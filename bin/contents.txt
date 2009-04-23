@@ -1,0 +1,5 @@
+This folder will contain the following binaries:
+
+unittest
+xizero
+asciimissile
