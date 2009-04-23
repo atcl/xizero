@@ -15,12 +15,18 @@
 
 using namespace std;
 
+void CLexit_(const char *f,const char *m, xlong r)
+{
+	cout << f << ": "<< m << endl;
+	exit(r);
+}
+
 xlong CLgetfilesize_(const char* fn)
 {
 	FILE *of;
 	uxlong fl;
 
-	of = fopen(fn,"rb");
+	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
 	fseek (of,0,SEEK_END);
 	fl = (ftell(of));
 	fclose(of);
@@ -34,7 +40,7 @@ xlong* CLgetfile_(const char* fn)
 	xlong *bf;
 	uxlong fl;
 
-	//if( !( of = fopen(fn,"rb") ) ) cout << "CLapi.CLgetfile_: Error opening file" << endl; exit(1);
+	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
 	of = fopen(fn,"rb");
 	fseek (of,0,SEEK_END);
 	fl = (ftell(of))>>2;
@@ -52,8 +58,7 @@ char* CLgetcharfile_(const char* fn)
 	char* bf;
 	uxlong fl;
 
-	//if( !( of = fopen(fn,"rb") ) ) cout << "CLapi.CLgetfile_: Error opening file" << endl; exit(1);
-	of = fopen(fn,"rb");
+	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
 	fseek (of,0,SEEK_END);
 	fl = (ftell(of));
 	rewind(of);
@@ -165,15 +170,9 @@ float CLgettime_()
 	return current_time;
 }
 
-void CLexit_(const char *f,const char *m, xlong r)
+xlong CLsystem_(const char* c)
 {
-	cout << f << ": "<< m << endl;
-	exit(r);
-}
-
-void CLsystem_(const char* c)
-{
-	system(c);
+	return system(c);
 }
 
 xlong getchararraysize_(xchar* c)

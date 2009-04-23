@@ -6,13 +6,14 @@
 using namespace std;
 
 #include "CLinc.h"
-#include "unittest.hh"
+
 
 int main()
 {
 	//init sequence
 	CLsetup();
 	FLTKsetup();
+
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/hero/hero.a","../dat/hero/herodat.a","../dat/level/level0.a",clformat,clmath,CLdoublebuffer,CLzbuffer,CLstencilbuffer);
 
