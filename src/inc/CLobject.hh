@@ -31,7 +31,7 @@ class CLobject
 		xlong name;
 	
 	public:
-		CLobject(xlong* db,float* zb,xlong* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li);
+		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li);
 		~CLobject();
 		
 		void update(CLmatrix* m);
@@ -56,7 +56,7 @@ class CLobject
 
 xlong CLobject::version = 0x00010000;
 
-CLobject::CLobject(xlong* db,float* zb,xlong* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
+CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
 {
 	clmath = clm;
 	shadowmatrix = sm;

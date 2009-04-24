@@ -12,9 +12,9 @@ uxlong CLscreendepth = 4;
 uxlong CLscreenpixsize = xres * yres;
 uxlong CLscreenmemsize = xres * yres * 4;
 
-xlong* CLdoublebuffer;
-xlong* CLstencilbuffer;
-float* CLzbuffer;
+CLbuffer<xlong>* CLdoublebuffer;
+CLbuffer<xlong>* CLstencilbuffer;
+CLbuffer<float>* CLzbuffer;
 
 CLlight*   amb;
 CLmatrix*  ltm;
@@ -23,7 +23,6 @@ CLmatrix*  bsm;
 //static classes
 CLfps*    clfps;
 CLformat* clformat;
-CLbuffer* clbuffer;
 CLmath*   clmath;
 CLgfx1*   clgfx1;
 CLgfx2*   clgfx2;

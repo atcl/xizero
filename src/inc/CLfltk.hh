@@ -53,7 +53,7 @@ class FLTKwindow : public Fl_Window
 
 	void RenderImage()
 	{
-		memcpy((uxlong*)&screenbuffer,CLdoublebuffer,(xres*yres*4));
+		memcpy((uxlong*)&screenbuffer,CLdoublebuffer->getbuffer(),(xres*yres*4));
 		redraw();
 	}
 

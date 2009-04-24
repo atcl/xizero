@@ -21,9 +21,9 @@ class CLlevel
 		CLformat* clformat;
 		CLmath*   clmath;
 
-		xlong*  cldouble;
-		float* clzbuffer;
-		xlong*  clstencil;
+		CLbuffer<xlong>*  cldouble;
+		CLbuffer<float>* clzbuffer;
+		CLbuffer<xlong>*  clstencil;
 
 	private:
 		static xlong version;
@@ -50,7 +50,7 @@ class CLlevel
 		CLobject** clterrain;
 
 	public:
-		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,xlong* cld,float* clz,xlong* cls);
+		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls);
 		~CLlevel();
 
 		void display();
@@ -66,7 +66,7 @@ xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 
 
-CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,xlong* cld,float* clz,xlong* cls)
+CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls)
 {
 	clformat  = clf;
 	clmath    = clm;

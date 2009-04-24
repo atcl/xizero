@@ -11,7 +11,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	string argfile = "../dat/terrain/0000.y3d";
+	string argfile = "../dat/cube.y3d";
 	xlong  argfileindex =-1;
 
 	if(argc>2)
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 	//CLobject + CLpolygon
 
 	CLobject* cubus;
-	cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,300,300,100,clmath,bsm,amb);
+	cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb);
 
 	clfps->init();
 
@@ -184,11 +184,12 @@ int main(int argc, char** argv)
 		//4. all shadow casting objects
 
 		//ltm->print();
-		clbuffer->clear(0,CLdoublebuffer,CLscreenpixsize);
-		clbuffer->clear(zmax,CLzbuffer,CLscreenpixsize);
-		clbuffer->clear(0,CLstencilbuffer,CLscreenpixsize);
+		CLdoublebuffer->clear(0);
+		CLzbuffer->clear(zmax);
+		CLstencilbuffer->clear(0);
+
 		//cubus->display(1,0,1,0,0);
-		clbuffer->blendcopy(CLdoublebuffer,CLstencilbuffer,CLscreenpixsize,4);
+		//CLdoublebuffer->blendcopy(CLstencilbuffer->getbuffer(),4);
 		cubus->display(1,1,1,0,0,1);
 		//cubus->setposition(400,300,100);
 		//cubus->display(0,1,0,0,0,0);

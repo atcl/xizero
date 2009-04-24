@@ -14,6 +14,7 @@
 
 using namespace std;
 
+
 void CLexit_(const char *f,const char *m, xlong r)
 {
 	cout << f << ": "<< m << endl;
@@ -137,14 +138,39 @@ xlong CLgetfilelinecount_(const char* fn)
 	return lc;
 }
 
-void CLdebug_(const char* c,xlong v)
+void CLdebug_(const xchar* c,xlong v)
 {
 	cout << c << v << endl;
 }
 
-void CLprint_(const char* c)
+void CLprint_(const xchar* c)
 {
 	cout << c << endl;
+}
+
+void CLprint_(xchar* c)
+{
+	cout << c << endl;
+}
+
+void CLprint_(xlong l)
+{
+	cout << l << endl;
+}
+
+void CLttyout_(const xchar* c)
+{
+	cout << c;
+}
+
+void CLttyout_(xchar* c)
+{
+	cout << c;
+}
+
+void CLttyout_(xlong l)
+{
+	cout << l;
 }
 
 void CLwaitforkey_()
@@ -164,11 +190,19 @@ void CLwait_(xlong milliseconds)
 	} while(nowtime < stoptime);
 }
 
-float CLgettime_()
+float CLgetmilliseconds_() //since midnight
 {
-	float current_time = clock()  / CLOCKS_PER_SEC * 1000;
+	return float(clock() / CLOCKS_PER_SEC * 1000);
+}
 
-	return current_time;
+float CLgetcentiseconds_() //since midnight
+{
+	return float(clock() / CLOCKS_PER_SEC * 100);
+}
+
+float CLgetdeciseconds_() //since midnight
+{
+	return float(clock() / CLOCKS_PER_SEC * 10);
 }
 
 xlong CLsystem_(const char* c)

@@ -34,8 +34,7 @@ class CLgfx1
 		void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
 		void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		void drawarc(xlong xc,xlong yc,xlong r,uxlong l,uxlong c);
+		void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
@@ -149,17 +148,12 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 }
 
-void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
 {
 
 }
 
-void CLgfx1::drawarc(xlong xc,xlong yc,ylong r,xlong l,uxlong c)
-{
-
-}
-
-void CLgfx1::drawrectangle(xlong x1,xlongy1,xlong x2,xlong y2,uxlong c)
+void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	drawhorline(x1,y1,x2,c);
 	drawhorline(x1,y2,x2,c);
@@ -175,12 +169,12 @@ void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4)
+void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
 {
-	drawanyline(x1,y1,x2,y2);
-	drawanyline(x2,y2,x3,y3);
-	drawanyline(x3,y3,x4,y4);
-	drawanyline(x4,y4,x1,y1);
+	drawanyline(x1,y1,x2,y2,c);
+	drawanyline(x2,y2,x3,y3,c);
+	drawanyline(x3,y3,x4,y4,c);
+	drawanyline(x4,y4,x1,y1,c);
 }
 
 xlong CLgfx1::getversion()

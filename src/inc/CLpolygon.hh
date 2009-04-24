@@ -32,9 +32,9 @@ class CLpolygon
 		fvertex pointt[4];
 		vector normal;
 		vector rnormal;
-		xlong *doublebuffer;
-		float *zbuffer;
-		xlong *sbuffer;
+		CLbuffer<xlong>* doublebuffer;
+		CLbuffer<float>* zbuffer;
+		CLbuffer<xlong>* sbuffer;
 		
 		void polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c);	//todo: swap
 		fvertex getzplanecoords(fvertex a,fvertex b,float pz);
@@ -52,7 +52,7 @@ class CLpolygon
 		xlong circledec(xlong x,xlong pc);
 	
 	public:
-		CLpolygon(xlong *db,float *zb,xlong* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll);
+		CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll);
 		~CLpolygon();
 		void update(CLmatrix* m,bool i);
 		void display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool debug);
@@ -111,7 +111,7 @@ void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 
 	for(int i=0; i<len; i++)
 	{
-		doublebuffer[off] = c;
+		(*doublebuffer)[off] = c;
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -458,10 +458,10 @@ void CLpolygon::rasterize(bool shadow)
 		{
 			while(length > 0)
 			{
-				if(actz < zbuffer[offset])
+				if(actz < (*zbuffer)[offset])
 				{
-					doublebuffer[offset] = shade;
-					zbuffer[offset] = actz;
+					(*doublebuffer)[offset] = shade;
+					(*zbuffer)[offset] = actz;
 				}
 				
 				offset++;
@@ -482,7 +482,7 @@ void CLpolygon::rasterize(bool shadow)
 	}
 }
 
-CLpolygon::CLpolygon(xlong *db,float *zb,xlong* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll)
+CLpolygon::CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll)
 {
 	clmath = clm;
 	cllight = cll;

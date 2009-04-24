@@ -7,17 +7,16 @@
 
 void CLsetup()
 {
-	clbuffer        = new CLbuffer();
-	CLdoublebuffer	= clbuffer->makelong(xres*yres);
-	CLzbuffer	= clbuffer->makefloat(xres*yres);
-	CLstencilbuffer	= clbuffer->makelong(xres*yres);
+	CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
+	CLstencilbuffer = new CLbuffer<xlong>(xres*yres);
+	CLzbuffer       = new CLbuffer<float>(xres*yres);
 
 	clfps    = new CLfps(3,true);
 	clformat = new CLformat();
 	clmath   = new CLmath();
 
-	clgfx1   = new CLgfx1(CLdoublebuffer);
-	clgfx2   = new CLgfx2(CLdoublebuffer);
+	//clgfx1   = new CLgfx1(CLdoublebuffer);
+	//clgfx2   = new CLgfx2(CLdoublebuffer);
 
 	amb      = new CLlight(1,1,-1,1,0x00FFFFFF,clmath);
 	ltm      = new CLmatrix(1,clmath);

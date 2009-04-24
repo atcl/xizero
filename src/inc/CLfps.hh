@@ -12,7 +12,7 @@ class CLfps
 {
 	private:
 		static xlong version;
-		float framespersecond;
+		xlong framespersecond;
 		float currenttime;
 		float elapsedtime;
 		float temptime;
@@ -51,22 +51,27 @@ CLfps::~CLfps() { }
 void CLfps::init()
 {
 	frames = 0;
-	lastupdate = clock();
+	lastupdate = CLgetmilliseconds_();
 	elapsedtime = 0;
 }
 
 void CLfps::increment()
 {
 	frames++;
-	currenttime = clock();
+	currenttime = CLgetmilliseconds_();
 	elapsedtime += (currenttime - lastupdate);
-	temptime = (elapsedtime / CLOCKS_PER_SEC);
+	temptime = (elapsedtime / 1000);
 
-	if( temptime >= interval)
+	if(temptime >= interval)
 	{
-		framespersecond = (frames/temptime);
+		framespersecond = xlong(frames/temptime);
 
-		if(output==true) cout << "fps: " << framespersecond << endl;
+		if(output==true)
+		{
+			CLttyout_("fps: ");
+			CLprint_(framespersecond);
+			//cout << "fps: " << framespersecond << endl;
+		}
 
 		frames = 0;
 		elapsedtime = 0;

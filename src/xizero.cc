@@ -37,9 +37,9 @@ int main()
 			break;
 		}
 
-		clbuffer->clear(0,CLdoublebuffer,CLscreenpixsize);
-		clbuffer->clear(zmax,CLzbuffer,CLscreenpixsize);
-		clbuffer->clear(0,CLstencilbuffer,CLscreenpixsize);
+		CLdoublebuffer->fastclear(0);
+		CLzbuffer->clear(zmax);
+		//CLstencilbuffer->clear(0);
 
 		testlevel->display();
 

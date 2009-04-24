@@ -5,152 +5,129 @@
 #pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
 
-class CLbuffer
+#include <string.h>
+
+template <typename T>class CLbuffer
 {
 	private:
 		static xlong version;
-		//xlong* lbuffer;
-		//float* fbuffer;
+		T* buffer;
 		uxlong size;
 		
 	public:
-		CLbuffer();
+		CLbuffer(uxlong s);
 		~CLbuffer();
 		
-		xlong* makelong(uxlong s);
-		float* makefloat(uxlong s);
-		void clear(xlong v,xlong* buffer,uxlong s);
-		void clear(float v,float* buffer,uxlong s);
-		void copy(xlong *dst,xlong* src,uxlong s);
-		void copy(float *dst,float* src,uxlong s);
-		void fastcopy(xlong *dst,xlong *src,uxlong s);
-		void fastcopy(float *dst,float *src,uxlong s);
-		void blendcopy(xlong *dst,xlong* src,uxlong s,xlong o);
-		//uxlong getsize();
-		//xlong operator[](xlong i);
-		//float operator[](xlong i);
+		void clear(T v);
+		void fastclear(xlong v);
+		void copy(T *dst);
+		void copy(CLbuffer *dst);
+		void fastcopy(xlong *dst);
+		void blendcopy(T *dst,xlong o);
+		uxlong getsize();
+		T* getbuffer();
+		T& operator[](uxlong i);
 		xlong getversion();
 };
 
-xlong CLbuffer::version = 0x00010000;
+template <typename T>xlong CLbuffer<T>::version = 0x00010000;
 
-CLbuffer::CLbuffer()
+template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 {
-
+	size = s;
+	buffer = new T[s];
 }
 
-CLbuffer::~CLbuffer() { }
+template <typename T>CLbuffer<T>::~CLbuffer() { }
 
-float* CLbuffer::makefloat(uxlong s)
+template <typename T>void CLbuffer<T>::clear(T v)
 {
-	float* buffer = new float[s];
-
-	return buffer;
-}
-
-xlong* CLbuffer::makelong(uxlong s)
-{
-	xlong* buffer = new xlong[s];
-
-	return buffer;
-}
-
-void CLbuffer::clear(xlong v,xlong* buffer,uxlong s)
-{
-	for(int i=0;i<s;i++)
+	for(int i=0;i<size;i++)
 	{
 		buffer[i] = v;
 	}
 }
 
-void CLbuffer::clear(float v,float* buffer,uxlong s)
+template <typename T>void CLbuffer<T>::fastclear(xlong v)
 {
-	for(int i=0;i<s;i++)
+	memset(buffer,v,size<<2);
+}
+
+template <typename T>void CLbuffer<T>::copy(T *dst)
+{
+	for(int i=0;i<size;i++)
 	{
-		buffer[i] = v;
+		dst[i] = buffer[i];
 	}
 }
 
-void CLbuffer::copy(xlong *dst,xlong* src,uxlong s)
+template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
 {
-	for(int i=0;i<s;i++)
+	for(int i=0;i<size;i++)
 	{
-		dst[i] = src[i];
+		dst[i] = buffer[i];
 	}
 }
 
-void CLbuffer::copy(float *dst,float *src,uxlong s)
+template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 {
-	for(int i=0;i<s;i++)
-	{
-		dst[i] = src[i];
-	}
+	memcpy(dst,buffer,size<<2);
 }
 
-void CLbuffer::fastcopy(xlong *dst,xlong* src,uxlong s)
-{
-
-}
-
-void CLbuffer::fastcopy(float *dst,float *src,uxlong s)
-{
-
-}
-
-void CLbuffer::blendcopy(xlong *dst,xlong* src,uxlong s,xlong o)
+template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
 	switch(o)
 	{
 		case 0:		//NONE
-			for(int i=0;i<s;i++)
+			for(int i=0;i<size;i++)
 			{
-				dst[i] = src[i];
+				dst[i] = buffer[i];
 			}
 		break;
 		case 1:		//AND
-			for(int i=0;i<s;i++)
+			for(int i=0;i<size;i++)
 			{
-				dst[i] = dst[i] && src[i];
+				dst[i] = dst[i] && buffer[i];
 			}
 		break;
 		case 2:		//OR
-			for(int i=0;i<s;i++)
+			for(int i=0;i<size;i++)
 			{
-				dst[i] = dst[i] || src[i];
+				dst[i] = dst[i] || buffer[i];
 			}
 		break;
 		case 3:		//OR
-			for(int i=0;i<s;i++)
+			for(int i=0;i<size;i++)
 			{
-				dst[i] = dst[i] ^ src[i];
+				dst[i] = dst[i] ^ buffer[i];
 			}
 		break;
 		case 4:		//ADD
-			for(int i=0;i<s;i++)
+			for(int i=0;i<size;i++)
 			{
-				dst[i] = dst[i] + src[i];
+				dst[i] = dst[i] + buffer[i];
 			}
 		break;
 	}
 	
 }
 
-// uxlong CLbuffer::getsize()
-// {
-// 	return size;
-// }
+template <typename T>uxlong CLbuffer<T>::getsize()
+{
+	return size;
+}
 
-// xlong CLbuffer::operator[](xlong i)
-// {
-// 	return lbuffer[i];
-// }
+template <typename T>T* CLbuffer<T>::getbuffer()
+{
+	return buffer;
+}
 
-// float CLbuffer::operator[](xlong i)
-// {
-// 	return fbuffer[i];
-// }
+template <typename T>T& CLbuffer<T>::operator[](uxlong i)
+{
+	return buffer[i];
+}
 
-xlong CLbuffer::getversion()
+template <typename T>xlong CLbuffer<T>::getversion()
 {
 	return version;
 }
