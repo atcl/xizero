@@ -18,6 +18,7 @@ class CLgfx1
 		xlong* doublebuffer;
 		xlong locmaxx;
 		xlong locmaxy;
+		void drawcirclepixel(xlong x,xlong y,uxlong c);
 		
 	public:
 		CLgfx1(xlong* db);
@@ -44,8 +45,8 @@ class CLgfx1
 		void fill(xlong x,xlong y,uxlong c);
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 		xlong getspritesize(xlong* s);
-		xlong getspriteheight(xlong* s);
 		xlong getspritewidth(xlong* s);
+		xlong getspriteheight(xlong* s);
 		void drawsprite(xlong x,xlong y,xlong* s);
 		void drawspritescaled(xlong x,xlong y,xlong* s,xlong z);
 		void drawspriterotated(xlong x,xlong y,xlong* s,xlong d);
@@ -59,6 +60,11 @@ class CLgfx1
 };
 
 xlong CLgfx1::version = 0x00010000;
+
+void CLgfx1::drawcirclepixel(xlong x,xlong y,uxlong c)
+{
+
+}
 
 CLgfx1::CLgfx1(xlong* db)
 {
@@ -141,6 +147,40 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 
+}
+
+void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+{
+
+}
+
+void CLgfx1::drawarc(xlong xc,xlong yc,ylong r,xlong l,uxlong c)
+{
+
+}
+
+void CLgfx1::drawrectangle(xlong x1,xlongy1,xlong x2,xlong y2,uxlong c)
+{
+	drawhorline(x1,y1,x2,c);
+	drawhorline(x1,y2,x2,c);
+	drawverline(x1,y1,y2,c);
+	drawverline(x2,y1,y2,c);
+}
+
+void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+{
+	for(int i=y1; i<=y2; i++)
+	{
+		drawhorline(x1,i,x2,c);
+	}
+}
+
+void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4)
+{
+	drawanyline(x1,y1,x2,y2);
+	drawanyline(x2,y2,x3,y3);
+	drawanyline(x3,y3,x4,y4);
+	drawanyline(x4,y4,x1,y1);
 }
 
 xlong CLgfx1::getversion()

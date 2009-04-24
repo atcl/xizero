@@ -146,4 +146,9 @@ bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
 	return true;
 }
 
+xlong getrandom()
+{
+
+}
+
 #endif

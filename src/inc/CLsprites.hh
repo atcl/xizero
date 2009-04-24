@@ -5,12 +5,12 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 
-void drawantimatter(uxlong x,uxlong y)
+void drawantimatter(xlong* db,xlong x,xlong y)
 {
 
 }
 
-void drawplasma(uxlong x,uxlong y)
+void drawplasma(xlong* db,xlong x,xlong y)
 {
 
 }

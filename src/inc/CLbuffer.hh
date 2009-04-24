@@ -11,7 +11,7 @@ class CLbuffer
 		static xlong version;
 		//xlong* lbuffer;
 		//float* fbuffer;
-		//uxlong size;
+		uxlong size;
 		
 	public:
 		CLbuffer();

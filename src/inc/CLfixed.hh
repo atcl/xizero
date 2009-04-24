@@ -8,7 +8,7 @@
 union fixedp
 {
 	xlong f;
-	xshort p[2]; //p[0]=fractional, p[1]=numeral
+	xshort p[2]; //p[0]=fractional, p[1]=numeral //?switch?
 
 	fixedp operator=(fixedp &a);
 	fixedp operator=(xshort& a);

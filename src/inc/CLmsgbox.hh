@@ -5,6 +5,8 @@
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 //self-contained
 
+#include "CLgfx2.hh"
+
 
 class CLmsgbox
 {

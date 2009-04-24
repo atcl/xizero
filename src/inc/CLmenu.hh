@@ -4,6 +4,8 @@
 #define HH_CLMENU
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLgfx2.hh"
+
 
 class CLmenu
 {

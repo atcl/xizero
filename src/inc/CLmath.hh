@@ -20,9 +20,9 @@ class CLmath
 		~CLmath();
 		xlong sign(xlong x);
 		xlong absolute(xlong x);
+		xlong intsqrt(uxlong x);
 		float sinbyarray(xlong x);
 		float cosbyarray(xlong x);
-		xlong intsqrt(uxlong x);
 		float vectorlength(fvector v);
 		xlong vectorlength(vector v);
 		float dotproduct(fvector a,fvector b);
