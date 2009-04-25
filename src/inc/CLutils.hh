@@ -102,31 +102,6 @@ xlong getlinecount(xchar* bf,xlong bs)
 	return lc;
 }
 
-//crasht mit memory conflict
-xchar** map2array(xchar* tf,xlong ts,xlong lw,xchar subconst=0)
-{
-	xlong lc = getlinecount(tf,ts);
-	xchar** rev = new xchar*[lc];
-	for(int i=0; i<lc; i++)
-	{
-		rev[i] = new xchar[lw];
-	}
-
-	xlong li = 0;
-	for(int j=0; j<lc; j++)
-	{
-		for(int k=0; k<lw; k++)
-		{
-			if(tf[li]!='\n') rev[j][k] = tf[li] - subconst;
-			else CLexit_(__func__,"Map not conform with given width",1);
-			li++;
-		}
-		li++;
-	}
-
-	return rev;
-}
-
 bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
 {
 	xlong es;

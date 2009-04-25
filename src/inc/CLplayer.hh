@@ -22,8 +22,12 @@ class CLplayer
 		//xlong ydelay;
 		//xlong xcount;
 		//xlong ycount;
+		xlong speed;
+		xlong speedmax;
 		xlong xspeed;
 		xlong yspeed;
+		xlong xacc;
+		xlong yacc;
 
 		xlong ammotype[4];
 		xlong ammodirection[4];
@@ -47,6 +51,10 @@ class CLplayer
 		~CLplayer();
 		void draw();
 		void move(xlong x,xlong y);
+		void incxspeed();
+		void incyspeed();
+		void decxspeed();
+		void decyspeed();
 		void fire(xlong at);
 		void hurt(xlong am);
 		void update();
@@ -65,6 +73,8 @@ CLplayer::CLplayer(CLobject* obj,xlong** dat)
 	lastupdate=0;
 	firing=-1;
 	tilt = 0;
+	speed = 1;
+	speedmax = 6;
 
 	//if( dat[1][0] != 'ENEM' ) exit(1) //wrong bcx type
 	//if( dat[1][1] != model->getname() ) exit(1) //bcx and y3d are not fitting
@@ -113,6 +123,26 @@ void CLplayer::draw()
 void CLplayer::move(xlong x,xlong y)
 {
 
+}
+
+void CLplayer::incxspeed()
+{
+	if(xspeed<speedmax) xspeed += xacc;
+}
+
+void CLplayer::incyspeed()
+{
+	if(yspeed<speedmax) yspeed += yacc;
+}
+
+void CLplayer::decxspeed()
+{
+	if(xspeed>-speedmax) xspeed -= xacc;
+}
+
+void CLplayer::decyspeed()
+{
+	if(yspeed>-speedmax) yspeed -= yacc;
 }
 
 void CLplayer::fire(xlong at)

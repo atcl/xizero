@@ -18,8 +18,8 @@ class CLformat
 		~CLformat();
 		xchar** loadcsv(xlong* bf);
 		arfile* loadar(xchar* bf,xlong cfs);
-		xlong** loadbcx(xlong* bf, xlong lc);
-		xchar** loadmap(xchar* bf, xlong lc);
+		xlong** loadbcx(xlong* bf,xlong bs);
+		xchar** loadmap(xchar* bf, xlong bs,xlong subconst);
 		xlong*  loadtga(xlong* bf);
 		xlong   getversion();
 };
@@ -40,6 +40,10 @@ xchar** CLformat::loadcsv(xlong* bf)
 
 arfile* CLformat::loadar(xchar* bf,xlong cfs)
 {
+	//all .ar members must be aligned on 4byte (long) borders
+	//so the filesize is fully dividable by 4
+	//test with: if(fs%4==0) ...
+
 	//ar can contain max 127 files!!!
 	armember* tindex[128];
 	xlong tsize = cfs - 8;
@@ -55,9 +59,11 @@ arfile* CLformat::loadar(xchar* bf,xlong cfs)
 
 		do
 		{
+			//read member header
 			copychararray(&fn[0],&bf[bc],16);	//member filename
-			bc += 16;
-			bc += 32;				//not necessary information here, so skip
+			bc += 48;				//no necessary information here, so skip
+			//*
+
 			//decode filesize of current ar member
 			if( bf[bc+9] != 0x20 )
 			{
@@ -154,8 +160,9 @@ arfile* CLformat::loadar(xchar* bf,xlong cfs)
 				ts[9]  = (bf[bc] - 0x30);
 				fs = ts[9];
 			}
-			bc += 12;
 			//fs contains filesize
+
+			bc+=12; //goto end of header
 
 			//build array for current ar member
 			xlong fs2 = fs>>2;
@@ -200,16 +207,16 @@ arfile* CLformat::loadar(xchar* bf,xlong cfs)
 		}
 		//af is now complete
 
-		//todo: garbage collect tindex contents
-
 		return af;
 	}
 
 	return 0;
 }
 
-xlong** CLformat::loadbcx(xlong* bf,xlong lc)
+xlong** CLformat::loadbcx(xlong* bf,xlong bs)
 {
+	xlong lc = getlinecount(bf,bs);
+
 	doubleword nl;
 	xlong bc = 4;	
 
@@ -246,45 +253,40 @@ xlong** CLformat::loadbcx(xlong* bf,xlong lc)
 	return re;
 }
 
-xchar** CLformat::loadmap(xchar* bf,xlong lc)
+xchar** CLformat::loadmap(xchar* bf,xlong bs,xlong subconst)
 {
-//.map has to finish with one new line!
+	xlong lc = getlinecount(bf,bs);
 
 	//determine line length
-	xlong ll = 0;
+	xlong lw = 0;
 	xlong cc = 0;
 	while(cc < lc)
 	{
 		if(bf[cc]=='\n') break;
-		else ll++;
+		else lw++;
 		cc++;
 	}
-	//ll contains line length
-	
-	//get line count
-	cc = 0;
+	//lw contains line length
+
+	xchar** rev = new xchar*[lc];
 	for(int i=0; i<lc; i++)
 	{
-		if(bf[i]=='\n') cc++;
+		rev[i] = new xchar[lw];
 	}
-	//cc contains line count
 
-	//build two dimensional array
-	xlong aa = 0;
-	xchar** re = new xchar*[cc];
-	for(int j=0; j<cc; j++)
+	xlong li = 0;
+	for(int j=0; j<lc; j++)
 	{
-		re[j] = new xchar[ll];
-		for(int k=0; k<ll; ll++)
+		for(int k=0; k<lw; k++)
 		{
-			re[j][k] = bf[aa];
-			aa++;
+			if(bf[li]!='\n') rev[j][k] = bf[li] - subconst;
+			else CLexit_(__func__,"Map not conform with given width",1);
+			li++;
 		}
-		aa++;
+		li++;
 	}
-	//re is now [line number] [line position] of bf
 
-	return re;
+	return rev;
 }
 
 xlong* CLformat::loadtga(xlong* bf)

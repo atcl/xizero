@@ -83,6 +83,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xchar *terrainraw = CLgetcharfile_(terrainlib);
 	xlong terrainsize = CLgetfilesize_(terrainlib);
 	arfile *terraina = clformat->loadar(terrainraw,terrainsize);
+	//*
 
 	//convert array of y3ds to array of CLobjects
 	clterrain = new CLobject*[terraina->filecount];
@@ -90,14 +91,16 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	{
 		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g].filedata,400,300,100,clmath,clshadow,cllight);
 	}
+	//*
 
 //level:
 	//load levelmaps from .ar
 	xchar *levelraw = CLgetcharfile_(levelcontainer);
 	xlong levelsize = CLgetfilesize_(levelcontainer);
 	arfile *levela = clformat->loadar(levelraw,levelsize);
+	//*
 
-	// //find terrain map, has to have extension .mapt
+	//find terrain map, has to have extension .mapt
 	xlong tf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
@@ -108,9 +111,11 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 		}
 	}
 	//tf holds index of armember terrain map
+
 	if(tf==-1) CLexit_(__func__,"no terrain map found",1);
+
 	//convert terrain map to 2d xchar array, and remove lineends
-	xchar** terrainmap = map2array(levela->members[tf].filetext,levela->members[tf].filesizetext,levelwidth,33);
+	xchar** terrainmap = clformat->loadmap(levela->members[tf].filetext,levela->members[tf].filesizetext,33);
 	//now terrain map holds 2d xchar array of terrain objects
 
 	//determine level consts
@@ -121,8 +126,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	smoothmark = mark * blockheight;
 	smoothlevelheight = mark * blockheight;
 	if(mark < 0) CLexit_(__func__,"Level too short",1);
+	//*
 
-	// //find height map, has to have extension .maph
+	//find height map, has to have extension .maph
 	xlong hf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
@@ -133,12 +139,14 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 		}
 	}
 	//tf holds index of armember height map
+
 	if(tf==-1) CLexit_(__func__,"no height map found",1);
+
 	//convert height map to 2d xchar array, and remove lineends
-	xchar** heightmap = map2array(levela->members[hf].filetext,levela->members[hf].filesizetext,levelwidth,48);
+	xchar** heightmap = clformat->loadmap(levela->members[hf].filetext,levela->members[hf].filesizetext,48);
 	//now height map holds 2d xchar array of height levels
 
-	// //find entity map, has to have extension .mape
+	//find entity map, has to have extension .mape
 	xlong ef = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
@@ -149,9 +157,11 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 		}
 	}
 	//tf holds index of armember entity map
-	if(tf==-1) CLexit_(__func__,"no entitiy map found",1);
+
+	if(ef==-1) CLexit_(__func__,"no entitiy map found",1);
+
 	//convert entity map to 2d xchar array, and remove lineends
-	xchar** entitymap = map2array(levela->members[ef].filetext,levela->members[ef].filesizetext,levelwidth);
+	xchar** entitymap = clformat->loadmap(levela->members[ef].filetext,levela->members[ef].filesizetext,33);
 	//now entity map holds 2d xchar array of entity objects
 
 	//build levellayerscontaining all sub maps
@@ -160,69 +170,80 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	levellayers[1] = heightmap;
 	levellayers[2] = entitymap;
 	//levellayers[3] = specialmap //later when needed.
+
+
 //***
 
-// 	for(int s=0; s<levelheight ;s++)
-// 	{
-// 		for(int t=0; t<levelwidth ;t++)
-// 		{
-// 			cout << xchar(levellayers[0][s][t]+20) << " ";
-// 		}
-// 		cout << endl;
-// 	}
-// 	cout << endl;
 
-//enemies:
-// 	//load enemylib from .ar to array of xlong* to .y3d files
-// 	temp1 = CLgetfile_(enemylib);
-// 	temp0 = CLgetfilesize_(enemylib);
-// 	temp2 = clformat->loadar(temp1,temp0);
-// 	temp5 = new CLobject*[temp2[0][0]];
-// 	for(int h=0; h<temp2[0][0] ; h++)
-// 	{
-// 		temp5[h] = new CLobject(cldouble,clzbuffer,clstencil,temp2[h+1],0,0,0,clmath,clshadow,cllight);
-// 	}
+
+//enemies: (test)
+// 	//load enemylib from .ar
+// 	xchar *enemyraw = CLgetcharfile_(enemylib);
+// 	xlong enemysize = CLgetfilesize_(enemylib);
+// 	arfile *enemya = clformat->loadar(enemyraw,enemysize);
+// 	//*
 // 
+// 	//divide in y3d and data
+// 	if(enemya->filecount%2 != 0) CLexit_(__func__,"unequal enemy models and enemy data",1);
+// 	xlong ey = (enemya->filecount)>>1;
+// 	xlong ed = ((enemya->filecount)>>1)+1;
+// 	//*
 // 
-// 	//load enemydat from .ar to array of xlong* to .bcx files
-// 	temp1 = CLgetfile_(enedatlib);
-// 	temp0 = CLgetfilesize_(enedatlib);
-// 	temp3 = clformat->loadar(temp1,temp0);
-// 	temp4 = new xlong**[temp3[0][0]];
-// 	for(int i=0; i<temp3[0][0]; i++)
+// 	//load enemies:
+// 	clenemy = new CLenemy*[ey];
+// 	CLobject** enemyy3d = new CLobject*[ey];
+// 	xlong*** enemybcx = new xlong**[ey];
+// 	for(int i=0; i<ey; i++, ed++)
 // 	{
-// 		temp0    = clformat->getlinecount(&temp3[i+1][1],temp3[i+1][0]);
-// 		temp4[i] = clformat->loadbcx(&temp3[i+1][1],temp0);
+// 		enemyy3d[i] = new CLobject(cldouble,clzbuffer,clstencil,enemya->members[i].filedata,400,300,100,clmath,clshadow,cllight);
+// 		enemybcx[i] = clformat->loadbcx(enemya->members[ed].filedata,enemya->members[ed].filesizedata);
+// 		clenemy[i] = new CLenemy(enemyy3d[i],enemybcx[i]);
 // 	}
-// 
-// 	//convert arrays of y3d and bcx to array of clenemy
-// 	clenemy = new CLenemy*[temp2[0][0]];
-// 	for(int j=0; j<temp2[0][0]; j++)
-// 	{
-// 		clenemy[j] = new CLenemy(temp5[j],temp4[j]);
-// 	}
+// 	//*
 //***	
 
-//player:
-// 	//load playerlib to xlong* to y3d objects
-// 	temp1 = CLgetfile_(playerlib);
-// 	temp0 = CLgetfilesize_(playerlib);
-// 	temp2 = clformat->loadar(temp1,temp0);
-// 	temp6 = new CLobject(cldouble,clzbuffer,clstencil,temp2[1],0,0,0,clmath,clshadow,cllight);
-// 	
-// 	//load playdat to xlong* to bcx
-// 	temp1 = CLgetfile_(playdatlib);
-// 	temp0 = CLgetfilesize_(playdatlib);
-// 	temp3 = clformat->loadar(temp1,temp0);
-// 	temp0 = clformat->getlinecount(&temp3[1][1],temp3[1][0]);
-// 	temp2 = clformat->loadbcx(&temp3[1][1],temp0);
+//player: (test)
+// 	//load playerlib from .ar to array of xlong* to y3d objects
+// 	xchar *playerraw = CLgetcharfile_(playerlib);
+// 	xlong playersize = CLgetfilesize_(playerlib);
+// 	arfile *playera = clformat->loadar(playerraw,playersize);
+// 	//*
 // 
-// 	//convert y3d and bcx to clplayer
-// 	clplayer = new CLplayer(temp6,temp2);
-
+// 	//find player model, has to have extension .y3d
+// 	xlong py = -1;
+// 	for(int h=0; h<playera->filecount; h++)
+// 	{
+// 		if(checkextension(playera->members[h].filename,16,".y3d",4)==true)
+// 		{
+// 			py=h;
+// 			break;
+// 		}
+// 	}
+// 	//py holds index of armember player model
+// 
+// 	if(py==-1) CLexit_(__func__,"no player model found",1);
+// 
+// 	//find player data, has to have extension .bcx
+// 	xlong pd = -1;
+// 	for(int h=0; h<playera->filecount; h++)
+// 	{
+// 		if(checkextension(playera->members[h].filename,16,".bcx",4)==true)
+// 		{
+// 			py=h;
+// 			break;
+// 		}
+// 	}
+// 	//pd holds index of armember player model
+// 
+// 	if(pd==-1) CLexit_(__func__,"no player data found",1);
+// 
+// 	//create player object
+// 	CLobject* playery3d = new CLobject(cldouble,clzbuffer,clstencil,playera->members[py].filedata,400,300,100,clmath,clshadow,cllight);
+// 	xlong** playerbcx = clformat->loadbcx(playera->members[pd].filedata,playera->members[pd].filesizedata);
+// 	clplayer = new CLplayer(playery3d,playerbcx);
+// 	//*
 //***
 
-	//hieghtmap element * 40 + terrain.z
 
 	//set map start position
 //***
