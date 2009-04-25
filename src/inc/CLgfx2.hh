@@ -21,6 +21,7 @@ class CLgfx2
 		xlong locatemaxx();
 		xlong locatemaxy();
 		uxlong locate(xlong x,xlong y);
+		uxlong getQBcolor(xchar c); //get 16 EGA colors
 
 		xlong getversion();
 };

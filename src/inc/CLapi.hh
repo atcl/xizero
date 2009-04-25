@@ -24,7 +24,7 @@ void CLexit_(const char *f,const char *m, xlong r)
 xlong CLgetfilesize_(const char* fn)
 {
 	FILE *of;
-	uxlong fl;
+	xlong fl;
 
 	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
 	fseek (of,0,SEEK_END);
@@ -205,9 +205,9 @@ float CLgetdeciseconds_() //since midnight
 	return float(clock() / CLOCKS_PER_SEC * 10);
 }
 
-xlong CLsystem_(const char* c)
+xlong CLsystem_(const xchar* c)
 {
-	return system(c);
+	//return system(c);
 }
 
 xlong getchararraysize_(xchar* c)

@@ -35,6 +35,7 @@ class CLpolygon
 		CLbuffer<xlong>* doublebuffer;
 		CLbuffer<float>* zbuffer;
 		CLbuffer<xlong>* sbuffer;
+		xlong active;
 		
 		void polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c);	//todo: swap
 		fvertex getzplanecoords(fvertex a,fvertex b,float pz);
@@ -61,6 +62,8 @@ class CLpolygon
 		void reset();
 		void setcolor(xlong c);
 		uxlong getcolor();
+		void setactive(xlong b);
+		xlong getactive();
 		xlong getversion();
 };
 
@@ -673,6 +676,17 @@ void CLpolygon::setcolor(xlong c)
 uxlong CLpolygon::getcolor()
 {
 	return color;
+}
+
+void CLpolygon::setactive(xlong b)
+{
+	if(b!=0) active=1;
+	else active=0;
+}
+
+xlong CLpolygon::getactive()
+{
+	return active;
 }
 
 xlong CLpolygon::getversion()

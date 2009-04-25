@@ -18,6 +18,11 @@ void dissolve(xlong t,CLbuffer<xlong>* db)
 
 }
 
+void fadetoblack(xlong t,CLbuffer<xlong>* db)
+{
+
+}
+
 void drawscreen(xlong* src,CLbuffer<xlong> *db)
 {
 

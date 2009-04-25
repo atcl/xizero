@@ -32,6 +32,13 @@ struct screenside
 	float z;
 };
 
+struct sprite
+{
+	xlong size;
+	xlong width;
+	xlong height;
+};
+
 struct armember
 {
 	xlong filesizedata;

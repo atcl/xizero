@@ -21,7 +21,9 @@ struct vector
 	vector& operator-=(vector &a);
 	vector& operator+(vector &a);
 	vector& operator-(vector &a);
-	xlong operator*(vector &a);
+	xlong operator*(vector &a);	//dot-product
+	vector& operator*=(xlong &s);	//scalar multiplication
+	xlong operator^(vector &a);	//cross-product
 };
 
 struct fvector
@@ -42,7 +44,9 @@ struct fvector
 	fvector& operator-=(fvector &a);
 	fvector& operator+(fvector &a);
 	fvector& operator-(fvector &a);
-	float operator*(fvector &a);
+	float operator*(fvector &a);	//dot-product
+	fvector& operator*=(float &s);	//scalar multiplication
+	float operator^(fvector &a);	//cross-product
 };
 
 //vector:
@@ -115,6 +119,19 @@ xlong vector::operator*(vector &a)
 	return ( (x*a.x) + (y*a.y) + (z*a.z) );
 }
 
+vector& vector::operator*=(xlong &s)
+{
+	x *= s;
+	y *= s;
+	z *= s;
+	return *this;
+}
+
+xlong vector::operator^(vector &a)
+{
+
+}
+
 //fvector:
 
 // fvector fvector::operator=(fvector &a)
@@ -183,6 +200,19 @@ fvector& fvector::operator-(fvector &a)
 float fvector::operator*(fvector &a)
 {
 	return ( (x*a.x) + (y*a.y) + (z*a.z) );
+}
+
+fvector& fvector::operator*=(float &s)
+{
+	x *= s;
+	y *= s;
+	z *= s;
+	return *this;
+}
+
+float fvector::operator^(fvector &a)
+{
+
 }
 
 #endif
