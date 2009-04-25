@@ -25,9 +25,10 @@ class CLobject
 		xlong dockcount;
 		xlong vertexptr;
 		CLpolygon** polyptr;
-		vertex** dockptr;
+		vector** dockptr;
 		vertex position;
 		vertex rposition;
+		vertex* boundingbox;
 		xlong name;
 	
 	public:
@@ -36,7 +37,6 @@ class CLobject
 		
 		void update(CLmatrix* m);
 		void display(bool center,bool flat,bool light,bool shadows,bool pixelshader,bool debug);
-		vertex getdocking(xlong i);
 		vertex getposition();
 		xlong getpositionx();
 		xlong getpositiony();
@@ -49,7 +49,10 @@ class CLobject
 		void addpositiony(xlong y);
 		void addpositionz(xlong z);
 		xlong getname();
+		vector* getdockingpoint(xlong i);
+		vector* getdockingpoint(xlong t,xlong i);
 		void translatealongnormals(float size);
+		vertex* getboundingbox();
 		void reset();
 		xlong getversion();
 };
@@ -90,6 +93,15 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	rposition.y = y;
 	rposition.z = z;
 
+	boundingbox = new vertex[2];
+	//min max of every x,y,z
+	xlong minx = 0;
+	xlong maxx = 0;
+	xlong miny = 0;
+	xlong maxy = 0;
+	xlong minz = 0;
+	xlong maxz = 0;
+
 	if(dataptr[0] != '<CLY') CLexit_(__func__,"wrong y3d format, may be endianess?",1);
 
 	if(dataptr[1] == '3DB>')
@@ -103,7 +115,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
-		dockptr = new vertex*[dockcount];
+		dockptr = new vector*[dockcount];
 
 		d = 8;
 
@@ -170,10 +182,11 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[1] = dataptr[d]; d++; //dy
 				t[2] = dataptr[d]; d++; //dz
 
-				dockptr[dockcounter] = new vertex;
+				dockptr[dockcounter] = new vector;
 				dockptr[dockcounter]->x = t[0];
 				dockptr[dockcounter]->y = t[1];
 				dockptr[dockcounter]->z = t[2];
+				dockptr[dockcounter]->l = xlong(localdocktype);
 			}
 		}
 
@@ -221,11 +234,6 @@ void CLobject::display(bool center,bool flat,bool light,bool shadows,bool pixels
 			polyptr[i]->display(position.x,position.y,position.z,center,flat,light,0,pixelshader,debug);
 		}
 	}
-}
-
-vertex CLobject::getdocking(xlong i)
-{
-	return *dockptr[i];
 }
 
 vertex CLobject::getposition()
@@ -290,6 +298,32 @@ xlong CLobject::getname()
 	return name;
 }
 
+vector* CLobject::getdockingpoint(xlong i) //get i-th docking point
+{
+	return dockptr[i];
+}
+
+vector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
+{
+	xlong c=-1;
+
+	for(int j=0;j<dockcount;j++)
+	{
+		if(dockptr[j]->l == t)
+		{
+			c++;
+
+			if(c==i)
+			{
+				break;
+			}
+		}
+	}
+
+	if(c==-1) return 0;
+	else return dockptr[c]; 
+}
+
 void CLobject::translatealongnormals(float size)
 {
 	xlong xa;
@@ -306,6 +340,11 @@ void CLobject::translatealongnormals(float size)
 
 		polyptr[i]->add(xa,ya,za);
 	}
+}
+
+vertex* CLobject::getboundingbox() //returning min und max vertecies of object
+{
+
 }
 
 void CLobject::reset()
