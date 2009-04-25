@@ -4,18 +4,21 @@
 #define HH_CLSCREEN
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLutils.hh"
+#include "CLgfx1.hh"
 
-void circleblend(xlong x,xlong y,xlong r,xlong t,xlong* db)
+
+void circleblend(xlong x,xlong y,xlong r,xlong t,CLbuffer<xlong>* db)
 {
 
 }
 
-void dissolve(xlong t,xlong* db)
+void dissolve(xlong t,CLbuffer<xlong>* db)
 {
 
 }
 
-void drawscreen(xlong* src,xlong *db)
+void drawscreen(xlong* src,CLbuffer<xlong> *db)
 {
 
 }

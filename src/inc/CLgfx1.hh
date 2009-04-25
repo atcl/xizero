@@ -15,13 +15,13 @@ class CLgfx1
 		static xlong last_s;
 		static xlong interval_s;
 
-		xlong* doublebuffer;
+		CLbuffer<xlong>* doublebuffer;
 		xlong locmaxx;
 		xlong locmaxy;
 		void drawcirclepixel(xlong x,xlong y,uxlong c);
 		
 	public:
-		CLgfx1(xlong* db);
+		CLgfx1(CLbuffer<xlong>* db);
 		~CLgfx1();
 		uxlong readpixel(xlong x,xlong y);
 		void drawpixel(xlong x,xlong y,uxlong c);
@@ -65,7 +65,7 @@ void CLgfx1::drawcirclepixel(xlong x,xlong y,uxlong c)
 
 }
 
-CLgfx1::CLgfx1(xlong* db)
+CLgfx1::CLgfx1(CLbuffer<xlong>* db)
 {
 	doublebuffer = db;
 }
@@ -74,12 +74,12 @@ CLgfx1::~CLgfx1() { }
 
 uxlong CLgfx1::readpixel(xlong x,xlong y)
 {
-	return (doublebuffer[(y*xres)+y]);
+	return ((*doublebuffer)[(y*xres)+y]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)
 {
-	doublebuffer[(y*xres)+x] = c;
+	(*doublebuffer)[(y*xres)+x] = c;
 }
 
 void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
@@ -89,15 +89,15 @@ void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
 
 void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
 {
-	doublebuffer[(y1*xres)+x1] = doublebuffer[(y2*xres)+x2];
+	(*doublebuffer)[(y1*xres)+x1] = (*doublebuffer)[(y2*xres)+x2];
 }
 
 void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c)
 {
-	doublebuffer[(y*xres)+x] = c;
-	doublebuffer[(y*xres)+x+1] = c;
-	doublebuffer[((y+1)*xres)+x] = c;
-	doublebuffer[((y+1)*xres)+(x+1)] = c;
+	(*doublebuffer)[(y*xres)+x] = c;
+	(*doublebuffer)[(y*xres)+x+1] = c;
+	(*doublebuffer)[((y+1)*xres)+x] = c;
+	(*doublebuffer)[((y+1)*xres)+(x+1)] = c;
 }
 
 void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
@@ -112,7 +112,7 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 	for(int i=x1; i<=x2; i++)
 	{
 		
-		doublebuffer[offsetbase+i] = c;
+		(*doublebuffer)[offsetbase+i] = c;
 	}
 }
 
@@ -122,7 +122,7 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 
 	for(int i=y1; i<=y2; i++)
 	{
-		doublebuffer[offsetbase] = c;
+		(*doublebuffer)[offsetbase] = c;
 		offsetbase+=xres;
 	}
 }
@@ -133,7 +133,7 @@ void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 
 	for(int i=x1; i<=xy; i++)
 	{
-		doublebuffer[offsetbase+i] = c;
+		(*doublebuffer)[offsetbase+i] = c;
 		offsetbase+=xres+1;
 	}
 }

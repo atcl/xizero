@@ -4,7 +4,6 @@
 #define HH_CLFPS
 #pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval coorect"
 
-#include <time.h>
 #include "CLapi.hh"
 
 

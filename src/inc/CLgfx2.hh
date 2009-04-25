@@ -20,7 +20,7 @@ class CLgfx2
 		void drawfontstring(xlong p,xchar* a,xlong* f,uxlong c);
 		xlong locatemaxx();
 		xlong locatemaxy();
-		xlong locate(xlong x,xlong y);
+		uxlong locate(xlong x,xlong y);
 
 		xlong getversion();
 };

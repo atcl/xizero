@@ -4,6 +4,7 @@
 #define HH_CLGAME
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+
 class CLgame
 {
 	private:

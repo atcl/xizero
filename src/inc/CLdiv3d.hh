@@ -5,12 +5,12 @@
 #pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
 
 
-void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,xlong* db)
+void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db)
 {
 
 }
 
-void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,xlong* db,bool aa)
+void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa)
 {
 
 }

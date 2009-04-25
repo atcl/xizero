@@ -3,25 +3,148 @@
 
 <class>
 	
-	<filename></filename>
+	<name ispseudostatic="0">CLbuffer</name>
+	
+	<filename>CLbuffer.hh</filename>
 	
 	<depends>
-		<class></class>
-		<library></library>
+		<module>CLtypes.hh</module>
+		<library>(std)string.h</library>
 	</depends>
 	
-	<attribute ispublic="" isstatic="">
-		<name></name>
-		<datatype></datatype>
+	<attribute ispublic="0" isstatic="1">
+		<name>version</name>
+		<type>xlong</type>
+	<attribute>
+		
+	<attribute ispublic="0" isstatic="0">
+			<name>buffer</name>
+			<type>template*</type>
+	<attribute>
+		
+	<attribute ispublic="0" isstatic="0">
+			<name>size</name>
+			<type>uxlong</type>
 	<attribute>
 	
-	<method ispublic="">
-		<name></name>
-		<returntype></returntype>
-		<parameter></parameter>
-		<parameter></parameter>
+	<method ispublic="1">
+		<name>CLbuffer</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>s</name>
+			<type>uxlong</type>
+		</parameter>
 		<infotext></infotext>
 		<example></example>
-	</method>	
+	</method>
+	
+	<method ispublic="1">
+		<name>~CLbuffer</name>
+		<returntype>void</returntype>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>clear</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>v</name>
+			<type>template</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>fastclear</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>v</name>
+			<type>template</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>copy</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>dst</name>
+			<type>template*</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>copy</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>dst</name>
+			<type>CLbuffer*</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>fastcopy</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>dst</name>
+			<type>xlong</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>blendcopy</name>
+		<returntype>void</returntype>
+		<parameter>
+			<name>dst</name>
+			<type>template*</type>
+		</parameter>
+		<parameter>
+			<name>o</name>
+			<type>xlong</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>getsize</name>
+		<returntype>uxlong</returntype>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>getbuffer</name>
+		<returntype>template*</returntype>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>operator[]</name>
+		<returntype>template&</returntype>
+		<parameter>
+			<name>i</name>
+			<type>uxlong</type>
+		</parameter>
+		<infotext></infotext>
+		<example></example>
+	</method>
+	
+	<method ispublic="1">
+		<name>getversion</name>
+		<returntype>xlong</returntype>
+		<infotext></infotext>
+		<example></example>
+	</method>
 	
 </class>
