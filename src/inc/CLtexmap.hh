@@ -4,7 +4,11 @@
 #define HH_CLTEXMAP
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
-class CLtexmap
+#include "CLtypes.hh"
+#include "CLcl.hh"
+
+
+class CLtexmap : public virtual CLcl
 {
 	private:
 

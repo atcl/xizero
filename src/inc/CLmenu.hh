@@ -4,13 +4,14 @@
 #define HH_CLMENU
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLgfx2.hh"
 
 
-class CLmenu
+class CLmenu : public virtual CLcl
 {
 	private:
-		static xlong version;
 		xlong* doublebuffer;
 		char* title;
 		xlong* icon;
@@ -22,10 +23,7 @@ class CLmenu
 		~CLmenu();
 		void draw();
 		void action();
-		xlong getversion();
 };
-
-xlong CLmenu::version = 0x00010000;
 
 CLmenu::CLmenu(xlong* db,void* a)
 {
@@ -45,9 +43,5 @@ void CLmenu::action()
 
 }
 
-xlong CLmenu::getversion()
-{
-	return version;
-}
-
 #endif
+

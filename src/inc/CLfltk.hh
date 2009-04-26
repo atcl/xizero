@@ -4,7 +4,6 @@
 #define HH_CLFLTK
 #pragma message "Compiling " __FILE__ " ! TODO: show widgets"
 
-
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
@@ -12,6 +11,8 @@
 #include <FL/Fl_Box.H>
 #include <time.h>
 #include <string.h>
+
+#include "CLtypes.hh"
 
 #define UPDATE_RATE 0.05
 
@@ -104,6 +105,8 @@ class FLTKwindow : public Fl_Window
 			return keystate;
 		}
 	}
+
+	void setwindowtitle();
 };
 
 

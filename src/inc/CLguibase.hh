@@ -4,11 +4,13 @@
 #define HH_CLGUIBASE
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
-class CLguibase
+#include "CLtypes.hh"
+#include "CLcl.hh"
+
+
+class CLguibase : public virtual CLcl
 {
 	private:
-		static xlong version;
-
 		xlong doublebuffer;
 		xlong posx;
 		xlong posy;
@@ -16,13 +18,14 @@ class CLguibase
 		xlong height;
 		uxlong fcolor;
 		uxlong bcolor;
+
 		void drawrectangle();
 
 	public:
 		CLguibase();
-		~CLguibase();
+		virtual ~CLguibase();
 
-		void draw(); //virtual!
+		virtual void draw();
 		void setwidth(xlong w);
 		void setheight(xlong h);
 		void setx(xlong x);
@@ -31,23 +34,16 @@ class CLguibase
 		xlong getheight();
 		xlong getx();
 		xlong gety();
-
-		xlong getversion();
 };
-
-xlong CLguibase::version = 0x00010000;
 
 CLguibase::CLguibase()
 {
 
 }
 
-CLguibase::~CLguibase() { }
+CLguibase::~CLguibase() { } //virtual!
 
-// void CLguibase::draw()
-// {
-// 
-// }
+void CLguibase::draw() { } //virtual!
 
 void CLguibase::setwidth(xlong w)
 {
@@ -89,10 +85,5 @@ xlong CLguibase::gety()
 	return posy;
 }
 
-xlong CLguibase::getversion()
-{
-	return version;
-}
-
-
 #endif
+

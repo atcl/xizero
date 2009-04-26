@@ -4,11 +4,13 @@
 #define HH_CLGAME
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 
-class CLgame
+
+class CLgame : public virtual CLcl
 {
 	private:
-		static xlong version;
 		xlong boundaryx1;
 		xlong boundaryx2;
 		xlong boundaryy1;
@@ -22,11 +24,7 @@ class CLgame
 		xlong boundarydetection(xlong x,xlong y);
 		xlong collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2);
 		xlong collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b);
-
-		xlong getversion();
 };
-
-xlong CLgame::version = 0x00010000;
 
 CLgame::CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2)
 {
@@ -69,9 +67,5 @@ xlong CLgame::collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlo
 	return 0;
 }
 
-xlong CLgame::getversion()
-{
-	return version;
-}
-
 #endif
+

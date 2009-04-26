@@ -4,14 +4,14 @@
 #define HH_CLPROGRESS
 #pragma message "Compiling " __FILE__ " ! TODO: constructor"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLguibase.hh"
 
 
-class CLprogress : public CLguibase
+class CLprogress : public CLguibase , public virtual CLcl
 {
 	private:
-		static xlong version;
-
 		xlong framethickness;
 		uxlong barcolor;
 		uxlong framecolor;
@@ -31,11 +31,7 @@ class CLprogress : public CLguibase
 		xlong getstart();
 		xlong getend();
 		xlong getprogress();
-
-		xlong getversion();
 };
-
-xlong CLprogress::version = 0x00010000;
 
 CLprogress::CLprogress()
 {
@@ -84,9 +80,5 @@ xlong CLprogress::getprogress()
 	return progress;
 }
 
-xlong CLprogress::getversion()
-{
-	return version;
-}
-
 #endif
+

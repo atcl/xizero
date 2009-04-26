@@ -4,6 +4,7 @@
 #define HH_CLINTRO
 #pragma message "Compiling " __FILE__ " ! TODO: test on models"
 
+#include "CLtypes.hh"
 #include "CLapi.hh"
 #include "CLbuffer"
 #include "CLobject.hh"

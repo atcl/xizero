@@ -4,6 +4,8 @@
 #define HH_CLTREE
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
+
 
 
 #endif

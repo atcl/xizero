@@ -4,12 +4,13 @@
 #define HH_CLAMMO
 #pragma message "Compiling " __FILE__ " ! TODO: update,draw"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 
 
-class CLammo
+class CLammo : public virtual CLcl
 {
 	private:
-		static xlong version;
 		xlong* sprite;
 		xlong xcoord;
 		xlong ycoord;
@@ -23,11 +24,7 @@ class CLammo
 		~CLammo();
 		update();
 		draw();
-
-		xlong getversion();
 };
-
-xlong CLammo::version = 0x00010000;
 
 CLammo::CLammo()
 {
@@ -46,9 +43,5 @@ void CLammo::draw()
 
 }
 
-xlong CLammo::getversion()
-{
-	return version;
-}
-
 #endif
+

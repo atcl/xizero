@@ -4,16 +4,17 @@
 #define HH_CLMATRIX
 #pragma message "Compiling " __FILE__ " ! TODO: std free"
 
-
 #include <iostream>
 #include <iomanip>
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
 #include "CLvector.hh"
 
 
-class CLmatrix
+class CLmatrix : public virtual CLcl
 {
 	protected:
 		CLmath* clmath;
@@ -42,6 +43,8 @@ class CLmatrix
 		void shadow(fvector l,fvector p);
 		void project();
 		float trace();
+		float determinate();
+		void invert();
 		void print();
 };
 

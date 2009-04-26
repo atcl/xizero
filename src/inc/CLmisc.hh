@@ -6,13 +6,82 @@
 
 void one()
 {
-
+	retrun 1;
 }
 
 void crosslevel()
 {
 
 }
+
+//id:
+xlong generateid() { }
+xlong generatecrc() { }
+bool checkcrc() {}
+
+//guifx
+void drawmousegfx() { }
+void drawmouseorbitter() { }
+
+//extrak 10k buffer
+void clearbuffer() { }
+xlong* getbufferptr() { }
+
+//fakecd
+void loadcd() { }
+void playcd() { }
+void stopcd() { }
+void settrack() { }
+void skiptrack() { }
+void prevtrack() { }
+void pausecd() { }
+void ejectcd() { }
+
+//detect
+void detectcpu() { }
+void detectram() { }
+void detectgpu() { }
+void detectvram() { }
+void detectsb() { }
+void detectps() { }
+
+//basic
+bool eof() { }
+xchar inkey() { }
+void int() { }
+
+//cfg
+void loadconfig() { }
+
+//fltk
+void systemfontout() { }
+
+//kern
+void getexename() { }
+void getexesize() { }
+void getenv() { }
+void writetofile() { }
+void appendfile() { }
+
+//class mouse
+void hide() { }
+void show() { }
+void setto() { }
+
+//class fifo
+void fifoin() { }
+void fifoout()  { }
+void fifoclear() { }
+
+//class string
+void replace() { }
+void left() { }
+void right() { }
+void mid() { }
+void concat() { }
+void length() { }
+void compare() { }
+
 
 #endif
 

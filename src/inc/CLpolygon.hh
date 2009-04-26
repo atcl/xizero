@@ -4,8 +4,10 @@
 #define HH_CLPOLYGON
 #pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals"
 
-
 #include <iostream>
+
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLpolyinc.hh"
 #include "CLapi.hh"
 #include "CLmath.hh"
@@ -14,27 +16,27 @@
 #include "CLvector.hh"
 
 
-class CLpolygon
+class CLpolygon : public virtual CLcl
 {
 	protected:
 		CLmath* clmath;
 		CLlight* cllight;
 
+		CLbuffer<xlong>* doublebuffer;
+		CLbuffer<float>* zbuffer;
+		CLbuffer<xlong>* sbuffer;
+
 	private:
-		static xlong version;
+		static xlong pointcount;
 		uxlong color;
 		uxlong shade;
 		uxlong scolor;
-		static xlong pointcount;
 		xlong cpointcount;
 		fvertex pointr[4];
 		fvertex points[4];
 		fvertex pointt[4];
 		vector normal;
 		vector rnormal;
-		CLbuffer<xlong>* doublebuffer;
-		CLbuffer<float>* zbuffer;
-		CLbuffer<xlong>* sbuffer;
 		xlong active;
 		
 		void polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c);	//todo: swap
@@ -64,10 +66,7 @@ class CLpolygon
 		uxlong getcolor();
 		void setactive(xlong b);
 		xlong getactive();
-		xlong getversion();
 };
-
-xlong CLpolygon::version = 0x00010000;
 
 xlong CLpolygon::pointcount = 4;
 
@@ -689,9 +688,5 @@ xlong CLpolygon::getactive()
 	return active;
 }
 
-xlong CLpolygon::getversion()
-{
-	return version;
-}
-
 #endif
+

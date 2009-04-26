@@ -4,14 +4,14 @@
 #define HH_CLBUTTON
 #pragma message "Compiling " __FILE__ " ! TODO: constructor,action"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLguibase.hh"
 
 
-class CLbutton : public CLguibase
+class CLbutton : public CLguibase , public virtual CLcl
 {
 	private:
-		static xlong version;
-
 		void* action;
 		xchar* caption;
 		bool flat;
@@ -23,11 +23,7 @@ class CLbutton : public CLguibase
 		void draw();
 		void setcaption(const xchar* t);
 		xchar* getcaption();
-
-		xlong getversion();
 };
-
-xlong CLbutton::version = 0x00010000;
 
 CLbutton::CLbutton()
 {
@@ -57,9 +53,5 @@ xchar* CLbutton::getcaption()
 	return caption;
 }
 
-xlong CLbutton::getversion()
-{
-	return version;
-}
-
 #endif
+

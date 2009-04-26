@@ -4,6 +4,8 @@
 #define HH_CLFIXED
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
+
 
 union fixedp
 {

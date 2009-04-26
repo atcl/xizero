@@ -4,20 +4,24 @@
 #define HH_CLGFX1
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 
-class CLgfx1
+
+class CLgfx1 : public virtual CLcl
 {
-	private:
-		static xlong version;
+	protected: 
+		CLbuffer<xlong>* doublebuffer;
 
+	private:
 		static xlong last_p;
 		static xlong interval_p;
 		static xlong last_s;
 		static xlong interval_s;
 
-		CLbuffer<xlong>* doublebuffer;
 		xlong locmaxx;
 		xlong locmaxy;
+
 		void drawcirclepixel(xlong x,xlong y,uxlong c);
 		
 	public:
@@ -28,6 +32,7 @@ class CLgfx1
 		void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
 		void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
 		void drawbigpixel(xlong x,xlong y,uxlong c);
+		void putpixel(xlong x,xlong y,uxlong c,xlong m);
 		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
 		void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
 		void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
@@ -52,13 +57,10 @@ class CLgfx1
 		void drawspriterotated90(xlong x,xlong y,xlong* s,xlong c);
 		void drawspritemirrored(xlong x,xlong y,xlong* s,xlong b);
 		void drawspriteanimated(xlong x,xlong y,xlong** s,xlong i);
+		void putsprite(xlong x,xlong y,xlong* s,xlong m);
 		void drawscreen(xlong* s);
 		void drawtile(xlong x,xlong y,xlong tx,xlong ty,xlong *s);
-		bool comparecolors(uxlong c1,uxlong c2);
-		xlong getversion();
 };
-
-xlong CLgfx1::version = 0x00010000;
 
 void CLgfx1::drawcirclepixel(xlong x,xlong y,uxlong c)
 {
@@ -98,6 +100,25 @@ void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c)
 	(*doublebuffer)[(y*xres)+x+1] = c;
 	(*doublebuffer)[((y+1)*xres)+x] = c;
 	(*doublebuffer)[((y+1)*xres)+(x+1)] = c;
+}
+
+void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
+{
+	switch(m)
+	{
+		case 1: //AND
+			(*doublebuffer)[(y*xres)+x] = (*doublebuffer)[(y*xres)+x] && c;
+		break;
+		case 2: //OR:
+			(*doublebuffer)[(y*xres)+x] = (*doublebuffer)[(y*xres)+x] || c;
+		break;
+		case 3: //XOR:
+			(*doublebuffer)[(y*xres)+x] = (*doublebuffer)[(y*xres)+x] ^ c;
+		break;
+		default:
+			(*doublebuffer)[(y*xres)+x] = c;
+	}
+
 }
 
 void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
@@ -177,9 +198,5 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 	drawanyline(x4,y4,x1,y1,c);
 }
 
-xlong CLgfx1::getversion()
-{
-	return version;
-}
-
 #endif
+

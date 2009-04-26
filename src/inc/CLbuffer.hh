@@ -4,13 +4,15 @@
 #define HH_CLBUFFER
 #pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
-
 #include <string.h>
 
-template <typename T>class CLbuffer
+#include "CLtypes.hh"
+#include "CLcl.hh"
+
+
+template <typename T>class CLbuffer : public virtual CLcl
 {
 	private:
-		static xlong version;
 		T* buffer;
 		uxlong size;
 		
@@ -27,10 +29,7 @@ template <typename T>class CLbuffer
 		uxlong getsize();
 		T* getbuffer();
 		T& operator[](uxlong i);
-		xlong getversion();
 };
-
-template <typename T>xlong CLbuffer<T>::version = 0x00010000;
 
 template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 {
@@ -127,9 +126,5 @@ template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 	return buffer[i];
 }
 
-template <typename T>xlong CLbuffer<T>::getversion()
-{
-	return version;
-}
-
 #endif
+

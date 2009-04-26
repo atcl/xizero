@@ -4,6 +4,8 @@
 #define HH_CLSTRUCT
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+#include "CLtypes.hh"
+
 
 struct vertex
 {

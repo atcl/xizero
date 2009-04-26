@@ -4,6 +4,8 @@
 #define HH_CLUTILS
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+#include "CLtypes.hh"
+
 
 xchar* long2char(xlong l)
 {

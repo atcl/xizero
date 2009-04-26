@@ -4,6 +4,8 @@
 #define HH_CLSETUP
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+#include "CLtypes.hh"
+
 
 void CLsetup()
 {

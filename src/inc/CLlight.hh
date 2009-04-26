@@ -4,23 +4,25 @@
 #define HH_CLLIGHT
 #pragma message "Compiling " __FILE__ " ! TODO: use this class"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLvector.hh"
 
 
-class CLlight
+class CLlight : public virtual CLcl
 {
 	protected:
 		CLmath*     clmath;
 		CLmatrix*   lm;
 
 	private:
-		static xlong version;
 		fvector     light;
 		uxlong       color;
 		
 	public:
 		CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm);
 		~CLlight();
+
 		fvector getlight();
 		uxlong getcolor();
 		void addintensity(float p);
@@ -32,10 +34,7 @@ class CLlight
 		void setlightx(float x);
 		void setlighty(float x);
 		void setlightz(float x);
-		xlong getversion();
 };
-
-xlong CLlight::version = 0x00010000;
 
 CLlight::CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm)
 {
@@ -109,9 +108,5 @@ void CLlight::setlightz(float z)
 	light.z = z;
 }
 
-xlong CLlight::getversion()
-{
-	return version;
-}
-
 #endif
+

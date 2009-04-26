@@ -4,13 +4,14 @@
 #define HH_CLFPS
 #pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval coorect"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLapi.hh"
 
 
-class CLfps
+class CLfps : public virtual CLcl
 {
 	private:
-		static xlong version;
 		xlong framespersecond;
 		float currenttime;
 		float elapsedtime;
@@ -27,10 +28,7 @@ class CLfps
 		void init();
 		void increment();
 		float get();
-		xlong getversion();
 };
-
-xlong CLfps::version = 0x00010000;
 
 CLfps::CLfps(xlong i,bool o)
 {
@@ -84,9 +82,5 @@ float CLfps::get()
 	return framespersecond;
 }
 
-xlong CLfps::getversion()
-{
-	return version;
-}
-
 #endif
+

@@ -4,14 +4,15 @@
 #define HH_CLFORMAT
 #pragma message "Compiling " __FILE__ " ! TODO: fix loadar crash"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLutils.hh"
 
 
-class CLformat
+class CLformat : public virtual CLcl
 {
 	private:
-		static xlong version;
 
 	public:
 		CLformat();
@@ -21,10 +22,10 @@ class CLformat
 		xlong** loadbcx(xlong* bf,xlong bs);
 		xchar** loadmap(xchar* bf, xlong bs,xlong subconst);
 		xlong*  loadtga(xlong* bf);
-		xlong   getversion();
-};
 
-xlong CLformat::version = 0x00010000;
+		xlong** loadlvl();
+		xlong** loadini();
+};
 
 CLformat::CLformat()
 {
@@ -292,11 +293,6 @@ xchar** CLformat::loadmap(xchar* bf,xlong bs,xlong subconst)
 xlong* CLformat::loadtga(xlong* bf)
 {
 
-}
-
-xlong CLformat::getversion()
-{
-	return version;
 }
 
 #endif

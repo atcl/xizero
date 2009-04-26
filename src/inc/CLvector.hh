@@ -4,6 +4,8 @@
 #define HH_CLVECTOR
 #pragma message "Compiling " __FILE__ " ! TODO: overload operators"
 
+#include "CLtypes.hh"
+
 
 struct vector
 {

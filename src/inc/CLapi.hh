@@ -4,13 +4,15 @@
 #define HH_CLAPI
 #pragma message "Compiling " __FILE__ " ! TODO: underscores everywhere"
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
 #include <sstream>
 #include <cstring>
+
+#include "CLtypes.hh"
+
 
 using namespace std;
 
@@ -218,6 +220,11 @@ xlong getchararraysize_(xchar* c)
 xlong getchararraysize_(const xchar* c)
 {
 	return xlong(strlen(c));
+}
+
+void installsystemkey(xchar scancode,void *action)
+{
+
 }
 
 #endif

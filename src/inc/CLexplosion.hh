@@ -4,26 +4,27 @@
 #define HH_CLEXPLOSION
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
+
+
 //combi aus "translate along normals" + "dyadic product"
-class CLexplosion
+class CLexplosion : public virtual CLcl
 {
 	protected:
-		static xlong version;
+		CLobject* object;
+
+	private:
 		float last_time;
 		float curr_time;
 		xlong interval;
-
-		CLobject* object;
 
 	public:
 		CLexplosion(CLobject* o);
 		~CLexplosion();
 
 		void start();
-		xlong getversion();
 };
-
-xlong CLexplosion::version = 0x00010000;
 
 CLexplosion::CLexplosion(CLobject* o)
 {
@@ -35,11 +36,6 @@ CLexplosion::~CLexplosion() { }
 void CLexplosion::start()
 {
 
-}
-
-xlong CLexplosion::getversion()
-{
-	return version;
 }
 
 #endif

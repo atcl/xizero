@@ -4,13 +4,14 @@
 #define HH_CLLABEL
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLguibase.hh"
 
 
-class CLlabel : public CLguibase
+class CLlabel : public CLguibase , public virtual CLcl
 {
 	private:
-		static xlong version;
 		xchar* text;
 
 	public:
@@ -20,11 +21,7 @@ class CLlabel : public CLguibase
 		void draw();
 		void settext(const xchar* t);
 		xchar* gettext();
-
-		xlong getversion();
 };
-
-xlong CLlabel::version = 0x00010000;
 
 CLlabel::CLlabel()
 {
@@ -48,9 +45,5 @@ xchar* CLlabel::gettext()
 	return text;
 }
 
-xlong CLlabel::getversion()
-{
-	return version;
-}
-
 #endif
+

@@ -4,20 +4,23 @@
 #define HH_CLMATH
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
-
 #include <math.h>
+
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLvector.hh"
 
-class CLmath
+
+class CLmath : public virtual CLcl
 {
 	private:
 		float* sinarray;
 		float* cosarray;
-		static xlong version;
 
 	public:
 		CLmath();
 		~CLmath();
+
 		xlong sign(xlong x);
 		xlong absolute(xlong x);
 		xlong intsqrt(uxlong x);
@@ -29,10 +32,14 @@ class CLmath
 		xlong dotproduct(vector a,vector b);
 		fvector crossproduct(fvector a,fvector b);
 		vector crossproduct(vector a,vector b);
-		xlong getversion();
-};
 
-xlong CLmath::version = 0x00010000;
+		float pi();
+		float deg2rad(xlong d);
+		xlong faculty(xlong f);
+		xlong power(xlong b,xlong e);
+		float odeeuler();
+				
+};
 
 CLmath::CLmath()
 {
@@ -134,11 +141,6 @@ vector CLmath::crossproduct(vector a,vector b)
 	f.y = ( (a.z * b.x) - (a.x * b.z) );
 	f.z = ( (a.x * b.y) - (a.y * b.x) );
 	f.l = vectorlength(f);
-}
-
-xlong CLmath::getversion()
-{
-	return version;
 }
 
 #endif

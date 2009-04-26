@@ -4,13 +4,16 @@
 #define HH_CLPLAYER
 #pragma message "Compiling " __FILE__ " ! TODO: interaction"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 
-class CLplayer
+
+class CLplayer : public virtual CLcl
 {
-	private:
-		static xlong version;
+	protected:
 		CLobject* model;
 
+	private:
 		xlong xcoord;
 		xlong ycoord;
 		xlong xdirection;
@@ -49,6 +52,7 @@ class CLplayer
 	public:
 		CLplayer(CLobject* obj,xlong** dat);
 		~CLplayer();
+
 		void draw();
 		void move(xlong x,xlong y);
 		void incxspeed();
@@ -61,10 +65,7 @@ class CLplayer
 		void collision();
 		xlong gethealth();
 		xlong getshield();
-		xlong getversion();
 };
-
-xlong CLplayer::version = 0x00010000;
 
 CLplayer::CLplayer(CLobject* obj,xlong** dat)
 {
@@ -175,9 +176,5 @@ xlong CLplayer::getshield()
 	return shield;
 }
 
-xlong CLplayer::getversion()
-{
-	return version;
-}
-
 #endif
+

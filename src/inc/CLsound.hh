@@ -4,7 +4,11 @@
 #define HH_CLSOUND
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
-class CLsound
+#include "CLtypes.hh"
+#include "CLcl.hh"
+
+
+class CLsound : public virtual CLcl
 {
 	private:
 		xlong volume;

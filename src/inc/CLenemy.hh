@@ -4,15 +4,17 @@
 #define HH_CLENEMY
 #pragma message "Compiling " __FILE__ " ! TODO: interaction"
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 
-class CLenemy
+
+class CLenemy : public virtual CLcl
 {
-	private:
-		static xlong version;
-
+	protected:
 		CLobject* model;
-		xlong name;
 
+	private:
+		xlong name;
 		xlong xcoord;
 		xlong ycoord;
 		xlong xdirection;
@@ -50,10 +52,7 @@ class CLenemy
 		void update();
 		void collision();
 		xlong gethealth();
-		xlong getversion();
 };
-
-xlong CLenemy::version = 0x00010000;
 
 CLenemy::CLenemy(CLobject* obj, xlong** dat)
 {
@@ -120,9 +119,6 @@ xlong CLenemy::gethealth()
 
 }
 
-xlong CLenemy::getversion()
-{
-	return version;
-} 
-
 #endif
+
+

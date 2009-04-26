@@ -4,6 +4,7 @@
 #define HH_CLLEVEL
 #pragma message "Compiling " __FILE__ " ! TODO: display crasht!"
 
+#include "CLcl.hh"
 #include "CLapi.hh"
 #include "CLmath.hh"
 #include "CLformat.hh"
@@ -15,7 +16,7 @@
 #include "CLlight.hh"
 
 
-class CLlevel
+class CLlevel : public virtual CLcl
 {
 	protected:
 		CLformat* clformat;
@@ -25,8 +26,15 @@ class CLlevel
 		CLbuffer<float>* clzbuffer;
 		CLbuffer<xlong>*  clstencil;
 
+		CLmatrix* cllinear;
+		CLmatrix* clshadow;
+		CLlight*  cllight;
+
+		CLplayer*  clplayer;
+		CLenemy**  clenemy;
+		CLobject** clterrain;
+
 	private:
-		static xlong version;
 		static xlong levelwidth;
 		static xlong blockheight;
 		static xlong blockwidth;
@@ -40,25 +48,13 @@ class CLlevel
 		xlong smoothmark;
 		xlong smoothlevelheight;
 
-
-		CLmatrix* cllinear;
-		CLmatrix* clshadow;
-		CLlight*  cllight;
-
-		CLplayer*  clplayer;
-		CLenemy**  clenemy;
-		CLobject** clterrain;
-
 	public:
 		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls);
 		~CLlevel();
 
 		void display();
 		void subsmark(xlong m);
-		xlong getversion();
 };
-
-xlong CLlevel::version = 0x00010000;
 
 xlong CLlevel::levelwidth = 20;
 xlong CLlevel::blockheight = 40;
@@ -325,9 +321,5 @@ void CLlevel::subsmark(xlong m)
 	}
 }
 
-xlong CLlevel::getversion()
-{
-	return version;
-}
-
 #endif
+

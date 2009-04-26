@@ -4,6 +4,8 @@
 #define HH_CLOBJECT
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+#include "CLtypes.hh"
+#include "CLcl.hh"
 #include "CLpolygon.hh"
 #include "CLmath.hh"
 #include "CLmatrix.hh"
@@ -11,20 +13,20 @@
 #include "CLstruct.hh"
 #include "CLvector.hh"
 
-class CLobject
+
+class CLobject : public virtual CLcl
 {
 	protected:
 		CLmath* clmath;
 		CLmatrix* shadowmatrix;
 		CLlight*  cllight;
+		CLpolygon** polyptr;
 
 	private:
-		static xlong version;
 		xlong vertexcount;
 		xlong polycount;
 		xlong dockcount;
 		xlong vertexptr;
-		CLpolygon** polyptr;
 		vector** dockptr;
 		vertex position;
 		vertex rposition;
@@ -54,10 +56,7 @@ class CLobject
 		void translatealongnormals(float size);
 		vertex* getboundingbox();
 		void reset();
-		xlong getversion();
 };
-
-xlong CLobject::version = 0x00010000;
 
 CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
 {
@@ -359,9 +358,5 @@ void CLobject::reset()
 	}
 }
 
-xlong CLobject::getversion()
-{
-	return version;
-}
-
 #endif
+

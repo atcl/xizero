@@ -4,6 +4,7 @@
 #define HH_CLSCREEN
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
+#include "CLtypes.hh"
 #include "CLutils.hh"
 #include "CLgfx1.hh"
 
