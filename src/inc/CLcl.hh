@@ -6,8 +6,17 @@
 
 class CLcl
 {
+	private:
+		static xlong version;
 
+	public:
+		CLcl();
+		~CLcl();
+
+		xlong getversion();
 };
+
+xlong CLcl::version = 0x00010000;
 
 #endif
 

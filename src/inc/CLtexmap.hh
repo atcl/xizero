@@ -4,7 +4,16 @@
 #define HH_CLTEXMAP
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
+class CLtexmap
+{
+	private:
 
+
+	public:
+		CLtexmap();
+		~CLtexmap();
+		maptexlinear();
+}
 
 #endif
 
