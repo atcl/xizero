@@ -161,7 +161,50 @@ void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 
 void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
+	if(x1==x2 && y1==y2) return;
 
+	xlong dx = x2 - x1;
+	xlong dy = y2 - y1;
+	xlong e;
+	xlong xs = 1;
+	xlong ys = xres;
+	xlong len;
+	xlong off = y1*xres+x1;
+	xlong temp;
+
+	if(dx<0)
+	{
+		dx = -dx;
+		xs = -xs;
+	}
+
+
+	if(dy<0)
+	{
+		dy = -dy;
+		ys = -ys;
+	}
+
+	if(dy > dx)
+	{
+		dx ^= dy ^= dx ^= dy;
+		xs ^= ys ^= xs ^= ys;
+	}
+
+	len = dx+1;
+	e = dy;
+
+	for(int i=0; i<len; i++)
+	{
+		(*doublebuffer)[off] = c;
+		off += xs;
+		e += dy;
+		if(e >= dx)
+		{
+			e -= dx;
+			off += ys;
+		}
+	}
 }
 
 void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)

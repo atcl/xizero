@@ -7,8 +7,6 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Box.H>
 #include <time.h>
 #include <string.h>
 
@@ -113,38 +111,12 @@ class FLTKwindow : public Fl_Window
 //********
 
 FLTKwindow  *win;
-Fl_Menu_Bar *menubar;
-Fl_Box      *box;
-
-void Menu_CB(Fl_Widget *w, void*data)
-{
-	char picked[80];
-	menubar->item_pathname(picked, sizeof(picked)-1);
-	if ( strcmp(picked, "File/Quit") == 0 ) CLexit_(__func__,"Bye",0);
-}
 
 void FLTKsetup()
 {
 	Fl::visual(FL_RGB);
 
 	win     = new FLTKwindow(xres, yres,"atCROSSLEVEL");
-// 	menubar = new Fl_Menu_Bar(0, 0, 600, 25);
-// 	box     = new Fl_Box(530,35,590,55,"fps:");
-
-// 	box->labelcolor(FL_WHITE);
-// 	box->box(FL_NO_BOX);
-
-/*	menubar->add( "File/Load"  ,0,Menu_CB);
-	menubar->add( "File/Quit"  ,0,Menu_CB);
-	menubar->add( "Mode/Model"  ,0,Menu_CB);
-	menubar->add( "Mode/Model/Wireframe" ,0,Menu_CB);
-	menubar->add( "Mode/Model/Flat"      ,0,Menu_CB);
-	menubar->add( "Mode/Model/Shadow"    ,0,Menu_CB);
-	menubar->add( "Mode/Level" ,0,Menu_CB);
-	menubar->add( "Mode/Level/Terrain"   ,0,Menu_CB);
-	menubar->add( "Mode/Level/Enemies"   ,0,Menu_CB);
-	menubar->add( "Mode/Level/Player"    ,0,Menu_CB);*/	
-
 	win->end();
 	win->show();
 }
@@ -196,6 +168,22 @@ int FLTKgetmousebuttonr()
 	return win->mousebuttonr;
 }
 
+xlong FLTKsetfont(xchar s)
+{
+	fl_font(FL_COURIER,s);
+}
 
+xlong FLTKgetfontheight()
+{
+	return fl_height();
+}
+
+void FLTKwritestring(xlong x,xlong y,xchar* s,uxlong c)
+{
+	doubleword temp;
+	temp.dd = c;
+	fl_color(temp.db[1],temp.db[2],temp.db[3]);
+	fl_draw(s,x,y);
+}
 
 #endif

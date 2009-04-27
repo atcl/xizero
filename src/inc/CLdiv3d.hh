@@ -22,9 +22,11 @@ void drawlightsource(xlong x,xlong y,xlong z,uxlong color,xlong intensity)
 
 }
 
-void drawfloor(xlong z)
+void drawfloor(xlong z, xlong w=xres)
 {
+	//determine shade
 
+	//draw screen
 } 
 
 #endif

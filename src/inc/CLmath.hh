@@ -16,6 +16,8 @@ class CLmath : public virtual CLcl
 	private:
 		float* sinarray;
 		float* cosarray;
+		float qpi;
+		float qpi180;
 
 	public:
 		CLmath();
@@ -43,6 +45,9 @@ class CLmath : public virtual CLcl
 
 CLmath::CLmath()
 {
+	qpi = 355/113;
+	qpi180 = qpi / 180;
+
 	float degtorad = M_PI/180;
 
 	sinarray = new float[360];
@@ -141,6 +146,45 @@ vector CLmath::crossproduct(vector a,vector b)
 	f.y = ( (a.z * b.x) - (a.x * b.z) );
 	f.z = ( (a.x * b.y) - (a.y * b.x) );
 	f.l = vectorlength(f);
+}
+
+float CLmath::pi()
+{
+	return qpi;
+}
+
+float CLmath::deg2rad(xlong d)
+{
+	return float(qpi*d);
+}
+
+xlong CLmath::faculty(xlong f)
+{
+	xlong r = 1;
+
+	for(int i=2;i<=f;i++)
+	{
+		r *= i;
+	}
+
+	return r;
+}
+
+xlong CLmath::power(xlong b,xlong e)
+{
+	xlong r = 1;
+
+	for(int i=1;i<=e;i++)
+	{
+		r *= b;
+	}
+
+	return r;
+}
+
+float CLmath::odeeuler()
+{
+
 }
 
 #endif

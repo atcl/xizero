@@ -35,10 +35,7 @@ CLgame::CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2)
 
 }
 
-CLgame::~CLgame()
-{
-
-}
+CLgame::~CLgame() { }
 
 xlong CLgame::boundarydetection(xlong x1,xlong y1,xlong x2,xlong y2)
 {

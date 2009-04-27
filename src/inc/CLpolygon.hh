@@ -72,6 +72,8 @@ xlong CLpolygon::pointcount = 4;
 
 void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 {
+	if(x1==x2 && y1==y2) return;
+
 	xlong dx = x2 - x1;
 	xlong dy = y2 - y1;
 	xlong e;
@@ -96,16 +98,16 @@ void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 
 	if(dy > dx)
 	{
-		//dx ^= dy ^= dx ^= dy;
-		//xs ^= ys ^= xs ^= ys;
+		dx ^= dy ^= dx ^= dy;
+		xs ^= ys ^= xs ^= ys;
 
-		temp = dy;
-		dy = dx;
-		dx = temp;
-
-		temp = ys;
-		ys = xs;
-		xs = temp;
+// 		temp = dy;
+// 		dy = dx;
+// 		dx = temp;
+// 
+// 		temp = ys;
+// 		ys = xs;
+// 		xs = temp;
 	}
 
 	len = dx+1;

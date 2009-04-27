@@ -10,7 +10,7 @@
 union fixedp
 {
 	xlong f;
-	xshort p[2]; //p[0]=fractional, p[1]=numeral //?switch?
+	xshort p[2]; //p[1]=fractional, p[0]=numeral
 
 	fixedp operator=(fixedp &a);
 	fixedp operator=(xshort& a);
@@ -29,8 +29,8 @@ fixedp fixedp::operator=(fixedp &a)
 fixedp fixedp::operator=(xshort &a)
 {
 	fixedp temp;
-	temp.p[1] = a;
-	temp.p[0] = 0;
+	temp.p[0] = a;
+	temp.p[1] = 0;
 }
 
 xshort fixedp::toshort()
@@ -43,14 +43,14 @@ xlong fixedp::tolong()
 
 }
 
-fixedp operator++(fixedp &a)
+fixedp& operator++(fixedp &a)
 {
-
+	a.p[0]++;
 }
 
-fixedp operator--(fixedp &a)
+fixedp& operator--(fixedp &a)
 {
-
+	a.p[0]--;
 }
 
 fixedp operator+=(fixedp &a,fixedp &b)
@@ -84,7 +84,7 @@ fixedp operator+(fixedp &a,xshort &b)
 {
 	fixedp temp;
 	temp.f = a.f;
-	temp.p[1] += b;
+	temp.p[0] += b;
 	return temp;
 }
 
@@ -92,7 +92,7 @@ fixedp operator+(xshort &a,fixedp &b)
 {
 	fixedp temp;
 	temp.f = b.f;
-	temp.p[1] += a;
+	temp.p[0] += a;
 	return temp;
 }
 
