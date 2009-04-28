@@ -1,0 +1,1 @@
+x=MSGBOX("exit atcrosslevel",vbokonly,"Say")
