@@ -23,9 +23,9 @@ struct fvertex
 
 union doubleword
 {
-	xlong dd;
+	xlong  dd;
 	xshort dw[2];
-	xchar db[4];
+	xchar  db[4];
 };
 
 struct screenside
@@ -39,6 +39,27 @@ struct sprite
 	xlong size;
 	xlong width;
 	xlong height;
+	xlong* data;
+};
+
+struct sprites
+{
+	xlong size;
+	xlong width;
+	xlong height;
+
+	xlong tilesize;
+	xlong tilewidth;
+	xlong tileheight;
+
+	xlong* data;
+};
+
+struct listmember
+{
+	void* data;
+	listmember* next;
+	listmember* prev;
 };
 
 struct armember
@@ -52,8 +73,17 @@ struct armember
 
 struct arfile
 {
-	xlong filecount;
+	xlong     filecount;
 	armember* members;
+};
+
+struct exe
+{
+	xchar*  name;
+	xchar*  title;
+	xlong   size;
+	xlong   version;
+	sprite* splash;
 };
 
 #endif

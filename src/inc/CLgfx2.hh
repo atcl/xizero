@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 
 
 class CLgfx2 : public virtual CLcl

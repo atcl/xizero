@@ -4,7 +4,9 @@
 #define HH_CLLEVEL
 #pragma message "Compiling " __FILE__ " ! TODO: display crasht!"
 
+#include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 #include "CLapi.hh"
 #include "CLmath.hh"
 #include "CLformat.hh"

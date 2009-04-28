@@ -21,7 +21,7 @@ class CLformat : public virtual CLcl
 		arfile* loadar(xchar* bf,xlong cfs);
 		xlong** loadbcx(xlong* bf,xlong bs);
 		xchar** loadmap(xchar* bf, xlong bs,xlong subconst);
-		xlong*  loadtga(xlong* bf);
+		sprite*  loadtga(xchar* bf);
 
 		xlong** loadlvl();
 		xlong** loadini();
@@ -290,9 +290,42 @@ xchar** CLformat::loadmap(xchar* bf,xlong bs,xlong subconst)
 	return rev;
 }
 
-xlong* CLformat::loadtga(xlong* bf)
+sprite* CLformat::loadtga(xchar* bf)
 {
+//loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 
+	xchar	imageid		= bf[0];
+
+	xchar	colormap	= bf[1];
+	xchar	imagetype	= bf[2];
+
+	if(imagetype > 2) return 0; //no TGA!
+
+	xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
+	xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
+	xchar	colormaprentry	= bf[7];
+
+	xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
+	xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
+	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
+	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
+	xchar	imagepixelsize	= bf[16];
+
+	if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit
+
+	xchar	imagedescriptor	= bf[17];
+
+	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
+
+	xshort imageoffset = imageid + colormaplength;
+
+	sprite* r = new sprite();
+	r->size = imagewidth * imageheight;
+	r->width = imagewidth;
+	r->height = imageheight;
+	r->data = reinterpret_cast<xlong*>(&bf[18] + imageoffset);
+
+	return r;
 }
 
 #endif

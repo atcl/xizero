@@ -4,6 +4,7 @@
 #define HH_CLSOUND
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
+//#include <libsndfile.h>
 #include "CLtypes.hh"
 #include "CLcl.hh"
 

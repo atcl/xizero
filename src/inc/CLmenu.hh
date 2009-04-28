@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 #include "CLgfx2.hh"
 
 
@@ -22,8 +23,14 @@ class CLmenu : public virtual CLcl
 		CLmenu(xlong* db,void* a);
 		~CLmenu();
 		void draw();
+		void onclick();
 		void action();
 };
+
+void CLmenu::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,uxlong color2)
+{
+
+}
 
 CLmenu::CLmenu(xlong* db,void* a)
 {
@@ -35,7 +42,9 @@ CLmenu::~CLmenu() { }
 
 void CLmenu::draw()
 {
-
+	//drawrectangle(0,0,xres,?,grey);	//win
+	//drawrectangle(2,2,xres,?/2,red);	//title
+	//drawrectangle(?,?,?,?,grey);		//close
 }
 
 void CLmenu::action()

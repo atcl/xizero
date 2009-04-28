@@ -1,0 +1,1 @@
+!Don't fuck with the .a archive files in this folder and its subfolders, the contained files are placed in  a certain oder, and that is important for the engine! 

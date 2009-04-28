@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLbuffer.hh"
 
 
 void drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y)

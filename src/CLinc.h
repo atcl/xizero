@@ -22,29 +22,36 @@
 //pseudo static classes
 #include "inc/CLfps.hh"
 #include "inc/CLformat.hh"
-#include "inc/CLbuffer.hh"
 #include "inc/CLmath.hh"
 #include "inc/CLgfx1.hh"
 #include "inc/CLgfx2.hh"
 #include "inc/CLdiv3d.hh"
 
 //non-static classes I
+#include "inc/CLbuffer.hh"
+
+//non-static classes II
+#include "inc/CLfifo.hh"
+#include "inc/CLlist.hh"
+#include "inc/CLtree.hh"
+
+//non-static classes II
 #include "inc/CLmenu.hh"
 #include "inc/CLmsgbox.hh"
 
-//non-static classes II (GUI elements)
+//non-static classes III (GUI elements)
 #include "inc/CLguibase.hh"
 #include "inc/CLlabel.hh"
 #include "inc/CLbutton.hh"
 #include "inc/CLprogress.hh"
 
-//non-static classes III (3D engine)
+//non-static classes IIII (3D engine)
 #include "inc/CLmatrix.hh"
 #include "inc/CLlight.hh"
 #include "inc/CLpolygon.hh"
 #include "inc/CLobject.hh"
 
-//non static classes IIII (game objects)
+//non static classes IIIII (game objects)
 #include "inc/CLenemy.hh"
 #include "inc/CLplayer.hh"
 #include "inc/CLlevel.hh"

@@ -17,6 +17,10 @@ union fixedp
 
 	xshort toshort();
 	xlong  tolong();
+
+	fixedp round();
+	fixedp roundup();
+	fixedp rounddown();
 };
 
 fixedp fixedp::operator=(fixedp &a)
@@ -39,6 +43,21 @@ xshort fixedp::toshort()
 }
 
 xlong fixedp::tolong()
+{
+
+}
+
+fixedp fixedp::round()
+{
+
+}
+
+fixedp fixedp::roundup()
+{
+
+}
+
+fixedp fixedp::rounddown()
 {
 
 }

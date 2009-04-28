@@ -5,6 +5,14 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLbuffer.hh"
+#include "CLfps.hh"
+#include "CLformat.hh"
+#include "CLmath.hh"
+#include "CLgfx1.hh"
+#include "CLgfx2.hh"
+#include "CLlight.hh"
+#include "CLmatrix.hh"
 
 
 void CLsetup()

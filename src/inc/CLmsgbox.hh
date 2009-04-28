@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 #include "CLgfx2.hh"
 
 
@@ -20,7 +21,7 @@ class CLmsgbox : public virtual CLcl
 		CLmsgbox(xlong* db,void* a);
 		~CLmsgbox();
 		void draw();
-		void onok();
+		void onclick();
 };
 
 CLmsgbox::CLmsgbox(xlong* db,void* a)
@@ -36,7 +37,7 @@ void CLmsgbox::draw()
 
 }
 
-void CLmsgbox::onok()
+void CLmsgbox::onclick()
 {
 	//action();
 }

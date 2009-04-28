@@ -8,6 +8,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 #include "CLpolyinc.hh"
 #include "CLapi.hh"
 #include "CLmath.hh"

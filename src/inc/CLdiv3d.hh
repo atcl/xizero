@@ -5,7 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
 
 #include "CLtypes.hh"
-
+#include "CLbuffer.hh"
 
 void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db)
 {

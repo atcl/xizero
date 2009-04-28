@@ -1,5 +1,6 @@
-<? xml-version="1.0" ?>
+<?xml version="1.0"?>
 
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
 
 <class>
 	
@@ -8,28 +9,33 @@
 	<filename>CLbuffer.hh</filename>
 	
 	<depends>
-		<module>CLtypes.hh</module>
-		<library>(std)string.h</library>
+		<module href="CLtypes.xml">CLtypes.hh</module>
+		<module href="CLcl.xml">CLcl.hh</module>
+		<library partof="std">string.h</library>
 	</depends>
+	
+	<derived>
+		<parent href="CLcl.xml">CLcl</parent>	
+	</derived>
 	
 	<attribute ispublic="0" isstatic="1">
 		<name>version</name>
 		<type>xlong</type>
-	<attribute>
+	</attribute>
 		
 	<attribute ispublic="0" isstatic="0">
 			<name>buffer</name>
 			<type>template*</type>
-	<attribute>
+	</attribute>
 		
 	<attribute ispublic="0" isstatic="0">
 			<name>size</name>
 			<type>uxlong</type>
-	<attribute>
+	</attribute>
 	
 	<method ispublic="1">
 		<name>CLbuffer</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>s</name>
 			<type>uxlong</type>
@@ -40,14 +46,14 @@
 	
 	<method ispublic="1">
 		<name>~CLbuffer</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<infotext></infotext>
 		<example></example>
 	</method>
 	
 	<method ispublic="1">
 		<name>clear</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>v</name>
 			<type>template</type>
@@ -58,7 +64,7 @@
 	
 	<method ispublic="1">
 		<name>fastclear</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>v</name>
 			<type>template</type>
@@ -69,7 +75,7 @@
 	
 	<method ispublic="1">
 		<name>copy</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>dst</name>
 			<type>template*</type>
@@ -80,7 +86,7 @@
 	
 	<method ispublic="1">
 		<name>copy</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>dst</name>
 			<type>CLbuffer*</type>
@@ -91,7 +97,7 @@
 	
 	<method ispublic="1">
 		<name>fastcopy</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>dst</name>
 			<type>xlong</type>
@@ -102,7 +108,7 @@
 	
 	<method ispublic="1">
 		<name>blendcopy</name>
-		<returntype>void</returntype>
+		<returns>void</returns>
 		<parameter>
 			<name>dst</name>
 			<type>template*</type>
@@ -117,21 +123,21 @@
 	
 	<method ispublic="1">
 		<name>getsize</name>
-		<returntype>uxlong</returntype>
+		<returns>uxlong</returns>
 		<infotext></infotext>
 		<example></example>
 	</method>
 	
 	<method ispublic="1">
 		<name>getbuffer</name>
-		<returntype>template*</returntype>
+		<returns>template*</returns>
 		<infotext></infotext>
 		<example></example>
 	</method>
 	
 	<method ispublic="1">
 		<name>operator[]</name>
-		<returntype>template&</returntype>
+		<returns>template&amp;</returns>
 		<parameter>
 			<name>i</name>
 			<type>uxlong</type>
@@ -142,7 +148,7 @@
 	
 	<method ispublic="1">
 		<name>getversion</name>
-		<returntype>xlong</returntype>
+		<returns>xlong</returns>
 		<infotext></infotext>
 		<example></example>
 	</method>

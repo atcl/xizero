@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
+#include "CLbuffer.hh"
 #include "CLutils.hh"
 #include "CLgfx1.hh"
 
@@ -20,11 +21,6 @@ void dissolve(xlong t,CLbuffer<xlong>* db)
 }
 
 void fadetoblack(xlong t,CLbuffer<xlong>* db)
-{
-
-}
-
-void drawscreen(xlong* src,CLbuffer<xlong> *db)
 {
 
 }

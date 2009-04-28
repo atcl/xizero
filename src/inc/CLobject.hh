@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 #include "CLpolygon.hh"
 #include "CLmath.hh"
 #include "CLmatrix.hh"

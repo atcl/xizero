@@ -11,84 +11,180 @@
 class CLlist : public virtual CLcl
 {
 	private:
+		listmember* current;
+		listmember* first;
+		listmember* last;
+		xlong length;
 
-		void setstart();
+	public:
+		CLlist();
+		CLlist(void* e);
+		~CLlist();
+
+		void append(void* e);
+		void* getcurrent();
+		void delcurrent(bool smash);
+		xlong getlength();
+		void settoindex(xlong i);
+		void clear();
+		void smash();
+		void setfirst();
 		void setlast();
 		void setprev();
 		void setnext();
-	public:
-		CLlist();
-		~CLlist();
-
-		void append();
-		void getcurrent();
-		void delcurrent();
-		xlong* getdata();
-		xlong getlength();
-		void settoindex();
-		void clear();		
+		bool islast();
+		bool isfirst();
 };
-
-void CLlist::setstart()
-{
-
-}
-
-void CLlist::setlast()
-{
-
-}
-
-void CLlist setnext()
-{
-
-}
-
-void CLlist::setprev()
-{
-
-}
 
 CLlist::CLlist()
 {
+	length = 0;
+	current = 0;
+	first = 0;
+	last = 0;
+}
 
+CLlist::CLlist(void* e)
+{
+	length = 1;
+	current = new listmember;
+	first = current;
+	last = current;
+	current->data = e;
+	current->next = current;
+	current->prev = current;
 }
 
 CLlist::~CLlist() { }
 
-void CLlist::append()
+void CLlist::append(void* e)
 {
-
+	if(length==0)
+	{
+		length++;
+		current = new listmember;
+		first = current;
+		last = current;
+		current->data = e;
+		current->next = current;
+		current->prev = current;
+	}
+	else
+	{
+		length++;
+		listmember* temp = new listmember;
+		setlast();
+		current->next = temp;
+		last = temp;
+		temp->prev = current;
+		temp->next = temp;
+		current = temp;
+	}
 }
 
-void CLlist::getcurrent()
+void* CLlist::getcurrent()
 {
-
+	return current->data;
 }
 
-void CLlist::delcurrent()
+void CLlist::delcurrent(bool smash)
 {
+	if(smash==true) delete current->data;
 
-}
-
-xlong* CLlist::getdata()
-{
-
+	if(current==last)
+	{
+		setprev();
+		delete current->next;
+		current->next = current;
+		last = current;
+	}
+	else if(current==first)
+	{
+		setnext();
+		delete current->prev;
+		current->prev = current;
+		first = current;
+	}
+	else
+	{
+		listmember* tempnext = current->next;
+		listmember* tempprev = current->prev;
+		setprev();
+		delete current->next;
+		current->next = tempnext;
+		setnext();
+		current->prev = tempprev;
+	}
 }
 
 xlong CLlist::getlength()
 {
-
+	return length;
 }
 
-void CLlist::settoindex()
+void CLlist::settoindex(xlong i)
 {
+	if(i<=length)
+	{
+		setfirst();
 
+		for(int j=0;j<i;j++)
+		{
+			setnext();
+		}
+	}
 }
 
 void CLlist::clear()
 {
+	length = 0;
+	current = 0;
+	first = 0;
+	last = 0;
+}
 
+void CLlist::smash()
+{
+	current = first;
+	while(current!=last);
+	{
+		delete current->data;
+		setnext();
+		delete current->prev;
+	}
+	
+}
+
+void CLlist::setfirst()
+{
+	current = first;
+}
+
+void CLlist::setlast()
+{
+	current = last;
+}
+
+void CLlist::setnext()
+{
+	current = current->next;
+}
+
+void CLlist::setprev()
+{
+	current = current->prev;
+}
+
+bool CLlist::isfirst()
+{
+	if(current==first) return true;
+	else return false;
+}
+
+bool CLlist::islast()
+{
+	if(current==last) return true;
+	else return false;
 }
 
 #endif

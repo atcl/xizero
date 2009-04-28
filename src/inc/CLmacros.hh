@@ -24,7 +24,7 @@ void inline say()
 
 void inline bye()
 {
-
+	CLexit(__func__,"bye",0);
 }
 
 

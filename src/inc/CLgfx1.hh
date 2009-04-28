@@ -6,11 +6,12 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLbuffer.hh"
 
 
 class CLgfx1 : public virtual CLcl
 {
-	protected: 
+	protected:
 		CLbuffer<xlong>* doublebuffer;
 
 	private:
@@ -239,6 +240,31 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 	drawanyline(x2,y2,x3,y3,c);
 	drawanyline(x3,y3,x4,y4,c);
 	drawanyline(x4,y4,x1,y1,c);
+}
+
+void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
+{
+
+}
+
+void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
+{
+
+}
+
+void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
+{
+
+}
+
+void CLgfx1::fill(xlong x,xlong y,uxlong c)
+{
+
+}
+
+void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
+{
+
 }
 
 #endif
