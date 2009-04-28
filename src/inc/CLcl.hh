@@ -11,6 +11,8 @@ class CLcl
 {
 	private:
 		static xlong version;
+		xlong id;
+		const xchar* name;
 
 	public:
 		CLcl();
@@ -21,7 +23,10 @@ class CLcl
 
 xlong CLcl::version = 0x00010000;
 
-CLcl::CLcl() { }
+CLcl::CLcl()
+{ 
+	name = __func__; //needs to be changed to name of derived constructor __func__ !
+}
 
 CLcl::~CLcl() { } //virtual
 

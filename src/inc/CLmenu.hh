@@ -17,7 +17,6 @@ class CLmenu : public virtual CLcl
 		char* title;
 		xlong* icon;
 		void* actionptr;
-		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,uxlong color2=0); //also for 3d frames
 		
 	public:
 		CLmenu(xlong* db,void* a);
@@ -26,11 +25,6 @@ class CLmenu : public virtual CLcl
 		void onclick();
 		void action();
 };
-
-void CLmenu::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,uxlong color2)
-{
-
-}
 
 CLmenu::CLmenu(xlong* db,void* a)
 {

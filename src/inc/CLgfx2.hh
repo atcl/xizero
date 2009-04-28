@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLstruct.hh"
 #include "CLbuffer.hh"
 
 
@@ -19,12 +20,14 @@ class CLgfx2 : public virtual CLcl
 	public:
 		CLgfx2(CLbuffer<xlong>* db);
 		~CLgfx2();
-		void drawfontchar(xlong x,xlong y,xchar a,xlong* f,uxlong c);
-		void drawfontchar(xlong p,xchar a,xlong* f,uxlong c);
-		void drawfontstring(xlong x,xlong y,xchar* a,xlong* f,uxlong c);
-		void drawfontstring(xlong p,xchar* a,xlong* f,uxlong c);
-		void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,xlong* f,uxlong c);
-		void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,xlong* f,uxlong c);
+		void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
+		void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1);
+		void drawfontchar(xlong x,xlong y,xchar a,sprites* f,uxlong c);
+		void drawfontchar(xlong p,xchar a,sprites* f,uxlong c);
+		void drawfontstring(xlong x,xlong y,xchar* a,sprites* f,uxlong c);
+		void drawfontstring(xlong p,xchar* a,sprites* f,uxlong c);
+		void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,sprites* f,uxlong c);
+		void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,sprites* f,uxlong c);
 		xlong locatemaxx();
 		xlong locatemaxy();
 		xlong locate(xlong x,xlong y);
@@ -43,22 +46,22 @@ CLgfx2::CLgfx2(CLbuffer<xlong>* db)
 
 CLgfx2::~CLgfx2() { }
 
-void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,xlong* f,uxlong c)
+void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,sprites* f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontchar(xlong p,xchar a,xlong* f,uxlong c)
+void CLgfx2::drawfontchar(xlong p,xchar a,sprites* f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,xlong* f,uxlong c)
+void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,sprites* f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontstring(xlong p,xchar* a,xlong* f,uxlong c)
+void CLgfx2::drawfontstring(xlong p,xchar* a,sprites* f,uxlong c)
 {
 
 }

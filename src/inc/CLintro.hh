@@ -65,9 +65,9 @@ void atcrosslevelintro()
 		atcl->update(ltm);
 
 		//clear buffers
-		clbuffer->clear(0,CLdoublebuffer,CLscreenpixsize);
-		clbuffer->clear(zmax,CLzbuffer,CLscreenpixsize);
-		clbuffer->clear(0,CLstencilbuffer,CLscreenpixsize);
+		CLdoublebuffer->clear(0);
+		CLzbuffer->clear(zmax);
+		CLstencilbuffer->clear(0);
 
 		//display
 		atcl->display(1,0,0,0,0)

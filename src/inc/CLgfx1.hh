@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLstruct.hh"
 #include "CLbuffer.hh"
 
 
@@ -49,18 +50,18 @@ class CLgfx1 : public virtual CLcl
 		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
 		void fill(xlong x,xlong y,uxlong c);
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
-		xlong getspritesize(xlong* s);
-		xlong getspritewidth(xlong* s);
-		xlong getspriteheight(xlong* s);
-		void drawsprite(xlong x,xlong y,xlong* s);
-		void drawspritescaled(xlong x,xlong y,xlong* s,xlong z);
-		void drawspriterotated(xlong x,xlong y,xlong* s,xlong d);
-		void drawspriterotated90(xlong x,xlong y,xlong* s,xlong c);
-		void drawspritemirrored(xlong x,xlong y,xlong* s,xlong b);
-		void drawspriteanimated(xlong x,xlong y,xlong** s,xlong i);
-		void putsprite(xlong x,xlong y,xlong* s,xlong m);
+		xlong getspritesize(sprite* s);
+		xlong getspritewidth(sprite* s);
+		xlong getspriteheight(sprite* s);
+		void drawsprite(xlong x,xlong y,sprite* s);
+		void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
+		void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
+		void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c);
+		void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
+		void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
+		void putsprite(xlong x,xlong y,sprite* s,xlong m);
 		void drawscreen(xlong* s);
-		void drawtile(xlong x,xlong y,xlong tx,xlong ty,xlong *s);
+		void drawtile(xlong x,xlong y,xlong tx,xlong ty,sprites *s);
 };
 
 void CLgfx1::drawcirclepixel(xlong x,xlong y,uxlong c)

@@ -15,7 +15,6 @@ class CLmsgbox : public virtual CLcl
 	private:
 		xlong* doublebuffer;
 		void*  action;
-		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,uxlong color2=0); //also for 3d frames around buttons
 		
 	public:
 		CLmsgbox(xlong* db,void* a);
