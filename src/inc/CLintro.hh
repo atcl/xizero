@@ -6,7 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLapi.hh"
-#include "CLbuffer"
+#include "CLbuffer.hh"
 #include "CLobject.hh"
 #include "CLmatrix.hh"
 
@@ -16,10 +16,10 @@ void atcrosslevelintro()
 	//animation variables
 
 		//animation duration in seconds
-		float anim_duration = 10;
+		xlong anim_duration = 10;
 
 		//framerate (in frames per second)
-		float anim_frames = 20;
+		xlong anim_frames = 20;
 
 		//current frame initialize
 		float anim_current = 0;
@@ -30,19 +30,19 @@ void atcrosslevelintro()
 		float anim_stop = (anim_duration * anim_frames * 1000); //final stop value later
 
 		//arrays for x,y,z translates per step
-		xlong *x_trn = new long[anim_duration*anim_frames];
-		xlong *y_trn = new long[anim_duration*anim_frames];
-		xlong *z_trn = new long[anim_duration*anim_frames];
+		xlong *x_trn = new xlong[anim_duration*anim_frames];
+		xlong *y_trn = new xlong[anim_duration*anim_frames];
+		xlong *z_trn = new xlong[anim_duration*anim_frames];
 
 		//arrays for x,y,z rotations per step
-		xlong *x_rot = new long[anim_duration*anim_frames];
-		xlong *y_rot = new long[anim_duration*anim_frames];
-		xlong *z_rot = new long[anim_duration*anim_frames];
+		xlong *x_rot = new xlong[anim_duration*anim_frames];
+		xlong *y_rot = new xlong[anim_duration*anim_frames];
+		xlong *z_rot = new xlong[anim_duration*anim_frames];
 
 		//arrays for x,y,z scales per step
-		xlong *x_scl = new long[anim_duration*anim_frames];
-		xlong *y_scl = new long[anim_duration*anim_frames];
-		xlong *z_scl = new long[anim_duration*anim_frames];
+		xlong *x_scl = new xlong[anim_duration*anim_frames];
+		xlong *y_scl = new xlong[anim_duration*anim_frames];
+		xlong *z_scl = new xlong[anim_duration*anim_frames];
 
 	//load atcrosslevel model
 	xlong *atcl_f;
@@ -50,15 +50,15 @@ void atcrosslevelintro()
 	CLobject* atcl;
 	atcl = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,atcl_f,400,300,100,clmath,bsm,amb);
 
-	anim_start = CLgettime();
+	xlong anim_start = CLgetmilliseconds_();
 	anim_stop += anim_start;
 
 	//run animation
-	while( anim_current =< anim_stop )
+	while( anim_current <= anim_stop )
 	{
 		//check time
-		anim_current = CLgettime();
-		anim_index = long((anim_current - anim_start) / anim_length)
+		anim_current = CLgetmilliseconds_();
+		anim_index = long((anim_current - anim_start) / anim_length);
 
 		//transform
 		
@@ -70,7 +70,7 @@ void atcrosslevelintro()
 		CLstencilbuffer->clear(0);
 
 		//display
-		atcl->display(1,0,0,0,0)
+		atcl->display(1,0,0,0,0,0);
 
 		//clear transformation matrix
 		ltm->unit();

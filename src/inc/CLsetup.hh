@@ -26,7 +26,7 @@ void CLsetup()
 	clmath   = new CLmath();
 
 	clgfx1   = new CLgfx1(CLdoublebuffer);
-	//clgfx2   = new CLgfx2(CLdoublebuffer);
+	clgfx2   = new CLgfx2(CLdoublebuffer);
 
 	amb      = new CLlight(1,1,-1,1,0x00FFFFFF,clmath);
 	ltm      = new CLmatrix(1,clmath);

@@ -89,13 +89,16 @@
 						<xsl:value-of select="name"/>
 					</b><br/>
 					Returns: <xsl:value-of select="returns"/><br/>
-					Parameters:
+					Parameter:
 						<xsl:for-each select="parameter">
 							<xsl:value-of select="type"/>
 							&#160; <xsl:value-of select="name"/> ,&#160; 
 						</xsl:for-each><br/>
 					Info: <xsl:value-of select="info"/><br/>
 				</p>
+
+				<hr/>
+
 			</xsl:for-each>
 		</p>
 

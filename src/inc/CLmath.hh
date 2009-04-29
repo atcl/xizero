@@ -39,7 +39,7 @@ class CLmath : public virtual CLcl
 		float deg2rad(xlong d);
 		xlong faculty(xlong f);
 		xlong power(xlong b,xlong e);
-		float odeeuler(void* f,float x0,float t0,float h,xlong k);
+		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
 				
 };
 
@@ -182,14 +182,14 @@ xlong CLmath::power(xlong b,xlong e)
 	return r;
 }
 
-float CLmath::odeeuler(void* f,float x0,float t0,float h,xlong k)
+float CLmath::odeeuler( float(*f)(float,float),float x0,float t0,float h,xlong k)
 {
 	float tk = t0;
 	float xk = x0;
 
 	for(int i=1;i<=k;i++)
 	{
-		//xk = xk + (h * f(tk,xk) );
+		xk = xk + (h * f(tk,xk) );
 	}
 
 	return xk;

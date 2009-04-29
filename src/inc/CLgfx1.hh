@@ -24,7 +24,7 @@ class CLgfx1 : public virtual CLcl
 		xlong locmaxx;
 		xlong locmaxy;
 
-		void drawcirclepixel(xlong x,xlong y,uxlong c);
+		void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 		
 	public:
 		CLgfx1(CLbuffer<xlong>* db);
@@ -60,13 +60,63 @@ class CLgfx1 : public virtual CLcl
 		void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
 		void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
 		void putsprite(xlong x,xlong y,sprite* s,xlong m);
-		void drawscreen(xlong* s);
-		void drawtile(xlong x,xlong y,xlong tx,xlong ty,sprites *s);
+		void drawscreen(sprite* s);
+		void drawtile(xlong x,xlong y,sprites *s,xlong ti);
 };
 
-void CLgfx1::drawcirclepixel(xlong x,xlong y,uxlong c)
+void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
+//fast version: //untested at all!
+// 	xlong b1 = (yc*xres)+xc;
+// 	xlong b2 = (xc*xres)+yc;
+// 	xlong a1 = y*xres;
+// 	xlong a2 = x*xres;
+// 	(*doublebuffer)[b1+a1+xc+x] = c;
+// 	(*doublebuffer)[b1-a1+xc+x] = c;
+// 	(*doublebuffer)[b1+a1-xc-x] = c;
+// 	(*doublebuffer)[b1-a1-xc-c] = c;
+// 	(*doublebuffer)[b2+a2+yc+y] = c;
+// 	(*doublebuffer)[b2-a2+yc+y] = c;
+// 	(*doublebuffer)[b2+a2-yc-y] = c;
+// 	(*doublebuffer)[b2-a2-yc-y] = c;
+//*
 
+//slow version: //should work
+	xlong tx = 0;
+	xlong ty = 0;
+
+	tx = xc + x;
+	ty = yc + y;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc + x;
+	ty = yc - y;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc - x;
+	ty = yc + y;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc - x;
+	ty = yc - y;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc + y;
+	ty = yc + x;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc + y;
+	ty = yc - x;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc - y;
+	ty = yc + x;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+
+	tx = xc - y;
+	ty = yc - x;
+	(*doublebuffer)[(ty*xres)+tx] = c;
+//*
 }
 
 CLgfx1::CLgfx1(CLbuffer<xlong>* db)
@@ -245,7 +295,17 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
+	xlong d = 3 - (r>>1);
+	xlong cx = 0;
+	xlong cy = r;
 
+	while(cx!=cy)
+	{
+		drawcirclepixel(xc,yc,cx,cy,c);
+		if(d<0) d += (cx<<2)+6;
+		d += ((cx-cy)<<2)+10;
+		cy++;
+	}
 }
 
 void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
@@ -266,6 +326,153 @@ void CLgfx1::fill(xlong x,xlong y,uxlong c)
 void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 {
 
+}
+
+xlong CLgfx1::getspritesize(sprite* s)
+{
+	return s->size;
+}
+
+xlong CLgfx1::getspritewidth(sprite* s)
+{
+	return s->width;
+}
+
+xlong CLgfx1::getspriteheight(sprite* s)
+{
+	return s->height;
+}
+
+void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
+{
+	//init
+	if(x>xres || y>yres) return;
+	xlong ssize = s->size;
+	xlong swidth = s->width;
+	xlong sheight = s->height;
+	xlong hordiff = xres - s->width;
+	xlong xs = x;
+	xlong ys = y;
+	xlong xe = x + swidth;
+	xlong ye = y + sheight;
+	if(xe<0 || ye<0) return;
+
+	//clipping
+	if(xs<0) xs = 0;
+	if(xe>xres) xe = xres-1;
+	if(ys<0) ys = 0;
+	if(ye>yres) ye = yres-1;
+
+	//draw vars
+	xlong ewidth = xe - xs + 1;
+	xlong eheight = ye - ys + 1;
+	xlong eoffset = (y - ys) * swidth;
+	xlong xoffset = (ys * xres) + xs + (xs - x); //optimize!
+	xlong linearc = 0;
+
+	//drawloop
+	for(int i=0; i<eheight ;i++)
+	{
+		for(int j=0; j<ewidth ;j++)
+		{
+			if(s->data[linearc] && 0xFF000000 != 0xFF)
+			{
+				(*doublebuffer)[xoffset+j] = s->data[linearc];
+			}
+			linearc++;
+		}
+		xoffset += hordiff;
+	}
+	
+}
+
+void CLgfx1::drawspritescaled(xlong x,xlong y,sprite* s,xlong z)
+{
+
+}
+
+void CLgfx1::drawspriterotated(xlong x,xlong y,sprite* s,xlong d)
+{
+
+}
+
+void CLgfx1::drawspriterotated90(xlong x,xlong y,sprite* s,xlong c)
+{
+
+}
+
+void CLgfx1::drawspritemirrored(xlong x,xlong y,sprite* s,xlong b)
+{
+
+}
+
+void CLgfx1::drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
+{
+
+}
+
+void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m)
+{
+
+}
+
+void CLgfx1::drawscreen(sprite* s)
+{
+	if(s->width==xres && s->height==yres)
+	{
+		for(int i=0; i<s->size; i++)
+		{
+			(*doublebuffer)[i] = s->data[i];
+		}
+	}
+}
+
+void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
+{
+	//find tile
+	xlong toffset = (ti / s->perrow) * s->tilesize;
+	toffset += (ti % s->perrow) * (s->tilewidth-1);
+
+	//init
+	if(x>xres || y>yres) return;
+	xlong tsize = s->tilesize;
+	xlong twidth = s->tilewidth;
+	xlong theight = s->tileheight;
+	xlong hordiff = xres - s->tilewidth;
+	xlong xs = x;
+	xlong ys = y;
+	xlong xe = x + twidth;
+	xlong ye = y + theight;
+	if(xe<0 || ye<0) return;
+
+	//clipping
+	if(xs<0) xs = 0;
+	if(xe>xres) xe = xres-1;
+	if(ys<0) ys = 0;
+	if(ye>yres) ye = yres-1;
+
+	//draw vars
+	xlong ewidth = xe - xs + 1;
+	xlong eheight = ye - ys + 1;
+	xlong eoffset = (y - ys) * twidth;
+	xlong xoffset = (ys * xres) + xs + (xs - x); //optimize!
+	xlong linearc = toffset;
+	xlong shordiff = s->width - s->tilewidth;
+
+	//drawloop
+	for(int i=0; i<eheight ;i++)
+	{
+		for(int j=0; j<ewidth ;j++)
+		{
+			if(s->data[linearc] && 0xFF000000 != 0xFF)
+			{
+				(*doublebuffer)[xoffset+j] = s->data[linearc];
+			}
+			linearc++;
+		}
+		xoffset += hordiff;
+		toffset += shordiff;
+	}
 }
 
 #endif

@@ -39,6 +39,7 @@ struct sprite
 	xlong size;
 	xlong width;
 	xlong height;
+
 	xlong* data;
 };
 
@@ -48,6 +49,7 @@ struct sprites
 	xlong width;
 	xlong height;
 
+	xlong perrow;
 	xlong tilesize;
 	xlong tilewidth;
 	xlong tileheight;

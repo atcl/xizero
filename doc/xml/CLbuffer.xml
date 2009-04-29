@@ -146,11 +146,4 @@
 		<example></example>
 	</method>
 	
-	<method ispublic="1">
-		<name>getversion</name>
-		<returns>xlong</returns>
-		<infotext></infotext>
-		<example></example>
-	</method>
-	
 </class>
