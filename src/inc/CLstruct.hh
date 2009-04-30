@@ -64,6 +64,16 @@ struct listmember
 	listmember* prev;
 };
 
+struct node
+{
+	node* parent;
+	node* next;
+	node* prev;
+	node** child;
+	xlong childcount;
+	void* data;
+};
+
 struct armember
 {
 	xlong filesizedata;

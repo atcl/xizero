@@ -6,8 +6,95 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLstruct.hh"
 
+class CLtree : public virtual CLcl
+{
+	private:
+		node* rootnode;
+		node* current;
 
+	public:
+		CLtree();
+		~CLtree();
+
+		void root();
+		void child(xlong i);
+		xlong childcount();
+		void parent();
+		void next();	//next sibling
+		void* data();
+		void data(void* d);
+		void addchild();
+		void delchild();
+		bool isroot();
+		
+};
+
+CLtree::CLtree()
+{
+	rootnode = new node;
+	rootnode->parent = 0;
+}
+
+CLtree::~CLtree() { }
+
+void CLtree::root()
+{
+	current = rootnode;
+}
+
+void CLtree::child(xlong i)
+{
+	if(i<current->childcount)
+	{
+		current = current->child[i];
+	}
+}
+
+xlong CLtree::childcount()
+{
+	return current->childcount;
+}
+
+void CLtree::parent()
+{
+	current = current->parent;
+}
+
+void CLtree::next()
+{
+	if(current->next!=0)
+	{
+		current = current->next;
+	}
+}
+
+void* CLtree::data()
+{
+	return current->data;
+}
+
+void CLtree::data(void* d)
+{
+	current->data = d;
+}
+
+void CLtree::addchild()
+{
+
+}
+
+void CLtree::delchild()
+{
+
+}
+
+bool CLtree::isroot()
+{
+	if(current==rootnode) return true;
+	else return false;
+}
 
 #endif
 
