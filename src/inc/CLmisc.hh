@@ -6,7 +6,7 @@
 
 void one()
 {
-	retrun 1;
+	return 1;
 }
 
 void crosslevel()
@@ -67,11 +67,6 @@ void appendfile() { }
 void hide() { }
 void show() { }
 void setto() { }
-
-//class fifo
-void fifoin() { }
-void fifoout()  { }
-void fifoclear() { }
 
 //class string
 void replace() { }

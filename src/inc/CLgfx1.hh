@@ -320,7 +320,16 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 
 void CLgfx1::fill(xlong x,xlong y,uxlong c)
 {
-
+// 	if (getPixel(x, y) == alteFarbe)
+// 	{
+// 		markierePixel(x, y, neueFarbe);
+// 	
+// 		fill4(x, y + 1);
+// 		fill4(x, y - 1);
+// 		fill4(x + 1, y);
+// 		fill4(x - 1, y);
+// 	}
+// 	return;
 }
 
 void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)

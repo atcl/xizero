@@ -14,12 +14,9 @@
 #include "CLtypes.hh"
 
 
-using namespace std;
-
-
 void CLexit_(const char *f,const char *m, xlong r)
 {
-	cout << f << ": "<< m << endl;
+	std::cout << f << ": "<< m << std::endl;
 	exit(r);
 }
 
@@ -142,42 +139,42 @@ xlong CLgetfilelinecount_(const char* fn)
 
 void CLdebug_(const xchar* c,xlong v)
 {
-	cout << c << v << endl;
+	std::cout << c << v << std::endl;
 }
 
 void CLprint_(const xchar* c)
 {
-	cout << c << endl;
+	std::cout << c << std::endl;
 }
 
 void CLprint_(xchar* c)
 {
-	cout << c << endl;
+	std::cout << c << std::endl;
 }
 
 void CLprint_(xlong l)
 {
-	cout << l << endl;
+	std::cout << l << std::endl;
 }
 
 void CLttyout_(const xchar* c)
 {
-	cout << c;
+	std::cout << c;
 }
 
 void CLttyout_(xchar* c)
 {
-	cout << c;
+	std::cout << c;
 }
 
 void CLttyout_(xlong l)
 {
-	cout << l;
+	std::cout << l;
 }
 
 void CLwaitforkey_()
 {
-	cin.get(); //change to any key, now only enter
+	std::cin.get(); //change to any key, now only enter
 }
 
 void CLwait_(xlong milliseconds)
