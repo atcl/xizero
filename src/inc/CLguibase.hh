@@ -19,8 +19,6 @@ class CLguibase : public virtual CLcl
 		uxlong fcolor;
 		uxlong bcolor;
 
-		void drawrectangle();
-
 	public:
 		CLguibase();
 		virtual ~CLguibase();

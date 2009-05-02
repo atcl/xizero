@@ -26,7 +26,7 @@ class CLtree : public virtual CLcl
 		void* data();
 		void data(void* d);
 		void addchild();
-		void delchild();
+		void delchild(xlong i);
 		bool isroot();
 		
 };
@@ -82,12 +82,35 @@ void CLtree::data(void* d)
 
 void CLtree::addchild()
 {
+	node* newnode = new node;
+
+	newnode->parent = current;
+	newnode->next = newnode;
+	if(current->childcount==0)
+	{
+		newnode->prev = newnode;
+	}
+	else
+	{
+		newnode->prev = current->child[current->childcount-1];
+	}
+	newnode->child = 0;
+	newnode->childcount = 0;
+	newnode->data = 0;
+
+	current->childcount++;
+
+	
 
 }
 
-void CLtree::delchild()
+void CLtree::delchild(xlong i)
 {
-
+	if(i >= current->childcount)
+	{
+		delete current->child[i-1]->next;
+		current->child[i-1]->next = current->child[i-1];
+	}
 }
 
 bool CLtree::isroot()

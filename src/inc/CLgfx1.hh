@@ -48,7 +48,7 @@ class CLgfx1 : public virtual CLcl
 		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
 		void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
 		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
-		void fill(xlong x,xlong y,uxlong c);
+		void fill(xlong x,xlong y,uxlong oc,uxlong nc);
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 		xlong getspritesize(sprite* s);
 		xlong getspritewidth(sprite* s);
@@ -318,23 +318,32 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 
 }
 
-void CLgfx1::fill(xlong x,xlong y,uxlong c)
+void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 {
-// 	if (getPixel(x, y) == alteFarbe)
-// 	{
-// 		markierePixel(x, y, neueFarbe);
-// 	
-// 		fill4(x, y + 1);
-// 		fill4(x, y - 1);
-// 		fill4(x + 1, y);
-// 		fill4(x - 1, y);
-// 	}
-// 	return;
+	if (readpixel(x,y) == oc)
+	{
+		drawpixel(x,y,nc);
+	
+		fill(x,y+1,oc,nc);
+		fill(x,y-1,oc,nc);
+		fill(x+1,y,oc,nc);
+		fill(x-1,y,oc,nc);
+	}
+	return;
 }
 
 void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 {
-
+	if (readpixel(x,y) != fc)
+	{
+		drawpixel(x,y,c);
+	
+		fill(x,y+1,fc,c);
+		fill(x,y-1,fc,c);
+		fill(x+1,y,fc,c);
+		fill(x-1,y,fc,c);
+	}
+	return;
 }
 
 xlong CLgfx1::getspritesize(sprite* s)

@@ -89,6 +89,12 @@ struct arfile
 	armember* members;
 };
 
+struct xmlelement
+{
+	xchar* value;
+	xchar** attributes;
+};
+
 struct exe
 {
 	xchar*  name;

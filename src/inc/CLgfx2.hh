@@ -46,6 +46,61 @@ CLgfx2::CLgfx2(CLbuffer<xlong>* db)
 
 CLgfx2::~CLgfx2() { }
 
+void CLgfx2::drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
+{
+	xlong offset1 = (y1*xres)+x1;
+	xlong offset2 = offset1;
+	xlong doffset = ((y2-y1)*xres);
+
+	for(int i=y1; i<=y2; i++)
+	{
+		(*doublebuffer)[offset1] = c2;
+		offset1++;
+		for(int j=x1+1; j<x2; j++)
+		{
+			(*doublebuffer)[offset1] = c1;
+			offset1++;
+		}
+		(*doublebuffer)[offset1] = c2;
+		offset1 += xres;
+	}
+
+	for(int k=x1; k<x2; k++)
+	{
+		(*doublebuffer)[offset2] = c2;
+		(*doublebuffer)[offset2+doffset] = c2;
+		offset2++;
+	}
+}
+
+void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1)
+{
+
+	xlong offset1 = (y1*xres)+x1;
+	xlong offset2 = offset1;
+	xlong doffset = ((y2-y1)*xres);
+
+	for(int i=y1; i<=y2; i++)
+	{
+		(*doublebuffer)[offset1] = 0x00FFFFFF;
+		offset1++;
+		for(int j=x1+1; j<x2; j++)
+		{
+			(*doublebuffer)[offset1] = c1;
+			offset1++;
+		}
+		(*doublebuffer)[offset1] = 0x00000000;
+		offset1 += xres;
+	}
+
+	for(int k=x1; k<x2; k++)
+	{
+		(*doublebuffer)[offset2] = 0x00FFFFFF;
+		(*doublebuffer)[offset2+doffset] = 0x000000;
+		offset2++;
+	}
+}
+
 void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,sprites* f,uxlong c)
 {
 
