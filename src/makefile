@@ -17,6 +17,9 @@ TARGET4 = asciimissile
 default:
 	$(CC) $(CCFLAGS) $(O2FLAGS) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
 
+unit:
+	$(CC) $(CCFLAGS) $(O2FLAGS) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS)
+
 fast:
 	$(CC) $(CCFLAGS) $(O3FLAGS) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
 

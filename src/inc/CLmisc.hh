@@ -77,6 +77,8 @@ void concat() { }
 void length() { }
 void compare() { }
 
+//console: clk,end,info,ver,mem,set,run,see,
+
 
 #endif
 
