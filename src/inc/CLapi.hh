@@ -12,6 +12,7 @@
 #include <cstring>
 
 #include "CLtypes.hh"
+#include "CLstruct.hh"
 
 
 void CLexit_(const char *f,const char *m, xlong r)
@@ -155,6 +156,11 @@ void CLprint_(xchar* c)
 void CLprint_(xlong l)
 {
 	std::cout << l << std::endl;
+}
+
+void CLprint_(vector v)
+{
+	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
 }
 
 void CLttyout_(const xchar* c)

@@ -52,6 +52,33 @@ int main(int argc, char** argv)
 // 	//cout << "array1[3]: " << bcx[1][3] << endl;
 // 
 
+
+	//test section:
+
+		//test bcx loading:
+
+		//test tga loading:
+
+		//test list:
+
+		//test tree:
+
+		//test gfx1:
+
+		//test gfx2:
+
+		//test button:
+
+		//test label:
+
+		//test progress:
+
+		// //test msgbox:
+
+		// //test menu:
+
+	//
+
 	xlong *cube;
 	
 	if(argfileindex!=-1)

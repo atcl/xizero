@@ -10,23 +10,24 @@
 
 class CLammo : public virtual CLcl
 {
+	protected:
+		CLbuffer<xlong>* doublebuffer;
+
 	private:
-		xlong* sprite;
-		xlong xcoord;
-		xlong ycoord;
-		xlong xspeed;
-		xlong yspeed;
-		xlong xdirection;
-		xlong ydirection;
+		sprite* sprite;
+		vector pos;
+		vector spd;
+		vector dir;
+		void* comspr(CLbuffer<xlong>* db,xlong x,xlong y);
 
 	public:
-		CLammo();
+		CLammo(sprite* s);
 		~CLammo();
 		update();
 		draw();
 };
 
-CLammo::CLammo()
+CLammo::CLammo(sprite* s)
 {
 
 }
