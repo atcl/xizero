@@ -12,6 +12,7 @@
 #include "CLconsts.hh"
 #include "CLstruct.hh"
 #include "CLvector.hh"
+#include "CLmath.hh"
 
 
 class CLmatrix : public virtual CLcl
@@ -318,11 +319,11 @@ float CLmatrix::trace()
 
 void CLmatrix::print()
 {
-	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << endl;
-	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << endl;
-	std::cout << std::setw(7) << m[2][0] <<" "<< std::setw(7) << m[2][1] <<" "<< std::setw(7) << m[2][2] <<" "<< std::setw(7) << m[2][3] << endl;
-	std::cout << std::setw(7) << m[3][0] <<" "<< std::setw(7) << m[3][1] <<" "<< std::setw(7) << m[3][2] <<" "<< std::setw(7) << m[3][3] << endl;
-	std::cout << endl;
+	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << std::endl;
+	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << std::endl;
+	std::cout << std::setw(7) << m[2][0] <<" "<< std::setw(7) << m[2][1] <<" "<< std::setw(7) << m[2][2] <<" "<< std::setw(7) << m[2][3] << std::endl;
+	std::cout << std::setw(7) << m[3][0] <<" "<< std::setw(7) << m[3][1] <<" "<< std::setw(7) << m[3][2] <<" "<< std::setw(7) << m[3][3] << std::endl;
+	std::cout << std::endl;
 }
 
 #endif

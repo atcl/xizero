@@ -60,6 +60,9 @@
 //global variables
 #include "inc/CLglobal.hh"
 
+//inline macros
+#include "inc/CLmacros.hh"
+
 //GUI dependent
 #include "inc/CLfltk.hh"
 

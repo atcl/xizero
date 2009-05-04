@@ -15,13 +15,13 @@
 #include "CLstruct.hh"
 
 
-void CLexit_(const char *f,const char *m, xlong r)
+void CLexit_(const xchar *f,const xchar *m, xlong r)
 {
 	std::cout << f << ": "<< m << std::endl;
 	exit(r);
 }
 
-xlong CLgetfilesize_(const char* fn)
+xlong CLgetfilesize_(const xchar* fn)
 {
 	FILE *of;
 	xlong fl;
@@ -34,7 +34,7 @@ xlong CLgetfilesize_(const char* fn)
 	return fl;
 }
 
-xlong* CLgetfile_(const char* fn)
+xlong* CLgetfile_(const xchar* fn)
 {
 	FILE *of;
 	xlong *bf;
@@ -52,37 +52,54 @@ xlong* CLgetfile_(const char* fn)
 	return bf;
 }
 
-char* CLgetcharfile_(const char* fn)
+xchar* CLgetcharfile_(const xchar* fn)
 {
 	FILE* of;
-	char* bf;
+	xchar* bf;
 	uxlong fl;
 
 	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
 	fseek (of,0,SEEK_END);
 	fl = (ftell(of));
 	rewind(of);
-	bf = new char[fl];
+	bf = new xchar[fl];
 	fread(bf,1,fl,of);
 	fclose(of);
 
 	return bf;
 }
 
-char** CLgetcsvfile_(const char* fn)
+// xchar* CLgetfile_(const xchar* fn)
+// {
+// 	FILE* of;
+// 	xchar* bf;
+// 	uxlong fl;
+// 
+// 	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
+// 	fseek (of,0,SEEK_END);
+// 	fl = (ftell(of));
+// 	rewind(of);
+// 	bf = new xchar[fl];
+// 	fread(bf,1,fl,of);
+// 	fclose(of);
+// 
+// 	return bf;
+// }
+
+xchar** CLgetcsvfile_(const char* fn)
 {
-	ifstream of;
+	std::ifstream of;
 	char **bf;
 	uxlong vc = 0;
 
-	string line;
-	string value;
+	std::string line;
+	std::string value;
 	of.open(fn);
 	if( of.fail() ) CLexit_(__func__,"cannot open file",1);
 	
 	while( getline(of,line) )
 	{
-		istringstream csvstream(line);
+		std::istringstream csvstream(line);
 
 		while( getline(csvstream, value, ',') )
 		{
@@ -99,7 +116,7 @@ char** CLgetcsvfile_(const char* fn)
 
 	while( getline(of,line) )
 	{
-		istringstream csvstream(line);
+		std::istringstream csvstream(line);
 
 		while( getline(csvstream, value, ',') )
 		{

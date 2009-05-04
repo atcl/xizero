@@ -28,6 +28,13 @@ union doubleword
 	xchar  db[4];
 };
 
+struct CLfile
+{
+	xlong* chardata;
+	xlong* longdata;
+	xlong  size;
+};
+
 struct screenside
 {
 	xlong offset;

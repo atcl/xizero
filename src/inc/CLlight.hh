@@ -7,6 +7,8 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLvector.hh"
+#include "CLmath.hh"
+#include "CLmatrix.hh"
 
 
 class CLlight : public virtual CLcl

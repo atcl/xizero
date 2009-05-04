@@ -21,8 +21,9 @@ class CLformat : public virtual CLcl
 		arfile* loadar(xchar* bf,xlong cfs);
 		xlong** loadbcx(xlong* bf,xlong bs);
 		xchar** loadmap(xchar* bf, xlong bs,xlong subconst);
-		sprite*  loadtga(xchar* bf);
+		sprite* loadtga(xchar* bf);
 
+		sprite* loadfont(xchar* bf);
 		xlong** loadlvl();
 		xlong** loadini();
 };
@@ -219,16 +220,18 @@ xlong** CLformat::loadbcx(xlong* bf,xlong bs)
 	xlong lc = getlinecount(bf,bs);
 
 	doubleword nl;
-	xlong bc = 4;	
+	xlong bc = 0;	
 
-	xlong *arr0 = new xlong[lc-2];
-	xlong *arr1 = new xlong[lc-2];
+	xlong *arr0 = new xlong[lc];
+	xlong *arr1 = new xlong[lc];
 
-	arr0[0] = lc-3;
-	arr1[0] = lc-3;
+	arr0[0] = lc-2;
+	arr1[0] = lc-2;
 
-	if( bf[0] == 'BLC<' )
+	if( bf[bc] == 'BLC<' )
 	{
+		bc += 4;
+
 		for(int i=1; i < lc; i++)
 		{
 			if( bf[bc] == 'LUN<' ) break;
@@ -236,8 +239,10 @@ xlong** CLformat::loadbcx(xlong* bf,xlong bs)
 			arr0[i] = bf[bc]; bc++;
 			arr1[i] = bf[bc]; bc++;
 			nl.dd   = bf[bc]; bc++;
-			if( nl.db[0] == '#' )
+
+			if( nl.dw[0] == '##' )
 			{
+				//CLprint_(&nl.db[0]);
 				nl.dd = bf[bc-2];
 				arr1[i]  = (nl.db[0] - 0x30) * 1000;
 				arr1[i] += (nl.db[1] - 0x30) * 100; 

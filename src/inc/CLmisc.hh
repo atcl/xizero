@@ -57,8 +57,8 @@ void loadconfig() { }
 void systemfontout() { }
 
 //kern
-void getexename() { }
-void getexesize() { }
+xchar* getexename() { }
+xchar* getexesize() { }
 void getenv() { }
 void writetofile() { }
 void appendfile() { }
@@ -67,6 +67,10 @@ void appendfile() { }
 void hide() { }
 void show() { }
 void setto() { }
+xlong getmousex();
+xlong getmousey();
+xlong getmouseb1();
+xlong getmouseb2();
 
 //class string
 void replace() { }

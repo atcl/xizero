@@ -4,14 +4,12 @@
 #include <iostream>
 #include <cstring>
 
-using namespace std;
-
 #include "CLinc.h"
 
 
 int main(int argc, char** argv)
 {
-	string argfile = "../dat/cube.y3d";
+	std::string argfile = "../dat/cube.y3d";
 	xlong  argfileindex =-1;
 
 	if(argc>2)
@@ -33,7 +31,7 @@ int main(int argc, char** argv)
 	bsm->shadow(amb->getlight(),plane);
 
 	xchar* gg = "manifolds rule";
-	cout << gg << " " << getchararraysize_(gg) << endl;
+	std::cout << gg << " " << getchararraysize_(gg) << std::endl;
 
 //
 // 	xlong* fbcx = CLgetfile_("../dat/test.bcx");
@@ -54,32 +52,45 @@ int main(int argc, char** argv)
 
 
 	//test section:
+		CLdoublebuffer->clear(0);
+	//
 
 		//test bcx loading:
-
+			xlong* fbcx = CLgetfile_("../dat/test.bcx");
+			xlong** bcx;
+			xlong sbcx = CLgetfilesize_("../dat/test.bcx");
+			doubleword tt;
+			bcx = clformat->loadbcx(fbcx,sbcx);
 		//test tga loading:
-
+			xchar* ftga = CLgetcharfile_("../dat/CLsysfnt.tga");
+			sprite* testsprite = clformat->loadtga(ftga);
 		//test list:
-
+			CLlist* testlist = new CLlist();
 		//test tree:
+			CLtree* testtree = new CLtree();
 
+		//while(FLTKwait())
+		//{
 		//test gfx1:
 
 		//test gfx2:
 
 		//test button:
-
+			//CLbutton testbutton = new CLbutton();
 		//test label:
-
+			//CLlabel testlabel = new CLlabel();
 		//test progress:
-
+			//CLprogress testprogress = new CLprogress();
 		// //test msgbox:
-
+			//CLmsgbox testmsgbox = new CLmsgbox();
 		// //test menu:
-
+			//CLmenu testmenu = new CLmenu();
 	//
+		//CLwaitforkey_();
+		//}
+	//*
 
-	xlong *cube;
+	xlong* cube;
 	
 	if(argfileindex!=-1)
 	{
@@ -98,13 +109,13 @@ int main(int argc, char** argv)
 
 	//CLobject + CLpolygon
 
-	CLobject* cubus;
-	cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb);
+	CLobject* cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb);
 
-	clfps->init();
+	//clfps->init();
 
 	while(FLTKwait())
 	{
+
 		switch(FLTKgetturbokeystate())
 		{
 			case 0:
@@ -215,19 +226,18 @@ int main(int argc, char** argv)
 		CLzbuffer->clear(zmax);
 		CLstencilbuffer->clear(0);
 
-		//cubus->display(1,0,1,0,0);
+		//clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
+
+		//cubus->display(1,1,1,1,0,0);
 		//CLdoublebuffer->blendcopy(CLstencilbuffer->getbuffer(),4);
 		cubus->display(1,1,1,0,0,1);
-		//cubus->setposition(400,300,100);
-		//cubus->display(0,1,0,0,0,0);
-		//cubus->setposition(300,300,100);
-		ltm->unit();
+		//ltm->unit();
 
-		clfps->increment(); 
+		//clfps->increment(); 
 	}
 
 	//exit sequence	
-	cout << "unittest says: exit" << endl;
+	std::cout << "unittest says: exit" << std::endl;
 	return 0;
 	//***
 }

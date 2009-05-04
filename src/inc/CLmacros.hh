@@ -17,14 +17,14 @@ xlong inline times600(xlong f)
 	return (f<<9 + f<<6 +f<<4 + f<<3);
 }
 
-void inline say()
+void inline say(const xchar* c)
 {
-
+	CLprint_(c);
 }
 
 void inline bye()
 {
-	CLexit(__func__,"bye",0);
+	CLexit_(__func__,"bye",0);
 }
 
 

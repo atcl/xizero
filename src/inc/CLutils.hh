@@ -128,4 +128,44 @@ xlong getrandom()
 
 }
 
+xchar* color2string(uxlong c)
+{
+	doubleword tc;
+	tc.dd = c;
+	xchar* rc = new xchar[10];
+
+	const xchar* tmp = "0123456789ABCDEF";
+
+	rc[0] = '0';
+	rc[9] = 'h';
+
+	rc[1] = tmp[tc.db[0] / 16];
+	rc[2] = tmp[tc.db[0] % 16];
+	rc[3] = tmp[tc.db[1] / 16];
+	rc[4] = tmp[tc.db[1] % 16];
+	rc[5] = tmp[tc.db[2] / 16];
+	rc[6] = tmp[tc.db[2] % 16];
+	rc[7] = tmp[tc.db[3] / 16];
+	rc[8] = tmp[tc.db[3] % 16];
+
+	return rc;
+}
+
+xlong endian(xlong l)
+{
+	xchar tc;
+	doubleword tl;
+	tl.dd = l;
+
+	tc = tl.db[0];
+	tl.db[0] = tl.db[3];
+	tl.db[3] = tc;
+
+	tc = tl.db[1];
+	tl.db[1] = tl.db[2];
+	tl.db[2] = tc;
+
+	return tl.dd;
+}
+
 #endif
