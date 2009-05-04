@@ -24,7 +24,7 @@ void inline say(const xchar* c)
 
 void inline bye()
 {
-	CLexit_(__func__,"bye",0);
+	CLexit_(0,__func__,"bye");
 }
 
 

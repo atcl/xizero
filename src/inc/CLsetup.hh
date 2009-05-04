@@ -15,6 +15,11 @@
 #include "CLmatrix.hh"
 
 
+//prototypes:
+void CLsetup();
+//
+
+
 void CLsetup()
 {
 	CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);

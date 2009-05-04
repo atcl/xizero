@@ -13,16 +13,16 @@
 
 namespace CL
 { 
-	#define syscol 0x00C0C0C0
-	#define trans  0xFF000000
-	#define black  0x00000000
-	#define white  0x00FFFFFF
-	#define red    0x00FF0000
-	#define blue   0x0000FF00
-	#define green  0x000000FF
-	#define yellow 0x00FFFF00
-	#define pink   0x00FF00FF
-	#define cyan   0x0000FFFF
+	#define CLsystem 0x00C0C0C0
+	#define CLtrans  0xFF000000
+	#define CLblack  0x00000000
+	#define CLwhite  0x00FFFFFF
+	#define CLred    0x00FF0000
+	#define CLblue   0x0000FF00
+	#define CLgreen  0x000000FF
+	#define CLyellow 0x00FFFF00
+	#define CLpink   0x00FF00FF
+	#define CLcyan   0x0000FFFF
 }
 
 #endif

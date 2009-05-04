@@ -15,10 +15,75 @@
 #include "CLstruct.hh"
 
 
-void CLexit_(const xchar *f,const xchar *m, xlong r)
+//prototypes:
+void    CLexit_(xlong r,const xchar *f="",const xchar *m="");
+void    CLexit_(xlong r,const xchar *f,const xchar *m,const xchar* d);
+void    CLexit_(xlong r,const xchar *f,const xchar *m,xlong d);
+CLfile* CLgetfile_(const xchar* fn,bool s=true);
+xlong   CLgetfilesize_(const xchar* fn);
+xchar** CLgetcsvfile_(const char* fn);
+void    CLdebug_(const xchar* c,xlong v);
+void    CLprint_(const xchar* c);
+void    CLprint_(const xlong l);
+void    CLprint_(const vector v);
+void    CLttyout_(const xchar* c);
+void    CLttyout_(const xlong l);
+void    CLwaitforkey_();
+void    CLwait_(xlong milliseconds);
+float   CLgetmilliseconds_(); //since midnight
+float   CLgetcentiseconds_(); //since midnight
+float   CLgetdeciseconds_(); //since midnight
+xlong   CLsystem_(const xchar* c);
+xlong   getchararraysize_(const xchar* c);
+void    installsystemkey(xchar scancode,void *action);
+//
+
+void CLexit_(xlong r,const xchar *f,const xchar *m)
 {
-	std::cout << f << ": "<< m << std::endl;
+	std::cout << f << ": "<< m <<  std::endl;
 	exit(r);
+}
+
+void CLexit_(xlong r,const xchar *f,const xchar *m,const xchar* d)
+{
+	std::cout << f << ": "<< m << " " << d << std::endl;
+	exit(r);
+}
+
+void CLexit_(xlong r,const xchar *f,const xchar *m,xlong d)
+{
+	std::cout << f << ": "<< m << " " << d << std::endl;
+	exit(r);
+}
+
+CLfile* CLgetfile_(const xchar* fn,bool s)
+{
+	CLfile* re = new CLfile;
+
+	FILE *of;
+
+	if( !( of = fopen(fn,"rb") ) ) 
+	{
+		if(s==0)
+		{
+			return 0;
+		}
+		else
+		{
+			CLexit_(1,__func__,"cannot open file",fn);
+		}
+	}
+	of = fopen(fn,"rb");
+	fseek (of,0,SEEK_END);
+	re->size = (ftell(of));
+	re->lsize = re->size>>2;
+	fseek (of,0,SEEK_SET );
+	re->text = new xchar[re->size];
+	re->data = reinterpret_cast<xlong*>(&re->text[0]);
+	fread(re->text,1,re->size,of);
+	fclose(of);
+
+	return re;
 }
 
 xlong CLgetfilesize_(const xchar* fn)
@@ -26,65 +91,13 @@ xlong CLgetfilesize_(const xchar* fn)
 	FILE *of;
 	xlong fl;
 
-	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
+	if( !( of = fopen(fn,"rb") ) ) CLexit_(1,__func__,"cannot open file");
 	fseek (of,0,SEEK_END);
 	fl = (ftell(of));
 	fclose(of);
 
 	return fl;
 }
-
-xlong* CLgetfile_(const xchar* fn)
-{
-	FILE *of;
-	xlong *bf;
-	uxlong fl;
-
-	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
-	of = fopen(fn,"rb");
-	fseek (of,0,SEEK_END);
-	fl = (ftell(of))>>2;
-	rewind(of);
-	bf = new xlong[fl];
-	fread(bf,4,fl,of);
-	fclose(of);
-
-	return bf;
-}
-
-xchar* CLgetcharfile_(const xchar* fn)
-{
-	FILE* of;
-	xchar* bf;
-	uxlong fl;
-
-	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
-	fseek (of,0,SEEK_END);
-	fl = (ftell(of));
-	rewind(of);
-	bf = new xchar[fl];
-	fread(bf,1,fl,of);
-	fclose(of);
-
-	return bf;
-}
-
-// xchar* CLgetfile_(const xchar* fn)
-// {
-// 	FILE* of;
-// 	xchar* bf;
-// 	uxlong fl;
-// 
-// 	if( !( of = fopen(fn,"rb") ) ) CLexit_(__func__,"cannot open file",1);
-// 	fseek (of,0,SEEK_END);
-// 	fl = (ftell(of));
-// 	rewind(of);
-// 	bf = new xchar[fl];
-// 	fread(bf,1,fl,of);
-// 	fclose(of);
-// 
-// 	return bf;
-// }
 
 xchar** CLgetcsvfile_(const char* fn)
 {
@@ -95,7 +108,7 @@ xchar** CLgetcsvfile_(const char* fn)
 	std::string line;
 	std::string value;
 	of.open(fn);
-	if( of.fail() ) CLexit_(__func__,"cannot open file",1);
+	if( of.fail() ) CLexit_(1,__func__,"cannot open file",fn);
 	
 	while( getline(of,line) )
 	{
@@ -112,7 +125,7 @@ xchar** CLgetcsvfile_(const char* fn)
 
 	of.close();
 	of.open(fn);
-	if( of.fail() ) CLexit_(__func__,"cannot open file",1);
+	if( of.fail() ) CLexit_(1,__func__,"cannot open file",fn);
 
 	while( getline(of,line) )
 	{
@@ -135,26 +148,6 @@ xchar** CLgetcsvfile_(const char* fn)
 	return bf;
 }
 
-xlong CLgetfilelinecount_(const char* fn)
-{
-	FILE *of;
-	xlong *bf;
-	xlong lc = 0;
-	int c = 0;
-
-	if( !( of = fopen(fn,"r") ) ) CLexit_(__func__,"cannot open file",1);
-	
-	do
-	{
-		c = fgetc(of);
-		if (c == '\n') lc++;
-	} while (c != EOF);
-
-	fclose(of);
-
-	return lc;
-}
-
 void CLdebug_(const xchar* c,xlong v)
 {
 	std::cout << c << v << std::endl;
@@ -165,17 +158,12 @@ void CLprint_(const xchar* c)
 	std::cout << c << std::endl;
 }
 
-void CLprint_(xchar* c)
-{
-	std::cout << c << std::endl;
-}
-
-void CLprint_(xlong l)
+void CLprint_(const xlong l)
 {
 	std::cout << l << std::endl;
 }
 
-void CLprint_(vector v)
+void CLprint_(const vector v)
 {
 	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
 }
@@ -185,12 +173,7 @@ void CLttyout_(const xchar* c)
 	std::cout << c;
 }
 
-void CLttyout_(xchar* c)
-{
-	std::cout << c;
-}
-
-void CLttyout_(xlong l)
+void CLttyout_(const xlong l)
 {
 	std::cout << l;
 }
@@ -230,11 +213,6 @@ float CLgetdeciseconds_() //since midnight
 xlong CLsystem_(const xchar* c)
 {
 	//return system(c);
-}
-
-xlong getchararraysize_(xchar* c)
-{
-	return xlong(strlen(c));
 }
 
 xlong getchararraysize_(const xchar* c)

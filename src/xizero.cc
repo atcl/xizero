@@ -33,13 +33,13 @@ int main()
 			break;
 
 			case '0':
-				CLexit_(__func__,"xizero says: bye",0);
+				CLexit_(0,__func__,"xizero says: bye");
 			break;
 		}
 
 		CLdoublebuffer->fastclear(0);
 		CLzbuffer->clear(zmax);
-		//CLstencilbuffer->clear(0);
+		CLstencilbuffer->fastclear(0);
 
 		testlevel->display();
 

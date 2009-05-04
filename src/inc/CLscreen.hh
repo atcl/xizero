@@ -10,6 +10,13 @@
 #include "CLgfx1.hh"
 
 
+//prototypes:
+void circleblend(xlong x,xlong y,xlong r,xlong t,CLbuffer<xlong>* db);
+void dissolve(xlong t,CLbuffer<xlong>* db);
+void fadetoblack(xlong t,CLbuffer<xlong>* db);
+//
+
+
 void circleblend(xlong x,xlong y,xlong r,xlong t,CLbuffer<xlong>* db)
 {
 

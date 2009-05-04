@@ -36,6 +36,7 @@ class CLobject : public virtual CLcl
 	
 	public:
 		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li);
+		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li);
 		~CLobject();
 		
 		void update(CLmatrix* m);
@@ -58,6 +59,151 @@ class CLobject : public virtual CLcl
 		vertex* getboundingbox();
 		void reset();
 };
+
+CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
+{
+	xlong* dataptr = fileptr->data;
+
+	clmath = clm;
+	shadowmatrix = sm;
+	cllight = li;
+
+	xlong sobjcount;
+
+	xlong sobjcounter = 0;
+	xlong polycounter = 0;
+	xlong dockcounter = 0;
+
+	xlong* sobjptr;
+
+	xlong xoff;
+	xlong yoff;
+	xlong zoff;
+	
+	xlong localpolycount;
+	xlong localdockcount;
+	short localdocktype;
+
+	xlong d;
+	xlong t[17];
+	doubleword s;
+
+	position.x = x;
+	position.y = y;
+	position.z = z;
+
+	rposition.x = x;
+	rposition.y = y;
+	rposition.z = z;
+
+	boundingbox = new vertex[2];
+	//min max of every x,y,z
+	xlong minx = 0;
+	xlong maxx = 0;
+	xlong miny = 0;
+	xlong maxy = 0;
+	xlong minz = 0;
+	xlong maxz = 0;
+
+	if(dataptr[0] != '<CLY') CLexit_(1,__func__,"wrong y3d format, may be endianess?");
+
+	if(dataptr[1] == '3DB>')
+	{
+		polycount = dataptr[2];
+		polyptr = new CLpolygon*[polycount];
+		//dataptr[3] is empty
+
+		//dataptr[4] = "OBJT"
+		if(dataptr[4] != 'OBJT' ) CLexit_(1,__func__,"No OBJT tag");
+		name = dataptr[5];
+		sobjcount = dataptr[6];
+		dockcount = dataptr[7];
+		dockptr = new vector*[dockcount];
+
+		d = 8;
+
+		for(int i=0;i<sobjcount;i++)
+		{
+			if(dataptr[d] != 'SOBJ' ) CLexit_(1,__func__,"No SOBJ tag");
+			d++; //"SOBJ"
+			d++; //subobject identifier
+			localpolycount = dataptr[d]; d++;
+			localdockcount = dataptr[d]; d++;
+
+			if(dataptr[d] != 'CONN' ) CLexit_(1,__func__,"No CONN tag");
+			d++; //"CONN"
+			xoff = dataptr[d]; d++;
+			yoff = dataptr[d]; d++;
+			zoff = dataptr[d]; d++;
+
+			for(int j=0;j<localpolycount;j++,polycounter++)
+			{
+				if(dataptr[d] != 'POLY' ) CLexit_(1,__func__,"No POLY tag");
+				d++; //"POLY"
+				d++; //identifier
+				t[12] = dataptr[d]; d++; //color
+				d++; //0
+
+				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				d++; //"VECT"
+				t[0] = dataptr[d] + xoff; d++; //x1
+				t[1] = dataptr[d] + yoff; d++; //y1
+				t[2] = dataptr[d]/4 + zoff; d++; //z1
+				//t[2] = dataptr[d] + zoff; d++; //z1
+
+				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				d++; //"VECT"
+				t[3] = dataptr[d] + xoff; d++; //x2
+				t[4] = dataptr[d] + yoff; d++; //y2
+				t[5] = dataptr[d]/4 + zoff; d++; //z2
+				//t[5] = dataptr[d] + zoff; d++; //z2
+
+				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				d++; //"VECT"
+				t[6] = dataptr[d] + xoff; d++; //x3
+				t[7] = dataptr[d] + yoff; d++; //y3
+				t[8] = dataptr[d]/4 + zoff; d++; //z3
+				//t[8] = dataptr[d] + zoff; d++; //z3
+
+				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
+				d++; //"VECT"
+				t[9] = dataptr[d] + xoff; d++; //x4
+				t[10] = dataptr[d] + yoff; d++; //y4
+				t[11] = dataptr[d]/4 + zoff; d++; //z4
+				//t[11] = dataptr[d] + zoff; d++; //z4
+				
+				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
+
+			}
+
+			for(int k=0;k<localdockcount;k++,dockcounter++)
+			{
+				s.dd = dataptr[d]; d++; //"DP"+docktype
+				localdocktype = s.dw[1];
+				
+				t[0] = dataptr[d]; d++; //dx
+				t[1] = dataptr[d]; d++; //dy
+				t[2] = dataptr[d]; d++; //dz
+
+				dockptr[dockcounter] = new vector;
+				dockptr[dockcounter]->x = t[0];
+				dockptr[dockcounter]->y = t[1];
+				dockptr[dockcounter]->z = t[2];
+				dockptr[dockcounter]->l = xlong(localdocktype);
+			}
+		}
+
+		//"ENDO"
+	}
+	else if(dataptr[1] == 'D_X>')
+	{
+
+	}
+	else if(dataptr[1] == 'D_T>')
+	{
+
+	}
+}
 
 CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
 {
@@ -102,7 +248,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	xlong minz = 0;
 	xlong maxz = 0;
 
-	if(dataptr[0] != '<CLY') CLexit_(__func__,"wrong y3d format, may be endianess?",1);
+	if(dataptr[0] != '<CLY') CLexit_(1,__func__,"wrong y3d format, may be endianess?");
 
 	if(dataptr[1] == '3DB>')
 	{
@@ -111,7 +257,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 		//dataptr[3] is empty
 
 		//dataptr[4] = "OBJT"
-		if(dataptr[4] != 'OBJT' ) CLexit_(__func__,"No OBJT tag",1);
+		if(dataptr[4] != 'OBJT' ) CLexit_(1,__func__,"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
@@ -121,13 +267,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 
 		for(int i=0;i<sobjcount;i++)
 		{
-			if(dataptr[d] != 'SOBJ' ) CLexit_(__func__,"No SOBJ tag",1);
+			if(dataptr[d] != 'SOBJ' ) CLexit_(1,__func__,"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
 			localdockcount = dataptr[d]; d++;
 
-			if(dataptr[d] != 'CONN' ) CLexit_(__func__,"No CONN tag",1);
+			if(dataptr[d] != 'CONN' ) CLexit_(1,__func__,"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
@@ -135,34 +281,34 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 
 			for(int j=0;j<localpolycount;j++,polycounter++)
 			{
-				if(dataptr[d] != 'POLY' ) CLexit_(__func__,"No POLY tag",1);
+				if(dataptr[d] != 'POLY' ) CLexit_(1,__func__,"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				t[12] = dataptr[d]; d++; //color
 				d++; //0
 
-				if(dataptr[d] != 'VECT' ) CLexit_(__func__,"No VECT tag",1);
+				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[0] = dataptr[d] + xoff; d++; //x1
 				t[1] = dataptr[d] + yoff; d++; //y1
 				t[2] = dataptr[d]/4 + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
-				if(dataptr[d] != 'VECT' ) CLexit_(__func__,"No VECT tag",1);
+				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
 				t[5] = dataptr[d]/4 + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
 
-				if(dataptr[d] != 'VECT' ) CLexit_(__func__,"No VECT tag",1);
+				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[6] = dataptr[d] + xoff; d++; //x3
 				t[7] = dataptr[d] + yoff; d++; //y3
 				t[8] = dataptr[d]/4 + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
-				if(dataptr[d] != 'VECT' )CLexit_(__func__,"No VECT tag",1);
+				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4

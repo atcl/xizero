@@ -8,6 +8,7 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLutils.hh"
+#include "CLmacros.hh"
 
 
 class CLformat : public virtual CLcl
@@ -17,13 +18,13 @@ class CLformat : public virtual CLcl
 	public:
 		CLformat();
 		~CLformat();
-		xchar** loadcsv(xlong* bf);
-		arfile* loadar(xchar* bf,xlong cfs);
-		xlong** loadbcx(xlong* bf,xlong bs);
-		xchar** loadmap(xchar* bf, xlong bs,xlong subconst);
-		sprite* loadtga(xchar* bf);
+		xchar** loadcsv(CLfile* sf);
+		arfile* loadar(CLfile* sf);
+		xlong** loadbcx(CLfile* bf);
+		xchar** loadmap(CLfile* sf,xlong subconst);
+		sprite* loadtga(CLfile* sf);
 
-		sprite* loadfont(xchar* bf);
+		sprite* loadfont(CLfile* sf);
 		xlong** loadlvl();
 		xlong** loadini();
 };
@@ -35,16 +36,19 @@ CLformat::CLformat()
 
 CLformat::~CLformat() { }
 
-xchar** CLformat::loadcsv(xlong* bf)
+xchar** CLformat::loadcsv(CLfile* sf)
 {
 
 }
 
-arfile* CLformat::loadar(xchar* bf,xlong cfs)
+arfile* CLformat::loadar(CLfile* sf)
 {
 	//all .ar members must be aligned on 4byte (long) borders
 	//so the filesize is fully dividable by 4
 	//test with: if(fs%4==0) ...
+
+	xchar* bf = sf->text;
+	xlong cfs = sf->size;
 
 	//ar can contain max 127 files!!!
 	armember* tindex[128];
@@ -179,11 +183,11 @@ arfile* CLformat::loadar(xchar* bf,xlong cfs)
 
 			//make new armember
 			tindex[fc] = new armember;
-			tindex[fc]->filesizetext = fs;
-			tindex[fc]->filesizedata = fs2;
-			tindex[fc]->filename = new xchar[16]; copychararray(tindex[fc]->filename,&fn[0],16);
-			tindex[fc]->filedata = tb;
-			tindex[fc]->filetext = reinterpret_cast<xchar *>(&tb[0]);
+			tindex[fc]->size = fs;
+			tindex[fc]->lsize = fs2;
+			tindex[fc]->name = new xchar[16]; copychararray(tindex[fc]->name,&fn[0],16);
+			tindex[fc]->data = tb;
+			tindex[fc]->text = reinterpret_cast<xchar *>(&tb[0]);
 			//tindex[fc] contains complete armember
 
 			tsize -= (fs+60); //subtract readin size from global size
@@ -193,19 +197,15 @@ arfile* CLformat::loadar(xchar* bf,xlong cfs)
 		} while( tsize > 0 );	//wo kommen die 3 her in level.a ???
 
 		//create return value
-		arfile *af = new arfile;
+		arfile* af = new arfile;
 		af->filecount = fc;
-		af->members = new armember[fc];
+		af->members = new armember*[fc];
 		//return value created
 
 		//place file contents in return value
 		for(int j=0; j<fc; j++)
-		{
-			af->members[j].filesizetext = tindex[j]->filesizetext;
-			af->members[j].filesizedata = tindex[j]->filesizedata;
-			af->members[j].filename = tindex[j]->filename;
-			af->members[j].filedata = tindex[j]->filedata;
-			af->members[j].filetext = tindex[j]->filetext;
+		{ 
+			af->members[j] = tindex[j];
 		}
 		//af is now complete
 
@@ -215,9 +215,9 @@ arfile* CLformat::loadar(xchar* bf,xlong cfs)
 	return 0;
 }
 
-xlong** CLformat::loadbcx(xlong* bf,xlong bs)
+xlong** CLformat::loadbcx(CLfile* bf)
 {
-	xlong lc = getlinecount(bf,bs);
+	xlong lc = getlinecount(bf->text,bf->size);
 
 	doubleword nl;
 	xlong bc = 0;	
@@ -228,22 +228,22 @@ xlong** CLformat::loadbcx(xlong* bf,xlong bs)
 	arr0[0] = lc-2;
 	arr1[0] = lc-2;
 
-	if( bf[bc] == 'BLC<' )
+	if( bf->data[bc] == 'BLC<' )
 	{
 		bc += 4;
 
 		for(int i=1; i < lc; i++)
 		{
-			if( bf[bc] == 'LUN<' ) break;
+			if( bf->data[bc] == 'LUN<' ) break;
 
-			arr0[i] = bf[bc]; bc++;
-			arr1[i] = bf[bc]; bc++;
-			nl.dd   = bf[bc]; bc++;
+			arr0[i] = bf->data[bc]; bc++;
+			arr1[i] = bf->data[bc]; bc++;
+			nl.dd   = bf->data[bc]; bc++;
 
 			if( nl.dw[0] == '##' )
 			{
 				//CLprint_(&nl.db[0]);
-				nl.dd = bf[bc-2];
+				nl.dd = bf->data[bc-2];
 				arr1[i]  = (nl.db[0] - 0x30) * 1000;
 				arr1[i] += (nl.db[1] - 0x30) * 100; 
 				arr1[i] += (nl.db[2] - 0x30) * 10; 
@@ -259,8 +259,10 @@ xlong** CLformat::loadbcx(xlong* bf,xlong bs)
 	return re;
 }
 
-xchar** CLformat::loadmap(xchar* bf,xlong bs,xlong subconst)
+xchar** CLformat::loadmap(CLfile* sf,xlong subconst)
 {
+	xchar* bf = sf->text;
+	xlong bs = sf->size;
 	xlong lc = getlinecount(bf,bs);
 
 	//determine line length
@@ -286,7 +288,7 @@ xchar** CLformat::loadmap(xchar* bf,xlong bs,xlong subconst)
 		for(int k=0; k<lw; k++)
 		{
 			if(bf[li]!='\n') rev[j][k] = bf[li] - subconst;
-			else CLexit_(__func__,"Map not conform with given width",1);
+			else CLexit_(1,__func__,"Map not conform with given width");
 			li++;
 		}
 		li++;
@@ -295,9 +297,10 @@ xchar** CLformat::loadmap(xchar* bf,xlong bs,xlong subconst)
 	return rev;
 }
 
-sprite* CLformat::loadtga(xchar* bf)
+sprite* CLformat::loadtga(CLfile* sf)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
+	xchar* bf = sf->text;
 
 	xchar	imageid		= bf[0];
 

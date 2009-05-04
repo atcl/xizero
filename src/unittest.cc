@@ -56,13 +56,12 @@ int main(int argc, char** argv)
 	//
 
 		//test bcx loading:
-			xlong* fbcx = CLgetfile_("../dat/test.bcx");
+			CLfile* fbcx = CLgetfile_("../dat/test.bcx");
 			xlong** bcx;
-			xlong sbcx = CLgetfilesize_("../dat/test.bcx");
 			doubleword tt;
-			bcx = clformat->loadbcx(fbcx,sbcx);
+			bcx = clformat->loadbcx(fbcx);
 		//test tga loading:
-			xchar* ftga = CLgetcharfile_("../dat/CLsysfnt.tga");
+			CLfile* ftga = CLgetfile_("../dat/CLsysfnt.tga");
 			sprite* testsprite = clformat->loadtga(ftga);
 		//test list:
 			CLlist* testlist = new CLlist();
@@ -94,17 +93,14 @@ int main(int argc, char** argv)
 	
 	if(argfileindex!=-1)
 	{
-		xchar  *arch;
-		xlong   arsz;
-		arfile *arar;
-		arch = CLgetcharfile_(argfile.c_str());
-		arsz = CLgetfilesize_(argfile.c_str());
-		arar = clformat->loadar(arch,arsz);
-		cube = arar->members[argfileindex].filedata;
+		CLfile* arch = CLgetfile_(argfile.c_str());
+		arfile* arar = clformat->loadar(arch);
+		cube = arar->members[argfileindex]->data;
 	}
 	else
 	{
-		cube = CLgetfile_(argfile.c_str());
+		CLfile* cubef = CLgetfile_(argfile.c_str());
+		cube = cubef->data;
 	}
 
 	//CLobject + CLpolygon
@@ -211,7 +207,7 @@ int main(int argc, char** argv)
 
 			//System:
 			case '0':
-				CLexit_("user","exit",0);
+				CLexit_(1,"user","exit");
 			break;
 		}
 
@@ -231,13 +227,12 @@ int main(int argc, char** argv)
 		//cubus->display(1,1,1,1,0,0);
 		//CLdoublebuffer->blendcopy(CLstencilbuffer->getbuffer(),4);
 		cubus->display(1,1,1,0,0,1);
-		//ltm->unit();
+		ltm->unit();
 
 		//clfps->increment(); 
 	}
 
 	//exit sequence	
-	std::cout << "unittest says: exit" << std::endl;
 	return 0;
 	//***
 }

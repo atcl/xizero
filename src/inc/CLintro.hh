@@ -11,7 +11,13 @@
 #include "CLmatrix.hh"
 
 
-void atcrosslevelintro()
+//prototypes:
+void atcrosslevel_intro();
+void xizero_intro();
+//
+
+
+void atcrosslevel_intro()
 {
 	//animation variables
 
@@ -45,7 +51,7 @@ void atcrosslevelintro()
 		xlong *z_scl = new xlong[anim_duration*anim_frames];
 
 	//load atcrosslevel model
-	xlong *atcl_f;
+	CLfile *atcl_f;
 	atcl_f = CLgetfile_("../dat/atcl.y3d");
 	CLobject* atcl;
 	atcl = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,atcl_f,400,300,100,clmath,bsm,amb);
@@ -77,7 +83,7 @@ void atcrosslevelintro()
 	}
 }
 
-void xizerointro()
+void xizero_intro()
 {
 
 }

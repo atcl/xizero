@@ -30,9 +30,11 @@ union doubleword
 
 struct CLfile
 {
-	xlong* chardata;
-	xlong* longdata;
+	xchar* name;
+	xchar* text;
+	xlong* data;
 	xlong  size;
+	xlong  lsize;
 };
 
 struct screenside
@@ -81,19 +83,12 @@ struct node
 	void* data;
 };
 
-struct armember
-{
-	xlong filesizedata;
-	xlong filesizetext;
-	xchar *filename;
-	xlong *filedata;
-	xchar *filetext;
-};
+typedef CLfile armember;
 
 struct arfile
 {
-	xlong     filecount;
-	armember* members;
+	xlong      filecount;
+	armember** members;
 };
 
 struct xmlelement

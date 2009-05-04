@@ -16,6 +16,7 @@
 #include "CLplayer.hh"
 #include "CLenemy.hh"
 #include "CLlight.hh"
+#include "CLmacros.hh"
 
 
 class CLlevel : public virtual CLcl
@@ -78,31 +79,29 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects
-	xchar *terrainraw = CLgetcharfile_(terrainlib);
-	xlong terrainsize = CLgetfilesize_(terrainlib);
-	arfile *terraina = clformat->loadar(terrainraw,terrainsize);
+	CLfile* terrainraw = CLgetfile_(terrainlib);
+	arfile* terraina = clformat->loadar(terrainraw);
 	//*
 
 	//convert array of y3ds to array of CLobjects
 	clterrain = new CLobject*[terraina->filecount];
 	for(int g=0; g<terraina->filecount; g++)
 	{
-		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g].filedata,400,300,100,clmath,clshadow,cllight);
+		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g]->data,400,300,100,clmath,clshadow,cllight);
 	}
 	//*
 
 //level:
 	//load levelmaps from .ar
-	xchar *levelraw = CLgetcharfile_(levelcontainer);
-	xlong levelsize = CLgetfilesize_(levelcontainer);
-	arfile *levela = clformat->loadar(levelraw,levelsize);
+	CLfile* levelraw = CLgetfile_(levelcontainer);
+	arfile* levela = clformat->loadar(levelraw);
 	//*
 
 	//find terrain map, has to have extension .mapt
 	xlong tf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(checkextension(levela->members[h].filename,16,".mapt",5)==true)
+		if(checkextension(levela->members[h]->name,16,".mapt",5)==true)
 		{
 			tf=h;
 			break;
@@ -110,27 +109,27 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//tf holds index of armember terrain map
 
-	if(tf==-1) CLexit_(__func__,"no terrain map found",1);
+	if(tf==-1) CLexit_(1,__func__,"no terrain map found");
 
 	//convert terrain map to 2d xchar array, and remove lineends
-	xchar** terrainmap = clformat->loadmap(levela->members[tf].filetext,levela->members[tf].filesizetext,33);
+	xchar** terrainmap = clformat->loadmap(levela->members[tf],33);
 	//now terrain map holds 2d xchar array of terrain objects
 
 	//determine level consts
-	levelheight = getlinecount(levela->members[tf].filetext,levela->members[tf].filesizetext);
+	levelheight = getlinecount(levela->members[tf]->text,levela->members[tf]->size);
 	blocksperscreeny = yres / blockheight;
 	blocksperscreenx = xres / blockwidth;
 	mark = levelheight - blocksperscreeny;
 	smoothmark = mark * blockheight;
 	smoothlevelheight = mark * blockheight;
-	if(mark < 0) CLexit_(__func__,"Level too short",1);
+	if(mark < 0) CLexit_(1,__func__,"Level too short");
 	//*
 
 	//find height map, has to have extension .maph
 	xlong hf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(checkextension(levela->members[h].filename,16,".maph",5)==true)
+		if(checkextension(levela->members[h]->name,16,".maph",5)==true)
 		{
 			hf=h;
 			break;
@@ -138,17 +137,17 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//tf holds index of armember height map
 
-	if(tf==-1) CLexit_(__func__,"no height map found",1);
+	if(tf==-1) CLexit_(1,__func__,"no height map found");
 
 	//convert height map to 2d xchar array, and remove lineends
-	xchar** heightmap = clformat->loadmap(levela->members[hf].filetext,levela->members[hf].filesizetext,48);
+	xchar** heightmap = clformat->loadmap(levela->members[hf],48);
 	//now height map holds 2d xchar array of height levels
 
 	//find entity map, has to have extension .mape
 	xlong ef = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(checkextension(levela->members[h].filename,16,".mape",5)==true)
+		if(checkextension(levela->members[h]->name,16,".mape",5)==true)
 		{
 			ef=h;
 			break;
@@ -156,10 +155,10 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//tf holds index of armember entity map
 
-	if(ef==-1) CLexit_(__func__,"no entitiy map found",1);
+	if(ef==-1) CLexit_(1,__func__,"no entitiy map found");
 
 	//convert entity map to 2d xchar array, and remove lineends
-	xchar** entitymap = clformat->loadmap(levela->members[ef].filetext,levela->members[ef].filesizetext,33);
+	xchar** entitymap = clformat->loadmap(levela->members[ef],33);
 	//now entity map holds 2d xchar array of entity objects
 
 	//build levellayerscontaining all sub maps
