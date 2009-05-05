@@ -37,6 +37,8 @@ void CLsetup()
 	ltm      = new CLmatrix(1,clmath);
 	bsm      = new CLmatrix(1,clmath);
 
+	bsm->shadow(amb->getlight(),plane);
+
 	leftside = new screenside[yres];
 	rightside = new screenside[yres]; 
 }

@@ -206,6 +206,7 @@ int main(int argc, char** argv)
 
 			//System:
 			case '0':
+				xlong reval = CLsystem_("Xdialog --msgbox 'bye' 0 0");
 				CLexit_(1,"user","exit");
 			break;
 		}
@@ -216,15 +217,16 @@ int main(int argc, char** argv)
 		//3. blend stencil to double
 		//4. all shadow casting objects
 
-		//ltm->print();
-		CLdoublebuffer->ultraclear(0);
+		CLdoublebuffer->fastclear(0);
 		CLzbuffer->clear(zmax);
-		CLstencilbuffer->ultraclear(0);
+		CLstencilbuffer->fastclear(0);
 
+		clgfx1->drawpixel(20,20,0x000FF0000);
 		//clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
 
-		//cubus->display(1,1,1,1,0,0);
-		//CLdoublebuffer->blendcopy(CLstencilbuffer->getbuffer(),4);
+		cubus->display(1,1,1,1,0,0);
+		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+
 		cubus->display(1,1,1,0,0,1);
 		ltm->unit();
 

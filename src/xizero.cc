@@ -46,7 +46,5 @@ int main()
 		clfps->increment(); 
 	}
 
-	//xlong reval = CLsystem_("Xdialog --msgbox 'hi' 0 0");
-
 	return 0;
 }

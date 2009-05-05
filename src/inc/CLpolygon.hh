@@ -478,7 +478,7 @@ void CLpolygon::rasterize(bool shadow)
 		{
 			while(length > 0)
 			{
-				sbuffer[offset] = scolor;
+				(*sbuffer)[offset] = scolor;
 				
 				offset++;
 				length--;
@@ -576,7 +576,7 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 	xyclipping();
 	if(cpointcount == 0) return;
 	
-	if(flat==false) //wireframe
+	if(flat==false && shadow==0) //wireframe
 	{
 		shape();
 	}
@@ -593,8 +593,6 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 			}
 			else			//shadow
 			{
-				//cout << "ok" << endl;
-				//shade = shadow;
 				rasterize(1);
 			}
 		}
@@ -603,14 +601,21 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 
 void CLpolygon::update(CLmatrix* m,bool i=0)
 {
-	points[0] = m->transform(points[0]);
-	points[1] = m->transform(points[1]);
-	points[2] = m->transform(points[2]);
-	points[3] = m->transform(points[3]);
 
 	if(i==0)
 	{
+		points[0] = m->transform(points[0]);
+		points[1] = m->transform(points[1]);
+		points[2] = m->transform(points[2]);
+		points[3] = m->transform(points[3]);
 		normal = m->transform(normal);
+	}
+	if(i==1)
+	{
+		pointt[0] = m->transform(points[0]);
+		pointt[1] = m->transform(points[1]);
+		pointt[2] = m->transform(points[2]);
+		pointt[3] = m->transform(points[3]);
 	}
 }
 

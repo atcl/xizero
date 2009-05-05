@@ -27,6 +27,7 @@ class CLstring : public virtual CLcl
 		void compare(CLstring c);
 		void compare(const xchar* c);
 
+		//operator =
 		//operator +
 		//operator []
 };

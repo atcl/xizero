@@ -26,11 +26,12 @@ template <typename T>class CLbuffer : public virtual CLcl
 		void clear(T v);
 		void fastclear(xlong v);
 		void ultraclear(xlong v);
-		void copy(T *dst);
-		void copy(CLbuffer *dst);
-		void fastcopy(xlong *dst);
+		void copy(T* dst);
+		void copy(CLbuffer* dst);
+		void fastcopy(xlong* dst);
 		void ultracopy(xlong* dst);
-		void blendcopy(T *dst,xlong o);
+		void blendcopy(T* dst,xlong o);
+		void blendcopy(CLbuffer<T>* dst,xlong o);
 		uxlong getsize();
 		T* getbuffer();
 		T& operator[](uxlong i);

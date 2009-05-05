@@ -212,7 +212,7 @@ float CLgetdeciseconds_() //since midnight
 
 xlong CLsystem_(const xchar* c)
 {
-	//return system(c);
+	return system(c);
 }
 
 xlong getchararraysize_(const xchar* c)
