@@ -25,6 +25,8 @@ class CLmath : public virtual CLcl
 
 		xlong sign(xlong x);
 		xlong absolute(xlong x);
+		xlong min(xlong a,xlong b);
+		xlong max(xlong a,xlong b);
 		xlong intsqrt(uxlong x);
 		float sinbyarray(xlong x);
 		float cosbyarray(xlong x);
@@ -76,6 +78,18 @@ xlong CLmath::absolute(xlong x)
 	if(x<0) x *= -1;
 
 	return x;
+}
+
+xlong CLmath::min(xlong a,xlong b)
+{
+	if(a<=b) return a;
+	else return b;
+}
+
+xlong CLmath::max(xlong a,xlong b)
+{
+	if(a>=b) return a;
+	else return b;
 }
 
 float CLmath::sinbyarray(xlong x)

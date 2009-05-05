@@ -4,6 +4,7 @@
 #define HH_CLBUFFER
 #pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
+#include <stdio.h>
 #include <string.h>
 
 #include "CLtypes.hh"
@@ -15,6 +16,8 @@ template <typename T>class CLbuffer : public virtual CLcl
 	private:
 		T* buffer;
 		uxlong size;
+		uxlong ds;
+		uxlong qs;
 		
 	public:
 		CLbuffer(uxlong s);
@@ -22,9 +25,11 @@ template <typename T>class CLbuffer : public virtual CLcl
 		
 		void clear(T v);
 		void fastclear(xlong v);
+		void ultraclear(xlong v);
 		void copy(T *dst);
 		void copy(CLbuffer *dst);
 		void fastcopy(xlong *dst);
+		void ultracopy(xlong* dst);
 		void blendcopy(T *dst,xlong o);
 		uxlong getsize();
 		T* getbuffer();
@@ -35,6 +40,8 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 {
 	size = s;
 	buffer = new T[s];
+	//ds = s >> 2;
+	//qs = s >> 4;
 }
 
 template <typename T>CLbuffer<T>::~CLbuffer() { }
@@ -50,6 +57,18 @@ template <typename T>void CLbuffer<T>::clear(T v)
 template <typename T>void CLbuffer<T>::fastclear(xlong v)
 {
 	memset(buffer,v,size<<2);
+}
+
+template <typename T>void CLbuffer<T>::ultraclear(xlong v)
+{
+	xlong puredst = reinterpret_cast<xlong>(&buffer[0]);
+
+__asm__ __volatile__ ( \
+			"cld\n\t" \
+			"rep\n\t" \
+			"stosl" \
+			: : "a" (v), "D" (puredst), "c" (size) : );
+
 }
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
@@ -71,6 +90,18 @@ template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
 template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 {
 	memcpy(dst,buffer,size<<2);
+}
+
+template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
+{
+	xlong puresrc = reinterpret_cast<xlong>(&buffer[0]);
+	xlong puredst = reinterpret_cast<xlong>(&dst[0]);
+
+__asm__ __volatile__ ( \
+			"cld\n\t" \
+			"rep\n\t" \
+			"movsl" \
+			: : "S" (puresrc), "D" (puredst), "c" (size) : );
 }
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)

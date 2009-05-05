@@ -72,14 +72,6 @@ xlong getmousey();
 xlong getmouseb1();
 xlong getmouseb2();
 
-//class string
-void replace() { }
-void left() { }
-void right() { }
-void mid() { }
-void concat() { }
-void length() { }
-void compare() { }
 
 //console: clk,end,info,ver,mem,set,run,see,
 

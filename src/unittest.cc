@@ -63,8 +63,7 @@ int main(int argc, char** argv)
 		//test tga loading:
 			CLfile* ftga = CLgetfile_("../dat/CLsysfnt.tga");
 			sprite* testsprite = clformat->loadtga(ftga);
-		//test list:
-			CLlist* testlist = new CLlist();
+
 		//test tree:
 			CLtree* testtree = new CLtree();
 
@@ -107,7 +106,7 @@ int main(int argc, char** argv)
 
 	CLobject* cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb);
 
-	//clfps->init();
+	clfps->init();
 
 	while(FLTKwait())
 	{
@@ -218,9 +217,9 @@ int main(int argc, char** argv)
 		//4. all shadow casting objects
 
 		//ltm->print();
-		CLdoublebuffer->clear(0);
+		CLdoublebuffer->ultraclear(0);
 		CLzbuffer->clear(zmax);
-		CLstencilbuffer->clear(0);
+		CLstencilbuffer->ultraclear(0);
 
 		//clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
 
@@ -229,7 +228,7 @@ int main(int argc, char** argv)
 		cubus->display(1,1,1,0,0,1);
 		ltm->unit();
 
-		//clfps->increment(); 
+		clfps->increment(); 
 	}
 
 	//exit sequence	

@@ -23,11 +23,12 @@ class CLlist : public virtual CLcl
 
 		void append(void* e);
 		void* getcurrent();
-		void delcurrent(bool smash);
+		void* delcurrent(bool smash); //test smash option
 		xlong getlength();
-		void settoindex(xlong i);
+		void setindex(xlong i);
+		xlong getindex();
 		void clear();
-		void smash();
+		void smash(); //test
 		void setfirst();
 		void setlast();
 		void setprev();
@@ -61,7 +62,6 @@ void CLlist::append(void* e)
 {
 	if(length==0)
 	{
-		length++;
 		current = new listmember;
 		first = current;
 		last = current;
@@ -71,25 +71,33 @@ void CLlist::append(void* e)
 	}
 	else
 	{
-		length++;
-		listmember* temp = new listmember;
 		setlast();
-		current->next = temp;
-		last = temp;
-		temp->prev = current;
-		temp->next = temp;
-		current = temp;
+		current->next = new listmember;
+		last = current->next;
+		current->next->data = e;
+		current->next->prev = current;
+		current->next->next = current->next;
+		current = current->next;
 	}
+
+	length++;
 }
 
 void* CLlist::getcurrent()
 {
-	return current->data;
+	if(current!=0)
+	{
+		return current->data;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
-void CLlist::delcurrent(bool smash)
+void* CLlist::delcurrent(bool smash)
 {
-	if(smash==true) delete current->data;
+	if(length==0) return 0;
 
 	if(current==last)
 	{
@@ -115,6 +123,10 @@ void CLlist::delcurrent(bool smash)
 		setnext();
 		current->prev = tempprev;
 	}
+
+	length--;
+
+	if(smash==true) return current->data;
 }
 
 xlong CLlist::getlength()
@@ -122,7 +134,7 @@ xlong CLlist::getlength()
 	return length;
 }
 
-void CLlist::settoindex(xlong i)
+void CLlist::setindex(xlong i)
 {
 	if(i<=length)
 	{
@@ -133,6 +145,21 @@ void CLlist::settoindex(xlong i)
 			setnext();
 		}
 	}
+}
+
+xlong CLlist::getindex()
+{
+	xlong i = 0;
+
+	while(current!=first)
+	{
+		i++;
+		setprev();
+	}
+
+	setindex(i);
+
+	return i;
 }
 
 void CLlist::clear()
@@ -148,7 +175,7 @@ void CLlist::smash()
 	current = first;
 	while(current!=last);
 	{
-		delete current->data;
+		//delete current->data;
 		setnext();
 		delete current->prev;
 	}
