@@ -28,7 +28,7 @@ class CLtree : public virtual CLcl
 		void addchild();
 		void delchild(xlong i);
 		bool isroot();
-		
+		void print();
 };
 
 CLtree::CLtree()
@@ -117,6 +117,11 @@ bool CLtree::isroot()
 {
 	if(current==rootnode) return true;
 	else return false;
+}
+
+void CLtree::print()
+{
+
 }
 
 #endif

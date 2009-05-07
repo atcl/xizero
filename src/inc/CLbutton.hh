@@ -14,8 +14,7 @@ class CLbutton : public CLguibase , public virtual CLcl
 	private:
 		void (*action)();
 		xchar* caption;
-		uxlong fcolor;
-		uxlong bcolor;
+		uxlong rcolor;
 		bool flat;
 		
 	public:
@@ -40,7 +39,15 @@ CLbutton::~CLbutton() { }
 
 void CLbutton::draw()
 {
-
+	if(flat==0)
+	{
+		drawflatrectangle(posx,posy,posx+width,posy+height,bcolor,rcolor);
+	}
+	else
+	{
+		drawflatrectangle(posx,posy,posx+width,posy+height,bcolor,rcolor);
+	}
+	//drawtext
 }
 
 void CLbutton::setaction(void(*a)())

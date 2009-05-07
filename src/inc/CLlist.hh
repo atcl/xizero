@@ -35,6 +35,7 @@ class CLlist : public virtual CLcl
 		void setnext();
 		bool islast();
 		bool isfirst();
+		void print();
 };
 
 CLlist::CLlist()
@@ -212,6 +213,11 @@ bool CLlist::islast()
 {
 	if(current==last) return true;
 	else return false;
+}
+
+void CLlist::print()
+{
+
 }
 
 #endif

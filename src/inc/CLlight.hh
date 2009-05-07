@@ -19,7 +19,8 @@ class CLlight : public virtual CLcl
 
 	private:
 		fvector     light;
-		uxlong       color;
+		uxlong      color;
+		xlong       type;
 		
 	public:
 		CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm);
@@ -36,6 +37,7 @@ class CLlight : public virtual CLcl
 		void setlightx(float x);
 		void setlighty(float x);
 		void setlightz(float x);
+		void draw();
 };
 
 CLlight::CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm)
@@ -108,6 +110,11 @@ void CLlight::setlighty(float y)
 void CLlight::setlightz(float z)
 {
 	light.z = z;
+}
+
+void CLlight::draw()
+{
+
 }
 
 #endif

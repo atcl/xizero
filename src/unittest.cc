@@ -108,6 +108,9 @@ int main(int argc, char** argv)
 
 	clfps->init();
 
+	FLTKsetfont(8);
+	xchar* toprint = "hi there";
+
 	while(FLTKwait())
 	{
 
@@ -220,6 +223,30 @@ int main(int argc, char** argv)
 		CLdoublebuffer->fastclear(0);
 		CLzbuffer->clear(zmax);
 		CLstencilbuffer->fastclear(0);
+
+		//FLTKwritestring(10,10,toprint,0x00ff0000);
+
+// 		//uxlong readpixel(xlong x,xlong y);
+// 		drawpixel(xlong x,xlong y,uxlong c);
+// 		//drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
+// 		//copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
+// 		drawbigpixel(xlong x,xlong y,uxlong c);
+// 		//putpixel(xlong x,xlong y,uxlong c,xlong m);
+// 		drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
+// 		drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
+// 		drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
+// 		drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
+// 		drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+// 		//drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+// 		//drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
+// 		drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+// 		drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+// 		drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
+// 		drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
+// 		//drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+// 		//drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
+// 		fill(xlong x,xlong y,uxlong oc,uxlong nc);
+// 		fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 
 		clgfx1->drawpixel(20,20,0x000FF0000);
 		//clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!

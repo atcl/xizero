@@ -18,24 +18,33 @@ class CLexplosion : public virtual CLcl
 		float last_time;
 		float curr_time;
 		xlong interval;
+		xlong step;
 
 	public:
 		CLexplosion(CLobject* o);
 		~CLexplosion();
 
-		void start();
+		void draw();
+		void next();
 };
 
 CLexplosion::CLexplosion(CLobject* o)
 {
 	object = o;
+	step = 0;
 }
 
 CLexplosion::~CLexplosion() { }
 
-void CLexplosion::start()
+void CLexplosion::draw()
+{
+
+}
+
+void CLexplosion::next()
 {
 
 }
 
 #endif
+

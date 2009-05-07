@@ -168,7 +168,7 @@ int FLTKgetmousebuttonr()
 	return win->mousebuttonr;
 }
 
-xlong FLTKsetfont(xchar s)
+xlong FLTKsetfont(const xchar s)
 {
 	fl_font(FL_COURIER,s);
 }
@@ -178,11 +178,11 @@ xlong FLTKgetfontheight()
 	return fl_height();
 }
 
-void FLTKwritestring(xlong x,xlong y,xchar* s,uxlong c)
+void FLTKwritestring(xlong x,xlong y,const xchar* s,uxlong c)
 {
-	doubleword temp;
-	temp.dd = c;
-	fl_color(temp.db[1],temp.db[2],temp.db[3]);
+	//doubleword temp;
+	//temp.dd = c;
+	//fl_color(temp.db[1],temp.db[2],temp.db[3]);
 	fl_draw(s,x,y);
 }
 

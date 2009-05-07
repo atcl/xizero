@@ -32,7 +32,8 @@ CLlabel::~CLlabel() { }
 
 void CLlabel::draw()
 {
-
+	drawflatrectangle(posx,posy,posx+width,posy+height,bcolor,rcolor);
+	//drawtext
 }
 
 void CLlabel::settext(const xchar* t)

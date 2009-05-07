@@ -19,5 +19,20 @@ class CLtexmap : public virtual CLcl
 		maptexlinear();
 }
 
+CLtexmap::CLtexmap()
+{
+
+}
+
+CLtexmap::~CLtexmap()
+{
+
+}
+
+CLtexmap::maptexlinear()
+{
+
+}
+
 #endif
 

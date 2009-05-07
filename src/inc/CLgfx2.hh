@@ -21,7 +21,7 @@ class CLgfx2 : public virtual CLcl
 		CLgfx2(CLbuffer<xlong>* db);
 		~CLgfx2();
 		void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
-		void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1);
+		void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
 		void drawfontchar(xlong x,xlong y,xchar a,sprites* f,uxlong c);
 		void drawfontchar(xlong p,xchar a,sprites* f,uxlong c);
 		void drawfontstring(xlong x,xlong y,xchar* a,sprites* f,uxlong c);
@@ -73,7 +73,7 @@ void CLgfx2::drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxl
 	}
 }
 
-void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1)
+void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
 {
 
 	xlong offset1 = (y1*xres)+x1;

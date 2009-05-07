@@ -21,7 +21,9 @@ class CLsound : public virtual CLcl
 		~CLsound();
 		void playvoc(xlong* bf,xlong eff);
 		void loopplayvoc(xlong* bf,xlong eff);
-}
+};
+
+
 
 #endif
 

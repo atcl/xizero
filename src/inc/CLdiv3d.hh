@@ -11,7 +11,6 @@
 //prototypes:
 void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db);
 void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa);
-void drawlightsource(xlong x,xlong y,xlong z,uxlong color,xlong intensity);
 void drawfloor(xlong z, xlong w=xres);
 //
 
@@ -22,11 +21,6 @@ void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db)
 }
 
 void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa)
-{
-
-}
-
-void drawlightsource(xlong x,xlong y,xlong z,uxlong color,xlong intensity)
 {
 
 }
