@@ -87,7 +87,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	clterrain = new CLobject*[terraina->filecount];
 	for(int g=0; g<terraina->filecount; g++)
 	{
-		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g]->data,400,300,100,clmath,clshadow,cllight);
+		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g]->data,400,300,100,clmath,clshadow,cllight,1);
 	}
 	//*
 

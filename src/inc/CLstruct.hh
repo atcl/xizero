@@ -45,42 +45,42 @@ struct screenside
 
 struct sprite
 {
-	xlong size;
-	xlong width;
-	xlong height;
+	xlong  size;
+	xlong  width;
+	xlong  height;
 
 	xlong* data;
 };
 
 struct sprites
 {
-	xlong size;
-	xlong width;
-	xlong height;
+	xlong  size;
+	xlong  width;
+	xlong  height;
 
-	xlong perrow;
-	xlong tilesize;
-	xlong tilewidth;
-	xlong tileheight;
+	xlong  perrow;
+	xlong  tilesize;
+	xlong  tilewidth;
+	xlong  tileheight;
 
 	xlong* data;
 };
 
 struct listmember
 {
-	void* data;
+	void*       data;
 	listmember* next;
 	listmember* prev;
 };
 
 struct node
 {
-	node* parent;
-	node* next;
-	node* prev;
+	node*  parent;
+	node*  next;
+	node*  prev;
 	node** child;
-	xlong childcount;
-	void* data;
+	xlong  childcount;
+	void*  data;
 };
 
 typedef CLfile armember;
@@ -93,7 +93,7 @@ struct arfile
 
 struct xmlelement
 {
-	xchar* value;
+	xchar*  value;
 	xchar** attributes;
 };
 

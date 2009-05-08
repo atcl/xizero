@@ -10,7 +10,7 @@
 
 class CLguibase : public virtual CLcl
 {
-	private:
+	protected:
 		xlong doublebuffer;
 		xlong posx;
 		xlong posy;
@@ -18,6 +18,7 @@ class CLguibase : public virtual CLcl
 		xlong height;
 		uxlong fcolor;
 		uxlong bcolor;
+		uxlong rcolor;
 
 	public:
 		CLguibase();

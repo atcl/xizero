@@ -35,8 +35,8 @@ class CLobject : public virtual CLcl
 		xlong name;
 	
 	public:
-		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li);
-		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li);
+		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li,bool zs);
+		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li,bool zs);
 		~CLobject();
 		
 		void update(CLmatrix* m);
@@ -60,7 +60,7 @@ class CLobject : public virtual CLcl
 		void reset();
 };
 
-CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
+CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li,bool zs)
 {
 	xlong* dataptr = fileptr->data;
 
@@ -105,6 +105,9 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	xlong minz = 0;
 	xlong maxz = 0;
 
+	xlong zshift = 2;
+	if(zs==1) zshift = 0;
+
 	if(dataptr[0] != '<CLY') CLexit_(1,__func__,"wrong y3d format, may be endianess?");
 
 	if(dataptr[1] == '3DB>')
@@ -148,28 +151,28 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				d++; //"VECT"
 				t[0] = dataptr[d] + xoff; d++; //x1
 				t[1] = dataptr[d] + yoff; d++; //y1
-				t[2] = dataptr[d]/4 + zoff; d++; //z1
+				t[2] = (dataptr[d]>>zshift) + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
-				t[5] = dataptr[d]/4 + zoff; d++; //z2
+				t[5] = (dataptr[d]>>zshift) + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[6] = dataptr[d] + xoff; d++; //x3
 				t[7] = dataptr[d] + yoff; d++; //y3
-				t[8] = dataptr[d]/4 + zoff; d++; //z3
+				t[8] = (dataptr[d]>>zshift) + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
 				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4
-				t[11] = dataptr[d]/4 + zoff; d++; //z4
+				t[11] = (dataptr[d]>>zshift) + zoff; d++; //z4
 				//t[11] = dataptr[d] + zoff; d++; //z4
 				
 				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
@@ -181,9 +184,9 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				s.dd = dataptr[d]; d++; //"DP"+docktype
 				localdocktype = s.dw[1];
 				
-				t[0] = dataptr[d]; d++; //dx
-				t[1] = dataptr[d]; d++; //dy
-				t[2] = dataptr[d]; d++; //dz
+				t[0] = dataptr[d] + xoff; d++; //dx
+				t[1] = dataptr[d] + yoff; d++; //dy
+				t[2] = (dataptr[d]>>zshift) + zoff; d++; //dz
 
 				dockptr[dockcounter] = new vector;
 				dockptr[dockcounter]->x = t[0];
@@ -205,7 +208,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	}
 }
 
-CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li)
+CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong* dataptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li,bool zs)
 {
 	clmath = clm;
 	shadowmatrix = sm;
@@ -248,6 +251,9 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	xlong minz = 0;
 	xlong maxz = 0;
 
+	xlong zshift = 2;
+	if(zs==0) zshift = 0;
+
 	if(dataptr[0] != '<CLY') CLexit_(1,__func__,"wrong y3d format, may be endianess?");
 
 	if(dataptr[1] == '3DB>')
@@ -291,28 +297,28 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				d++; //"VECT"
 				t[0] = dataptr[d] + xoff; d++; //x1
 				t[1] = dataptr[d] + yoff; d++; //y1
-				t[2] = dataptr[d]/4 + zoff; d++; //z1
+				t[2] = (dataptr[d]>>zshift) + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
-				t[5] = dataptr[d]/4 + zoff; d++; //z2
+				t[5] = (dataptr[d]>>zshift) + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[6] = dataptr[d] + xoff; d++; //x3
 				t[7] = dataptr[d] + yoff; d++; //y3
-				t[8] = dataptr[d]/4 + zoff; d++; //z3
+				t[8] = (dataptr[d]>>zshift) + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
 				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4
-				t[11] = dataptr[d]/4 + zoff; d++; //z4
+				t[11] = (dataptr[d]>>zshift) + zoff; d++; //z4
 				//t[11] = dataptr[d] + zoff; d++; //z4
 				
 				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
@@ -324,9 +330,9 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				s.dd = dataptr[d]; d++; //"DP"+docktype
 				localdocktype = s.dw[1];
 				
-				t[0] = dataptr[d]; d++; //dx
-				t[1] = dataptr[d]; d++; //dy
-				t[2] = dataptr[d]; d++; //dz
+				t[0] = dataptr[d] + xoff; d++; //dx
+				t[1] = dataptr[d] + yoff; d++; //dy
+				t[2] = (dataptr[d]>>zshift) + zoff; d++; //dz
 
 				dockptr[dockcounter] = new vector;
 				dockptr[dockcounter]->x = t[0];

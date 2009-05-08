@@ -35,6 +35,7 @@ class CLlist : public virtual CLcl
 		void setnext();
 		bool islast();
 		bool isfirst();
+		void radixsort();
 		void print();
 };
 
@@ -213,6 +214,11 @@ bool CLlist::islast()
 {
 	if(current==last) return true;
 	else return false;
+}
+
+void CLlist::radixsort()
+{
+
 }
 
 void CLlist::print()

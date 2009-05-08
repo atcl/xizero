@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv)
 {
-	std::string argfile = "../dat/cube.y3d";
+	std::string argfile = "../dat/test.y3d";
 	xlong  argfileindex =-1;
 
 	if(argc>2)
@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
 	//CLobject + CLpolygon
 
-	CLobject* cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb);
+	CLobject* cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb,0);
 
 	clfps->init();
 
@@ -226,16 +226,10 @@ int main(int argc, char** argv)
 
 		//FLTKwritestring(10,10,toprint,0x00ff0000);
 
-// 		//uxlong readpixel(xlong x,xlong y);
-// 		drawpixel(xlong x,xlong y,uxlong c);
-// 		//drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-// 		//copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
-// 		drawbigpixel(xlong x,xlong y,uxlong c);
-// 		//putpixel(xlong x,xlong y,uxlong c,xlong m);
-// 		drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-// 		drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
-// 		drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
-// 		drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
+		//drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
+		//copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
+		//putpixel(xlong x,xlong y,uxlong c,xlong m);
+		//drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
 // 		drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 // 		//drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 // 		//drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
@@ -251,7 +245,7 @@ int main(int argc, char** argv)
 		clgfx1->drawpixel(20,20,0x000FF0000);
 		//clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
 
-		cubus->display(1,1,1,1,0,0);
+		//cubus->display(1,1,1,1,0,0);
 		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 
 		cubus->display(1,1,1,0,0,1);

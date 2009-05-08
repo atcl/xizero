@@ -54,7 +54,7 @@ void atcrosslevel_intro()
 	CLfile *atcl_f;
 	atcl_f = CLgetfile_("../dat/atcl.y3d");
 	CLobject* atcl;
-	atcl = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,atcl_f,400,300,100,clmath,bsm,amb);
+	atcl = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,atcl_f,400,300,100,clmath,bsm,amb,0);
 
 	xlong anim_start = CLgetmilliseconds_();
 	anim_stop += anim_start;

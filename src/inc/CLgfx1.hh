@@ -182,7 +182,12 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 {
 	xlong offsetbase = (y1*xres);
 
-	for(int i=x1; i<=x2; i++)
+	xlong a = x1;
+	xlong b = x2;
+
+	if(a>b) a ^= b ^= a ^= b;
+
+	for(int i=a; i<=b; i++)
 	{
 		
 		(*doublebuffer)[offsetbase+i] = c;
@@ -191,9 +196,14 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 
 void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 {
-	xlong offsetbase = (y1*xres)+x1;
+	xlong a = y1;
+	xlong b = y2;
 
-	for(int i=y1; i<=y2; i++)
+	if(a>b) a ^= b ^= a ^= b;
+
+	xlong offsetbase = (a*xres)+x1;
+
+	for(int i=a; i<=b; i++)
 	{
 		(*doublebuffer)[offsetbase] = c;
 		offsetbase+=xres;
@@ -202,11 +212,11 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 
 void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 {
-	xlong offsetbase = (y1*xres);
+	xlong offsetbase = (y1*xres)+x1;
 
-	for(int i=x1; i<=xy; i++)
+	for(int i=0; i<xy; i++)
 	{
-		(*doublebuffer)[offsetbase+i] = c;
+		(*doublebuffer)[offsetbase] = c;
 		offsetbase+=xres+1;
 	}
 }
