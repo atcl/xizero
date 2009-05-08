@@ -13,14 +13,14 @@ class CLsound : public virtual CLcl
 {
 	private:
 		xlong volume;
-
+		
 		void fadein();
 		void fadeout();
 	public:
-		CLsound();
+		CLsound(CLfile* bf);
 		~CLsound();
-		void playvoc(xlong* bf,xlong eff);
-		void loopplayvoc(xlong* bf,xlong eff);
+		void playvoc(xlong eff);
+		void loopplayvoc(xlong eff);
 };
 
 

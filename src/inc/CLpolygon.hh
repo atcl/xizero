@@ -338,17 +338,10 @@ void CLpolygon::flatshade(bool ambient)
 	float t = ((normal.x*tlight.x) + (normal.y*tlight.y) + (normal.z*tlight.z)) / (normal.l*tlight.l);
 	if(t < 0) t *= -1;
 	if(t > 1) t = 1;
-	if(t < 0.2)
+	if(t < 0.2 && ambient==false)
 	{
-		if(ambient==true)
-		{
-			//shade = nolight;
-			//return;
-		}
-		else
-		{
-			t = 0.2;
-		}
+		shade = nolight;
+		return;
 		
 	}
 

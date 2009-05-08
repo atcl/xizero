@@ -51,10 +51,12 @@ void atcrosslevel_intro()
 		xlong *z_scl = new xlong[anim_duration*anim_frames];
 
 	//load atcrosslevel model
-	CLfile *atcl_f;
-	atcl_f = CLgetfile_("../dat/atcl.y3d");
-	CLobject* atcl;
-	atcl = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,atcl_f,400,300,100,clmath,bsm,amb,0);
+	CLfile *cf = CLgetfile_("../dat/cross.y3d");
+	CLobject* cross = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cf,400,300,100,clmath,bsm,amb,0);
+	CLfile *lf = CLgetfile_("../dat/level.y3d");
+	CLobject* level = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,clmath,bsm,amb,0);
+
+	//build scene
 
 	xlong anim_start = CLgetmilliseconds_();
 	anim_stop += anim_start;
@@ -68,7 +70,7 @@ void atcrosslevel_intro()
 
 		//transform
 		
-		atcl->update(ltm);
+		//atcl->update(ltm);
 
 		//clear buffers
 		CLdoublebuffer->clear(0);
@@ -76,7 +78,7 @@ void atcrosslevel_intro()
 		CLstencilbuffer->clear(0);
 
 		//display
-		atcl->display(1,0,0,0,0,0);
+		//atcl->display(1,0,0,0,0,0);
 
 		//clear transformation matrix
 		ltm->unit();

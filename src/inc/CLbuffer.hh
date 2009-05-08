@@ -33,6 +33,7 @@ template <typename T>class CLbuffer : public virtual CLcl
 		void blendcopy(T* dst,xlong o);
 		void blendcopy(CLbuffer<T>* dst,xlong o);
 		uxlong getsize();
+		void reassign(uxlong s);
 		T* getbuffer();
 		T& operator[](uxlong i);
 };
@@ -146,6 +147,16 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 template <typename T>uxlong CLbuffer<T>::getsize()
 {
 	return size;
+}
+
+template <typename T>void CLbuffer<T>::reassign(uxlong s)
+{
+	delete buffer;
+
+	size = s;
+	buffer = new T[s];
+	//ds = s >> 2;
+	//qs = s >> 4;
 }
 
 template <typename T>T* CLbuffer<T>::getbuffer()

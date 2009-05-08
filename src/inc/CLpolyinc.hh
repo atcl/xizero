@@ -13,7 +13,7 @@ fvertex spoint[20];
 xlong cleartrans = 0;
 xlong maxcleartrans = 0;
 xlong zdistance = 1000; //=zmax?
-uxlong nolight = 0x001F1F1F;
+uxlong nolight = 0x00303030;
 uxlong shadowcolor = 0x00C0C0C0;
 
 fvector plane = {0,0,1,1};

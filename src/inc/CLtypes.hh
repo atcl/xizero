@@ -4,8 +4,6 @@
 #define HH_CLTYPES
 #pragma message "Compiling " __FILE__ " ! TODO: platform independent type decs"
 
-#include "CLtypes.hh"
-
 
 //todo: autoset variable size by machine architectures compiled on
 typedef char		 xchar;
