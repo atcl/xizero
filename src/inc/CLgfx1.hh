@@ -9,6 +9,8 @@
 #include "CLstruct.hh"
 #include "CLbuffer.hh"
 
+//ad clipping: just break the draw loops if screen is left.
+
 
 class CLgfx1 : public virtual CLcl
 {
