@@ -37,6 +37,8 @@ class CLgfx2 : public virtual CLcl
 		uxlong blendcolorsalpha();
 		uxlong blendcolorsadd();
 		uxlong blendcolorsmul();
+
+		void savescreenshot(const xchar*);
 };
 
 CLgfx2::CLgfx2(CLbuffer<xlong>* db)
@@ -191,6 +193,36 @@ uxlong CLgfx2::getQBcolor(xchar c)
 		default:
 			return 0;
 	}
+}
+
+bool CLgfx2::comparecolors(uxlong c1,uxlong c2)
+{
+
+}
+
+uxlong CLgfx2::blendcolors()
+{
+
+}
+
+uxlong CLgfx2::blendcolorsalpha()
+{
+
+}
+
+uxlong CLgfx2::blendcolorsadd()
+{
+
+}
+
+uxlong CLgfx2::blendcolorsmul()
+{
+
+}
+
+void CLgfx2::savescreenshot(const xchar*)
+{
+
 }
 
 #endif

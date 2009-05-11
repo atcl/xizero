@@ -19,8 +19,8 @@ void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db)
 {
 	if(x>0 && x<xres && y>0 && y<yres && z>0 && z<zres)
 	{
-		xlong nx = (xlong( ( 80 * x) / z) ) + xres>>1); //95 wenn xclipping läuft
-		xlong ny = (xlong( (-95 * y) / z) ) + yres>>1);
+		xlong nx = xlong( ( 80 * x) / z) + xres>>1; //95 wenn xclipping läuft
+		xlong ny = xlong( (-95 * y) / z) + yres>>1;
 
 		(*db)[(ny*xres)+nx] = color;
 	}
@@ -38,8 +38,8 @@ void drawfloor(xlong z, xlong w)
 	//draw screen
 	xlong x1 = 0;
 	xlong y1 = 0;
-	xlong x2 = (xlong( ( 80 * (xres-1)) / z) ) + xres>>1);
-	xlong y2 = (xlong( (-95 * (yres-1)) / z) ) + yres>>1);
+	xlong x2 = xlong( ( 80 * xmax) / z) + xres>>1;
+	xlong y2 = xlong( (-95 * ymax) / z) + yres>>1;
 	//draw filled rectangle
 } 
 

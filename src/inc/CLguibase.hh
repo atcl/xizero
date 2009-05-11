@@ -31,12 +31,14 @@ class CLguibase : public virtual CLcl
 		void sety(xlong y);
 		void setfcolor(uxlong fc);
 		void setbcolor(uxlong bc);
+		void setrcolor(uxlong rc);
 		xlong getwidth();
 		xlong getheight();
 		xlong getx();
 		xlong gety();
 		uxlong getfcolor();
 		uxlong getbcolor();
+		uxlong getrcolor();
 };
 
 CLguibase::CLguibase()
@@ -78,6 +80,11 @@ void CLguibase::setbcolor(uxlong bc)
 	bcolor = bc;
 }
 
+void CLguibase::setrcolor(uxlong rc)
+{
+	rcolor = rc;
+}
+
 xlong CLguibase::getwidth()
 {
 	return width;
@@ -106,6 +113,11 @@ uxlong CLguibase::getfcolor()
 uxlong CLguibase::getbcolor()
 {
 	return bcolor;
+}
+
+uxlong CLguibase::getrcolor()
+{
+	return rcolor;
 }
 
 #endif

@@ -4,11 +4,11 @@
 #define HH_CLCONSTS
 #pragma message "Compiling " __FILE__ " ! TODO: more"
 
-#define xmin 0
+#define xmin 1
 #define xmax xres-1
-#define ymin 0
+#define ymin 1
 #define ymax yres-1
-#define zmin 0
+#define zmin 1
 #define zmax zres-1
 
 namespace CL

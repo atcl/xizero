@@ -11,6 +11,7 @@
 #include "CLvector.hh"
 
 
+//templates
 class CLmath : public virtual CLcl
 {
 	private:
