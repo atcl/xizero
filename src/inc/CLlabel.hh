@@ -38,7 +38,7 @@ void CLlabel::draw()
 
 void CLlabel::settext(const xchar* t)
 {
-
+	text = (xchar*)t;
 }
 
 xchar* CLlabel::gettext()

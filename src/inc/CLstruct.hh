@@ -71,6 +71,8 @@ struct listmember
 	void*       data;
 	listmember* next;
 	listmember* prev;
+	xchar*      name;
+	xlong*      hash;
 };
 
 struct node
@@ -81,6 +83,8 @@ struct node
 	node** child;
 	xlong  childcount;
 	void*  data;
+	xchar* name;
+	xlong* hash;
 };
 
 typedef CLfile armember;

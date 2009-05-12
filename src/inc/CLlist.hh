@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLapi.hh"
 
 
 class CLlist : public virtual CLcl
@@ -21,8 +22,9 @@ class CLlist : public virtual CLcl
 		CLlist(void* e);
 		~CLlist();
 
-		void append(void* e);
-		void* getcurrent();
+		void append(void* e,const xchar* n);
+		void* getcurrentdata();
+		xchar* getcurrentname();
 		void* delcurrent(bool smash); //test smash option
 		xlong getlength();
 		void setindex(xlong i);
@@ -60,7 +62,7 @@ CLlist::CLlist(void* e)
 
 CLlist::~CLlist() { }
 
-void CLlist::append(void* e)
+void CLlist::append(void* e,const xchar* n)
 {
 	if(length==0)
 	{
@@ -70,6 +72,7 @@ void CLlist::append(void* e)
 		current->data = e;
 		current->next = current;
 		current->prev = current;
+		current->name = (xchar*)n;
 	}
 	else
 	{
@@ -80,16 +83,29 @@ void CLlist::append(void* e)
 		current->next->prev = current;
 		current->next->next = current->next;
 		current = current->next;
+		current->name = (xchar*)n;
 	}
 
 	length++;
 }
 
-void* CLlist::getcurrent()
+void* CLlist::getcurrentdata()
 {
 	if(current!=0)
 	{
 		return current->data;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+xchar* CLlist::getcurrentname()
+{
+	if(current!=0)
+	{
+		return current->name;
 	}
 	else
 	{
@@ -223,7 +239,16 @@ void CLlist::radixsort()
 
 void CLlist::print()
 {
+	setfirst();
 
+	CLprint_("|");
+
+	while(!islast())
+	{
+		CLttyout_("+");
+		CLprint_(getcurrentname());
+		setnext();
+	}
 }
 
 #endif

@@ -11,7 +11,7 @@
 #include "CLvector.hh"
 
 
-//templates
+//+templates
 class CLmath : public virtual CLcl
 {
 	private:
@@ -24,11 +24,11 @@ class CLmath : public virtual CLcl
 		CLmath();
 		~CLmath();
 
-		xlong sign(xlong x);
-		xlong absolute(xlong x);
-		xlong min(xlong a,xlong b);
-		xlong max(xlong a,xlong b);
-		xlong intsqrt(uxlong x);
+		template<typename T> T sign(T x);
+		template<typename T> T absolute(T x);
+		template<typename T> T min(T a,T b);
+		template<typename T> T max(T a,T b);
+		template<typename T> T intsqrt(T x);
 		float sinbyarray(xlong x);
 		float cosbyarray(xlong x);
 		float vectorlength(fvector v);
@@ -67,27 +67,27 @@ CLmath::CLmath()
 
 CLmath::~CLmath() { }
 
-xlong CLmath::sign(xlong x)
+template<typename T> T CLmath::sign(T x)
 {
-	if(x = 0) return 0;
+	if(x == 0) return 0;
 	else if(x < 0) return -1;
 	else if(x > 0) return 1;
 }
 
-xlong CLmath::absolute(xlong x)
+template<typename T> T CLmath::absolute(T x)
 {
 	if(x<0) x *= -1;
 
 	return x;
 }
 
-xlong CLmath::min(xlong a,xlong b)
+template<typename T> T CLmath::min(T a,T b)
 {
 	if(a<=b) return a;
 	else return b;
 }
 
-xlong CLmath::max(xlong a,xlong b)
+template<typename T> T CLmath::max(T a,T b)
 {
 	if(a>=b) return a;
 	else return b;
@@ -106,12 +106,12 @@ float CLmath::cosbyarray(xlong x)
 	return cosarray[d];
 }
 
-xlong CLmath::intsqrt(uxlong x)
+template<typename T> T CLmath::intsqrt(T x)
 {
-	if(x==0) return 0;
+	if(x<=0) return 0;
 
-	uxlong num = x;
-	uxlong tmp = (x + 1)>>1;
+	T num = x;
+	T tmp = (x + 1)>>1;
 
 	for(int i=15;i>0;i--)
 	{

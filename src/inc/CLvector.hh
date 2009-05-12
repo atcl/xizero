@@ -19,6 +19,8 @@ struct vector
 	//vector(xlong x,xlong y,xlong z);
 	//vector(xlong x,xlong y,xlong z,xlong l);
 	//~vector();
+	xlong length();
+	void unit();
 	vector& operator+=(vector &a);
 	vector& operator-=(vector &a);
 	vector& operator+(vector &a);
@@ -42,6 +44,8 @@ struct fvector
 	//fvector(xlong x,xlong y,xlong z);
 	//fvector(xlong x,xlong y,xlong z,xlong l);
 	//~vector();
+	xlong length();
+	void unit();
 	fvector& operator+=(fvector &a);
 	fvector& operator-=(fvector &a);
 	fvector& operator+(fvector &a);
@@ -83,6 +87,16 @@ struct fvector
 // }
 // 
 // vector::~vector() { }
+
+xlong vector::length()
+{
+	
+}
+
+void vector::unit()
+{
+
+}
 
 vector& vector::operator+=(vector &a)
 {
@@ -166,6 +180,16 @@ xlong vector::operator^(vector &a)
 // }
 // 
 // fvector::~fvector() { }
+
+xlong fvector::length()
+{
+	
+}
+
+void fvector::unit()
+{
+
+}
 
 fvector& fvector::operator+=(fvector &a)
 {
