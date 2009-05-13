@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 			doubleword tt;
 			bcx = clformat->loadbcx(fbcx);
 		//test tga loading:
-			CLfile* ftga = CLgetfile_("../dat/CLsysfnt.tga");
+			CLfile* ftga = CLgetfile_("../dat/CLteletype.fnt");
 			sprite* testsprite = clformat->loadtga(ftga);
 
 		//test tree:

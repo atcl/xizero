@@ -210,6 +210,11 @@ float CLgetdeciseconds_() //since midnight
 	return float(clock() / CLOCKS_PER_SEC * 10);
 }
 
+void CLdoevery_(every* e)
+{
+	
+}
+
 xlong CLsystem_(const xchar* c)
 {
 	return system(c);

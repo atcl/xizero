@@ -4,20 +4,10 @@
 #define HH_CLMISC
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
-void one()
-{
-	return 1;
-}
-
 void crosslevel()
 {
 
 }
-
-//id:
-xlong generateid() { }
-xlong generatecrc() { }
-bool checkcrc() {}
 
 //guifx
 void drawmousegfx() { }

@@ -29,7 +29,14 @@ void dissolve(xlong t,CLbuffer<xlong>* db)
 
 void fadetoblack(xlong t,CLbuffer<xlong>* db)
 {
+	every* ev = new every;
+	//ev->func = ;
+	ev->interval = 50;
+	ev->count = 256;
+	ev->active = true;
+	//ev->id = clid->generateid
 
+	CLdoevery_(ev);
 }
 
 #endif
