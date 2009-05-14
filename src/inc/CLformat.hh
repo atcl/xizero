@@ -172,8 +172,8 @@ arfile* CLformat::loadar(CLfile* sf)
 
 			//build array for current ar member
 			xlong fs2 = fs>>2;
-			xlong *tb = new xlong[fs2+1];
-			xlong* bf2 = reinterpret_cast<xlong *>(&bf[bc]);
+			xlong* tb = new xlong[fs2+1];
+			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]);
 			for(int i=0; i<fs2+1; i++)
 			{
 				tb[i] = bf2[i];
@@ -319,7 +319,7 @@ sprite* CLformat::loadtga(CLfile* sf)
 	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
 	xchar	imagepixelsize	= bf[16];
 
-	if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit
+	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
 
 	xchar	imagedescriptor	= bf[17];
 
@@ -327,11 +327,11 @@ sprite* CLformat::loadtga(CLfile* sf)
 
 	xshort imageoffset = imageid + colormaplength;
 
-	sprite* r = new sprite();
+	sprite* r = new sprite;
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
 	r->height = imageheight;
-	r->data = reinterpret_cast<xlong*>(&bf[18] + imageoffset);
+	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset);
 
 	return r;
 }

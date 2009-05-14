@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 			doubleword tt;
 			bcx = clformat->loadbcx(fbcx);
 		//test tga loading:
-			CLfile* ftga = CLgetfile_("../dat/CLteletype.fnt");
+			CLfile* ftga = CLgetfile_("../dat/7segment.tga");
 			sprite* testsprite = clformat->loadtga(ftga);
 
 		//test tree:
@@ -243,7 +243,7 @@ int main(int argc, char** argv)
 // 		fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 
 		clgfx1->drawpixel(20,20,0x000FF0000);
-		//clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
+		clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
 
 		//cubus->display(1,1,1,1,0,0);
 		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);

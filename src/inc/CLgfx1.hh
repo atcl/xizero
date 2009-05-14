@@ -411,7 +411,8 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 			}
 			linearc++;
 		}
-		xoffset += hordiff;
+		xoffset += xres;
+		linearc--;
 	}
 	
 }
