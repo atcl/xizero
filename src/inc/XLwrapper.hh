@@ -1,24 +1,26 @@
 
 #include <X11/Xlib.h>
-//#include <X11/Xutil.h>
+#include <X11/Xutil.h>
 //#include <X11/keysym.h>
 
 #include <stdio.h>
 
 #define WIN_TITLE "test"
-#define xres 800
-#define yres 600
-
 
 //gcc test.c -o test -L/usr/X11R6/lib -lX11 -I/usr/X11R6/include
+
+//! prototypes
+
 
 Display* d;
 Window   w;
 Atom     a;
 XEvent   e;
+Screen*  s;
 Visual*  v;
-Ximage   i;
+XImage*  i;
 GC       g;
+int      n;
 
 //current input:
 char kp;
@@ -32,14 +34,18 @@ long mt;
 
 void XLsetup(char* doublebuffer)
 {
-	if( (d=XOpenDisplay(NULL) == NULL )
-	{
-		//CLexit(__func__,1,"XOpenDisplay is unable to open a Display");
-	}
+// 	if( (d = XOpenDisplay(NULL)) == NULL )
+// 	{
+// 		//CLexit(__func__,1,"XOpenDisplay is unable to open a Display");
+// 	}
 
-	w = XCreateSimpleWindow(d,DefaultRootWindow(d),0,0,xres,yres,0,0,BlackPixel(d,DefaultScreen(d)));
+	d = XOpenDisplay(NULL);
 
-	v =DefaultVisualOfScreen(d);
+	s = DefaultScreenOfDisplay(d);
+	n = DefaultScreen(d);
+	v = DefaultVisualOfScreen(s);
+
+	w = XCreateWindow(d,DefaultRootWindow(d),0,0,xres,yres,0,24,InputOutput,v,0,NULL);
 
 	XStoreName(d,w,WIN_TITLE);
 
@@ -48,13 +54,11 @@ void XLsetup(char* doublebuffer)
 
 	XMapWindow(d,w);
 
-	XGCValues values = CapButt | JoinBevel;
-	unsigned long valuemask = GCCapStyle | GCJoinStyle;
-	g = XCreateGC(d,w, valuemask, &values);
+	g = XCreateGC(d,w, 0, NULL);
 
-	i = XCreateImage(d,v,32,ZPixmap,0,doublebuffer,xres,yres,32,xres*4);
+	i = XCreateImage(d,v,24,ZPixmap,0,doublebuffer,xres,yres,32,xres*4);
 	
-	XSelectInput(d,w, KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask);
+	XSelectInput(d,w, ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask);
 }
 
 void XLflush()
@@ -63,15 +67,23 @@ void XLflush()
 	XFlush(d);
 }
 
+void XLexit()
+{
+	XDestroyImage(i);
+	XFreeGC(d,g);
+	XDestroyWindow(d,w);
+	XCloseDisplay(d);
+}
+
 void XLgetinput()
 {
-	XNextEvent(d,e);
+	XNextEvent(d,&e);
 	switch(e.type)
 	{
-		case KeyPress:		kp = event.xkey.keycode;
+		case KeyPress:		kp = e.xkey.keycode;
 					break;
 
-		case KeyRelease:	kt = event.xkey.keycode;
+		case KeyRelease:	kt = e.xkey.keycode;
 					break;
 
 		case ButtonPress:	mb = e.xbutton.button;
@@ -88,8 +100,8 @@ void XLgetinput()
 					my = e.xbutton.y;
 					break;
 
-		case ClientMessage:	if (event.xclient.data.l[0] == delete_atom);
-					CloseAll();
+		case ClientMessage:	if (e.xclient.data.l[0] == a);
+					XLexit();
 					break;	
 	}
 }
@@ -129,39 +141,35 @@ long XLgetturbomousebutton()
 	return mt;
 }
 
-void XLexit()
-{
-	XDestroyImage(i);
-	XFreeGC(d,g);
-	XDestroyWindow(d,w);
-	XCloseDisplay(d);
-}
-
-int main()
-{
-	char* vram = new char[xres*yres*4];
-
-	XLsetup(vram);
-
-	bool inf = 1;
-
-	while(inf==1)
-	{
-		XLgetinput();
-
-		switch(XLgetkey())
-		{
-			case 0: inf = 0; //leave
-
-			case 1: ; //output pixel
-
-			case 2: ; //output event data to console
-
-		}
-
-		XLflush();
-	}
-}
+// int main()
+// {
+// 	char* vram = new char[xres*yres*4];
+// 
+// 	XLsetup(vram);
+// 
+// 	bool inf = 1;
+// 
+// 	while(inf==1)
+// 	{
+// 		XLgetinput();
+// 
+// 		switch(XLgetkey())
+// 		{
+// 			case '0': inf = 0; //leave
+//  
+// 			case '1': ; //output pixel
+// 
+// 			case '2': ; //output event data to console
+//  
+// 		}
+// 
+// 		XClearWindow(d,w);
+// 
+// 		XLflush();
+// 	}
+// 
+// 	return 0;
+// }
 
 
 

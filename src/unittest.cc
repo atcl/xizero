@@ -109,7 +109,7 @@ int main(int argc, char** argv)
 	clfps->init();
 
 	FLTKsetfont(8);
-	xchar* toprint = "hi there";
+	xchar* toprint = u8"hi there";
 
 	while(FLTKwait())
 	{

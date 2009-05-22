@@ -195,6 +195,8 @@ void CLwait_(xlong milliseconds)
 	} while(nowtime < stoptime);
 }
 
+//! change all sceinds stuff to xlong
+
 float CLgetmilliseconds_() //since midnight
 {
 	return float(clock() / CLOCKS_PER_SEC * 1000);
@@ -210,9 +212,21 @@ float CLgetdeciseconds_() //since midnight
 	return float(clock() / CLOCKS_PER_SEC * 10);
 }
 
-void CLdoevery_(every* e)
+xlong CLdoevery_(every* e)
 {
-	
+	float now = CLgetmilliseconds_();
+
+	e->last = now;
+
+	if(now - e->last < e->interval) return 1;
+
+	if(e->count == e->times) return 1;
+
+	e->function();
+
+	e->count++;
+
+	return 0;
 }
 
 xlong CLsystem_(const xchar* c)

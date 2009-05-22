@@ -11,78 +11,92 @@
 class CLfifo : public virtual CLcl
 {
 	private:
-		xlong head;
-		xlong tail;
+		listmember* head;
+		listmember* tail;
 		xlong length;
-		xlong current;
 		void** que;
 
 	public:
-		CLfifo(xlong l);
+		CLfifo();
 		~CLfifo();
 		void in(void* f);
 		void* out();
+		xlong getlength();
 		void clear();
-		bool isfull();
 		bool isempty();
 };
 
-CLfifo::CLfifo(xlong l)
+CLfifo::CLfifo()
 {
-	length = l;
-	current = -1;
-	que = new void*[l];
+	length = 0;
 }
 
 CLfifo::~CLfifo() { }
 
 void CLfifo::in(void* f)
 {
-	if(current==-1)
+	listmember* t = new listmember;
+
+	if(length == 0)
 	{
-		current = 0;
-		que[current] = f;
-		head = current;
-		tail = current;
+		tail = t;
 	}
-	else if(isfull()==false)
+	else
 	{
-		
+		head->prev = t;
+		head = t;
 	}
+
+	t->data = f;
+	t->next = 0;
+	t->prev = 0;
+	t->name = 0;
+	t->hash = 0;
+	head = t;
+	length++;
 }
 
 void* CLfifo::out()
 {
-	void* t = 0;
-
-	if(isempty()==false)
+	if(length == 0)
 	{
-		if(tail!=head)
-		{
-			
-		}
-		else
-		{
-			
-		}
+		return 0;
 	}
-
-	return t;
+	else if(length==1)
+	{
+		length--;
+		return tail->data;
+	}
+	else
+	{
+		length--;
+		void* t = tail->data;
+		tail  = tail->prev;
+		return t;
+	}
 }
 
 void CLfifo::clear()
 {
-
+	for(int i=0; i<length; i++)
+	{
+		listmember* t = tail;
+		tail = tail->prev;
+		delete t;
+		length--;
+	}
 }
 
-bool CLfifo::isfull()
+xlong CLfifo::getlength()
 {
-
+	return length;
 }
 
 bool CLfifo::isempty()
 {
+	if(length==0) return true;
 
+	return false;
 }
 
 #endif

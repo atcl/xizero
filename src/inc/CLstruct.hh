@@ -103,13 +103,26 @@ struct xmlelement
 
 struct every
 {
-	void* function();//function to execute
+	void(*function)();//function to execute
 	xlong interval;  //in milliseconds
+	xlong times;
 	xlong count;	 //break condition regular (do x-times)
 	bool  active;    //break condition extra (if false break)
 	xlong id;        //unique id
 
 	xlong last;      //last time done;
+
+	every(void(*f)(),xlong i,xlong t,xlong d)
+	{
+		function = f;
+		interval = i;
+		times = t;
+		id = d;
+
+		last = 0;
+		count = 0;
+		active = true;
+	}
 };
 
 struct exe
