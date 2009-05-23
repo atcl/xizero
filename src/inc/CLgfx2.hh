@@ -8,6 +8,13 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLbuffer.hh"
+#include "CLformat.hh"
+
+
+#define teletype 0;
+#define monotype 1;
+#define linetype 2;
+#define segmtype 3;
 
 
 class CLgfx2 : public virtual CLcl
@@ -16,18 +23,22 @@ class CLgfx2 : public virtual CLcl
 		CLbuffer<xlong>* doublebuffer;
 
 	private:
+		sprites* tele;
+		sprites* mono;
+		sprites* line;
+		sprites* segm;
 
 	public:
 		CLgfx2(CLbuffer<xlong>* db);
 		~CLgfx2();
 		void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
 		void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
-		void drawfontchar(xlong x,xlong y,xchar a,sprites* f,uxlong c);
-		void drawfontchar(xlong p,xchar a,sprites* f,uxlong c);
-		void drawfontstring(xlong x,xlong y,xchar* a,sprites* f,uxlong c);
-		void drawfontstring(xlong p,xchar* a,sprites* f,uxlong c);
-		void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,sprites* f,uxlong c);
-		void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,sprites* f,uxlong c);
+		void drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c);
+		void drawfontchar(xlong p,xchar a,xlong f,uxlong c);
+		void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c);
+		void drawfontstring(xlong p,xchar* a,xlong f,uxlong c);
+		void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,xlong f,uxlong c);
+		void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,xlong f,uxlong c);
 		xlong locatemaxx();
 		xlong locatemaxy();
 		xlong locate(xlong x,xlong y);
@@ -103,22 +114,22 @@ void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxl
 	}
 }
 
-void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,sprites* f,uxlong c)
+void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontchar(xlong p,xchar a,sprites* f,uxlong c)
+void CLgfx2::drawfontchar(xlong p,xchar a,xlong f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,sprites* f,uxlong c)
+void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontstring(xlong p,xchar* a,sprites* f,uxlong c)
+void CLgfx2::drawfontstring(xlong p,xchar* a,xlong f,uxlong c)
 {
 
 }

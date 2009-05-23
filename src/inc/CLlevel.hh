@@ -116,7 +116,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	//now terrain map holds 2d xchar array of terrain objects
 
 	//determine level consts
-	levelheight = getlinecount(levela->members[tf]->text,levela->members[tf]->size);
+	levelheight = getlinecount(levela->members[tf]);
 	blocksperscreeny = yres / blockheight;
 	blocksperscreenx = xres / blockwidth;
 	mark = levelheight - blocksperscreeny;

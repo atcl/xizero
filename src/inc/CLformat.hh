@@ -217,7 +217,7 @@ arfile* CLformat::loadar(CLfile* sf)
 
 xlong** CLformat::loadbcx(CLfile* bf)
 {
-	xlong lc = getlinecount(bf->text,bf->size);
+	xlong lc = getlinecount(bf);
 
 	doubleword nl;
 	xlong bc = 0;	
@@ -263,7 +263,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst)
 {
 	xchar* bf = sf->text;
 	xlong bs = sf->size;
-	xlong lc = getlinecount(bf,bs);
+	xlong lc = getlinecount(sf);
 
 	//determine line length
 	xlong lw = 0;

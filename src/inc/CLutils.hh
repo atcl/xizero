@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include  "CLstruct.hh"
 
 
 xchar* long2char(xlong l)
@@ -72,32 +73,13 @@ bool comparechararrays(xchar* t1, xchar* t2,xlong tl)
 	return true;
 }
 
-xlong getlinecount(xlong* bf,xlong bs)
-{
-	xlong lc = 0;	//line count
-	doubleword cc;	//current chars
-
-	//check for linebreaks a xlong at a time
-	for(int c=0; c<bs; c++)
-	{
-		cc.dd = bf[c];
-		if( cc.db[0] == '\n' ) lc++;
-		if( cc.db[1] == '\n' ) lc++;
-		if( cc.db[2] == '\n' ) lc++;
-		if( cc.db[3] == '\n' ) lc++;
-	}
-	//lc holds now the line count of bf
-
-	return lc;
-}
-
-xlong getlinecount(xchar* bf,xlong bs)
+xlong getlinecount(CLfile* sf)
 {
 	xlong lc = 0;	//line count
 
-	for(int c=0; c<bs; c++)
+	for(int c=0; c<sf->size; c++)
 	{
-		if( bf[c] == '\n' && bf[c-1] != '\n' ) lc++;
+		if( sf->text[c] == '\n' && sf->text[c-1] != '\n' ) lc++;
 	}
 	//lc holds now the line count of bf
 
@@ -153,6 +135,8 @@ xchar* color2string(uxlong c)
 
 xlong endian(xlong l)
 {
+	//converts/toggles endianess of l
+
 	xchar tc;
 	doubleword tl;
 	tl.dd = l;

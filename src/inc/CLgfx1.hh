@@ -273,7 +273,59 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
+	if(x1==x2 && y1==y2) return;
 
+	xlong dx = x2 - x1;
+	xlong dy = y2 - y1;
+	xlong e;
+	xlong xs = 1;
+	xlong ys = xres;
+	xlong len;
+	xlong off = y1*xres+x1;
+	xlong temp;
+
+	if(dx<0)
+	{
+		dx = -dx;
+		xs = -xs;
+	}
+
+
+	if(dy<0)
+	{
+		dy = -dy;
+		ys = -ys;
+	}
+
+	if(dy > dx)
+	{
+		dx ^= dy ^= dx ^= dy;
+		xs ^= ys ^= xs ^= ys;
+	}
+
+	len = dx+1;
+	e = dy;
+
+	for(int i=0; i<len; i++)
+	{
+		(*doublebuffer)[off] = c;
+
+		(*doublebuffer)[off-1]      = c; //adjust colors 
+		(*doublebuffer)[off+1]      = c;
+		(*doublebuffer)[off-xres-1] = c;
+		(*doublebuffer)[off-xres]   = c;
+		(*doublebuffer)[off-xres+1] = c;
+		(*doublebuffer)[off+xres-1] = c;
+		(*doublebuffer)[off+xres]   = c;
+		(*doublebuffer)[off+xres+1] = c; //*
+		off += xs;
+		e += dy;
+		if(e >= dx)
+		{
+			e -= dx;
+			off += ys;
+		}
+	}
 }
 
 void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
@@ -322,7 +374,9 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 
 void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
-
+	drawcircle(xc,yc,r,c);
+	drawcircle(xc,yc,r+1,c); //adjust color
+	drawcircle(xc,yc,r-1,c); //adjust color
 }
 
 void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
