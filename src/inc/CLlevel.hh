@@ -59,7 +59,7 @@ class CLlevel : public virtual CLcl
 		void subsmark(xlong m);
 };
 
-xlong CLlevel::levelwidth = 20;
+xlong CLlevel::levelwidth = 20; //in blocks
 xlong CLlevel::blockheight = 40;
 xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;

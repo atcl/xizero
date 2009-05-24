@@ -11,6 +11,7 @@
 //prototypes:
 void drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y);
 void drawplasma(CLbuffer<xlong>* db,xlong x,xlong y);
+void drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y);
 //
 
 
@@ -24,4 +25,10 @@ void drawplasma(CLbuffer<xlong>* db,xlong x,xlong y)
 
 }
 
+void drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y)
+{
+
+}
+
 #endif
+

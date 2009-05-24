@@ -12,6 +12,7 @@ class CLenemy : public virtual CLcl
 {
 	protected:
 		CLobject* model;
+		CLlist*   ammolist;
 
 	private:
 		xlong name;

@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: underscores everywhere"
 
 #include <stdio.h>
+#include <iomanip>
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
@@ -13,6 +14,7 @@
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+#include "CLmatrix.hh"
 
 
 //prototypes:
@@ -26,6 +28,7 @@ void    CLdebug_(const xchar* c,xlong v);
 void    CLprint_(const xchar* c);
 void    CLprint_(const xlong l);
 void    CLprint_(const vector v);
+void    CLprint_(CLmatrix m);
 void    CLttyout_(const xchar* c);
 void    CLttyout_(const xlong l);
 void    CLwaitforkey_();
@@ -168,6 +171,15 @@ void CLprint_(const vector v)
 	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
 }
 
+void CLprint_(CLmatrix m)
+{
+	std::cout << std::setw(7) << m.getentry(0,0) <<" "<< std::setw(7) << m.getentry(0,1) <<" "<< std::setw(7) << m.getentry(0,2) <<" "<< std::setw(7) << m.getentry(0,3) << std::endl;
+	std::cout << std::setw(7) << m.getentry(1,0) <<" "<< std::setw(7) << m.getentry(1,1) <<" "<< std::setw(7) << m.getentry(1,2) <<" "<< std::setw(7) << m.getentry(1,3) << std::endl;
+	std::cout << std::setw(7) << m.getentry(2,0) <<" "<< std::setw(7) << m.getentry(2,1) <<" "<< std::setw(7) << m.getentry(2,2) <<" "<< std::setw(7) << m.getentry(2,3) << std::endl;
+	std::cout << std::setw(7) << m.getentry(3,0) <<" "<< std::setw(7) << m.getentry(3,1) <<" "<< std::setw(7) << m.getentry(3,2) <<" "<< std::setw(7) << m.getentry(3,3) << std::endl;
+	std::cout << std::endl;
+}
+
 void CLttyout_(const xchar* c)
 {
 	std::cout << c;
@@ -195,7 +207,7 @@ void CLwait_(xlong milliseconds)
 	} while(nowtime < stoptime);
 }
 
-//! change all sceinds stuff to xlong
+//! change all seconds stuff to xlong
 
 float CLgetmilliseconds_() //since midnight
 {

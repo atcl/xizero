@@ -4,9 +4,6 @@
 #define HH_CLMATRIX
 #pragma message "Compiling " __FILE__ " ! TODO: std free"
 
-#include <iostream>
-#include <iomanip>
-
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLconsts.hh"
@@ -46,7 +43,7 @@ class CLmatrix : public virtual CLcl
 		float trace();
 		float determinate();
 		void invert();
-		void print();
+		float getentry(xlong r,xlong c);
 };
 
 
@@ -317,13 +314,9 @@ float CLmatrix::trace()
 	return (m[1][1] + m[2][2] + m[3][3] + m[4][4]);
 }
 
-void CLmatrix::print()
+float CLmatrix::getentry(xlong r,xlong c)
 {
-	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << std::endl;
-	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << std::endl;
-	std::cout << std::setw(7) << m[2][0] <<" "<< std::setw(7) << m[2][1] <<" "<< std::setw(7) << m[2][2] <<" "<< std::setw(7) << m[2][3] << std::endl;
-	std::cout << std::setw(7) << m[3][0] <<" "<< std::setw(7) << m[3][1] <<" "<< std::setw(7) << m[3][2] <<" "<< std::setw(7) << m[3][3] << std::endl;
-	std::cout << std::endl;
+	return m[r][c];
 }
 
 #endif

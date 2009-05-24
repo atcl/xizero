@@ -10,6 +10,11 @@
 #include "CLgfx1.hh"
 
 
+//gobals:
+xchar fade_const;
+xlong diss_const;
+xlong circ_const;
+
 //prototypes:
 void circleblend(xlong x,xlong y,xlong r,xlong t,CLbuffer<xlong>* db);
 void dissolve(xlong t,CLbuffer<xlong>* db);
@@ -38,5 +43,22 @@ void fadetoblack(xlong t,CLbuffer<xlong>* db)
 
 	CLdoevery_(ev);
 }
+
+//everies:
+
+ev_dissolve()
+{
+	//xlong x = CLrandom_(xres);
+	//xlong y = CLrandom_(yres);
+	//xlong c = CLrandom_(0x00FFFFFF);
+
+	//clgfx1->drawpixel(x,y,c);
+}
+
+ev_fadetoblack()
+{
+	
+}
+
 
 #endif

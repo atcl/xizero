@@ -68,7 +68,7 @@ xlong getmouseb2();
 
 #endif
 
-//old functions, jusst for reference:
+//old functions, just for reference:
 
 //from level-constructor, display a level:
 // 	for(int s=0; s<levelheight ;s++)
@@ -81,3 +81,4 @@ xlong getmouseb2();
 // 	}
 // 	cout << endl;
 //*
+

@@ -24,7 +24,8 @@ class CLformat : public virtual CLcl
 		xchar** loadmap(CLfile* sf,xlong subconst);
 		sprite* loadtga(CLfile* sf);
 
-		sprite* loadfont(CLfile* sf);
+		sprites* loadtileset(CLfile* sf);
+		sprites* loadfont(CLfile* sf);
 		xlong** loadlvl();
 		xlong** loadini();
 };
@@ -336,4 +337,25 @@ sprite* CLformat::loadtga(CLfile* sf)
 	return r;
 }
 
+sprites* CLformat::loadtileset(CLfile* sf)
+{
+
+}
+
+sprites* CLformat::loadfont(CLfile* sf)
+{
+
+}
+
+xlong** CLformat::loadlvl()
+{
+
+}
+
+xlong** CLformat::loadini()
+{
+
+}
+
 #endif
+
