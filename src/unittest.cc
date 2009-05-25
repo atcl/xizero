@@ -224,26 +224,19 @@ int main(int argc, char** argv)
 		CLzbuffer->clear(zmax);
 		CLstencilbuffer->fastclear(0);
 
-		//FLTKwritestring(10,10,toprint,0x00ff0000);
+		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
+		//clgfx1->copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
+		//clgfx1->putpixel(xlong x,xlong y,uxlong c,xlong m);
+		//clgfx1->drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
+// 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+// 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
+//		clgfx1->drawcircle(200,200,50,0x0000FF00); //!seg fault!
+// 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+// 		//clgfx1->drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
+//		clgfx1->fill(100,100,0x00000000,0x00FF0000); //!seg fault + overloaded version with no oldcolor and then get per readpixel from provided location
+// 		clgfx1->fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 
-		//drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-		//copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
-		//putpixel(xlong x,xlong y,uxlong c,xlong m);
-		//drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-// 		drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-// 		//drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-// 		//drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
-// 		drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-// 		drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-// 		drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
-// 		drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
-// 		//drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-// 		//drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
-// 		fill(xlong x,xlong y,uxlong oc,uxlong nc);
-// 		fillframe(xlong x,xlong y,uxlong fc,uxlong c);
-
-		clgfx1->drawpixel(20,20,0x000FF0000);
-		clgfx1->drawsprite(10,10,testsprite); //segfault hier! kann aber schon beim laden passieren!
+		clgfx1->drawsprite(10,10,testsprite);
 
 		//cubus->display(1,1,1,1,0,0);
 		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);

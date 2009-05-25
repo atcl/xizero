@@ -21,6 +21,16 @@ struct fvertex
 	float z;
 };
 
+struct CLbox
+{
+	xlong x1;
+	xlong y1;
+	xlong z1;
+	xlong x2;
+	xlong y2;
+	xlong z2;
+};
+
 union doubleword
 {
 	xlong  dd;

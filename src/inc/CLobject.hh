@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLOBJECT
 #define HH_CLOBJECT
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: bounding box per min/max in both ctors"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

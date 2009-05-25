@@ -92,11 +92,23 @@ doubleword getinput()
 	return temp;
 }
 
+//this is cool and should be added to cstdio
+bool fexists(char f[])
+{
+	FILE *fex = fopen(f, "r");
+	if(fex) return true;
+	else return false;
+}
+//*
+
+
+
 int main()
 {
 	vector<y3dline> proto;
 	int32_t globalpolycount = 0;
 	y3dline temp;
+	y3dline test[4];
 	int32_t sobjcount;
 	int32_t polycount = 0;
 	int32_t dockcount;
@@ -122,6 +134,8 @@ int main()
 	temp.d.dd = 0; //after input complete polycount	
 	proto.push_back(temp);
 	lineout(temp,'OBJT');
+
+	cout << endl;
 
 	//SOBJ's
 	for(int i=0; i<sobjcount; i++)
@@ -168,19 +182,31 @@ int main()
 			proto.push_back(temp);
 			lineout(temp,'POLY');
 
+			cout << endl;
+
 			//VECT's
 			for(int h=0; h<4; h++)
 			{
-				temp.a.dd = 'VECT';
+				test[h].a.dd = 'VECT';
 				cout << "Enter X" << (h+1) << " value: ";
-				cin >> dec >> temp.b.dd;
+				cin >> dec >> test[h].b.dd;
 				cout << "Enter Y" << (h+1) << " value: ";
-				cin >> dec >> temp.c.dd;
+				cin >> dec >> test[h].c.dd;
 				cout << "Enter Z" << (h+1) << " value: ";
-				cin >> dec >> temp.d.dd;
-				proto.push_back(temp);
+				cin >> dec >> test[h].d.dd;
 				lineout(temp,'VECT');
 			}
+
+			//visibility check
+
+			//convexity check
+
+			proto.push_back(test[0]);
+			proto.push_back(test[1]);
+			proto.push_back(test[2]);
+			proto.push_back(test[3]);
+
+			cout << endl;
 		}
 
 		//DOCK's
@@ -200,6 +226,8 @@ int main()
 			proto.push_back(temp);
 			lineout(temp,'DOCK');
 		}
+
+		cout << endl;
 	}
 
 	proto[0].c.dd = globalpolycount;
@@ -213,23 +241,58 @@ int main()
 	lineout(temp,'ENDO');
 
 	//output to file:
+	bool dec_loop = false;
 
-
-	char filename[11];
-	cout << "Enter filename to save [8.3]: ";
-	cin >> filename;
-	cout << "saving to: " << filename << endl;
-
-	FILE *fp;
-	fp=fopen(filename, "wb");
-	for(int z=0; z<proto.size() ;z++)
+	while(!dec_loop)
 	{
-		fwrite(&proto[z].a.dd, sizeof(proto[z].a.dd), 1, fp);
-		fwrite(&proto[z].b.dd, sizeof(proto[z].b.dd), 1, fp);
-		fwrite(&proto[z].c.dd, sizeof(proto[z].c.dd), 1, fp);
-		fwrite(&proto[z].d.dd, sizeof(proto[z].b.dd), 1, fp);
+		char filename[12];
+		cout << "Enter filename to save [8.3]: ";
+		cin >> filename;
+		cout << "saving to: " << filename << endl;
+	
+		if( filename[9]!='.' && (filename[10]!='y' || filename[10]!='Y') && filename[11]!='3' && (filename!='d' || filename[10]!='D') )
+		{
+			filename[9]  = '.';
+			filename[10] = 'y';
+			filename[11] = '3';
+			filename[12] = 'd';
+		}
+	
+		if(!fexists(filename))
+		{
+			FILE *fp;
+			fp=fopen(filename, "wb");
+			for(int z=0; z<proto.size() ;z++)
+			{
+				fwrite(&proto[z].a.dd, sizeof(proto[z].a.dd), 1, fp);
+				fwrite(&proto[z].b.dd, sizeof(proto[z].b.dd), 1, fp);
+				fwrite(&proto[z].c.dd, sizeof(proto[z].c.dd), 1, fp);
+				fwrite(&proto[z].d.dd, sizeof(proto[z].b.dd), 1, fp);
+			}
+			fclose(fp);
+			dec_loop==true;
+		}
+		else
+		{
+			char yesno;
+			cout << "overwrite?" << endl;
+			cin >> yesno;
+			if(yesno=='y' || yesno=='Y')
+			{
+				FILE *fp;
+				fp=fopen(filename, "wb");
+				for(int z=0; z<proto.size() ;z++)
+				{
+					fwrite(&proto[z].a.dd, sizeof(proto[z].a.dd), 1, fp);
+					fwrite(&proto[z].b.dd, sizeof(proto[z].b.dd), 1, fp);
+					fwrite(&proto[z].c.dd, sizeof(proto[z].c.dd), 1, fp);
+					fwrite(&proto[z].d.dd, sizeof(proto[z].b.dd), 1, fp);
+				}
+				fclose(fp);
+				dec_loop==true;
+			}
+		}
 	}
-	fclose(fp);
 
 	cout << "done! exiting..." << endl;
 	

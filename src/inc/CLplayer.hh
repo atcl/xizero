@@ -2,65 +2,51 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-#pragma message "Compiling " __FILE__ " ! TODO: interaction"
+#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLstruct.hh"
 
 
 class CLplayer : public virtual CLcl
 {
 	protected:
-		CLobject* model;
+		CLobject* model[2]; //0 is chassis,1 is tower
 		CLlist*   ammolist;
 
 	private:
-		xlong width;
-		xlong height;
-		xlong depth;
+		CLbox bbox;
 
 		xlong ammotype[4];
-		xlong ammodirection[4];
 		xlong firerate[4];
-		xlong ammoload[4];
 		xlong ammoloadrate[4];
-		xlong firing;
+
+		vector ammodirection[4];
 		
 		xlong health;
 		xlong shield;
 		xlong shieldrate;
 		xlong armor;
 
-// 		vector dimension;
-// 		vector postion;
-// 		vector direction;
-// 		vector speed;
-// 		vector speedmax;
-// 		vector acceleration;
+		vector speedmax;
+		vector acceleration;
 
-		xlong xcoord;
-		xlong ycoord;
-		xlong zcoord;
-		xlong xdirection;
-		xlong ydirection;
-		xlong speed;
-		xlong speedmax;
-		xlong xspeed;
-		xlong yspeed;
-		xlong xacc;
-		xlong yacc;
+		vector position;
+		vector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
+		vector speed;
+		vector tilt; //meaning mainly z-tilt (ie on ramps)
 
-		xlong tilt; //meaning z-tilt
-
-		xlong points; //cumulative over all levels? then ctor para!
-
+		xlong active;
+		xlong points;
+		xlong firing;
 		xlong lastupdate;
 	public:
-		CLplayer(CLobject* obj,xlong** dat);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,xlong p=0);
 		~CLplayer();
 
 		void draw();
-		void move(xlong x,xlong y);
+		void move(xlong x,xlong y,xlong z=0);
 		void incxspeed();
 		void incyspeed();
 		void decxspeed();
@@ -73,55 +59,88 @@ class CLplayer : public virtual CLcl
 		xlong getshield();
 		xlong getx();
 		xlong gety();
+		xlong getz();
 };
 
-CLplayer::CLplayer(CLobject* obj,xlong** dat)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,xlong p)
 {
+	//set parameters to attributes:
+	model[0] = cha;
+	model[1] = tow;
+	position.x = sx;
+	position.y = sy;
+	position.z = sz;
+	points = p;
+
+	//create attribute objects:
 	ammolist = new CLlist();
 
-	model = obj;
-	points = 0;
-	lastupdate=0;
-	firing=-1;
-	tilt = 0;
-	speed = 1;
-	speedmax = 6;
+	//construct bounding box from model:
+	//CLbox = model->getboundingbox();
 
-	//if( dat[1][0] != 'ENEM' ) exit(1) //wrong bcx type
-	//if( dat[1][1] != model->getname() ) exit(1) //bcx and y3d are not fitting
-	xcoord		= dat[1][2];
-	ycoord		= dat[1][3];
-	xdirection	= dat[1][4];
-	ydirection	= dat[1][5];
-	width		= dat[1][6];
-	height		= dat[1][7];
-	depth		= dat[1][8];
-	xspeed		= dat[1][9];
-	yspeed		= dat[1][10];
-	ammotype[0]	= dat[1][11];
-	ammodirection[0]= dat[1][12];
+	//load player attribtes from data-file provided in parameters (dat)
+
+	if( dat[1][0] != 'PLYR' ) CLexit_(1,__func__,"wrong bcx type");
+	//if( dat[1][1] != model[0]->getname() ) CLexit_(__func__,1,"bcx and y3d are not fitting");
+	health		= dat[1][2];
+	shield		= dat[1][3];
+	shieldrate	= dat[1][4];
+	armor		= dat[1][5];
+
+	speedmax.x      = dat[1][6];
+	speedmax.y      = dat[1][7];
+	speedmax.z      = dat[1][8];
+	acceleration.x  = dat[1][9];
+	acceleration.y  = dat[1][10];
+	acceleration.z  = dat[1][11];
+
+	ammotype[0]	= dat[1][12];
 	firerate[0]	= dat[1][13];
-	ammoload[0]	= dat[1][14];
-	ammoloadrate[0]	= dat[1][15];
-	ammotype[1]	= dat[1][16];
-	ammodirection[1]= dat[1][17];
-	firerate[1]	= dat[1][18];
-	ammoload[1]	= dat[1][19];
-	ammoloadrate[1]	= dat[1][20];
-	ammotype[2]	= dat[1][21];
-	ammodirection[2]= dat[1][22];
-	firerate[2]	= dat[1][23];
-	ammoload[2]	= dat[1][24];
-	ammoloadrate[2]	= dat[1][25];
-	ammotype[3]	= dat[1][26];
-	ammodirection[3]= dat[1][27];
-	firerate[3]	= dat[1][28];
-	ammoload[3]	= dat[1][29];
-	ammoloadrate[3]= dat[1][30];
-	health		= dat[1][31];
-	shield		= dat[1][32];
-	shieldrate	= dat[1][33];
-	armor		= dat[1][34];
+	ammoloadrate[0]	= dat[1][14];
+
+	ammotype[1]	= dat[1][15];
+	firerate[1]	= dat[1][16];
+	ammoloadrate[1]	= dat[1][17];
+
+	ammotype[2]	= dat[1][18];
+	firerate[2]	= dat[1][19];
+	ammoloadrate[2]	= dat[1][20];
+
+	ammotype[3]	= dat[1][21];
+	firerate[3]	= dat[1][22];
+	ammoloadrate[3] = dat[1][23];
+
+	//set other attributes to init:
+	speed.x = 0;
+	speed.y = 0;
+	speed.z = 0;
+
+	direction[0].x = 0;
+	direction[0].y = 0;
+	direction[0].z = 0;
+	direction[1].x = 0;
+	direction[1].y = 0;
+	direction[1].z = 0;
+
+	ammodirection[0].x = 0;
+	ammodirection[0].y = 0;
+	ammodirection[0].z = 0;
+	
+	ammodirection[1].x = 0;
+	ammodirection[1].y = 0;
+	ammodirection[1].z = 0;
+
+	ammodirection[2].x = 0;
+	ammodirection[2].y = 0;
+	ammodirection[2].z = 0;
+
+	ammodirection[3].x = 0;
+	ammodirection[3].y = 0;
+	ammodirection[3].z = 0;
+
+	active = true;
+	lastupdate = 0;
+	firing=-1;
 }
 
 CLplayer::~CLplayer() { }
@@ -133,34 +152,35 @@ void CLplayer::draw()
 	//model->display()
 }
 
-void CLplayer::move(xlong x,xlong y)
+void CLplayer::move(xlong x,xlong y,xlong z)
 {
 	//not to be used for regular player movement!
 	//For regular movement x and y are controlled indirectly through the speed.
 	//This is only to be used for special purposes like resetting after death.
 
-	xcoord = x;
-	ycoord = y;
+	position.x = x;
+	position.y = y;
+	if(z!=0) position.z = z;
 }
 
 void CLplayer::incxspeed()
 {
-	if(xspeed<speedmax) xspeed += xacc;
+
 }
 
 void CLplayer::incyspeed()
 {
-	if(yspeed<speedmax) yspeed += yacc;
+
 }
 
 void CLplayer::decxspeed()
 {
-	if(xspeed>-speedmax) xspeed -= xacc;
+
 }
 
 void CLplayer::decyspeed()
 {
-	if(yspeed>-speedmax) yspeed -= yacc;
+
 }
 
 void CLplayer::fire(xlong at)
@@ -195,12 +215,17 @@ xlong CLplayer::getshield()
 
 xlong CLplayer::getx()
 {
-	return xcoord;
+	return position.x;
 }
 
 xlong CLplayer::gety()
 {
-	return ycoord;
+	return position.y;
+}
+
+xlong CLplayer::getz()
+{
+	return position.z;
 }
 
 #endif
