@@ -83,7 +83,7 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30) * 1000000;
 				ts[7]  = (bf[bc+2] - 0x30) * 10000000;
 				ts[8]  = (bf[bc+1] - 0x30) * 100000000;
-				ts[9]  = (bf[bc] - 0x30) * 1000000000;
+				ts[9]  = (bf[bc] -   0x30) * 1000000000;
 				fs = ts[0] + ts[1] + ts[2] + ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+8] != 0x20 )
@@ -96,7 +96,7 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30) * 100000;
 				ts[7]  = (bf[bc+2] - 0x30) * 1000000;
 				ts[8]  = (bf[bc+1] - 0x30) * 10000000;
-				ts[9]  = (bf[bc] - 0x30) * 100000000;
+				ts[9]  = (bf[bc] -   0x30) * 100000000;
 				fs = ts[1] + ts[2] + ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+7] != 0x20 )
@@ -108,7 +108,7 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30) * 10000;
 				ts[7]  = (bf[bc+2] - 0x30) * 100000;
 				ts[8]  = (bf[bc+1] - 0x30) * 1000000;
-				ts[9]  = (bf[bc] - 0x30) * 10000000;
+				ts[9]  = (bf[bc] -   0x30) * 10000000;
 				fs = ts[2] + ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+6] != 0x20 )
@@ -119,7 +119,7 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30) * 1000;
 				ts[7]  = (bf[bc+2] - 0x30) * 10000;
 				ts[8]  = (bf[bc+1] - 0x30) * 100000;
-				ts[9]  = (bf[bc] - 0x30) * 1000000;
+				ts[9]  = (bf[bc] -   0x30) * 1000000;
 				fs = ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+5] != 0x20 )
@@ -129,7 +129,7 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30) * 100;
 				ts[7]  = (bf[bc+2] - 0x30) * 1000;
 				ts[8]  = (bf[bc+1] - 0x30) * 10000;
-				ts[9]  = (bf[bc] - 0x30) * 100000;
+				ts[9]  = (bf[bc] -   0x30) * 100000;
 				fs = ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+4] != 0x20 )
@@ -138,7 +138,7 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30) * 10;
 				ts[7]  = (bf[bc+2] - 0x30) * 100;
 				ts[8]  = (bf[bc+1] - 0x30) * 1000;
-				ts[9]  = (bf[bc] - 0x30) * 10000;
+				ts[9]  = (bf[bc] -   0x30) * 10000;
 				fs = ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+3] != 0x20 )
@@ -146,25 +146,25 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[6]  = (bf[bc+3] - 0x30);
 				ts[7]  = (bf[bc+2] - 0x30) * 10;
 				ts[8]  = (bf[bc+1] - 0x30) * 100;
-				ts[9]  = (bf[bc] - 0x30) * 1000;
+				ts[9]  = (bf[bc] -   0x30) * 1000;
 				fs = ts[6] + ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+2] != 0x20 )
 			{
 				ts[7]  = (bf[bc+2] - 0x30);
 				ts[8]  = (bf[bc+1] - 0x30) * 10;
-				ts[9]  = (bf[bc] - 0x30) * 100;
+				ts[9]  = (bf[bc] -   0x30) * 100;
 				fs = ts[7] + ts[8] + ts[9];
 			}
 			else if( bf[bc+1] != 0x20 )
 			{
 				ts[8]  = (bf[bc+1] - 0x30);
-				ts[9]  = (bf[bc] - 0x30) * 10;
+				ts[9]  = (bf[bc] -   0x30) * 10;
 				fs = ts[8] + ts[9];
 			}
 			else if( bf[bc] != 0x20 )
 			{
-				ts[9]  = (bf[bc] - 0x30);
+				ts[9]  = (bf[bc] -   0x30);
 				fs = ts[9];
 			}
 			//fs contains filesize
@@ -173,8 +173,10 @@ arfile* CLformat::loadar(CLfile* sf)
 
 			//build array for current ar member
 			xlong fs2 = fs>>2;
+
 			xlong* tb = new xlong[fs2+1];
 			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]);
+
 			for(int i=0; i<fs2+1; i++)
 			{
 				tb[i] = bf2[i];
@@ -190,6 +192,8 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc]->data = tb;
 			tindex[fc]->text = reinterpret_cast<xchar *>(&tb[0]);
 			//tindex[fc] contains complete armember
+
+			if(fs%4!=0) tsize -= (4 - (fs % 4)); //if filesize % 4 != 0 adjust
 
 			tsize -= (fs+60); //subtract readin size from global size
 

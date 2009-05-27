@@ -66,7 +66,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 {
 	//set parameters to attributes:
 	model[0] = cha;
-	model[1] = tow;
+	//model[1] = tow; //temp reactivate as soon as 2nd model avail
 	position.x = sx;
 	position.y = sy;
 	position.z = sz;
