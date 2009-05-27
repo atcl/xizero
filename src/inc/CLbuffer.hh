@@ -123,35 +123,34 @@ __asm__ __volatile__ ( \
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
-//!todo: backward counting in each loop!
 	switch(o)
 	{
 		case 0:		//NONE
-			for(int i=0;i<size;i++)
+			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = buffer[i];
 			}
 		break;
 		case 1:		//AND
-			for(int i=0;i<size;i++)
+			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] && buffer[i];
 			}
 		break;
 		case 2:		//OR
-			for(int i=0;i<size;i++)
+			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] || buffer[i];
 			}
 		break;
 		case 3:		//OR
-			for(int i=0;i<size;i++)
+			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] ^ buffer[i];
 			}
 		break;
 		case 4:		//ADD
-			for(int i=0;i<size;i++)
+			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] + buffer[i];
 			}

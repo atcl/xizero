@@ -21,7 +21,7 @@ xlong inline x600(xlong f)
 
 void inline say(const xchar* c)
 {
-	CLprint_(c);
+	
 }
 
 void inline bye()
@@ -39,6 +39,10 @@ void inline CLmovsd(xlong* dst,void* src,xlong cnt)
 	memcpy(dst,src,cnt);
 }
 
+void inline qq(const xchar m)
+{
+	CLprint_(c);
+}
 
 #endif
 

@@ -80,7 +80,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 
 	//load player attribtes from data-file provided in parameters (dat)
 
-	if( dat[1][0] != 'PLYR' ) CLexit_(1,__func__,"wrong bcx type");
+	//if( dat[1][0] != 'PLYR' ) CLexit_(1,__func__,"wrong bcx type");
 	//if( dat[1][1] != model[0]->getname() ) CLexit_(__func__,1,"bcx and y3d are not fitting");
 	health		= dat[1][2];
 	shield		= dat[1][3];

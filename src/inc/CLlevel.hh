@@ -52,7 +52,7 @@ class CLlevel : public virtual CLcl
 		xlong smoothlevelheight;
 
 	public:
-		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls);
+		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls);
 		~CLlevel();
 
 		void display();
@@ -65,7 +65,7 @@ xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 
 
-CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* playdatlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls)
+CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls)
 {
 	clformat  = clf;
 	clmath    = clm;
@@ -171,47 +171,47 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 //***
 
 //player:
-CLprint_("player");
+
 	//load playerstuff 
 	CLfile* playerraw = CLgetfile_(playerlib);
 	arfile* playera = clformat->loadar(playerraw);
 // 	//*
 
-// 	//find player definition, has to have extension .bcx
-// 	xlong pd = -1;
-// 	for(int h=0; h<playera->filecount; h++)
-// 	{
-// 		if(checkextension(playera->members[h]->name,16,".bcx",5)==true)
-// 		{
-// 			pd=h;
-// 			break;
-// 		}
-// 	}
-// 	//pd holds index of player definition
-// 
-// 	if(pd==-1) CLexit_(1,__func__,"no player definition file found");
-// 
-// 	xlong** playerd = clformat->loadbcx(playera->members[pd]);
-// 
-// 	//find player model part I, has to have extension .y3d
-// 	xlong pm = -1;
-// 	for(int h=0; h<playera->filecount; h++)
-// 	{
-// 		if(checkextension(playera->members[h]->name,16,".y3d",5)==true)
-// 		{
-// 			pm=h;
-// 			break;
-// 		}
-// 	}
-// 	//pm holds index of first model
-// 
-// 	if(pm==-1) CLexit_(1,__func__,"no player model part I file found");
-// 
-// 	CLobject* playerm = new CLobject(cldouble,clzbuffer,clstencil,playera->members[pm]->data,400,300,100,clmath,clshadow,cllight,1);
-// 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
-// 
-// 	//!todo: determine player startpos by whatever map holds startpos
-// 	clplayer = new CLplayer(playerm,playern,playerd,0,0,0);
+	//find player definition, has to have extension .bcx
+	xlong pd = -1;
+	for(int h=0; h<playera->filecount; h++)
+	{
+		if(checkextension(playera->members[h]->name,16,".bcx",4)==true)
+		{
+			pd=h;
+			break;
+		}
+	}
+	//pd holds index of player definition
+
+	if(pd==-1) CLexit_(1,__func__,"no player definition file found");
+
+	xlong** playerd = clformat->loadbcx(playera->members[pd]);
+
+	//find player model part I, has to have extension .y3d
+	xlong pm = -1;
+	for(int h=0; h<playera->filecount; h++)
+	{
+		if(checkextension(playera->members[h]->name,16,".y3d",4)==true)
+		{
+			pm=h;
+			break;
+		}
+	}
+	//pm holds index of first model
+
+	if(pm==-1) CLexit_(1,__func__,"no player model part I file found");
+
+	CLobject* playerm = new CLobject(cldouble,clzbuffer,clstencil,playera->members[pm]->data,400,300,100,clmath,clshadow,cllight,1);
+	CLobject* playern = NULL; //2nd part of player model as soon as avail.
+
+	//!todo: determine player startpos by whatever map holds startpos
+	clplayer = new CLplayer(playerm,playern,playerd,0,0,0);
 //***
 
 //enemies: (test)

@@ -105,9 +105,16 @@ bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
 	return true;
 }
 
-xlong getrandom()
-{
+xlong seed = 22695477;
+xlong multiplicator = 1;
+xlong incrementor = 1;
 
+xlong getrandom(xlong range)
+{
+	seed *= multiplicator;
+	seed += incrementor;
+	//rotation bitwise?
+	return seed % range;
 }
 
 xchar* color2string(uxlong c)
@@ -150,6 +157,11 @@ xlong endian(xlong l)
 	tl.db[2] = tc;
 
 	return tl.dd;
+}
+
+xlong chararraylength(const xchar c)
+{
+
 }
 
 #endif
