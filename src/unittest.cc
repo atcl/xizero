@@ -111,6 +111,8 @@ int main(int argc, char** argv)
 	FLTKsetfont(8);
 	xchar* toprint = u8"hi there";
 
+	bool mode=false;
+
 	while(FLTKwait())
 	{
 
@@ -206,6 +208,10 @@ int main(int argc, char** argv)
 				ltm->scale(1,1,0.9);
 				cubus->update(ltm);
 			break;
+			case '^':
+				if(mode==false) mode=true;
+				else mode=false;
+			break;
 
 			//System:
 			case '0':
@@ -241,7 +247,9 @@ int main(int argc, char** argv)
 		//cubus->display(1,1,1,1,0,0);
 		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 
-		cubus->display(1,1,1,0,0,1);
+		if(mode==false) cubus->display(1,1,1,0,0,1);
+		else cubus->display(1,1,1,0,0,0);
+
 		ltm->unit();
 
 		clfps->increment(); 

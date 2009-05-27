@@ -50,7 +50,12 @@ template <typename T>CLbuffer<T>::~CLbuffer() { }
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {
-	for(int i=0;i<size;i++)
+// 	for(int i=0;i<size;i++)
+// 	{
+// 		buffer[i] = v;
+// 	}
+
+	for(int i=size-1;i>=0;i--)
 	{
 		buffer[i] = v;
 	}
@@ -75,7 +80,12 @@ __asm__ __volatile__ ( \
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
 {
-	for(int i=0;i<size;i++)
+// 	for(int i=0;i<size;i++)
+// 	{
+// 		dst[i] = buffer[i];
+// 	}
+
+	for(int i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
 	}
@@ -83,7 +93,12 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 
 template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
 {
-	for(int i=0;i<size;i++)
+// 	for(int i=0;i<size;i++)
+// 	{
+// 		dst[i] = buffer[i];
+// 	}
+
+	for(int i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
 	}
@@ -108,6 +123,7 @@ __asm__ __volatile__ ( \
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
+//!todo: backward counting in each loop!
 	switch(o)
 	{
 		case 0:		//NONE

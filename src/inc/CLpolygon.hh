@@ -578,11 +578,16 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 	{
 		if(visible())
 		{
-			if(shadow==false)	//normal
+			if(debug==true)
+			{
+				shade=color;
+				rasterize(0);
+				shape();
+			}
+			if(shadow==false)	//default
 			{
 				flatshade(ambient);
 				rasterize(0);
-				if(debug==1) shape();
 			}
 			else			//shadow
 			{
