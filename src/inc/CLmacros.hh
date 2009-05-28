@@ -41,7 +41,7 @@ void inline CLmovsd(xlong* dst,void* src,xlong cnt)
 
 void inline qq(const xchar m)
 {
-	CLprint_(c);
+	CLprint_(m);
 }
 
 #endif
