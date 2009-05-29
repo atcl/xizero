@@ -13,6 +13,7 @@ class CLplayer : public virtual CLcl
 {
 	protected:
 		CLobject* model[2]; //0 is chassis,1 is tower
+		CLmatrix* cllinear;
 		CLlist*   ammolist;
 
 	private:
@@ -36,21 +37,20 @@ class CLplayer : public virtual CLcl
 		vector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
 		vector speed;
 		vector tilt; //meaning mainly z-tilt (ie on ramps)
+		vector screenpos;
 
 		xlong active;
 		xlong points;
 		xlong firing;
 		xlong lastupdate;
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,xlong p=0);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,xlong p=0);
 		~CLplayer();
 
-		void draw();
+		void display(xlong mark);
 		void move(xlong x,xlong y,xlong z=0);
-		void incxspeed();
-		void incyspeed();
-		void decxspeed();
-		void decyspeed();
+		void incspeed();
+		void decspeed();
 		void fire(xlong at);
 		void hurt(xlong am);
 		void update();
@@ -62,11 +62,14 @@ class CLplayer : public virtual CLcl
 		xlong getz();
 };
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,xlong p)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,xlong p)
 {
 	//set parameters to attributes:
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
+
+	cllinear = new CLmatrix(1,clm);
+
 	position.x = sx;
 	position.y = sy;
 	position.z = sz;
@@ -116,10 +119,10 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	speed.z = 0;
 
 	direction[0].x = 0;
-	direction[0].y = 0;
+	direction[0].y = 1;
 	direction[0].z = 0;
 	direction[1].x = 0;
-	direction[1].y = 0;
+	direction[1].y = 1;
 	direction[1].z = 0;
 
 	ammodirection[0].x = 0;
@@ -145,8 +148,16 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 
 CLplayer::~CLplayer() { }
 
-void CLplayer::draw()
+void CLplayer::display(xlong mark)
 {
+	screenpos.x = position.x;
+	screenpos.y = position.y - mark;
+	screenpos.z = position.z;
+
+	model[0]->setposition(screenpos.x,screenpos.y,100);
+	model[0]->display(1,1,1,0,0,0);
+	model[0]->reset();
+
 	//if(tilt!=0) model->rotate(0,0,tilt);
 	//model->setposition()
 	//model->display()
@@ -163,22 +174,12 @@ void CLplayer::move(xlong x,xlong y,xlong z)
 	if(z!=0) position.z = z;
 }
 
-void CLplayer::incxspeed()
+void CLplayer::incspeed()
 {
-
+	
 }
 
-void CLplayer::incyspeed()
-{
-
-}
-
-void CLplayer::decxspeed()
-{
-
-}
-
-void CLplayer::decyspeed()
+void CLplayer::decspeed()
 {
 
 }

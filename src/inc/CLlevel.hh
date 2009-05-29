@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLLEVEL
 #define HH_CLLEVEL
-#pragma message "Compiling " __FILE__ " ! TODO: display crasht!"
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -57,6 +57,7 @@ class CLlevel : public virtual CLcl
 
 		void display();
 		void subsmark(xlong m);
+		xlong getmark();
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -112,7 +113,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	if(tf==-1) CLexit_(1,__func__,"no terrain map found");
 
 	//convert terrain map to 2d xchar array, and remove lineends
-	xchar** terrainmap = clformat->loadmap(levela->members[tf],33);
+	xchar** terrainmap = clformat->loadmap(levela->members[tf],33,' ',-1);
 	//now terrain map holds 2d xchar array of terrain objects
 
 	//determine level consts
@@ -140,7 +141,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	if(tf==-1) CLexit_(1,__func__,"no height map found");
 
 	//convert height map to 2d xchar array, and remove lineends
-	xchar** heightmap = clformat->loadmap(levela->members[hf],48);
+	xchar** heightmap = clformat->loadmap(levela->members[hf],48,' ',0);
 	//now height map holds 2d xchar array of height levels
 
 	//find entity map, has to have extension .mape
@@ -158,7 +159,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	if(ef==-1) CLexit_(1,__func__,"no entitiy map found");
 
 	//convert entity map to 2d xchar array, and remove lineends
-	xchar** entitymap = clformat->loadmap(levela->members[ef],33);
+	xchar** entitymap = clformat->loadmap(levela->members[ef],33,'.',-1);
 	//now entity map holds 2d xchar array of entity objects
 
 	//build levellayerscontaining all sub maps
@@ -210,8 +211,28 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	CLobject* playerm = new CLobject(cldouble,clzbuffer,clstencil,playera->members[pm]->data,400,300,100,clmath,clshadow,cllight,1);
 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
 
-	//!todo: determine player startpos by whatever map holds startpos
-	clplayer = new CLplayer(playerm,playern,playerd,0,0,0);
+	bool startposfound = false;
+	xlong playerx = 0;
+	xlong playery = 0;
+	xlong playerz = 0;
+	for(int h=0; h<levelheight; h++)
+	{
+		for(int i=0; i<levelwidth; i++)
+		{
+			if(levellayers[2][h][i] == 0)
+			{
+				startposfound = true;
+				playerx = i * blockwidth;
+				playery = h * blockheight;
+				playerz = levellayers[1][h][i] * blockdepth;
+				break;
+			}
+		}
+	}
+
+	if(startposfound==false) CLexit_(1,__func__,"no player start position found in entity map");
+
+	clplayer = new CLplayer(playerm,playern,playerd,playerx,playery,playerz,clmath);
 //***
 
 //enemies: (test)
@@ -336,6 +357,7 @@ void CLlevel::display()
 						if(currentterrain==0) clterrain[currentterrain]->setpositionz(tempz);
 						else clterrain[0]->reset();
 					}
+
 					clterrain[currentterrain]->addpositionz(currentz);
 					clterrain[currentterrain]->display(1,1,1,0,0,0);
 					clterrain[currentterrain]->reset();
@@ -347,11 +369,13 @@ void CLlevel::display()
 		}
 		}
 		currentx = -(xres >> 1) + blockoffsetx;
-		currenty -= blockheight;
-		
+		currenty -= blockheight;	
 	}
 
-	//display player
+	//display player:
+	clplayer->display(smoothmark);
+	//*
+
 }
 
 void CLlevel::subsmark(xlong m)
@@ -363,6 +387,11 @@ void CLlevel::subsmark(xlong m)
 		smoothmark = sm;
 		mark = smoothmark / blockheight;
 	}
+}
+
+long CLlevel::getmark()
+{
+	return smoothmark;
 }
 
 #endif

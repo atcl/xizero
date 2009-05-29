@@ -21,7 +21,7 @@ class CLformat : public virtual CLcl
 		xchar** loadcsv(CLfile* sf);
 		arfile* loadar(CLfile* sf);
 		xlong** loadbcx(CLfile* bf);
-		xchar** loadmap(CLfile* sf,xlong subconst);
+		xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
 		sprite* loadtga(CLfile* sf);
 
 		sprites* loadtileset(CLfile* sf);
@@ -264,7 +264,7 @@ xlong** CLformat::loadbcx(CLfile* bf)
 	return re;
 }
 
-xchar** CLformat::loadmap(CLfile* sf,xlong subconst)
+xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
 	xchar* bf = sf->text;
 	xlong bs = sf->size;
@@ -292,8 +292,13 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst)
 	{
 		for(int k=0; k<lw; k++)
 		{
-			if(bf[li]!='\n') rev[j][k] = bf[li] - subconst;
+			if(bf[li]!='\n')
+			{
+				if(bf[li]==rc) rev[j][k] = rv;
+				else rev[j][k] = bf[li] - subconst;
+			}
 			else CLexit_(1,__func__,"Map not conform with given width");
+			
 			li++;
 		}
 		li++;
