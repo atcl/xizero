@@ -17,23 +17,29 @@ int main()
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/player/player.a","../dat/level/level0.a",clformat,clmath,CLdoublebuffer,CLzbuffer,CLstencilbuffer);
 
+	
+
 	clfps->init();
 
 	while(FLTKwait())
 	{
-		switch(FLTKgetturbokeystate())
+		char input = FLTKgetturbokeystate();
+
+		switch(input)
 		{
-			case 0:
-			break;
-			case FL_Up:
-				testlevel->subsmark(4);
-			break;
-			case FL_Down:
-				testlevel->subsmark(-4);
-			break;
+// 			case FL_Up:
+// 				testlevel->subsmark(4);
+// 			break;
+// 			case FL_Down:
+// 				testlevel->subsmark(-4);
+// 			break;
 
 			case '0':
 				CLexit_(0,__func__,"xizero says: bye");
+			break;
+
+			default:
+				testlevel->clplayer->update(input);
 			break;
 		}
 

@@ -211,17 +211,17 @@ void CLwait_(xlong milliseconds)
 
 float CLgetmilliseconds_() //since midnight
 {
-	return float(clock() / CLOCKS_PER_SEC * 1000);
+	return float(1000 * clock() / CLOCKS_PER_SEC);
 }
 
 float CLgetcentiseconds_() //since midnight
 {
-	return float(clock() / CLOCKS_PER_SEC * 100);
+	return float(100 * clock() / CLOCKS_PER_SEC);
 }
 
 float CLgetdeciseconds_() //since midnight
 {
-	return float(clock() / CLOCKS_PER_SEC * 10);
+	return float(10 * clock() / CLOCKS_PER_SEC);
 }
 
 xlong CLdoevery_(every* e)

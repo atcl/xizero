@@ -33,7 +33,7 @@ class CLlevel : public virtual CLcl
 		CLmatrix* clshadow;
 		CLlight*  cllight;
 
-		CLplayer*  clplayer;
+		//CLplayer*  clplayer;
 		CLenemy**  clenemy;
 		CLobject** clterrain;
 
@@ -58,6 +58,8 @@ class CLlevel : public virtual CLcl
 		void display();
 		void subsmark(xlong m);
 		xlong getmark();
+
+		CLplayer*  clplayer; //temp bis entschieden ob im level bleibt oder ausgelagert wird in die freiheit
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -389,7 +391,7 @@ void CLlevel::subsmark(xlong m)
 	}
 }
 
-long CLlevel::getmark()
+xlong CLlevel::getmark()
 {
 	return smoothmark;
 }

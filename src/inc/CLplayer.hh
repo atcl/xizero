@@ -7,6 +7,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
+#include "CLapi.hh"
 
 
 class CLplayer : public virtual CLcl
@@ -30,31 +31,33 @@ class CLplayer : public virtual CLcl
 		xlong shieldrate;
 		xlong armor;
 
-		vector speedmax;
-		vector acceleration;
+		float speedmax;
+		fvector acceleration;
 
 		vector position;
 		vector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
-		vector speed;
-		vector tilt; //meaning mainly z-tilt (ie on ramps)
+		fvector speed;
+		fvector tilt; //meaning mainly z-tilt (ie on ramps)
 		vector screenpos;
 
 		xlong active;
 		xlong points;
 		xlong firing;
-		xlong lastupdate;
+		float lastupdate;
+
+		void incspeed();
+		void decspeed();
+		void fire(xlong at);
+		void hurt(xlong am);
+		void transform(bool m);
+		void collision();
 	public:
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,xlong p=0);
 		~CLplayer();
 
 		void display(xlong mark);
 		void move(xlong x,xlong y,xlong z=0);
-		void incspeed();
-		void decspeed();
-		void fire(xlong at);
-		void hurt(xlong am);
-		void update();
-		void collision();
+		void update(xchar input);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -90,12 +93,11 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	shieldrate	= dat[1][4];
 	armor		= dat[1][5];
 
-	speedmax.x      = dat[1][6];
-	speedmax.y      = dat[1][7];
-	speedmax.z      = dat[1][8];
-	acceleration.x  = dat[1][9];
-	acceleration.y  = dat[1][10];
-	acceleration.z  = dat[1][11];
+	speedmax        = 8; //dat[1][6];
+
+	acceleration.x  = 0; //dat[1][9];
+	acceleration.y  = -1; //dat[1][10];
+	acceleration.z  = 0; //dat[1][11];
 
 	ammotype[0]	= dat[1][12];
 	firerate[0]	= dat[1][13];
@@ -142,7 +144,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	ammodirection[3].z = 0;
 
 	active = true;
-	lastupdate = 0;
+	lastupdate = CLgetmilliseconds_();
 	firing=-1;
 }
 
@@ -155,12 +157,7 @@ void CLplayer::display(xlong mark)
 	screenpos.z = position.z;
 
 	model[0]->setposition(screenpos.x,screenpos.y,100);
-	model[0]->display(1,1,1,0,0,0);
-	model[0]->reset();
-
-	//if(tilt!=0) model->rotate(0,0,tilt);
-	//model->setposition()
-	//model->display()
+	model[0]->display(0,1,1,0,0,0);
 }
 
 void CLplayer::move(xlong x,xlong y,xlong z)
@@ -176,12 +173,22 @@ void CLplayer::move(xlong x,xlong y,xlong z)
 
 void CLplayer::incspeed()
 {
-	
+	if(speed.l <= speedmax)
+	{
+		speed.x += acceleration.x;
+		speed.y += acceleration.y;
+		speed.z += acceleration.z;
+	}
 }
 
 void CLplayer::decspeed()
 {
-
+	if(speed.l > acceleration.l)
+	{
+		speed.x -= acceleration.x;
+		speed.y -= acceleration.y;
+		speed.z -= acceleration.z;
+	}
 }
 
 void CLplayer::fire(xlong at)
@@ -194,9 +201,115 @@ void CLplayer::hurt(xlong am)
 
 }
 
-void CLplayer::update()
+void CLplayer::transform(bool m)
 {
+	//bool decdes what part, if complete or only tower
 
+	if(m==false)
+	{
+		//transform model(s)
+		model[0]->update(cllinear);
+		//model[1]->update(cllinear);
+
+		//transform bounding box
+		//bbox.a = cllinear->transform(bbox.a);
+		//bbox.b = cllinear->transform(bbox.b);
+	
+		//transform direction vector
+		direction[0] = cllinear->transform(direction[0]);
+		direction[1] = cllinear->transform(direction[1]);
+	
+		//transform speed vector
+		speed = cllinear->transform(speed);
+
+		//transform (constant) acceleration vector
+		acceleration = cllinear->transform(acceleration);
+
+		//transform tilt vector
+		tilt = cllinear->transform(tilt);
+
+		//transform ammo direction(s)
+
+	}
+	else
+	{
+		//transform model(s)
+		//model[1]->update(cllinear);
+
+		//transform bounding box
+		//bbox.a = cllinear->transform(bbox.a);
+		//bbox.b = cllinear->transform(bbox.b);
+
+		//transform direction vector
+		direction[1] = cllinear->transform(direction[1]);
+
+		//transform ammo direction(s)
+
+	}
+}
+
+void CLplayer::update(xchar input)
+{
+	switch(input)
+	{
+		case 82: //arrow up -> accelerate
+		incspeed();
+		break;
+
+		case 84: //arrow down -> deccelerate
+		decspeed();
+		break;
+
+		case 81: //arrow left -> turn left
+		decspeed();
+		cllinear->rotate(0,0,5);
+		transform(false);
+		cllinear->unit();
+		break;
+
+		case 83: //arrow right -> turn right
+		decspeed();
+		cllinear->rotate(0,0,-5);
+		transform(false);
+		cllinear->unit();
+		break;
+
+		case 97: //a -> turn tower left
+		cllinear->rotate(0,0,5);
+		transform(true);
+		cllinear->unit();
+		break;
+
+		case 100: //d -> turn tower right
+		cllinear->rotate(0,0,-5);
+		transform(true);
+		cllinear->unit();
+		break;
+
+		case 32: //space -> fire tower weapon
+		break;
+
+		case -29: //strg -> fire chassis weapon(s)
+		break;
+
+		case 119: //w -> fire tachyon laser
+		break;
+
+		case 115: //s -> fire laser
+		break;
+
+		case 101: //e -> action key
+		break;
+	}
+
+	float temp = CLgetmilliseconds_();
+	if(temp >= lastupdate + 50)
+	{
+		position.x -= speed.x;
+		position.y += speed.y;
+		position.z += speed.z;
+		lastupdate = temp;
+	}
 }
 
 void CLplayer::collision()
