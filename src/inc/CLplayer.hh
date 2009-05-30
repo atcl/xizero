@@ -18,8 +18,6 @@ class CLplayer : public virtual CLcl
 		CLlist*   ammolist;
 
 	private:
-		CLbox bbox;
-
 		xlong ammotype[4];
 		xlong firerate[4];
 		xlong ammoloadrate[4];
@@ -203,17 +201,13 @@ void CLplayer::hurt(xlong am)
 
 void CLplayer::transform(bool m)
 {
-	//bool decdes what part, if complete or only tower
+	//bool decides what part, if complete or only tower
 
 	if(m==false)
 	{
 		//transform model(s)
 		model[0]->update(cllinear);
 		//model[1]->update(cllinear);
-
-		//transform bounding box
-		//bbox.a = cllinear->transform(bbox.a);
-		//bbox.b = cllinear->transform(bbox.b);
 	
 		//transform direction vector
 		direction[0] = cllinear->transform(direction[0]);
@@ -235,10 +229,6 @@ void CLplayer::transform(bool m)
 	{
 		//transform model(s)
 		//model[1]->update(cllinear);
-
-		//transform bounding box
-		//bbox.a = cllinear->transform(bbox.a);
-		//bbox.b = cllinear->transform(bbox.b);
 
 		//transform direction vector
 		direction[1] = cllinear->transform(direction[1]);

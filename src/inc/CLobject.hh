@@ -31,7 +31,7 @@ class CLobject : public virtual CLcl
 		vector** dockptr;
 		vertex position;
 		vertex rposition;
-		vertex* boundingbox;
+		CLbox* boundingbox;
 		xlong name;
 	
 	public:
@@ -56,7 +56,7 @@ class CLobject : public virtual CLcl
 		vector* getdockingpoint(xlong i);
 		vector* getdockingpoint(xlong t,xlong i);
 		void translatealongnormals(float size);
-		vertex* getboundingbox();
+		CLbox* getboundingbox();
 		void reset();
 };
 
@@ -96,7 +96,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	rposition.y = y;
 	rposition.z = z;
 
-	boundingbox = new vertex[2];
+	boundingbox = new CLbox;
 	//min max of every x,y,z
 	xlong minx = 0;
 	xlong maxx = 0;
@@ -154,12 +154,30 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				t[2] = (dataptr[d]>>zshift) + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
+				//bounding box gen:
+				if(t[0] < minx) minx = t[0];
+				if(t[0] > maxx) maxx = t[0];
+				if(t[1] < miny) miny = t[1];
+				if(t[1] > maxy) maxy = t[1];
+				if(t[2] < minz) minz = t[2];
+				if(t[2] > maxz) maxz = t[2];
+				//
+
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
 				t[5] = (dataptr[d]>>zshift) + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
+
+				//bounding box gen:
+				if(t[3] < minx) minx = t[3];
+				if(t[3] > maxx) maxx = t[3];
+				if(t[4] < miny) miny = t[4];
+				if(t[4] > maxy) maxy = t[4];
+				if(t[5] < minz) minz = t[5];
+				if(t[5] > maxz) maxz = t[5];
+				//
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -168,12 +186,30 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				t[8] = (dataptr[d]>>zshift) + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
+				//bounding box gen:
+				if(t[6] < minx) minx = t[6];
+				if(t[6] > maxx) maxx = t[6];
+				if(t[7] < miny) miny = t[7];
+				if(t[7] > maxy) maxy = t[7];
+				if(t[8] < minz) minz = t[8];
+				if(t[8] > maxz) maxz = t[8];
+				//
+
 				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4
 				t[11] = (dataptr[d]>>zshift) + zoff; d++; //z4
 				//t[11] = dataptr[d] + zoff; d++; //z4
+
+				//bounding box gen:
+				if(t[9] < minx) minx = t[9];
+				if(t[9] > maxx) maxx = t[9];
+				if(t[10] < miny) miny = t[10];
+				if(t[10] > maxy) maxy = t[10];
+				if(t[11] < minz) minz = t[11];
+				if(t[11] > maxz) maxz = t[11];
+				//
 				
 				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
 
@@ -197,6 +233,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 		}
 
 		//"ENDO"
+
+		boundingbox->a.x = minx;
+		boundingbox->a.y = miny;
+		boundingbox->a.z = minz;
+		boundingbox->b.x = maxx;
+		boundingbox->b.y = maxy;
+		boundingbox->b.z = maxz;
 	}
 	else if(dataptr[1] == 'D_X>')
 	{
@@ -242,7 +285,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	rposition.y = y;
 	rposition.z = z;
 
-	boundingbox = new vertex[2];
+	boundingbox = new CLbox;
 	//min max of every x,y,z
 	xlong minx = 0;
 	xlong maxx = 0;
@@ -300,12 +343,30 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[2] = (dataptr[d]>>zshift) + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
+				//bounding box gen:
+				if(t[0] < minx) minx = t[0];
+				if(t[0] > maxx) maxx = t[0];
+				if(t[1] < miny) miny = t[1];
+				if(t[1] > maxy) maxy = t[1];
+				if(t[2] < minz) minz = t[2];
+				if(t[2] > maxz) maxz = t[2];
+				//
+
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
 				t[5] = (dataptr[d]>>zshift) + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
+
+				//bounding box gen:
+				if(t[3] < minx) minx = t[3];
+				if(t[3] > maxx) maxx = t[3];
+				if(t[4] < miny) miny = t[4];
+				if(t[4] > maxy) maxy = t[4];
+				if(t[5] < minz) minz = t[5];
+				if(t[5] > maxz) maxz = t[5];
+				//
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -314,12 +375,30 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[8] = (dataptr[d]>>zshift) + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
+				//bounding box gen:
+				if(t[6] < minx) minx = t[6];
+				if(t[6] > maxx) maxx = t[6];
+				if(t[7] < miny) miny = t[7];
+				if(t[7] > maxy) maxy = t[7];
+				if(t[8] < minz) minz = t[8];
+				if(t[8] > maxz) maxz = t[8];
+				//
+
 				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4
 				t[11] = (dataptr[d]>>zshift) + zoff; d++; //z4
 				//t[11] = dataptr[d] + zoff; d++; //z4
+
+				//bounding box gen:
+				if(t[9] < minx) minx = t[9];
+				if(t[9] > maxx) maxx = t[9];
+				if(t[10] < miny) miny = t[10];
+				if(t[10] > maxy) maxy = t[10];
+				if(t[11] < minz) minz = t[11];
+				if(t[11] > maxz) maxz = t[11];
+				//
 				
 				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
 
@@ -343,6 +422,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 		}
 
 		//"ENDO"
+
+		boundingbox->a.x = minx;
+		boundingbox->a.y = miny;
+		boundingbox->a.z = minz;
+		boundingbox->b.x = maxx;
+		boundingbox->b.y = maxy;
+		boundingbox->b.z = maxz;
 	}
 	else if(dataptr[1] == 'D_X>')
 	{
@@ -367,6 +453,9 @@ void CLobject::update(CLmatrix* m)
 	{
 		*dockptr[j] = m->transform(*dockptr[j]);
 	}
+
+	boundingbox->a = m->transform(boundingbox->a);
+	boundingbox->b = m->transform(boundingbox->b);
 }
 
 void CLobject::display(bool center,bool flat,bool light,bool shadows,bool pixelshader,bool debug)
@@ -494,9 +583,9 @@ void CLobject::translatealongnormals(float size)
 	}
 }
 
-vertex* CLobject::getboundingbox() //returning min und max vertecies of object
+CLbox* CLobject::getboundingbox()
 {
-
+	return boundingbox;
 }
 
 void CLobject::reset()
