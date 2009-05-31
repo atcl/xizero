@@ -57,6 +57,7 @@ class CLlevel : public virtual CLcl
 
 		void display();
 		void subsmark(xlong m);
+		void setmark(xlong m);
 		xlong getmark();
 
 		CLplayer*  clplayer; //temp bis entschieden ob im level bleibt oder ausgelagert wird in die freiheit
@@ -315,6 +316,10 @@ CLlevel::~CLlevel() { }
 
 void CLlevel::display()
 {
+	xlong tempy = 3*(yres>>2);
+	xlong py = clplayer->gety();
+	if( (py<smoothlevelheight+tempy) && (py>tempy) ) subsmark(smoothmark+tempy-py);
+
 	xchar currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
@@ -389,6 +394,11 @@ void CLlevel::subsmark(xlong m)
 		smoothmark = sm;
 		mark = smoothmark / blockheight;
 	}
+}
+
+void CLlevel::setmark(xlong m)
+{
+
 }
 
 xlong CLlevel::getmark()

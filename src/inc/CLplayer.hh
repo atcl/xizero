@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else"
+#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -29,8 +29,8 @@ class CLplayer : public virtual CLcl
 		xlong shieldrate;
 		xlong armor;
 
-		float speedmax;
-		fvector acceleration;
+		fvector speeddir;
+		xlong speedconst;
 
 		vector position;
 		vector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
@@ -91,11 +91,11 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	shieldrate	= dat[1][4];
 	armor		= dat[1][5];
 
-	speedmax        = 8; //dat[1][6];
+	speeddir.x  = 0;
+	speeddir.y  = -2;
+	speeddir.z  = 0;
 
-	acceleration.x  = 0; //dat[1][9];
-	acceleration.y  = -1; //dat[1][10];
-	acceleration.z  = 0; //dat[1][11];
+	speedconst = 0;
 
 	ammotype[0]	= dat[1][12];
 	firerate[0]	= dat[1][13];
@@ -171,22 +171,24 @@ void CLplayer::move(xlong x,xlong y,xlong z)
 
 void CLplayer::incspeed()
 {
-	if(speed.l <= speedmax)
+	if(speedconst<2)
 	{
-		speed.x += acceleration.x;
-		speed.y += acceleration.y;
-		speed.z += acceleration.z;
-	}
+		speedconst++;
+		speed.x = speeddir.x;
+		speed.y = speeddir.y;
+		speed.z = speeddir.z;
+	} 
 }
 
 void CLplayer::decspeed()
 {
-	if(speed.l > acceleration.l)
+	if(speedconst>-2)
 	{
-		speed.x -= acceleration.x;
-		speed.y -= acceleration.y;
-		speed.z -= acceleration.z;
-	}
+		speedconst--;
+		speed.x = -speeddir.x;
+		speed.y = -speeddir.y;
+		speed.z = -speeddir.z;
+	} 
 }
 
 void CLplayer::fire(xlong at)
@@ -216,8 +218,8 @@ void CLplayer::transform(bool m)
 		//transform speed vector
 		speed = cllinear->transform(speed);
 
-		//transform (constant) acceleration vector
-		acceleration = cllinear->transform(acceleration);
+		//transform (constant) speeddir vector
+		speeddir = cllinear->transform(speeddir);
 
 		//transform tilt vector
 		tilt = cllinear->transform(tilt);
@@ -251,14 +253,12 @@ void CLplayer::update(xchar input)
 		break;
 
 		case 81: //arrow left -> turn left
-		decspeed();
 		cllinear->rotate(0,0,5);
 		transform(false);
 		cllinear->unit();
 		break;
 
 		case 83: //arrow right -> turn right
-		decspeed();
 		cllinear->rotate(0,0,-5);
 		transform(false);
 		cllinear->unit();
@@ -293,7 +293,7 @@ void CLplayer::update(xchar input)
 	}
 
 	float temp = CLgetmilliseconds_();
-	if(temp >= lastupdate + 50)
+	if(temp >= lastupdate + 25)
 	{
 		position.x -= speed.x;
 		position.y += speed.y;
