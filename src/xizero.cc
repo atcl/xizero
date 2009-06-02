@@ -21,11 +21,15 @@ int main()
 
 	clfps->init();
 
+	xchar input = 0;
+	xchar turbo = 0;
+
 	while(FLTKwait())
 	{
-		char input = FLTKgetturbokeystate();
+		turbo = FLTKgetturbokeystate();
+		input = FLTKgetkeystate();
 
-		switch(input)
+		switch(turbo)
 		{
 // 			case FL_Up:
 // 				testlevel->subsmark(4);
@@ -39,7 +43,7 @@ int main()
 			break;
 
 			default:
-				testlevel->clplayer->update(input);
+				testlevel->clplayer->update(input,turbo);
 			break;
 		}
 

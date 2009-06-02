@@ -43,7 +43,10 @@ class CLmath : public virtual CLcl
 		xlong faculty(xlong f);
 		xlong power(xlong b,xlong e);
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
-				
+
+		xlong round(float x);
+		xlong roundup(float x);
+		xlong rounddown(float x);
 };
 
 CLmath::CLmath()
@@ -208,6 +211,22 @@ float CLmath::odeeuler( float(*f)(float,float),float x0,float t0,float h,xlong k
 	}
 
 	return xk;
+}
+
+xlong CLmath::round(float x)
+{
+	if(x-floor(x)>=0.5) return ceil(x);
+	else return floor(x);
+}
+
+xlong CLmath::roundup(float x)
+{
+	return xlong(ceil(x));
+}
+
+xlong CLmath::rounddown(float x)
+{
+	return xlong(floor(x));
 }
 
 #endif

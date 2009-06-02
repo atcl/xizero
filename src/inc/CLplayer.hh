@@ -16,6 +16,7 @@ class CLplayer : public virtual CLcl
 		CLobject* model[2]; //0 is chassis,1 is tower
 		CLmatrix* cllinear;
 		CLlist*   ammolist;
+		CLmath*   clmath;
 
 	private:
 		xlong ammotype[4];
@@ -30,21 +31,20 @@ class CLplayer : public virtual CLcl
 		xlong armor;
 
 		fvector speeddir;
-		xlong speedconst;
 
 		vector position;
 		vector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
-		fvector speed;
+		vector speed;
 		fvector tilt; //meaning mainly z-tilt (ie on ramps)
 		vector screenpos;
 
+		bool  oddeven;
 		xlong active;
 		xlong points;
 		xlong firing;
 		float lastupdate;
 
-		void incspeed();
-		void decspeed();
+		void setspeed(xlong s);
 		void fire(xlong at);
 		void hurt(xlong am);
 		void transform(bool m);
@@ -55,7 +55,7 @@ class CLplayer : public virtual CLcl
 
 		void display(xlong mark);
 		void move(xlong x,xlong y,xlong z=0);
-		void update(xchar input);
+		void update(xchar input,char turbo);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -69,6 +69,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
 
+	clmath = clm;
 	cllinear = new CLmatrix(1,clm);
 
 	position.x = sx;
@@ -94,8 +95,6 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	speeddir.x  = 0;
 	speeddir.y  = -2;
 	speeddir.z  = 0;
-
-	speedconst = 0;
 
 	ammotype[0]	= dat[1][12];
 	firerate[0]	= dat[1][13];
@@ -141,6 +140,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	ammodirection[3].y = 0;
 	ammodirection[3].z = 0;
 
+	oddeven = 0;
 	active = true;
 	lastupdate = CLgetmilliseconds_();
 	firing=-1;
@@ -169,26 +169,28 @@ void CLplayer::move(xlong x,xlong y,xlong z)
 	if(z!=0) position.z = z;
 }
 
-void CLplayer::incspeed()
+void CLplayer::setspeed(xlong s)
 {
-	if(speedconst<2)
+	switch(s)
 	{
-		speedconst++;
-		speed.x = speeddir.x;
-		speed.y = speeddir.y;
-		speed.z = speeddir.z;
-	} 
-}
+		case 0:
+			speed.x = 0;
+			speed.y = 0;
+			speed.z = 0;
+		break;
 
-void CLplayer::decspeed()
-{
-	if(speedconst>-2)
-	{
-		speedconst--;
-		speed.x = -speeddir.x;
-		speed.y = -speeddir.y;
-		speed.z = -speeddir.z;
-	} 
+		case 1:
+			speed.x = clmath->round(speeddir.x + speeddir.x);
+			speed.y = clmath->round(speeddir.y + speeddir.y);
+			speed.z = clmath->round(speeddir.z + speeddir.z);
+		break;
+
+		case -1:
+			speed.x = clmath->round(-speeddir.x - speeddir.x);
+			speed.y = clmath->round(-speeddir.y - speeddir.y);
+			speed.z = clmath->round(-speeddir.z - speeddir.z);
+		break;
+	}
 }
 
 void CLplayer::fire(xlong at)
@@ -220,6 +222,7 @@ void CLplayer::transform(bool m)
 
 		//transform (constant) speeddir vector
 		speeddir = cllinear->transform(speeddir);
+		CLprint_(speeddir);
 
 		//transform tilt vector
 		tilt = cllinear->transform(tilt);
@@ -240,40 +243,47 @@ void CLplayer::transform(bool m)
 	}
 }
 
-void CLplayer::update(xchar input)
+void CLplayer::update(xchar input,xchar turbo)
 {
-	switch(input)
+// 	switch(input)
+// 	{
+// 		
+// 	}
+
+	switch(turbo)
 	{
 		case 82: //arrow up -> accelerate
-		incspeed();
+			if(input!=turbo) setspeed(1);
+			else setspeed(0);
 		break;
 
 		case 84: //arrow down -> deccelerate
-		decspeed();
+			if(input!=turbo) setspeed(-1);
+			else setspeed(0);
 		break;
 
 		case 81: //arrow left -> turn left
-		cllinear->rotate(0,0,5);
-		transform(false);
-		cllinear->unit();
+			cllinear->rotate(0,0,8);
+			transform(false);
+			cllinear->unit();
 		break;
 
 		case 83: //arrow right -> turn right
-		cllinear->rotate(0,0,-5);
-		transform(false);
-		cllinear->unit();
+			cllinear->rotate(0,0,-8);
+			transform(false);
+			cllinear->unit();
 		break;
 
 		case 97: //a -> turn tower left
-		cllinear->rotate(0,0,5);
-		transform(true);
-		cllinear->unit();
+			cllinear->rotate(0,0,4);
+			transform(true);
+			cllinear->unit();
 		break;
 
 		case 100: //d -> turn tower right
-		cllinear->rotate(0,0,-5);
-		transform(true);
-		cllinear->unit();
+			cllinear->rotate(0,0,-4);
+			transform(true);
+			cllinear->unit();
 		break;
 
 		case 32: //space -> fire tower weapon

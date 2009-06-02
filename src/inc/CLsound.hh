@@ -8,7 +8,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
-//#include <canberra.h>
+
 
 
 class CLsound : public virtual CLcl

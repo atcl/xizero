@@ -171,6 +171,11 @@ void CLprint_(const vector v)
 	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
 }
 
+void CLprint_(const fvector v)
+{
+	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
+}
+
 void CLprint_(CLmatrix m)
 {
 	std::cout << std::setw(7) << m.getentry(0,0) <<" "<< std::setw(7) << m.getentry(0,1) <<" "<< std::setw(7) << m.getentry(0,2) <<" "<< std::setw(7) << m.getentry(0,3) << std::endl;
