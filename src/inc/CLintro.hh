@@ -107,6 +107,32 @@ void atcrosslevel_intro()
 		//clear transformation matrix
 		ltm->unit();
 	}
+
+
+	//clean up:
+	delete[] x_trn;
+	delete[] y_trn;
+	delete[] z_trn;
+
+	delete[] x_rot;
+	delete[] y_rot;
+	delete[] z_rot;
+
+	delete[] x_scl;
+	delete[] y_scl;
+	delete[] z_scl;
+
+	delete cross;
+	delete level0;
+	delete level1;
+	delete level2;
+	delete level3;
+	delete level4;
+	delete level5;
+	delete level6;
+	delete level7;
+	delete level8;
+	delete level9;
 }
 
 void xizero_intro()

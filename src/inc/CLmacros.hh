@@ -26,7 +26,7 @@ void inline say(const xchar* c)
 
 void inline bye()
 {
-	CLexit_(0,__func__,"bye");
+	CLexit_(0,0,__func__,"bye");
 }
 
 void inline CLstosd(xlong* dst,xlong val,xlong cnt)

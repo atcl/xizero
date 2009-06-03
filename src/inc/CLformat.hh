@@ -224,7 +224,7 @@ xlong** CLformat::loadbcx(CLfile* bf)
 {
 	xlong lc = getlinecount(bf);
 
-	doubleword nl;
+	doubleword nl = { 0 };
 	xlong bc = 0;	
 
 	xlong *arr0 = new xlong[lc];
@@ -297,7 +297,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 				if(bf[li]==rc) rev[j][k] = rv;
 				else rev[j][k] = bf[li] - subconst;
 			}
-			else CLexit_(1,__func__,"Map not conform with given width");
+			else CLexit_(1,0,__func__,"Map not conform with given width");
 			
 			li++;
 		}

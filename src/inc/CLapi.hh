@@ -18,9 +18,9 @@
 
 
 //prototypes:
-void    CLexit_(xlong r,const xchar *f="",const xchar *m="");
-void    CLexit_(xlong r,const xchar *f,const xchar *m,const xchar* d);
-void    CLexit_(xlong r,const xchar *f,const xchar *m,xlong d);
+void    CLexit_(xlong r,void(*e)(),const xchar *f="",const xchar *m="");
+void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d);
+void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d);
 CLfile* CLgetfile_(const xchar* fn,bool s=true);
 xlong   CLgetfilesize_(const xchar* fn);
 xchar** CLgetcsvfile_(const char* fn);
@@ -28,6 +28,7 @@ void    CLdebug_(const xchar* c,xlong v);
 void    CLprint_(const xchar* c);
 void    CLprint_(const xlong l);
 void    CLprint_(const vector v);
+void    CLprint_(const fvector v);
 void    CLprint_(CLmatrix m);
 void    CLttyout_(const xchar* c);
 void    CLttyout_(const xlong l);
@@ -41,20 +42,26 @@ xlong   getchararraysize_(const xchar* c);
 void    installsystemkey(xchar scancode,void *action);
 //
 
-void CLexit_(xlong r,const xchar *f,const xchar *m)
+void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m)
 {
+	if(e!=0) e();
+
 	std::cout << f << ": "<< m <<  std::endl;
 	exit(r);
 }
 
-void CLexit_(xlong r,const xchar *f,const xchar *m,const xchar* d)
+void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d)
 {
+	if(e!=0) e();
+
 	std::cout << f << ": "<< m << " " << d << std::endl;
 	exit(r);
 }
 
-void CLexit_(xlong r,const xchar *f,const xchar *m,xlong d)
+void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
 {
+	if(e!=0) e();
+
 	std::cout << f << ": "<< m << " " << d << std::endl;
 	exit(r);
 }
@@ -69,11 +76,13 @@ CLfile* CLgetfile_(const xchar* fn,bool s)
 	{
 		if(s==0)
 		{
+			delete re;
 			return 0;
 		}
 		else
 		{
-			CLexit_(1,__func__,"cannot open file",fn);
+			delete re;
+			CLexit_(1,0,__func__,"cannot open file",fn);
 		}
 	}
 	of = fopen(fn,"rb");
@@ -94,7 +103,7 @@ xlong CLgetfilesize_(const xchar* fn)
 	FILE *of;
 	xlong fl;
 
-	if( !( of = fopen(fn,"rb") ) ) CLexit_(1,__func__,"cannot open file");
+	if( !( of = fopen(fn,"rb") ) ) CLexit_(1,0,__func__,"cannot open file");
 	fseek (of,0,SEEK_END);
 	fl = (ftell(of));
 	fclose(of);
@@ -111,7 +120,7 @@ xchar** CLgetcsvfile_(const char* fn)
 	std::string line;
 	std::string value;
 	of.open(fn);
-	if( of.fail() ) CLexit_(1,__func__,"cannot open file",fn);
+	if( of.fail() ) CLexit_(1,0,__func__,"cannot open file",fn);
 	
 	while( getline(of,line) )
 	{
@@ -128,7 +137,7 @@ xchar** CLgetcsvfile_(const char* fn)
 
 	of.close();
 	of.open(fn);
-	if( of.fail() ) CLexit_(1,__func__,"cannot open file",fn);
+	if( of.fail() ) CLexit_(1,0,__func__,"cannot open file",fn);
 
 	while( getline(of,line) )
 	{

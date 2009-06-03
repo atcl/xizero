@@ -82,7 +82,7 @@ void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
-	xlong temp;
+	xlong temp = 0;
 
 	if(dx<0)
 	{
@@ -224,7 +224,7 @@ void CLpolygon::project(xlong px,xlong py,xlong projconstx,xlong projconsty,bool
 		}
 		else
 		{
-			CLexit_(1,__func__,"Invalid z value: ",ppoint[x].z);
+			CLexit_(1,0,__func__,"Invalid z value: ",ppoint[x].z);
 		}
 	}
 }
@@ -330,7 +330,7 @@ void CLpolygon::shape()
 
 void CLpolygon::flatshade(bool ambient)
 {
-	uxlong d;
+	uxlong d = 0;
 	doubleword argb;
 	fvector tlight = cllight->getlight();
 

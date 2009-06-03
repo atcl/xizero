@@ -68,7 +68,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	shadowmatrix = sm;
 	cllight = li;
 
-	xlong sobjcount;
+	xlong sobjcount = 0;
 
 	xlong sobjcounter = 0;
 	xlong polycounter = 0;
@@ -76,17 +76,17 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 
 	xlong* sobjptr;
 
-	xlong xoff;
-	xlong yoff;
-	xlong zoff;
+	xlong xoff = 0;
+	xlong yoff = 0;
+	xlong zoff = 0;
 	
-	xlong localpolycount;
-	xlong localdockcount;
-	short localdocktype;
+	xlong localpolycount = 0;
+	xlong localdockcount = 0;
+	short localdocktype = 0;
 
-	xlong d;
+	xlong d = 0;
 	xlong t[17];
-	doubleword s;
+	doubleword s = { 0 };
 
 	position.x = x;
 	position.y = y;
@@ -108,7 +108,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	xlong zshift = 2;
 	if(zs==1) zshift = 0;
 
-	if(dataptr[0] != '<CLY') CLexit_(1,__func__,"wrong y3d format, may be endianess?");
+	if(dataptr[0] != '<CLY') CLexit_(1,0,__func__,"wrong y3d format, may be endianess?");
 
 	if(dataptr[1] == '3DB>')
 	{
@@ -117,7 +117,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 		//dataptr[3] is empty
 
 		//dataptr[4] = "OBJT"
-		if(dataptr[4] != 'OBJT' ) CLexit_(1,__func__,"No OBJT tag");
+		if(dataptr[4] != 'OBJT' ) CLexit_(1,0,__func__,"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
@@ -127,13 +127,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 
 		for(int i=0;i<sobjcount;i++)
 		{
-			if(dataptr[d] != 'SOBJ' ) CLexit_(1,__func__,"No SOBJ tag");
+			if(dataptr[d] != 'SOBJ' ) CLexit_(1,0,__func__,"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
 			localdockcount = dataptr[d]; d++;
 
-			if(dataptr[d] != 'CONN' ) CLexit_(1,__func__,"No CONN tag");
+			if(dataptr[d] != 'CONN' ) CLexit_(1,0,__func__,"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
@@ -141,13 +141,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 
 			for(int j=0;j<localpolycount;j++,polycounter++)
 			{
-				if(dataptr[d] != 'POLY' ) CLexit_(1,__func__,"No POLY tag");
+				if(dataptr[d] != 'POLY' ) CLexit_(1,0,__func__,"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				t[12] = dataptr[d]; d++; //color
 				d++; //0
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[0] = dataptr[d] + xoff; d++; //x1
 				t[1] = dataptr[d] + yoff; d++; //y1
@@ -163,7 +163,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				if(t[2] > maxz) maxz = t[2];
 				//
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
@@ -179,7 +179,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				if(t[5] > maxz) maxz = t[5];
 				//
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[6] = dataptr[d] + xoff; d++; //x3
 				t[7] = dataptr[d] + yoff; d++; //y3
@@ -195,7 +195,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				if(t[8] > maxz) maxz = t[8];
 				//
 
-				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' )CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4
@@ -257,7 +257,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	shadowmatrix = sm;
 	cllight = li;
 
-	xlong sobjcount;
+	xlong sobjcount = 0;
 
 	xlong sobjcounter = 0;
 	xlong polycounter = 0;
@@ -265,17 +265,17 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 
 	xlong* sobjptr;
 
-	xlong xoff;
-	xlong yoff;
-	xlong zoff;
+	xlong xoff = 0;
+	xlong yoff = 0;
+	xlong zoff = 0;
 	
-	xlong localpolycount;
-	xlong localdockcount;
-	short localdocktype;
+	xlong localpolycount = 0;
+	xlong localdockcount = 0;
+	short localdocktype = 0;
 
-	xlong d;
+	xlong d = 0;
 	xlong t[17];
-	doubleword s;
+	doubleword s = { 0 };
 
 	position.x = x;
 	position.y = y;
@@ -297,7 +297,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	xlong zshift = 2;
 	if(zs==0) zshift = 0;
 
-	if(dataptr[0] != '<CLY') CLexit_(1,__func__,"wrong y3d format, may be endianess?");
+	if(dataptr[0] != '<CLY') CLexit_(1,0,__func__,"wrong y3d format, may be endianess?");
 
 	if(dataptr[1] == '3DB>')
 	{
@@ -306,7 +306,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 		//dataptr[3] is empty
 
 		//dataptr[4] = "OBJT"
-		if(dataptr[4] != 'OBJT' ) CLexit_(1,__func__,"No OBJT tag");
+		if(dataptr[4] != 'OBJT' ) CLexit_(1,0,__func__,"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
@@ -316,13 +316,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 
 		for(int i=0;i<sobjcount;i++)
 		{
-			if(dataptr[d] != 'SOBJ' ) CLexit_(1,__func__,"No SOBJ tag");
+			if(dataptr[d] != 'SOBJ' ) CLexit_(1,0,__func__,"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
 			localdockcount = dataptr[d]; d++;
 
-			if(dataptr[d] != 'CONN' ) CLexit_(1,__func__,"No CONN tag");
+			if(dataptr[d] != 'CONN' ) CLexit_(1,0,__func__,"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
@@ -330,13 +330,13 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 
 			for(int j=0;j<localpolycount;j++,polycounter++)
 			{
-				if(dataptr[d] != 'POLY' ) CLexit_(1,__func__,"No POLY tag");
+				if(dataptr[d] != 'POLY' ) CLexit_(1,0,__func__,"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				t[12] = dataptr[d]; d++; //color
 				d++; //0
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[0] = dataptr[d] + xoff; d++; //x1
 				t[1] = dataptr[d] + yoff; d++; //y1
@@ -352,7 +352,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				if(t[2] > maxz) maxz = t[2];
 				//
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3] = dataptr[d] + xoff; d++; //x2
 				t[4] = dataptr[d] + yoff; d++; //y2
@@ -368,7 +368,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				if(t[5] > maxz) maxz = t[5];
 				//
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[6] = dataptr[d] + xoff; d++; //x3
 				t[7] = dataptr[d] + yoff; d++; //y3
@@ -384,7 +384,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				if(t[8] > maxz) maxz = t[8];
 				//
 
-				if(dataptr[d] != 'VECT' )CLexit_(1,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' )CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[9] = dataptr[d] + xoff; d++; //x4
 				t[10] = dataptr[d] + yoff; d++; //y4
@@ -440,7 +440,10 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	}
 }
 
-CLobject::~CLobject() { }
+CLobject::~CLobject()
+{
+	delete boundingbox;
+}
 
 void CLobject::update(CLmatrix* m)
 {

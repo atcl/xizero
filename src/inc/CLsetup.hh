@@ -17,6 +17,7 @@
 
 //prototypes:
 void CLsetup();
+void CLgarbage();
 //
 
 
@@ -41,6 +42,27 @@ void CLsetup()
 
 	leftside = new screenside[yres];
 	rightside = new screenside[yres]; 
+}
+
+void CLgarbage()
+{
+	delete CLdoublebuffer;
+	delete CLstencilbuffer;
+	delete CLzbuffer;
+
+	delete clfps;
+	delete clformat;
+	delete clmath;
+
+	delete clgfx1;
+	delete clgfx2;
+
+	delete amb;
+	delete ltm;
+	delete bsm;
+
+	delete leftside;
+	delete rightside;
 }
 
 #endif

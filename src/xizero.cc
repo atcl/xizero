@@ -3,10 +3,10 @@
 
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 #include "CLinc.h"
-
+#include "xizero.hh"
 
 int main()
 {
@@ -39,7 +39,7 @@ int main()
 // 			break;
 
 			case '0':
-				CLexit_(0,__func__,"xizero says: bye");
+				CLexit_(0,0,__func__,"xizero says: bye");
 			break;
 
 			default:
@@ -55,6 +55,9 @@ int main()
 
 		clfps->increment(); 
 	}
+
+	//clean up:
+	delete testlevel; //wrap clean up code in a func in the header file that is callable by a new CLexit func
 
 	return 0;
 }

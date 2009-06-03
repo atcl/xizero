@@ -113,7 +113,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//tf holds index of armember terrain map
 
-	if(tf==-1) CLexit_(1,__func__,"no terrain map found");
+	if(tf==-1) CLexit_(1,0,__func__,"no terrain map found");
 
 	//convert terrain map to 2d xchar array, and remove lineends
 	xchar** terrainmap = clformat->loadmap(levela->members[tf],33,' ',-1);
@@ -126,7 +126,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	mark = levelheight - blocksperscreeny;
 	smoothmark = mark * blockheight;
 	smoothlevelheight = mark * blockheight;
-	if(mark < 0) CLexit_(1,__func__,"Level too short");
+	if(mark < 0) CLexit_(1,0,__func__,"Level too short");
 	//*
 
 	//find height map, has to have extension .maph
@@ -141,7 +141,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//tf holds index of armember height map
 
-	if(tf==-1) CLexit_(1,__func__,"no height map found");
+	if(tf==-1) CLexit_(1,0,__func__,"no height map found");
 
 	//convert height map to 2d xchar array, and remove lineends
 	xchar** heightmap = clformat->loadmap(levela->members[hf],48,' ',0);
@@ -159,7 +159,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//tf holds index of armember entity map
 
-	if(ef==-1) CLexit_(1,__func__,"no entitiy map found");
+	if(ef==-1) CLexit_(1,0,__func__,"no entitiy map found");
 
 	//convert entity map to 2d xchar array, and remove lineends
 	xchar** entitymap = clformat->loadmap(levela->members[ef],33,'.',-1);
@@ -193,7 +193,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//pd holds index of player definition
 
-	if(pd==-1) CLexit_(1,__func__,"no player definition file found");
+	if(pd==-1) CLexit_(1,0,__func__,"no player definition file found");
 
 	xlong** playerd = clformat->loadbcx(playera->members[pd]);
 
@@ -209,7 +209,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	}
 	//pm holds index of first model
 
-	if(pm==-1) CLexit_(1,__func__,"no player model part I file found");
+	if(pm==-1) CLexit_(1,0,__func__,"no player model part I file found");
 
 	CLobject* playerm = new CLobject(cldouble,clzbuffer,clstencil,playera->members[pm]->data,400,300,100,clmath,clshadow,cllight,1);
 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
@@ -233,7 +233,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 		}
 	}
 
-	if(startposfound==false) CLexit_(1,__func__,"no player start position found in entity map");
+	if(startposfound==false) CLexit_(1,0,__func__,"no player start position found in entity map");
 
 	clplayer = new CLplayer(playerm,playern,playerd,playerx,playery,playerz,clmath);
 //***
@@ -312,7 +312,13 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 }
 
-CLlevel::~CLlevel() { }
+CLlevel::~CLlevel()
+{
+	delete cllinear;
+	delete clshadow;
+	delete cllight;
+	delete clplayer;
+}
 
 void CLlevel::display()
 {
@@ -320,7 +326,7 @@ void CLlevel::display()
 	xlong py = clplayer->gety();
 	if( (py<smoothlevelheight+tempy) && (py>tempy) ) subsmark(smoothmark+tempy-py);
 
-	xchar currentterrain = 0;
+	xlong currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
 	xlong blockoffsetx = blockwidth >> 1;
@@ -342,7 +348,7 @@ void CLlevel::display()
 		{
 			for(int j=0; j<blocksperscreenx; j++)
 			{
-				currentterrain = levellayers[0][mark+i][j];
+				currentterrain = xlong(levellayers[0][mark+i][j]);
 				if(currentterrain != -1)
 				{
 					//hier fehler bei subblocks und höhere leveln.

@@ -68,7 +68,11 @@ CLmath::CLmath()
 	
 }
 
-CLmath::~CLmath() { }
+CLmath::~CLmath()
+{
+	delete[] sinarray;
+	delete[] cosarray;
+}
 
 template<typename T> T CLmath::sign(T x)
 {

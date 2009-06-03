@@ -34,7 +34,10 @@ CLbutton::CLbutton(void(*a)(),xchar *c)
 	caption = c;
 }
 
-CLbutton::~CLbutton() { }
+CLbutton::~CLbutton()
+{
+	delete[] caption;
+}
 
 void CLbutton::draw()
 {

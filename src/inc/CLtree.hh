@@ -37,7 +37,10 @@ CLtree::CLtree()
 	rootnode->parent = 0;
 }
 
-CLtree::~CLtree() { }
+CLtree::~CLtree()
+{
+	delete rootnode;
+}
 
 void CLtree::root()
 {

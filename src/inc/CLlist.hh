@@ -49,6 +49,11 @@ CLlist::CLlist()
 	last = 0;
 }
 
+CLlist::~CLlist()
+{
+	delete current;
+}
+
 CLlist::CLlist(void* e)
 {
 	length = 1;
@@ -59,8 +64,6 @@ CLlist::CLlist(void* e)
 	current->next = current;
 	current->prev = current;
 }
-
-CLlist::~CLlist() { }
 
 void CLlist::append(void* e,const xchar* n)
 {

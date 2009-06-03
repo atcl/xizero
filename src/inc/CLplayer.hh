@@ -146,7 +146,11 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	firing=-1;
 }
 
-CLplayer::~CLplayer() { }
+CLplayer::~CLplayer()
+{
+	delete cllinear;
+	delete ammolist;
+}
 
 void CLplayer::display(xlong mark)
 {

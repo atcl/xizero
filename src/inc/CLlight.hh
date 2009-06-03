@@ -51,7 +51,10 @@ CLlight::CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm)
 	lm = new CLmatrix(1,clmath);
 }
 
-CLlight::~CLlight() { }
+CLlight::~CLlight()
+{
+	delete lm;
+}
 
 fvector CLlight::getlight()
 {

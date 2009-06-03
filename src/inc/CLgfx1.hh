@@ -234,7 +234,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
-	xlong temp;
+	xlong temp = 0;
 
 	if(dx<0)
 	{
@@ -282,7 +282,7 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
-	xlong temp;
+	xlong temp = 0;
 
 	if(dx<0)
 	{

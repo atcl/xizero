@@ -9,8 +9,6 @@
 
 #endif
 
-
-
 #define xres 800
 #define yres 600
 #define zres 400 
