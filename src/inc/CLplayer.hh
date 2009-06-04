@@ -8,6 +8,7 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLapi.hh"
+#include "CLgame.hh"
 
 
 class CLplayer : public virtual CLcl
@@ -17,6 +18,7 @@ class CLplayer : public virtual CLcl
 		CLmatrix* cllinear;
 		CLlist*   ammolist;
 		CLmath*   clmath;
+		CLgame*   clgame;
 
 	private:
 		xlong ammotype[4];
@@ -48,9 +50,9 @@ class CLplayer : public virtual CLcl
 		void fire(xlong at);
 		void hurt(xlong am);
 		void transform(bool m);
-		void collision();
+		void collision(xchar*** levellayers);
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,xlong p=0);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p=0);
 		~CLplayer();
 
 		void display(xlong mark);
@@ -63,13 +65,14 @@ class CLplayer : public virtual CLcl
 		xlong getz();
 };
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,xlong p)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p)
 {
 	//set parameters to attributes:
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
 
 	clmath = clm;
+	clgame = clg;
 	cllinear = new CLmatrix(1,clm);
 
 	position.x = sx;
@@ -316,8 +319,19 @@ void CLplayer::update(xchar input,xchar turbo)
 	}
 }
 
-void CLplayer::collision()
+void CLplayer::collision(xchar*** levellayers)
 {
+	//boundary check: (check if game screen is left)
+
+
+	//terrain collision check: (check if player collides with terrain block)
+
+
+	//environment check: (check if player can drive up- or downhill)
+
+
+	//enemy collision check: (check if player collides with enemy entity)
+
 
 }
 

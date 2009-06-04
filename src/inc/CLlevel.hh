@@ -15,6 +15,7 @@
 #include "CLmatrix.hh"
 #include "CLplayer.hh"
 #include "CLenemy.hh"
+#include "CLgame.hh"
 #include "CLlight.hh"
 #include "CLmacros.hh"
 
@@ -24,6 +25,7 @@ class CLlevel : public virtual CLcl
 	protected:
 		CLformat* clformat;
 		CLmath*   clmath;
+		CLgame*   clgame;
 
 		CLbuffer<xlong>*  cldouble;
 		CLbuffer<float>* clzbuffer;
@@ -80,6 +82,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	cllinear = new CLmatrix(1,clmath);
 	clshadow = new CLmatrix(1,clmath);
 	cllight  = new CLlight(1,0,1,1,0x00FFFFFF,clmath);
+	clgame   = new CLgame(0,0,0,0); //fix to projected box
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects
@@ -235,7 +238,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	if(startposfound==false) CLexit_(1,0,__func__,"no player start position found in entity map");
 
-	clplayer = new CLplayer(playerm,playern,playerd,playerx,playery,playerz,clmath);
+	clplayer = new CLplayer(playerm,playern,playerd,playerx,playery,playerz,clmath,clgame);
 //***
 
 //enemies: (test)
@@ -318,6 +321,7 @@ CLlevel::~CLlevel()
 	delete clshadow;
 	delete cllight;
 	delete clplayer;
+	delete clgame;
 }
 
 void CLlevel::display()
