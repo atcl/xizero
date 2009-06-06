@@ -21,6 +21,8 @@ class CLplayer : public virtual CLcl
 		CLgame*   clgame;
 
 	private:
+		CLbox* boundingbox[2];
+
 		xlong ammotype[4];
 		xlong firerate[4];
 		xlong ammoloadrate[4];
@@ -40,7 +42,7 @@ class CLplayer : public virtual CLcl
 		fvector tilt; //meaning mainly z-tilt (ie on ramps)
 		vector screenpos;
 
-		bool  oddeven;
+		bool  fwbw;
 		xlong active;
 		xlong points;
 		xlong firing;
@@ -55,9 +57,10 @@ class CLplayer : public virtual CLcl
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p=0);
 		~CLplayer();
 
+		void update(xchar input,char turbo,xchar*** levellayers);
 		void display(xlong mark);
-		void move(xlong x,xlong y,xlong z=0);
-		void update(xchar input,char turbo);
+
+		void setxyz(xlong x,xlong y,xlong z);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -65,11 +68,123 @@ class CLplayer : public virtual CLcl
 		xlong getz();
 };
 
+void CLplayer::setspeed(xlong s)
+{
+	switch(s)
+	{
+		case 0:
+			speed.x = 0;
+			speed.y = 0;
+			speed.z = 0;
+		break;
+
+		case 1:
+			speed.x = speeddir.x;
+			speed.y = speeddir.y;
+			speed.z = speeddir.z;
+		break;
+
+		case -1:
+			speed.x = -speeddir.x;
+			speed.y = -speeddir.y;
+			speed.z = -speeddir.z;
+		break;
+	}
+}
+
+void CLplayer::fire(xlong at)
+{
+
+}
+
+void CLplayer::hurt(xlong am)
+{
+
+}
+
+void CLplayer::transform(bool m)
+{
+	//bool decides what part, if complete or only tower
+
+	if(m==false)
+	{
+		//transform model(s)
+		model[0]->update(cllinear);
+		//model[1]->update(cllinear);
+	
+		//transform direction vector
+		direction[0] = cllinear->transform(direction[0]);
+		direction[1] = cllinear->transform(direction[1]);
+	
+		//transform speed vector
+		speed = cllinear->transform(speed);
+
+		//transform (constant) speeddir vector
+		speeddir = cllinear->transform(speeddir);
+
+		//transform tilt vector
+		tilt = cllinear->transform(tilt);
+
+		//transform ammo direction(s)
+
+	}
+	else
+	{
+		//transform model(s)
+		//model[1]->update(cllinear);
+
+		//transform direction vector
+		direction[1] = cllinear->transform(direction[1]);
+
+		//transform ammo direction(s)
+
+	}
+}
+
+void CLplayer::collision(xchar*** levellayers)
+{
+	//boundary check: (check if game screen is left)
+	xlong bc = clgame->boundary(screenpos,boundingbox[0]);
+
+	if(bc!=0)
+	{
+		if(bc==-1 && speed.x>=0) setspeed(0);
+		if(bc==1 && speed.x<=0) setspeed(0);
+		if(bc==-2 && speed.y<=0) setspeed(0);
+		if(bc==2 && speed.y>=0) setspeed(0);
+	}
+
+	//terrain collision check: (check if player collides with terrain block)
+
+	xlong blockwidth = 40;
+	xlong blockheight = 40;
+	xlong blockdepth = 40;
+
+	xlong lx1 = ( ( position.x + clmath->max(boundingbox[0]->a.x,boundingbox[0]->a.x) + speed.x ) / blockwidth );
+	xlong ly1 = ( ( position.y + clmath->max(boundingbox[0]->a.y,boundingbox[0]->a.y) + speed.y ) / blockheight );
+	xlong lz1 = ( ( position.z + clmath->max(boundingbox[0]->a.z,boundingbox[0]->a.z) + speed.z ) / blockdepth );
+
+	xlong lx2 = ( ( position.x + clmath->max(boundingbox[0]->a.x,boundingbox[0]->a.x) + speed.x ) / blockwidth );
+	xlong ly2 = ( ( position.y + clmath->max(boundingbox[0]->a.y,boundingbox[0]->a.y) + speed.y ) / blockheight );
+	xlong lz2 = ( ( position.z + clmath->max(boundingbox[0]->a.z,boundingbox[0]->a.z) + speed.z ) / blockdepth );
+
+	//!continue here...
+
+	//environment check: (check if player can drive up- or downhill)
+
+
+	//enemy collision check: (check if player collides with enemy entity)
+
+
+}
+
 CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p)
 {
 	//set parameters to attributes:
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
+	boundingbox[0] = model[0]->getboundingbox();
+	//boundingbox[1] = model[1]->getboundingbox(); //temp reactivate as soon as 2nd model avail
 
 	clmath = clm;
 	clgame = clg;
@@ -96,7 +211,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	armor		= dat[1][5];
 
 	speeddir.x  = 0;
-	speeddir.y  = -2;
+	speeddir.y  = -4;
 	speeddir.z  = 0;
 
 	ammotype[0]	= dat[1][12];
@@ -143,7 +258,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	ammodirection[3].y = 0;
 	ammodirection[3].z = 0;
 
-	oddeven = 0;
+	fwbw = 1;
 	active = true;
 	lastupdate = CLgetmilliseconds_();
 	firing=-1;
@@ -155,103 +270,9 @@ CLplayer::~CLplayer()
 	delete ammolist;
 }
 
-void CLplayer::display(xlong mark)
-{
-	screenpos.x = position.x;
-	screenpos.y = position.y - mark;
-	screenpos.z = position.z;
-
-	model[0]->setposition(screenpos.x,screenpos.y,100);
-	model[0]->display(0,1,1,0,0,0);
-}
-
-void CLplayer::move(xlong x,xlong y,xlong z)
-{
-	//not to be used for regular player movement!
-	//For regular movement x and y are controlled indirectly through the speed.
-	//This is only to be used for special purposes like resetting after death.
-
-	position.x = x;
-	position.y = y;
-	if(z!=0) position.z = z;
-}
-
-void CLplayer::setspeed(xlong s)
-{
-	switch(s)
-	{
-		case 0:
-			speed.x = 0;
-			speed.y = 0;
-			speed.z = 0;
-		break;
-
-		case 1:
-			speed.x = clmath->round(speeddir.x + speeddir.x);
-			speed.y = clmath->round(speeddir.y + speeddir.y);
-			speed.z = clmath->round(speeddir.z + speeddir.z);
-		break;
-
-		case -1:
-			speed.x = clmath->round(-speeddir.x - speeddir.x);
-			speed.y = clmath->round(-speeddir.y - speeddir.y);
-			speed.z = clmath->round(-speeddir.z - speeddir.z);
-		break;
-	}
-}
-
-void CLplayer::fire(xlong at)
+void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
 {
 
-}
-
-void CLplayer::hurt(xlong am)
-{
-
-}
-
-void CLplayer::transform(bool m)
-{
-	//bool decides what part, if complete or only tower
-
-	if(m==false)
-	{
-		//transform model(s)
-		model[0]->update(cllinear);
-		//model[1]->update(cllinear);
-	
-		//transform direction vector
-		direction[0] = cllinear->transform(direction[0]);
-		direction[1] = cllinear->transform(direction[1]);
-	
-		//transform speed vector
-		speed = cllinear->transform(speed);
-
-		//transform (constant) speeddir vector
-		speeddir = cllinear->transform(speeddir);
-		CLprint_(speeddir);
-
-		//transform tilt vector
-		tilt = cllinear->transform(tilt);
-
-		//transform ammo direction(s)
-
-	}
-	else
-	{
-		//transform model(s)
-		//model[1]->update(cllinear);
-
-		//transform direction vector
-		direction[1] = cllinear->transform(direction[1]);
-
-		//transform ammo direction(s)
-
-	}
-}
-
-void CLplayer::update(xchar input,xchar turbo)
-{
 // 	switch(input)
 // 	{
 // 		
@@ -260,13 +281,13 @@ void CLplayer::update(xchar input,xchar turbo)
 	switch(turbo)
 	{
 		case 82: //arrow up -> accelerate
-			if(input!=turbo) setspeed(1);
-			else setspeed(0);
+			setspeed(1);
+			fwbw=1;
 		break;
 
 		case 84: //arrow down -> deccelerate
-			if(input!=turbo) setspeed(-1);
-			else setspeed(0);
+			setspeed(-1);
+			fwbw=0;
 		break;
 
 		case 81: //arrow left -> turn left
@@ -309,6 +330,9 @@ void CLplayer::update(xchar input,xchar turbo)
 		break;
 	}
 
+	//processing new data:
+	collision(levellayers);
+
 	float temp = CLgetmilliseconds_();
 	if(temp >= lastupdate + 25)
 	{
@@ -319,20 +343,25 @@ void CLplayer::update(xchar input,xchar turbo)
 	}
 }
 
-void CLplayer::collision(xchar*** levellayers)
+void CLplayer::display(xlong mark)
 {
-	//boundary check: (check if game screen is left)
+	screenpos.x = position.x;
+	screenpos.y = position.y - mark;
+	screenpos.z = position.z;
 
+	model[0]->setposition(screenpos.x,screenpos.y,100);
+	model[0]->display(0,1,1,0,0,0);
+}
 
-	//terrain collision check: (check if player collides with terrain block)
+void CLplayer::setxyz(xlong x,xlong y,xlong z)
+{
+	//not to be used for regular player movement!
+	//For regular movement x and y are controlled indirectly through the speed.
+	//This is only to be used for special purposes like resetting after death.
 
-
-	//environment check: (check if player can drive up- or downhill)
-
-
-	//enemy collision check: (check if player collides with enemy entity)
-
-
+	position.x = x;
+	position.y = y;
+	if(z!=0) position.z = z;
 }
 
 xlong CLplayer::gethealth()

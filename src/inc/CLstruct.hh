@@ -23,8 +23,8 @@ struct fvertex
 
 struct CLbox
 {
-	vertex a;
-	vertex b;
+	fvertex a;
+	fvertex b;
 };
 
 union doubleword

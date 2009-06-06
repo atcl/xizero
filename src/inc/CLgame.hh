@@ -21,19 +21,19 @@ class CLgame : public virtual CLcl
 	public:
 		CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2);
 		~CLgame();
-		xlong boundarydetection(xlong x1,xlong y1,xlong x2,xlong y2);
-		xlong boundarydetection(xlong x,xlong y);
-		xlong boundarydetection(vector* v1,vector* v2);
-		xlong boundarydetection(vector* v);
-		xlong boundarydetection(CLbox* bb);
-		xlong collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2);
-		xlong collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b);
-		xlong collisiondetection(vector* v1,vector* v2,vector* w1,vector* w2);
-		xlong collisiondetection(vector* v1,vector* v2,vector* w);
-		xlong collisiondetection(CLbox* bb1,CLbox* bb2);
+		xlong boundary(xlong x1,xlong y1,xlong x2,xlong y2);
+		xlong boundary(xlong x,xlong y);
+		xlong boundary(vector* v1,vector* v2);
+		xlong boundary(vector* v);
+		xlong boundary(vector position,CLbox* bb);
+		xlong collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2);
+		xlong collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b);
+		xlong collision(vector* v1,vector* v2,vector* w1,vector* w2);
+		xlong collision(vector* v1,vector* v2,vector* w);
+		xlong collision(CLbox* bb1,CLbox* bb2);
 };
 
-CLgame::CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2)
+CLgame::CLgame(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {
 	boundaryx1 = bx1;
 	boundaryx2 = bx2;
@@ -43,36 +43,39 @@ CLgame::CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2)
 
 CLgame::~CLgame() { }
 
-xlong CLgame::boundarydetection(xlong x1,xlong y1,xlong x2,xlong y2)
+xlong CLgame::boundary(xlong x1,xlong y1,xlong x2,xlong y2)
 {
-	if(x1>boundaryx1 && x2<boundaryx2 && y1>boundaryy1 && y2<boundaryy2) return 0;
-	return 1;
+	if(x1>boundaryx1 && x2<boundaryx2 && y1>boundaryy1 && y2<boundaryy2) return 1;
+	return 0;
 }
 
-xlong CLgame::boundarydetection(xlong x,xlong y)
+xlong CLgame::boundary(xlong x,xlong y)
 {
-	if(x>boundaryx1 && x<boundaryx2 && y>boundaryy1 && y<boundaryy2) return 0;
-	return 1;
+	if(x>boundaryx1 && x<boundaryx2 && y>boundaryy1 && y<boundaryy2) return 1;
+	return 0;
 }
 
-xlong CLgame::boundarydetection(vector* v1,vector* v2)
-{
-
-}
-
-xlong CLgame::boundarydetection(vector* v)
+xlong CLgame::boundary(vector* v1,vector* v2)
 {
 
 }
 
-xlong CLgame::boundarydetection(CLbox* bb) //!test!
+xlong CLgame::boundary(vector* v)
 {
-	if( ( bb->a.x > boundaryx1 ) && ( bb->b.x < boundaryx2 )
-	 && ( bb->a.y > boundaryy1 ) && ( bb->b.y < boundaryy2 ) ) return 0;
-	return 1;
+
 }
 
-xlong CLgame::collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2)
+xlong CLgame::boundary(vector p,CLbox* bb)
+{
+	if( ( ( bb->a.x + p.x ) < boundaryx1 ) || ( ( bb->b.x + p.x ) < boundaryx1 ) ) return -1;
+	if( ( ( bb->a.x + p.x ) > boundaryx2 ) || ( ( bb->b.x + p.x ) > boundaryx2 ) ) return 1;
+	if( ( ( bb->a.y + p.y ) < boundaryy1 ) || ( ( bb->b.y + p.y ) < boundaryy1 ) ) return -2;
+	if( ( ( bb->a.y + p.y ) > boundaryy2 ) || ( ( bb->b.y + p.y ) > boundaryy2 ) ) return 2;
+
+	return 0;
+}
+
+xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2)
 {
 	if( x1>a1 && x1<a2 && y1>b1 && y1<b2 ) return 1;
 	if( x2>a1 && x2<a2 && y2>b1 && y2<b2 ) return 1;
@@ -81,23 +84,23 @@ xlong CLgame::collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xl
 	return 0;
 }
 
-xlong CLgame::collisiondetection(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b)
+xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b)
 {
 	if( a<x1 && a>x2 && b>y1 && b<y2 ) return 1;
 	return 0;
 }
 
-xlong CLgame::collisiondetection(vector* v1,vector* v2,vector* w1,vector* w2)
+xlong CLgame::collision(vector* v1,vector* v2,vector* w1,vector* w2)
 {
 
 }
 
-xlong CLgame::collisiondetection(vector* v1,vector* v2,vector* w)
+xlong CLgame::collision(vector* v1,vector* v2,vector* w)
 {
 
 }
 
-xlong CLgame::collisiondetection(CLbox* bb1, CLbox* bb2) //!test!
+xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 {
 	if( ( bb1->a.x > bb2->a.x )
 	 && ( bb1->a.x < bb2->b.x )

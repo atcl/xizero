@@ -23,6 +23,7 @@ int main()
 
 	xchar input = 0;
 	xchar turbo = 0;
+	xlong mark  = 0;
 
 	while(FLTKwait())
 	{
@@ -43,7 +44,7 @@ int main()
 			break;
 
 			default:
-				testlevel->clplayer->update(input,turbo);
+				testlevel->update(input,turbo);
 			break;
 		}
 

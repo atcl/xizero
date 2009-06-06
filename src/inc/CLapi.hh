@@ -27,6 +27,8 @@ xchar** CLgetcsvfile_(const char* fn);
 void    CLdebug_(const xchar* c,xlong v);
 void    CLprint_(const xchar* c);
 void    CLprint_(const xlong l);
+void    CLprint_(const vertex v);
+void    CLprint_(const fvertex v);
 void    CLprint_(const vector v);
 void    CLprint_(const fvector v);
 void    CLprint_(CLmatrix m);
@@ -173,6 +175,16 @@ void CLprint_(const xchar* c)
 void CLprint_(const xlong l)
 {
 	std::cout << l << std::endl;
+}
+
+void CLprint_(const vertex v)
+{
+	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
+}
+
+void CLprint_(const fvertex v)
+{
+	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
 }
 
 void CLprint_(const vector v)

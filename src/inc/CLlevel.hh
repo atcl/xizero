@@ -35,7 +35,7 @@ class CLlevel : public virtual CLcl
 		CLmatrix* clshadow;
 		CLlight*  cllight;
 
-		//CLplayer*  clplayer;
+		CLplayer*  clplayer;
 		CLenemy**  clenemy;
 		CLobject** clterrain;
 
@@ -57,12 +57,11 @@ class CLlevel : public virtual CLcl
 		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* levelcontainer,CLformat* clf,CLmath* clm,CLbuffer<xlong>* cld,CLbuffer<float>* clz,CLbuffer<xlong>* cls);
 		~CLlevel();
 
+		void update(xchar input,xchar turbo);
 		void display();
 		void subsmark(xlong m);
 		void setmark(xlong m);
 		xlong getmark();
-
-		CLplayer*  clplayer; //temp bis entschieden ob im level bleibt oder ausgelagert wird in die freiheit
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -82,7 +81,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	cllinear = new CLmatrix(1,clmath);
 	clshadow = new CLmatrix(1,clmath);
 	cllight  = new CLlight(1,0,1,1,0x00FFFFFF,clmath);
-	clgame   = new CLgame(0,0,0,0); //fix to projected box
+	clgame   = new CLgame(80,0,720,600); //!fix to projected box
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects
@@ -324,6 +323,11 @@ CLlevel::~CLlevel()
 	delete clgame;
 }
 
+void CLlevel::update(xchar input,xchar turbo)
+{
+	clplayer->update(input,turbo,levellayers);
+}
+
 void CLlevel::display()
 {
 	xlong tempy = 3*(yres>>2);
@@ -389,10 +393,9 @@ void CLlevel::display()
 		currenty -= blockheight;	
 	}
 
-	//display player:
+	//display player
 	clplayer->display(smoothmark);
-	//*
-
+	//
 }
 
 void CLlevel::subsmark(xlong m)
