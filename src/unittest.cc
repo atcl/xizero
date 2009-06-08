@@ -216,7 +216,7 @@ int main(int argc, char** argv)
 			//System:
 			case '0':
 				xlong reval = CLsystem_("Xdialog --msgbox 'bye' 0 0");
-				CLexit_(1,"user","exit");
+				CLexit_(1,0,"user","exit");
 			break;
 		}
 

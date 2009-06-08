@@ -97,13 +97,30 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	rposition.z = z;
 
 	boundingbox = new CLbox;
-	//min max of every x,y,z
-	xlong minx = 0;
-	xlong maxx = 0;
-	xlong miny = 0;
-	xlong maxy = 0;
-	xlong minz = 0;
-	xlong maxz = 0;
+	boundingbox->t1.x = 0;
+	boundingbox->t1.y = 0;
+	boundingbox->t1.z = 0;
+	boundingbox->t2.x = 0;
+	boundingbox->t2.y = 0;
+	boundingbox->t2.z = 0;
+	boundingbox->t3.x = 0;
+	boundingbox->t3.y = 0;
+	boundingbox->t3.z = 0;
+	boundingbox->t4.x = 0;
+	boundingbox->t4.y = 0;
+	boundingbox->t4.z = 0;
+	boundingbox->b1.x = 0;
+	boundingbox->b1.y = 0;
+	boundingbox->b1.z = 0;
+	boundingbox->b2.x = 0;
+	boundingbox->b2.y = 0;
+	boundingbox->b2.z = 0;
+	boundingbox->b3.x = 0;
+	boundingbox->b3.y = 0;
+	boundingbox->b3.z = 0;
+	boundingbox->b4.x = 0;
+	boundingbox->b4.y = 0;
+	boundingbox->b4.z = 0;
 
 	xlong zshift = 2;
 	if(zs==1) zshift = 0;
@@ -154,14 +171,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				t[2] = (dataptr[d]>>zshift) + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
-				//bounding box gen:
-				if(t[0] < minx) minx = t[0];
-				if(t[0] > maxx) maxx = t[0];
-				if(t[1] < miny) miny = t[1];
-				if(t[1] > maxy) maxy = t[1];
-				if(t[2] < minz) minz = t[2];
-				if(t[2] > maxz) maxz = t[2];
-				//
+				//bounding box generation
+				if( t[0] < boundingbox->t1.x) { boundingbox->t1.x = t[0]; boundingbox->b1.x = t[0]; boundingbox->t4.x = t[0]; boundingbox->b4.x = t[0]; } 
+				if( t[0] > boundingbox->b2.x) { boundingbox->t2.x = t[0]; boundingbox->b2.x = t[0]; boundingbox->t3.x = t[0]; boundingbox->b3.x = t[0]; } 
+				if( t[1] < boundingbox->t1.y) { boundingbox->t1.y = t[1]; boundingbox->b1.y = t[1]; boundingbox->t2.y = t[1]; boundingbox->b2.y = t[1]; } 
+				if( t[1] > boundingbox->b3.y) { boundingbox->t3.y = t[1]; boundingbox->b3.y = t[1]; boundingbox->t4.y = t[1]; boundingbox->b4.y = t[1]; } 
+				if( t[2] < boundingbox->t1.z) { boundingbox->t1.z = t[2]; boundingbox->t2.z = t[2]; boundingbox->t3.z = t[2]; boundingbox->t4.z = t[2]; } 
+				if( t[2] > boundingbox->b1.z) { boundingbox->b1.z = t[2]; boundingbox->b2.z = t[2]; boundingbox->b3.z = t[2]; boundingbox->b4.z = t[2]; } 
+				//*
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -170,14 +187,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				t[5] = (dataptr[d]>>zshift) + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
 
-				//bounding box gen:
-				if(t[3] < minx) minx = t[3];
-				if(t[3] > maxx) maxx = t[3];
-				if(t[4] < miny) miny = t[4];
-				if(t[4] > maxy) maxy = t[4];
-				if(t[5] < minz) minz = t[5];
-				if(t[5] > maxz) maxz = t[5];
-				//
+				//bounding box generation
+				if( t[3] < boundingbox->t1.x) { boundingbox->t1.x = t[3]; boundingbox->b1.x = t[3]; boundingbox->t4.x = t[3]; boundingbox->b4.x = t[3]; } 
+				if( t[3] > boundingbox->b2.x) { boundingbox->t2.x = t[3]; boundingbox->b2.x = t[3]; boundingbox->t3.x = t[3]; boundingbox->b3.x = t[3]; } 
+				if( t[4] < boundingbox->t1.y) { boundingbox->t1.y = t[4]; boundingbox->b1.y = t[4]; boundingbox->t2.y = t[4]; boundingbox->b2.y = t[4]; } 
+				if( t[4] > boundingbox->b3.y) { boundingbox->t3.y = t[4]; boundingbox->b3.y = t[4]; boundingbox->t4.y = t[4]; boundingbox->b4.y = t[4]; } 
+				if( t[5] < boundingbox->t1.z) { boundingbox->t1.z = t[5]; boundingbox->t2.z = t[5]; boundingbox->t3.z = t[5]; boundingbox->t4.z = t[5]; } 
+				if( t[5] > boundingbox->b1.z) { boundingbox->b1.z = t[5]; boundingbox->b2.z = t[5]; boundingbox->b3.z = t[5]; boundingbox->b4.z = t[5]; } 
+				//*
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -186,14 +203,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				t[8] = (dataptr[d]>>zshift) + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
-				//bounding box gen:
-				if(t[6] < minx) minx = t[6];
-				if(t[6] > maxx) maxx = t[6];
-				if(t[7] < miny) miny = t[7];
-				if(t[7] > maxy) maxy = t[7];
-				if(t[8] < minz) minz = t[8];
-				if(t[8] > maxz) maxz = t[8];
-				//
+				//bounding box generation
+				if( t[6] < boundingbox->t1.x) { boundingbox->t1.x = t[6]; boundingbox->b1.x = t[6]; boundingbox->t4.x = t[6]; boundingbox->b4.x = t[6]; } 
+				if( t[6] > boundingbox->b2.x) { boundingbox->t2.x = t[6]; boundingbox->b2.x = t[6]; boundingbox->t3.x = t[6]; boundingbox->b3.x = t[6]; } 
+				if( t[7] < boundingbox->t1.y) { boundingbox->t1.y = t[7]; boundingbox->b1.y = t[7]; boundingbox->t2.y = t[7]; boundingbox->b2.y = t[7]; } 
+				if( t[7] > boundingbox->b3.y) { boundingbox->t3.y = t[7]; boundingbox->b3.y = t[7]; boundingbox->t4.y = t[7]; boundingbox->b4.y = t[7]; } 
+				if( t[8] < boundingbox->t1.z) { boundingbox->t1.z = t[8]; boundingbox->t2.z = t[8]; boundingbox->t3.z = t[8]; boundingbox->t4.z = t[8]; } 
+				if( t[8] > boundingbox->b1.z) { boundingbox->b1.z = t[8]; boundingbox->b2.z = t[8]; boundingbox->b3.z = t[8]; boundingbox->b4.z = t[8]; } 
+				//*
 
 				if(dataptr[d] != 'VECT' )CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -202,14 +219,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				t[11] = (dataptr[d]>>zshift) + zoff; d++; //z4
 				//t[11] = dataptr[d] + zoff; d++; //z4
 
-				//bounding box gen:
-				if(t[9] < minx) minx = t[9];
-				if(t[9] > maxx) maxx = t[9];
-				if(t[10] < miny) miny = t[10];
-				if(t[10] > maxy) maxy = t[10];
-				if(t[11] < minz) minz = t[11];
-				if(t[11] > maxz) maxz = t[11];
-				//
+				//bounding box generation
+				if( t[9] < boundingbox->t1.x) { boundingbox->t1.x = t[9]; boundingbox->b1.x = t[9]; boundingbox->t4.x = t[9]; boundingbox->b4.x = t[0]; } 
+				if( t[9] > boundingbox->b2.x) { boundingbox->t2.x = t[9]; boundingbox->b2.x = t[9]; boundingbox->t3.x = t[9]; boundingbox->b3.x = t[0]; } 
+				if( t[10] < boundingbox->t1.y) { boundingbox->t1.y = t[10]; boundingbox->b1.y = t[10]; boundingbox->t2.y = t[10]; boundingbox->b2.y = t[10]; } 
+				if( t[10] > boundingbox->b3.y) { boundingbox->t3.y = t[10]; boundingbox->b3.y = t[10]; boundingbox->t4.y = t[10]; boundingbox->b4.y = t[10]; } 
+				if( t[11] < boundingbox->t1.z) { boundingbox->t1.z = t[11]; boundingbox->t2.z = t[11]; boundingbox->t3.z = t[11]; boundingbox->t4.z = t[11]; } 
+				if( t[11] > boundingbox->b1.z) { boundingbox->b1.z = t[11]; boundingbox->b2.z = t[11]; boundingbox->b3.z = t[11]; boundingbox->b4.z = t[11]; } 
+				//*
 				
 				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
 
@@ -234,12 +251,6 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 
 		//"ENDO"
 
-		boundingbox->a.x = minx;
-		boundingbox->a.y = miny;
-		boundingbox->a.z = minz;
-		boundingbox->b.x = maxx;
-		boundingbox->b.y = maxy;
-		boundingbox->b.z = maxz;
 	}
 	else if(dataptr[1] == 'D_X>')
 	{
@@ -286,13 +297,30 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 	rposition.z = z;
 
 	boundingbox = new CLbox;
-	//min max of every x,y,z
-	xlong minx = 0;
-	xlong maxx = 0;
-	xlong miny = 0;
-	xlong maxy = 0;
-	xlong minz = 0;
-	xlong maxz = 0;
+	boundingbox->t1.x = 0;
+	boundingbox->t1.y = 0;
+	boundingbox->t1.z = 0;
+	boundingbox->t2.x = 0;
+	boundingbox->t2.y = 0;
+	boundingbox->t2.z = 0;
+	boundingbox->t3.x = 0;
+	boundingbox->t3.y = 0;
+	boundingbox->t3.z = 0;
+	boundingbox->t4.x = 0;
+	boundingbox->t4.y = 0;
+	boundingbox->t4.z = 0;
+	boundingbox->b1.x = 0;
+	boundingbox->b1.y = 0;
+	boundingbox->b1.z = 0;
+	boundingbox->b2.x = 0;
+	boundingbox->b2.y = 0;
+	boundingbox->b2.z = 0;
+	boundingbox->b3.x = 0;
+	boundingbox->b3.y = 0;
+	boundingbox->b3.z = 0;
+	boundingbox->b4.x = 0;
+	boundingbox->b4.y = 0;
+	boundingbox->b4.z = 0;
 
 	xlong zshift = 2;
 	if(zs==0) zshift = 0;
@@ -343,14 +371,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[2] = (dataptr[d]>>zshift) + zoff; d++; //z1
 				//t[2] = dataptr[d] + zoff; d++; //z1
 
-				//bounding box gen:
-				if(t[0] < minx) minx = t[0];
-				if(t[0] > maxx) maxx = t[0];
-				if(t[1] < miny) miny = t[1];
-				if(t[1] > maxy) maxy = t[1];
-				if(t[2] < minz) minz = t[2];
-				if(t[2] > maxz) maxz = t[2];
-				//
+				//bounding box generation
+				if( t[0] < boundingbox->t1.x) { boundingbox->t1.x = t[0]; boundingbox->b1.x = t[0]; boundingbox->t4.x = t[0]; boundingbox->b4.x = t[0]; } 
+				if( t[0] > boundingbox->b2.x) { boundingbox->t2.x = t[0]; boundingbox->b2.x = t[0]; boundingbox->t3.x = t[0]; boundingbox->b3.x = t[0]; } 
+				if( t[1] < boundingbox->t1.y) { boundingbox->t1.y = t[1]; boundingbox->b1.y = t[1]; boundingbox->t2.y = t[1]; boundingbox->b2.y = t[1]; } 
+				if( t[1] > boundingbox->b3.y) { boundingbox->t3.y = t[1]; boundingbox->b3.y = t[1]; boundingbox->t4.y = t[1]; boundingbox->b4.y = t[1]; } 
+				if( t[2] < boundingbox->t1.z) { boundingbox->t1.z = t[2]; boundingbox->t2.z = t[2]; boundingbox->t3.z = t[2]; boundingbox->t4.z = t[2]; } 
+				if( t[2] > boundingbox->b1.z) { boundingbox->b1.z = t[2]; boundingbox->b2.z = t[2]; boundingbox->b3.z = t[2]; boundingbox->b4.z = t[2]; } 
+				//*
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -359,14 +387,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[5] = (dataptr[d]>>zshift) + zoff; d++; //z2
 				//t[5] = dataptr[d] + zoff; d++; //z2
 
-				//bounding box gen:
-				if(t[3] < minx) minx = t[3];
-				if(t[3] > maxx) maxx = t[3];
-				if(t[4] < miny) miny = t[4];
-				if(t[4] > maxy) maxy = t[4];
-				if(t[5] < minz) minz = t[5];
-				if(t[5] > maxz) maxz = t[5];
-				//
+				//bounding box generation
+				if( t[3] < boundingbox->t1.x) { boundingbox->t1.x = t[3]; boundingbox->b1.x = t[3]; boundingbox->t4.x = t[3]; boundingbox->b4.x = t[3]; } 
+				if( t[3] > boundingbox->b2.x) { boundingbox->t2.x = t[3]; boundingbox->b2.x = t[3]; boundingbox->t3.x = t[3]; boundingbox->b3.x = t[3]; } 
+				if( t[4] < boundingbox->t1.y) { boundingbox->t1.y = t[4]; boundingbox->b1.y = t[4]; boundingbox->t2.y = t[4]; boundingbox->b2.y = t[4]; } 
+				if( t[4] > boundingbox->b3.y) { boundingbox->t3.y = t[4]; boundingbox->b3.y = t[4]; boundingbox->t4.y = t[4]; boundingbox->b4.y = t[4]; } 
+				if( t[5] < boundingbox->t1.z) { boundingbox->t1.z = t[5]; boundingbox->t2.z = t[5]; boundingbox->t3.z = t[5]; boundingbox->t4.z = t[5]; } 
+				if( t[5] > boundingbox->b1.z) { boundingbox->b1.z = t[5]; boundingbox->b2.z = t[5]; boundingbox->b3.z = t[5]; boundingbox->b4.z = t[5]; } 
+				//*
 
 				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -375,14 +403,14 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[8] = (dataptr[d]>>zshift) + zoff; d++; //z3
 				//t[8] = dataptr[d] + zoff; d++; //z3
 
-				//bounding box gen:
-				if(t[6] < minx) minx = t[6];
-				if(t[6] > maxx) maxx = t[6];
-				if(t[7] < miny) miny = t[7];
-				if(t[7] > maxy) maxy = t[7];
-				if(t[8] < minz) minz = t[8];
-				if(t[8] > maxz) maxz = t[8];
-				//
+				//bounding box generation
+				if( t[6] < boundingbox->t1.x) { boundingbox->t1.x = t[6]; boundingbox->b1.x = t[6]; boundingbox->t4.x = t[6]; boundingbox->b4.x = t[6]; } 
+				if( t[6] > boundingbox->b2.x) { boundingbox->t2.x = t[6]; boundingbox->b2.x = t[6]; boundingbox->t3.x = t[6]; boundingbox->b3.x = t[6]; } 
+				if( t[7] < boundingbox->t1.y) { boundingbox->t1.y = t[7]; boundingbox->b1.y = t[7]; boundingbox->t2.y = t[7]; boundingbox->b2.y = t[7]; } 
+				if( t[7] > boundingbox->b3.y) { boundingbox->t3.y = t[7]; boundingbox->b3.y = t[7]; boundingbox->t4.y = t[7]; boundingbox->b4.y = t[7]; } 
+				if( t[8] < boundingbox->t1.z) { boundingbox->t1.z = t[8]; boundingbox->t2.z = t[8]; boundingbox->t3.z = t[8]; boundingbox->t4.z = t[8]; } 
+				if( t[8] > boundingbox->b1.z) { boundingbox->b1.z = t[8]; boundingbox->b2.z = t[8]; boundingbox->b3.z = t[8]; boundingbox->b4.z = t[8]; } 
+				//*
 
 				if(dataptr[d] != 'VECT' )CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
@@ -391,15 +419,15 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 				t[11] = (dataptr[d]>>zshift) + zoff; d++; //z4
 				//t[11] = dataptr[d] + zoff; d++; //z4
 
-				//bounding box gen:
-				if(t[9] < minx) minx = t[9];
-				if(t[9] > maxx) maxx = t[9];
-				if(t[10] < miny) miny = t[10];
-				if(t[10] > maxy) maxy = t[10];
-				if(t[11] < minz) minz = t[11];
-				if(t[11] > maxz) maxz = t[11];
-				//
-				
+				//bounding box generation
+				if( t[9] < boundingbox->t1.x) { boundingbox->t1.x = t[9]; boundingbox->b1.x = t[9]; boundingbox->t4.x = t[9]; boundingbox->b4.x = t[0]; } 
+				if( t[9] > boundingbox->b2.x) { boundingbox->t2.x = t[9]; boundingbox->b2.x = t[9]; boundingbox->t3.x = t[9]; boundingbox->b3.x = t[0]; } 
+				if( t[10] < boundingbox->t1.y) { boundingbox->t1.y = t[10]; boundingbox->b1.y = t[10]; boundingbox->t2.y = t[10]; boundingbox->b2.y = t[10]; } 
+				if( t[10] > boundingbox->b3.y) { boundingbox->t3.y = t[10]; boundingbox->b3.y = t[10]; boundingbox->t4.y = t[10]; boundingbox->b4.y = t[10]; } 
+				if( t[11] < boundingbox->t1.z) { boundingbox->t1.z = t[11]; boundingbox->t2.z = t[11]; boundingbox->t3.z = t[11]; boundingbox->t4.z = t[11]; } 
+				if( t[11] > boundingbox->b1.z) { boundingbox->b1.z = t[11]; boundingbox->b2.z = t[11]; boundingbox->b3.z = t[11]; boundingbox->b4.z = t[11]; } 
+				//*
+
 				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7],t[8],t[9],t[10],t[11],t[12],0x000000C0,clm,cllight);
 
 			}
@@ -423,12 +451,6 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,x
 
 		//"ENDO"
 
-		boundingbox->a.x = minx;
-		boundingbox->a.y = miny;
-		boundingbox->a.z = minz;
-		boundingbox->b.x = maxx;
-		boundingbox->b.y = maxy;
-		boundingbox->b.z = maxz;
 	}
 	else if(dataptr[1] == 'D_X>')
 	{
@@ -457,8 +479,14 @@ void CLobject::update(CLmatrix* m)
 		*dockptr[j] = m->transform(*dockptr[j]);
 	}
 
-	boundingbox->a = m->transform(boundingbox->a);
-	boundingbox->b = m->transform(boundingbox->b);
+	boundingbox->t1 = m->transform(boundingbox->t1);
+	boundingbox->t2 = m->transform(boundingbox->t2);
+	boundingbox->t3 = m->transform(boundingbox->t3);
+	boundingbox->t4 = m->transform(boundingbox->t4);
+	boundingbox->b1 = m->transform(boundingbox->b1);
+	boundingbox->b2 = m->transform(boundingbox->b2);
+	boundingbox->b3 = m->transform(boundingbox->b3);
+	boundingbox->b4 = m->transform(boundingbox->b4);
 }
 
 void CLobject::display(bool center,bool flat,bool light,bool shadows,bool pixelshader,bool debug)

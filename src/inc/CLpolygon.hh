@@ -448,7 +448,7 @@ void CLpolygon::rasterize(bool shadow)
 	{
 		length = rightside[y].offset - leftside[y].offset;
 		if(length != 0) zstep = ((rightside[y].z - leftside[y].z) / length);
-		else zstep = 0; //or 1 decide later
+		else zstep = 0; //or 1, decide later
 		actz = leftside[y].z;
 		offset = leftside[y].offset;
 

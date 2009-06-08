@@ -227,6 +227,15 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	if(x1==x2 && y1==y2) return;
 
+	if(x1<0) x1=0;
+	if(y1<0) y1=0;
+	if(x2<0) x2=0;
+	if(y2<0) y2=0;
+	if(x1>xres-1) x1=xres-1;
+	if(y1>yres-1) y1=yres-1;
+	if(x2>xres-1) x2=xres-1;
+	if(y2>yres-1) y2=yres-1;
+
 	xlong dx = x2 - x1;
 	xlong dy = y2 - y1;
 	xlong e;

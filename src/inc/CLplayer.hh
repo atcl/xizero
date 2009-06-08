@@ -10,6 +10,9 @@
 #include "CLapi.hh"
 #include "CLgame.hh"
 
+#include "CLglobal.hh" //temp!
+#include "CLgfx1.hh" //temp!
+
 
 class CLplayer : public virtual CLcl
 {
@@ -19,6 +22,8 @@ class CLplayer : public virtual CLcl
 		CLlist*   ammolist;
 		CLmath*   clmath;
 		CLgame*   clgame;
+
+		CLgfx1*   clgfx1; //temp!
 
 	private:
 		CLbox* boundingbox[2];
@@ -36,8 +41,8 @@ class CLplayer : public virtual CLcl
 
 		fvector speeddir;
 
-		vector position;
-		vector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
+		fvector position;
+		fvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
 		vector speed;
 		fvector tilt; //meaning mainly z-tilt (ie on ramps)
 		vector screenpos;
@@ -156,19 +161,8 @@ void CLplayer::collision(xchar*** levellayers)
 
 	//terrain collision check: (check if player collides with terrain block)
 
-	xlong blockwidth = 40;
-	xlong blockheight = 40;
-	xlong blockdepth = 40;
-
-	xlong lx1 = ( ( position.x + clmath->max(boundingbox[0]->a.x,boundingbox[0]->a.x) + speed.x ) / blockwidth );
-	xlong ly1 = ( ( position.y + clmath->max(boundingbox[0]->a.y,boundingbox[0]->a.y) + speed.y ) / blockheight );
-	xlong lz1 = ( ( position.z + clmath->max(boundingbox[0]->a.z,boundingbox[0]->a.z) + speed.z ) / blockdepth );
-
-	xlong lx2 = ( ( position.x + clmath->max(boundingbox[0]->a.x,boundingbox[0]->a.x) + speed.x ) / blockwidth );
-	xlong ly2 = ( ( position.y + clmath->max(boundingbox[0]->a.y,boundingbox[0]->a.y) + speed.y ) / blockheight );
-	xlong lz2 = ( ( position.z + clmath->max(boundingbox[0]->a.z,boundingbox[0]->a.z) + speed.z ) / blockdepth );
-
-	//!continue here...
+	 //directly test zbuffer if terrain collision or not
+	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 
 	//environment check: (check if player can drive up- or downhill)
 
@@ -180,6 +174,8 @@ void CLplayer::collision(xchar*** levellayers)
 
 CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p)
 {
+	clgfx1 = new CLgfx1(CLdoublebuffer); //temp!
+
 	//set parameters to attributes:
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
@@ -345,12 +341,27 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
 
 void CLplayer::display(xlong mark)
 {
-	screenpos.x = position.x;
-	screenpos.y = position.y - mark;
-	screenpos.z = position.z;
+	screenpos.x = xlong(position.x);
+	screenpos.y = xlong(position.y - mark);
+	screenpos.z = xlong(position.z);
 
 	model[0]->setposition(screenpos.x,screenpos.y,100);
 	model[0]->display(0,1,1,0,0,0);
+
+	//temp!
+	clgfx1->drawpolygon(
+screenpos.x+boundingbox[0]->b1.x,
+screenpos.y-boundingbox[0]->b1.y,
+screenpos.x+boundingbox[0]->b2.x,
+screenpos.y-boundingbox[0]->b2.y,
+screenpos.x+boundingbox[0]->b3.x,
+screenpos.y-boundingbox[0]->b3.y,
+screenpos.x+boundingbox[0]->b4.x,
+screenpos.y-boundingbox[0]->b4.y,
+0x00FFFFFF);
+
+	clgfx1->drawrectangle(80,0,720,599,0x00FF00FF);
+	//*
 }
 
 void CLplayer::setxyz(xlong x,xlong y,xlong z)

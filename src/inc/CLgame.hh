@@ -67,10 +67,10 @@ xlong CLgame::boundary(vector* v)
 
 xlong CLgame::boundary(vector p,CLbox* bb)
 {
-	if( ( ( bb->a.x + p.x ) < boundaryx1 ) || ( ( bb->b.x + p.x ) < boundaryx1 ) ) return -1;
-	if( ( ( bb->a.x + p.x ) > boundaryx2 ) || ( ( bb->b.x + p.x ) > boundaryx2 ) ) return 1;
-	if( ( ( bb->a.y + p.y ) < boundaryy1 ) || ( ( bb->b.y + p.y ) < boundaryy1 ) ) return -2;
-	if( ( ( bb->a.y + p.y ) > boundaryy2 ) || ( ( bb->b.y + p.y ) > boundaryy2 ) ) return 2;
+	if( ( ( bb->t1.x + p.x ) < boundaryx1 ) || ( ( bb->t2.x + p.x ) < boundaryx1 ) || ( ( bb->t3.x + p.x ) < boundaryx1 ) || ( ( bb->t4.x + p.x ) < boundaryx1 ) ) return -1;
+	if( ( ( bb->t1.x + p.x ) > boundaryx2 ) || ( ( bb->t2.x + p.x ) > boundaryx2 ) || ( ( bb->t3.x + p.x ) > boundaryx2 ) || ( ( bb->t4.x + p.x ) > boundaryx2 ) ) return 1;
+	if( ( ( -bb->t1.y + p.y ) < boundaryy1 ) || ( ( -bb->t2.y + p.y ) < boundaryy1 ) || ( ( -bb->t3.y + p.y ) < boundaryy1 ) || ( ( -bb->t4.y + p.y ) < boundaryy1 ) ) return -2;
+	if( ( ( -bb->t1.y + p.y ) > boundaryy2 ) || ( ( -bb->t2.y + p.y ) > boundaryy2 ) || ( ( -bb->t3.y + p.y ) > boundaryy2 ) || ( ( -bb->t4.y + p.y ) > boundaryy2 ) ) return 2;
 
 	return 0;
 }
@@ -101,7 +101,7 @@ xlong CLgame::collision(vector* v1,vector* v2,vector* w)
 }
 
 xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
-{
+{/*
 	if( ( bb1->a.x > bb2->a.x )
 	 && ( bb1->a.x < bb2->b.x )
 	 && ( bb1->a.y > bb2->a.y )
@@ -120,7 +120,7 @@ xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 	if( ( bb2->b.x > bb1->a.x )
 	 && ( bb2->b.x < bb1->b.x )
 	 && ( bb2->b.y > bb1->a.y )
-	 && ( bb2->b.y < bb1->b.y ) ) return 1;
+	 && ( bb2->b.y < bb1->b.y ) ) return 1;*/
 
 	return 0;
 }
