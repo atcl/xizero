@@ -81,7 +81,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	cllinear = new CLmatrix(1,clmath);
 	clshadow = new CLmatrix(1,clmath);
 	cllight  = new CLlight(1,0,1,1,0x00FFFFFF,clmath);
-	clgame   = new CLgame(80,0,720,600,clmath); //!fix to projected box
+	clgame   = new CLgame(60,0,740,600,clmath); //!fix to projected box
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects

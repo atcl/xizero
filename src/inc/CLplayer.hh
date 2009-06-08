@@ -155,20 +155,20 @@ void CLplayer::collision(xchar*** levellayers)
 	if(bc!=0)
 	{
 		if(bc==-1 && speed.x>=0) { gear=0; setspeed(); }
-		if(bc==1 && speed.x<=0) { gear=0; setspeed(); }
+		if(bc==1  && speed.x<=0) { gear=0; setspeed(); }
 		if(bc==-2 && speed.y<=0) { gear=0; setspeed(); }
-		if(bc==2 && speed.y>=0) { gear=0; setspeed(); }
+		if(bc==2  && speed.y>=0) { gear=0; setspeed(); }
 	}
 
 	//terrain collision check: (check if player collides with terrain block)
 	long tc = 0;
 
+	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
 	{
 	
 	}
 	 //directly test zbuffer if terrain collision or not
-	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 
 	//environment check: (check if player can drive up- or downhill)
 
@@ -365,7 +365,7 @@ screenpos.x+boundingbox[0]->b4.x,
 screenpos.y-boundingbox[0]->b4.y,
 0x00FFFFFF);
 
-	clgfx1->drawrectangle(80,0,720,599,0x00FF00FF);
+	clgfx1->drawrectangle(60,0,740,599,0x00FF00FF);
 	//*
 }
 

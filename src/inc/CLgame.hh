@@ -133,9 +133,25 @@ xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 
 xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer,xlong zdiff)
 {
+	vector v1 = { p.x + bb->b1.x, p.y + bb->b1.y, p.z + bb->b1.z, 0 };
+	vector v2 = { p.x + bb->b2.x, p.y + bb->b2.y, p.z + bb->b2.z, 0 };
+	vector v3 = { p.x + bb->b3.x, p.y + bb->b3.y, p.z + bb->b3.z, 0 };
+	vector v4 = { p.x + bb->b4.x, p.y + bb->b4.y, p.z + bb->b4.z, 0 };
 
+	CLpoint p1 = project(v1);
+	CLpoint p2 = project(v2);
+	CLpoint p3 = project(v3);
+	CLpoint p4 = project(v4);
 
-	return 0;
+	xlong o1 = (p1.y * xres) + p1.x;
+	xlong o2 = (p2.y * xres) + p2.x;
+	xlong o3 = (p3.y * xres) + p3.x;
+	xlong o4 = (p4.y * xres) + p4.x;
+
+	xshort r = 0;
+
+	//test zbuffer at o1-o4
+
 }
 
 #endif
