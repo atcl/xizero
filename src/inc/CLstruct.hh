@@ -33,6 +33,12 @@ struct CLbox
 	fvertex b4;
 };
 
+struct CLpoint
+{
+	xlong x;
+	xlong y;
+};
+
 union doubleword
 {
 	xlong  dd;

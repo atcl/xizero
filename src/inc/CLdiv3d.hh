@@ -12,6 +12,9 @@
 void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db);
 void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa);
 void drawfloor(xlong z, xlong w=xres);
+CLpoint project(vector v);
+CLpoint project(fvector v);
+CLpoint project(fvertex v);
 //
 
 
@@ -42,5 +45,53 @@ void drawfloor(xlong z, xlong w)
 	xlong y2 = xlong( (-95 * ymax) / z) + yres>>1;
 	//draw filled rectangle
 } 
+
+CLpoint project(vector v)
+{
+	xlong nx = 0;
+	xlong ny = 0;
+
+	if(v.x>0 && v.x<xres && v.y>0 && v.y<yres && v.z>0 && v.z<zres)
+	{
+		nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
+		ny = xlong( (-95 * v.y) / v.z) + yres>>1;
+	}
+
+	CLpoint r = {nx,ny};
+
+	return r;
+}
+
+CLpoint project(fvector v)
+{
+	xlong nx = 0;
+	xlong ny = 0;
+
+	if(v.x>0 && v.x<xres && v.y>0 && v.y<yres && v.z>0 && v.z<zres)
+	{
+		nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
+		ny = xlong( (-95 * v.y) / v.z) + yres>>1;
+	}
+
+	CLpoint r = {nx,ny};
+
+	return r;
+}
+
+CLpoint project(fvertex v)
+{
+	xlong nx = 0;
+	xlong ny = 0;
+
+	if(v.x>0 && v.x<xres && v.y>0 && v.y<yres && v.z>0 && v.z<zres)
+	{
+		nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
+		ny = xlong( (-95 * v.y) / v.z) + yres>>1;
+	}
+
+	CLpoint r = {nx,ny};
+
+	return r;
+}
 
 #endif

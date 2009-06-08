@@ -22,6 +22,7 @@ class CLplayer : public virtual CLcl
 		CLlist*   ammolist;
 		CLmath*   clmath;
 		CLgame*   clgame;
+		CLbuffer<float>* clzbuffer;
 
 		CLgfx1*   clgfx1; //temp!
 
@@ -47,19 +48,19 @@ class CLplayer : public virtual CLcl
 		fvector tilt; //meaning mainly z-tilt (ie on ramps)
 		vector screenpos;
 
-		bool  fwbw;
+		xlong gear;
 		xlong active;
 		xlong points;
 		xlong firing;
 		float lastupdate;
 
-		void setspeed(xlong s);
+		void setspeed();
 		void fire(xlong at);
 		void hurt(xlong am);
 		void transform(bool m);
 		void collision(xchar*** levellayers);
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p=0);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p=0);
 		~CLplayer();
 
 		void update(xchar input,char turbo,xchar*** levellayers);
@@ -73,9 +74,9 @@ class CLplayer : public virtual CLcl
 		xlong getz();
 };
 
-void CLplayer::setspeed(xlong s)
+void CLplayer::setspeed()
 {
-	switch(s)
+	switch(gear)
 	{
 		case 0:
 			speed.x = 0;
@@ -153,14 +154,19 @@ void CLplayer::collision(xchar*** levellayers)
 
 	if(bc!=0)
 	{
-		if(bc==-1 && speed.x>=0) setspeed(0);
-		if(bc==1 && speed.x<=0) setspeed(0);
-		if(bc==-2 && speed.y<=0) setspeed(0);
-		if(bc==2 && speed.y>=0) setspeed(0);
+		if(bc==-1 && speed.x>=0) { gear=0; setspeed(); }
+		if(bc==1 && speed.x<=0) { gear=0; setspeed(); }
+		if(bc==-2 && speed.y<=0) { gear=0; setspeed(); }
+		if(bc==2 && speed.y>=0) { gear=0; setspeed(); }
 	}
 
 	//terrain collision check: (check if player collides with terrain block)
+	long tc = 0;
 
+	if(tc!=0)
+	{
+	
+	}
 	 //directly test zbuffer if terrain collision or not
 	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 
@@ -172,7 +178,7 @@ void CLplayer::collision(xchar*** levellayers)
 
 }
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,xlong p)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p)
 {
 	clgfx1 = new CLgfx1(CLdoublebuffer); //temp!
 
@@ -184,6 +190,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 
 	clmath = clm;
 	clgame = clg;
+	clzbuffer = clz;
 	cllinear = new CLmatrix(1,clm);
 
 	position.x = sx;
@@ -207,7 +214,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	armor		= dat[1][5];
 
 	speeddir.x  = 0;
-	speeddir.y  = -4;
+	speeddir.y  = -6;
 	speeddir.z  = 0;
 
 	ammotype[0]	= dat[1][12];
@@ -254,7 +261,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	ammodirection[3].y = 0;
 	ammodirection[3].z = 0;
 
-	fwbw = 1;
+	gear = 0;
 	active = true;
 	lastupdate = CLgetmilliseconds_();
 	firing=-1;
@@ -269,31 +276,29 @@ CLplayer::~CLplayer()
 void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
 {
 
-// 	switch(input)
-// 	{
-// 		
-// 	}
+	switch(input)
+	{
+		case 82:
+			if(gear==-1) { gear=0; setspeed(); }
+			else { gear=1; setspeed(); }
+		break;
+
+		case 84:
+			if(gear==1) { gear=0; setspeed(); }
+			else { gear=-1; setspeed(); }
+		break;	
+	}
 
 	switch(turbo)
 	{
-		case 82: //arrow up -> accelerate
-			setspeed(1);
-			fwbw=1;
-		break;
-
-		case 84: //arrow down -> deccelerate
-			setspeed(-1);
-			fwbw=0;
-		break;
-
 		case 81: //arrow left -> turn left
-			cllinear->rotate(0,0,8);
+			cllinear->rotate(0,0,5);
 			transform(false);
 			cllinear->unit();
 		break;
 
 		case 83: //arrow right -> turn right
-			cllinear->rotate(0,0,-8);
+			cllinear->rotate(0,0,-5);
 			transform(false);
 			cllinear->unit();
 		break;
@@ -330,7 +335,7 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
 	collision(levellayers);
 
 	float temp = CLgetmilliseconds_();
-	if(temp >= lastupdate + 25)
+	if(temp >= lastupdate + 20)
 	{
 		position.x -= speed.x;
 		position.y += speed.y;

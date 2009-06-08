@@ -7,19 +7,22 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
+#include "CLdiv3d.hh"
 
 
 class CLgame : public virtual CLcl
 {
+	protected:
+		CLmath* clmath;
+
 	private:
 		xlong boundaryx1;
 		xlong boundaryx2;
 		xlong boundaryy1;
 		xlong boundaryy2;
 
-
 	public:
-		CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2);
+		CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2,CLmath* clm);
 		~CLgame();
 		xlong boundary(xlong x1,xlong y1,xlong x2,xlong y2);
 		xlong boundary(xlong x,xlong y);
@@ -31,10 +34,13 @@ class CLgame : public virtual CLcl
 		xlong collision(vector* v1,vector* v2,vector* w1,vector* w2);
 		xlong collision(vector* v1,vector* v2,vector* w);
 		xlong collision(CLbox* bb1,CLbox* bb2);
+
+		xlong impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer,xlong zdiff);
 };
 
-CLgame::CLgame(xlong bx1,xlong by1,xlong bx2,xlong by2)
+CLgame::CLgame(xlong bx1,xlong by1,xlong bx2,xlong by2,CLmath* clm)
 {
+	clmath = clm;
 	boundaryx1 = bx1;
 	boundaryx2 = bx2;
 	boundaryy1 = by1;
@@ -121,6 +127,13 @@ xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 	 && ( bb2->b.x < bb1->b.x )
 	 && ( bb2->b.y > bb1->a.y )
 	 && ( bb2->b.y < bb1->b.y ) ) return 1;*/
+
+	return 0;
+}
+
+xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer,xlong zdiff)
+{
+
 
 	return 0;
 }

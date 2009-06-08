@@ -81,7 +81,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	cllinear = new CLmatrix(1,clmath);
 	clshadow = new CLmatrix(1,clmath);
 	cllight  = new CLlight(1,0,1,1,0x00FFFFFF,clmath);
-	clgame   = new CLgame(80,0,720,600); //!fix to projected box
+	clgame   = new CLgame(80,0,720,600,clmath); //!fix to projected box
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects
@@ -94,6 +94,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	for(int g=0; g<terraina->filecount; g++)
 	{
 		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g]->data,400,300,100,clmath,clshadow,cllight,1);
+		clterrain[g]->setminz(100);
 	}
 	//*
 
@@ -216,6 +217,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	CLobject* playerm = new CLobject(cldouble,clzbuffer,clstencil,playera->members[pm]->data,400,300,100,clmath,clshadow,cllight,1);
 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
 
+	playerm->setminz(100);
+	//playern->setminz(100); //as soon as 2nd part is avail
+
 	bool startposfound = false;
 	xlong playerx = 0;
 	xlong playery = 0;
@@ -237,7 +241,10 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	if(startposfound==false) CLexit_(1,0,__func__,"no player start position found in entity map");
 
-	clplayer = new CLplayer(playerm,playern,playerd,playerx,playery,playerz,clmath,clgame);
+	clplayer = new CLplayer(playerm,playern,playerd,playerx,playery,playerz,clmath,clgame,clzbuffer);
+
+//***
+
 //***
 
 //enemies: (test)

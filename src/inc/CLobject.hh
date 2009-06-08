@@ -58,6 +58,8 @@ class CLobject : public virtual CLcl
 		void translatealongnormals(float size);
 		CLbox* getboundingbox();
 		void reset();
+		void setminz(xlong z);
+		xlong getminz();
 };
 
 CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmath* clm,CLmatrix* sm,CLlight* li,bool zs)
@@ -629,6 +631,22 @@ void CLobject::reset()
 	{
 		polyptr[i]->reset();
 	}
+}
+
+void CLobject::setminz(xlong z)
+{
+	xlong temp = clmath->min(boundingbox->t1.z,boundingbox->b1.z);
+
+	xlong diff = z - (position.z + temp);
+
+	position.z += diff; 
+}
+
+xlong CLobject::getminz()
+{
+	xlong temp = clmath->min(boundingbox->t1.z,boundingbox->b1.z);
+
+	return position.z + temp;
 }
 
 #endif

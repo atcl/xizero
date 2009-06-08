@@ -20,6 +20,7 @@ class FLTKwindow : public Fl_Window
 	doubleword screenbuffer[xres*yres];
 	int keystate;
 	int keyup;
+	int tkeystate;
 	int width;
 	int height;
 
@@ -61,12 +62,16 @@ class FLTKwindow : public Fl_Window
 		switch (event)
 		{
 			case FL_KEYBOARD:
+				tkeystate = Fl::event_key();
 				keystate = Fl::event_key();
 				return 1;
 			case FL_KEYUP:
 				keyup = Fl::event_key();
 				return 1;
-			 case FL_MOVE:
+// 			case: FL_KEYDOWN:
+// 				keydown = Fl::event_key();
+// 				return 1;
+			case FL_MOVE:
 				mousex = Fl::event_x();
 				mousey = Fl::event_y();
 			case FL_PUSH:
@@ -79,28 +84,23 @@ class FLTKwindow : public Fl_Window
 
 	int getkeystate()
 	{
-		if(keyup == keystate)
-		{
-			keyup = 0;
-			return keystate;
-		}
-		else
-		{
-			return 0;
-		}
+		
+		int temp = keystate;
+		keystate = 0;
+		return temp;
 	}
 
 	int getturbokeystate()
 	{
-		if(keyup == keystate)
+		if(keyup == tkeystate)
 		{
-			keystate = 0;
+			tkeystate = 0;
 			keyup = 0;
 			return 0;
 		}
 		else
 		{
-			return keystate;
+			return tkeystate;
 		}
 	}
 

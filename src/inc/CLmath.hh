@@ -27,7 +27,9 @@ class CLmath : public virtual CLcl
 		template<typename T> T sign(T x);
 		template<typename T> T absolute(T x);
 		template<typename T> T min(T a,T b);
+		template<typename T> T min(T a,T b,T c,T d);
 		template<typename T> T max(T a,T b);
+		template<typename T> T max(T a,T b,T c,T d);
 		template<typename T> T intsqrt(T x);
 		float sinbyarray(xlong x); //!template
 		float cosbyarray(xlong x); //!template
@@ -94,10 +96,28 @@ template<typename T> T CLmath::min(T a,T b)
 	else return b;
 }
 
+template<typename T> T CLmath::min(T a,T b,T c,T d)
+{
+	T m = a;
+	if(b<m) m=b;
+	if(c<m) m=c;
+	if(d<m) m=d;
+	return m;
+}
+
 template<typename T> T CLmath::max(T a,T b)
 {
 	if(a>=b) return a;
 	else return b;
+}
+
+template<typename T> T CLmath::max(T a,T b,T c,T d)
+{
+	T m = a;
+	if(b>m) m=b;
+	if(c>m) m=c;
+	if(d>m) m=d;
+	return m;
 }
 
 float CLmath::sinbyarray(xlong x)
