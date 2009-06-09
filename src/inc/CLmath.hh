@@ -25,6 +25,7 @@ class CLmath : public virtual CLcl
 		~CLmath();
 
 		template<typename T> T sign(T x);
+		template<typename T> T heaviside(T x);
 		template<typename T> T absolute(T x);
 		template<typename T> T min(T a,T b);
 		template<typename T> T min(T a,T b,T c,T d);
@@ -78,9 +79,19 @@ CLmath::~CLmath()
 
 template<typename T> T CLmath::sign(T x)
 {
+	//{ return (x==0) ? 0 : (x<0 ? -1 : 1); }
+
 	if(x == 0) return 0;
 	else if(x < 0) return -1;
 	else if(x > 0) return 1;
+}
+
+template<typename T> T CLmath::heaviside(T x)
+{
+	//replace by return first bit	
+
+	if(x > 0) return 1;
+	else return 0;
 }
 
 template<typename T> T CLmath::absolute(T x)

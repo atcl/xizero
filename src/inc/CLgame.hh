@@ -143,14 +143,35 @@ xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer,xlong zdiff)
 	CLpoint p3 = project(v3);
 	CLpoint p4 = project(v4);
 
-	xlong o1 = (p1.y * xres) + p1.x;
-	xlong o2 = (p2.y * xres) + p2.x;
-	xlong o3 = (p3.y * xres) + p3.x;
-	xlong o4 = (p4.y * xres) + p4.x;
-
-	xshort r = 0;
-
 	//test zbuffer at o1-o4
+
+	xlong pxmin = clmath->min(p1.x,p2.x,p3.x,p4.x);
+	xlong pymin = clmath->min(p1.y,p2.y,p3.y,p4.y);
+	xlong pxmax = clmath->max(p1.x,p2.x,p3.x,p4.x);
+	xlong pymax = clmath->max(p1.y,p2.y,p3.y,p4.y);
+
+	xlong o1 = (pymin * xres) + pxmin;
+	xlong o2 = (pymin * xres) + pxmax;
+	xlong o3 = (pymax * xres) + pxmax;
+	xlong o4 = (pymax * xres) + pxmin;
+
+	xlong r = 0;
+
+	//here is checked, by binary setting, if and where a terrain object (already drawn [into z-buffer]) around is hit
+	//here no check is performed if the z-difference is above or below zero aka dip or rock. 
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o1] - (*zbuffer)[o1-1] ) ));        //test left
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o1] - (*zbuffer)[o1-xres] ) )) <<4; //test top
+
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o2] - (*zbuffer)[o2+1] ) )) <<1;    //test right
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o2] - (*zbuffer)[o2-xres] ) )) <<5; //test top
+
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o3] - (*zbuffer)[o3+1] ) )) <<2;    //test right
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o3] - (*zbuffer)[o3+xres] ) )) <<6; //test bottom
+
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o4] - (*zbuffer)[o4-1] ) )) <<3;    //test left
+	r += xlong(clmath->heaviside( ( (*zbuffer)[o4] - (*zbuffer)[o4+xres] ) )) <<7; //test bottom
+
+
 
 }
 
