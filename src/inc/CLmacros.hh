@@ -21,7 +21,7 @@ xlong inline x600(xlong f)
 
 void inline say(const xchar* c)
 {
-	
+
 }
 
 void inline bye()

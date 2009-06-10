@@ -31,6 +31,7 @@ void    CLprint_(const vertex v);
 void    CLprint_(const fvertex v);
 void    CLprint_(const vector v);
 void    CLprint_(const fvector v);
+void    CLprint_(const CLpoint p);
 void    CLprint_(CLmatrix m);
 void    CLttyout_(const xchar* c);
 void    CLttyout_(const xlong l);
@@ -195,6 +196,11 @@ void CLprint_(const vector v)
 void CLprint_(const fvector v)
 {
 	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
+}
+
+void CLprint_(const CLpoint p)
+{
+	std::cout << "( " << p.x << "," << p.y << " )" << std::endl;
 }
 
 void CLprint_(CLmatrix m)

@@ -35,7 +35,7 @@ class CLgame : public virtual CLcl
 		xlong collision(vector* v1,vector* v2,vector* w);
 		xlong collision(CLbox* bb1,CLbox* bb2);
 
-		xlong impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer,xlong zdiff);
+		xlong impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer);
 };
 
 CLgame::CLgame(xlong bx1,xlong by1,xlong bx2,xlong by2,CLmath* clm)
@@ -131,47 +131,62 @@ xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 	return 0;
 }
 
-xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer,xlong zdiff)
+xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer)
 {
-	vector v1 = { p.x + bb->b1.x, p.y + bb->b1.y, p.z + bb->b1.z, 0 };
-	vector v2 = { p.x + bb->b2.x, p.y + bb->b2.y, p.z + bb->b2.z, 0 };
-	vector v3 = { p.x + bb->b3.x, p.y + bb->b3.y, p.z + bb->b3.z, 0 };
-	vector v4 = { p.x + bb->b4.x, p.y + bb->b4.y, p.z + bb->b4.z, 0 };
+	vector v1 = { p.x+bb->b1.x, p.y+bb->b1.y, p.z+bb->b1.z };
+	vector v2 = { p.x+bb->b2.x, p.y+bb->b2.y, p.z+bb->b2.z };
+	vector v3 = { p.x+bb->b3.x, p.y+bb->b3.y, p.z+bb->b3.z };
+	vector v4 = { p.x+bb->b4.x, p.y+bb->b4.y, p.z+bb->b4.z };
 
-	CLpoint p1 = project(v1);
-	CLpoint p2 = project(v2);
-	CLpoint p3 = project(v3);
-	CLpoint p4 = project(v4);
-
-	//test zbuffer at o1-o4
-
-	xlong pxmin = clmath->min(p1.x,p2.x,p3.x,p4.x);
-	xlong pymin = clmath->min(p1.y,p2.y,p3.y,p4.y);
-	xlong pxmax = clmath->max(p1.x,p2.x,p3.x,p4.x);
-	xlong pymax = clmath->max(p1.y,p2.y,p3.y,p4.y);
-
-	xlong o1 = (pymin * xres) + pxmin;
-	xlong o2 = (pymin * xres) + pxmax;
-	xlong o3 = (pymax * xres) + pxmax;
-	xlong o4 = (pymax * xres) + pxmin;
+	xlong o1 = (v1.y * xres) + v1.x;
+	xlong o2 = (v2.y * xres) + v2.x;
+	xlong o3 = (v3.y * xres) + v3.x;
+	xlong o4 = (v4.y * xres) + v4.x;
 
 	xlong r = 0;
 
-	//here is checked, by binary setting, if and where a terrain object (already drawn [into z-buffer]) around is hit
-	//here no check is performed if the z-difference is above or below zero aka dip or rock. 
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o1] - (*zbuffer)[o1-1] ) ));        //test left
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o1] - (*zbuffer)[o1-xres] ) )) <<4; //test top
+	if(v4.x<v1.x)
+	{
+		//forward
+		if( (*zbuffer)[o4] != (*zbuffer)[o4-1] ) r = 1;
+		if( (*zbuffer)[o3] != (*zbuffer)[o3-1] ) r = 1;
 
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o2] - (*zbuffer)[o2+1] ) )) <<1;    //test right
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o2] - (*zbuffer)[o2-xres] ) )) <<5; //test top
+		//backward
+// 		if( (*zbuffer)[o1] != (*zbuffer)[o1+1] ) r = 2;
+// 		if( (*zbuffer)[o2] != (*zbuffer)[o2+1] ) r = 2;
+	}
+	else
+	{
+		//forward
+		if( (*zbuffer)[o4] != (*zbuffer)[o4+1] ) r = 2;
+		if( (*zbuffer)[o3] != (*zbuffer)[o3+1] ) r = 2;
 
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o3] - (*zbuffer)[o3+1] ) )) <<2;    //test right
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o3] - (*zbuffer)[o3+xres] ) )) <<6; //test bottom
+		//backward
+// 		if( (*zbuffer)[o1] != (*zbuffer)[o1-1] ) r = 1;
+// 		if( (*zbuffer)[o2] != (*zbuffer)[o2-1] ) r = 1;
+	}
 
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o4] - (*zbuffer)[o4-1] ) )) <<3;    //test left
-	r += xlong(clmath->heaviside( ( (*zbuffer)[o4] - (*zbuffer)[o4+xres] ) )) <<7; //test bottom
+	if(v4.y<v1.y)
+	{
+		//forward
+		if( (*zbuffer)[o4] != (*zbuffer)[o4-xres] ) r = 4;
+		if( (*zbuffer)[o3] != (*zbuffer)[o3-xres] ) r = 4;
 
+		//backward
+// 		if( (*zbuffer)[o1] != (*zbuffer)[o1+xres] ) r = 8;
+// 		if( (*zbuffer)[o2] != (*zbuffer)[o2+xres] ) r = 8;
+	}
+	else
+	{
+		if( (*zbuffer)[o4] != (*zbuffer)[o4+xres] ) r = 8;
+		if( (*zbuffer)[o3] != (*zbuffer)[o3+xres] ) r = 8;
 
+		//backward
+// 		if( (*zbuffer)[o1] != (*zbuffer)[o1+xres] ) r = 4;
+// 		if( (*zbuffer)[o2] != (*zbuffer)[o2+xres] ) r = 4;
+	}
+
+	return r;
 
 }
 

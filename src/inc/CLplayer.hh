@@ -63,8 +63,8 @@ class CLplayer : public virtual CLcl
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p=0);
 		~CLplayer();
 
-		void update(xchar input,char turbo,xchar*** levellayers);
-		void display(xlong mark);
+		void update(xchar input,char turbo,xchar*** levellayers,xlong mark);
+		void display();
 
 		void setxyz(xlong x,xlong y,xlong z);
 		xlong gethealth();
@@ -161,14 +161,19 @@ void CLplayer::collision(xchar*** levellayers)
 	}
 
 	//terrain collision check: (check if player collides with terrain block)
-	long tc = 0;
+	xlong tc = clgame->impact(screenpos,boundingbox[0],clzbuffer);
+
+// 	CLprint_(tc);
+// 	CLprint_(speeddir);
 
 	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
 	{
-	
+		if(tc==1 && speeddir.x>0) { gear=0; setspeed(); }
+		if(tc==2 && speeddir.x<0) { gear=0; setspeed(); }
+		if(tc==4 && speeddir.y<0) { gear=0; setspeed(); }
+		if(tc==8 && speeddir.y>0) { gear=0; setspeed(); }
 	}
-	 //directly test zbuffer if terrain collision or not
 
 	//environment check: (check if player can drive up- or downhill)
 
@@ -273,7 +278,7 @@ CLplayer::~CLplayer()
 	delete ammolist;
 }
 
-void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
+void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 {
 
 	switch(input)
@@ -331,6 +336,10 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
 		break;
 	}
 
+	screenpos.x = xlong(position.x);
+	screenpos.y = xlong(position.y - mark);
+	screenpos.z = xlong(position.z);
+
 	//processing new data:
 	collision(levellayers);
 
@@ -344,12 +353,8 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers)
 	}
 }
 
-void CLplayer::display(xlong mark)
+void CLplayer::display()
 {
-	screenpos.x = xlong(position.x);
-	screenpos.y = xlong(position.y - mark);
-	screenpos.z = xlong(position.z);
-
 	model[0]->setposition(screenpos.x,screenpos.y,100);
 	model[0]->display(0,1,1,0,0,0);
 
@@ -366,6 +371,8 @@ screenpos.y-boundingbox[0]->b4.y,
 0x00FFFFFF);
 
 	clgfx1->drawrectangle(60,0,740,599,0x00FF00FF);
+
+	clgfx1->drawpixel(screenpos.x+boundingbox[0]->b1.x,screenpos.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*
 }
 

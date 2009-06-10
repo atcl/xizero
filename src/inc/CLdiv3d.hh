@@ -7,14 +7,16 @@
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
 
-
 //prototypes:
 void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db);
 void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa);
-void drawfloor(xlong z, xlong w=xres);
+void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db);
+
 CLpoint project(vector v);
 CLpoint project(fvector v);
 CLpoint project(fvertex v);
+
+void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db);
 //
 
 
@@ -34,7 +36,7 @@ void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong col
 
 }
 
-void drawfloor(xlong z, xlong w)
+void drawfloor(xlong z, xlong w,ulong c,CLbuffer<float>* zb,CLbuffer<xlong>* db)
 {
 	//determine shade
 
@@ -43,7 +45,15 @@ void drawfloor(xlong z, xlong w)
 	xlong y1 = 0;
 	xlong x2 = xlong( ( 80 * xmax) / z) + xres>>1;
 	xlong y2 = xlong( (-95 * ymax) / z) + yres>>1;
-	//draw filled rectangle
+	
+	//draw filled rectangle and fill zbuffer
+	for(int i=0; i<(x2-x1); i++)
+	{
+		for(int j=0; j<(y2-y1); j++)
+		{
+//...
+		}
+	}
 } 
 
 CLpoint project(vector v)
@@ -64,14 +74,8 @@ CLpoint project(vector v)
 
 CLpoint project(fvector v)
 {
-	xlong nx = 0;
-	xlong ny = 0;
-
-	if(v.x>0 && v.x<xres && v.y>0 && v.y<yres && v.z>0 && v.z<zres)
-	{
-		nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
-		ny = xlong( (-95 * v.y) / v.z) + yres>>1;
-	}
+	xlong nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
+	xlong ny = xlong( (-95 * v.y) / v.z) + yres>>1;
 
 	CLpoint r = {nx,ny};
 
@@ -80,18 +84,26 @@ CLpoint project(fvector v)
 
 CLpoint project(fvertex v)
 {
-	xlong nx = 0;
-	xlong ny = 0;
-
-	if(v.x>0 && v.x<xres && v.y>0 && v.y<yres && v.z>0 && v.z<zres)
-	{
-		nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
-		ny = xlong( (-95 * v.y) / v.z) + yres>>1;
-	}
+	xlong nx = xlong( ( 80 * v.x) / v.z) + xres>>1; //95 wenn xclipping läuft
+	xlong ny = xlong( (-95 * v.y) / v.z) + yres>>1;
 
 	CLpoint r = {nx,ny};
 
 	return r;
+}
+
+void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db)
+{
+	float z;
+
+	for(int i=0; i<yres-1;i++)
+	{
+		for(int j=0; j<xres-1; j++)
+		{
+			z = (*zb)[(i*xres)+j] * 4;
+			(*db)[(i*xres)+j] = xshort(z)<<8;
+		}
+	}
 }
 
 #endif

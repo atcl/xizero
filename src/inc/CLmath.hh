@@ -32,8 +32,8 @@ class CLmath : public virtual CLcl
 		template<typename T> T max(T a,T b);
 		template<typename T> T max(T a,T b,T c,T d);
 		template<typename T> T intsqrt(T x);
-		float sinbyarray(xlong x); //!template
-		float cosbyarray(xlong x); //!template
+		float sinbyarray(xlong x);
+		float cosbyarray(xlong x);
 		float vectorlength(fvector v);
 		xlong vectorlength(vector v);
 		float dotproduct(fvector a,fvector b);

@@ -332,15 +332,17 @@ CLlevel::~CLlevel()
 
 void CLlevel::update(xchar input,xchar turbo)
 {
-	clplayer->update(input,turbo,levellayers);
-}
-
-void CLlevel::display()
-{
 	xlong tempy = 3*(yres>>2);
 	xlong py = clplayer->gety();
 	if( (py<smoothlevelheight+tempy) && (py>tempy) ) subsmark(smoothmark+tempy-py);
 
+
+
+	clplayer->update(input,turbo,levellayers,smoothmark);
+}
+
+void CLlevel::display()
+{
 	xlong currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
@@ -401,7 +403,7 @@ void CLlevel::display()
 	}
 
 	//display player
-	clplayer->display(smoothmark);
+	clplayer->display();
 	//
 }
 
