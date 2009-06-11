@@ -32,14 +32,8 @@ int main()
 
 		switch(turbo)
 		{
-// 			case FL_Up:
-// 				testlevel->subsmark(4);
-// 			break;
-// 			case FL_Down:
-// 				testlevel->subsmark(-4);
-// 			break;
-
 			case '0':
+				delete testlevel;
 				CLexit_(0,0,__func__,"xizero says: bye");
 			break;
 
@@ -52,15 +46,14 @@ int main()
 		CLzbuffer->clear(zmax);
 		CLstencilbuffer->fastclear(0);
 
+		//drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+
 		testlevel->display();
 
 		//drawzbuffer(CLzbuffer,CLdoublebuffer);
 
 		clfps->increment(); 
 	}
-
-	//clean up:
-	delete testlevel; //wrap clean up code in a func in the header file that is callable by a new CLexit func
 
 	return 0;
 }

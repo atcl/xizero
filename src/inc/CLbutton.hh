@@ -8,7 +8,6 @@
 #include "CLcl.hh"
 #include "CLguibase.hh"
 
-
 class CLbutton : public CLguibase , public virtual CLcl
 {
 	private:

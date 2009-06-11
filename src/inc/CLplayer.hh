@@ -370,7 +370,7 @@ screenpos.x+boundingbox[0]->b4.x,
 screenpos.y-boundingbox[0]->b4.y,
 0x00FFFFFF);
 
-	clgfx1->drawrectangle(60,0,740,599,0x00FF00FF);
+	clgfx1->drawrectangle(65,0,735,599,0x00FF00FF);
 
 	clgfx1->drawpixel(screenpos.x+boundingbox[0]->b1.x,screenpos.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*

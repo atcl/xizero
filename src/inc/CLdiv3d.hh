@@ -36,22 +36,21 @@ void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong col
 
 }
 
-void drawfloor(xlong z, xlong w,ulong c,CLbuffer<float>* zb,CLbuffer<xlong>* db)
+void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db)
 {
 	//determine shade
 
 	//draw screen
-	xlong x1 = 0;
-	xlong y1 = 0;
-	xlong x2 = xlong( ( 80 * xmax) / z) + xres>>1;
-	xlong y2 = xlong( (-95 * ymax) / z) + yres>>1;
+	xlong x1 = (xres-w)>>1;
+	xlong x2 = xres-((xres-w)>>1);
 	
 	//draw filled rectangle and fill zbuffer
 	for(int i=0; i<(x2-x1); i++)
 	{
-		for(int j=0; j<(y2-y1); j++)
+		for(int j=0; j<yres; j++)
 		{
-//...
+			(*db)[(j*xres)+(x1+i)] = c;
+			(*zb)[(j*xres)+(x1+i)] = z;
 		}
 	}
 } 

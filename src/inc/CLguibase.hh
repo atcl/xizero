@@ -6,11 +6,14 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLgfx2.hh"
 
 
 class CLguibase : public virtual CLcl
 {
 	protected:
+		CLgfx2* clgfx2;
+
 		xlong doublebuffer;
 		xlong posx;
 		xlong posy;
@@ -41,9 +44,9 @@ class CLguibase : public virtual CLcl
 		uxlong getrcolor();
 };
 
-CLguibase::CLguibase()
+CLguibase::CLguibase(CLgfx2* clg)
 {
-
+	clgfx2 = clg;
 }
 
 CLguibase::~CLguibase() { } //virtual!

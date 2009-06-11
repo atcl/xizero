@@ -133,23 +133,27 @@ xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 
 xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer)
 {
-	vector v1 = { p.x+bb->b1.x, p.y+bb->b1.y, p.z+bb->b1.z };
-	vector v2 = { p.x+bb->b2.x, p.y+bb->b2.y, p.z+bb->b2.z };
-	vector v3 = { p.x+bb->b3.x, p.y+bb->b3.y, p.z+bb->b3.z };
-	vector v4 = { p.x+bb->b4.x, p.y+bb->b4.y, p.z+bb->b4.z };
+	xlong x1 = p.x+bb->b1.x;
+	xlong y1 = p.y+bb->b1.y;
+	xlong x2 = p.x+bb->b2.x;
+	xlong y2 = p.y+bb->b2.y;
+	xlong x3 = p.x+bb->b3.x;
+	xlong y3 = p.y+bb->b3.y;
+	xlong x4 = p.x+bb->b4.x;
+	xlong y4 = p.y+bb->b4.y;
 
-	xlong o1 = (v1.y * xres) + v1.x;
-	xlong o2 = (v2.y * xres) + v2.x;
-	xlong o3 = (v3.y * xres) + v3.x;
-	xlong o4 = (v4.y * xres) + v4.x;
+	xlong o1 = ( y1 * xres ) + x1;
+	xlong o2 = ( y2 * xres ) + x2;
+	xlong o3 = ( y3 * xres ) + x3;
+	xlong o4 = ( y4 * xres ) + x4;
 
 	xlong r = 0;
 
-	if(v4.x<v1.x)
+	if(x4<x1)
 	{
 		//forward
-		if( (*zbuffer)[o4] != (*zbuffer)[o4-1] ) r = 1;
-		if( (*zbuffer)[o3] != (*zbuffer)[o3-1] ) r = 1;
+		if( (*zbuffer)[o4] != (*zbuffer)[o4-2] ) r = 1;
+		if( (*zbuffer)[o3] != (*zbuffer)[o3-2] ) r = 1;
 
 		//backward
 // 		if( (*zbuffer)[o1] != (*zbuffer)[o1+1] ) r = 2;
@@ -158,19 +162,19 @@ xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer)
 	else
 	{
 		//forward
-		if( (*zbuffer)[o4] != (*zbuffer)[o4+1] ) r = 2;
-		if( (*zbuffer)[o3] != (*zbuffer)[o3+1] ) r = 2;
+		if( (*zbuffer)[o4] != (*zbuffer)[o4+2] ) r = 2;
+		if( (*zbuffer)[o3] != (*zbuffer)[o3+2] ) r = 2;
 
 		//backward
 // 		if( (*zbuffer)[o1] != (*zbuffer)[o1-1] ) r = 1;
 // 		if( (*zbuffer)[o2] != (*zbuffer)[o2-1] ) r = 1;
 	}
 
-	if(v4.y<v1.y)
+	if(y1<y4)
 	{
 		//forward
-		if( (*zbuffer)[o4] != (*zbuffer)[o4-xres] ) r = 4;
-		if( (*zbuffer)[o3] != (*zbuffer)[o3-xres] ) r = 4;
+		if( (*zbuffer)[o1] != (*zbuffer)[o1-xres-xres] ) r = 4;
+		if( (*zbuffer)[o2] != (*zbuffer)[o2-xres-xres] ) r = 4;
 
 		//backward
 // 		if( (*zbuffer)[o1] != (*zbuffer)[o1+xres] ) r = 8;
@@ -178,8 +182,8 @@ xlong CLgame::impact(vector p,CLbox* bb,CLbuffer<float>* zbuffer)
 	}
 	else
 	{
-		if( (*zbuffer)[o4] != (*zbuffer)[o4+xres] ) r = 8;
-		if( (*zbuffer)[o3] != (*zbuffer)[o3+xres] ) r = 8;
+		if( (*zbuffer)[o1] != (*zbuffer)[o1+xres+xres] ) r = 8;
+		if( (*zbuffer)[o2] != (*zbuffer)[o2+xres+xres] ) r = 8;
 
 		//backward
 // 		if( (*zbuffer)[o1] != (*zbuffer)[o1+xres] ) r = 4;
