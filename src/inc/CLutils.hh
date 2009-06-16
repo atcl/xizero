@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLUTILS
 #define HH_CLUTILS
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+#warning "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
 #include  "CLstruct.hh"

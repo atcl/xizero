@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLGUIBASE
 #define HH_CLGUIBASE
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+#warning "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -44,9 +44,9 @@ class CLguibase : public virtual CLcl
 		uxlong getrcolor();
 };
 
-CLguibase::CLguibase(CLgfx2* clg)
+CLguibase::CLguibase()
 {
-	clgfx2 = clg;
+
 }
 
 CLguibase::~CLguibase() { } //virtual!

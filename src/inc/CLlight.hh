@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLLIGHT
 #define HH_CLLIGHT
-#pragma message "Compiling " __FILE__ " ! TODO: use this class"
+#warning "Compiling " __FILE__ " ! TODO: use this class"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

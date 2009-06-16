@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLOBJECT
 #define HH_CLOBJECT
-#pragma message "Compiling " __FILE__ " ! TODO: bounding box per min/max in both ctors"
+#warning "Compiling " __FILE__ " ! TODO: bounding box per min/max in both ctors"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -498,14 +498,14 @@ void CLobject::display(bool center,bool flat,bool light,bool shadows,bool pixels
 		for(int i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowmatrix,1);
-			polyptr[i]->display(position.x,position.y,position.z,center,1,light,1,0,0);
+			polyptr[i]->display(position.x,position.y,position.z,center,1,light,1,0,0,0);
 		}
 	}
 	else
 	{
 		for(int i=0;i<polycount;i++)
 		{
-			polyptr[i]->display(position.x,position.y,position.z,center,flat,light,0,pixelshader,debug);
+			polyptr[i]->display(position.x,position.y,position.z,center,flat,light,0,pixelshader,0,debug);
 		}
 	}
 }

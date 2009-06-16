@@ -43,7 +43,7 @@ int main()
 		}
 
 		CLdoublebuffer->fastclear(0);
-		CLzbuffer->clear(zmax);
+		CLzbuffer->clear(zres-1);
 		CLstencilbuffer->fastclear(0);
 
 		//drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);

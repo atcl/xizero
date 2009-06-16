@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPROGRESS
 #define HH_CLPROGRESS
-#pragma message "Compiling " __FILE__ " ! TODO: constructor"
+#warning "Compiling " __FILE__ " ! TODO: constructor"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

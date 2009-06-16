@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLGLOBAL
 #define HH_CLGLOBAL
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+#warning "Compiling " __FILE__ " ! TODO: ..."
 
 
 //variables

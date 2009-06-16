@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLCONIO
 #define HH_CLCONIO
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+#warning "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

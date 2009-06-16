@@ -5,9 +5,10 @@
 
 #if __GNUC__ <= 4 && __GNUC_MINOR__ < 4
 
-#define u8 
+	#define u8 
 
 #endif
+
 
 #define xres 800
 #define yres 600

@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLVECTOR
 #define HH_CLVECTOR
-#pragma message "Compiling " __FILE__ " ! TODO: overload operators"
+#warning "Compiling " __FILE__ " ! TODO: overload operators, template vector"
 
 #include "CLtypes.hh"
 

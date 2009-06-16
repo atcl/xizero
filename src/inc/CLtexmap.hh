@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLTEXMAP
 #define HH_CLTEXMAP
-#pragma message "Compiling " __FILE__ " ! TODO: ..." 
+#warning "Compiling " __FILE__ " ! TODO: ..." 
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

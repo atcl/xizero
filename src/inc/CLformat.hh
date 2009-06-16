@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLFORMAT
 #define HH_CLFORMAT
-#pragma message "Compiling " __FILE__ " ! TODO: fix loadar crash"
+#warning "Compiling " __FILE__ " ! TODO: fix loadar crash"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLINTRO
 #define HH_CLINTRO
-#pragma message "Compiling " __FILE__ " ! TODO: test on models"
+#warning Compiling __FILE__ ! TODO: test on models
 
 #include "CLtypes.hh"
 #include "CLapi.hh"
@@ -98,7 +98,7 @@ void atcrosslevel_intro()
 
 		//clear buffers
 		CLdoublebuffer->clear(0);
-		CLzbuffer->clear(zmax);
+		CLzbuffer->clear(zres-1);
 		CLstencilbuffer->clear(0);
 
 		//display

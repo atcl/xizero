@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLFPS
 #define HH_CLFPS
-#pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval correct"
+#warning "Compiling " __FILE__ " ! TODO: check if timeinterval correct"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

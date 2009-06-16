@@ -2,14 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLCONSTS
 #define HH_CLCONSTS
-#pragma message "Compiling " __FILE__ " ! TODO: more"
-
-#define xmin 1
-#define xmax xres-1
-#define ymin 1
-#define ymax yres-1
-#define zmin 1
-#define zmax zres-1
+#pragma message "warning " __FILE__ " ! TODO: more"
 
 namespace CL
 { 

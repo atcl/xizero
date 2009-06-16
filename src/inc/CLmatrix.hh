@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMATRIX
 #define HH_CLMATRIX
-#pragma message "Compiling " __FILE__ " ! TODO: std free"
+#warning "Compiling " __FILE__ " ! TODO: std free"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -271,6 +271,9 @@ void CLmatrix::shadow(fvector l,fvector p)
 
 void CLmatrix::project()
 {
+	float zmin = 1;
+	float zmax = zres-1;
+
 	m[0][0] = (2 * zmin / xres);
 	m[0][1] = 0;
 	m[0][2] = 0;

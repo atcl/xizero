@@ -2,9 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPOLYGON
 #define HH_CLPOLYGON
-#pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals"
-
-#include <iostream>
+#warning "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix, display bools as actual bits of a short"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -29,6 +27,12 @@ class CLpolygon : public virtual CLcl
 
 	private:
 		static xlong pointcount;
+		xlong xmin;
+		xlong xmax;
+		xlong ymin;
+		xlong ymax;
+		xlong zmin;
+		xlong zmax;
 		uxlong color;
 		uxlong shade;
 		uxlong scolor;
@@ -51,7 +55,7 @@ class CLpolygon : public virtual CLcl
 		void shape();
 		void flatshade(bool ambient);
 		void setside(fvertex b,fvertex e,screenside *s);
-		void rasterize(bool shadow);	//todo: swap
+		void rasterize(xlong shadow);	//todo: swap
 		xlong circleinc(xlong x,xlong pc);
 		xlong circledec(xlong x,xlong pc);
 	
@@ -59,7 +63,9 @@ class CLpolygon : public virtual CLcl
 		CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll);
 		~CLpolygon();
 		void update(CLmatrix* m,bool i);
-		void display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool debug);
+		void display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool land,bool debug);
+		void display(vertex* p,xchar flags);
+		void display(vertex* p,screenside* l,screenside* r,CLbuffer<float>* b,xlong h);
 		vector getnormal();
 		void add(xlong x,xlong y,xlong z);
 		void reset();
@@ -101,14 +107,6 @@ void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 	{
 		dx ^= dy ^= dx ^= dy;
 		xs ^= ys ^= xs ^= ys;
-
-// 		temp = dy;
-// 		dy = dx;
-// 		dx = temp;
-// 
-// 		temp = ys;
-// 		ys = xs;
-// 		xs = temp;
 	}
 
 	len = dx+1;
@@ -135,7 +133,6 @@ fvertex CLpolygon::getzplanecoords(fvertex a, fvertex b, float pz)
 	c.x = (a.x - b.x) * m + b.x;
 	c.y = (a.y - b.y) * m + b.y;
 	c.z = pz;
-
 	return c;
 }
 
@@ -147,7 +144,6 @@ fvertex CLpolygon::getxplanecoords(fvertex a, fvertex b, float px)
 	c.x = px;
 	c.y = (a.y - b.y) * m + b.y;
 	c.z = (a.z - b.z) * m + b.z;
-	
 	return c;
 }
 
@@ -159,7 +155,6 @@ fvertex CLpolygon::getyplanecoords(fvertex a, fvertex b, float py)
 	c.x = (a.x - b.x) * m + b.x;
 	c.y = py;
 	c.z = (a.z - b.z) * m + b.z;
-	
 	return c;
 }
 
@@ -231,8 +226,8 @@ void CLpolygon::project(xlong px,xlong py,xlong projconstx,xlong projconsty,bool
 
 void CLpolygon::xyclipping()
 {
-	xlong x;
-	xlong y;
+	xlong x = 0;
+	xlong y = 0;
 	xlong localpointcount = 0;
 
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
@@ -406,7 +401,7 @@ xlong CLpolygon::circledec(xlong x,xlong pc)
 	}
 }
 
-void CLpolygon::rasterize(bool shadow)
+void CLpolygon::rasterize(xlong shadow)
 {
 	xlong x;
 	xlong y;
@@ -440,10 +435,10 @@ void CLpolygon::rasterize(bool shadow)
 		rightside = t;
 	}
 
-	xlong length;
-	xlong offset;
-	float actz;
-	float zstep;
+	xlong length = 0;
+	xlong offset = 0;
+	float actz = 0;
+	float zstep = 0;
 	for(y=xlong(spoint[top].y); y<=xlong(spoint[bot].y); y++)
 	{
 		length = rightside[y].offset - leftside[y].offset;
@@ -477,11 +472,32 @@ void CLpolygon::rasterize(bool shadow)
 				length--;
 			}
 		}
+		if(shadow==2)
+		{
+			while(length > 0)
+			{
+				if(actz < (*zbuffer)[offset])
+				{
+					(*zbuffer)[offset] = actz;
+				}
+				
+				offset++;
+				actz += zstep;
+				length--;
+			}
+		}
 	}
 }
 
 CLpolygon::CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll)
 {
+	xmin = 1;
+	xmax = xres-1;
+	ymin = 1;
+	ymax = yres-1;
+	zmin = 1;
+	zmax = zres-1; 
+
 	clmath = clm;
 	cllight = cll;
 
@@ -542,7 +558,7 @@ CLpolygon::CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb
 
 CLpolygon::~CLpolygon() { }
 
-void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool debug)
+void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool land,bool debug)
 {
 	if(shadow==0)
 	{
@@ -573,7 +589,11 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 	{
 		shape();
 	}
-		
+	else if(land==1)
+	{
+		//test if l!=0
+		//rasterize(2);
+	}
 	else
 	{
 		if(visible())
@@ -595,6 +615,39 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 			}
 		}
 	}
+}
+
+void display(vertex* p,xchar flags)
+{
+//flags: 0x00000000
+//         | = center. Center object on screen.
+
+//flags: 0x00000000
+//          | = flat. Use flat shading (if shadows = 0)
+
+//flags: 0x00000000
+//           | = ambient. Use ambient lightening (additionally to flat)
+
+//flags: 0x00000000
+//            | = shadow. Render shadow of object
+
+//flags: 0x00000000
+//             | = pixelshader. Shade polygon each pixel. (not available yet)
+
+//flags: 0x00000000
+//              | = projection type (not available yet)
+
+//flags: 0x00000000 
+//               | = shape. No shading, no color, wireframe only
+
+//flags: 0x00000000
+//                | = debug. No shading, plain color and shape
+
+}
+
+void display(vertex* p,screenside* l,screenside* r,CLbuffer<float>* b,xlong h)
+{
+
 }
 
 void CLpolygon::update(CLmatrix* m,bool i=0)

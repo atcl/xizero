@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLSCREEN
 #define HH_CLSCREEN
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+#warning "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLbuffer.hh"

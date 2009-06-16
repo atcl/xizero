@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLBUTTON
 #define HH_CLBUTTON
-#pragma message "Compiling " __FILE__ " ! TODO: constructor,action"
+#warning "Compiling " __FILE__ " ! TODO: constructor,action"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

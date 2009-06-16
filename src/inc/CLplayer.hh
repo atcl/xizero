@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
+#warning "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -40,13 +40,15 @@ class CLplayer : public virtual CLcl
 		xlong shieldrate;
 		xlong armor;
 
-		fvector speeddir;
-
 		fvector position;
+		fvector tposition;
+		fvector lposition;
+		vector  sposition;
 		fvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
-		vector speed;
+		vector  speed;
+		fvector speeddir;
 		fvector tilt; //meaning mainly z-tilt (ie on ramps)
-		vector screenpos;
+
 
 		xlong gear;
 		xlong active;
@@ -58,7 +60,7 @@ class CLplayer : public virtual CLcl
 		void fire(xlong at);
 		void hurt(xlong am);
 		void transform(bool m);
-		void collision(xchar*** levellayers);
+		xlong collision(xlong mark);
 	public:
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p=0);
 		~CLplayer();
@@ -147,21 +149,26 @@ void CLplayer::transform(bool m)
 	}
 }
 
-void CLplayer::collision(xchar*** levellayers)
+xlong CLplayer::collision(xlong mark)
 {
+	if(gear==0) return 0;
+
+	xlong r = 0;
+
 	//boundary check: (check if game screen is left)
-	xlong bc = clgame->boundary(screenpos,boundingbox[0]);
+	xlong bc = 0; //clgame->boundary(tposition,boundingbox[0]);
 
 	if(bc!=0)
 	{
-		if(bc==-1 && speed.x>=0) { gear=0; setspeed(); }
-		if(bc==1  && speed.x<=0) { gear=0; setspeed(); }
-		if(bc==-2 && speed.y<=0) { gear=0; setspeed(); }
-		if(bc==2  && speed.y>=0) { gear=0; setspeed(); }
+		if(bc==-1 && speed.x>=0) { gear=0; setspeed(); r++; }
+		if(bc==1  && speed.x<=0) { gear=0; setspeed(); r++; }
+		if(bc==-2 && speed.y<=0) { gear=0; setspeed(); r++; }
+		if(bc==2  && speed.y>=0) { gear=0; setspeed(); r++; }
 	}
+	//*
 
 	//terrain collision check: (check if player collides with terrain block)
-	xlong tc = clgame->impact(screenpos,boundingbox[0],clzbuffer);
+	xlong tc = 0; //clgame->impact(tposition,lposition,boundingbox[0],clzbuffer);
 
 // 	CLprint_(tc);
 // 	CLprint_(speeddir);
@@ -169,10 +176,10 @@ void CLplayer::collision(xchar*** levellayers)
 	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
 	{
-		if(tc==1 && speeddir.x>0) { gear=0; setspeed(); }
-		if(tc==2 && speeddir.x<0) { gear=0; setspeed(); }
-		if(tc==4 && speeddir.y<0) { gear=0; setspeed(); }
-		if(tc==8 && speeddir.y>0) { gear=0; setspeed(); }
+		if(tc==1) { gear=0; setspeed(); r++; }
+		if(tc==2) { gear=0; setspeed(); r++; }
+		if(tc==4) { gear=0; setspeed(); r++; }
+		if(tc==8) { gear=0; setspeed(); r++; }
 	}
 
 	//environment check: (check if player can drive up- or downhill)
@@ -180,7 +187,7 @@ void CLplayer::collision(xchar*** levellayers)
 
 	//enemy collision check: (check if player collides with enemy entity)
 
-
+	return r;
 }
 
 CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p)
@@ -201,6 +208,11 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	position.x = sx;
 	position.y = sy;
 	position.z = sz;
+
+	lposition.x = sx;
+	lposition.y = sy;
+	lposition.z = sz;	
+
 	points = p;
 
 	//create attribute objects:
@@ -336,43 +348,53 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 		break;
 	}
 
-	screenpos.x = xlong(position.x);
-	screenpos.y = xlong(position.y - mark);
-	screenpos.z = xlong(position.z);
-
-	//processing new data:
-	collision(levellayers);
-
+	//
 	float temp = CLgetmilliseconds_();
 	if(temp >= lastupdate + 20)
 	{
-		position.x -= speed.x;
-		position.y += speed.y;
-		position.z += speed.z;
+		tposition.x = position.x - speed.x;
+		tposition.y = position.y + speed.y - mark;
+		tposition.z = position.z + speed.z;
 		lastupdate = temp;
+
+		if(collision(mark)==0)
+		{
+			lposition.x = sposition.x;
+			lposition.y = sposition.y;
+			lposition.z = sposition.z;
+
+			position.x = tposition.x;
+			position.y = tposition.y + mark;
+			position.z = tposition.z;
+		
+			sposition.x = xlong(tposition.x);
+			sposition.y = xlong(tposition.y);
+			sposition.z = xlong(tposition.z);
+		}
 	}
+	//*
 }
 
 void CLplayer::display()
 {
-	model[0]->setposition(screenpos.x,screenpos.y,100);
+	model[0]->setposition(sposition.x,sposition.y,100);
 	model[0]->display(0,1,1,0,0,0);
 
 	//temp!
 	clgfx1->drawpolygon(
-screenpos.x+boundingbox[0]->b1.x,
-screenpos.y-boundingbox[0]->b1.y,
-screenpos.x+boundingbox[0]->b2.x,
-screenpos.y-boundingbox[0]->b2.y,
-screenpos.x+boundingbox[0]->b3.x,
-screenpos.y-boundingbox[0]->b3.y,
-screenpos.x+boundingbox[0]->b4.x,
-screenpos.y-boundingbox[0]->b4.y,
+sposition.x+boundingbox[0]->b1.x,
+sposition.y-boundingbox[0]->b1.y,
+sposition.x+boundingbox[0]->b2.x,
+sposition.y-boundingbox[0]->b2.y,
+sposition.x+boundingbox[0]->b3.x,
+sposition.y-boundingbox[0]->b3.y,
+sposition.x+boundingbox[0]->b4.x,
+sposition.y-boundingbox[0]->b4.y,
 0x00FFFFFF);
 
 	clgfx1->drawrectangle(65,0,735,599,0x00FF00FF);
 
-	clgfx1->drawpixel(screenpos.x+boundingbox[0]->b1.x,screenpos.y-boundingbox[0]->b1.y,0x00FF00FF);
+	clgfx1->drawpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*
 }
 
