@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMATH
 #define HH_CLMATH
-#warning "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include <math.h>
 
@@ -34,12 +34,6 @@ class CLmath : public virtual CLcl
 		template<typename T> T intsqrt(T x);
 		float sinbyarray(xlong x);
 		float cosbyarray(xlong x);
-		float vectorlength(fvector v);
-		xlong vectorlength(vector v);
-		float dotproduct(fvector a,fvector b);
-		xlong dotproduct(vector a,vector b);
-		fvector crossproduct(fvector a,fvector b);
-		vector crossproduct(vector a,vector b);
 
 		float pi();
 		float deg2rad(xlong d);
@@ -157,48 +151,6 @@ template<typename T> T CLmath::intsqrt(T x)
 	}
 
 	return tmp;
-}
-
-float CLmath::vectorlength(fvector v)
-{
-	float t = ((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
-	float u = sqrt(t);
-	return u;
-}
-
-xlong CLmath::vectorlength(vector v)
-{
-	xlong t = ((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
-	xlong u = intsqrt(t);
-	return u;
-}
-
-float CLmath::dotproduct(fvector a,fvector b)
-{
-	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
-}
-
-xlong CLmath::dotproduct(vector a,vector b)
-{
-	return ((a.x * b.x) + (a.y * b.y) + (a.z * b.z));
-}
-
-fvector CLmath::crossproduct(fvector a,fvector b)
-{
-	fvector f;
-	f.x = ( (a.y * b.z) - (a.z * b.y) );
-	f.y = ( (a.z * b.x) - (a.x * b.z) );
-	f.z = ( (a.x * b.y) - (a.y * b.x) );
-	f.l = vectorlength(f);
-}
-
-vector CLmath::crossproduct(vector a,vector b)
-{
-	vector f;
-	f.x = ( (a.y * b.z) - (a.z * b.y) );
-	f.y = ( (a.z * b.x) - (a.x * b.z) );
-	f.z = ( (a.x * b.y) - (a.y * b.x) );
-	f.l = vectorlength(f);
 }
 
 float CLmath::pi()

@@ -7,7 +7,7 @@
 #include <inttypes.h>
 
 
-//todo: autoset variable size by machine architectures compiled on
+//32bit types
 typedef char		 xchar;
 typedef uint8_t		uxchar;
 typedef int16_t		 xshort;
@@ -17,14 +17,5 @@ typedef uint32_t	uxlong;
 typedef int64_t		 xhyper;
 typedef uint64_t	uxhyper;
 //***
-
-//32bit types
-typedef unsigned long  ulong;
-typedef signed   long  slong;
-typedef unsigned short ushort;
-typedef signed   short sshort;
-typedef unsigned char  uchar;
-typedef signed   char  schar;
-//
 
 #endif

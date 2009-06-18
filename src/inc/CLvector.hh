@@ -2,243 +2,166 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLVECTOR
 #define HH_CLVECTOR
-#warning "Compiling " __FILE__ " ! TODO: overload operators, template vector"
+#pragma message "Compiling " __FILE__  "! TODO: "
 
+#include  <iostream>
 #include "CLtypes.hh"
 
 
-struct vector
+//CLvector definition:
+template<typename T>
+struct CLvector
 {
-	xlong x;
-	xlong y;
-	xlong z;
-	xlong l;
+	T x;
+	T y;
+	T z;
 
-	//vector operator=(vector &a);
-	//vector();
-	//vector(xlong x,xlong y,xlong z);
-	//vector(xlong x,xlong y,xlong z,xlong l);
-	//~vector();
-	xlong length();
-	void unit();
-	vector& operator+=(vector &a);
-	vector& operator-=(vector &a);
-	vector& operator+(vector &a);
-	vector& operator-(vector &a);
-	xlong operator*(vector &a);	//dot-product
-	vector& operator*=(xlong &s);	//scalar multiplication
-	xlong operator^(vector &a);	//cross-product
-};
+	CLvector() { x=y=z=0; }
+	CLvector(T tx,T ty,T tz) { x=tx; y=ty; z=tz; }
+	~CLvector() { }
 
-struct fvector
-{
-	float x;
-	float y;
-	float z;
-	float l;
-
-	//fvector operator=(fvector &a);
-	//fvector();
-	//fvector(float x,float y,float z);
-	//fvector(float x,float y,float z,float l);
-	//fvector(xlong x,xlong y,xlong z);
-	//fvector(xlong x,xlong y,xlong z,xlong l);
-	//~vector();
-	xlong length();
-	void unit();
-	fvector& operator+=(fvector &a);
-	fvector& operator-=(fvector &a);
-	fvector& operator+(fvector &a);
-	fvector& operator-(fvector &a);
-	float operator*(fvector &a);	//dot-product
-	fvector& operator*=(float &s);	//scalar multiplication
-	float operator^(fvector &a);	//cross-product
-};
-
-//vector:
-
-// vector vector::operator=(vector &a)
-// {
-// 	x = a.x;
-// 	y = a.y;
-// 	z = a.z;
-// 	l = a.l;
-// }
-// 
-// vector::vector()
-// {
-// 
-// }
-// 
-// vector::vector(xlong vx,xlong vy,xlong vz)
-// {
-// 	x = vx;
-// 	y = vy;
-// 	z = vz;
-// 	//calc vector length l;
-// }
-// 
-// vector::vector(xlong vx,xlong vy,xlong vz,xlong vl)
-// {
-// 	x = vx;
-// 	y = vy;
-// 	z = vz;
-// 	l = vl;
-// }
-// 
-// vector::~vector() { }
-
-xlong vector::length()
-{
+	CLvector operator+(CLvector& a);		//vector addition
+	CLvector operator-(CLvector& a);		//vector subtraction
+	       T operator*(CLvector& a);		//dot product
+	CLvector operator*(T c);			//scalar multiplication
+	CLvector operator^(CLvector& a);		//cross product
+	       T operator!();				//vector length
 	
-}
+	CLvector& operator+=(CLvector& a);		//vector addition
+	CLvector& operator-=(CLvector& a);		//vector subtraction
+	CLvector& operator*=(T c);			//scalar multiplication
+	CLvector& operator^=(CLvector& a);		//cross product
 
-void vector::unit()
+	CLvector& operator=(CLvector& a);		//vector assignment
+	CLvector& operator=(CLvector a);		//vector assignment
+
+	void print();					//console output	
+};
+//*
+
+//CLvector implementation:
+
+//vector addition:
+template<typename T>
+CLvector<T> CLvector<T>::operator+(CLvector<T>& a)
 {
-
+	return CLvector( this->x + a.x,this->y + a.y,this->z + a.z );
 }
+//*
 
-vector& vector::operator+=(vector &a)
+//vector subtraction:
+template<typename T>
+CLvector<T> CLvector<T>::operator-(CLvector<T>& a)
 {
-	x += a.x;
-	y += a.y;
-	z += a.z;
+	return CLvector( this->x - a.x,this->y - a.y,this->z - a.z );
+}
+//*
+
+//dot product:
+template<typename T>
+T CLvector<T>::operator*(CLvector<T>& a)
+{
+	return ( (this->x * a.x) + (this->y * a.y) + (this->z * a.z) );
+}
+//*
+
+//scalar multiplication:
+template<typename T>
+CLvector<T> CLvector<T>::operator*(T c)
+{
+	return ( (this->x * c) + (this->y * c) + (this->z * c) );
+}
+//*
+
+//cross product:
+template<typename T>
+CLvector<T> CLvector<T>::operator^(CLvector<T>& a)
+{
+	return CLvector( ( (this->y * a.z) - (this->z * a.y) ),( (this->z * a.x) - (this->x * a.z) ),( (this->x * a.y) - (this->y * a.x) ) );
+}
+//*
+
+//vector length:
+template<typename T>
+T CLvector<T>::operator!()
+{
+	return ( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ); //! add square root
+}
+//*
+
+//vector addition:
+template<typename T>
+CLvector<T>& CLvector<T>::operator+=(CLvector<T>& a)
+{
+	this->x += a.x;
+	this->y += a.y;
+	this->z += a.z;
 	return *this;
 }
+//*
 
-vector& vector::operator-=(vector &a)
+//vector subtraction:
+template<typename T>
+CLvector<T>& CLvector<T>::operator-=(CLvector<T>& a)
 {
-	x -= a.x;
-	y -= a.y;
-	z -= a.z;
+	this->x -= a.x;
+	this->y -= a.y;
+	this->z -= a.z;
 	return *this;
 }
+//*
 
-vector& vector::operator+(vector &a)
+//scalar multiplication:
+template<typename T>
+CLvector<T>& CLvector<T>::operator*=(T c)
 {
-	x += a.x;
-	y += a.y;
-	z += a.z;
+	this->x *= c;
+	this->y *= c;
+	this->z *= c;
 	return *this;
 }
+//*
 
-vector& vector::operator-(vector &a)
+//cross product:
+template<typename T>
+CLvector<T>& CLvector<T>::operator^=(CLvector<T>& a)
 {
-	x -= a.x;
-	y -= a.y;
-	z -= a.z;
+	this->x = ( (this->y * a.z) - (this->z * a.y) );
+	this->y = ( (this->z * a.x) - (this->x * a.z) );
+	this->z = ( (this->x * a.y) - (this->y * a.x) );
 	return *this;
 }
+//*
 
-xlong vector::operator*(vector &a)
+//vector assignment:
+template<typename T>
+CLvector<T>& CLvector<T>::operator=(CLvector<T>& a)
 {
-	return ( (x*a.x) + (y*a.y) + (z*a.z) );
+	this->x = a.x;
+	this->y = a.y;
+	this->z = a.z;
+}
+//*
+
+//vector assignment:
+template<typename T>
+CLvector<T>& CLvector<T>::operator=(CLvector<T> a)
+{
+	this->x = a.x;
+	this->y = a.y;
+	this->z = a.z;
+}
+//*
+
+//console output
+template<typename T>
+void CLvector<T>::print()
+{
+	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl; 
 }
 
-vector& vector::operator*=(xlong &s)
-{
-	x *= s;
-	y *= s;
-	z *= s;
-	return *this;
-}
+//*
 
-xlong vector::operator^(vector &a)
-{
-
-}
-
-//fvector:
-
-// fvector fvector::operator=(fvector &a)
-// {
-// 	x = a.x;
-// 	y = a.y;
-// 	z = a.z;
-// 	l = a.l;
-// }
-// 
-// fvector::fvector()
-// {
-// 
-// }
-// 
-// fvector::fvector(float vx,float vy,float vz)
-// {
-// 	x = vx;
-// 	y = vy;
-// 	z = vz;
-// 	//calc vector length l
-// }
-// 
-// fvector::fvector(float vx,float vy,float vz,float vl)
-// {
-// 	x = vx;
-// 	y = vy;
-// 	z = vz;
-// 	l = vl;
-// }
-// 
-// fvector::~fvector() { }
-
-xlong fvector::length()
-{
-	
-}
-
-void fvector::unit()
-{
-
-}
-
-fvector& fvector::operator+=(fvector &a)
-{
-	x += a.x;
-	y += a.y;
-	z += a.z;
-	return *this;
-}
-
-fvector& fvector::operator-=(fvector &a)
-{
-	x -= a.x;
-	y -= a.y;
-	z -= a.z;
-	return *this;
-}
-
-fvector& fvector::operator+(fvector &a)
-{
-	x += a.x;
-	y += a.y;
-	z += a.z;
-	return *this;
-}
-
-fvector& fvector::operator-(fvector &a)
-{
-	x -= a.x;
-	y -= a.y;
-	z -= a.z;
-	return *this;
-}
-
-float fvector::operator*(fvector &a)
-{
-	return ( (x*a.x) + (y*a.y) + (z*a.z) );
-}
-
-fvector& fvector::operator*=(float &s)
-{
-	x *= s;
-	y *= s;
-	z *= s;
-	return *this;
-}
-
-float fvector::operator^(fvector &a)
-{
-
-}
 
 #endif
+

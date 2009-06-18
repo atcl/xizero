@@ -27,12 +27,6 @@ xchar** CLgetcsvfile_(const char* fn);
 void    CLdebug_(const xchar* c,xlong v);
 void    CLprint_(const xchar* c);
 void    CLprint_(const xlong l);
-void    CLprint_(const vertex v);
-void    CLprint_(const fvertex v);
-void    CLprint_(const vector v);
-void    CLprint_(const fvector v);
-void    CLprint_(const CLpoint p);
-void    CLprint_(CLmatrix m);
 void    CLttyout_(const xchar* c);
 void    CLttyout_(const xlong l);
 void    CLwaitforkey_();
@@ -176,40 +170,6 @@ void CLprint_(const xchar* c)
 void CLprint_(const xlong l)
 {
 	std::cout << l << std::endl;
-}
-
-void CLprint_(const vertex v)
-{
-	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
-}
-
-void CLprint_(const fvertex v)
-{
-	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
-}
-
-void CLprint_(const vector v)
-{
-	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
-}
-
-void CLprint_(const fvector v)
-{
-	std::cout << "( " << v.x << "," << v.y << "," << v.z << " )" << std::endl;
-}
-
-void CLprint_(const CLpoint p)
-{
-	std::cout << "( " << p.x << "," << p.y << " )" << std::endl;
-}
-
-void CLprint_(CLmatrix m)
-{
-	std::cout << std::setw(7) << m.getentry(0,0) <<" "<< std::setw(7) << m.getentry(0,1) <<" "<< std::setw(7) << m.getentry(0,2) <<" "<< std::setw(7) << m.getentry(0,3) << std::endl;
-	std::cout << std::setw(7) << m.getentry(1,0) <<" "<< std::setw(7) << m.getentry(1,1) <<" "<< std::setw(7) << m.getentry(1,2) <<" "<< std::setw(7) << m.getentry(1,3) << std::endl;
-	std::cout << std::setw(7) << m.getentry(2,0) <<" "<< std::setw(7) << m.getentry(2,1) <<" "<< std::setw(7) << m.getentry(2,2) <<" "<< std::setw(7) << m.getentry(2,3) << std::endl;
-	std::cout << std::setw(7) << m.getentry(3,0) <<" "<< std::setw(7) << m.getentry(3,1) <<" "<< std::setw(7) << m.getentry(3,2) <<" "<< std::setw(7) << m.getentry(3,3) << std::endl;
-	std::cout << std::endl;
 }
 
 void CLttyout_(const xchar* c)

@@ -2,41 +2,27 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLSTRUCT
 #define HH_CLSTRUCT
-#warning "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
 
-
-struct vertex
-{
-	xlong x;
-	xlong y;
-	xlong z;
-};
-
-struct fvertex
-{
-	float x;
-	float y;
-	float z;
-};
-
-struct CLbox
-{
-	fvertex t1;
-	fvertex t2;
-	fvertex t3;
-	fvertex t4;
-	fvertex b1;
-	fvertex b2;
-	fvertex b3;
-	fvertex b4;
-};
 
 struct CLpoint
 {
 	xlong x;
 	xlong y;
+};
+
+struct CLbox
+{
+	CLvector<float> t1;
+	CLvector<float> t2;
+	CLvector<float> t3;
+	CLvector<float> t4;
+	CLvector<float> b1;
+	CLvector<float> b2;
+	CLvector<float> b3;
+	CLvector<float> b4;
 };
 
 union doubleword

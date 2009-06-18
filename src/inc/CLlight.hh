@@ -18,18 +18,18 @@ class CLlight : public virtual CLcl
 		CLmatrix*   lm;
 
 	private:
-		fvector     light;
+		CLvector<float> light;
+		float       intensity;
 		uxlong      color;
 		xlong       type;
 		
 	public:
-		CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm);
+		template<class clvector>CLlight(clvector l,float li,uxlong c,CLmath* clm);
 		~CLlight();
 
-		fvector getlight();
+		template<class clvector>clvector getlight();
 		uxlong getcolor();
 		void addintensity(float p);
-		void subintensity(float m);
 		void mulintensity(float f);
 		void setintensity(float i);
 		void rotatelight(xlong x,xlong y,xlong z);
@@ -40,12 +40,10 @@ class CLlight : public virtual CLcl
 		void draw();
 };
 
-CLlight::CLlight(float lx,float ly,float lz,float li,uxlong c,CLmath* clm)
+template<class clvector>CLlight::CLlight(clvector l,float li,uxlong c,CLmath* clm)
 {
-	light.x = lx;
-	light.y = ly;
-	light.z = lz;
-	light.l = li;
+	light = l;
+	intensity = li;
 	color   = c;
 	clmath  = clm;
 	lm = new CLmatrix(1,clmath);
@@ -56,7 +54,7 @@ CLlight::~CLlight()
 	delete lm;
 }
 
-fvector CLlight::getlight()
+template<class clvector>clvector CLlight::getlight()
 {
 	return light;
 }
@@ -68,22 +66,17 @@ uxlong CLlight::getcolor()
 
 void CLlight::addintensity(float p)
 {
-	light.l += p;
-}
-
-void CLlight::subintensity(float m)
-{
-	light.l -= m;
+	intensity += p;
 }
 
 void CLlight::mulintensity(float f)
 {
-	light.l *= f;
+	intensity *= f;
 }
 
 void CLlight::setintensity(float i)
 {
-	light.l = i;
+// 	intensity = i;
 }
 
 void CLlight::rotatelight(xlong x, xlong y, xlong z)

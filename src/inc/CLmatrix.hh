@@ -2,8 +2,9 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMATRIX
 #define HH_CLMATRIX
-#warning "Compiling " __FILE__ " ! TODO: std free"
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
+#include <iostream>
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLconsts.hh"
@@ -29,21 +30,18 @@ class CLmatrix : public virtual CLcl
 		void translate(xlong x,xlong y,xlong z);
 		void scale(float x,float y,float z);
 		void aspectscale(float x);
-		vertex transform(vertex t);
-		fvertex transform(fvertex t);
-		vector transform(vector t);
-		fvector transform(fvector t);
+		template<class clvector>clvector transform(const clvector& t);
 		void clear(xlong i);
 		void zero();
 		void unit();
 		void transpone();
-		void dyadic(vertex a,vertex b);
-		void shadow(fvector l,fvector p);
+		template<class clvector>void dyadic(const clvector& a,const clvector& b);
+		template<class clvector>void shadow(const clvector& l,const clvector& p);
 		void project();
 		float trace();
 		float determinate();
-		void invert();
-		float getentry(xlong r,xlong c);
+
+		void print();
 };
 
 
@@ -125,112 +123,32 @@ void CLmatrix::aspectscale(float x)
 	multiplicate(x,0,0,0,0,x,0,0,0,0,x,0,0,0,0,1);
 }
 
-vertex CLmatrix::transform(vertex t)
+template<class clvector>
+clvector CLmatrix::transform(const clvector& t)
 {
-	vertex r;
+	clvector r;
 
 	r.x = xlong(m[0][0] * float(t.x) + m[0][1] * float(t.y) + m[0][2] * float(t.z) + m[0][3]);
 	r.y = xlong(m[1][0] * float(t.x) + m[1][1] * float(t.y) + m[1][2] * float(t.z) + m[1][3]);
 	r.z = xlong(m[2][0] * float(t.x) + m[2][1] * float(t.y) + m[2][2] * float(t.z) + m[2][3]);
-
-	return r;
-}
-
-fvertex CLmatrix::transform(fvertex t)
-{
-	fvertex r;
-
-	r.x = (m[0][0] * t.x + m[0][1] * t.y + m[0][2] * t.z + m[0][3]);
-	r.y = (m[1][0] * t.x + m[1][1] * t.y + m[1][2] * t.z + m[1][3]);
-	r.z = (m[2][0] * t.x + m[2][1] * t.y + m[2][2] * t.z + m[2][3]);
-
-	return r;
-}
-
-vector CLmatrix::transform(vector t)
-{
-	vector r;
-
-	r.x = xlong(m[0][0] * float(t.x) + m[0][1] * float(t.y) + m[0][2] * float(t.z) + m[0][3]);
-	r.y = xlong(m[1][0] * float(t.x) + m[1][1] * float(t.y) + m[1][2] * float(t.z) + m[1][3]);
-	r.z = xlong(m[2][0] * float(t.x) + m[2][1] * float(t.y) + m[2][2] * float(t.z) + m[2][3]);
-
-	r.l = clmath->vectorlength(r);
-
-	return r;
-}
-
-fvector CLmatrix::transform(fvector t)
-{
-	fvector r;
-
-	r.x = (m[0][0] * t.x + m[0][1] * t.y + m[0][2] * t.z + m[0][3]);
-	r.y = (m[1][0] * t.x + m[1][1] * t.y + m[1][2] * t.z + m[1][3]);
-	r.z = (m[2][0] * t.x + m[2][1] * t.y + m[2][2] * t.z + m[2][3]);
-
-	r.l = clmath->vectorlength(r);
 
 	return r;
 }
 
 void CLmatrix::clear(xlong i)
 {
-	m[0][0] = i;
-	m[0][1] = i;
-	m[0][2] = i;
-	m[0][3] = i;
-	m[1][0] = i;
-	m[1][1] = i;
-	m[1][2] = i;
-	m[1][3] = i;
-	m[2][0] = i;
-	m[2][1] = i;
-	m[2][2] = i;
-	m[2][3] = i;
-	m[3][0] = i;
-	m[3][1] = i;
-	m[3][2] = i;
-	m[3][3] = i;
+	m[0][0]=m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][1]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][2]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=m[3][3]=i;
 }
 
 void CLmatrix::zero()
 {
-	m[0][0] = 0;
-	m[0][1] = 0;
-	m[0][2] = 0;
-	m[0][3] = 0;
-	m[1][0] = 0;
-	m[1][1] = 0;
-	m[1][2] = 0;
-	m[1][3] = 0;
-	m[2][0] = 0;
-	m[2][1] = 0;
-	m[2][2] = 0;
-	m[2][3] = 0;
-	m[3][0] = 0;
-	m[3][1] = 0;
-	m[3][2] = 0;
-	m[3][3] = 0;
+	m[0][0]=m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][1]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][2]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=m[3][3]=0;
 }
 
 void CLmatrix::unit()
 {
-	m[0][0] = 1;
-	m[0][1] = 0;
-	m[0][2] = 0;
-	m[0][3] = 0;
-	m[1][0] = 0;
-	m[1][1] = 1;
-	m[1][2] = 0;
-	m[1][3] = 0;
-	m[2][0] = 0;
-	m[2][1] = 0;
-	m[2][2] = 1;
-	m[2][3] = 0;
-	m[3][0] = 0;
-	m[3][1] = 0;
-	m[3][2] = 0;
-	m[3][3] = 1;
+	m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=0;
+	m[0][0]=m[1][1]=m[2][2]=m[3][3]=1;
 }
 
 void CLmatrix::transpone()
@@ -246,10 +164,10 @@ void CLmatrix::transpone()
 	temp = m[2][3]; m[2][3] = m[3][2]; m[3][2] = temp;
 }
 
-void CLmatrix::shadow(fvector l,fvector p)
+template<class clvector>
+void CLmatrix::shadow(const clvector& l,const clvector& p)
 {
-	//float ldotp = clmath->dotproduct(l,p);
-	float ldotp = (l.x*p.x) + (l.y*p.y) + (l.z*p.z);
+	float ldotp = l*p;
 
 	m[0][0] = (ldotp - (l.x * p.x));
 	m[0][1] = -(l.x * p.y);
@@ -292,7 +210,8 @@ void CLmatrix::project()
 	m[3][3] = 0;
 }
 
-void CLmatrix::dyadic(vertex a,vertex b)
+template<class clvector>
+void CLmatrix::dyadic(const clvector& a,const clvector& b)
 {
 	m[0][0] = float(a.x * b.x);
 	m[0][1] = float(a.x * b.y);
@@ -317,9 +236,14 @@ float CLmatrix::trace()
 	return (m[1][1] + m[2][2] + m[3][3] + m[4][4]);
 }
 
-float CLmatrix::getentry(xlong r,xlong c)
+void CLmatrix::print()
 {
-	return m[r][c];
+	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << std::endl;
+	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << std::endl;
+	std::cout << std::setw(7) << m[2][0] <<" "<< std::setw(7) << m[2][1] <<" "<< std::setw(7) << m[2][2] <<" "<< std::setw(7) << m[2][3] << std::endl;
+	std::cout << std::setw(7) << m[3][0] <<" "<< std::setw(7) << m[3][1] <<" "<< std::setw(7) << m[3][2] <<" "<< std::setw(7) << m[3][3] << std::endl;
+	std::cout << std::endl;
 }
 
 #endif
+
