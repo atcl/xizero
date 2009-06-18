@@ -17,49 +17,34 @@
 #define segmtype 3;
 
 
-class CLgfx2 : public virtual CLcl
+namespace CLgfx2
 {
-	protected:
-		CLbuffer<xlong>* doublebuffer;
 
-	private:
-		sprites* tele;
-		sprites* mono;
-		sprites* line;
-		sprites* segm;
+sprites* tele;
+sprites* mono;
+sprites* line;
+sprites* segm;
 
-	public:
-		CLgfx2(CLbuffer<xlong>* db);
-		~CLgfx2();
-		void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
-		void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
-		void drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c);
-		void drawfontchar(xlong p,xchar a,xlong f,uxlong c);
-		void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c);
-		void drawfontstring(xlong p,xchar* a,xlong f,uxlong c);
-		void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,xlong f,uxlong c);
-		void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,xlong f,uxlong c);
-		xlong locatemaxx();
-		xlong locatemaxy();
-		xlong locate(xlong x,xlong y);
-		uxlong getQBcolor(xchar c); //get 16 EGA colors
-		bool comparecolors(uxlong c1,uxlong c2);
-		uxlong blendcolors();
-		uxlong blendcolorsalpha();
-		uxlong blendcolorsadd();
-		uxlong blendcolorsmul();
+//prototypes:
+void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
+void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
+void drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c);
+void drawfontchar(xlong p,xchar a,xlong f,uxlong c);
+void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c);
+void drawfontstring(xlong p,xchar* a,xlong f,uxlong c);
+void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,xlong f,uxlong c);
+void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,xlong f,uxlong c);
+xlong locatemaxx();
+xlong locatemaxy();
+xlong locate(xlong x,xlong y);
+uxlong getQBcolor(xchar c); //get 16 EGA colors
+bool comparecolors(uxlong c1,uxlong c2);
+uxlong blendcolors();
+void savescreenshot(const xchar*);
+//*
 
-		void savescreenshot(const xchar*);
-};
-
-CLgfx2::CLgfx2(CLbuffer<xlong>* db)
-{
-	doublebuffer = db;
-}
-
-CLgfx2::~CLgfx2() { }
-
-void CLgfx2::drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
+//implementation:
+void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
 {
 	xlong offset1 = (y1*xres)+x1;
 	xlong offset2 = offset1;
@@ -67,26 +52,26 @@ void CLgfx2::drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxl
 
 	for(int i=y1; i<=y2; i++)
 	{
-		(*doublebuffer)[offset1] = c2;
+		(*CLdoublebuffer)[offset1] = c2;
 		offset1++;
 		for(int j=x1+1; j<x2; j++)
 		{
-			(*doublebuffer)[offset1] = c1;
+			(*CLdoublebuffer)[offset1] = c1;
 			offset1++;
 		}
-		(*doublebuffer)[offset1] = c2;
+		(*CLdoublebuffer)[offset1] = c2;
 		offset1 += xres;
 	}
 
 	for(int k=x1; k<x2; k++)
 	{
-		(*doublebuffer)[offset2] = c2;
-		(*doublebuffer)[offset2+doffset] = c2;
+		(*CLdoublebuffer)[offset2] = c2;
+		(*CLdoublebuffer)[offset2+doffset] = c2;
 		offset2++;
 	}
 }
 
-void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
+void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
 {
 
 	xlong offset1 = (y1*xres)+x1;
@@ -95,61 +80,61 @@ void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxl
 
 	for(int i=y1; i<=y2; i++)
 	{
-		(*doublebuffer)[offset1] = 0x00FFFFFF;
+		(*CLdoublebuffer)[offset1] = 0x00FFFFFF;
 		offset1++;
 		for(int j=x1+1; j<x2; j++)
 		{
-			(*doublebuffer)[offset1] = c1;
+			(*CLdoublebuffer)[offset1] = c1;
 			offset1++;
 		}
-		(*doublebuffer)[offset1] = 0x00000000;
+		(*CLdoublebuffer)[offset1] = 0x00000000;
 		offset1 += xres;
 	}
 
 	for(int k=x1; k<x2; k++)
 	{
-		(*doublebuffer)[offset2] = 0x00FFFFFF;
-		(*doublebuffer)[offset2+doffset] = 0x000000;
+		(*CLdoublebuffer)[offset2] = 0x00FFFFFF;
+		(*CLdoublebuffer)[offset2+doffset] = 0x000000;
 		offset2++;
 	}
 }
 
-void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c)
+void drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontchar(xlong p,xchar a,xlong f,uxlong c)
+void drawfontchar(xlong p,xchar a,xlong f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c)
+void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c)
 {
 
 }
 
-void CLgfx2::drawfontstring(xlong p,xchar* a,xlong f,uxlong c)
+void drawfontstring(xlong p,xchar* a,xlong f,uxlong c)
 {
 
 }
 
-xlong CLgfx2::locatemaxx()
+xlong locatemaxx()
 {
 
 }
 
-xlong CLgfx2::locatemaxy()
+xlong locatemaxy()
 {
 
 }
 
-xlong CLgfx2::locate(xlong x,xlong y)
+xlong locate(xlong x,xlong y)
 {
 
 }
 
-uxlong CLgfx2::getQBcolor(xchar c)
+uxlong getQBcolor(xchar c)
 {
 	switch(c)
 	{
@@ -206,35 +191,24 @@ uxlong CLgfx2::getQBcolor(xchar c)
 	}
 }
 
-bool CLgfx2::comparecolors(uxlong c1,uxlong c2)
+bool comparecolors(uxlong c1,uxlong c2)
 {
 
 }
 
-uxlong CLgfx2::blendcolors()
+uxlong blendcolors()
+{
+	//add,mul,alpha,and,or,nand,nor,not,xor
+}
+
+void savescreenshot(const xchar*)
 {
 
 }
 
-uxlong CLgfx2::blendcolorsalpha()
-{
+//*
 
-}
-
-uxlong CLgfx2::blendcolorsadd()
-{
-
-}
-
-uxlong CLgfx2::blendcolorsmul()
-{
-
-}
-
-void CLgfx2::savescreenshot(const xchar*)
-{
-
-}
+} //end of namespace
 
 #endif
 

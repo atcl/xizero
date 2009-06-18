@@ -2,8 +2,13 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLGLOBAL
 #define HH_CLGLOBAL
-#warning "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
+#include "CLtypes.hh"
+#include "CLbuffer.hh"
+#include "CLlight.hh"
+#include "CLmatrix.hh"
+#include "CLfps.hh"
 
 //variables
 uxlong CLscreenwidth = xres;
@@ -12,19 +17,14 @@ uxlong CLscreendepth = 4;
 uxlong CLscreenpixsize = xres * yres;
 uxlong CLscreenmemsize = xres * yres * 4;
 
-CLbuffer<xlong>* CLdoublebuffer;
-CLbuffer<xlong>* CLstencilbuffer;
-CLbuffer<float>* CLzbuffer;
+CLlbuffer* CLdoublebuffer;
+CLlbuffer* CLstencilbuffer;
+CLfbuffer* CLzbuffer;
 
 CLlight*   amb;
 CLmatrix*  ltm;
 CLmatrix*  bsm;
 
-//static classes
 CLfps*    clfps;
-CLformat* clformat;
-CLmath*   clmath;
-CLgfx1*   clgfx1;
-CLgfx2*   clgfx2;
 
 #endif

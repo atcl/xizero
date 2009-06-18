@@ -96,7 +96,7 @@ typedef CLfile armember;
 struct arfile
 {
 	xlong      filecount;
-	armember** members;
+	armember**  members;
 };
 
 struct xmlelement

@@ -2,16 +2,14 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-#warning "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
+#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
 
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLconsts.hh"
 #include "CLstruct.hh"
+#include "CLcl.hh"
 #include "CLapi.hh"
 #include "CLgame.hh"
-
-#include "CLglobal.hh" //temp!
-#include "CLgfx1.hh" //temp!
 
 
 class CLplayer : public virtual CLcl
@@ -20,11 +18,7 @@ class CLplayer : public virtual CLcl
 		CLobject* model[2]; //0 is chassis,1 is tower
 		CLmatrix* cllinear;
 		CLlist*   ammolist;
-		CLmath*   clmath;
 		CLgame*   clgame;
-		CLbuffer<float>* clzbuffer;
-
-		CLgfx1*   clgfx1; //temp!
 
 	private:
 		CLbox* boundingbox[2];
@@ -33,21 +27,21 @@ class CLplayer : public virtual CLcl
 		xlong firerate[4];
 		xlong ammoloadrate[4];
 
-		vector ammodirection[4];
+		CLfvector ammodirection[4];
 		
 		xlong health;
 		xlong shield;
 		xlong shieldrate;
 		xlong armor;
 
-		fvector position;
-		fvector tposition;
-		fvector lposition;
-		vector  sposition;
-		fvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
-		vector  speed;
-		fvector speeddir;
-		fvector tilt; //meaning mainly z-tilt (ie on ramps)
+		CLfvector position;
+		CLfvector tposition;
+		CLfvector lposition;
+		CLlvector sposition;
+		CLfvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
+		CLfvector speed;
+		CLfvector speeddir;
+		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
 
 
 		xlong gear;
@@ -62,7 +56,7 @@ class CLplayer : public virtual CLcl
 		void transform(bool m);
 		xlong collision(xlong mark);
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p=0);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p=0);
 		~CLplayer();
 
 		void update(xchar input,char turbo,xchar*** levellayers,xlong mark);
@@ -81,22 +75,16 @@ void CLplayer::setspeed()
 	switch(gear)
 	{
 		case 0:
-			speed.x = 0;
-			speed.y = 0;
-			speed.z = 0;
-		break;
+			speed = 0;
+			break;
 
 		case 1:
-			speed.x = speeddir.x;
-			speed.y = speeddir.y;
-			speed.z = speeddir.z;
-		break;
+			speed = speeddir;
+			break;
 
 		case -1:
-			speed.x = -speeddir.x;
-			speed.y = -speeddir.y;
-			speed.z = -speeddir.z;
-		break;
+			speed = -speeddir;
+			break;
 	}
 }
 
@@ -190,28 +178,19 @@ xlong CLplayer::collision(xlong mark)
 	return r;
 }
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlong sz,CLmath* clm,CLgame* clg,CLbuffer<float>* clz,xlong p)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p)
 {
-	clgfx1 = new CLgfx1(CLdoublebuffer); //temp!
-
 	//set parameters to attributes:
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
 	boundingbox[0] = model[0]->getboundingbox();
 	//boundingbox[1] = model[1]->getboundingbox(); //temp reactivate as soon as 2nd model avail
 
-	clmath = clm;
 	clgame = clg;
-	clzbuffer = clz;
-	cllinear = new CLmatrix(1,clm);
+	cllinear = new CLmatrix(1);
 
-	position.x = sx;
-	position.y = sy;
-	position.z = sz;
-
-	lposition.x = sx;
-	lposition.y = sy;
-	lposition.z = sz;	
+	position = s;
+	lposition = s;	
 
 	points = p;
 
@@ -251,9 +230,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,xlong sx,xlong sy,xlo
 	ammoloadrate[3] = dat[1][23];
 
 	//set other attributes to init:
-	speed.x = 0;
-	speed.y = 0;
-	speed.z = 0;
+	speed = 0;
 
 	direction[0].x = 0;
 	direction[0].y = 1;
@@ -359,13 +336,9 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 
 		if(collision(mark)==0)
 		{
-			lposition.x = sposition.x;
-			lposition.y = sposition.y;
-			lposition.z = sposition.z;
-
-			position.x = tposition.x;
-			position.y = tposition.y + mark;
-			position.z = tposition.z;
+			lposition = sposition;
+			position = tposition;
+			position.y += mark;
 		
 			sposition.x = xlong(tposition.x);
 			sposition.y = xlong(tposition.y);
@@ -378,10 +351,10 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 void CLplayer::display()
 {
 	model[0]->setposition(sposition.x,sposition.y,100);
-	model[0]->display(0,1,1,0,0,0);
+	model[0]->display(FLAT + AMBIENT);
 
 	//temp!
-	clgfx1->drawpolygon(
+	CLgfx1::drawpolygon(
 sposition.x+boundingbox[0]->b1.x,
 sposition.y-boundingbox[0]->b1.y,
 sposition.x+boundingbox[0]->b2.x,
@@ -392,9 +365,9 @@ sposition.x+boundingbox[0]->b4.x,
 sposition.y-boundingbox[0]->b4.y,
 0x00FFFFFF);
 
-	clgfx1->drawrectangle(65,0,735,599,0x00FF00FF);
+	CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
-	clgfx1->drawpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
+	CLgfx1::drawpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*
 }
 

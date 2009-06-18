@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLLIGHT
 #define HH_CLLIGHT
-#warning "Compiling " __FILE__ " ! TODO: use this class"
+#pragma message "Compiling " __FILE__ " ! TODO: use this class"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -17,16 +17,16 @@ class CLlight : public virtual CLcl
 		CLmatrix*   lm;
 
 	private:
-		CLvector<float> light;
-		float       intensity;
-		uxlong      color;
-		xlong       type;
+		CLfvector light;
+		float     intensity;
+		uxlong    color;
+		xlong     type;
 		
 	public:
-		template<class clvector>CLlight(clvector l,float li,uxlong c);
+		CLlight(CLfvector l,float li,uxlong c);
 		~CLlight();
 
-		template<class clvector>clvector getlight();
+		CLfvector getlight();
 		uxlong getcolor();
 		void addintensity(float p);
 		void mulintensity(float f);
@@ -39,7 +39,7 @@ class CLlight : public virtual CLcl
 		void draw();
 };
 
-template<class clvector>CLlight::CLlight(clvector l,float li,uxlong c)
+CLlight::CLlight(CLfvector l,float li,uxlong c)
 {
 	light = l;
 	intensity = li;
@@ -52,7 +52,7 @@ CLlight::~CLlight()
 	delete lm;
 }
 
-template<class clvector>clvector CLlight::getlight()
+CLfvector CLlight::getlight()
 {
 	return light;
 }

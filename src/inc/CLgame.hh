@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLGAME
 #define HH_CLGAME
-#warning "Compiling " __FILE__ " ! TODO: complete vector functions"
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -24,18 +24,18 @@ class CLgame : public virtual CLcl
 		CLgame();
 		CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2);
 		~CLgame();
-		xlong boundary(xlong x1,xlong y1,xlong x2,xlong y2);
-		xlong boundary(xlong x,xlong y);
-		xlong boundary(vector* v1,vector* v2);
-		xlong boundary(vector* v);
-		xlong boundary(fvector position,CLbox* bb);
-		xlong collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2);
-		xlong collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b);
-		xlong collision(vector* v1,vector* v2,vector* w1,vector* w2);
-		xlong collision(vector* v1,vector* v2,vector* w);
-		xlong collision(CLbox* bb1,CLbox* bb2);
+		xlong boundary(xlong x1,xlong y1,xlong x2,xlong y2) const;
+		xlong boundary(xlong x,xlong y) const;
+		template<class clvector>xlong boundary(const clvector& v1,const clvector& v2) const;
+		template<class clvector>xlong boundary(const clvector& v) const;
+		template<class clvector>xlong boundary(const clvector& position,const CLbox& bb) const;
+		xlong collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2) const;
+		xlong collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b) const;
+		template<class clvector>xlong collision(const clvector& v1,const clvector& v2,const clvector& w1,const clvector& w2) const;
+		template<class clvector>xlong collision(const clvector& v1,const clvector& v2,const clvector& w) const;
+		xlong collision(const CLbox& bb1,const CLbox& bb2) const;
 
-		xlong impact(fvector p,fvector l,CLbox* bb);
+		template<class clvector>xlong impact(const clvector& p,const clvector& l,const CLbox& bb) const;
 };
 
 CLgame::CLgame()
@@ -56,39 +56,42 @@ CLgame::CLgame(xlong bx1,xlong by1,xlong bx2,xlong by2)
 
 CLgame::~CLgame() { }
 
-xlong CLgame::boundary(xlong x1,xlong y1,xlong x2,xlong y2)
+xlong CLgame::boundary(xlong x1,xlong y1,xlong x2,xlong y2) const
 {
 	if(x1>boundaryx1 && x2<boundaryx2 && y1>boundaryy1 && y2<boundaryy2) return 1;
 	return 0;
 }
 
-xlong CLgame::boundary(xlong x,xlong y)
+xlong CLgame::boundary(xlong x,xlong y) const
 {
 	if(x>boundaryx1 && x<boundaryx2 && y>boundaryy1 && y<boundaryy2) return 1;
 	return 0;
 }
 
-xlong CLgame::boundary(vector* v1,vector* v2)
+template<class clvector>
+xlong CLgame::boundary(const clvector& v1,const clvector& v2) const
 {
 
 }
 
-xlong CLgame::boundary(vector* v)
+template<class clvector>
+xlong CLgame::boundary(const clvector& v) const
 {
 
 }
 
-xlong CLgame::boundary(fvector p,CLbox* bb)
+template<class clvector>
+xlong CLgame::boundary(const clvector& p,const CLbox& bb) const
 {
-	if( ( ( bb->t1.x + p.x ) < boundaryx1 ) || ( ( bb->t2.x + p.x ) < boundaryx1 ) || ( ( bb->t3.x + p.x ) < boundaryx1 ) || ( ( bb->t4.x + p.x ) < boundaryx1 ) ) return -1;
-	if( ( ( bb->t1.x + p.x ) > boundaryx2 ) || ( ( bb->t2.x + p.x ) > boundaryx2 ) || ( ( bb->t3.x + p.x ) > boundaryx2 ) || ( ( bb->t4.x + p.x ) > boundaryx2 ) ) return 1;
-	if( ( ( -bb->t1.y + p.y ) < boundaryy1 ) || ( ( -bb->t2.y + p.y ) < boundaryy1 ) || ( ( -bb->t3.y + p.y ) < boundaryy1 ) || ( ( -bb->t4.y + p.y ) < boundaryy1 ) ) return -2;
-	if( ( ( -bb->t1.y + p.y ) > boundaryy2 ) || ( ( -bb->t2.y + p.y ) > boundaryy2 ) || ( ( -bb->t3.y + p.y ) > boundaryy2 ) || ( ( -bb->t4.y + p.y ) > boundaryy2 ) ) return 2;
+	if( ( (  bb.t1.x + p.x ) < boundaryx1 ) || ( (  bb.t2.x + p.x ) < boundaryx1 ) || ( (  bb.t3.x + p.x ) < boundaryx1 ) || ( (  bb.t4.x + p.x ) < boundaryx1 ) ) return -1;
+	if( ( (  bb.t1.x + p.x ) > boundaryx2 ) || ( (  bb.t2.x + p.x ) > boundaryx2 ) || ( (  bb.t3.x + p.x ) > boundaryx2 ) || ( (  bb.t4.x + p.x ) > boundaryx2 ) ) return 1;
+	if( ( ( -bb.t1.y + p.y ) < boundaryy1 ) || ( ( -bb.t2.y + p.y ) < boundaryy1 ) || ( ( -bb.t3.y + p.y ) < boundaryy1 ) || ( ( -bb.t4.y + p.y ) < boundaryy1 ) ) return -2;
+	if( ( ( -bb.t1.y + p.y ) > boundaryy2 ) || ( ( -bb.t2.y + p.y ) > boundaryy2 ) || ( ( -bb.t3.y + p.y ) > boundaryy2 ) || ( ( -bb.t4.y + p.y ) > boundaryy2 ) ) return 2;
 
 	return 0;
 }
 
-xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2)
+xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2) const
 {
 	if( x1>a1 && x1<a2 && y1>b1 && y1<b2 ) return 1;
 	if( x2>a1 && x2<a2 && y2>b1 && y2<b2 ) return 1;
@@ -97,23 +100,25 @@ xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xl
 	return 0;
 }
 
-xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b)
+xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b) const
 {
 	if( a<x1 && a>x2 && b>y1 && b<y2 ) return 1;
 	return 0;
 }
 
-xlong CLgame::collision(vector* v1,vector* v2,vector* w1,vector* w2)
+template<class clvector>
+xlong CLgame::collision(const clvector& v1,const clvector& v2,const clvector& w1,const clvector& w2) const
 {
 
 }
 
-xlong CLgame::collision(vector* v1,vector* v2,vector* w)
+template<class clvector>
+xlong CLgame::collision(const clvector& v1,const clvector& v2,const clvector& w) const
 {
 
 }
 
-xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
+xlong CLgame::collision(const CLbox& bb1, const CLbox& bb2) const //!test!
 {/*
 	if( ( bb1->a.x > bb2->a.x )
 	 && ( bb1->a.x < bb2->b.x )
@@ -138,27 +143,9 @@ xlong CLgame::collision(CLbox* bb1, CLbox* bb2) //!test!
 	return 0;
 }
 
-xlong CLgame::impact(fvector p,fvector l,CLbox* bb)
+template<class clvector>
+xlong CLgame::impact(const clvector& p,const clvector& l,const CLbox& bb) const
 {
-	xlong px1 = p.x+bb->b1.x;
-	xlong py1 = p.y+bb->b1.y;
-	xlong px2 = p.x+bb->b2.x;
-	xlong py2 = p.y+bb->b2.y;
-	xlong px3 = p.x+bb->b3.x;
-	xlong py3 = p.y+bb->b3.y;
-	xlong px4 = p.x+bb->b4.x;
-	xlong py4 = p.y+bb->b4.y;
-
-	xlong lx1 = l.x+bb->b1.x;
-	xlong ly1 = l.y+bb->b1.y;
-	xlong lx2 = l.x+bb->b2.x;
-	xlong ly2 = l.y+bb->b2.y;
-	xlong lx3 = l.x+bb->b3.x;
-	xlong ly3 = l.y+bb->b3.y;
-	xlong lx4 = l.x+bb->b4.x;
-	xlong ly4 = l.y+bb->b4.y;
-
-
 
 }
 

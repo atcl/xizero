@@ -12,8 +12,6 @@
 class CLguibase : public virtual CLcl
 {
 	protected:
-		CLgfx2* clgfx2;
-
 		xlong doublebuffer;
 		xlong posx;
 		xlong posy;

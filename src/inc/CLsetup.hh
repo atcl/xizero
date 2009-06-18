@@ -2,15 +2,14 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLSETUP
 #define HH_CLSETUP
-#warning "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
-#include "CLbuffer.hh"
-#include "CLfps.hh"
-#include "CLformat.hh"
 #include "CLmath.hh"
-#include "CLgfx1.hh"
-#include "CLgfx2.hh"
+#include "CLbuffer.hh"
+#include "CLglobal.hh"
+#include "CLfps.hh"
+
 #include "CLlight.hh"
 #include "CLmatrix.hh"
 
@@ -28,15 +27,12 @@ void CLsetup()
 	CLzbuffer       = new CLbuffer<float>(xres*yres);
 
 	clfps    = new CLfps(3,true);
-	clformat = new CLformat();
-	clmath   = new CLmath();
 
-	clgfx1   = new CLgfx1(CLdoublebuffer);
-	clgfx2   = new CLgfx2(CLdoublebuffer);
+	CLmath::init();
 
-	amb      = new CLlight(1,1,-1,1,0x00FFFFFF,clmath);
-	ltm      = new CLmatrix(1,clmath);
-	bsm      = new CLmatrix(1,clmath);
+	amb      = new CLlight(CLfvector(1,1,-1),1,0x00FFFFFF);
+	ltm      = new CLmatrix(1);
+	bsm      = new CLmatrix(1);
 
 	bsm->shadow(amb->getlight(),plane);
 
@@ -51,11 +47,6 @@ void CLgarbage()
 	delete CLzbuffer;
 
 	delete clfps;
-	delete clformat;
-	delete clmath;
-
-	delete clgfx1;
-	delete clgfx2;
 
 	delete amb;
 	delete ltm;

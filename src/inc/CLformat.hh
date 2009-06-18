@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLFORMAT
 #define HH_CLFORMAT
-#warning "Compiling " __FILE__ " ! TODO: fix loadar crash"
+#pragma message "Compiling " __FILE__ " ! TODO: fix rare loadar crash"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -11,38 +11,29 @@
 #include "CLmacros.hh"
 
 
-class CLformat : public virtual CLcl
+namespace CLformat
 {
-	private:
 
-	public:
-		CLformat();
-		~CLformat();
-		xchar** loadcsv(CLfile* sf);
-		arfile* loadar(CLfile* sf);
-		xlong** loadbcx(CLfile* bf);
-		xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
-		sprite* loadtga(CLfile* sf);
+//prototyoes:
+xchar** loadcsv(CLfile* sf);
+arfile* loadar(CLfile* sf);
+xlong** loadbcx(CLfile* bf);
+xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
+sprite* loadtga(CLfile* sf);
 
-		sprites* loadtileset(CLfile* sf);
-		sprites* loadfont(CLfile* sf);
-		xlong** loadlvl();
-		xlong** loadini();
-};
+sprites* loadtileset(CLfile* sf);
+sprites* loadfont(CLfile* sf);
+xlong** loadlvl();
+xlong** loadini();
+//*
 
-CLformat::CLformat()
+//implementation:
+xchar** loadcsv(CLfile* sf)
 {
 
 }
 
-CLformat::~CLformat() { }
-
-xchar** CLformat::loadcsv(CLfile* sf)
-{
-
-}
-
-arfile* CLformat::loadar(CLfile* sf)
+arfile* loadar(CLfile* sf)
 {
 	//all .ar members must be aligned on 4byte (long) borders
 	//so the filesize is fully dividable by 4
@@ -220,7 +211,7 @@ arfile* CLformat::loadar(CLfile* sf)
 	return 0;
 }
 
-xlong** CLformat::loadbcx(CLfile* bf)
+xlong** loadbcx(CLfile* bf)
 {
 	xlong lc = getlinecount(bf);
 
@@ -264,7 +255,7 @@ xlong** CLformat::loadbcx(CLfile* bf)
 	return re;
 }
 
-xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
+xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
 	xchar* bf = sf->text;
 	xlong bs = sf->size;
@@ -307,7 +298,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 	return rev;
 }
 
-sprite* CLformat::loadtga(CLfile* sf)
+sprite* loadtga(CLfile* sf)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 	xchar* bf = sf->text;
@@ -346,25 +337,28 @@ sprite* CLformat::loadtga(CLfile* sf)
 	return r;
 }
 
-sprites* CLformat::loadtileset(CLfile* sf)
+sprites* loadtileset(CLfile* sf)
 {
 
 }
 
-sprites* CLformat::loadfont(CLfile* sf)
+sprites* loadfont(CLfile* sf)
 {
 
 }
 
-xlong** CLformat::loadlvl()
+xlong** loadlvl()
 {
 
 }
 
-xlong** CLformat::loadini()
+xlong** loadini()
 {
 
 }
+//*
+
+} //namespace ends
 
 #endif
 

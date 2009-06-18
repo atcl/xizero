@@ -5,23 +5,14 @@
 #pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix"
 
 #include "CLtypes.hh"
-#include "CLcl.hh"
-#include "CLbuffer.hh"
-#include "CLapi.hh"
-#include "CLmath.hh"
-#include "CLlight.hh"
+#include "CLconsts.hh"
 #include "CLstruct.hh"
+#include "CLmath.hh"
+#include "CLcl.hh"
 #include "CLvector.hh"
+#include "CLbuffer.hh"
+#include "CLlight.hh"
 #include "CLpolyinc.hh"
-
-#define CENTER  0x10000000
-#define FLAT    0x01000000
-#define AMBIENT 0x00100000
-#define SHADOW  0x00010000
-#define SHADER  0x00001000
-#define LPROJ   0x00000100
-#define SHAPE   0x00000010
-#define DEBUG   0x00000001
 
 
 class CLpolygon : public virtual CLcl
@@ -63,13 +54,13 @@ class CLpolygon : public virtual CLcl
 		CLpolygon(CLlbuffer* db,CLfbuffer* zb,CLlbuffer* sb,const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
 		~CLpolygon();
 		void update(CLmatrix* m,bool i);
-		void display(const CLlvector* p,xchar flags);
-		void display(const CLlvector* p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
+		void display(const CLlvector& p,xchar flags);
+		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
 		void setcolor(uxlong c);
 		uxlong getcolor();
-		template<class clvector>clvector getnormal();
+		CLfvector getnormal();
 };
 
 xlong CLpolygon::pointcount = 4;
@@ -487,7 +478,7 @@ CLpolygon::CLpolygon(CLlbuffer* db,CLfbuffer* zb,CLlbuffer* sb,const CLlvector& 
 
 CLpolygon::~CLpolygon() { }
 
-void CLpolygon::display(const CLlvector* p,xchar flags)
+void CLpolygon::display(const CLlvector& p,xchar flags)
 {
 	if(flags&SHADOW)
 	{
@@ -504,12 +495,12 @@ void CLpolygon::display(const CLlvector* p,xchar flags)
 		ppoint[3] = pointt[3];
 	}
 
-	ppoint[0].z += float(p->z);
-	ppoint[1].z += float(p->z);
-	ppoint[2].z += float(p->z);
-	ppoint[3].z += float(p->z);
+	ppoint[0].z += float(p.z);
+	ppoint[1].z += float(p.z);
+	ppoint[2].z += float(p.z);
+	ppoint[3].z += float(p.z);
 	zclipping();
-	project(p->x,p->y);
+	project(p.x,p.y);
 	xyclipping();
 	if(cpointcount == 0) return;
 
@@ -542,7 +533,7 @@ void CLpolygon::display(const CLlvector* p,xchar flags)
 
 }
 
-void display(const CLlvector* p,screenside* l,screenside* r,CLbuffer<float>* b,xlong h)
+void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
 {
 	//! todo
 }
@@ -596,8 +587,7 @@ uxlong CLpolygon::getcolor()
 	return color;
 }
 
-template<class clvector>
-clvector CLpolygon::getnormal()
+CLfvector CLpolygon::getnormal()
 {
 	return normal;
 }

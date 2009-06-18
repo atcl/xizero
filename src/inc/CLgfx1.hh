@@ -2,22 +2,19 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLGFX1
 #define HH_CLGFX1
-#warning "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLbuffer.hh"
+#include "CLglobal.hh"
+
 
 //ad clipping: just break the draw loops if screen is left.
 
-
-class CLgfx1 : public virtual CLcl
+namespace CLgfx1
 {
-	protected:
-		CLbuffer<xlong>* doublebuffer;
-
-	private:
 		static xlong last_p;
 		static xlong interval_p;
 		static xlong last_s;
@@ -26,47 +23,46 @@ class CLgfx1 : public virtual CLcl
 		xlong locmaxx;
 		xlong locmaxy;
 
-		void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
-		
-	public:
-		CLgfx1(CLbuffer<xlong>* db);
-		~CLgfx1();
-		uxlong readpixel(xlong x,xlong y);
-		void drawpixel(xlong x,xlong y,uxlong c);
-		void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-		void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
-		void drawbigpixel(xlong x,xlong y,uxlong c);
-		void putpixel(xlong x,xlong y,uxlong c,xlong m);
-		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-		void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
-		void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
-		void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
-		void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
-		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
-		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
-		void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
-		void fill(xlong x,xlong y,uxlong oc,uxlong nc);
-		void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
-		xlong getspritesize(sprite* s);
-		xlong getspritewidth(sprite* s);
-		xlong getspriteheight(sprite* s);
-		void drawsprite(xlong x,xlong y,sprite* s);
-		void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
-		void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
-		void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c);
-		void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
-		void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
-		void putsprite(xlong x,xlong y,sprite* s,xlong m);
-		void drawscreen(sprite* s);
-		void drawtile(xlong x,xlong y,sprites *s,xlong ti);
-};
+//prototypes:
+void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 
-void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
+uxlong readpixel(xlong x,xlong y);
+void drawpixel(xlong x,xlong y,uxlong c);
+void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
+void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
+void drawbigpixel(xlong x,xlong y,uxlong c);
+void putpixel(xlong x,xlong y,uxlong c,xlong m);
+void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
+void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
+void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
+void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
+void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
+void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
+void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
+void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
+void fill(xlong x,xlong y,uxlong oc,uxlong nc);
+void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
+xlong getspritesize(sprite* s);
+xlong getspritewidth(sprite* s);
+xlong getspriteheight(sprite* s);
+void drawsprite(xlong x,xlong y,sprite* s);
+void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
+void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
+void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c);
+void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
+void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
+void putsprite(xlong x,xlong y,sprite* s,xlong m);
+void drawscreen(sprite* s);
+void drawtile(xlong x,xlong y,sprites *s,xlong ti);
+//*
+
+//implementation:
+void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
 //fast version: //untested at all!
 // 	xlong b1 = (yc*xres)+xc;
@@ -89,98 +85,91 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 
 	tx = xc + x;
 	ty = yc + y;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc + x;
 	ty = yc - y;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc - x;
 	ty = yc + y;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc - x;
 	ty = yc - y;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc + y;
 	ty = yc + x;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc + y;
 	ty = yc - x;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc - y;
 	ty = yc + x;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 
 	tx = xc - y;
 	ty = yc - x;
-	(*doublebuffer)[(ty*xres)+tx] = c;
+	(*CLdoublebuffer)[(ty*xres)+tx] = c;
 //*
 }
 
-CLgfx1::CLgfx1(CLbuffer<xlong>* db)
+uxlong readpixel(xlong x,xlong y)
 {
-	doublebuffer = db;
+	return ((*CLdoublebuffer)[(y*xres)+y]);
 }
 
-CLgfx1::~CLgfx1() { }
-
-uxlong CLgfx1::readpixel(xlong x,xlong y)
+void drawpixel(xlong x,xlong y,uxlong c)
 {
-	return ((*doublebuffer)[(y*xres)+y]);
+	(*CLdoublebuffer)[(y*xres)+x] = c;
 }
 
-void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)
-{
-	(*doublebuffer)[(y*xres)+x] = c;
-}
-
-void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
+void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
 {
 	b[(y*xres)+x] = c;
 }
 
-void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
+void copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
 {
-	(*doublebuffer)[(y1*xres)+x1] = (*doublebuffer)[(y2*xres)+x2];
+	(*CLdoublebuffer)[(y1*xres)+x1] = (*CLdoublebuffer)[(y2*xres)+x2];
 }
 
-void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c)
+void drawbigpixel(xlong x,xlong y,uxlong c)
 {
-	(*doublebuffer)[(y*xres)+x] = c;
-	(*doublebuffer)[(y*xres)+x+1] = c;
-	(*doublebuffer)[((y+1)*xres)+x] = c;
-	(*doublebuffer)[((y+1)*xres)+(x+1)] = c;
+	(*CLdoublebuffer)[(y*xres)+x] = c;
+	(*CLdoublebuffer)[(y*xres)+x+1] = c;
+	(*CLdoublebuffer)[((y+1)*xres)+x] = c;
+	(*CLdoublebuffer)[((y+1)*xres)+(x+1)] = c;
 }
 
-void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
+void putpixel(xlong x,xlong y,uxlong c,xlong m)
 {
 	switch(m)
 	{
 		case 1: //AND
-			(*doublebuffer)[(y*xres)+x] = (*doublebuffer)[(y*xres)+x] && c;
+			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] && c;
 		break;
 		case 2: //OR:
-			(*doublebuffer)[(y*xres)+x] = (*doublebuffer)[(y*xres)+x] || c;
+			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] || c;
 		break;
 		case 3: //XOR:
-			(*doublebuffer)[(y*xres)+x] = (*doublebuffer)[(y*xres)+x] ^ c;
+			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] ^ c;
 		break;
 		default:
-			(*doublebuffer)[(y*xres)+x] = c;
+			(*CLdoublebuffer)[(y*xres)+x] = c;
 	}
 
 }
 
-void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
+void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
 {
 
 }
 
-void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
+void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 {
 	xlong offsetbase = (y1*xres);
 
@@ -192,11 +181,11 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 	for(int i=a; i<=b; i++)
 	{
 		
-		(*doublebuffer)[offsetbase+i] = c;
+		(*CLdoublebuffer)[offsetbase+i] = c;
 	}
 }
 
-void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
+void drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 {
 	xlong a = y1;
 	xlong b = y2;
@@ -207,23 +196,23 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 
 	for(int i=a; i<=b; i++)
 	{
-		(*doublebuffer)[offsetbase] = c;
+		(*CLdoublebuffer)[offsetbase] = c;
 		offsetbase+=xres;
 	}
 }
 
-void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
+void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 {
 	xlong offsetbase = (y1*xres)+x1;
 
 	for(int i=0; i<xy; i++)
 	{
-		(*doublebuffer)[offsetbase] = c;
+		(*CLdoublebuffer)[offsetbase] = c;
 		offsetbase+=xres+1;
 	}
 }
 
-void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	if(x1==x2 && y1==y2) return;
 
@@ -269,7 +258,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 	for(int i=0; i<len; i++)
 	{
-		(*doublebuffer)[off] = c;
+		(*CLdoublebuffer)[off] = c;
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -280,7 +269,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	if(x1==x2 && y1==y2) return;
 
@@ -317,16 +306,16 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 	for(int i=0; i<len; i++)
 	{
-		(*doublebuffer)[off] = c;
+		(*CLdoublebuffer)[off] = c;
 
-		(*doublebuffer)[off-1]      = c; //adjust colors 
-		(*doublebuffer)[off+1]      = c;
-		(*doublebuffer)[off-xres-1] = c;
-		(*doublebuffer)[off-xres]   = c;
-		(*doublebuffer)[off-xres+1] = c;
-		(*doublebuffer)[off+xres-1] = c;
-		(*doublebuffer)[off+xres]   = c;
-		(*doublebuffer)[off+xres+1] = c; //*
+		(*CLdoublebuffer)[off-1]      = c; //adjust colors 
+		(*CLdoublebuffer)[off+1]      = c;
+		(*CLdoublebuffer)[off-xres-1] = c;
+		(*CLdoublebuffer)[off-xres]   = c;
+		(*CLdoublebuffer)[off-xres+1] = c;
+		(*CLdoublebuffer)[off+xres-1] = c;
+		(*CLdoublebuffer)[off+xres]   = c;
+		(*CLdoublebuffer)[off+xres+1] = c; //*
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -337,12 +326,12 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
+void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
 {
 
 }
 
-void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	drawhorline(x1,y1,x2,c);
 	drawhorline(x1,y2,x2,c);
@@ -350,7 +339,7 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	drawverline(x2,y1,y2,c);
 }
 
-void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	for(int i=y1; i<=y2; i++)
 	{
@@ -358,7 +347,7 @@ void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
+void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
 {
 	drawanyline(x1,y1,x2,y2,c);
 	drawanyline(x2,y2,x3,y3,c);
@@ -366,7 +355,7 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 	drawanyline(x4,y4,x1,y1,c);
 }
 
-void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
+void drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
 	xlong d = 3 - (r>>1);
 	xlong cx = 0;
@@ -381,19 +370,19 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 	}
 }
 
-void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
+void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
 	drawcircle(xc,yc,r,c);
 	drawcircle(xc,yc,r+1,c); //adjust color
 	drawcircle(xc,yc,r-1,c); //adjust color
 }
 
-void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
+void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 {
 
 }
 
-void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
+void fill(xlong x,xlong y,uxlong oc,uxlong nc)
 {
 	if (readpixel(x,y) == oc)
 	{
@@ -407,7 +396,7 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 	return;
 }
 
-void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
+void fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 {
 	if (readpixel(x,y) != fc)
 	{
@@ -421,22 +410,22 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 	return;
 }
 
-xlong CLgfx1::getspritesize(sprite* s)
+xlong getspritesize(sprite* s)
 {
 	return s->size;
 }
 
-xlong CLgfx1::getspritewidth(sprite* s)
+xlong getspritewidth(sprite* s)
 {
 	return s->width;
 }
 
-xlong CLgfx1::getspriteheight(sprite* s)
+xlong getspriteheight(sprite* s)
 {
 	return s->height;
 }
 
-void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
+void drawsprite(xlong x,xlong y,sprite* s)
 {
 	//init
 	if(x>xres || y>yres) return;
@@ -470,7 +459,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 		{
 			if(s->data[linearc] && 0xFF000000 != 0xFF)
 			{
-				(*doublebuffer)[xoffset+j] = s->data[linearc];
+				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}
 			linearc++;
 		}
@@ -480,48 +469,48 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	
 }
 
-void CLgfx1::drawspritescaled(xlong x,xlong y,sprite* s,xlong z)
+void drawspritescaled(xlong x,xlong y,sprite* s,xlong z)
 {
 
 }
 
-void CLgfx1::drawspriterotated(xlong x,xlong y,sprite* s,xlong d)
+void drawspriterotated(xlong x,xlong y,sprite* s,xlong d)
 {
 
 }
 
-void CLgfx1::drawspriterotated90(xlong x,xlong y,sprite* s,xlong c)
+void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c)
 {
 
 }
 
-void CLgfx1::drawspritemirrored(xlong x,xlong y,sprite* s,xlong b)
+void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b)
 {
 
 }
 
-void CLgfx1::drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
+void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
 {
 
 }
 
-void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m)
+void putsprite(xlong x,xlong y,sprite* s,xlong m)
 {
 
 }
 
-void CLgfx1::drawscreen(sprite* s)
+void drawscreen(sprite* s)
 {
 	if(s->width==xres && s->height==yres)
 	{
 		for(int i=0; i<s->size; i++)
 		{
-			(*doublebuffer)[i] = s->data[i];
+			(*CLdoublebuffer)[i] = s->data[i];
 		}
 	}
 }
 
-void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
+void drawtile(xlong x,xlong y,sprites *s,xlong ti)
 {
 	//find tile
 	xlong toffset = (ti / s->perrow) * s->tilesize;
@@ -560,7 +549,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 		{
 			if(s->data[linearc] && 0xFF000000 != 0xFF)
 			{
-				(*doublebuffer)[xoffset+j] = s->data[linearc];
+				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}
 			linearc++;
 		}
@@ -568,6 +557,9 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 		toffset += shordiff;
 	}
 }
+//*
+
+} //end of namespace
 
 #endif
 

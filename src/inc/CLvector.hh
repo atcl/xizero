@@ -16,6 +16,7 @@ struct CLvector
 	T x;
 	T y;
 	T z;
+	T e;
 
 	CLvector() { x=y=z=0; }
 	CLvector(T tx,T ty,T tz) { x=tx; y=ty; z=tz; }
@@ -31,8 +32,10 @@ struct CLvector
 	CLvector& operator+=(const CLvector& a);	//vector addition
 	CLvector& operator-=(const CLvector& a);	//vector subtraction
 	CLvector& operator*=(T c);			//scalar multiplication
+	CLvector& operator-();				//vector additive negation
 
-	CLvector& operator=(CLvector a);		//vector assignment
+	CLvector& operator=(const CLvector a);		//vector vector assignment //?argument as reference?
+	CLvector& operator=(T c);			//scalar vector assignment
 		  operator CLvector<float>() const;	//cast
 
 	void print();					//console output	
@@ -122,13 +125,34 @@ CLvector<T>& CLvector<T>::operator*=(T c)
 }
 //*
 
-//vector assignment:
+//vector additive negation:
 template<typename T>
-CLvector<T>& CLvector<T>::operator=(CLvector<T> a)
+CLvector<T>& CLvector<T>::operator-()
+{
+	this->x = -this->x;
+	this->y = -this->y;
+	this->z = -this->z;
+}
+//*
+
+//vector vector assignment:
+template<typename T>
+CLvector<T>& CLvector<T>::operator=(const CLvector<T> a)
 {
 	this->x = a.x;
 	this->y = a.y;
 	this->z = a.z;
+	return *this;
+}
+//*
+
+//scalar vector assignment
+template<typename T>
+CLvector<T>& CLvector<T>::operator=(T c)
+{
+	this->x = c;
+	this->y = c;
+	this->z = c;
 	return *this;
 }
 //*
@@ -146,6 +170,14 @@ template<typename T>
 void CLvector<T>::print()
 {
 	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl; 
+}
+//*
+
+//scalar multiplication from left:
+template<typename T>
+CLvector<T> operator*(T c,CLvector<T>& a)
+{
+	return ( (a.x * c) + (a.y * c) + (a.z * c) );
 }
 //*
 

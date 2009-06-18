@@ -2,10 +2,10 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLBUFFER
 #define HH_CLBUFFER
-#warning "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
+#pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
-#include <stdio.h>
-#include <string.h>
+// #include <stdio.h>
+// #include <string.h>
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -50,11 +50,6 @@ template <typename T>CLbuffer<T>::~CLbuffer() { }
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {
-// 	for(int i=0;i<size;i++)
-// 	{
-// 		buffer[i] = v;
-// 	}
-
 	for(int i=size-1;i>=0;i--)
 	{
 		buffer[i] = v;
@@ -80,11 +75,6 @@ __asm__ __volatile__ ( \
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
 {
-// 	for(int i=0;i<size;i++)
-// 	{
-// 		dst[i] = buffer[i];
-// 	}
-
 	for(int i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
@@ -93,11 +83,6 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 
 template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
 {
-// 	for(int i=0;i<size;i++)
-// 	{
-// 		dst[i] = buffer[i];
-// 	}
-
 	for(int i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
@@ -111,6 +96,8 @@ template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 
 template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
+	//add prefetch 
+
 	xlong puresrc = reinterpret_cast<xlong>(&buffer[0]);
 	xlong puredst = reinterpret_cast<xlong>(&dst[0]);
 

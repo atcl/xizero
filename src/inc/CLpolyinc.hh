@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPOLYINC
 #define HH_CLPOLYINC
-#warning "Compiling " __FILE__ " ! TODO: all"
+#pragma warning "Compiling " __FILE__ " ! TODO: all"
 
 xlong xmin = 1;
 xlong xmax = xres - 1;
