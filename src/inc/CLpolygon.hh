@@ -2,82 +2,79 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPOLYGON
 #define HH_CLPOLYGON
-#warning "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix, display bools as actual bits of a short"
+#pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLbuffer.hh"
-#include "CLpolyinc.hh"
 #include "CLapi.hh"
 #include "CLmath.hh"
 #include "CLlight.hh"
 #include "CLstruct.hh"
 #include "CLvector.hh"
+#include "CLpolyinc.hh"
+
+#define CENTER  0x10000000
+#define FLAT    0x01000000
+#define AMBIENT 0x00100000
+#define SHADOW  0x00010000
+#define SHADER  0x00001000
+#define LPROJ   0x00000100
+#define SHAPE   0x00000010
+#define DEBUG   0x00000001
 
 
 class CLpolygon : public virtual CLcl
 {
 	protected:
-		CLmath* clmath;
-		CLlight* cllight;
-
-		CLbuffer<xlong>* doublebuffer;
-		CLbuffer<float>* zbuffer;
-		CLbuffer<xlong>* sbuffer;
+		CLlbuffer* doublebuffer;
+		CLfbuffer* zbuffer;
+		CLlbuffer* sbuffer;
 
 	private:
 		static xlong pointcount;
-		xlong xmin;
-		xlong xmax;
-		xlong ymin;
-		xlong ymax;
-		xlong zmin;
-		xlong zmax;
+
 		uxlong color;
 		uxlong shade;
 		uxlong scolor;
 		xlong cpointcount;
-		fvertex pointr[4];
-		fvertex points[4];
-		fvertex pointt[4];
-		vector normal;
-		vector rnormal;
-		xlong active;
-		
-		void polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c);	//todo: swap
-		fvertex getzplanecoords(fvertex a,fvertex b,float pz);
-		fvertex getxplanecoords(fvertex a,fvertex b,float px);
-		fvertex getyplanecoords(fvertex a,fvertex b,float py);
+		CLfvector pointr[4];
+		CLfvector points[4];
+		CLfvector pointt[4];
+		CLfvector normal;
+		CLfvector rnormal;
+
+		void polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		template<class clvector>clvector getzplanecoords(const clvector& a,const clvector& b,float pz);
+		template<class clvector>clvector getxplanecoords(const clvector& a,const clvector& b,float px);
+		template<class clvector>clvector getyplanecoords(const clvector& a,const clvector& b,float py);
 		void zclipping();
-		void project(xlong px,xlong py,xlong projconstx,xlong projconsty,bool center);
+		void project(xlong px=0,xlong py=0);
 		void xyclipping();
 		bool visible();
 		void shape();
 		void flatshade(bool ambient);
-		void setside(fvertex b,fvertex e,screenside *s);
-		void rasterize(xlong shadow);	//todo: swap
+		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
+		void rasterize(xlong shadow);
 		xlong circleinc(xlong x,xlong pc);
 		xlong circledec(xlong x,xlong pc);
-	
+
 	public:
-		CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll);
+		CLpolygon(CLlbuffer* db,CLfbuffer* zb,CLlbuffer* sb,const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
 		~CLpolygon();
 		void update(CLmatrix* m,bool i);
-		void display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool land,bool debug);
-		void display(vertex* p,xchar flags);
-		void display(vertex* p,screenside* l,screenside* r,CLbuffer<float>* b,xlong h);
-		vector getnormal();
-		void add(xlong x,xlong y,xlong z);
+		void display(const CLlvector* p,xchar flags);
+		void display(const CLlvector* p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
+		template<class clvector>void add(const clvector& a);
 		void reset();
-		void setcolor(xlong c);
+		void setcolor(uxlong c);
 		uxlong getcolor();
-		void setactive(xlong b);
-		xlong getactive();
+		template<class clvector>clvector getnormal();
 };
 
 xlong CLpolygon::pointcount = 4;
 
-void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
+void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	if(x1==x2 && y1==y2) return;
 
@@ -88,14 +85,12 @@ void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
-	xlong temp = 0;
 
 	if(dx<0)
 	{
 		dx = -dx;
 		xs = -xs;
 	}
-
 
 	if(dy<0)
 	{
@@ -125,33 +120,36 @@ void CLpolygon::polyline(uxlong x1,uxlong y1,uxlong x2,uxlong y2,uxlong c)
 	}
 }
 
-fvertex CLpolygon::getzplanecoords(fvertex a, fvertex b, float pz)
+template<class clvector>
+clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz) //!change float pz to template arg of clvector!
 {
 	float m = (pz - b.z) / (a.z - b.z);
 
-	fvertex c;
+	clvector c;
 	c.x = (a.x - b.x) * m + b.x;
 	c.y = (a.y - b.y) * m + b.y;
 	c.z = pz;
 	return c;
 }
 
-fvertex CLpolygon::getxplanecoords(fvertex a, fvertex b, float px)
+template<class clvector>
+clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px) //!change float pz to template arg of clvector!
 {
 	float m = (px - b.x) / (a.x - b.x);
 
-	fvertex c;
+	clvector c;
 	c.x = px;
 	c.y = (a.y - b.y) * m + b.y;
 	c.z = (a.z - b.z) * m + b.z;
 	return c;
 }
 
-fvertex CLpolygon::getyplanecoords(fvertex a, fvertex b, float py)
+template<class clvector>
+clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py) //!change float pz to template arg of clvector!
 {
 	float m = (py - b.y) / (a.y - b.y);
 
-	fvertex c;
+	clvector c;
 	c.x = (a.x - b.x) * m + b.x;
 	c.y = py;
 	c.z = (a.z - b.z) * m + b.z;
@@ -160,8 +158,8 @@ fvertex CLpolygon::getyplanecoords(fvertex a, fvertex b, float py)
 
 void CLpolygon::zclipping()
 {
-	xlong x;
-	xlong y;
+	xlong x = 0;
+	xlong y = 0;
 	xlong localpointcount = 0;
 
 	for(x=pointcount-1, y=0; y<pointcount; x=y, y++)
@@ -201,20 +199,14 @@ void CLpolygon::zclipping()
 	}
 }
 
-void CLpolygon::project(xlong px,xlong py,xlong projconstx,xlong projconsty,bool center)
+void CLpolygon::project(xlong px,xlong py)
 {
-	if(center==true)
-	{
-		px = xres >> 1;
-		py = yres >> 1;
-	}
-
 	for(xlong x=0; x<cpointcount; x++)
 	{
 		if(ppoint[x].z > 0)
 		{
-			spoint[x].x = float(xlong( ( 80 * ppoint[x].x) / (ppoint[x].z) ) + px); //95 wenn xclipping läuft
-			spoint[x].y = float(xlong( (-95 * ppoint[x].y) / (ppoint[x].z) ) + py);
+			spoint[x].x = float(xlong( ( 80 * ppoint[x].x) / (ppoint[x].z) ) + ( (xres>>2) + px ) ); //95 wenn xclipping läuft
+			spoint[x].y = float(xlong( (-95 * ppoint[x].y) / (ppoint[x].z) ) + ( (yres>>2) + py ) );
 			spoint[x].z = ppoint[x].z + cleartrans;
 		}
 		else
@@ -307,15 +299,15 @@ void CLpolygon::xyclipping()
 
 bool CLpolygon::visible()
 {
-		xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
+	xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
 		
-		 return( f < 1L ? 1 : 0 );
+	 return( f < 1L ? 1 : 0 );
 }
 
 void CLpolygon::shape()
 {
-	xlong x;
-	xlong y;
+	xlong x = 0;
+	xlong y = 0;
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
 		polyline(xlong(spoint[x].x),xlong(spoint[x].y),xlong(spoint[y].x),xlong(spoint[y].y),0x000000FF);
@@ -327,17 +319,17 @@ void CLpolygon::flatshade(bool ambient)
 {
 	uxlong d = 0;
 	doubleword argb;
-	fvector tlight = cllight->getlight();
+	CLfvector light = cllight->getlight();
 
-	//float t = clmath->dotproduct(normal,tlight) / (normal.l * tlight.l);
-	float t = ((normal.x*tlight.x) + (normal.y*tlight.y) + (normal.z*tlight.z)) / (normal.l*tlight.l);
-	if(t < 0) t *= -1;
+	float t = normal * light / ( !normal * !light );
+	t = CLmath::absolute(t);
+
 	if(t > 1) t = 1;
+
 	if(t < 0.2 && ambient==false)
 	{
 		shade = nolight;
 		return;
-		
 	}
 
 	argb.dd = color;
@@ -347,22 +339,21 @@ void CLpolygon::flatshade(bool ambient)
 	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t);
 	shade = argb.dd;
 
-	if(ambient==true)
+	if(ambient==true && t<0.2)
 	{
-		if(t<0.2)
-		{
 		argb.db[0] += 25;
 		argb.db[1] += 25;
 		argb.db[2] += 25;
 		shade  = argb.dd;
-		}
 	}
 }
 
-void CLpolygon::setside(fvertex b, fvertex e, screenside *s)
+template<class clvector>
+void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s)
 {
 	xlong length = xlong(e.y - b.y);
 	if(length <= 0) return;
+
 	float b_off = (b.y * xres) + b.x;
 	float e_off = (e.y * xres) + e.x;
 	float off_s = ( (e_off - b_off) / length );
@@ -379,32 +370,18 @@ void CLpolygon::setside(fvertex b, fvertex e, screenside *s)
 
 xlong CLpolygon::circleinc(xlong x,xlong pc)
 {
-	if( (x+1) >= pc)
-	{
-		return 0;
-	}
-	else
-	{
-		return x+1;
-	}
+	return ( (x+1) >= pc ) ? 0 : x+1; //!replace x+1 durch x++ at first and by x at second occur
 }
 
 xlong CLpolygon::circledec(xlong x,xlong pc)
 {
-	if( (x-1) < 0)
-	{
-		return pc-1;
-	}
-	else
-	{
-		return x-1;
-	}
+	return ( (x-1) < 0 ) ? pc-1 : x-1; //!replace x-1 durch x-- at first and by x at second occur, also pc-1 by pc--
 }
 
 void CLpolygon::rasterize(xlong shadow)
 {
-	xlong x;
-	xlong y;
+	xlong x = 0;
+	xlong y = 0;
 	xlong top = 0;
 	xlong bot = 0;
 
@@ -429,7 +406,8 @@ void CLpolygon::rasterize(xlong shadow)
 	xlong m = xlong(spoint[bot].y + spoint[top].y) >> 1;
 	if(leftside[m].offset > rightside[m].offset)
 	{
-		//swap left and right per xor trick
+		//swap left and right per xor trick?
+
 		screenside *t = leftside;
 		leftside = rightside;
 		rightside = t;
@@ -439,6 +417,7 @@ void CLpolygon::rasterize(xlong shadow)
 	xlong offset = 0;
 	float actz = 0;
 	float zstep = 0;
+
 	for(y=xlong(spoint[top].y); y<=xlong(spoint[bot].y); y++)
 	{
 		length = rightside[y].offset - leftside[y].offset;
@@ -489,78 +468,28 @@ void CLpolygon::rasterize(xlong shadow)
 	}
 }
 
-CLpolygon::CLpolygon(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,xlong ax,xlong ay,xlong az,xlong bx,xlong by,xlong bz,xlong cx,xlong cy,xlong cz,xlong dx,xlong dy,xlong dz,uxlong co,uxlong sc,CLmath* clm,CLlight* cll)
+CLpolygon::CLpolygon(CLlbuffer* db,CLfbuffer* zb,CLlbuffer* sb,const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
 {
-	xmin = 1;
-	xmax = xres-1;
-	ymin = 1;
-	ymax = yres-1;
-	zmin = 1;
-	zmax = zres-1; 
-
-	clmath = clm;
-	cllight = cll;
-
 	color = co;
 	scolor = sc;
 	doublebuffer = db;
 	zbuffer = zb;
 	sbuffer = sb;
 	cpointcount = 4;
-	
-	points[0].x = float(ax);
-	points[0].y = float(ay);
-	points[0].z = float(az);
-	points[1].x = float(bx);
-	points[1].y = float(by);
-	points[1].z = float(bz);
-	points[2].x = float(cx);
-	points[2].y = float(cy);
-	points[2].z = float(cz);
-	points[3].x = float(dx);
-	points[3].y = float(dy);
-	points[3].z = float(dz);
 
-	pointr[0].x = float(ax);
-	pointr[0].y = float(ay);
-	pointr[0].z = float(az);
-	pointr[1].x = float(bx);
-	pointr[1].y = float(by);
-	pointr[1].z = float(bz);
-	pointr[2].x = float(cx);
-	pointr[2].y = float(cy);
-	pointr[2].z = float(cz);
-	pointr[3].x = float(dx);
-	pointr[3].y = float(dy);
-	pointr[3].z = float(dz);
+	points[0] = pointr[0] = pointt[0] = CLfvector(a);
+	points[1] = pointr[1] = pointt[1] = b;
+	points[2] = pointr[2] = pointt[2] = c;
+	points[3] = pointr[3] = pointt[3] = d;
 
-	vector r;
-	vector s;
-	r.x = (bx - ax);
-	r.y = (by - ay);
-	r.z = (bz - az);
-	s.x = (cx - ax);
-	s.y = (cy - ay);
-	s.z = (cz - az);
-
-	//normal = clmath->crossproduct(r,s);
-
-	normal.x = ( (r.y * s.z) - (r.z * s.y) );
-	normal.y = ( (r.z * s.x) - (r.x * s.z) );
-	normal.z = ( (r.x * s.y) - (r.y * s.x) );
-	normal.l = clmath->vectorlength(normal);
-
-	rnormal.x = normal.x;
-	rnormal.y = normal.y;
-	rnormal.z = normal.z;
-	rnormal.l = normal.l;
+	normal = rnormal = (b-a) ^ (c-a);
 }
 
 CLpolygon::~CLpolygon() { }
 
-void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool ambient,bool shadow,bool pixelshader,bool land,bool debug)
+void CLpolygon::display(const CLlvector* p,xchar flags)
 {
-	if(shadow==0)
+	if(flags&SHADOW)
 	{
 		ppoint[0] = points[0];
 		ppoint[1] = points[1];
@@ -575,38 +504,33 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 		ppoint[3] = pointt[3];
 	}
 
-	ppoint[0].z += float(pz);
-	ppoint[1].z += float(pz);
-	ppoint[2].z += float(pz);
-	ppoint[3].z += float(pz);
-
+	ppoint[0].z += float(p->z);
+	ppoint[1].z += float(p->z);
+	ppoint[2].z += float(p->z);
+	ppoint[3].z += float(p->z);
 	zclipping();
-	project(px,py,0,0,center);
+	project(p->x,p->y);
 	xyclipping();
 	if(cpointcount == 0) return;
-	
-	if(flat==false && shadow==0) //wireframe
+
+
+	if( ~(flags&FLAT) && ~(flags&SHADOW) ) //wireframe
 	{
 		shape();
-	}
-	else if(land==1)
-	{
-		//test if l!=0
-		//rasterize(2);
 	}
 	else
 	{
 		if(visible())
 		{
-			if(debug==true)
+			if(flags&DEBUG)
 			{
 				shade=color;
 				rasterize(0);
 				shape();
 			}
-			if(shadow==false)	//default
+			if( ~(flags&SHADOW) )	//default
 			{
-				flatshade(ambient);
+				flatshade(flags&AMBIENT);
 				rasterize(0);
 			}
 			else			//shadow
@@ -615,118 +539,54 @@ void CLpolygon::display(xlong px,xlong py,xlong pz,bool center,bool flat,bool am
 			}
 		}
 	}
-}
-
-void display(vertex* p,xchar flags)
-{
-//flags: 0x00000000
-//         | = center. Center object on screen.
-
-//flags: 0x00000000
-//          | = flat. Use flat shading (if shadows = 0)
-
-//flags: 0x00000000
-//           | = ambient. Use ambient lightening (additionally to flat)
-
-//flags: 0x00000000
-//            | = shadow. Render shadow of object
-
-//flags: 0x00000000
-//             | = pixelshader. Shade polygon each pixel. (not available yet)
-
-//flags: 0x00000000
-//              | = projection type (not available yet)
-
-//flags: 0x00000000 
-//               | = shape. No shading, no color, wireframe only
-
-//flags: 0x00000000
-//                | = debug. No shading, plain color and shape
 
 }
 
-void display(vertex* p,screenside* l,screenside* r,CLbuffer<float>* b,xlong h)
+void display(const CLlvector* p,screenside* l,screenside* r,CLbuffer<float>* b,xlong h)
 {
-
+	//! todo
 }
 
 void CLpolygon::update(CLmatrix* m,bool i=0)
 {
+	switch(i)
+	{
+		case 0:
+			points[0] = m->transform(points[0]);
+			points[1] = m->transform(points[1]);
+			points[2] = m->transform(points[2]);
+			points[3] = m->transform(points[3]);
+			normal = m->transform(normal);
+			break;
 
-	if(i==0)
-	{
-		points[0] = m->transform(points[0]);
-		points[1] = m->transform(points[1]);
-		points[2] = m->transform(points[2]);
-		points[3] = m->transform(points[3]);
-		normal = m->transform(normal);
-	}
-	if(i==1)
-	{
-		pointt[0] = m->transform(points[0]);
-		pointt[1] = m->transform(points[1]);
-		pointt[2] = m->transform(points[2]);
-		pointt[3] = m->transform(points[3]);
+		case 1:
+			pointt[0] = m->transform(points[0]);
+			pointt[1] = m->transform(points[1]);
+			pointt[2] = m->transform(points[2]);
+			pointt[3] = m->transform(points[3]);
+			break;
 	}
 }
 
-vector CLpolygon::getnormal()
+template<class clvector>
+void CLpolygon::add(const clvector& a)
 {
-	return normal;
-}
-
-void CLpolygon::add(xlong x,xlong y,xlong z)
-{
-	if(x!=0)
-	{
-		float fx = float(x);
-		points[0].x += fx;
-		points[1].x += fx;
-		points[2].x += fx;
-		points[3].x += fx;
-	}
-
-	if(y!=0)
-	{
-		float fy = float(y);
-		points[0].y += fy;
-		points[1].y += fy;
-		points[2].y += fy;
-		points[3].y += fy;
-	}
-
-	if(z!=0)
-	{
-		float fz = float(z);
-		points[0].z += fz;
-		points[1].z += fz;
-		points[2].z += fz;
-		points[3].z += fz;
-	}
+	points[0] += a;
+	points[1] += a;
+	points[2] += a;
+	points[3] += a;
 }
 
 void CLpolygon::reset()
 {
-	points[0].x = pointr[0].x;
-	points[0].y = pointr[0].y;
-	points[0].z = pointr[0].z;
-	points[1].x = pointr[1].x;
-	points[1].y = pointr[1].y;
-	points[1].z = pointr[1].z;
-	points[2].x = pointr[2].x;
-	points[2].y = pointr[2].y;
-	points[2].z = pointr[2].z;
-	points[3].x = pointr[3].x;
-	points[3].y = pointr[3].y;
-	points[3].z = pointr[3].z;
-
-	normal.x = rnormal.x;
-	normal.y = rnormal.y;
-	normal.z = rnormal.z;
-	normal.l = rnormal.l;
+	points[0] = pointr[0];
+	points[1] = pointr[1];
+	points[2] = pointr[2];
+	points[3] = pointr[3];
+	normal    = rnormal;
 }
 
-void CLpolygon::setcolor(xlong c)
+void CLpolygon::setcolor(uxlong c)
 {
 	color = c;
 }
@@ -736,15 +596,10 @@ uxlong CLpolygon::getcolor()
 	return color;
 }
 
-void CLpolygon::setactive(xlong b)
+template<class clvector>
+clvector CLpolygon::getnormal()
 {
-	if(b!=0) active=1;
-	else active=0;
-}
-
-xlong CLpolygon::getactive()
-{
-	return active;
+	return normal;
 }
 
 #endif

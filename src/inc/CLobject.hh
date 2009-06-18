@@ -600,17 +600,17 @@ vector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point of t
 
 void CLobject::translatealongnormals(float size)
 {
-	xlong xa;
-	xlong ya;
-	xlong za;
+	float xa = 0;
+	float ya = 0;
+	float za = 0;
 	vector t;
 
 	for(int i=0;i<polycount;i++)
 	{
 		t = polyptr[i]->getnormal();
-		xa = xlong((t.x / t.l) * size);
-		ya = xlong((t.y / t.l) * size);
-		za = xlong((t.z / t.l) * size);
+		xa = (t.x / t.l) * size;
+		ya = (t.y / t.l) * size;
+		za = (t.z / t.l) * size;
 
 		polyptr[i]->add(xa,ya,za);
 	}

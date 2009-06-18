@@ -6,6 +6,7 @@
 
 #include  <iostream>
 #include "CLtypes.hh"
+#include "CLmath.hh"
 
 
 //CLvector definition:
@@ -20,20 +21,19 @@ struct CLvector
 	CLvector(T tx,T ty,T tz) { x=tx; y=ty; z=tz; }
 	~CLvector() { }
 
-	CLvector operator+(CLvector& a);		//vector addition
-	CLvector operator-(CLvector& a);		//vector subtraction
-	       T operator*(CLvector& a);		//dot product
-	CLvector operator*(T c);			//scalar multiplication
-	CLvector operator^(CLvector& a);		//cross product
-	       T operator!();				//vector length
+	CLvector operator+(const CLvector& a) const;	//vector addition
+	CLvector operator-(const CLvector& a) const;	//vector subtraction
+	       T operator*(const CLvector& a) const;	//dot product
+	CLvector operator*(T c) const;			//scalar multiplication
+	CLvector operator^(const CLvector& a) const;	//cross product
+	       T operator!() const;			//vector length
 	
-	CLvector& operator+=(CLvector& a);		//vector addition
-	CLvector& operator-=(CLvector& a);		//vector subtraction
+	CLvector& operator+=(const CLvector& a);	//vector addition
+	CLvector& operator-=(const CLvector& a);	//vector subtraction
 	CLvector& operator*=(T c);			//scalar multiplication
-	CLvector& operator^=(CLvector& a);		//cross product
 
-	CLvector& operator=(CLvector& a);		//vector assignment
 	CLvector& operator=(CLvector a);		//vector assignment
+		  operator CLvector<float>() const;	//cast
 
 	void print();					//console output	
 };
@@ -43,23 +43,23 @@ struct CLvector
 
 //vector addition:
 template<typename T>
-CLvector<T> CLvector<T>::operator+(CLvector<T>& a)
+CLvector<T> CLvector<T>::operator+(const CLvector<T>& a) const
 {
-	return CLvector( this->x + a.x,this->y + a.y,this->z + a.z );
+	return CLvector<T>( (this->x + a.x),(this->y + a.y),(this->z + a.z) );
 }
 //*
 
 //vector subtraction:
 template<typename T>
-CLvector<T> CLvector<T>::operator-(CLvector<T>& a)
+CLvector<T> CLvector<T>::operator-(const CLvector<T>& a) const
 {
-	return CLvector( this->x - a.x,this->y - a.y,this->z - a.z );
+	return CLvector<T>( (this->x - a.x),(this->y - a.y),(this->z - a.z) );
 }
 //*
 
 //dot product:
 template<typename T>
-T CLvector<T>::operator*(CLvector<T>& a)
+T CLvector<T>::operator*(const CLvector<T>& a) const
 {
 	return ( (this->x * a.x) + (this->y * a.y) + (this->z * a.z) );
 }
@@ -67,7 +67,7 @@ T CLvector<T>::operator*(CLvector<T>& a)
 
 //scalar multiplication:
 template<typename T>
-CLvector<T> CLvector<T>::operator*(T c)
+CLvector<T> CLvector<T>::operator*(T c) const
 {
 	return ( (this->x * c) + (this->y * c) + (this->z * c) );
 }
@@ -75,7 +75,7 @@ CLvector<T> CLvector<T>::operator*(T c)
 
 //cross product:
 template<typename T>
-CLvector<T> CLvector<T>::operator^(CLvector<T>& a)
+CLvector<T> CLvector<T>::operator^(const CLvector<T>& a) const
 {
 	return CLvector( ( (this->y * a.z) - (this->z * a.y) ),( (this->z * a.x) - (this->x * a.z) ),( (this->x * a.y) - (this->y * a.x) ) );
 }
@@ -83,15 +83,15 @@ CLvector<T> CLvector<T>::operator^(CLvector<T>& a)
 
 //vector length:
 template<typename T>
-T CLvector<T>::operator!()
+T CLvector<T>::operator!() const
 {
-	return ( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ); //! add square root
+	return CLmath::intsqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) );
 }
 //*
 
 //vector addition:
 template<typename T>
-CLvector<T>& CLvector<T>::operator+=(CLvector<T>& a)
+CLvector<T>& CLvector<T>::operator+=(const CLvector<T>& a)
 {
 	this->x += a.x;
 	this->y += a.y;
@@ -102,7 +102,7 @@ CLvector<T>& CLvector<T>::operator+=(CLvector<T>& a)
 
 //vector subtraction:
 template<typename T>
-CLvector<T>& CLvector<T>::operator-=(CLvector<T>& a)
+CLvector<T>& CLvector<T>::operator-=(const CLvector<T>& a)
 {
 	this->x -= a.x;
 	this->y -= a.y;
@@ -122,27 +122,6 @@ CLvector<T>& CLvector<T>::operator*=(T c)
 }
 //*
 
-//cross product:
-template<typename T>
-CLvector<T>& CLvector<T>::operator^=(CLvector<T>& a)
-{
-	this->x = ( (this->y * a.z) - (this->z * a.y) );
-	this->y = ( (this->z * a.x) - (this->x * a.z) );
-	this->z = ( (this->x * a.y) - (this->y * a.x) );
-	return *this;
-}
-//*
-
-//vector assignment:
-template<typename T>
-CLvector<T>& CLvector<T>::operator=(CLvector<T>& a)
-{
-	this->x = a.x;
-	this->y = a.y;
-	this->z = a.z;
-}
-//*
-
 //vector assignment:
 template<typename T>
 CLvector<T>& CLvector<T>::operator=(CLvector<T> a)
@@ -150,6 +129,15 @@ CLvector<T>& CLvector<T>::operator=(CLvector<T> a)
 	this->x = a.x;
 	this->y = a.y;
 	this->z = a.z;
+	return *this;
+}
+//*
+
+//vector assignment:
+template<typename T>
+CLvector<T>::operator CLvector<float>() const
+{
+	return CLvector<float>( float(this->x), float(this->y), float(this->z) );
 }
 //*
 
@@ -159,7 +147,16 @@ void CLvector<T>::print()
 {
 	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl; 
 }
+//*
 
+//*
+
+//typedefs:
+typedef CLvector<xlong> CLlvector;
+typedef CLvector<float> CLfvector;
+//typedef CLvector<fixed> CLxvector;
+
+//#define v_ template<class clvector> 
 //*
 
 

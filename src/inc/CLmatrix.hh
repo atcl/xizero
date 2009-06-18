@@ -7,24 +7,19 @@
 #include <iostream>
 #include "CLtypes.hh"
 #include "CLcl.hh"
-#include "CLconsts.hh"
-#include "CLstruct.hh"
 #include "CLvector.hh"
 #include "CLmath.hh"
 
 
 class CLmatrix : public virtual CLcl
 {
-	protected:
-		CLmath* clmath;
-
 	private:
 		float m[4][4];
 		
 		void multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44);
 
 	public:
-		CLmatrix(bool i,CLmath* clm);
+		CLmatrix(bool i);
 		~CLmatrix();
 		void rotate(xlong x,xlong y,xlong z);
 		void translate(xlong x,xlong y,xlong z);
@@ -74,10 +69,8 @@ void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,fl
 	m[3][3] = (tm0*n14 + tm1*n24 + tm2*n34 + tm3*n44);
 }
 
-CLmatrix::CLmatrix(bool i,CLmath* clm)
+CLmatrix::CLmatrix(bool i)
 {
-	clmath = clm;
-
 	if(i==false) clear(0);
 	if(i==true) unit();
 }
@@ -88,22 +81,22 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z)
 {
 	if(x!=0) 
 	{
-		float sinx = clmath->sinbyarray(x);
-		float cosx = clmath->cosbyarray(x);
+		float sinx = CLmath::sin(x);
+		float cosx = CLmath::cos(x);
 		multiplicate(1,0,0,0,0,cosx,-sinx,0,0,sinx,cosx,0,0,0,0,1);
 	}	
 
 	if(y!=0)
 	{
-		float siny = clmath->sinbyarray(y);
-		float cosy = clmath->cosbyarray(y);
+		float siny = CLmath::sin(y);
+		float cosy = CLmath::cos(y);
 		multiplicate(cosy,0,siny,0,0,1,0,0,-siny,0,cosy,0,0,0,0,1);
 	}
 
 	if(z!=0)
 	{
-		float sinz = clmath->sinbyarray(z);
-		float cosz = clmath->cosbyarray(z);
+		float sinz = CLmath::sin(z);
+		float cosz = CLmath::cos(z);
 		multiplicate(cosz,-sinz,0,0,sinz,cosz,0,0,0,0,1,0,0,0,0,1);
 	}
 }

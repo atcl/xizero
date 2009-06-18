@@ -14,7 +14,6 @@
 class CLlight : public virtual CLcl
 {
 	protected:
-		CLmath*     clmath;
 		CLmatrix*   lm;
 
 	private:
@@ -24,7 +23,7 @@ class CLlight : public virtual CLcl
 		xlong       type;
 		
 	public:
-		template<class clvector>CLlight(clvector l,float li,uxlong c,CLmath* clm);
+		template<class clvector>CLlight(clvector l,float li,uxlong c);
 		~CLlight();
 
 		template<class clvector>clvector getlight();
@@ -40,13 +39,12 @@ class CLlight : public virtual CLcl
 		void draw();
 };
 
-template<class clvector>CLlight::CLlight(clvector l,float li,uxlong c,CLmath* clm)
+template<class clvector>CLlight::CLlight(clvector l,float li,uxlong c)
 {
 	light = l;
 	intensity = li;
 	color   = c;
-	clmath  = clm;
-	lm = new CLmatrix(1,clmath);
+	lm = new CLmatrix(1);
 }
 
 CLlight::~CLlight()

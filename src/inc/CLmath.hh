@@ -7,49 +7,40 @@
 #include <math.h>
 
 #include "CLtypes.hh"
-#include "CLcl.hh"
-#include "CLvector.hh"
 
-
-//+templates
-class CLmath : public virtual CLcl
+namespace CLmath
 {
-	private:
-		float* sinarray;
-		float* cosarray;
-		float qpi;
-		float qpi180;
 
-	public:
-		CLmath();
-		~CLmath();
+//globals:
+float  fxpi;
+float* sinarray;
+float* cosarray;
+//*
 
-		template<typename T> T sign(T x);
-		template<typename T> T heaviside(T x);
-		template<typename T> T absolute(T x);
-		template<typename T> T min(T a,T b);
-		template<typename T> T min(T a,T b,T c,T d);
-		template<typename T> T max(T a,T b);
-		template<typename T> T max(T a,T b,T c,T d);
-		template<typename T> T intsqrt(T x);
-		float sinbyarray(xlong x);
-		float cosbyarray(xlong x);
+//prototypes:
+void init();
+template<typename T> T sign(T x);
+template<typename T> T heaviside(T x);
+template<typename T> T absolute(T x);
+template<typename T> T min(T a,T b);
+template<typename T> T max(T a,T b);
+template<typename T> T round(T x);
+template<typename T> T roundup(T x);
+template<typename T> T rounddown(T x);
+template<typename T> T intsqrt(T x);
+template<typename T> T deg2rad(xlong d);
+xlong faculty(xlong f);
+xlong power(xlong b,xlong e);
+float pi();
+float sin(xlong x);
+float cos(xlong x);
+float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
+//*
 
-		float pi();
-		float deg2rad(xlong d);
-		xlong faculty(xlong f);
-		xlong power(xlong b,xlong e);
-		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
-
-		xlong round(float x);
-		xlong roundup(float x);
-		xlong rounddown(float x);
-};
-
-CLmath::CLmath()
+//implementation:
+void init()
 {
-	qpi = 355/113;
-	qpi180 = qpi / 180;
+	fxpi = 355/113;
 
 	float degtorad = M_PI/180;
 
@@ -61,84 +52,58 @@ CLmath::CLmath()
 		sinarray[i] = sin(i*degtorad);
 		cosarray[i] = cos(i*degtorad);
 	}
-
-	
 }
 
-CLmath::~CLmath()
+template<typename T>
+T sign(T x)
 {
-	delete[] sinarray;
-	delete[] cosarray;
+	return (x==0) ? 0 : (x<0 ? -1 : 1);
 }
 
-template<typename T> T CLmath::sign(T x)
+template<typename T>
+T heaviside(T x)
 {
-	//{ return (x==0) ? 0 : (x<0 ? -1 : 1); }
-
-	if(x == 0) return 0;
-	else if(x < 0) return -1;
-	else if(x > 0) return 1;
+	return (x<=0) ? 0 : 1;
 }
 
-template<typename T> T CLmath::heaviside(T x)
+template<typename T>
+T absolute(T x)
 {
-	//replace by return first bit	
-
-	if(x > 0) return 1;
-	else return 0;
+	return (x<0) ? -x : x;
 }
 
-template<typename T> T CLmath::absolute(T x)
+template<typename T>
+T min(T a,T b)
 {
-	if(x<0) x *= -1;
-
-	return x;
+	return (a<b) ? a : b;
 }
 
-template<typename T> T CLmath::min(T a,T b)
+template<typename T>
+T max(T a,T b)
 {
-	if(a<=b) return a;
-	else return b;
+	return (a>b) ? a : b;
 }
 
-template<typename T> T CLmath::min(T a,T b,T c,T d)
+template<typename T>
+T round(T x)
 {
-	T m = a;
-	if(b<m) m=b;
-	if(c<m) m=c;
-	if(d<m) m=d;
-	return m;
+	return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x);
 }
 
-template<typename T> T CLmath::max(T a,T b)
+template<typename T>
+T roundup(T x)
 {
-	if(a>=b) return a;
-	else return b;
+	return xlong(ceil(x));
 }
 
-template<typename T> T CLmath::max(T a,T b,T c,T d)
+template<typename T>
+T rounddown(T x)
 {
-	T m = a;
-	if(b>m) m=b;
-	if(c>m) m=c;
-	if(d>m) m=d;
-	return m;
+	return xlong(floor(x));
 }
 
-float CLmath::sinbyarray(xlong x)
-{
-	if(x < 0) x -= 180;
-	xlong d = absolute(x)%360;
-	return sinarray[d];
-}
-
-float CLmath::cosbyarray(xlong x)
-{
-	xlong d = absolute(x)%360;
-	return cosarray[d];
-}
-
-template<typename T> T CLmath::intsqrt(T x)
+template<typename T>
+T intsqrt(T x)
 {
 	if(x<=0) return 0;
 
@@ -153,17 +118,13 @@ template<typename T> T CLmath::intsqrt(T x)
 	return tmp;
 }
 
-float CLmath::pi()
+template<typename T>
+T deg2rad(T d)
 {
-	return qpi;
+	return float(fxpi*d);
 }
 
-float CLmath::deg2rad(xlong d)
-{
-	return float(qpi*d);
-}
-
-xlong CLmath::faculty(xlong f)
+xlong faculty(xlong f)
 {
 	xlong r = 1;
 
@@ -175,7 +136,7 @@ xlong CLmath::faculty(xlong f)
 	return r;
 }
 
-xlong CLmath::power(xlong b,xlong e)
+xlong power(xlong b,xlong e)
 {
 	xlong r = 1;
 
@@ -187,7 +148,25 @@ xlong CLmath::power(xlong b,xlong e)
 	return r;
 }
 
-float CLmath::odeeuler( float(*f)(float,float),float x0,float t0,float h,xlong k)
+float pi()
+{
+	return fxpi;
+}
+
+float sin(xlong x)
+{
+	if(x < 0) x -= 180;
+	xlong d = absolute(x)%360;
+	return sinarray[d];
+}
+
+float cos(xlong x)
+{
+	xlong d = absolute(x)%360;
+	return cosarray[d];
+}
+
+float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 {
 	float tk = t0;
 	float xk = x0;
@@ -200,20 +179,9 @@ float CLmath::odeeuler( float(*f)(float,float),float x0,float t0,float h,xlong k
 	return xk;
 }
 
-xlong CLmath::round(float x)
-{
-	if(x-floor(x)>=0.5) return ceil(x);
-	else return floor(x);
-}
+//*
 
-xlong CLmath::roundup(float x)
-{
-	return xlong(ceil(x));
-}
-
-xlong CLmath::rounddown(float x)
-{
-	return xlong(floor(x));
-}
+} //namespace end
 
 #endif
+

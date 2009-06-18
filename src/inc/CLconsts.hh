@@ -4,7 +4,7 @@
 #define HH_CLCONSTS
 #pragma message "warning " __FILE__ " ! TODO: more"
 
-namespace CL
+namespace CLcolors
 { 
 	#define CLsystem 0x00C0C0C0
 	#define CLtrans  0xFF000000

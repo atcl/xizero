@@ -184,5 +184,12 @@ template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 	return buffer[i];
 }
 
+//*
+
+//typedefs:
+typedef CLbuffer<float> CLfbuffer;
+typedef CLbuffer<xlong> CLlbuffer;
+//*
+
 #endif
 
