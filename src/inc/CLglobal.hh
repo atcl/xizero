@@ -21,7 +21,9 @@ CLlbuffer* CLdoublebuffer;
 CLlbuffer* CLstencilbuffer;
 CLfbuffer* CLzbuffer;
 
-CLlight*   amb;
+CLfvector clplane(0,0,1);
+CLfvector cllight(1,1,-1);
+
 CLmatrix*  linearM;
 CLmatrix*  shadowM;
 

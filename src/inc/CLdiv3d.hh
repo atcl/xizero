@@ -13,6 +13,7 @@ void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong col
 void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db);
 template<class clvector>CLpoint project(clvector p);
 void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db);
+void drawlight();
 //
 
 

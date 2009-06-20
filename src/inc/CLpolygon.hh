@@ -54,7 +54,7 @@ class CLpolygon : public virtual CLcl
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
-		//void setcolor(uxlong c);
+		void setcolor(uxlong c);
 		uxlong getcolor();
 		CLfvector getnormal();
 };
@@ -205,7 +205,7 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 		}
 		else
 		{
-			CLexit_(1,0,__func__,"Invalid z value: ",ppoint[x].z);
+			CLsystem::CLexit_(1,0,__func__,"Invalid z value: ",ppoint[x].z);
 		}
 	}
 }
@@ -295,7 +295,7 @@ bool CLpolygon::visible()
 {
 	xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
 		
-	 return( f < 1L ? 1 : 0 );
+	return( f < 1L ? 1 : 0 );
 }
 
 void CLpolygon::shape()
@@ -312,12 +312,12 @@ void CLpolygon::shape()
 void CLpolygon::flatshade(bool ambient)
 {
 	uxlong d = 0;
-	doubleword argb;
+	doubleword argb = { 0 };
 
 	float t = (normal * cllight) / ( !normal * !cllight );
 	t = CLmath::absolute(t);
 
-	//if(t > 1) t = 1;
+	if(t > 1) t = 1;
 
 	if(t < 0.2 && ambient==false)
 	{
@@ -531,9 +531,42 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 
 }
 
-void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
+void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
 {
-	//! todo
+	screenside* backup_left = leftside;
+	screenside* backup_right = rightside;
+	CLfbuffer* backup_zbuffer = CLzbuffer;
+	xlong backup_ymax = ymax; 
+
+	leftside = l;
+	rightside = r;
+	CLzbuffer = b;
+	ymax = ymax-1;
+	
+	//
+
+	ppoint[0] = points[0];
+	ppoint[1] = points[1];
+	ppoint[2] = points[2];
+	ppoint[3] = points[3];
+
+	ppoint[0].z += float(p.z);
+	ppoint[1].z += float(p.z);
+	ppoint[2].z += float(p.z);
+	ppoint[3].z += float(p.z);
+	zclipping();
+	project(p.x,p.y,0);
+	xyclipping();
+	if(cpointcount == 0) return;
+
+	rasterize(2);
+
+	//
+
+	leftside = backup_left;
+	rightside = backup_right;
+	CLzbuffer = backup_zbuffer;
+	ymax = backup_ymax;
 }
 
 void CLpolygon::update(CLmatrix* m,bool i=0)
@@ -575,10 +608,10 @@ void CLpolygon::reset()
 	normal    = rnormal;
 }
 
-// void CLpolygon::setcolor(uxlong c)
-// {
-// 	color = c;
-// }
+void CLpolygon::setcolor(uxlong c)
+{
+	color = c;
+}
 
 uxlong CLpolygon::getcolor()
 {

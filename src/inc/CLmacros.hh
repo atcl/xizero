@@ -4,6 +4,7 @@
 #define HH_CLMACROS
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
+#include <iostream>
 #include <string.h>
 
 #include "CLtypes.hh"
@@ -21,12 +22,17 @@ xlong inline x600(xlong f)
 
 void inline say(const xchar* c)
 {
+	std::cout << c << std::endl;
+}
 
+void inline debug(const xchar* c,xlong v)
+{
+	std::cout << c << ": " << v << std::endl;
 }
 
 void inline bye()
 {
-	CLexit_(0,0,__func__,"bye");
+	CLsystem::CLexit_(0,0,__func__,"bye");
 }
 
 void inline CLstosd(xlong* dst,xlong val,xlong cnt)
@@ -41,7 +47,7 @@ void inline CLmovsd(xlong* dst,void* src,xlong cnt)
 
 void inline qq(const xchar m)
 {
-	CLprint_(m);
+	CLsystem::CLprint_(m);
 }
 
 #endif

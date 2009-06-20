@@ -12,8 +12,6 @@
 
 class CLgame : public virtual CLcl
 {
-	protected:
-
 	private:
 		xlong boundaryx1;
 		xlong boundaryx2;

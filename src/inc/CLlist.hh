@@ -244,12 +244,12 @@ void CLlist::print()
 {
 	setfirst();
 
-	CLprint_("|");
+	CLsystem::CLprint_("|");
 
 	while(!islast())
 	{
-		CLttyout_("+");
-		CLprint_(getcurrentname());
+		CLsystem::CLprint_("+",0);
+		CLsystem::CLprint_(getcurrentname());
 		setnext();
 	}
 }

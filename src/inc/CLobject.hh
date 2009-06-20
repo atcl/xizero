@@ -40,6 +40,7 @@ class CLobject : public virtual CLcl
 		
 		void update(CLmatrix* m);
 		void display(xchar flags);
+		void display(screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		CLlvector getposition();
 		xlong getpositionx();
 		xlong getpositiony();
@@ -100,7 +101,7 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 	xlong zshift = 2;
 	if(zs==0) zshift = 0;
 
-	if(dataptr[0] != '<CLY') CLexit_(1,0,__func__,"wrong y3d format, may be endianess?");
+	if(dataptr[0] != '<CLY') CLsystem::CLexit_(1,0,__func__,"wrong y3d format, may be endianess?");
 
 	if(dataptr[1] == '3DB>')
 	{
@@ -109,7 +110,7 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 		//dataptr[3] is empty
 
 		//dataptr[4] = "OBJT"
-		if(dataptr[4] != 'OBJT' ) CLexit_(1,0,__func__,"No OBJT tag");
+		if(dataptr[4] != 'OBJT' ) CLsystem::CLexit_(1,0,__func__,"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
@@ -119,13 +120,13 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 
 		for(int i=0;i<sobjcount;i++)
 		{
-			if(dataptr[d] != 'SOBJ' ) CLexit_(1,0,__func__,"No SOBJ tag");
+			if(dataptr[d] != 'SOBJ' ) CLsystem::CLexit_(1,0,__func__,"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
 			localdockcount = dataptr[d]; d++;
 
-			if(dataptr[d] != 'CONN' ) CLexit_(1,0,__func__,"No CONN tag");
+			if(dataptr[d] != 'CONN' ) CLsystem::CLexit_(1,0,__func__,"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
@@ -133,13 +134,13 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 
 			for(int j=0;j<localpolycount;j++,polycounter++)
 			{
-				if(dataptr[d] != 'POLY' ) CLexit_(1,0,__func__,"No POLY tag");
+				if(dataptr[d] != 'POLY' ) CLsystem::CLexit_(1,0,__func__,"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				localcolor = dataptr[d]; d++; //color
 				d++; //0
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLsystem::CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[0].x = dataptr[d] + xoff; d++; //x1
 				t[0].y = dataptr[d] + yoff; d++; //y1
@@ -154,7 +155,7 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 				if( t[0].z > boundingbox->b1.z) { boundingbox->b1.z = t[0].z; boundingbox->b2.z = t[0].z; boundingbox->b3.z = t[0].z; boundingbox->b4.z = t[0].z; } 
 				//*
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLsystem::CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[1].x = dataptr[d] + xoff; d++; //x2
 				t[1].y = dataptr[d] + yoff; d++; //y2
@@ -169,7 +170,7 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 				if( t[1].z > boundingbox->b1.z) { boundingbox->b1.z = t[1].z; boundingbox->b2.z = t[1].z; boundingbox->b3.z = t[1].z; boundingbox->b4.z = t[1].z; } 
 				//*
 
-				if(dataptr[d] != 'VECT' ) CLexit_(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLsystem::CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[2].x = dataptr[d] + xoff; d++; //x3
 				t[2].y = dataptr[d] + yoff; d++; //y3
@@ -184,7 +185,7 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 				if( t[2].z > boundingbox->b1.z) { boundingbox->b1.z = t[2].z; boundingbox->b2.z = t[2].z; boundingbox->b3.z = t[2].z; boundingbox->b4.z = t[2].z; } 
 				//*
 
-				if(dataptr[d] != 'VECT' )CLexit_(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) CLsystem::CLexit_(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3].x = dataptr[d] + xoff; d++; //x4
 				t[3].y = dataptr[d] + yoff; d++; //y4
@@ -198,9 +199,8 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 				if( t[3].z < boundingbox->t1.z) { boundingbox->t1.z = t[3].z; boundingbox->t2.z = t[3].z; boundingbox->t3.z = t[3].z; boundingbox->t4.z = t[3].y; } 
 				if( t[3].z > boundingbox->b1.z) { boundingbox->b1.z = t[3].z; boundingbox->b2.z = t[3].z; boundingbox->b3.z = t[3].z; boundingbox->b4.z = t[3].y; } 
 				//*
-				
-				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
 
+				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
 			}
 
 			for(int k=0;k<localdockcount;k++,dockcounter++)
@@ -276,6 +276,14 @@ void CLobject::display(xchar flags)
 		{
 			polyptr[i]->display(position,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
 		}
+	}
+}
+
+void CLobject::display(screenside* l,screenside* r,CLfbuffer* b,xlong h)
+{
+	for(int i=0;i<polycount;i++)
+	{
+		polyptr[i]->display(position,l,r,b,h);
 	}
 }
 

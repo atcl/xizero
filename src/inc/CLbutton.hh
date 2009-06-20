@@ -6,9 +6,10 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLutils.hh"
 #include "CLguibase.hh"
 
-class CLbutton : public CLguibase , public virtual CLcl
+class CLbutton : public CLguibase
 {
 	private:
 		void (*action)();
@@ -64,7 +65,7 @@ void CLbutton::setcaption(xchar* t)
 void CLbutton::setcaption(const xchar* t)
 {
 	delete caption;
-	xlong s = getchararraysize_(t);
+	xlong s = CLutils::chararraylength(t);
 	caption = new xchar[s];
 	for(int i=0; i<s ;i++)
 	{

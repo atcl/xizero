@@ -26,12 +26,8 @@ int main(int argc, char** argv)
 	FLTKsetup();
 	//***
 
-	//CLmatrix
-	linearM->unit();
-	shadowM->shadow(amb->getlight(),plane);
-
 	xchar* gg = "manifolds rule";
-	std::cout << gg << " " << getchararraysize_(gg) << std::endl;
+	std::cout << gg << " " << CLutils::chararraylength(gg) << std::endl;
 
 //
 // 	xlong* fbcx = CLgetfile_("../dat/test.bcx");
@@ -56,12 +52,12 @@ int main(int argc, char** argv)
 	//
 
 		//test bcx loading:
-			CLfile* fbcx = CLgetfile_("../dat/test.bcx");
+			CLfile* fbcx = CLsystem::CLgetfile_("../dat/test.bcx");
 			xlong** bcx;
 			doubleword tt;
 			bcx = CLformat::loadbcx(fbcx);
 		//test tga loading:
-			CLfile* ftga = CLgetfile_("../dat/7segment.tga");
+			CLfile* ftga = CLsystem::CLgetfile_("../dat/7segment.tga");
 			sprite* testsprite = CLformat::loadtga(ftga);
 
 		//test tree:
@@ -92,13 +88,13 @@ int main(int argc, char** argv)
 	
 	if(argfileindex!=-1)
 	{
-		CLfile* arch = CLgetfile_(argfile.c_str());
+		CLfile* arch = CLsystem::CLgetfile_(argfile.c_str());
 		arfile* arar = CLformat::loadar(arch);
 		cube = arar->members[argfileindex];
 	}
 	else
 	{
-		CLfile* cubef = CLgetfile_(argfile.c_str());
+		CLfile* cubef = CLsystem::CLgetfile_(argfile.c_str());
 		cube = cubef;
 	}
 
@@ -215,8 +211,8 @@ int main(int argc, char** argv)
 
 			//System:
 			case '0':
-				xlong reval = CLsystem_("Xdialog --msgbox 'bye' 0 0");
-				CLexit_(1,0,"user","exit");
+				xlong reval = CLsystem::CLsystem_("Xdialog --msgbox 'bye' 0 0");
+				CLsystem::CLexit_(1,0,"user","exit");
 			break;
 		}
 

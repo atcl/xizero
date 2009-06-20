@@ -9,7 +9,7 @@
 #include "CLguibase.hh"
 
 
-class CLprogress : public CLguibase , public virtual CLcl
+class CLprogress : public CLguibase
 {
 	private:
 		xlong framethickness;

@@ -66,9 +66,9 @@ void atcrosslevel_intro()
 		xlong *z_scl = new xlong[anim_duration*anim_frames];
 
 	//load atcrosslevel model
-	CLfile *cf = CLgetfile_("../dat/cross.y3d");
+	CLfile *cf = CLsystem::CLgetfile_("../dat/cross.y3d");
 	CLobject* cross = new CLobject(cf,400,300,100,0);
-	CLfile *lf = CLgetfile_("../dat/level.y3d");
+	CLfile *lf = CLsystem::CLgetfile_("../dat/level.y3d");
 	CLobject* level0 = new CLobject(lf,400,300,100,0);
 	CLobject* level1 = new CLobject(lf,400,300,100,0);
 	CLobject* level2 = new CLobject(lf,400,300,100,0);
@@ -82,14 +82,14 @@ void atcrosslevel_intro()
 
 	//build scene
 
-	xlong anim_start = CLgetmilliseconds_();
+	xlong anim_start = CLsystem::CLgetmilliseconds_();
 	anim_stop += anim_start;
 
 	//run animation
 	while( anim_current <= anim_stop )
 	{
 		//check time
-		anim_current = CLgetmilliseconds_();
+		anim_current = CLsystem::CLgetmilliseconds_();
 		anim_index = long((anim_current - anim_start) / anim_length);
 
 		//transform

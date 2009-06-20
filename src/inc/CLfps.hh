@@ -13,9 +13,9 @@ class CLfps : public virtual CLcl
 {
 	private:
 		xlong framespersecond;
-		float currenttime;
-		float elapsedtime;
-		float temptime;
+		xlong currenttime;
+		xlong elapsedtime;
+		xlong temptime;
 		xlong frames;
 		xlong lastupdate;
 		xlong interval;
@@ -32,13 +32,13 @@ class CLfps : public virtual CLcl
 
 CLfps::CLfps(xlong i,bool o)
 {
-	interval = i;
+	interval = i*1000;
 	output = o;
 }
 
 CLfps::CLfps(xlong i,bool o,xlong* outtoo)
 {
-	interval = i;
+	interval = i*1000;
 	output = o;
 	out = outtoo;
 }
@@ -48,25 +48,25 @@ CLfps::~CLfps() { }
 void CLfps::init()
 {
 	frames = 0;
-	lastupdate = CLgetmilliseconds_();
+	lastupdate = CLsystem::CLgetmilliseconds_();
 	elapsedtime = 0;
 }
 
 void CLfps::increment()
 {
 	frames++;
-	currenttime = CLgetmilliseconds_();
+	currenttime = CLsystem::CLgetmilliseconds_();
 	elapsedtime += (currenttime - lastupdate);
-	temptime = (elapsedtime / 1000);
+	temptime = elapsedtime;
 
 	if(temptime >= interval)
 	{
-		framespersecond = xlong(frames/temptime);
+		framespersecond = xlong(frames*1000/temptime);
 
 		if(output==true)
 		{
-			CLttyout_("fps: ");
-			CLprint_(framespersecond);
+			CLsystem::CLprint_("fps: ",0);
+			CLsystem::CLprint_(framespersecond);
 			//cout << "fps: " << framespersecond << endl;
 		}
 

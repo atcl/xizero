@@ -22,9 +22,6 @@ xlong zdistance = 1000; //=zmax?
 uxlong nolight = 0x00303030;
 uxlong shadowcolor = 0x00C0C0C0;
 
-CLfvector plane(0,0,1);
-CLfvector cllight(-1,1,-1);
-
 screenside *leftside;
 screenside *rightside;
 

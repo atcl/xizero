@@ -19,32 +19,25 @@
 
 namespace CLsystem
 {
-
-	
+	void    CLexit_(xlong r,void(*e)(),const xchar *f="",const xchar *m="");
+	void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d);
+	void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d);
+	CLfile* CLgetfile_(const xchar* fn,bool s=true);
+	xchar** CLgetcsvfile_(const char* fn);
+	void    CLprint_(const xchar* c,bool i=1);
+	void    CLprint_(const xlong l,bool i=1);
+	void    CLwaitforkey_();
+	void    CLwait_(xlong milliseconds);
+	xlong   CLgetmilliseconds_(); //since midnight
+	xlong    CLdoevery_(every* e);
+	xlong   CLsystem_(const xchar* c);
+	void    installsystemkey(xchar scancode,void *action);
 }
 
 
-//prototypes:
-void    CLexit_(xlong r,void(*e)(),const xchar *f="",const xchar *m="");
-void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d);
-void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d);
-CLfile* CLgetfile_(const xchar* fn,bool s=true);
-// xlong   CLgetfilesize_(const xchar* fn);
-xchar** CLgetcsvfile_(const char* fn);
-void    CLdebug_(const xchar* c,xlong v);
-void    CLprint_(const xchar* c);
-void    CLprint_(const xlong l);
-void    CLttyout_(const xchar* c);
-void    CLttyout_(const xlong l);
-void    CLwaitforkey_();
-void    CLwait_(xlong milliseconds);
-float   CLgetmilliseconds_(); //since midnight
-xlong   CLsystem_(const xchar* c);
-xlong   getchararraysize_(const xchar* c);
-void    installsystemkey(xchar scancode,void *action);
-//
 
-void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m)
+//implementaion:
+void CLsystem::CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m)
 {
 	if(e!=0) e();
 
@@ -52,7 +45,7 @@ void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m)
 	exit(r);
 }
 
-void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d)
+void CLsystem::CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d)
 {
 	if(e!=0) e();
 
@@ -60,7 +53,7 @@ void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d)
 	exit(r);
 }
 
-void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
+void CLsystem::CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
 {
 	if(e!=0) e();
 
@@ -68,7 +61,7 @@ void CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
 	exit(r);
 }
 
-CLfile* CLgetfile_(const xchar* fn,bool s)
+CLfile* CLsystem::CLgetfile_(const xchar* fn,bool s)
 {
 	CLfile* re = new CLfile;
 
@@ -100,20 +93,7 @@ CLfile* CLgetfile_(const xchar* fn,bool s)
 	return re;
 }
 
-// xlong CLgetfilesize_(const xchar* fn)
-// {
-// 	FILE *of;
-// 	xlong fl;
-// 
-// 	if( !( of = fopen(fn,"rb") ) ) CLexit_(1,0,__func__,"cannot open file");
-// 	fseek (of,0,SEEK_END);
-// 	fl = (ftell(of));
-// 	fclose(of);
-// 
-// 	return fl;
-// }
-
-xchar** CLgetcsvfile_(const char* fn)
+xchar** CLsystem::CLgetcsvfile_(const char* fn)
 {
 	std::ifstream of;
 	char **bf;
@@ -162,37 +142,32 @@ xchar** CLgetcsvfile_(const char* fn)
 	return bf;
 }
 
-void CLdebug_(const xchar* c,xlong v)
-{
-	std::cout << c << v << std::endl;
-}
-
-void CLprint_(const xchar* c)
-{
-	std::cout << c << std::endl;
-}
-
-void CLprint_(const xlong l)
-{
-	std::cout << l << std::endl;
-}
-
-void CLttyout_(const xchar* c)
+void CLsystem::CLprint_(const xchar* c,bool i)
 {
 	std::cout << c;
+
+	if(i)
+	{
+		std::cout << std::endl;
+	}
 }
 
-void CLttyout_(const xlong l)
+void CLsystem::CLprint_(const xlong l,bool i)
 {
 	std::cout << l;
+
+	if(i)
+	{
+		std::cout << std::endl;
+	}
 }
 
-void CLwaitforkey_()
+void CLsystem::CLwaitforkey_()
 {
 	std::cin.get(); //change to any key, now only enter
 }
 
-void CLwait_(xlong milliseconds)
+void CLsystem::CLwait_(xlong milliseconds)
 {
 	xlong starttime = clock() / CLOCKS_PER_SEC * 1000;
 	xlong stoptime = (starttime + milliseconds) / 1000 * CLOCKS_PER_SEC;
@@ -206,12 +181,12 @@ void CLwait_(xlong milliseconds)
 
 //! change all seconds stuff to xlong
 
-float CLgetmilliseconds_() //since midnight
+xlong CLsystem::CLgetmilliseconds_() //since midnight
 {
-	return float(1000 * clock() / CLOCKS_PER_SEC);
+	return xlong(1000 * clock() / CLOCKS_PER_SEC);
 }
 
-xlong CLdoevery_(every* e)
+xlong CLsystem::CLdoevery_(every* e)
 {
 	float now = CLgetmilliseconds_();
 
@@ -228,17 +203,12 @@ xlong CLdoevery_(every* e)
 	return 0;
 }
 
-xlong CLsystem_(const xchar* c)
+xlong CLsystem::CLsystem_(const xchar* c)
 {
 	return system(c);
 }
 
-xlong getchararraysize_(const xchar* c)
-{
-	return xlong(strlen(c));
-}
-
-void installsystemkey(xchar scancode,void *action)
+void CLsystem::installsystemkey(xchar scancode,void *action)
 {
 
 }

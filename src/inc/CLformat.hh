@@ -13,27 +13,25 @@
 
 namespace CLformat
 {
-
-//prototyoes:
-xchar** loadcsv(CLfile* sf);
-arfile* loadar(CLfile* sf);
-xlong** loadbcx(CLfile* bf);
-xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
-sprite* loadtga(CLfile* sf);
-
-sprites* loadtileset(CLfile* sf);
-sprites* loadfont(CLfile* sf);
-xlong** loadlvl();
-xlong** loadini();
-//*
+	xchar** loadcsv(CLfile* sf);
+	arfile* loadar(CLfile* sf);
+	xlong** loadbcx(CLfile* bf);
+	xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
+	sprite* loadtga(CLfile* sf);
+	
+	sprites* loadtileset(CLfile* sf);
+	sprites* loadfont(CLfile* sf);
+	xlong** loadlvl();
+	xlong** loadini();
+}
 
 //implementation:
-xchar** loadcsv(CLfile* sf)
+xchar** CLformat::loadcsv(CLfile* sf)
 {
 
 }
 
-arfile* loadar(CLfile* sf)
+arfile* CLformat::loadar(CLfile* sf)
 {
 	//all .ar members must be aligned on 4byte (long) borders
 	//so the filesize is fully dividable by 4
@@ -211,7 +209,7 @@ arfile* loadar(CLfile* sf)
 	return 0;
 }
 
-xlong** loadbcx(CLfile* bf)
+xlong** CLformat::loadbcx(CLfile* bf)
 {
 	xlong lc = CLutils::getlinecount(bf);
 
@@ -255,7 +253,7 @@ xlong** loadbcx(CLfile* bf)
 	return re;
 }
 
-xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
+xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
 	xchar* bf = sf->text;
 	xlong bs = sf->size;
@@ -288,7 +286,7 @@ xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 				if(bf[li]==rc) rev[j][k] = rv;
 				else rev[j][k] = bf[li] - subconst;
 			}
-			else CLexit_(1,0,__func__,"Map not conform with given width");
+			else CLsystem::CLexit_(1,0,__func__,"Map not conform with given width");
 			
 			li++;
 		}
@@ -298,7 +296,7 @@ xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 	return rev;
 }
 
-sprite* loadtga(CLfile* sf)
+sprite* CLformat::loadtga(CLfile* sf)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 	xchar* bf = sf->text;
@@ -337,28 +335,26 @@ sprite* loadtga(CLfile* sf)
 	return r;
 }
 
-sprites* loadtileset(CLfile* sf)
+sprites* CLformat::loadtileset(CLfile* sf)
 {
 
 }
 
-sprites* loadfont(CLfile* sf)
+sprites* CLformat::loadfont(CLfile* sf)
 {
 
 }
 
-xlong** loadlvl()
+xlong** CLformat::loadlvl()
 {
 
 }
 
-xlong** loadini()
+xlong** CLformat::loadini()
 {
 
 }
 //*
-
-} //namespace ends
 
 #endif
 

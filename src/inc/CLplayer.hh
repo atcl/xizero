@@ -182,6 +182,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 {
 	//set parameters to attributes:
 	model[0] = cha;
+
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
 	boundingbox[0] = model[0]->getboundingbox();
 	//boundingbox[1] = model[1]->getboundingbox(); //temp reactivate as soon as 2nd model avail
@@ -259,7 +260,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 
 	gear = 0;
 	active = true;
-	lastupdate = CLgetmilliseconds_();
+	lastupdate = CLsystem::CLgetmilliseconds_();
 	firing=-1;
 }
 
@@ -328,7 +329,7 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 	}
 
 	//
-	float temp = CLgetmilliseconds_();
+	float temp = CLsystem::CLgetmilliseconds_();
 	if(temp >= lastupdate + 20)
 	{
 		tposition.x = position.x - speed.x;
@@ -354,7 +355,7 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 void CLplayer::display()
 {
 	model[0]->setposition(sposition.x,sposition.y,100);
-	model[0]->display(FLAT + AMBIENT + DEBUG);
+	model[0]->display(FLAT + AMBIENT);
 
 	//temp!
 	CLgfx1::drawpolygon(

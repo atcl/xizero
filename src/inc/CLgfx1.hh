@@ -15,54 +15,51 @@
 
 namespace CLgfx1
 {
-		static xlong last_p;
-		static xlong interval_p;
-		static xlong last_s;
-		static xlong interval_s;
+	static xlong last_p;
+	static xlong interval_p;
+	static xlong last_s;
+	static xlong interval_s;
+	xlong locmaxx;
+	xlong locmaxy;
 
-		xlong locmaxx;
-		xlong locmaxy;
-
-//prototypes:
-void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
-
-uxlong readpixel(xlong x,xlong y);
-void drawpixel(xlong x,xlong y,uxlong c);
-void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
-void drawbigpixel(xlong x,xlong y,uxlong c);
-void putpixel(xlong x,xlong y,uxlong c,xlong m);
-void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
-void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
-void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
-void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
-void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
-void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
-void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
-void fill(xlong x,xlong y,uxlong oc,uxlong nc);
-void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
-xlong getspritesize(sprite* s);
-xlong getspritewidth(sprite* s);
-xlong getspriteheight(sprite* s);
-void drawsprite(xlong x,xlong y,sprite* s);
-void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
-void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
-void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c);
-void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
-void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
-void putsprite(xlong x,xlong y,sprite* s,xlong m);
-void drawscreen(sprite* s);
-void drawtile(xlong x,xlong y,sprites *s,xlong ti);
-//*
+	void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
+	uxlong readpixel(xlong x,xlong y);
+	void drawpixel(xlong x,xlong y,uxlong c);
+	void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
+	void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
+	void drawbigpixel(xlong x,xlong y,uxlong c);
+	void putpixel(xlong x,xlong y,uxlong c,xlong m);
+	void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
+	void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
+	void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
+	void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
+	void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+	void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+	void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
+	void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+	void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+	void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
+	void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
+	void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+	void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
+	void fill(xlong x,xlong y,uxlong oc,uxlong nc);
+	void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
+	xlong getspritesize(sprite* s);
+	xlong getspritewidth(sprite* s);
+	xlong getspriteheight(sprite* s);
+	void drawsprite(xlong x,xlong y,sprite* s);
+	void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
+	void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
+	void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c);
+	void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
+	void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
+	void putsprite(xlong x,xlong y,sprite* s,xlong m);
+	void drawscreen(sprite* s);
+	void drawtile(xlong x,xlong y,sprites *s,xlong ti);
+}
 
 //implementation:
-void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
+void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
 //fast version: //untested at all!
 // 	xlong b1 = (yc*xres)+xc;
@@ -117,27 +114,27 @@ void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 //*
 }
 
-uxlong readpixel(xlong x,xlong y)
+uxlong CLgfx1::readpixel(xlong x,xlong y)
 {
 	return ((*CLdoublebuffer)[(y*xres)+y]);
 }
 
-void drawpixel(xlong x,xlong y,uxlong c)
+void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)
 {
 	(*CLdoublebuffer)[(y*xres)+x] = c;
 }
 
-void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
+void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
 {
 	b[(y*xres)+x] = c;
 }
 
-void copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
+void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
 {
 	(*CLdoublebuffer)[(y1*xres)+x1] = (*CLdoublebuffer)[(y2*xres)+x2];
 }
 
-void drawbigpixel(xlong x,xlong y,uxlong c)
+void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c)
 {
 	(*CLdoublebuffer)[(y*xres)+x] = c;
 	(*CLdoublebuffer)[(y*xres)+x+1] = c;
@@ -145,7 +142,7 @@ void drawbigpixel(xlong x,xlong y,uxlong c)
 	(*CLdoublebuffer)[((y+1)*xres)+(x+1)] = c;
 }
 
-void putpixel(xlong x,xlong y,uxlong c,xlong m)
+void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
 {
 	switch(m)
 	{
@@ -164,12 +161,12 @@ void putpixel(xlong x,xlong y,uxlong c,xlong m)
 
 }
 
-void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
+void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
 {
 
 }
 
-void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
+void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 {
 	xlong offsetbase = (y1*xres);
 
@@ -185,7 +182,7 @@ void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 	}
 }
 
-void drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
+void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 {
 	xlong a = y1;
 	xlong b = y2;
@@ -201,7 +198,7 @@ void drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 	}
 }
 
-void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
+void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 {
 	xlong offsetbase = (y1*xres)+x1;
 
@@ -212,7 +209,7 @@ void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 	}
 }
 
-void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	if(x1==x2 && y1==y2) return;
 
@@ -269,7 +266,7 @@ void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	if(x1==x2 && y1==y2) return;
 
@@ -326,12 +323,12 @@ void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
+void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
 {
 
 }
 
-void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	drawhorline(x1,y1,x2,c);
 	drawhorline(x1,y2,x2,c);
@@ -339,7 +336,7 @@ void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	drawverline(x2,y1,y2,c);
 }
 
-void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	for(int i=y1; i<=y2; i++)
 	{
@@ -347,7 +344,7 @@ void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	}
 }
 
-void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
+void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
 {
 	drawanyline(x1,y1,x2,y2,c);
 	drawanyline(x2,y2,x3,y3,c);
@@ -355,7 +352,7 @@ void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,
 	drawanyline(x4,y4,x1,y1,c);
 }
 
-void drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
+void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
 	xlong d = 3 - (r>>1);
 	xlong cx = 0;
@@ -370,19 +367,19 @@ void drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 	}
 }
 
-void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
+void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
 	drawcircle(xc,yc,r,c);
 	drawcircle(xc,yc,r+1,c); //adjust color
 	drawcircle(xc,yc,r-1,c); //adjust color
 }
 
-void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
+void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 {
 
 }
 
-void fill(xlong x,xlong y,uxlong oc,uxlong nc)
+void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 {
 	if (readpixel(x,y) == oc)
 	{
@@ -396,7 +393,7 @@ void fill(xlong x,xlong y,uxlong oc,uxlong nc)
 	return;
 }
 
-void fillframe(xlong x,xlong y,uxlong fc,uxlong c)
+void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 {
 	if (readpixel(x,y) != fc)
 	{
@@ -410,22 +407,22 @@ void fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 	return;
 }
 
-xlong getspritesize(sprite* s)
+xlong CLgfx1::getspritesize(sprite* s)
 {
 	return s->size;
 }
 
-xlong getspritewidth(sprite* s)
+xlong CLgfx1::getspritewidth(sprite* s)
 {
 	return s->width;
 }
 
-xlong getspriteheight(sprite* s)
+xlong CLgfx1::getspriteheight(sprite* s)
 {
 	return s->height;
 }
 
-void drawsprite(xlong x,xlong y,sprite* s)
+void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 {
 	//init
 	if(x>xres || y>yres) return;
@@ -469,37 +466,37 @@ void drawsprite(xlong x,xlong y,sprite* s)
 	
 }
 
-void drawspritescaled(xlong x,xlong y,sprite* s,xlong z)
+void CLgfx1::drawspritescaled(xlong x,xlong y,sprite* s,xlong z)
 {
 
 }
 
-void drawspriterotated(xlong x,xlong y,sprite* s,xlong d)
+void CLgfx1::drawspriterotated(xlong x,xlong y,sprite* s,xlong d)
 {
 
 }
 
-void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c)
+void CLgfx1::drawspriterotated90(xlong x,xlong y,sprite* s,xlong c)
 {
 
 }
 
-void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b)
+void CLgfx1::drawspritemirrored(xlong x,xlong y,sprite* s,xlong b)
 {
 
 }
 
-void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
+void CLgfx1::drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
 {
 
 }
 
-void putsprite(xlong x,xlong y,sprite* s,xlong m)
+void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m)
 {
 
 }
 
-void drawscreen(sprite* s)
+void CLgfx1::drawscreen(sprite* s)
 {
 	if(s->width==xres && s->height==yres)
 	{
@@ -510,7 +507,7 @@ void drawscreen(sprite* s)
 	}
 }
 
-void drawtile(xlong x,xlong y,sprites *s,xlong ti)
+void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 {
 	//find tile
 	xlong toffset = (ti / s->perrow) * s->tilesize;
@@ -558,8 +555,6 @@ void drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	}
 }
 //*
-
-} //end of namespace
 
 #endif
 

@@ -9,7 +9,7 @@
 #include "CLguibase.hh"
 
 
-class CLlabel : public CLguibase , public virtual CLcl
+class CLlabel : public CLguibase
 {
 	private:
 		xchar* text;
