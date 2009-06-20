@@ -40,7 +40,7 @@ class CLpolygon : public virtual CLcl
 		template<class clvector>clvector getxplanecoords(const clvector& a,const clvector& b,float px);
 		template<class clvector>clvector getyplanecoords(const clvector& a,const clvector& b,float py);
 		void zclipping();
-		void project(xlong px=0,xlong py=0);
+		void project(xlong px=0,xlong py=0,bool c=0);
 		void xyclipping();
 		bool visible();
 		void shape();
@@ -190,14 +190,21 @@ void CLpolygon::zclipping()
 	}
 }
 
-void CLpolygon::project(xlong px,xlong py)
+void CLpolygon::project(xlong px,xlong py,bool c)
 {
+	if(c)
+	{
+		px = (xres>>1);
+		py = (yres>>1);
+	}
+
 	for(xlong x=0; x<cpointcount; x++)
 	{
 		if(ppoint[x].z > 0)
 		{
-			spoint[x].x = float(xlong( ( 80 * ppoint[x].x) / (ppoint[x].z) ) + ( (xres>>2) + px ) ); //95 wenn xclipping läuft
-			spoint[x].y = float(xlong( (-95 * ppoint[x].y) / (ppoint[x].z) ) + ( (yres>>2) + py ) );
+			//instead of xlong conversion rather use CLmath::round?
+			spoint[x].x = float(xlong( ( 80 * ppoint[x].x) / (ppoint[x].z) ) + px ); //95 wenn xclipping läuft
+			spoint[x].y = float(xlong( (-95 * ppoint[x].y) / (ppoint[x].z) ) + py );
 			spoint[x].z = ppoint[x].z + cleartrans;
 		}
 		else
@@ -310,9 +317,8 @@ void CLpolygon::flatshade(bool ambient)
 {
 	uxlong d = 0;
 	doubleword argb;
-	CLfvector light = cllight->getlight();
 
-	float t = normal * light / ( !normal * !light );
+	float t = (normal * cllight) / ( !normal * !cllight );
 	t = CLmath::absolute(t);
 
 	if(t > 1) t = 1;
@@ -480,19 +486,31 @@ CLpolygon::~CLpolygon() { }
 
 void CLpolygon::display(const CLlvector& p,xchar flags)
 {
+// 	//*
+// 	if(flags&CENTER)  CLttyout_(1); else CLttyout_(0);
+// 	if(flags&FLAT)    CLttyout_(1); else CLttyout_(0);
+// 	if(flags&AMBIENT) CLttyout_(1); else CLttyout_(0);
+// 	if(flags&SHADOW)  CLttyout_(1); else CLttyout_(0);
+// 	if(flags&SHADER)  CLttyout_(1); else CLttyout_(0);
+// 	if(flags&LPROJ)   CLttyout_(1); else CLttyout_(0);
+// 	if(flags&SHAPE)   CLttyout_(1); else CLttyout_(0);
+// 	if(flags&DEBUG)   CLttyout_(1); else CLttyout_(0);
+// 	CLprint_("bin");
+// 	//*
+
 	if(flags&SHADOW)
-	{
-		ppoint[0] = points[0];
-		ppoint[1] = points[1];
-		ppoint[2] = points[2];
-		ppoint[3] = points[3];
-	}
-	else
 	{
 		ppoint[0] = pointt[0];
 		ppoint[1] = pointt[1];
 		ppoint[2] = pointt[2];
 		ppoint[3] = pointt[3];
+	}
+	else
+	{
+		ppoint[0] = points[0];
+		ppoint[1] = points[1];
+		ppoint[2] = points[2];
+		ppoint[3] = points[3];
 	}
 
 	ppoint[0].z += float(p.z);
@@ -500,12 +518,12 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 	ppoint[2].z += float(p.z);
 	ppoint[3].z += float(p.z);
 	zclipping();
-	project(p.x,p.y);
+	project(p.x,p.y,flags&CENTER);
 	xyclipping();
 	if(cpointcount == 0) return;
 
 
-	if( ~(flags&FLAT) && ~(flags&SHADOW) ) //wireframe
+	if( !((flags&FLAT) || (flags&SHADOW)) ) //wireframe
 	{
 		shape();
 	}
@@ -513,7 +531,7 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 	{
 		if(visible())
 		{
-			if(flags&DEBUG)
+			if(flags&DEBUG)		//wireframe and unshaded color
 			{
 				shade=color;
 				rasterize(0);
@@ -521,6 +539,7 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 			}
 			if( ~(flags&SHADOW) )	//default
 			{
+				//shade=color;
 				flatshade(flags&AMBIENT);
 				rasterize(0);
 			}

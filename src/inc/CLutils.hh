@@ -2,13 +2,39 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLUTILS
 #define HH_CLUTILS
-#warning "Compiling " __FILE__ " ! TODO: ..."
+#pragma message: "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
 #include  "CLstruct.hh"
 
+//
+class CLutils
+{
+	static xlong seed;
+	static xlong multiplicator;
+	static xlong incrementor;
 
-xchar* long2char(xlong l)
+public:
+	static xchar* long2char(xlong l);
+	static xchar long2char(xlong l,xlong i);
+	static xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
+	static void copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
+	static bool comparechararrays(xchar* t1, xchar* t2,xlong tl);
+	static xlong getlinecount(CLfile* sf);
+	static bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el);
+	static xlong getrandom(xlong range);
+	static xchar* color2string(uxlong c);
+	static xlong endian(xlong l);
+	static xlong chararraylength(const xchar* c);
+};
+//
+
+//implentation:
+xlong CLutils::seed = 22695477;
+xlong CLutils::multiplicator = 1;
+xlong CLutils::incrementor = 1;
+
+xchar* CLutils::long2char(xlong l)
 {
 	xchar* ch = new xchar[4];
 
@@ -20,7 +46,7 @@ xchar* long2char(xlong l)
 	return ch;
 }
 
-xchar long2char(xlong l,xlong i)
+xchar CLutils::long2char(xlong l,xlong i)
 {
 	xchar ch = -1;
 
@@ -42,7 +68,7 @@ xchar long2char(xlong l,xlong i)
 	return ch;
 }
 
-xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower)
+xlong CLutils::chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower)
 {
 	xlong l;
 
@@ -55,7 +81,7 @@ xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower)
 	return l;
 }
 
-void copychararray(xchar* dst,xchar* src,xlong length)
+void CLutils::copychararray(xchar* dst,xchar* src,xlong length)
 {
 	for(int i=0; i<length; i++)
 	{
@@ -63,7 +89,7 @@ void copychararray(xchar* dst,xchar* src,xlong length)
 	}
 }
 
-bool comparechararrays(xchar* t1, xchar* t2,xlong tl)
+bool CLutils::comparechararrays(xchar* t1, xchar* t2,xlong tl)
 {
 	for(int i=0; i<tl; i++)
 	{
@@ -73,7 +99,7 @@ bool comparechararrays(xchar* t1, xchar* t2,xlong tl)
 	return true;
 }
 
-xlong getlinecount(CLfile* sf)
+xlong CLutils::getlinecount(CLfile* sf)
 {
 	xlong lc = 0;	//line count
 
@@ -86,7 +112,7 @@ xlong getlinecount(CLfile* sf)
 	return lc;
 }
 
-bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
+bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
 {
 	xlong es;
 	for(int l=0; l<nl; l++)
@@ -105,11 +131,7 @@ bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
 	return true;
 }
 
-xlong seed = 22695477;
-xlong multiplicator = 1;
-xlong incrementor = 1;
-
-xlong getrandom(xlong range)
+xlong CLutils::getrandom(xlong range)
 {
 	seed *= multiplicator;
 	seed += incrementor;
@@ -117,7 +139,7 @@ xlong getrandom(xlong range)
 	return seed % range;
 }
 
-xchar* color2string(uxlong c)
+xchar* CLutils::color2string(uxlong c)
 {
 	doubleword tc;
 	tc.dd = c;
@@ -140,7 +162,7 @@ xchar* color2string(uxlong c)
 	return rc;
 }
 
-xlong endian(xlong l)
+xlong CLutils::endian(xlong l)
 {
 	//converts/toggles endianess of l
 
@@ -159,9 +181,15 @@ xlong endian(xlong l)
 	return tl.dd;
 }
 
-xlong chararraylength(const xchar c)
+xlong CLutils::chararraylength(const xchar* c)
 {
-
+	xlong s = 0;
+	while (c[s])
+	{
+		s++;
+	}
+	return s;
 }
+//*
 
 #endif

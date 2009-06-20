@@ -103,7 +103,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	CLlvector t[4];
 
 	xlong zshift = 2;
-	if(zs==1) zshift = 0;
+	if(zs==0) zshift = 0;
 
 	if(dataptr[0] != '<CLY') CLexit_(1,0,__func__,"wrong y3d format, may be endianess?");
 
@@ -267,19 +267,31 @@ void CLobject::update(CLmatrix* m)
 
 void CLobject::display(xchar flags)
 {
+// 	//*
+// 	if(flags&CENTER)  CLttyout_(1); else CLttyout_(0);
+// 	if(flags&FLAT)    CLttyout_(1); else CLttyout_(0);
+// 	if(flags&AMBIENT) CLttyout_(1); else CLttyout_(0);
+// 	if(flags&SHADOW)  CLttyout_(1); else CLttyout_(0);
+// 	if(flags&SHADER)  CLttyout_(1); else CLttyout_(0);
+// 	if(flags&LPROJ)   CLttyout_(1); else CLttyout_(0);
+// 	if(flags&SHAPE)   CLttyout_(1); else CLttyout_(0);
+// 	if(flags&DEBUG)   CLttyout_(1); else CLttyout_(0);
+// 	CLprint_("bin");
+// 	//*
+
 	if(flags&SHADOW)
 	{
 		for(int i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowmatrix,1);
-			polyptr[i]->display(position,xchar( flags&CENTER + FLAT + flags&AMBIENT + SHADOW ));
+			polyptr[i]->display(position,( (flags&CENTER) + FLAT + (flags&AMBIENT) + SHADOW ));
 		}
 	}
 	else
 	{
 		for(int i=0;i<polycount;i++)
 		{
-			polyptr[i]->display(position,( flags&CENTER + flags&FLAT + flags&AMBIENT + flags&SHADER + flags&DEBUG ));
+			polyptr[i]->display(position,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
 		}
 	}
 }

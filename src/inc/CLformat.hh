@@ -47,7 +47,7 @@ arfile* loadar(CLfile* sf)
 	xlong tsize = cfs - 8;
 
 	//check for "magic-string"
-	if( comparechararrays(bf,"!<arch>",6) == 1 )
+	if( CLutils::comparechararrays(bf,"!<arch>",6) == 1 )
 	{
 		xlong bc = 8;
 		xlong fc = 0;
@@ -58,8 +58,8 @@ arfile* loadar(CLfile* sf)
 		do
 		{
 			//read member header
-			copychararray(&fn[0],&bf[bc],16);	//member filename
-			bc += 48;				//no necessary information here, so skip
+			CLutils::copychararray(&fn[0],&bf[bc],16);	//member filename
+			bc += 48;					//no necessary information here, so skip
 			//*
 
 			//decode filesize of current ar member
@@ -179,7 +179,7 @@ arfile* loadar(CLfile* sf)
 			tindex[fc] = new armember;
 			tindex[fc]->size = fs;
 			tindex[fc]->lsize = fs2;
-			tindex[fc]->name = new xchar[16]; copychararray(tindex[fc]->name,&fn[0],16);
+			tindex[fc]->name = new xchar[16]; CLutils::copychararray(tindex[fc]->name,&fn[0],16);
 			tindex[fc]->data = tb;
 			tindex[fc]->text = reinterpret_cast<xchar *>(&tb[0]);
 			//tindex[fc] contains complete armember
@@ -213,7 +213,7 @@ arfile* loadar(CLfile* sf)
 
 xlong** loadbcx(CLfile* bf)
 {
-	xlong lc = getlinecount(bf);
+	xlong lc = CLutils::getlinecount(bf);
 
 	doubleword nl = { 0 };
 	xlong bc = 0;	
@@ -259,7 +259,7 @@ xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
 	xchar* bf = sf->text;
 	xlong bs = sf->size;
-	xlong lc = getlinecount(sf);
+	xlong lc = CLutils::getlinecount(sf);
 
 	//determine line length
 	xlong lw = 0;

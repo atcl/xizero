@@ -1,10 +1,10 @@
 @echo OFF
 
-TITLE atCROSSLEVEL DOS32
+TITLE atCROSSLEVEL XiZeroDOS32
 
 SET CLenvvar = 'TEST'
 
-CLMAIN.exe
+xizero.exe
 
 CLmsgbox.vbs
 

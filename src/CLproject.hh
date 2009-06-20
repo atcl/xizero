@@ -14,4 +14,6 @@
 #define yres 600
 #define zres 400 
 
+//#define title xizero
+
 #endif

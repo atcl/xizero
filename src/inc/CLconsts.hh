@@ -5,7 +5,7 @@
 #pragma message "warning " __FILE__ " ! TODO: more"
 
 //basic colors
-#define CLsystem 0x00C0C0C0
+#define CLsyscol 0x00C0C0C0
 #define CLtrans  0xFF000000
 #define CLblack  0x00000000
 #define CLwhite  0x00FFFFFF

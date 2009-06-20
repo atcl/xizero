@@ -106,7 +106,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong tf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(checkextension(levela->members[h]->name,16,".mapt",5)==true)
+		if(CLutils::checkextension(levela->members[h]->name,16,".mapt",5)==true)
 		{
 			tf=h;
 			break;
@@ -121,7 +121,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	//now terrain map holds 2d xchar array of terrain objects
 
 	//determine level consts
-	levelheight = getlinecount(levela->members[tf]);
+	levelheight = CLutils::getlinecount(levela->members[tf]);
 	blocksperscreeny = yres / blockheight;
 	blocksperscreenx = xres / blockwidth;
 	mark = levelheight - blocksperscreeny;
@@ -135,7 +135,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong hf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(checkextension(levela->members[h]->name,16,".maph",5)==true)
+		if(CLutils::checkextension(levela->members[h]->name,16,".maph",5)==true)
 		{
 			hf=h;
 			break;
@@ -153,7 +153,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong ef = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(checkextension(levela->members[h]->name,16,".mape",5)==true)
+		if(CLutils::checkextension(levela->members[h]->name,16,".mape",5)==true)
 		{
 			ef=h;
 			break;
@@ -243,7 +243,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong pd = -1;
 	for(int h=0; h<playera->filecount; h++)
 	{
-		if(checkextension(playera->members[h]->name,16,".bcx",4)==true)
+		if(CLutils::checkextension(playera->members[h]->name,16,".bcx",4)==true)
 		{
 			pd=h;
 			break;
@@ -259,7 +259,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong pm = -1;
 	for(int h=0; h<playera->filecount; h++)
 	{
-		if(checkextension(playera->members[h]->name,16,".y3d",4)==true)
+		if(CLutils::checkextension(playera->members[h]->name,16,".y3d",4)==true)
 		{
 			pm=h;
 			break;
@@ -359,7 +359,7 @@ void CLlevel::display()
 	xlong blockoffsety = blockheight >> 1; 
 	xlong yoffset = smoothmark % blockheight;	//block overhead of possibly not fully displayable block
 	xlong currentx = -(xres >> 1) + blockoffsetx;
-	xlong currenty = (yres >> 1) - blockoffsety + yoffset  + (blockheight); //source of dispplay errors in height
+	xlong currenty =  (yres >> 1) - blockoffsety + yoffset  + (blockheight); //source of dispplay errors in height
 	xlong currentz = 0;
 	xlong tempz = 0;
 

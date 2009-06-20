@@ -351,7 +351,7 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 void CLplayer::display()
 {
 	model[0]->setposition(sposition.x,sposition.y,100);
-	model[0]->display(FLAT + AMBIENT);
+	//model[0]->display(FLAT + AMBIENT);
 
 	//temp!
 	CLgfx1::drawpolygon(
@@ -367,7 +367,7 @@ sposition.y-boundingbox[0]->b4.y,
 
 	CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
-	CLgfx1::drawpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
+	CLgfx1::drawbigpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*
 }
 

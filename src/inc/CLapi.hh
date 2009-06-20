@@ -17,12 +17,19 @@
 #include "CLmatrix.hh"
 
 
+namespace CLsystem
+{
+
+	
+}
+
+
 //prototypes:
 void    CLexit_(xlong r,void(*e)(),const xchar *f="",const xchar *m="");
 void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d);
 void    CLexit_(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d);
 CLfile* CLgetfile_(const xchar* fn,bool s=true);
-xlong   CLgetfilesize_(const xchar* fn);
+// xlong   CLgetfilesize_(const xchar* fn);
 xchar** CLgetcsvfile_(const char* fn);
 void    CLdebug_(const xchar* c,xlong v);
 void    CLprint_(const xchar* c);
@@ -32,8 +39,6 @@ void    CLttyout_(const xlong l);
 void    CLwaitforkey_();
 void    CLwait_(xlong milliseconds);
 float   CLgetmilliseconds_(); //since midnight
-float   CLgetcentiseconds_(); //since midnight
-float   CLgetdeciseconds_(); //since midnight
 xlong   CLsystem_(const xchar* c);
 xlong   getchararraysize_(const xchar* c);
 void    installsystemkey(xchar scancode,void *action);
@@ -95,18 +100,18 @@ CLfile* CLgetfile_(const xchar* fn,bool s)
 	return re;
 }
 
-xlong CLgetfilesize_(const xchar* fn)
-{
-	FILE *of;
-	xlong fl;
-
-	if( !( of = fopen(fn,"rb") ) ) CLexit_(1,0,__func__,"cannot open file");
-	fseek (of,0,SEEK_END);
-	fl = (ftell(of));
-	fclose(of);
-
-	return fl;
-}
+// xlong CLgetfilesize_(const xchar* fn)
+// {
+// 	FILE *of;
+// 	xlong fl;
+// 
+// 	if( !( of = fopen(fn,"rb") ) ) CLexit_(1,0,__func__,"cannot open file");
+// 	fseek (of,0,SEEK_END);
+// 	fl = (ftell(of));
+// 	fclose(of);
+// 
+// 	return fl;
+// }
 
 xchar** CLgetcsvfile_(const char* fn)
 {
@@ -204,16 +209,6 @@ void CLwait_(xlong milliseconds)
 float CLgetmilliseconds_() //since midnight
 {
 	return float(1000 * clock() / CLOCKS_PER_SEC);
-}
-
-float CLgetcentiseconds_() //since midnight
-{
-	return float(100 * clock() / CLOCKS_PER_SEC);
-}
-
-float CLgetdeciseconds_() //since midnight
-{
-	return float(10 * clock() / CLOCKS_PER_SEC);
 }
 
 xlong CLdoevery_(every* e)
