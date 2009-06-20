@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLLIST
 #define HH_CLLIST
-#warning "Compiling " __FILE__ " ! TODO: all" 
+#pragma message "Compiling " __FILE__ " ! TODO: all" 
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

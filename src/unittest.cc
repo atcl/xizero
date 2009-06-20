@@ -27,8 +27,8 @@ int main(int argc, char** argv)
 	//***
 
 	//CLmatrix
-	ltm->unit();
-	bsm->shadow(amb->getlight(),plane);
+	linearM->unit();
+	shadowM->shadow(amb->getlight(),plane);
 
 	xchar* gg = "manifolds rule";
 	std::cout << gg << " " << getchararraysize_(gg) << std::endl;
@@ -59,10 +59,10 @@ int main(int argc, char** argv)
 			CLfile* fbcx = CLgetfile_("../dat/test.bcx");
 			xlong** bcx;
 			doubleword tt;
-			bcx = clformat->loadbcx(fbcx);
+			bcx = CLformat::loadbcx(fbcx);
 		//test tga loading:
 			CLfile* ftga = CLgetfile_("../dat/7segment.tga");
-			sprite* testsprite = clformat->loadtga(ftga);
+			sprite* testsprite = CLformat::loadtga(ftga);
 
 		//test tree:
 			CLtree* testtree = new CLtree();
@@ -88,23 +88,23 @@ int main(int argc, char** argv)
 		//}
 	//*
 
-	xlong* cube;
+	CLfile* cube;
 	
 	if(argfileindex!=-1)
 	{
 		CLfile* arch = CLgetfile_(argfile.c_str());
-		arfile* arar = clformat->loadar(arch);
-		cube = arar->members[argfileindex]->data;
+		arfile* arar = CLformat::loadar(arch);
+		cube = arar->members[argfileindex];
 	}
 	else
 	{
 		CLfile* cubef = CLgetfile_(argfile.c_str());
-		cube = cubef->data;
+		cube = cubef;
 	}
 
 	//CLobject + CLpolygon
 
-	CLobject* cubus = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cube,400,300,100,clmath,bsm,amb,0);
+	CLobject* cubus = new CLobject(cube,400,300,100,0);
 
 	clfps->init();
 
@@ -123,90 +123,90 @@ int main(int argc, char** argv)
 
 			//Translate:
 			case FL_Right:
-				ltm->translate(2,0,0);
-				cubus->update(ltm);
+				linearM->translate(2,0,0);
+				cubus->update(linearM);
 			break;
 			case FL_Left:
-				ltm->translate(-2,0,0);
-				cubus->update(ltm);
+				linearM->translate(-2,0,0);
+				cubus->update(linearM);
 			break;
 			case FL_Up:
-				ltm->translate(0,2,0);
-				cubus->update(ltm);
+				linearM->translate(0,2,0);
+				cubus->update(linearM);
 			break;
 			case FL_Down:
-				ltm->translate(0,-2,0);
-				cubus->update(ltm);
+				linearM->translate(0,-2,0);
+				cubus->update(linearM);
 			break;
 			case FL_Page_Up:
-				ltm->translate(0,0,2);
-				cubus->update(ltm);
+				linearM->translate(0,0,2);
+				cubus->update(linearM);
 			break;
 			case FL_Page_Down:
-				ltm->translate(0,0,-2);
-				cubus->update(ltm);
+				linearM->translate(0,0,-2);
+				cubus->update(linearM);
 			break;
 
 			//Rotate:
 			case 'a':
-				ltm->rotate(0,5,0);
-				cubus->update(ltm);
+				linearM->rotate(0,5,0);
+				cubus->update(linearM);
 			break;
 			case 'd':
-				ltm->rotate(0,-5,0);
-				cubus->update(ltm);
+				linearM->rotate(0,-5,0);
+				cubus->update(linearM);
 			break;
 			case 'w':
-				ltm->rotate(-5,0,0);
-				cubus->update(ltm);
+				linearM->rotate(-5,0,0);
+				cubus->update(linearM);
 			break;
 			case 's':
-				ltm->rotate(5,0,0);
-				cubus->update(ltm);
+				linearM->rotate(5,0,0);
+				cubus->update(linearM);
 			break;
 			case 'q':
-				ltm->rotate(0,0,-5);
-				cubus->update(ltm);
+				linearM->rotate(0,0,-5);
+				cubus->update(linearM);
 			break;
 			case 'e':
-				ltm->rotate(0,0,5);
-				cubus->update(ltm);
+				linearM->rotate(0,0,5);
+				cubus->update(linearM);
 			break;
 
 			//Aspectscale:
 			case '7':
-				ltm->aspectscale(1.1);
-				cubus->update(ltm);
+				linearM->aspectscale(1.1);
+				cubus->update(linearM);
 			break;
 			case '8':
-				ltm->aspectscale(0.9);
-				cubus->update(ltm);
+				linearM->aspectscale(0.9);
+				cubus->update(linearM);
 			break;
 
 			//Scale
 			case '1':
-				ltm->scale(1.1,1,1);
-				cubus->update(ltm);
+				linearM->scale(1.1,1,1);
+				cubus->update(linearM);
 			break;
 			case '2':
-				ltm->scale(0.9,1,1);
-				cubus->update(ltm);
+				linearM->scale(0.9,1,1);
+				cubus->update(linearM);
 			break;
 			case '3':
-				ltm->scale(1,1.1,1);
-				cubus->update(ltm);
+				linearM->scale(1,1.1,1);
+				cubus->update(linearM);
 			break;
 			case '4':
-				ltm->scale(1,0.9,1);
-				cubus->update(ltm);
+				linearM->scale(1,0.9,1);
+				cubus->update(linearM);
 			break;
 			case '5':
-				ltm->scale(1,1,1.1);
-				cubus->update(ltm);
+				linearM->scale(1,1,1.1);
+				cubus->update(linearM);
 			break;
 			case '6':
-				ltm->scale(1,1,0.9);
-				cubus->update(ltm);
+				linearM->scale(1,1,0.9);
+				cubus->update(linearM);
 			break;
 			case '^':
 				if(mode==false) mode=true;
@@ -242,15 +242,15 @@ int main(int argc, char** argv)
 //		clgfx1->fill(100,100,0x00000000,0x00FF0000); //!seg fault + overloaded version with no oldcolor and then get per readpixel from provided location
 // 		clgfx1->fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 
-		clgfx1->drawsprite(10,10,testsprite);
+		CLgfx1::drawsprite(10,10,testsprite);
 
 		//cubus->display(1,1,1,1,0,0);
 		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 
-		if(mode==false) cubus->display(1,1,1,0,0,1);
-		else cubus->display(1,1,1,0,0,0);
+		if(mode==false) cubus->display(CENTER + AMBIENT + FLAT + DEBUG);
+		else cubus->display(CENTER + AMBIENT + FLAT);
 
-		ltm->unit();
+		linearM->unit();
 
 		clfps->increment(); 
 	}

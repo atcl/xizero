@@ -67,18 +67,18 @@ void atcrosslevel_intro()
 
 	//load atcrosslevel model
 	CLfile *cf = CLgetfile_("../dat/cross.y3d");
-	CLobject* cross = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,cf,400,300,100,bsm,0);
+	CLobject* cross = new CLobject(cf,400,300,100,0);
 	CLfile *lf = CLgetfile_("../dat/level.y3d");
-	CLobject* level0 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level1 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level2 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level3 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level4 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level5 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level6 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level7 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level8 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
-	CLobject* level9 = new CLobject(CLdoublebuffer,CLzbuffer,CLstencilbuffer,lf,400,300,100,bsm,0);
+	CLobject* level0 = new CLobject(lf,400,300,100,0);
+	CLobject* level1 = new CLobject(lf,400,300,100,0);
+	CLobject* level2 = new CLobject(lf,400,300,100,0);
+	CLobject* level3 = new CLobject(lf,400,300,100,0);
+	CLobject* level4 = new CLobject(lf,400,300,100,0);
+	CLobject* level5 = new CLobject(lf,400,300,100,0);
+	CLobject* level6 = new CLobject(lf,400,300,100,0);
+	CLobject* level7 = new CLobject(lf,400,300,100,0);
+	CLobject* level8 = new CLobject(lf,400,300,100,0);
+	CLobject* level9 = new CLobject(lf,400,300,100,0);
 
 	//build scene
 
@@ -105,7 +105,7 @@ void atcrosslevel_intro()
 		//atcl->display(1,0,0,0,0,0);
 
 		//clear transformation matrix
-		ltm->unit();
+		linearM->unit();
 	}
 
 

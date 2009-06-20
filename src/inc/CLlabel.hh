@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLLABEL
 #define HH_CLLABEL
-#warning "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

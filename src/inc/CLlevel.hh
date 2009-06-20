@@ -91,7 +91,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	clterrain = new CLobject*[terraina->filecount];
 	for(int g=0; g<terraina->filecount; g++)
 	{
-		clterrain[g] = new CLobject(cldouble,clzbuffer,clstencil,terraina->members[g],400,300,100,clshadow,1);
+		clterrain[g] = new CLobject(terraina->members[g],400,300,100,1);
 		clterrain[g]->setminz(100);
 	}
 	//*
@@ -269,14 +269,14 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	if(pm==-1) CLexit_(1,0,__func__,"no player model part I file found");
 
-	CLobject* playerm = new CLobject(cldouble,clzbuffer,clstencil,playera->members[pm],400,300,100,clshadow,1);
+	CLobject* playerm = new CLobject(playera->members[pm],400,300,100,0);
 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
 
 	playerm->setminz(100);
 	//playern->setminz(100); //as soon as 2nd part is avail
 
 	bool startposfound = false;
-	CLlvector player;
+	CLlvector playerp;
 	for(int h=0; h<levelheight; h++)
 	{
 		for(int i=0; i<levelwidth; i++)
@@ -284,9 +284,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 			if(levellayers[2][h][i] == 0)
 			{
 				startposfound = true;
-				player.x = i * blockwidth;
-				player.y = h * blockheight;
-				player.z = levellayers[1][h][i] * blockdepth;
+				playerp.x = i * blockwidth;
+				playerp.y = h * blockheight;
+				playerp.z = levellayers[1][h][i] * blockdepth;
 				break;
 			}
 		}
@@ -294,7 +294,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	if(startposfound==false) CLexit_(1,0,__func__,"no player start position found in entity map");
 
-	clplayer = new CLplayer(playerm,playern,playerd,player,clgame);
+	clplayer = new CLplayer(playerm,playern,playerd,playerp,clgame,smoothmark);
 
 //***
 
@@ -389,15 +389,15 @@ void CLlevel::display()
 						else clterrain[0]->update(cllinear);
 						for(int k=1; k<=currentheight; k++)
 						{
-							clterrain[0]->display(CENTER + FLAT + AMBIENT);
-							clterrain[0]->addpositionz(blockdepth>>2);
+							//clterrain[0]->display(CENTER + FLAT + AMBIENT);
+							clterrain[0]->addposition(0,0,blockdepth>>2);
 						}
 						if(currentterrain==0) clterrain[currentterrain]->setpositionz(tempz);
 						else clterrain[0]->reset();
 					}
 
-					clterrain[currentterrain]->addpositionz(currentz);
-					clterrain[currentterrain]->display(CENTER + FLAT + AMBIENT);
+					clterrain[currentterrain]->addposition(0,0,currentz);
+					//clterrain[currentterrain]->display(CENTER + FLAT + AMBIENT);
 					clterrain[currentterrain]->reset();
 					cllinear->unit();
 				}

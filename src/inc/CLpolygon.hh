@@ -11,17 +11,13 @@
 #include "CLcl.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
+#include "CLglobal.hh"
 #include "CLlight.hh"
 #include "CLpolyinc.hh"
 
 
 class CLpolygon : public virtual CLcl
 {
-	protected:
-		CLlbuffer* doublebuffer;
-		CLfbuffer* zbuffer;
-		CLlbuffer* sbuffer;
-
 	private:
 		static xlong pointcount;
 
@@ -51,14 +47,14 @@ class CLpolygon : public virtual CLcl
 		xlong circledec(xlong x,xlong pc);
 
 	public:
-		CLpolygon(CLlbuffer* db,CLfbuffer* zb,CLlbuffer* sb,const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
+		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
 		~CLpolygon();
 		void update(CLmatrix* m,bool i);
 		void display(const CLlvector& p,xchar flags);
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
-		void setcolor(uxlong c);
+		//void setcolor(uxlong c);
 		uxlong getcolor();
 		CLfvector getnormal();
 };
@@ -100,7 +96,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 	for(int i=0; i<len; i++)
 	{
-		(*doublebuffer)[off] = c;
+		(*CLdoublebuffer)[off] = c;
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -321,7 +317,7 @@ void CLpolygon::flatshade(bool ambient)
 	float t = (normal * cllight) / ( !normal * !cllight );
 	t = CLmath::absolute(t);
 
-	if(t > 1) t = 1;
+	//if(t > 1) t = 1;
 
 	if(t < 0.2 && ambient==false)
 	{
@@ -427,10 +423,10 @@ void CLpolygon::rasterize(xlong shadow)
 		{
 			while(length > 0)
 			{
-				if(actz < (*zbuffer)[offset])
+				if(actz < (*CLzbuffer)[offset])
 				{
-					(*doublebuffer)[offset] = shade;
-					(*zbuffer)[offset] = actz;
+					(*CLdoublebuffer)[offset] = shade;
+					(*CLzbuffer)[offset] = actz;
 				}
 				
 				offset++;
@@ -442,7 +438,7 @@ void CLpolygon::rasterize(xlong shadow)
 		{
 			while(length > 0)
 			{
-				(*sbuffer)[offset] = scolor;
+				(*CLstencilbuffer)[offset] = scolor;
 				
 				offset++;
 				length--;
@@ -452,9 +448,9 @@ void CLpolygon::rasterize(xlong shadow)
 		{
 			while(length > 0)
 			{
-				if(actz < (*zbuffer)[offset])
+				if(actz < (*CLzbuffer)[offset])
 				{
-					(*zbuffer)[offset] = actz;
+					(*CLzbuffer)[offset] = actz;
 				}
 				
 				offset++;
@@ -465,13 +461,10 @@ void CLpolygon::rasterize(xlong shadow)
 	}
 }
 
-CLpolygon::CLpolygon(CLlbuffer* db,CLfbuffer* zb,CLlbuffer* sb,const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
+CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
 {
 	color = co;
 	scolor = sc;
-	doublebuffer = db;
-	zbuffer = zb;
-	sbuffer = sb;
 	cpointcount = 4;
 
 	points[0] = pointr[0] = pointt[0] = CLfvector(a);
@@ -486,18 +479,6 @@ CLpolygon::~CLpolygon() { }
 
 void CLpolygon::display(const CLlvector& p,xchar flags)
 {
-// 	//*
-// 	if(flags&CENTER)  CLttyout_(1); else CLttyout_(0);
-// 	if(flags&FLAT)    CLttyout_(1); else CLttyout_(0);
-// 	if(flags&AMBIENT) CLttyout_(1); else CLttyout_(0);
-// 	if(flags&SHADOW)  CLttyout_(1); else CLttyout_(0);
-// 	if(flags&SHADER)  CLttyout_(1); else CLttyout_(0);
-// 	if(flags&LPROJ)   CLttyout_(1); else CLttyout_(0);
-// 	if(flags&SHAPE)   CLttyout_(1); else CLttyout_(0);
-// 	if(flags&DEBUG)   CLttyout_(1); else CLttyout_(0);
-// 	CLprint_("bin");
-// 	//*
-
 	if(flags&SHADOW)
 	{
 		ppoint[0] = pointt[0];
@@ -531,15 +512,13 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 	{
 		if(visible())
 		{
-			if(flags&DEBUG)		//wireframe and unshaded color
+			if(flags&DEBUG)		//plain color
 			{
 				shade=color;
 				rasterize(0);
-				shape();
 			}
-			if( ~(flags&SHADOW) )	//default
+			else if( ~(flags&SHADOW) )	//default
 			{
-				//shade=color;
 				flatshade(flags&AMBIENT);
 				rasterize(0);
 			}
@@ -596,10 +575,10 @@ void CLpolygon::reset()
 	normal    = rnormal;
 }
 
-void CLpolygon::setcolor(uxlong c)
-{
-	color = c;
-}
+// void CLpolygon::setcolor(uxlong c)
+// {
+// 	color = c;
+// }
 
 uxlong CLpolygon::getcolor()
 {

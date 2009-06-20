@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLSOUND
 #define HH_CLSOUND
-#warning "Compiling " __FILE__ " ! TODO: ..." 
+#pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
 
 #include "CLtypes.hh"

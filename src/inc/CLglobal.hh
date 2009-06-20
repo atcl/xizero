@@ -22,8 +22,8 @@ CLlbuffer* CLstencilbuffer;
 CLfbuffer* CLzbuffer;
 
 CLlight*   amb;
-CLmatrix*  ltm;
-CLmatrix*  bsm;
+CLmatrix*  linearM;
+CLmatrix*  shadowM;
 
 CLfps*    clfps;
 

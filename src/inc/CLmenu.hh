@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMENU
 #define HH_CLMENU
-#warning "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

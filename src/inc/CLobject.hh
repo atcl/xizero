@@ -11,6 +11,7 @@
 #include "CLcl.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
+#include "CLglobal.hh"
 #include "CLpolygon.hh"
 #include "CLmatrix.hh"
 #include "CLlight.hh"
@@ -20,7 +21,6 @@
 class CLobject : public virtual CLcl
 {
 	protected:
-		CLmatrix* shadowmatrix;
 		CLpolygon** polyptr;
 
 	private:
@@ -35,7 +35,7 @@ class CLobject : public virtual CLcl
 		xlong name;
 	
 	public:
-		CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmatrix* sm,bool zs);
+		CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs);
 		~CLobject();
 		
 		void update(CLmatrix* m);
@@ -48,9 +48,7 @@ class CLobject : public virtual CLcl
 		void setpositionx(xlong x);
 		void setpositiony(xlong y);
 		void setpositionz(xlong z);
-		void addpositionx(xlong x);
-		void addpositiony(xlong y);
-		void addpositionz(xlong z);
+		void addposition(xlong x,xlong y,xlong z);
 		xlong getname();
 		CLlvector* getdockingpoint(xlong i);
 		CLlvector* getdockingpoint(xlong t,xlong i);
@@ -61,7 +59,7 @@ class CLobject : public virtual CLcl
 		xlong getminz();
 };
 
-CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,CLfile* fileptr,xlong x,xlong y,xlong z,CLmatrix* sm,bool zs)
+CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 {
 	position.x = rposition.x = x;
 	position.y = rposition.y = y;
@@ -76,9 +74,6 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 	boundingbox->b2 = 0;
 	boundingbox->b3 = 0;
 	boundingbox->b4 = 0;
-
-	shadowmatrix = sm;
-
 
 	xlong* dataptr = fileptr->data;
 
@@ -204,7 +199,7 @@ CLobject::CLobject(CLbuffer<xlong>* db,CLbuffer<float>* zb,CLbuffer<xlong>* sb,C
 				if( t[3].z > boundingbox->b1.z) { boundingbox->b1.z = t[3].z; boundingbox->b2.z = t[3].z; boundingbox->b3.z = t[3].z; boundingbox->b4.z = t[3].y; } 
 				//*
 				
-				polyptr[polycounter] = new CLpolygon(db,zb,sb,t[0],t[1],t[2],t[3],localcolor,0x000000C0);
+				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
 
 			}
 
@@ -267,23 +262,11 @@ void CLobject::update(CLmatrix* m)
 
 void CLobject::display(xchar flags)
 {
-// 	//*
-// 	if(flags&CENTER)  CLttyout_(1); else CLttyout_(0);
-// 	if(flags&FLAT)    CLttyout_(1); else CLttyout_(0);
-// 	if(flags&AMBIENT) CLttyout_(1); else CLttyout_(0);
-// 	if(flags&SHADOW)  CLttyout_(1); else CLttyout_(0);
-// 	if(flags&SHADER)  CLttyout_(1); else CLttyout_(0);
-// 	if(flags&LPROJ)   CLttyout_(1); else CLttyout_(0);
-// 	if(flags&SHAPE)   CLttyout_(1); else CLttyout_(0);
-// 	if(flags&DEBUG)   CLttyout_(1); else CLttyout_(0);
-// 	CLprint_("bin");
-// 	//*
-
 	if(flags&SHADOW)
 	{
 		for(int i=0;i<polycount;i++)
 		{
-			polyptr[i]->update(shadowmatrix,1);
+			polyptr[i]->update(shadowM,1);
 			polyptr[i]->display(position,( (flags&CENTER) + FLAT + (flags&AMBIENT) + SHADOW ));
 		}
 	}
@@ -338,18 +321,10 @@ void CLobject::setpositionz(xlong z)
 	position.z = z;
 }
 
-void CLobject::addpositionx(xlong x)
+void CLobject::addposition(xlong x,xlong y,xlong z)
 {
 	position.x += x;
-}
-
-void CLobject::addpositiony(xlong y)
-{
 	position.y += y;
-}
-
-void CLobject::addpositionz(xlong z)
-{
 	position.z += z;
 }
 

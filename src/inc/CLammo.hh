@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLAMMO
 #define HH_CLAMMO
-#warning "Compiling " __FILE__ " ! TODO: ctor,update,draw"
+#pragma message "Compiling " __FILE__ " ! TODO: ctor,update,draw"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

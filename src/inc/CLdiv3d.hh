@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLDIV3D
 #define HH_CLDIV3D
-#warning "Compiling " __FILE__ " ! TODO: draw3dpixel"
+#pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
 
 #include "CLtypes.hh"
 #include "CLbuffer.hh"

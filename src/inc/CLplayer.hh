@@ -56,7 +56,7 @@ class CLplayer : public virtual CLcl
 		void transform(bool m);
 		xlong collision(xlong mark);
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p=0);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong imark,xlong p=0);
 		~CLplayer();
 
 		void update(xchar input,char turbo,xchar*** levellayers,xlong mark);
@@ -178,7 +178,7 @@ xlong CLplayer::collision(xlong mark)
 	return r;
 }
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong imark,xlong p)
 {
 	//set parameters to attributes:
 	model[0] = cha;
@@ -190,7 +190,9 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 	cllinear = new CLmatrix(1);
 
 	position = s;
-	lposition = s;	
+	lposition = s;
+	sposition = s;
+	sposition.y -= imark;
 
 	points = p;
 
@@ -338,6 +340,7 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 		{
 			lposition = sposition;
 			position = tposition;
+
 			position.y += mark;
 		
 			sposition.x = xlong(tposition.x);
@@ -351,7 +354,7 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 void CLplayer::display()
 {
 	model[0]->setposition(sposition.x,sposition.y,100);
-	//model[0]->display(FLAT + AMBIENT);
+	model[0]->display(FLAT + AMBIENT + DEBUG);
 
 	//temp!
 	CLgfx1::drawpolygon(

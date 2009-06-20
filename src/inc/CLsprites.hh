@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLSPRITES
 #define HH_CLSPRITES
-#warning "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
 #include "CLbuffer.hh"

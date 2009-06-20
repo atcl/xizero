@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLFLTK
 #define HH_CLFLTK
-#warning "Compiling " __FILE__ " ! TODO: show widgets"
+#pragma message "Compiling " __FILE__ " ! TODO: show widgets"
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>

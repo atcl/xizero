@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLAPI
 #define HH_CLAPI
-#warning "Compiling " __FILE__ " ! TODO: underscores everywhere"
+#pragma message "Compiling " __FILE__ " ! TODO: underscores everywhere"
 
 #include <stdio.h>
 #include <iomanip>

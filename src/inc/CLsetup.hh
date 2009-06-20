@@ -31,10 +31,10 @@ void CLsetup()
 	CLmath::init();
 
 	amb      = new CLlight(CLfvector(1,1,-1),1,0x00FFFFFF);
-	ltm      = new CLmatrix(1);
-	bsm      = new CLmatrix(1);
+	linearM  = new CLmatrix(1);
+	shadowM  = new CLmatrix(1);
 
-	bsm->shadow(amb->getlight(),plane);
+	shadowM->shadow(amb->getlight(),plane);
 
 	leftside = new screenside[yres];
 	rightside = new screenside[yres]; 
@@ -49,8 +49,8 @@ void CLgarbage()
 	delete clfps;
 
 	delete amb;
-	delete ltm;
-	delete bsm;
+	delete linearM;
+	delete shadowM;
 
 	delete leftside;
 	delete rightside;
