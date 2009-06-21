@@ -536,12 +536,12 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	screenside* backup_left = leftside;
 	screenside* backup_right = rightside;
 	CLfbuffer* backup_zbuffer = CLzbuffer;
-	xlong backup_ymax = ymax; 
+	xlong backup_ymax = ymax;
 
 	leftside = l;
 	rightside = r;
 	CLzbuffer = b;
-	ymax = ymax-1;
+	ymax = h-1;
 	
 	//
 
@@ -555,7 +555,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	ppoint[2].z += float(p.z);
 	ppoint[3].z += float(p.z);
 	zclipping();
-	project(p.x,p.y,0);
+	project(p.x,p.y,1);
 	xyclipping();
 	if(cpointcount == 0) return;
 

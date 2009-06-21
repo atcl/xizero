@@ -37,6 +37,8 @@ class CLlevel : public virtual CLcl
 		CLenemy**  clenemy;
 		CLobject** clterrain;
 
+		CLfbuffer* levellandscape;
+
 	private:
 		static xlong levelwidth;
 		static xlong blockheight;
@@ -44,7 +46,6 @@ class CLlevel : public virtual CLcl
 		static xlong blockdepth;
 
 		xchar*** levellayers;
-		float* levellandscape;
 		xlong levelheight;
 		xlong blocksperscreeny;
 		xlong blocksperscreenx;
@@ -177,10 +178,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 //***
 
 //level landscape generation:
-
-	levellandscape = new float[smoothlevelwidth*smoothlevelheight];
-	xlong* templevelrside = new xlong[smoothlevelheight];
-	xlong* templevellside = new xlong[smoothlevelheight];
+	levellandscape = new CLfbuffer(smoothlevelwidth*smoothlevelheight);
+	screenside* templevelrside = new screenside[smoothlevelheight];
+	screenside* templevellside = new screenside[smoothlevelheight];
 
 	xlong currentterrain = 0;
 	xchar currentheight = 0;
@@ -196,40 +196,38 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	{
 		for(int j=0; j<levelwidth; j++)
 		{
-// 			currentterrain = xlong(levellayers[0][i][j]);
-// 			if(currentterrain != -1)
-// 			{
-// 				currentheight = levellayers[1][i][j];
-// 				currententity = levellayers[2][i][j];
-// 				currentz = -currentheight * (blockdepth >> 2);
-// 				cllinear->translate(currentx,currenty,0);
-// 				clterrain[currentterrain]->update(cllinear);
-// 				if(currentheight!=0)
-// 				{
-// 					//clterrain[0]->addpositionz(currentz);
-// 					if(currentterrain==0) tempz = clterrain[currentterrain]->getpositionz();
-// 					else clterrain[0]->update(cllinear);
-// 					for(int k=1; k<=currentheight; k++)
-// 					{
-// 						clterrain[0]->display();
-// 						clterrain[0]->addpositionz(blockdepth>>2);
-// 					}
-// 					if(currentterrain==0) clterrain[currentterrain]->setpositionz(tempz);
-// 					else clterrain[0]->reset();
-// 				}
-// 
-// 				clterrain[currentterrain]->addpositionz(currentz);
-// 				clterrain[currentterrain]->display();
-// 				clterrain[currentterrain]->reset();
-// 				cllinear->unit();
-// 			}
-// 			currentx += blockwidth;
+			currentterrain = xlong(levellayers[0][i][j]);
+			if(currentterrain != -1)
+			{
+				currentheight = levellayers[1][i][j];
+				currententity = levellayers[2][i][j];
+				currentz = -currentheight * (blockdepth >> 2);
+				cllinear->translate(currentx,currenty,0);
+				clterrain[currentterrain]->update(cllinear);
+				if(currentheight!=0)
+				{
+					if(currentterrain==0) tempz = clterrain[currentterrain]->getpositionz();
+					else clterrain[0]->update(cllinear);
+					for(int k=1; k<=currentheight; k++)
+					{
+						//clterrain[0]->display(templevellside,templevelrside,levellandscape,smoothlevelheight);
+						clterrain[0]->addposition(0,0,blockdepth>>2);
+					}
+					if(currentterrain==0) clterrain[currentterrain]->setpositionz(tempz);
+					else clterrain[0]->reset();
+				}
+
+				clterrain[currentterrain]->addposition(0,0,currentz);
+				//clterrain[currentterrain]->display(templevellside,templevelrside,levellandscape,smoothlevelheight);
+				clterrain[currentterrain]->reset();
+				cllinear->unit();
+			}
+			currentx += blockwidth;
 		}
 	}
 
 	delete[] templevelrside;
 	delete[] templevellside;
-
 //*
 
 //player:
