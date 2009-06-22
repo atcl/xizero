@@ -8,32 +8,27 @@
 #include  "CLstruct.hh"
 
 //
-class CLutils
+namespace CLutils
 {
-	static xlong seed;
-	static xlong multiplicator;
-	static xlong incrementor;
+	xlong seed = 22695477;
+	xlong multiplicator = 1;
+	xlong incrementor = 1;
 
-public:
-	static xchar* long2char(xlong l);
-	static xchar long2char(xlong l,xlong i);
-	static xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
-	static void copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
-	static bool comparechararrays(xchar* t1, xchar* t2,xlong tl);
-	static xlong getlinecount(CLfile* sf);
-	static bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el);
-	static xlong getrandom(xlong range);
-	static xchar* color2string(uxlong c);
-	static xlong endian(xlong l);
-	static xlong chararraylength(const xchar* c);
+	xchar* long2char(xlong l);
+	xchar long2char(xlong l,xlong i);
+	xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
+	void copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
+	bool comparechararrays(xchar* t1, xchar* t2,xlong tl);
+	xlong getlinecount(CLfile* sf);
+	bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el);
+	xlong getrandom(xlong range);
+	xchar* color2string(uxlong c);
+	xlong endian(xlong l);
+	xlong chararraylength(const xchar* c);
 };
 //
 
 //implentation:
-xlong CLutils::seed = 22695477;
-xlong CLutils::multiplicator = 1;
-xlong CLutils::incrementor = 1;
-
 xchar* CLutils::long2char(xlong l)
 {
 	xchar* ch = new xchar[4];

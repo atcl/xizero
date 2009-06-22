@@ -12,7 +12,7 @@ void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db);
 void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa);
 void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db);
 template<class clvector>CLpoint project(clvector p);
-void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db);
+void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db,xlong srcdis=0);
 void drawlight();
 //
 
@@ -52,7 +52,7 @@ void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db
 	}
 } 
 
-void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db)
+void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db,xlong srcdis)
 {
 	float z;
 
@@ -60,7 +60,7 @@ void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db)
 	{
 		for(int j=0; j<xres-1; j++)
 		{
-			z = (*zb)[(i*xres)+j] * 4;
+			z = (*zb)[(i*xres)+j+srcdis] * 4;
 			(*db)[(i*xres)+j] = xshort(z)<<8;
 		}
 	}

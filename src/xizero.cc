@@ -47,6 +47,9 @@ int main()
 
 		testlevel->display();
 
+		//xlong dis = ( testlevel->getmark() ) * xres;
+		//drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis); 
+
 		//drawzbuffer(CLzbuffer,CLdoublebuffer);
 
 		clfps->increment(); 

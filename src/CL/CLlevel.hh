@@ -63,6 +63,7 @@ class CLlevel : public virtual CLcl
 		void subsmark(xlong m);
 		void setmark(xlong m);
 		xlong getmark();
+		CLfbuffer* getlandscape();
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -181,7 +182,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	levellandscape = new CLfbuffer(smoothlevelwidth*smoothlevelheight);
 	screenside* templevelrside = new screenside[smoothlevelheight];
 	screenside* templevellside = new screenside[smoothlevelheight];
-
+//! does not yet render landscpae!
 	xlong currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
@@ -432,6 +433,11 @@ void CLlevel::setmark(xlong m)
 xlong CLlevel::getmark()
 {
 	return smoothmark;
+}
+
+CLfbuffer* CLlevel::getlandscape()
+{
+	return levellandscape;	
 }
 
 #endif
