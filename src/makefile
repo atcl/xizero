@@ -8,6 +8,7 @@ O3FLAGS = -O3
 LDFLAGS = -lfltk -lX11
 OUTPARA = -o 
 CLEANUP = rm
+DEBUG   = -g
 
 SOURCE1 = xizero.cc
 TARGET1 = xizero
@@ -25,7 +26,7 @@ TARGET5 = simple
 
 # Compile!
 default:
-	$(CC) $(CCFLAGS) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
+	$(CC) $(CCFLAGS) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(DEBUG)
 
 unit:
 	$(CC) $(CCFLAGS) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS)

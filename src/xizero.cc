@@ -31,7 +31,7 @@ int main()
 		{
 			case '0':
 				delete testlevel;
-				CLsystem::CLexit_(0,0,__func__,"xizero says: bye");
+				CLsystem::exit(0,0,__func__,"xizero says: bye");
 			break;
 
 			default:

@@ -8,70 +8,70 @@
 #include "CLproject.hh"
 
 //general
-#include "inc/CLtypes.hh"
-#include "inc/CLvector.hh"
-#include "inc/CLfixed.hh"
-#include "inc/CLstruct.hh"
-#include "inc/CLconsts.hh"
+#include "CL/CLtypes.hh"
+#include "CL/CLvector.hh"
+#include "CL/CLfixed.hh"
+#include "CL/CLstruct.hh"
+#include "CL/CLconsts.hh"
 
 //API dependent
-#include "inc/CLapi.hh"
+#include "CL/CLapi.hh"
 
 //utility toolbox
-#include "inc/CLutils.hh"
+#include "CL/CLutils.hh"
 
 //pseudo static classes
-#include "inc/CLfps.hh"
-#include "inc/CLformat.hh"
-#include "inc/CLmath.hh"
-#include "inc/CLgfx1.hh"
-#include "inc/CLgfx2.hh"
-#include "inc/CLdiv3d.hh"
+#include "CL/CLfps.hh"
+#include "CL/CLformat.hh"
+#include "CL/CLmath.hh"
+#include "CL/CLgfx1.hh"
+#include "CL/CLgfx2.hh"
+#include "CL/CLdiv3d.hh"
 
 //non-static classes I
-#include "inc/CLbuffer.hh"
+#include "CL/CLbuffer.hh"
 
 //non-static classes II
-#include "inc/CLfifo.hh"
-#include "inc/CLlist.hh"
-#include "inc/CLtree.hh"
+#include "CL/CLfifo.hh"
+#include "CL/CLlist.hh"
+#include "CL/CLtree.hh"
 
 //non-static classes II
-#include "inc/CLmenu.hh"
-#include "inc/CLmsgbox.hh"
+#include "CL/CLmenu.hh"
+#include "CL/CLmsgbox.hh"
 
 //non-static classes III (GUI elements)
-#include "inc/CLguibase.hh"
-#include "inc/CLlabel.hh"
-#include "inc/CLbutton.hh"
-#include "inc/CLprogress.hh"
+#include "CL/CLguibase.hh"
+#include "CL/CLlabel.hh"
+#include "CL/CLbutton.hh"
+#include "CL/CLprogress.hh"
 
 //non-static classes IIII (3D engine)
-#include "inc/CLmatrix.hh"
-#include "inc/CLlight.hh"
-#include "inc/CLpolygon.hh"
-#include "inc/CLobject.hh"
+#include "CL/CLmatrix.hh"
+#include "CL/CLlight.hh"
+#include "CL/CLpolygon.hh"
+#include "CL/CLobject.hh"
 
 //non static classes IIIII (game objects)
-#include "inc/CLenemy.hh"
-#include "inc/CLplayer.hh"
-#include "inc/CLlevel.hh"
-#include "inc/CLgame.hh"
+#include "CL/CLenemy.hh"
+#include "CL/CLplayer.hh"
+#include "CL/CLlevel.hh"
+#include "CL/CLgame.hh"
 
 //global variables
-#include "inc/CLglobal.hh"
+#include "CL/CLglobal.hh"
 
 //inline macros
-#include "inc/CLmacros.hh"
+#include "CL/CLmacros.hh"
 
 //GUI dependent
-#include "inc/CLfltk.hh"
+#include "CL/CLfltk.hh"
 
 //super constructor
-#include "inc/CLsetup.hh"
+#include "CL/CLsetup.hh"
 
 //high level
-#include "inc/CLintro.hh"
+#include "CL/CLintro.hh"
 
 #endif
 
