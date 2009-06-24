@@ -100,9 +100,9 @@ xlong CLutils::getlinecount(CLfile* sf)
 
 	for(int c=0; c<sf->size; c++)
 	{
-		if( sf->text[c] == '\n' && sf->text[c-1] != '\n' ) lc++;
+		if( sf->text[c] == '\n' ) lc++;
 	}
-	//lc holds now the line count of bf
+	//lc holds now the line count of sf
 
 	return lc;
 }

@@ -5,62 +5,74 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
 
+#include <audiere.h>
+
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
 
+namespace CLaudio
+{
+	audiere::AudioDevicePtr device = 0;
+	
+	void init();
+}
 
+void CLaudio::init()
+{
+	audiere::AudioDevicePtr temp(audiere::OpenDevice());
+	device = temp;
+}
+
+//
 
 class CLsound : public virtual CLcl
 {
 	private:
-		xlong volume;
+		audiere::OutputStreamPtr sound;
+		float volume;
 		
-		void fadein();
-		void fadeout();
 	public:
-		CLsound(CLfile* bf);
+		CLsound(const xchar* c);
 		~CLsound();
-		void playvoc(xlong eff);
-		void loopplayvoc(xlong eff);
-		void setvolume(xlong v);
-		xlong getvolume();
-		xlong addvolume(xlong v);
+		void play(bool r);
+		void stop();
+		void setvolume(float v);
+		void addvolume(float v);
+		float getvolume();
 };
 
-CLsound::CLsound()
+CLsound::CLsound(const xchar* c)
 {
-
+	if(CLaudio::device!=0) { audiere::OutputStreamPtr temp(audiere::OpenSound(CLaudio::device,c,false)); sound = temp; }
 }
 
-CLsound::~CLsound()
-{
+CLsound::~CLsound() { }
 
+void CLsound::play(bool r)
+{
+	sound->setRepeat(r);
+	sound->play();
 }
 
-void CLsound::playvoc(xlong eff)
+void CLsound::stop()
 {
-
+	sound->stop();
 }
 
-void CLsound::loopplayback(xlong eff)
-{
-
-}
-
-void CLsound::setvolume(xlong v)
+void CLsound::setvolume(float v)
 {
 	volume = v;
 }
 
-xlong CLsound::getvolume()
-{
-	return volume;
-}
-
-void CLsound::addvolume(xlong v)
+void CLsound::addvolume(float v)
 {
 	volume += v;
+}
+
+float CLsound::getvolume()
+{
+	return volume;
 }
 
 #endif

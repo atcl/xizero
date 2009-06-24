@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLFLTK
 #define HH_CLFLTK
-#pragma message "Compiling " __FILE__ " ! TODO: show widgets"
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -166,24 +166,6 @@ int FLTKgetmousebuttonl()
 int FLTKgetmousebuttonr()
 {
 	return win->mousebuttonr;
-}
-
-xlong FLTKsetfont(const xchar s)
-{
-	fl_font(FL_COURIER,s);
-}
-
-xlong FLTKgetfontheight()
-{
-	return fl_height();
-}
-
-void FLTKwritestring(xlong x,xlong y,const xchar* s,uxlong c)
-{
-	//doubleword temp;
-	//temp.dd = c;
-	//fl_color(temp.db[1],temp.db[2],temp.db[3]);
-	fl_draw(s,x,y);
 }
 
 #endif

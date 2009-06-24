@@ -36,7 +36,7 @@ void CLsetup()
 	shadowM->shadow(cllight,clplane);
 
 	leftside = new screenside[yres];
-	rightside = new screenside[yres]; 
+	rightside = new screenside[yres];
 }
 
 void CLgarbage()

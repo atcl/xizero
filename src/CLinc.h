@@ -66,6 +66,8 @@
 
 //GUI dependent
 #include "CL/CLfltk.hh"
+#include "CL/CLwindow.hh"
+#include "CL/CLsound.hh"
 
 //super constructor
 #include "CL/CLsetup.hh"

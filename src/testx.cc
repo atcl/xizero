@@ -3,7 +3,7 @@
 #include <X11/Xutil.h>
 //#include <X11/keysym.h>
 
-#include <stdio.h>
+#include <iostream>
 
 #define WIN_TITLE "test"
 
@@ -84,40 +84,34 @@ void XLgetinput()
 	XNextEvent(d,&e);
 	switch(e.type)
 	{
-		case KeyPress:		kp = e.xkey.keycode;
-					break;
+		case KeyPress:		kp = XKeycodeToKeysym (d,e.xkey.keycode,0);
+							break;
 
-		case KeyRelease:	kt = e.xkey.keycode;
-					break;
+		case KeyRelease:	kt = XKeycodeToKeysym (d,e.xkey.keycode,0);
+							break;
 
 		case ButtonPress:	mb = e.xbutton.button;
-					mx = e.xbutton.x;
-					my = e.xbutton.y;
-					break;
+							mx = e.xbutton.x;
+							my = e.xbutton.y;
+							break;
 
 		case ButtonRelease:	mt = e.xbutton.button;
-					mx = e.xbutton.x;
-					my = e.xbutton.y;
-					break;
+							mx = e.xbutton.x;
+							my = e.xbutton.y;
+							break;
 
 		case MotionNotify:	mx = e.xbutton.x;
-					my = e.xbutton.y;
-					break;
+							my = e.xbutton.y;
+							break;
 
-		case ClientMessage:	if (e.xclient.data.l[0] == a);
-					XLexit();
-					break;	
+		case ClientMessage:	if(e.xclient.data.l[0] == a) XLexit();
+							break;	
 	}
 }
 
 char XLgetkey()
 {
 	return kp;
-}
-
-char XLgetkeyascii()
-{
-	
 }
 
 char XLgetturbokey()
@@ -145,29 +139,40 @@ long XLgetturbomousebutton()
 	return mt;
 }
 
+long* XLgetvideobuffer()
+{
+	
+}
+
 int main()
 {
 	char* vram = new char[xres*yres*4];
+	long* buff = reinterpret_cast<long*>(&vram[0]);
 
 	XLsetup(vram);
 
 	bool inf = 1;
 
+	buff[200*xres+200]=0x00FF0000;
+	
+	long tki = 0;
+	long nki = 0;
+
 	while(inf==1)
 	{
 		XLgetinput();
 
-		switch(XLgetkey())
+		tki = XLgetturbokey();
+		nki = XLgetkey();
+
+		switch(tki)
 		{
 			case '0': inf = 0; break; //leave
- 
-			case '1': ; //output pixel
 
-			case '2': ; //output event data to console
  
 		}
 
-		XClearWindow(d,w);
+		//XClearWindow(d,w);
 
 		XLflush();
 	}

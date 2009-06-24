@@ -14,13 +14,13 @@ int main()
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/player/player.a","../dat/level/level0.a",CLdoublebuffer,CLzbuffer,CLstencilbuffer);
 
-// 	testlevel->display();	
-
 	clfps->init();
 
 	xchar input = 0;
 	xchar turbo = 0;
 	xlong mark  = 0;
+	xlong mode  = 1;
+	xlong dis   = 0;
 
 	while(FLTKwait())
 	{
@@ -33,6 +33,18 @@ int main()
 				delete testlevel;
 				CLsystem::exit(0,0,__func__,"xizero says: bye");
 			break;
+			
+			case '1':
+				mode = 1;
+				break;
+			
+			case '2':
+				mode = 2;
+				break;
+			
+			case '3':
+				mode = 3;
+				break;
 
 			default:
 				testlevel->update(input,turbo);
@@ -43,15 +55,23 @@ int main()
 		CLzbuffer->clear(zres-1);
 		CLstencilbuffer->fastclear(0);
 
-		//drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+		switch(mode)
+		{
+			case 1: 
+				//drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				testlevel->display();
+				break;
 
-		testlevel->display();
+			case 2:
+				dis = ( testlevel->getmark() ) * xres;
+				drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis); 
+				break;
 
-		//xlong dis = ( testlevel->getmark() ) * xres;
-		//drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis); 
-
-		//drawzbuffer(CLzbuffer,CLdoublebuffer);
-
+			case 3:
+				drawzbuffer(CLzbuffer,CLdoublebuffer,0);
+				break;
+		}
+		
 		clfps->increment(); 
 	}
 

@@ -25,13 +25,11 @@ class CLlevel : public virtual CLcl
 	protected:
 		CLgame*   clgame;
 
-		CLlbuffer*  cldouble;
+		CLlbuffer* cldouble;
 		CLfbuffer* clzbuffer;
-		CLlbuffer*  clstencil;
+		CLlbuffer* clstencil;
 
 		CLmatrix* cllinear;
-		CLmatrix* clshadow;
-		CLlight*  cllight;
 
 		CLplayer*  clplayer;
 		CLenemy**  clenemy;
@@ -49,8 +47,10 @@ class CLlevel : public virtual CLcl
 		xlong levelheight;
 		xlong blocksperscreeny;
 		xlong blocksperscreenx;
-		xlong mark;
+		xlong blockmark;
 		xlong smoothmark;
+		xlong smoothmarkmin;
+		xlong smoothmarkmax;
 		xlong smoothlevelheight;
 		xlong smoothlevelwidth;
 
@@ -79,8 +79,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	clstencil = cls;
 
 	cllinear = new CLmatrix(1);
-	clshadow = new CLmatrix(1);
-	cllight  = new CLlight(CLfvector(1,0,1),1,0x00FFFFFF);
 	clgame   = new CLgame(60,0,740,600); //!fix to projected box
 
 //terrain:
@@ -122,15 +120,17 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xchar** terrainmap = CLformat::loadmap(levela->members[tf],33,' ',-1);
 	//now terrain map holds 2d xchar array of terrain objects
 
-	//determine level consts
+	//determine level constants
 	levelheight = CLutils::getlinecount(levela->members[tf]);
 	blocksperscreeny = yres / blockheight;
 	blocksperscreenx = xres / blockwidth;
-	mark = levelheight - blocksperscreeny;
-	smoothmark = mark * blockheight;
-	smoothlevelheight = mark * blockheight;
-	smoothlevelwidth = mark * blockwidth;
-	if(mark < 0) CLsystem::exit(1,0,__func__,"Level too short");
+	blockmark = levelheight - blocksperscreeny;
+	smoothmarkmin = 0;
+	smoothmarkmax = blockmark * blockheight;
+	smoothmark = smoothmarkmax;
+	smoothlevelheight = levelheight * blockheight;
+	smoothlevelwidth = levelwidth * blockwidth;
+	if(blockmark < 0) CLsystem::exit(1,0,__func__,"Level too short");
 	//*
 
 	//find height map, has to have extension .maph
@@ -179,17 +179,22 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 //***
 
 //level landscape generation:
-	levellandscape = new CLfbuffer(smoothlevelwidth*smoothlevelheight);
-	screenside* templevelrside = new screenside[smoothlevelheight];
-	screenside* templevellside = new screenside[smoothlevelheight];
-//! does not yet render landscpae!
+	xlong templevelheight = smoothlevelheight - blockheight;
+	CLsystem::print(templevelheight);
+	levellandscape = new CLfbuffer(smoothlevelwidth*templevelheight);
+	levellandscape->clear(zres-1);
+	screenside* templevelrside = new screenside[templevelheight];
+	screenside* templevellside = new screenside[templevelheight];
+	
+//! renders wrong! needs to render as if projected on screen not as projected on whole levellength
+//! use setposition rather than translate
 	xlong currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
 	xlong blockoffsetx = blockwidth >> 1;
 	xlong blockoffsety = blockheight >> 1; 
 	xlong currentx = -(xres >> 1) + blockoffsetx;
-	xlong currenty = (yres >> 1) - blockoffsety  + (blockheight);
+	xlong currenty = (templevelheight >> 1) - blockoffsety  + blockheight;
 	xlong currentz = 0;
 	xlong tempz = 0;
 
@@ -207,24 +212,26 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 				clterrain[currentterrain]->update(cllinear);
 				if(currentheight!=0)
 				{
-					if(currentterrain==0) tempz = clterrain[currentterrain]->getpositionz();
+					if(currentterrain==0) tempz = clterrain[0]->getpositionz();
 					else clterrain[0]->update(cllinear);
 					for(int k=1; k<=currentheight; k++)
 					{
-						clterrain[0]->display(templevellside,templevelrside,levellandscape,smoothlevelheight);
+						clterrain[0]->display(templevellside,templevelrside,levellandscape,templevelheight);
 						clterrain[0]->addposition(0,0,blockdepth>>2);
 					}
-					if(currentterrain==0) clterrain[currentterrain]->setpositionz(tempz);
+					if(currentterrain==0) clterrain[0]->setpositionz(tempz);
 					else clterrain[0]->reset();
 				}
 
 				clterrain[currentterrain]->addposition(0,0,currentz);
-				clterrain[currentterrain]->display(templevellside,templevelrside,levellandscape,smoothlevelheight);
+				clterrain[currentterrain]->display(templevellside,templevelrside,levellandscape,templevelheight);
 				clterrain[currentterrain]->reset();
 				cllinear->unit();
 			}
 			currentx += blockwidth;
 		}
+		currentx = -(xres >> 1) + blockoffsetx;
+		currenty -= blockheight;	
 	}
 
 	delete[] templevelrside;
@@ -331,9 +338,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 CLlevel::~CLlevel()
 {
-	delete cllinear;
-	delete clshadow;
-	delete cllight;
 	delete clplayer;
 	delete clgame;
 }
@@ -343,8 +347,6 @@ void CLlevel::update(xchar input,xchar turbo)
 	xlong tempy = 3*(yres>>2);
 	xlong py = clplayer->gety();
 	if( (py<smoothlevelheight+tempy) && (py>tempy) ) subsmark(smoothmark+tempy-py);
-
-
 
 	clplayer->update(input,turbo,levellayers,smoothmark);
 }
@@ -358,26 +360,26 @@ void CLlevel::display()
 	xlong blockoffsety = blockheight >> 1; 
 	xlong yoffset = smoothmark % blockheight;	//block overhead of possibly not fully displayable block
 	xlong currentx = -(xres >> 1) + blockoffsetx;
-	xlong currenty =  (yres >> 1) - blockoffsety + yoffset  + (blockheight); //source of dispplay errors in height
+	xlong currenty =  (yres >> 1) - blockoffsety + yoffset  + blockheight;
 	xlong currentz = 0;
 	xlong tempz = 0;
 
 	cllinear->unit();
 	for(int i=-1; i<blocksperscreeny+2; i++)
 	{
-		if( !( i<0                   && mark<=0 ) )
+		if( !( i<0                   && blockmark<=0 ) )
 		{
-		if( !( i==blocksperscreeny   && smoothmark>=smoothlevelheight ) )
+		if( !( i==blocksperscreeny   && smoothmark>=smoothmarkmax ) )
 		{
-		if( !( i==blocksperscreeny+1 && smoothmark>=smoothlevelheight-blockheight ) )
+		if( !( i==blocksperscreeny+1 && smoothmark>=smoothmarkmax-blockheight ) )
 		{
 			for(int j=0; j<blocksperscreenx; j++)
 			{
-				currentterrain = xlong(levellayers[0][mark+i][j]);
+				currentterrain = xlong(levellayers[0][blockmark+i][j]);
 				if(currentterrain != -1)
 				{
-					currentheight = levellayers[1][mark+i][j];
-					currententity = levellayers[2][mark+i][j];
+					currentheight = levellayers[1][blockmark+i][j];
+					currententity = levellayers[2][blockmark+i][j];
 					currentz = -currentheight * (blockdepth >> 2);
 					cllinear->translate(currentx,currenty,0);
 					clterrain[currentterrain]->update(cllinear);
@@ -418,10 +420,10 @@ void CLlevel::subsmark(xlong m)
 {
 	xlong sm = smoothmark - m;
 
-	if( sm<smoothlevelheight && sm>0 )
+	if( sm<smoothmarkmax && sm>smoothmarkmin )
 	{
 		smoothmark = sm;
-		mark = smoothmark / blockheight;
+		blockmark = smoothmark / blockheight;
 	}
 }
 

@@ -26,5 +26,15 @@
 #define SHAPE   0b00000010
 #define DEBUG   0b00000001
 
+//keycodes
+#define LEFT    81
+#define RIGHT   83
+#define UP      82
+#define DOWN    84
+#define ESC     27
+#define SPACE   32
+#define CTRL    -29
+#define ENTER   13
+
 #endif
 

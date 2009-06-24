@@ -24,21 +24,21 @@ struct CLvector
 
 	CLvector operator+(const CLvector& a) const;	//vector addition
 	CLvector operator-(const CLvector& a) const;	//vector subtraction
+	CLvector operator-();							//vector additive negation
 	       T operator*(const CLvector& a) const;	//dot product
-	CLvector operator*(T c) const;			//scalar multiplication
+	CLvector operator*(T c) const;					//scalar multiplication
 	CLvector operator^(const CLvector& a) const;	//cross product
-	       T operator!() const;			//vector length
+	       T operator!() const;						//vector length
 	
-	CLvector& operator+=(const CLvector& a);	//vector addition
-	CLvector& operator-=(const CLvector& a);	//vector subtraction
-	CLvector& operator*=(T c);			//scalar multiplication
-	CLvector& operator-();				//vector additive negation
+	CLvector& operator+=(const CLvector& a);		//vector addition
+	CLvector& operator-=(const CLvector& a);		//vector subtraction
+	CLvector& operator*=(T c);						//scalar multiplication
 
-	CLvector& operator=(const CLvector a);		//vector vector assignment //?argument as reference?
-	CLvector& operator=(T c);			//scalar vector assignment
-		  operator CLvector<float>() const;	//cast
+	CLvector& operator=(const CLvector a);			//vector vector assignment //?argument as reference?
+	CLvector& operator=(T c);						//scalar vector assignment
+		      operator CLvector<float>() const;		//cast
 
-	void print();					//console output	
+	void print();									//console output	
 };
 //*
 
@@ -127,11 +127,9 @@ CLvector<T>& CLvector<T>::operator*=(T c)
 
 //vector additive negation:
 template<typename T>
-CLvector<T>& CLvector<T>::operator-()
+CLvector<T> CLvector<T>::operator-()
 {
-	this->x = -this->x;
-	this->y = -this->y;
-	this->z = -this->z;
+	return CLvector<T>( -this->x,-this->y,-this->z );
 }
 //*
 

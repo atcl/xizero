@@ -5,7 +5,7 @@ CCFLAGS = -I/usr/include/freetype2
 WWFLAGS = -Wno-multichar -Wno-write-strings
 O2FLAGS = -O2
 O3FLAGS = -O3
-LDFLAGS = -lfltk -lX11
+LDFLAGS = -lfltk -lX11 -laudiere
 OUTPARA = -o 
 CLEANUP = rm
 DEBUG   = -g
@@ -20,8 +20,8 @@ TARGET3 = clbuilder
 
 TARGET4 = asciimissile
 
-SOURCE5 = simple.cc
-TARGET5 = simple
+SOURCE5 = testx.cc
+TARGET5 = testx
 
 
 # Compile!
@@ -34,7 +34,7 @@ unit:
 fast:
 	$(CC) $(CCFLAGS) $(O3FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
 
-simple:
+testx:
 	$(CC) $(CCFLAGS) $(O3FLAGS) $(OUTPARA) $(TARGET5) $(SOURCE5) $(LDFLAGS) $(WWFLAGS)
 
 all:
