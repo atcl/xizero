@@ -179,22 +179,19 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 //***
 
 //level landscape generation:
-	xlong templevelheight = smoothlevelheight - blockheight;
-	CLsystem::print(templevelheight);
+	xlong templevelheight = smoothlevelheight+blockheight;
 	levellandscape = new CLfbuffer(smoothlevelwidth*templevelheight);
-	levellandscape->clear(zres-1);
+	levellandscape->clear(105);
 	screenside* templevelrside = new screenside[templevelheight];
 	screenside* templevellside = new screenside[templevelheight];
-	
-//! renders wrong! needs to render as if projected on screen not as projected on whole levellength
-//! use setposition rather than translate
+
 	xlong currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
 	xlong blockoffsetx = blockwidth >> 1;
 	xlong blockoffsety = blockheight >> 1; 
-	xlong currentx = -(xres >> 1) + blockoffsetx;
-	xlong currenty = (templevelheight >> 1) - blockoffsety  + blockheight;
+	xlong currentx = blockoffsetx;
+	xlong currenty = blockoffsety;
 	xlong currentz = 0;
 	xlong tempz = 0;
 
@@ -208,12 +205,11 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 				currentheight = levellayers[1][i][j];
 				currententity = levellayers[2][i][j];
 				currentz = -currentheight * (blockdepth >> 2);
-				cllinear->translate(currentx,currenty,0);
-				clterrain[currentterrain]->update(cllinear);
+				clterrain[currentterrain]->setposition(currentx,currenty,100);
 				if(currentheight!=0)
 				{
 					if(currentterrain==0) tempz = clterrain[0]->getpositionz();
-					else clterrain[0]->update(cllinear);
+					else clterrain[0]->setposition(currentx,currenty,100);
 					for(int k=1; k<=currentheight; k++)
 					{
 						clterrain[0]->display(templevellside,templevelrside,levellandscape,templevelheight);
@@ -230,8 +226,8 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 			}
 			currentx += blockwidth;
 		}
-		currentx = -(xres >> 1) + blockoffsetx;
-		currenty -= blockheight;	
+		currentx = blockoffsetx;
+		currenty += blockheight;	
 	}
 
 	delete[] templevelrside;

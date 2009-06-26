@@ -199,8 +199,8 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 		if(ppoint[x].z > 0)
 		{
 			//instead of xlong conversion rather use CLmath::round?
-			spoint[x].x = float(xlong( ( 85 * ppoint[x].x) / (ppoint[x].z) ) + px );
-			spoint[x].y = float(xlong( (-95 * ppoint[x].y) / (ppoint[x].z) ) + py );
+			spoint[x].x = float(xlong( ( prjx * ppoint[x].x) / (ppoint[x].z) ) + px );
+			spoint[x].y = float(xlong( (-prjy * ppoint[x].y) / (ppoint[x].z) ) + py );
 			spoint[x].z = ppoint[x].z; // + cleartrans;
 		}
 		else
@@ -209,6 +209,8 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 		}
 	}
 }
+
+
 
 void CLpolygon::xyclipping()
 {
@@ -557,7 +559,22 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	ppoint[2].z += float(p.z);
 	ppoint[3].z += float(p.z);
 	zclipping();
-	project(p.x,p.y,1);
+	
+	for(xlong x=0; x<cpointcount; x++)
+	{
+		if(ppoint[x].z > 0)
+		{
+			//instead of xlong conversion rather use CLmath::round?
+			spoint[x].x = float(xlong(  ppoint[x].x ) + p.x );
+			spoint[x].y = float(xlong( -ppoint[x].y ) + p.y );
+			spoint[x].z = ppoint[x].z; // + cleartrans;
+		}
+		else
+		{
+			CLsystem::exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
+		}
+	}
+	
 	xyclipping();
 
 	if(visible() && cpointcount!=0)

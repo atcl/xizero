@@ -144,7 +144,7 @@ xlong CLplayer::collision(xlong mark)
 	xlong r = 0;
 
 	//boundary check: (check if game screen is left)
-	xlong bc = 0; //clgame->boundary(tposition,boundingbox[0]);
+	xlong bc = clgame->boundary(tposition,*boundingbox[0]);
 
 	if(bc!=0)
 	{
@@ -358,18 +358,18 @@ void CLplayer::display()
 	model[0]->display(FLAT + AMBIENT);
 
 	//temp!
-	CLgfx1::drawpolygon(
-sposition.x+boundingbox[0]->b1.x,
-sposition.y-boundingbox[0]->b1.y,
-sposition.x+boundingbox[0]->b2.x,
-sposition.y-boundingbox[0]->b2.y,
-sposition.x+boundingbox[0]->b3.x,
-sposition.y-boundingbox[0]->b3.y,
-sposition.x+boundingbox[0]->b4.x,
-sposition.y-boundingbox[0]->b4.y,
-0x00FFFFFF);
+	//~ CLgfx1::drawpolygon(
+//~ sposition.x+boundingbox[0]->b1.x,
+//~ sposition.y-boundingbox[0]->b1.y,
+//~ sposition.x+boundingbox[0]->b2.x,
+//~ sposition.y-boundingbox[0]->b2.y,
+//~ sposition.x+boundingbox[0]->b3.x,
+//~ sposition.y-boundingbox[0]->b3.y,
+//~ sposition.x+boundingbox[0]->b4.x,
+//~ sposition.y-boundingbox[0]->b4.y,
+//~ 0x00FFFFFF);
 
-	CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
+	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
 	//CLgfx1::drawbigpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*

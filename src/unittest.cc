@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv)
 {
-	std::string argfile = "../dat/test.y3d";
+	std::string argfile = "../dat/other/test.y3d";
 	xlong  argfileindex =-1;
 
 	if(argc>2)
@@ -52,12 +52,12 @@ int main(int argc, char** argv)
 	//
 
 		//test bcx loading:
-			CLfile* fbcx = CLsystem::CLgetfile_("../dat/test.bcx");
-			xlong** bcx;
-			doubleword tt;
-			bcx = CLformat::loadbcx(fbcx);
+			//~ CLfile* fbcx = CLsystem::getfile("../dat/test.bcx");
+			//~ xlong** bcx;
+			//~ doubleword tt;
+			//~ bcx = CLformat::loadbcx(fbcx);
 		//test tga loading:
-			CLfile* ftga = CLsystem::CLgetfile_("../dat/7segment.tga");
+			CLfile* ftga = CLsystem::getfile("../dat/other/7segment.tga");
 			sprite* testsprite = CLformat::loadtga(ftga);
 
 		//test tree:
@@ -88,13 +88,13 @@ int main(int argc, char** argv)
 	
 	if(argfileindex!=-1)
 	{
-		CLfile* arch = CLsystem::CLgetfile_(argfile.c_str());
+		CLfile* arch = CLsystem::getfile(argfile.c_str());
 		arfile* arar = CLformat::loadar(arch);
 		cube = arar->members[argfileindex];
 	}
 	else
 	{
-		CLfile* cubef = CLsystem::CLgetfile_(argfile.c_str());
+		CLfile* cubef = CLsystem::getfile(argfile.c_str());
 		cube = cubef;
 	}
 
@@ -104,7 +104,6 @@ int main(int argc, char** argv)
 
 	clfps->init();
 
-	FLTKsetfont(8);
 	xchar* toprint = u8"hi there";
 
 	bool mode=false;
@@ -211,8 +210,8 @@ int main(int argc, char** argv)
 
 			//System:
 			case '0':
-				xlong reval = CLsystem::CLsystem_("Xdialog --msgbox 'bye' 0 0");
-				CLsystem::CLexit_(1,0,"user","exit");
+				xlong reval = CLsystem::system("Xdialog --msgbox 'bye' 0 0");
+				CLsystem::exit(1,0,"user","exit");
 			break;
 		}
 

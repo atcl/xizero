@@ -25,4 +25,7 @@ uxlong shadowcolor = 0x00C0C0C0;
 screenside *leftside;
 screenside *rightside;
 
+#define prjx 80
+#define prjy 95
+
 #endif

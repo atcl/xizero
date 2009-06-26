@@ -52,13 +52,13 @@ int main()
 		}
 
 		CLdoublebuffer->fastclear(0);
-		CLzbuffer->clear(zres-1);
-		CLstencilbuffer->fastclear(0);
+		CLzbuffer->clear(zres); //optimze by: fastclear for float(reinterpret_cast), get rid pf clear translation 
+		//CLstencilbuffer->fastclear(0);
 
 		switch(mode)
 		{
 			case 1: 
-				//drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
 				testlevel->display();
 				break;
 
@@ -68,7 +68,9 @@ int main()
 				break;
 
 			case 3:
-				drawzbuffer(CLzbuffer,CLdoublebuffer,0);
+				drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				testlevel->display();
+				drawzbuffer(CLzbuffer,CLdoublebuffer);
 				break;
 		}
 		
