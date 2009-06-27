@@ -36,5 +36,9 @@
 #define CTRL    -29
 #define ENTER   13
 
+//3d engine consts
+#define prjx 80
+#define prjy 95
+
 #endif
 

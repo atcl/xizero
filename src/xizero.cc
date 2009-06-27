@@ -58,19 +58,19 @@ int main()
 		switch(mode)
 		{
 			case 1: 
-				drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
 				testlevel->display();
 				break;
 
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
-				drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis); 
+				CLmisc3d::drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis); 
 				break;
 
 			case 3:
-				drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
 				testlevel->display();
-				drawzbuffer(CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawzbuffer(CLzbuffer,CLdoublebuffer);
 				break;
 		}
 		
