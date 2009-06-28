@@ -54,7 +54,7 @@ class CLplayer : public virtual CLcl
 		void fire(xlong at);
 		void hurt(xlong am);
 		void transform(bool m);
-		xlong collision(xlong mark);
+		xlong collision();
 	public:
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong imark,xlong p=0);
 		~CLplayer();
@@ -137,10 +137,10 @@ void CLplayer::transform(bool m)
 	}
 }
 
-xlong CLplayer::collision(xlong mark)
+xlong CLplayer::collision()
 {
 	if(gear==0) return 0;
-
+	
 	xlong r = 0;
 
 	//boundary check: (check if game screen is left)
@@ -191,9 +191,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 	cllinear = new CLmatrix(1);
 
 	position = s;
-	lposition = s;
-	sposition = s;
-	sposition.y -= imark;
+	position.z += 105;
 
 	points = p;
 
@@ -335,26 +333,23 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 		tposition.x = position.x - speed.x;
 		tposition.y = position.y + speed.y - mark;
 		tposition.z = position.z + speed.z;
-		lastupdate = temp;
 
-		if(collision(mark)==0)
-		{
-			lposition = sposition;
-			position = tposition;
-
-			position.y += mark;
-		
-			sposition.x = xlong(tposition.x);
-			sposition.y = xlong(tposition.y);
-			sposition.z = xlong(tposition.z);
+		if(collision()==0)
+		{	
+			position = tposition; 
+			position.y += mark; 
+			
+			sposition = CLmisc3d::project(tposition);
 		}
+		
+		lastupdate = temp;
 	}
 	//*
 }
 
 void CLplayer::display()
 {
-	model[0]->setposition(sposition.x,sposition.y,100);
+	model[0]->setposition(sposition);
 	model[0]->display(FLAT + AMBIENT);
 
 	//temp!

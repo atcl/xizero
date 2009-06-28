@@ -1,185 +1,64 @@
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-//#include <X11/keysym.h>
-
-#include <iostream>
-
-#define WIN_TITLE "test"
-
-#define xres 800
-#define yres 600
-#define zres 400 
-
-//gcc test.c -o test -L/usr/X11R6/lib -lX11 -I/usr/X11R6/include
-
-//! prototypes
-
-
-Display* d;
-Window   w;
-Atom     a;
-XEvent   e;
-Screen*  s;
-Visual*  v;
-XImage*  i;
-GC       g;
-int      n;
-
-//current input:
-char kp;
-char kt;
-long mx;
-long my;
-long mb;
-long mt;
+//
 //
 
+#include <agar/core.h>
+#include <agar/gui.h>
+#include <agar/rg.h>
 
-void XLsetup(char* doublebuffer)
+
+namespace CLwindow
 {
-// 	if( (d = XOpenDisplay(NULL)) == NULL )
-// 	{
-// 		//CLexit(__func__,1,"XOpenDisplay is unable to open a Display");
-// 	}
+	AG_Window*  win;
+	AG_Surface* vram;
 
-	d = XOpenDisplay(NULL);
-
-	s = DefaultScreenOfDisplay(d);
-	n = DefaultScreen(d);
-	v = DefaultVisualOfScreen(s);
-
-	w = XCreateWindow(d,DefaultRootWindow(d),0,0,xres,yres,0,24,InputOutput,v,0,NULL);
-
-	XStoreName(d,w,WIN_TITLE);
-
-	a = XInternAtom(d,"WM_DELETE_WINDOW",true);
-	if(a) XSetWMProtocols(d,w,&a,1);
-
-	XMapWindow(d,w);
-
-	g = XCreateGC(d,w, 0, NULL);
-
-	i = XCreateImage(d,v,24,ZPixmap,0,doublebuffer,xres,yres,32,xres*4);
-	
-	XSelectInput(d,w, ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask);
-}
-
-void XLflush()
-{
-	XPutImage(d,w,g,i,0,0,0,0,xres,yres);
-	XFlush(d);
-}
-
-void XLexit()
-{
-	XDestroyImage(i);
-	XFreeGC(d,g);
-	XDestroyWindow(d,w);
-	XCloseDisplay(d);
-}
-
-void XLgetinput()
-{
-	XNextEvent(d,&e);
-	switch(e.type)
-	{
-		case KeyPress:		kp = XKeycodeToKeysym (d,e.xkey.keycode,0);
-							break;
-
-		case KeyRelease:	kt = XKeycodeToKeysym (d,e.xkey.keycode,0);
-							break;
-
-		case ButtonPress:	mb = e.xbutton.button;
-							mx = e.xbutton.x;
-							my = e.xbutton.y;
-							break;
-
-		case ButtonRelease:	mt = e.xbutton.button;
-							mx = e.xbutton.x;
-							my = e.xbutton.y;
-							break;
-
-		case MotionNotify:	mx = e.xbutton.x;
-							my = e.xbutton.y;
-							break;
-
-		case ClientMessage:	if(e.xclient.data.l[0] == a) XLexit();
-							break;	
-	}
-}
-
-char XLgetkey()
-{
-	return kp;
-}
-
-char XLgetturbokey()
-{
-	return kt;
-}
-
-long XLgetmousex()
-{
-	return mx;
-}
-
-long XLgetmousey()
-{
-	return my;
-}
-
-long XLgetmousebutton()
-{
-	return mb;
-}
-
-long XLgetturbomousebutton()
-{
-	return mt;
-}
-
-long* XLgetvideobuffer()
-{
+	open();
+	close();
+	flush();
 	
 }
+
+void CLwindow::setup()
+{
+	if(AG_InitCore("xizero",AG_CREATE_DATADIR)==-1) return 1;
+	if(AG_InitVideo(800, 600, 32, AG_VIDEO_HWSURFACE)==-1) return 1;
+
+	win = AG_WindowNew(0);
+	vram = AG_SurfaceStdRGBA(800,600);
+
+	//set exitfunc: void AG_AtExitFunc (void (*fn)(void))
+	//AG_AtExitFunc()
+
+	AG_WindowSetCaption(win,"XiZero");
+
+	AG_WindowShow(win);
+
+	AG_EventLoop(); //start here once, or call every frame?
+} 
+
+void CLwindow::close()
+{
+	AG_Destroy();
+	AG_Quit();
+} 
+
+void CLwindow::flush()
+{
+	AG_WidgetBlit(win,vram,0,0);
+} 
 
 int main()
 {
-	char* vram = new char[xres*yres*4];
-	long* buff = reinterpret_cast<long*>(&vram[0]);
+	long temp[800*600*4];
 
-	XLsetup(vram);
+	CLwindow::setup();
 
-	bool inf = 1;
+	bool i=0;
 
-	buff[200*xres+200]=0x00FF0000;
-	
-	long tki = 0;
-	long nki = 0;
-
-	while(inf==1)
+	while(i==0)
 	{
-		XLgetinput();
-
-		tki = XLgetturbokey();
-		nki = XLgetkey();
-
-		switch(tki)
-		{
-			case '0': inf = 0; break; //leave
-
- 
-		}
-
-		//XClearWindow(d,w);
-
-		XLflush();
+		CLwindow::flush();
 	}
 
-	return 0;
+	return (0);
 }
-
-
-
 

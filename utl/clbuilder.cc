@@ -107,6 +107,7 @@ int main()
 {
 	vector<y3dline> proto;
 	int32_t globalpolycount = 0;
+	int32_t globaldockcount = 0;
 	y3dline temp;
 	y3dline test[4];
 	int32_t sobjcount;
@@ -212,6 +213,8 @@ int main()
 		//DOCK's
 		for(int k=0; k<dockcount; k++)
 		{
+			globaldockcount++;
+
 			cout << "Enter Docking type [0-65536]: ";
 			cin.width(5);
 			cin >> docktype;
@@ -231,6 +234,7 @@ int main()
 	}
 
 	proto[0].c.dd = globalpolycount;
+	proto[1].d.dd = globaldockcount;
 	
 	//ENDO
 	temp.a.dd = 'ENDO';

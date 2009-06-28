@@ -116,7 +116,7 @@ void FLTKsetup()
 {
 	Fl::visual(FL_RGB);
 
-	win     = new FLTKwindow(xres, yres,"atCROSSLEVEL");
+	win = new FLTKwindow(xres, yres,"atCROSSLEVEL");
 	win->end();
 	win->show();
 }

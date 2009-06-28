@@ -24,6 +24,13 @@ TARGET4 = asciimissile
 SOURCE5 = testx.cc
 TARGET5 = testx
 
+#options to test:
+CPUa    = -mcpu pentium-mmx
+CPUb    = -mcpu pentium3
+MATH    = -ffast-math
+ATOM    = -xL
+#
+
 
 # Compile!
 default:

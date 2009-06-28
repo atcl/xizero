@@ -14,7 +14,7 @@ namespace CLmisc3d
 	void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db);
 	void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa);
 	void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db);
-	template<class clvector>clvector project(const clvector& v,const clvector& p);
+	template<class clvector>CLlvector project(const clvector& v);
 	void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db,xlong srcdis=0);
 	void drawlight();
 }
@@ -56,16 +56,16 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<
 }
 
 template<class clvector>
-clvector CLmisc3d::project(clvector v,clvector p)
+CLlvector CLmisc3d::project(const clvector& v)
 {
 	//!!! test project, and may be get rid of one parameter!!!
-	clvector r;
+	CLlvector r;
 	
 	if(v.z > 0)
 	{
 		//instead of xlong conversion rather use CLmath::round?
-		r.x = float(xlong( ( prjx * v.x) / (v.z) ) + p.x );
-		r.y = float(xlong( (-prjy * v.y) / (v.z) ) + p.y );
+		r.x = xlong( (prjx / v.z) * (v.x - 400)  ) +400;
+		r.y = xlong( (prjy / v.z) * (v.y - 300)  ) +300;
 		r.z = v.z; // + cleartrans;
 	}
 	

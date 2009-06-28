@@ -45,7 +45,7 @@ class CLobject : public virtual CLcl
 		xlong getpositionx();
 		xlong getpositiony();
 		xlong getpositionz();
-		void setposition(xlong x,xlong y,xlong z);
+		void setposition(CLlvector v);
 		void setpositionx(xlong x);
 		void setpositiony(xlong y);
 		void setpositionz(xlong z);
@@ -115,8 +115,15 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
-		dockptr = new CLlvector*[dockcount];
-
+		if(dockcount!=0)
+		{
+			dockptr = new CLlvector*[dockcount];
+		}
+		else
+		{
+			dockptr=0;
+		}
+		
 		d = 8;
 
 		for(int i=0;i<sobjcount;i++)
@@ -202,7 +209,6 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 				//*
 				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
 			}
-
 			for(int k=0;k<localdockcount;k++,dockcounter++)
 			{
 				s.dd = dataptr[d]; d++; //"DP"+docktype
@@ -212,7 +218,7 @@ CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
 				t[0].y = dataptr[d] + yoff; d++; //dy
 				t[0].z = (dataptr[d]>>zshift) + zoff; d++; //dz
 
-				dockptr[dockcounter] = new CLlvector;
+				dockptr[dockcounter] = new CLlvector(0,0,0);
 				dockptr[dockcounter]->x = t[0].x;
 				dockptr[dockcounter]->y = t[0].y;
 				dockptr[dockcounter]->z = t[0].z;
@@ -264,6 +270,7 @@ void CLobject::display(xchar flags)
 {
 	if(flags&SHADOW)
 	{
+		CLsystem::print("I shouldn't be here!");
 		for(int i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);
@@ -307,11 +314,9 @@ xlong CLobject::getpositionz()
 	return position.z;
 }
 
-void CLobject::setposition(xlong x,xlong y,xlong z)
+void CLobject::setposition(CLlvector v)
 {
-	position.x = x;
-	position.y = y;
-	position.z = z;
+	position = v;
 }
 
 void CLobject::setpositionx(xlong x)

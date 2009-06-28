@@ -79,7 +79,8 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	clstencil = cls;
 
 	cllinear = new CLmatrix(1);
-	clgame   = new CLgame(60,0,740,600); //!fix to projected box
+	//~ clgame   = new CLgame(60,0,740,600); //!fix to projected box
+	clgame   = new CLgame(0,0,800,600);
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects
@@ -189,11 +190,10 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xchar currentheight = 0;
 	xchar currententity = 0;
 	xlong blockoffsetx = blockwidth >> 1;
-	xlong blockoffsety = blockheight >> 1; 
-	xlong currentx = blockoffsetx;
-	xlong currenty = blockoffsety;
-	xlong currentz = 0;
-	xlong tempz = 0;
+	xlong blockoffsety = blockheight >> 1;
+	CLlvector current(blockoffsetx,blockoffsety,100);
+	xlong tempz1 = 0;
+	xlong tempz2 = 0;
 
 	for(int i=0; i<levelheight; i++)
 	{
@@ -204,30 +204,30 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 			{
 				currentheight = levellayers[1][i][j];
 				currententity = levellayers[2][i][j];
-				currentz = -currentheight * (blockdepth >> 2);
-				clterrain[currentterrain]->setposition(currentx,currenty,100);
+				tempz2 = -currentheight * (blockdepth >> 2);
+				clterrain[currentterrain]->setposition(current);
 				if(currentheight!=0)
 				{
-					if(currentterrain==0) tempz = clterrain[0]->getpositionz();
-					else clterrain[0]->setposition(currentx,currenty,100);
+					if(currentterrain==0) tempz1 = clterrain[0]->getpositionz();
+					else clterrain[0]->setposition(current);
 					for(int k=1; k<=currentheight; k++)
 					{
 						clterrain[0]->display(templevellside,templevelrside,levellandscape,templevelheight);
 						clterrain[0]->addposition(0,0,blockdepth>>2);
 					}
-					if(currentterrain==0) clterrain[0]->setpositionz(tempz);
+					if(currentterrain==0) clterrain[0]->setpositionz(tempz1);
 					else clterrain[0]->reset();
 				}
 
-				clterrain[currentterrain]->addposition(0,0,currentz);
+				clterrain[currentterrain]->addposition(0,0,tempz2);
 				clterrain[currentterrain]->display(templevellside,templevelrside,levellandscape,templevelheight);
 				clterrain[currentterrain]->reset();
 				cllinear->unit();
 			}
-			currentx += blockwidth;
+			current.x += blockwidth;
 		}
-		currentx = blockoffsetx;
-		currenty += blockheight;	
+		current.x = blockoffsetx;
+		current.y += blockheight;	
 	}
 
 	delete[] templevelrside;

@@ -482,7 +482,7 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 CLpolygon::~CLpolygon() { }
 
 void CLpolygon::display(const CLlvector& p,xchar flags)
-{	
+{
 	if(flags&SHADOW)
 	{
 		ppoint[0] = pointt[0];
