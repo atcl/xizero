@@ -11,6 +11,10 @@
 #include "CLapi.hh"
 #include "CLgame.hh"
 
+//temp:
+xlong xmark;
+//
+
 
 class CLplayer : public virtual CLcl
 {
@@ -54,12 +58,12 @@ class CLplayer : public virtual CLcl
 		void fire(xlong at);
 		void hurt(xlong am);
 		void transform(bool m);
-		xlong collision();
+		xlong collision(CLfbuffer* ll);
 	public:
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong imark,xlong p=0);
 		~CLplayer();
 
-		void update(xchar input,char turbo,xchar*** levellayers,xlong mark);
+		void update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
 		void display();
 
 		void setxyz(xlong x,xlong y,xlong z);
@@ -137,7 +141,7 @@ void CLplayer::transform(bool m)
 	}
 }
 
-xlong CLplayer::collision()
+xlong CLplayer::collision(CLfbuffer* ll)
 {
 	if(gear==0) return 0;
 	
@@ -146,20 +150,16 @@ xlong CLplayer::collision()
 	//boundary check: (check if game screen is left)
 	xlong bc = clgame->boundary(tposition,*boundingbox[0]);
 
-	if(bc!=0)
+	if( (bc!=0) && ( (bc==-1 && speed.x>=0) || (bc==1  && speed.x<=0) || (bc==-2 && speed.y<=0) || (bc==2  && speed.y>=0) ) )
 	{
-		if(bc==-1 && speed.x>=0) { gear=0; setspeed(); r++; }
-		if(bc==1  && speed.x<=0) { gear=0; setspeed(); r++; }
-		if(bc==-2 && speed.y<=0) { gear=0; setspeed(); r++; }
-		if(bc==2  && speed.y>=0) { gear=0; setspeed(); r++; }
+		gear=0;
+		setspeed();
+		r++;
 	}
 	//*
 
 	//terrain collision check: (check if player collides with terrain block)
-	xlong tc = 0; //clgame->impact(tposition,lposition,boundingbox[0],clzbuffer);
-
-// 	CLprint_(tc);
-// 	CLprint_(speeddir);
+	xlong tc = 0; // clgame->impact(ll,boundingbox[0],position,lposition);
 
 	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
@@ -268,7 +268,7 @@ CLplayer::~CLplayer()
 	delete ammolist;
 }
 
-void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
+void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
 
 	switch(input)
@@ -334,7 +334,13 @@ void CLplayer::update(xchar input,xchar turbo,xchar*** levellayers,xlong mark)
 		tposition.y = position.y + speed.y - mark;
 		tposition.z = position.z + speed.z;
 
-		if(collision()==0)
+		xmark = mark;
+
+		lposition.x = position.x - speed.x;
+		lposition.y = position.y + speed.y;
+		lposition.z = position.z + speed.z;
+
+		if(collision(ll)==0)
 		{	
 			position = tposition; 
 			position.y += mark; 
@@ -363,6 +369,28 @@ void CLplayer::display()
 //~ sposition.x+boundingbox[0]->b4.x,
 //~ sposition.y-boundingbox[0]->b4.y,
 //~ 0x00FFFFFF);
+
+	//~ CLgfx1::drawpolygon(
+//~ position.x+boundingbox[0]->b1.x,
+//~ position.y-boundingbox[0]->b1.y- xmark,
+//~ position.x+boundingbox[0]->b2.x,
+//~ position.y-boundingbox[0]->b2.y- xmark,
+//~ position.x+boundingbox[0]->b3.x,
+//~ position.y-boundingbox[0]->b3.y- xmark,
+//~ position.x+boundingbox[0]->b4.x,
+//~ position.y-boundingbox[0]->b4.y- xmark,
+//~ 0x0000FFFF);
+
+	//~ CLgfx1::drawpolygon(
+//~ lposition.x+boundingbox[0]->b1.x,
+//~ lposition.y-boundingbox[0]->b1.y- xmark,
+//~ lposition.x+boundingbox[0]->b2.x,
+//~ lposition.y-boundingbox[0]->b2.y- xmark,
+//~ lposition.x+boundingbox[0]->b3.x,
+//~ lposition.y-boundingbox[0]->b3.y- xmark,
+//~ lposition.x+boundingbox[0]->b4.x,
+//~ lposition.y-boundingbox[0]->b4.y- xmark,
+//~ 0x000000FF);
 
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 

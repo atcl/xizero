@@ -274,7 +274,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	CLobject* playerm = new CLobject(playera->members[pm],400,300,100,0);
 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
 
-	playerm->setminz(100);
+	playerm->setminz(105);
 	//playern->setminz(100); //as soon as 2nd part is avail
 
 	bool startposfound = false;
@@ -344,11 +344,12 @@ void CLlevel::update(xchar input,xchar turbo)
 	xlong py = clplayer->gety();
 	if( (py<smoothlevelheight+tempy) && (py>tempy) ) subsmark(smoothmark+tempy-py);
 
-	clplayer->update(input,turbo,levellayers,smoothmark);
+	clplayer->update(input,turbo,levellandscape,smoothmark);
 }
 
 void CLlevel::display()
 {
+	//display level:
 	xlong currentterrain = 0;
 	xchar currentheight = 0;
 	xchar currententity = 0;
@@ -406,9 +407,14 @@ void CLlevel::display()
 		currentx = -(xres >> 1) + blockoffsetx;
 		currenty -= blockheight;	
 	}
+	//
 
-	//display player
+	//display player:
 	clplayer->display();
+	//
+	
+	//display enemies:
+	
 	//
 }
 

@@ -313,7 +313,6 @@ void CLpolygon::shape()
 
 void CLpolygon::flatshade(bool ambient)
 {
-	uxlong d = 0;
 	doubleword argb = { 0 };
 
 	float t = (normal * cllight) / ( !normal * !cllight );

@@ -179,8 +179,6 @@ void CLsystem::wait(xlong milliseconds)
 	} while(nowtime < stoptime);
 }
 
-//! change all seconds stuff to xlong
-
 xlong CLsystem::getmilliseconds() //since midnight
 {
 	return xlong(1000 * clock() / CLOCKS_PER_SEC);

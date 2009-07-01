@@ -17,6 +17,18 @@
 #include "CLlight.hh"
 
 
+//change CLbox members to pointers?
+struct CLbox
+{
+	CLvector<float> t1;
+	CLvector<float> t2;
+	CLvector<float> t3;
+	CLvector<float> t4;
+	CLvector<float> b1;
+	CLvector<float> b2;
+	CLvector<float> b3;
+	CLvector<float> b4;
+};
 
 class CLobject : public virtual CLcl
 {

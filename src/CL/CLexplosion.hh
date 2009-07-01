@@ -8,7 +8,9 @@
 #include "CLcl.hh"
 
 
-//combi aus "translate along normals" + "dyadic product"
+//combine "translate along normals" + "dyadic product"
+//use dyadic product to crumple object
+//then translate along normals for explosion
 class CLexplosion : public virtual CLcl
 {
 	protected:

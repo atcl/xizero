@@ -8,6 +8,7 @@
 #include "CLconsts.hh"
 #include "CLbuffer.hh"
 #include "CLvector.hh"
+#include "CLglobal.hh"
 
 namespace CLmisc3d
 {
@@ -38,18 +39,37 @@ void CLmisc3d::draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,
 
 void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db)
 {
-	//!!!determine shade of floor!!!
+	//shade floor
+	doubleword argb = { 0 };
+	uxlong s;
+
+	float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
+
+	//if(t > 1) t = 1;
+	//if(t < 0.2) s = nolight;
+
+	argb.dd = c;
+	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t);
+	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t);
+	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t);
+	s = argb.dd;
+	//
+	
+	
+	//!!!optimize up the for-loops !!! causes 60fps drop!!!!!!!!! 
 
 	//draw screen
 	xlong x1 = (xres-w)>>1;
 	xlong x2 = xres-((xres-w)>>1);
+	
+	
 	
 	//draw filled rectangle and fill zbuffer
 	for(int i=0; i<(x2-x1); i++)
 	{
 		for(int j=0; j<yres; j++)
 		{
-			(*db)[(j*xres)+(x1+i)] = c;
+			(*db)[(j*xres)+(x1+i)] = s;
 			(*zb)[(j*xres)+(x1+i)] = z;
 		}
 	}

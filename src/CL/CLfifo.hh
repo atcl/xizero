@@ -8,11 +8,17 @@
 #include "CLcl.hh"
 
 
+struct fifomember
+{
+	void*       data;
+	fifomember* prev;
+};
+
 class CLfifo : public virtual CLcl
 {
 	private:
-		listmember* head;
-		listmember* tail;
+		fifomember* head;
+		fifomember* tail;
 		xlong length;
 		void** que;
 
@@ -35,7 +41,7 @@ CLfifo::~CLfifo() { }
 
 void CLfifo::in(void* f)
 {
-	listmember* t = new listmember;
+	fifomember* t = new fifomember;
 
 	if(length == 0)
 	{
@@ -48,10 +54,7 @@ void CLfifo::in(void* f)
 	}
 
 	t->data = f;
-	t->next = 0;
 	t->prev = 0;
-	t->name = 0;
-	t->hash = 0;
 	head = t;
 	length++;
 }
@@ -80,7 +83,7 @@ void CLfifo::clear()
 {
 	for(int i=0; i<length; i++)
 	{
-		listmember* t = tail;
+		fifomember* t = tail;
 		tail = tail->prev;
 		delete t;
 		length--;

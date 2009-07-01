@@ -33,7 +33,7 @@ class CLgame : public virtual CLcl
 		template<class clvector>xlong collision(const clvector& v1,const clvector& v2,const clvector& w) const;
 		xlong collision(const CLbox& bb1,const CLbox& bb2) const;
 
-		template<class clvector>xlong impact(const clvector& p,const clvector& l,const CLbox& bb) const;
+		template<class clvector>xlong impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) const;
 };
 
 CLgame::CLgame()
@@ -142,9 +142,33 @@ xlong CLgame::collision(const CLbox& bb1, const CLbox& bb2) const //!test!
 }
 
 template<class clvector>
-xlong CLgame::impact(const clvector& p,const clvector& l,const CLbox& bb) const
+xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) const
 {
+	clvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
+	clvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
+	clvector p3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
+	clvector p4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
+	
+	clvector l1( (l.x + bb->b1.x), (l.y - bb->b1.y), (l.z + bb->b1.z) );
+	clvector l2( (l.x + bb->b2.x), (l.y - bb->b2.y), (l.z + bb->b2.z) );
+	clvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
+	clvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
 
+	//these comparisons always return a difference of 10 though there shoud be none on normal floor.
+
+	//p1<l1
+	if( (*ll)[ (p1.y * xres) + p1.x ] < ((*ll)[ (l1.y * xres) + l1.x ]) ) return 1;
+	
+	//p2<l2
+	if( (*ll)[ (p2.y * xres) + p2.x ] < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
+	
+	//p3<l3
+	if( (*ll)[ (p3.y * xres) + p3.x ] < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
+	
+	//p4<l4
+	if( (*ll)[ (p4.y * xres) + p4.x ] < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
+	
+	return 0;
 }
 
 #endif

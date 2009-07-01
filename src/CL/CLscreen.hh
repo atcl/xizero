@@ -24,7 +24,8 @@ void fadetoblack(xlong t,CLbuffer<xlong>* db);
 
 void circleblend(xlong x,xlong y,xlong r,xlong t,CLbuffer<xlong>* db)
 {
-
+	//draw circle with radius r around (x,y)
+	//fill surface around circle with black
 }
 
 void dissolve(xlong t,CLbuffer<xlong>* db)
@@ -34,31 +35,7 @@ void dissolve(xlong t,CLbuffer<xlong>* db)
 
 void fadetoblack(xlong t,CLbuffer<xlong>* db)
 {
-	every* ev = new every;
-	//ev->func = ;
-	ev->interval = 50;
-	ev->count = 256;
-	ev->active = true;
-	//ev->id = clid->generateid
 
-	CLdoevery_(ev);
 }
-
-//everies:
-
-ev_dissolve()
-{
-	//xlong x = CLrandom_(xres);
-	//xlong y = CLrandom_(yres);
-	//xlong c = CLrandom_(0x00FFFFFF);
-
-	//clgfx1->drawpixel(x,y,c);
-}
-
-ev_fadetoblack()
-{
-	
-}
-
 
 #endif

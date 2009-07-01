@@ -11,6 +11,14 @@
 #include "CLmacros.hh"
 
 
+typedef CLfile armember;
+
+struct arfile
+{
+	xlong      filecount;
+	armember**  members;
+};
+
 namespace CLformat
 {
 	xchar** loadcsv(CLfile* sf);

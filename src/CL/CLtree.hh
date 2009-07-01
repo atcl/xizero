@@ -8,6 +8,19 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 
+
+struct node
+{
+	node*  parent;
+	node*  next;
+	node*  prev;
+	node** child;
+	xlong  childcount;
+	void*  data;
+	xchar* name;
+	xlong* hash;
+};
+
 class CLtree : public virtual CLcl
 {
 	private:

@@ -9,6 +9,15 @@
 #include "CLapi.hh"
 
 
+struct listmember
+{
+	void*       data;
+	listmember* next;
+	listmember* prev;
+	xchar*      name;
+	xlong*      hash;
+};
+
 class CLlist : public virtual CLcl
 {
 	private:

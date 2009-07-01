@@ -118,32 +118,47 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 				dst[i] = buffer[i];
 			}
 		break;
+		
 		case 1:		//AND
 			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] && buffer[i];
 			}
 		break;
+		
 		case 2:		//OR
 			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] || buffer[i];
 			}
 		break;
+		
 		case 3:		//OR
 			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] ^ buffer[i];
 			}
 		break;
+		
 		case 4:		//ADD
 			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] + buffer[i];
 			}
 		break;
+		
+		case 5:		//AA
+			for(int i=size-1;i>=0;i--)
+			{
+				//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
+			}
+		break;
 	}
-	
+}
+
+template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o)
+{
+
 }
 
 template <typename T>uxlong CLbuffer<T>::getsize()
