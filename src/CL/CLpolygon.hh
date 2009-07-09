@@ -21,7 +21,6 @@ class CLpolygon : public virtual CLcl
 	private:
 		static xlong pointcount;
 
-		uxlong color;
 		uxlong shade;
 		uxlong scolor;
 		xlong cpointcount;
@@ -49,14 +48,15 @@ class CLpolygon : public virtual CLcl
 	public:
 		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
 		~CLpolygon();
+		
 		void update(CLmatrix* m,bool i);
 		void display(const CLlvector& p,xchar flags);
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
-		void setcolor(uxlong c);
-		uxlong getcolor();
 		CLfvector getnormal();
+
+		uxlong color;
 };
 
 xlong CLpolygon::pointcount = 4;
@@ -626,16 +626,6 @@ void CLpolygon::reset()
 	points[2] = pointr[2];
 	points[3] = pointr[3];
 	normal    = rnormal;
-}
-
-void CLpolygon::setcolor(uxlong c)
-{
-	color = c;
-}
-
-uxlong CLpolygon::getcolor()
-{
-	return color;
 }
 
 CLfvector CLpolygon::getnormal()

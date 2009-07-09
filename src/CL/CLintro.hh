@@ -67,18 +67,18 @@ void atcrosslevel_intro()
 
 	//load atcrosslevel model
 	CLfile *cf = CLsystem::getfile("../dat/cross.y3d");
-	CLobject* cross = new CLobject(cf,400,300,100,0);
+	CLobject* cross = new CLobject(cf,0);
 	CLfile *lf = CLsystem::getfile("../dat/level.y3d");
-	CLobject* level0 = new CLobject(lf,400,300,100,0);
-	CLobject* level1 = new CLobject(lf,400,300,100,0);
-	CLobject* level2 = new CLobject(lf,400,300,100,0);
-	CLobject* level3 = new CLobject(lf,400,300,100,0);
-	CLobject* level4 = new CLobject(lf,400,300,100,0);
-	CLobject* level5 = new CLobject(lf,400,300,100,0);
-	CLobject* level6 = new CLobject(lf,400,300,100,0);
-	CLobject* level7 = new CLobject(lf,400,300,100,0);
-	CLobject* level8 = new CLobject(lf,400,300,100,0);
-	CLobject* level9 = new CLobject(lf,400,300,100,0);
+	CLobject* level0 = new CLobject(lf,0);
+	CLobject* level1 = new CLobject(lf,0);
+	CLobject* level2 = new CLobject(lf,0);
+	CLobject* level3 = new CLobject(lf,0);
+	CLobject* level4 = new CLobject(lf,0);
+	CLobject* level5 = new CLobject(lf,0);
+	CLobject* level6 = new CLobject(lf,0);
+	CLobject* level7 = new CLobject(lf,0);
+	CLobject* level8 = new CLobject(lf,0);
+	CLobject* level9 = new CLobject(lf,0);
 
 	//build scene
 

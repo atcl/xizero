@@ -41,27 +41,16 @@ class CLobject : public virtual CLcl
 		xlong dockcount;
 		xlong vertexptr;
 		CLlvector** dockptr;
-		CLlvector position;
-		CLlvector rposition;
 		CLbox* boundingbox;
 		xlong name;
 	
 	public:
-		CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs);
+		CLobject(CLfile* fileptr,bool zs);
 		~CLobject();
 		
 		void update(CLmatrix* m);
-		void display(xchar flags);
-		void display(screenside* l,screenside* r,CLfbuffer* b,xlong h);
-		CLlvector getposition();
-		xlong getpositionx();
-		xlong getpositiony();
-		xlong getpositionz();
-		void setposition(CLlvector v);
-		void setpositionx(xlong x);
-		void setpositiony(xlong y);
-		void setpositionz(xlong z);
-		void addposition(xlong x,xlong y,xlong z);
+		void display(CLlvector p,xchar flags);
+		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		xlong getname();
 		CLlvector* getdockingpoint(xlong i);
 		CLlvector* getdockingpoint(xlong t,xlong i);
@@ -70,12 +59,8 @@ class CLobject : public virtual CLcl
 		void reset();
 };
 
-CLobject::CLobject(CLfile* fileptr,xlong x,xlong y,xlong z,bool zs)
+CLobject::CLobject(CLfile* fileptr,bool zs)
 {
-	position.x = rposition.x = x;
-	position.y = rposition.y = y;
-	position.z = rposition.z = z;
-
 	boundingbox = new CLbox;
 	boundingbox->t1 = 0;
 	boundingbox->t2 = 0;
@@ -276,7 +261,7 @@ void CLobject::update(CLmatrix* m)
 	boundingbox->b4 = m->transform(boundingbox->b4);
 }
 
-void CLobject::display(xchar flags)
+void CLobject::display(CLlvector p,xchar flags)
 {
 	if(flags&SHADOW)
 	{
@@ -284,71 +269,24 @@ void CLobject::display(xchar flags)
 		for(int i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);
-			polyptr[i]->display(position,( (flags&CENTER) + FLAT + (flags&AMBIENT) + SHADOW ));
+			polyptr[i]->display(p,( (flags&CENTER) + FLAT + (flags&AMBIENT) + SHADOW ));
 		}
 	}
 	else
 	{
 		for(int i=0;i<polycount;i++)
 		{
-			polyptr[i]->display(position,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
+			polyptr[i]->display(p,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
 		}
 	}
 }
 
-void CLobject::display(screenside* l,screenside* r,CLfbuffer* b,xlong h)
+void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
 {
 	for(int i=0;i<polycount;i++)
 	{
-		polyptr[i]->display(position,l,r,b,h);
+		polyptr[i]->display(p,l,r,b,h);
 	}
-}
-
-CLlvector CLobject::getposition()
-{
-	return position;
-}
-
-xlong CLobject::getpositionx()
-{
-	return position.x;
-}
-
-xlong CLobject::getpositiony()
-{
-	return position.y;
-}
-
-xlong CLobject::getpositionz()
-{
-	return position.z;
-}
-
-void CLobject::setposition(CLlvector v)
-{
-	position = v;
-}
-
-void CLobject::setpositionx(xlong x)
-{
-	position.x = x;
-}
-
-void CLobject::setpositiony(xlong y)
-{
-	position.y = y;
-}
-
-void CLobject::setpositionz(xlong z)
-{
-	position.z = z;
-}
-
-void CLobject::addposition(xlong x,xlong y,xlong z)
-{
-	position.x += x;
-	position.y += y;
-	position.z += z;
 }
 
 xlong CLobject::getname()
@@ -404,10 +342,6 @@ CLbox* CLobject::getboundingbox()
 
 void CLobject::reset()
 {
-	position.x = rposition.x;
-	position.y = rposition.y;
-	position.z = rposition.z;
-
 	for(int i=0;i<polycount;i++)
 	{
 		polyptr[i]->reset();

@@ -191,7 +191,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 	cllinear = new CLmatrix(1);
 
 	position = s;
-	position.z += 100;
+	position.z += 105;
 
 	points = p;
 
@@ -355,8 +355,7 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 void CLplayer::display()
 {
-	model[0]->setposition(sposition);
-	model[0]->display(FLAT + AMBIENT);
+	model[0]->display(sposition,FLAT + AMBIENT);
 
 	//temp!
 	//~ CLgfx1::drawpolygon(
