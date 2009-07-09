@@ -93,7 +93,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	for(int g=0; g<terraina->filecount; g++)
 	{
 		clterrain[g] = new CLobject(terraina->members[g],400,300,100,1);
-		clterrain[g]->setminz(100);
 	}
 	//*
 
@@ -273,9 +272,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	CLobject* playerm = new CLobject(playera->members[pm],400,300,100,0);
 	CLobject* playern = NULL; //2nd part of player model as soon as avail.
-
-	playerm->setminz(105);
-	//playern->setminz(100); //as soon as 2nd part is avail
 
 	bool startposfound = false;
 	CLlvector playerp;

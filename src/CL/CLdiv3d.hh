@@ -65,9 +65,9 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<
 	
 	
 	//draw filled rectangle and fill zbuffer
-	for(int i=0; i<(x2-x1); i++)
+	for(int i=(x2-x1)-1; i>=0; i--)
 	{
-		for(int j=0; j<yres; j++)
+		for(int j=yres-1; j>=0; j--)
 		{
 			(*db)[(j*xres)+(x1+i)] = s;
 			(*zb)[(j*xres)+(x1+i)] = z;

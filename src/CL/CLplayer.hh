@@ -159,7 +159,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	//*
 
 	//terrain collision check: (check if player collides with terrain block)
-	xlong tc = 0; // clgame->impact(ll,boundingbox[0],position,lposition);
+	xlong tc = 0; xlong xc = clgame->impact(ll,boundingbox[0],position,lposition);
 
 	 //compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
@@ -191,7 +191,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 	cllinear = new CLmatrix(1);
 
 	position = s;
-	position.z += 105;
+	position.z += 100;
 
 	points = p;
 

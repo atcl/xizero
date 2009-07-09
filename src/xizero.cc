@@ -58,7 +58,7 @@ int main()
 		switch(mode)
 		{
 			case 1: 
-				CLmisc3d::drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawfloor(100,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
 				testlevel->display();
 				break;
 
@@ -68,7 +68,7 @@ int main()
 				break;
 
 			case 3:
-				CLmisc3d::drawfloor(105,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawfloor(100,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
 				testlevel->display();
 				CLmisc3d::drawzbuffer(CLzbuffer,CLdoublebuffer);
 				break;

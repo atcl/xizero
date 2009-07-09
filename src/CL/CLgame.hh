@@ -157,7 +157,13 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	//these comparisons always return a difference of 10 though there shoud be none on normal floor.
 
 	//p1<l1
-	if( (*ll)[ (p1.y * xres) + p1.x ] < ((*ll)[ (l1.y * xres) + l1.x ]) ) return 1;
+	if( (*ll)[ (p1.y * xres) + p1.x ] < ((*ll)[ (l1.y * xres) + l1.x ]) )
+	{
+		CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
+		CLsystem::print(" ");
+		CLsystem::print((*ll)[ (l1.y * xres) + l1.x ]);
+		return 1;
+	}
 	
 	//p2<l2
 	if( (*ll)[ (p2.y * xres) + p2.x ] < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
