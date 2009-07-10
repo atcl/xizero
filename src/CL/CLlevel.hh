@@ -181,7 +181,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 //***
 
 //level landscape generation:
-	xlong templevelheight = smoothlevelheight+blockheight;
+	xlong templevelheight = smoothlevelheight;
 	levellandscape = new CLfbuffer(smoothlevelwidth*templevelheight);
 	levellandscape->clear(floorheight);
 	screenside* templevelrside = new screenside[templevelheight];

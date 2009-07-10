@@ -154,10 +154,8 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	clvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
 	clvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
 
-	//these comparisons always return a difference of 10 though there shoud be none on normal floor.
-
 	//p1<l1
-	if( (*ll)[ (p1.y * xres) + p1.x ] < ((*ll)[ (l1.y * xres) + l1.x ]) )
+	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ]) )
 	{
 		CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
 		CLsystem::print(" vs ",0);
@@ -166,13 +164,13 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	}
 	
 	//p2<l2
-	if( (*ll)[ (p2.y * xres) + p2.x ] < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
+	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
 	
 	//p3<l3
-	if( (*ll)[ (p3.y * xres) + p3.x ] < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
+	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
 	
 	//p4<l4
-	if( (*ll)[ (p4.y * xres) + p4.x ] < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
+	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
 	
 	return 0;
 }

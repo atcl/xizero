@@ -29,4 +29,9 @@ CLmatrix*  shadowM;
 
 CLfps*    clfps;
 
+//temp:
+xlong xmark;
+CLlvector tv(0,0,0);
+//
+
 #endif
