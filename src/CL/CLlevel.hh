@@ -341,60 +341,60 @@ void CLlevel::update(xchar input,xchar turbo)
 void CLlevel::display()
 {
 	//display level:
-	xlong currentterrain = 0;
-	xchar currentheight = 0;
-	xchar currententity = 0;
-	xlong blockoffsetx = blockwidth >> 1;
-	xlong blockoffsety = blockheight >> 1; 
-	xlong yoffset = smoothmark % blockheight;
-	xlong tempz = 0;
-	xlong localfloorheight = floorheight - 5;
-	CLlvector ckeeper( -(xres >> 1) + blockoffsetx , (yres >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
-	CLlvector current( 0 , 0 , localfloorheight );
-
-	cllinear->unit();
-	for(int i=-1; i<blocksperscreeny+2; i++)
-	{
-		if( !( i<0                   && blockmark<=0 ) )
-		{
-		if( !( i==blocksperscreeny   && smoothmark>=smoothmarkmax ) )
-		{
-		if( !( i==blocksperscreeny+1 && smoothmark>=smoothmarkmax-blockheight ) )
-		{
-			for(int j=0; j<blocksperscreenx; j++)
-			{
-				currentterrain = xlong(levellayers[0][blockmark+i][j]);
-				if(currentterrain != -1)
-				{
-					currentheight = levellayers[1][blockmark+i][j];
-					currententity = levellayers[2][blockmark+i][j];
-					cllinear->translate(ckeeper.x,ckeeper.y,0);
-
-					if(currentheight!=0)
-					{
-						clterrain[0]->update(cllinear);
-						for(int k=1; k<=currentheight; k++)
-						{
-							clterrain[0]->display(current,CENTER + FLAT + AMBIENT);
-							current.z -= blockdepth>>2;
-						}
-						clterrain[0]->reset();
-					}
-					
-					clterrain[currentterrain]->update(cllinear);
-					clterrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT);
-					clterrain[currentterrain]->reset();
-					current.z = ckeeper.z;
-					cllinear->unit();
-				}
-				ckeeper.x += blockwidth;
-			}
-		}
-		}
-		}
-		ckeeper.x = -(xres >> 1) + blockoffsetx;
-		ckeeper.y -= blockheight;	
-	}
+	//~ xlong currentterrain = 0;
+	//~ xchar currentheight = 0;
+	//~ xchar currententity = 0;
+	//~ xlong blockoffsetx = blockwidth >> 1;
+	//~ xlong blockoffsety = blockheight >> 1; 
+	//~ xlong yoffset = smoothmark % blockheight;
+	//~ xlong tempz = 0;
+	//~ xlong localfloorheight = floorheight - 5;
+	//~ CLlvector ckeeper( -(xres >> 1) + blockoffsetx , (yres >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
+	//~ CLlvector current( 0 , 0 , localfloorheight );
+//~ 
+	//~ cllinear->unit();
+	//~ for(int i=-1; i<blocksperscreeny+2; i++)
+	//~ {
+		//~ if( !( i<0                   && blockmark<=0 ) )
+		//~ {
+		//~ if( !( i==blocksperscreeny   && smoothmark>=smoothmarkmax ) )
+		//~ {
+		//~ if( !( i==blocksperscreeny+1 && smoothmark>=smoothmarkmax-blockheight ) )
+		//~ {
+			//~ for(int j=0; j<blocksperscreenx; j++)
+			//~ {
+				//~ currentterrain = xlong(levellayers[0][blockmark+i][j]);
+				//~ if(currentterrain != -1)
+				//~ {
+					//~ currentheight = levellayers[1][blockmark+i][j];
+					//~ currententity = levellayers[2][blockmark+i][j];
+					//~ cllinear->translate(ckeeper.x,ckeeper.y,0);
+//~ 
+					//~ if(currentheight!=0)
+					//~ {
+						//~ clterrain[0]->update(cllinear);
+						//~ for(int k=1; k<=currentheight; k++)
+						//~ {
+							//~ clterrain[0]->display(current,CENTER + FLAT + AMBIENT);
+							//~ current.z -= blockdepth>>2;
+						//~ }
+						//~ clterrain[0]->reset();
+					//~ }
+					//~ 
+					//~ clterrain[currentterrain]->update(cllinear);
+					//~ clterrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT);
+					//~ clterrain[currentterrain]->reset();
+					//~ current.z = ckeeper.z;
+					//~ cllinear->unit();
+				//~ }
+				//~ ckeeper.x += blockwidth;
+			//~ }
+		//~ }
+		//~ }
+		//~ }
+		//~ ckeeper.x = -(xres >> 1) + blockoffsetx;
+		//~ ckeeper.y -= blockheight;	
+	//~ }
 	//
 
 	//display player:

@@ -159,9 +159,9 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	//p1<l1
 	if( (*ll)[ (p1.y * xres) + p1.x ] < ((*ll)[ (l1.y * xres) + l1.x ]) )
 	{
-		//CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
-		//CLsystem::print(" ");
-		//CLsystem::print((*ll)[ (l1.y * xres) + l1.x ]);
+		CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
+		CLsystem::print(" vs ",0);
+		CLsystem::print((*ll)[ (l1.y * xres) + l1.x ]);
 		return 1;
 	}
 	

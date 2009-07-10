@@ -336,10 +336,10 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 		xmark = mark;
 
-		lposition.x = position.x - speed.x;
-		lposition.y = position.y + speed.y;
-		lposition.z = position.z + speed.z;
-
+		lposition.x = position.x;
+		lposition.y = position.y - mark;
+		lposition.z = position.z;
+//sub mark after collision because levelland test (impact) is indep from mark
 		if(collision(ll)==0)
 		{	
 			position = tposition; 
@@ -355,7 +355,7 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 void CLplayer::display()
 {
-	model[0]->display(sposition,FLAT + AMBIENT);
+	//model[0]->display(sposition,FLAT + AMBIENT);
 
 	//temp!
 	//~ CLgfx1::drawpolygon(
@@ -369,27 +369,27 @@ void CLplayer::display()
 //~ sposition.y-boundingbox[0]->b4.y,
 //~ 0x00FFFFFF);
 
-	//~ CLgfx1::drawpolygon(
-//~ position.x+boundingbox[0]->b1.x,
-//~ position.y-boundingbox[0]->b1.y- xmark,
-//~ position.x+boundingbox[0]->b2.x,
-//~ position.y-boundingbox[0]->b2.y- xmark,
-//~ position.x+boundingbox[0]->b3.x,
-//~ position.y-boundingbox[0]->b3.y- xmark,
-//~ position.x+boundingbox[0]->b4.x,
-//~ position.y-boundingbox[0]->b4.y- xmark,
-//~ 0x0000FFFF);
+	CLgfx1::drawpolygon(
+tposition.x+boundingbox[0]->b1.x,
+tposition.y-boundingbox[0]->b1.y,
+tposition.x+boundingbox[0]->b2.x,
+tposition.y-boundingbox[0]->b2.y,
+tposition.x+boundingbox[0]->b3.x,
+tposition.y-boundingbox[0]->b3.y,
+tposition.x+boundingbox[0]->b4.x,
+tposition.y-boundingbox[0]->b4.y,
+0x0000FFFF);
 
-	//~ CLgfx1::drawpolygon(
-//~ lposition.x+boundingbox[0]->b1.x,
-//~ lposition.y-boundingbox[0]->b1.y- xmark,
-//~ lposition.x+boundingbox[0]->b2.x,
-//~ lposition.y-boundingbox[0]->b2.y- xmark,
-//~ lposition.x+boundingbox[0]->b3.x,
-//~ lposition.y-boundingbox[0]->b3.y- xmark,
-//~ lposition.x+boundingbox[0]->b4.x,
-//~ lposition.y-boundingbox[0]->b4.y- xmark,
-//~ 0x000000FF);
+	CLgfx1::drawpolygon(
+lposition.x+boundingbox[0]->b1.x,
+lposition.y-boundingbox[0]->b1.y,
+lposition.x+boundingbox[0]->b2.x,
+lposition.y-boundingbox[0]->b2.y,
+lposition.x+boundingbox[0]->b3.x,
+lposition.y-boundingbox[0]->b3.y,
+lposition.x+boundingbox[0]->b4.x,
+lposition.y-boundingbox[0]->b4.y,
+0x000000FF);
 
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
