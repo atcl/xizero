@@ -11,7 +11,7 @@
 #include "CLglobal.hh"
 
 
-//ad clipping: just break the draw loops if screen is left.
+//add clipping: just break the draw loops if screen is left.
 
 namespace CLgfx1
 {

@@ -14,24 +14,27 @@ class CLconio : public virtual CLcl
 	protected:
 		CLbuffer<xlong>* doublebuffer;
 		CLbuffer<xchar>* con;
+		
 	private:
 		xlong width;
 		xlong height;
 		xlong size;
+		xlong current;
+		
 	public:
-		CLconio(xlong s);
+		CLconio(xlong x,xlong y);
 		~CLconio();
 
-		void setup(xlong x,xlong y);
-		void addch(xchar c,xlong x,xlong y,uxlong fc,uxlong bc);
-		void addst(xchar* s,xlong x,xlong y,uxlong fc,uxlong bc);
+		void addch(xchar c,uxlong fc,uxlong bc);
+		void addst(xchar* s,uxlong fc,uxlong bc);
+		void locate(xlong x,xlong y);
 		void clear();
 		xchar kbhit();
 		xchar getch();
 		void flush();
 };
 
-CLconio::CLconio(xlong s)
+CLconio::CLconio(xlong x,xlong y)
 {
 	width = x;
 	height = y;
@@ -42,15 +45,6 @@ CLconio::CLconio(xlong s)
 
 CLconio::~CLconio() { }
 
-void CLconio::setup(xlong x,xlong y)
-{
-	width = x;
-	height = y;
-	size = x*y;
-	
-	con->reassign(size);
-}
-
 void CLconio::addch(xchar c,xlong x,xlong y,uxlong fc,uxlong bc)
 {
 
@@ -59,6 +53,11 @@ void CLconio::addch(xchar c,xlong x,xlong y,uxlong fc,uxlong bc)
 void CLconio::addst(xchar* s,xlong x,xlong y,uxlong fc,uxlong bc)
 {
 
+}
+
+void CLconio::locate(xlong x,xlong y)
+{
+	
 }
 
 void CLconio::clear()

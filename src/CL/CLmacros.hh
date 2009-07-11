@@ -45,9 +45,9 @@ void inline CLmovsd(xlong* dst,void* src,xlong cnt)
 	memcpy(dst,src,cnt);
 }
 
-void inline qq(const xchar m)
+void inline ttyout(const xchar m)
 {
-	CLsystem::print(m);
+	CLsystem::print(m,0);
 }
 
 #endif

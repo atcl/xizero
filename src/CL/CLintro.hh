@@ -11,10 +11,11 @@
 #include "CLmatrix.hh"
 
 
-//prototypes:
-void atcrosslevel_intro();
-void xizero_intro();
-//
+namespace CLintro
+{
+	void atcrosslevel();
+	void xizero();
+}
 
 //animation file format (csv): [all transformations are scene wide meaning acting on all objects???]
 //length,fps
@@ -32,7 +33,7 @@ void xizero_intro();
 //scl-z (length-times values relative)
 //*
 
-void atcrosslevel_intro()
+void CLintro::atcrosslevel()
 {
 	//animation variables
 
@@ -135,7 +136,7 @@ void atcrosslevel_intro()
 	delete level9;
 }
 
-void xizero_intro()
+void CLintro::xizero()
 {
 
 }

@@ -32,11 +32,9 @@ namespace CLsystem
 	xlong   doevery(every* e);
 	xlong   system(const xchar* c);
 	void    installsystemkey(xchar scancode,void *action);
-}
+};
 
 
-
-//implementaion:
 void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
 {
 	if(e!=0) e();

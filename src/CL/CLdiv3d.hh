@@ -100,7 +100,7 @@ void CLmisc3d::drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db,xlong srcdis)
 	{
 		for(int j=0; j<xres-1; j++)
 		{
-			z = (*zb)[(i*xres)+j+srcdis] *4;
+			z = (*zb)[(i*xres)+j+srcdis] * 4;
 			(*db)[(i*xres)+j] = z;
 		}
 	}

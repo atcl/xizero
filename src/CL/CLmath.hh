@@ -31,9 +31,9 @@ namespace CLmath
 	float sin(xlong x);
 	float cos(xlong x);
 	float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
-}
+};
 
-//implementation:
+
 void CLmath::init()
 {
 	fxpi = 355/113;
@@ -176,9 +176,6 @@ float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 
 	return xk;
 }
-
-//*
-
 
 #endif
 

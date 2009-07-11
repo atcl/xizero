@@ -33,7 +33,7 @@ namespace CLformat
 	xlong** loadini();
 }
 
-//implementation:
+
 xchar** CLformat::loadcsv(CLfile* sf)
 {
 
@@ -362,7 +362,6 @@ xlong** CLformat::loadini()
 {
 
 }
-//*
 
 #endif
 

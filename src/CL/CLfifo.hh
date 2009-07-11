@@ -32,6 +32,7 @@ class CLfifo : public virtual CLcl
 		bool isempty();
 };
 
+
 CLfifo::CLfifo()
 {
 	length = 0;

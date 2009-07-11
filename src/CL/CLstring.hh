@@ -13,6 +13,7 @@ class CLstring : public virtual CLcl
 	private:
 		xchar* s;
 		xlong l;
+		
 	public:
 		CLstring();
 		CLstring(const xchar* c);

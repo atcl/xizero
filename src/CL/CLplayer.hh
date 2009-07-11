@@ -42,7 +42,6 @@ class CLplayer : public virtual CLcl
 		CLfvector speeddir;
 		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
 
-
 		xlong gear;
 		xlong active;
 		xlong points;
@@ -54,13 +53,13 @@ class CLplayer : public virtual CLcl
 		void hurt(xlong am);
 		void transform(bool m);
 		xlong collision(CLfbuffer* ll,xlong m);
+		
 	public:
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p=0);
 		~CLplayer();
 
 		void update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
 		void display();
-
 		void setxyz(xlong x,xlong y,xlong z);
 		xlong gethealth();
 		xlong getshield();
@@ -68,6 +67,7 @@ class CLplayer : public virtual CLcl
 		xlong gety();
 		xlong getz();
 };
+
 
 void CLplayer::setspeed()
 {
@@ -110,9 +110,6 @@ void CLplayer::transform(bool m)
 		//transform direction vector
 		direction[0] = cllinear->transform(direction[0]);
 		direction[1] = cllinear->transform(direction[1]);
-	
-		//transform speed vector
-		speed = cllinear->transform(speed);
 
 		//transform (constant) speeddir vector
 		speeddir = cllinear->transform(speeddir);
@@ -134,6 +131,8 @@ void CLplayer::transform(bool m)
 		//transform ammo direction(s)
 
 	}
+	
+	cllinear->unit();
 }
 
 xlong CLplayer::collision(CLfbuffer* ll,xlong m)
@@ -188,7 +187,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 	cllinear = new CLmatrix(1);
 
 	position = s;
-	position.z += 105;
+	position.z += 95;
 
 	points = p;
 
@@ -267,7 +266,6 @@ CLplayer::~CLplayer()
 
 void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
-
 	switch(input)
 	{
 		case 82:
@@ -286,25 +284,23 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 81: //arrow left -> turn left
 			cllinear->rotate(0,0,5);
 			transform(false);
-			cllinear->unit();
+			setspeed();
 		break;
 
 		case 83: //arrow right -> turn right
 			cllinear->rotate(0,0,-5);
 			transform(false);
-			cllinear->unit();
+			setspeed();
 		break;
 
 		case 97: //a -> turn tower left
 			cllinear->rotate(0,0,4);
 			transform(true);
-			cllinear->unit();
 		break;
 
 		case 100: //d -> turn tower right
 			cllinear->rotate(0,0,-4);
 			transform(true);
-			cllinear->unit();
 		break;
 
 		case 32: //space -> fire tower weapon
@@ -323,7 +319,6 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 	}
 
-	//
 	float temp = CLsystem::getmilliseconds();
 	if(temp >= lastupdate + 20)
 	{
@@ -337,17 +332,18 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		{	
 			position = tposition; 
 			
+			tposition.y -= mark;
 			sposition = CLmisc3d::project(tposition);
+			tposition.y += mark;
 		}
 		
 		lastupdate = temp;
 	}
-	//*
 }
 
 void CLplayer::display()
 {
-	//model[0]->display(sposition,FLAT + AMBIENT);
+	model[0]->display(sposition,FLAT + AMBIENT);
 
 	//temp!
 	//~ CLgfx1::drawpolygon(
@@ -361,16 +357,18 @@ void CLplayer::display()
 //~ sposition.y-boundingbox[0]->b4.y,
 //~ 0x00FFFFFF);
 
-	CLgfx1::drawpolygon(
-tposition.x+boundingbox[0]->b1.x,
-tposition.y-boundingbox[0]->b1.y - xmark,
-tposition.x+boundingbox[0]->b2.x,
-tposition.y-boundingbox[0]->b2.y - xmark,
-tposition.x+boundingbox[0]->b3.x,
-tposition.y-boundingbox[0]->b3.y - xmark,
-tposition.x+boundingbox[0]->b4.x,
-tposition.y-boundingbox[0]->b4.y - xmark,
-0x0000FFFF);
+	//~ CLgfx1::drawpolygon(
+//~ tposition.x+boundingbox[0]->b1.x,
+//~ tposition.y-boundingbox[0]->b1.y - xmark,
+//~ tposition.x+boundingbox[0]->b2.x,
+//~ tposition.y-boundingbox[0]->b2.y - xmark,
+//~ tposition.x+boundingbox[0]->b3.x,
+//~ tposition.y-boundingbox[0]->b3.y - xmark,
+//~ tposition.x+boundingbox[0]->b4.x,
+//~ tposition.y-boundingbox[0]->b4.y - xmark,
+//~ 0x0000FFFF);
+
+	CLgfx1::drawbigpixel(tv.x,tv.y-xmark,0x000FFFFFF);
 
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 

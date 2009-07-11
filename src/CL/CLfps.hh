@@ -21,6 +21,7 @@ class CLfps : public virtual CLcl
 		xlong interval;
 		bool output;
 		xlong* out;
+		
 	public:
 		CLfps(xlong i,bool o);
 		CLfps(xlong i,bool o,xlong* outtoo);

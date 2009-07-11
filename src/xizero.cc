@@ -12,7 +12,7 @@ int main()
 	CLsetup();
 	FLTKsetup();
 
-	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/player/player.a","../dat/level/level0.a",CLdoublebuffer,CLzbuffer,CLstencilbuffer);
+	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/player/player.a","../dat/level/level0.a");
 
 	clfps->init();
 
@@ -64,8 +64,8 @@ int main()
 
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
-				CLmisc3d::drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis);
-				testlevel->display();
+				CLmisc3d::drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,xmark*xres);
+				//testlevel->display();
 				break;
 
 			case 3:

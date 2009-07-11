@@ -8,24 +8,24 @@
 #include "CLbuffer.hh"
 
 
-//prototypes:
-void drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y);
-void drawplasma(CLbuffer<xlong>* db,xlong x,xlong y);
-void drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y);
-//
+namespace CLsprites
+{
+	void drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y);
+	void drawplasma(CLbuffer<xlong>* db,xlong x,xlong y);
+	void drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y);
+};
 
-
-void drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y)
+void CLsprites::drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y)
 {
 
 }
 
-void drawplasma(CLbuffer<xlong>* db,xlong x,xlong y)
+void CLsprites::drawplasma(CLbuffer<xlong>* db,xlong x,xlong y)
 {
 
 }
 
-void drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y)
+void CLsprites::drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y)
 {
 
 }

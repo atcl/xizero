@@ -22,8 +22,10 @@ class CLgame : public virtual CLcl
 		CLgame();
 		CLgame(xlong bx1,xlong bx2,xlong by1,xlong by2);
 		~CLgame();
+		
 		xlong boundary(xlong x1,xlong y1,xlong x2,xlong y2) const;
 		xlong boundary(xlong x,xlong y) const;
+		
 		template<class clvector>xlong boundary(const clvector& v1,const clvector& v2) const;
 		template<class clvector>xlong boundary(const clvector& v) const;
 		template<class clvector>xlong boundary(const clvector& position,const CLbox& bb) const;
@@ -35,6 +37,7 @@ class CLgame : public virtual CLcl
 
 		template<class clvector>xlong impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) const;
 };
+
 
 CLgame::CLgame()
 {
@@ -154,12 +157,18 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	clvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
 	clvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
 
+//seems like x is shifted somehow ca 200px to the right map compared to display
+//wroking when only drving parallel to axes, as soon as other rotations, not working
+
+	tv.x = p.x;
+	tv.y = p.y;
+
 	//p1<l1
-	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ]) )
+	if( ((*ll)[ (p.y * xres) + p.x ]) < ((*ll)[ (l.y * xres) + l.x ]) )
 	{
-		CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
+		CLsystem::print((*ll)[ (p.y * xres) + p.x ],0);
 		CLsystem::print(" vs ",0);
-		CLsystem::print((*ll)[ (l1.y * xres) + l1.x ]);
+		CLsystem::print((*ll)[ (l.y * xres) + l.x ]);
 		return 1;
 	}
 	
