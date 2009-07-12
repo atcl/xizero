@@ -8,6 +8,8 @@
 #include "CLcl.hh"
 #include "CLutils.hh"
 #include "CLguibase.hh"
+#include "CLgfx2.hh"
+
 
 class CLbutton : public CLguibase
 {

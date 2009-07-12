@@ -7,6 +7,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLguibase.hh"
+#include "CLgfx2.hh"
 
 
 class CLprogress : public CLguibase

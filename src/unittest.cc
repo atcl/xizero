@@ -212,8 +212,8 @@ int main(int argc, char** argv)
 
 			//System:
 			case '0':
-				xlong reval = CLsystem::system("Xdialog --msgbox 'bye' 0 0");
-				CLsystem::exit(1,0,"user","exit");
+				xlong rval = CLsystem::system("Xdialog --msgbox 'bye' 0 0");
+				CLsystem::exit(rval,0,"user","exit");
 			break;
 		}
 
@@ -228,16 +228,12 @@ int main(int argc, char** argv)
 		//CLstencilbuffer->fastclear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-		//clgfx1->copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
 		//clgfx1->putpixel(xlong x,xlong y,uxlong c,xlong m);
 		//clgfx1->drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-// 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-// 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
-//		clgfx1->drawcircle(200,200,50,0x0000FF00); //!seg fault!
-// 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-// 		//clgfx1->drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
-//		clgfx1->fill(100,100,0x00000000,0x00FF0000); //!seg fault + overloaded version with no oldcolor and then get per readpixel from provided location
-// 		clgfx1->fillframe(xlong x,xlong y,uxlong fc,uxlong c);
+		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
+		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+		//clgfx1->drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
 
 		CLgfx1::drawsprite(10,10,testsprite);
 

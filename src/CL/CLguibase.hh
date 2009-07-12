@@ -6,7 +6,6 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
-#include "CLgfx2.hh"
 
 
 class CLguibase : public virtual CLcl

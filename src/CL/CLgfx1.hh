@@ -61,62 +61,23 @@ namespace CLgfx1
 //implementation:
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
-//fast version: //untested at all!
-// 	xlong b1 = (yc*xres)+xc;
-// 	xlong b2 = (xc*xres)+yc;
-// 	xlong a1 = y*xres;
-// 	xlong a2 = x*xres;
-// 	(*doublebuffer)[b1+a1+xc+x] = c;
-// 	(*doublebuffer)[b1-a1+xc+x] = c;
-// 	(*doublebuffer)[b1+a1-xc-x] = c;
-// 	(*doublebuffer)[b1-a1-xc-c] = c;
-// 	(*doublebuffer)[b2+a2+yc+y] = c;
-// 	(*doublebuffer)[b2-a2+yc+y] = c;
-// 	(*doublebuffer)[b2+a2-yc-y] = c;
-// 	(*doublebuffer)[b2-a2-yc-y] = c;
-//*
-
-//slow version: //should work
-	xlong tx = 0;
-	xlong ty = 0;
-
-	tx = xc + x;
-	ty = yc + y;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc + x;
-	ty = yc - y;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc - x;
-	ty = yc + y;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc - x;
-	ty = yc - y;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc + y;
-	ty = yc + x;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc + y;
-	ty = yc - x;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc - y;
-	ty = yc + x;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-
-	tx = xc - y;
-	ty = yc - x;
-	(*CLdoublebuffer)[(ty*xres)+tx] = c;
-//*
+	xlong b1 = (yc*xres)+xc;
+	xlong b2 = (xc*xres)+yc;
+ 	xlong a1 = y*xres;
+ 	xlong a2 = x*xres;
+ 	(*CLdoublebuffer)[b1+a1+x] = c;
+ 	(*CLdoublebuffer)[b1-a1+x] = c;
+ 	(*CLdoublebuffer)[b1+a1-x] = c;
+ 	(*CLdoublebuffer)[b1-a1-x] = c;
+ 	(*CLdoublebuffer)[b2+a2+y] = c;
+ 	(*CLdoublebuffer)[b2-a2+y] = c;
+ 	(*CLdoublebuffer)[b2+a2-y] = c;
+ 	(*CLdoublebuffer)[b2-a2-y] = c;
 }
 
 uxlong CLgfx1::readpixel(xlong x,xlong y)
 {
-	return ((*CLdoublebuffer)[(y*xres)+y]);
+	return ((*CLdoublebuffer)[(y*xres)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)
@@ -354,16 +315,16 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
-	xlong d = 3 - (r>>1);
+	xlong d = 3 - (r<<1);
 	xlong cx = 0;
 	xlong cy = r;
 
-	while(cx!=cy)
+	while(cx<=cy)
 	{
 		drawcirclepixel(xc,yc,cx,cy,c);
-		if(d<0) d += (cx<<2)+6;
-		d += ((cx-cy)<<2)+10;
-		cy++;
+		if(d<0) d += (cx*4)+6;
+		else { d += ((cx-cy)*4)+10; cy--; }
+		cx++; 
 	}
 }
 
@@ -381,29 +342,29 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 
 void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 {
-	if (readpixel(x,y) == oc)
-	{
-		drawpixel(x,y,nc);
-	
-		fill(x,y+1,oc,nc);
-		fill(x,y-1,oc,nc);
-		fill(x+1,y,oc,nc);
-		fill(x-1,y,oc,nc);
-	}
+	if (readpixel(x,y)!=oc) return;
+
+	drawpixel(x,y,nc);
+
+	if(y<yres) fill(x,y+1,oc,nc);
+	if(y>0)    fill(x,y-1,oc,nc);
+	if(x<xres) fill(x+1,y,oc,nc);
+	if(x>0)    fill(x-1,y,oc,nc);
+
 	return;
 }
 
 void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 {
-	if (readpixel(x,y) != fc)
-	{
-		drawpixel(x,y,c);
+	if(readpixel(x,y)==fc || readpixel(x,y)==c) return;
+
+	drawpixel(x,y,c);
 	
-		fill(x,y+1,fc,c);
-		fill(x,y-1,fc,c);
-		fill(x+1,y,fc,c);
-		fill(x-1,y,fc,c);
-	}
+	if(y<yres) fillframe(x,y+1,fc,c);
+	if(y>0) fillframe(x,y-1,fc,c);
+	if(x<xres) fillframe(x+1,y,fc,c);
+	if(x>0) fillframe(x-1,y,fc,c);
+
 	return;
 }
 

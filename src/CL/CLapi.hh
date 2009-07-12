@@ -201,7 +201,7 @@ xlong CLsystem::doevery(every* e)
 
 xlong CLsystem::system(const xchar* c)
 {
-	return system(c);
+	return ::system(c);
 }
 
 void CLsystem::installsystemkey(xchar scancode,void *action)
