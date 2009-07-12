@@ -147,43 +147,38 @@ xlong CLgame::collision(const CLbox& bb1, const CLbox& bb2) const //!test!
 template<class clvector>
 xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) const
 {
-	clvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
-	clvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
-	clvector p3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
-	clvector p4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
+	CLlvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
+	CLlvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
+	CLlvector p3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
+	CLlvector p4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
 	
-	clvector l1( (l.x + bb->b1.x), (l.y - bb->b1.y), (l.z + bb->b1.z) );
-	clvector l2( (l.x + bb->b2.x), (l.y - bb->b2.y), (l.z + bb->b2.z) );
-	clvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
-	clvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
-
-//working when only driving parallel to axes, as soon as other rotations, not working
-
-	tv.x = p.x;
-	tv.y = p.y;
+	CLlvector l1( (l.x + bb->b1.x), (l.y - bb->b1.y), (l.z + bb->b1.z) );
+	CLlvector l2( (l.x + bb->b2.x), (l.y - bb->b2.y), (l.z + bb->b2.z) );
+	CLlvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
+	CLlvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
+	
 	lv.x = l.x;
 	lv.y = l.y;
-	
-	//(*ll)[ (xlong(p.y)*xres) + xlong(p.x) ] = 0x000FFFFFF;
-	//(*ll)[ (xlong(l.y)*xres) + xlong(l.x) ] = 0x000FFFF00; 
+	tv.x = p.x;
+	tv.y = p.y;
 	
 	//p1<l1
-	if( (*ll)[ (xlong(p.y) * xres) + xlong(p.x) ] < (*ll)[ (xlong(l.y) * xres) + xlong(l.x) ] )
+	if( (*ll)[ (p1.y * xres) + p1.x ] < (*ll)[ (l1.y * xres) + l1.x ] )
 	{
-		CLsystem::print((*ll)[ (xlong(p.y) * xres) + xlong(p.x) ],0);
+		CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
 		CLsystem::print(" vs ",0);
-		CLsystem::print((*ll)[ (xlong(l.y) * xres) + xlong(l.x) ]);
+		CLsystem::print((*ll)[ (l1.y * xres) + l1.x ]);
 		return 1;
 	}
-	//~ 
-	//~ //p2<l2
-	//~ if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
-	//~ 
-	//~ //p3<l3
-	//~ if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
-	//~ 
-	//~ //p4<l4
-	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
+	
+	//p2<l2
+	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
+	
+	//p3<l3
+	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
+	
+	//p4<l4
+	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
 	
 	return 0;
 }

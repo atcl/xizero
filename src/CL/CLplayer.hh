@@ -146,7 +146,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 
 	//boundary check: (check if game screen is left)
 	tposition.y -= m;
-	xlong bc = 0; //clgame->boundary(tposition,*boundingbox[0]);
+	xlong bc = clgame->boundary(tposition,*boundingbox[0]);
 	tposition.y += m;
 
 	if( (bc!=0) && ( (bc==-1 && speed.x>=0) || (bc==1  && speed.x<=0) || (bc==-2 && speed.y<=0) || (bc==2  && speed.y>=0) ) )
@@ -158,7 +158,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 
 	//terrain collision check: (check if player collides with terrain block)
-	xlong tc = 0; xlong xc = clgame->impact(ll,boundingbox[0],tposition,position);
+	xlong tc = clgame->impact(ll,boundingbox[0],tposition,position);
  
 	//compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
