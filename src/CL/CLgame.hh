@@ -157,17 +157,18 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	CLlvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
 	CLlvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
 	
+	//only for landscape trace
 	lv.x = l.x;
 	lv.y = l.y;
 	tv.x = p.x;
 	tv.y = p.y;
+	//*
+
+	xlong df = 0;
 	
 	//p1<l1
 	if( (*ll)[ (p1.y * xres) + p1.x ] < (*ll)[ (l1.y * xres) + l1.x ] )
 	{
-		CLsystem::print((*ll)[ (p1.y * xres) + p1.x ],0);
-		CLsystem::print(" vs ",0);
-		CLsystem::print((*ll)[ (l1.y * xres) + l1.x ]);
 		return 1;
 	}
 	

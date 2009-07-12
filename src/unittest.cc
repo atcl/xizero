@@ -100,11 +100,13 @@ int main(int argc, char** argv)
 
 	//CLobject + CLpolygon
 
-	CLobject* cubus = new CLobject(cube,400,300,100,0);
+	CLobject* cubus = new CLobject(cube,0);
 
 	clfps->init();
 
 	xchar* toprint = u8"hi there";
+
+	CLlvector p(400,300,100);
 
 	bool mode=false;
 
@@ -223,7 +225,7 @@ int main(int argc, char** argv)
 
 		CLdoublebuffer->fastclear(0);
 		CLzbuffer->clear(zres-1);
-		CLstencilbuffer->fastclear(0);
+		//CLstencilbuffer->fastclear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
 		//clgfx1->copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
@@ -240,10 +242,10 @@ int main(int argc, char** argv)
 		CLgfx1::drawsprite(10,10,testsprite);
 
 		//cubus->display(1,1,1,1,0,0);
-		CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 
-		if(mode==false) cubus->display(CENTER + AMBIENT + FLAT + DEBUG);
-		else cubus->display(CENTER + AMBIENT + FLAT);
+		if(mode==false) cubus->display(p,CENTER + AMBIENT + FLAT + DEBUG);
+		else cubus->display(p,CENTER + AMBIENT + FLAT);
 
 		linearM->unit();
 

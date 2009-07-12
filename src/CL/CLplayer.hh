@@ -312,7 +312,7 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case -29: //strg -> fire chassis weapon(s)
 		break;
 
-		case 119: //w -> fire tachyon laser
+		case 119: //w -> fire (tachyon) laser
 		break;
 
 		case 115: //s -> fire laser
