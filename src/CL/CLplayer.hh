@@ -11,6 +11,9 @@
 #include "CLapi.hh"
 #include "CLgame.hh"
 
+//temp:
+bool tdebug = 0;
+//*
 
 class CLplayer : public virtual CLcl
 {
@@ -115,7 +118,7 @@ void CLplayer::transform(bool m)
 		speeddir = cllinear->transform(speeddir);
 
 		//transform tilt vector
-		tilt = cllinear->transform(tilt);
+		//tilt = cllinear->transform(tilt);
 
 		//transform ammo direction(s)
 
@@ -143,7 +146,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 
 	//boundary check: (check if game screen is left)
 	tposition.y -= m;
-	xlong bc = clgame->boundary(tposition,*boundingbox[0]);
+	xlong bc = 0; //clgame->boundary(tposition,*boundingbox[0]);
 	tposition.y += m;
 
 	if( (bc!=0) && ( (bc==-1 && speed.x>=0) || (bc==1  && speed.x<=0) || (bc==-2 && speed.y<=0) || (bc==2  && speed.y>=0) ) )
@@ -284,7 +287,7 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 81: //arrow left -> turn left
 			cllinear->rotate(0,0,5);
 			transform(false);
-			setspeed();
+			setspeed();	
 		break;
 
 		case 83: //arrow right -> turn right
@@ -325,16 +328,16 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		tposition.x = position.x - speed.x;
 		tposition.y = position.y + speed.y;
 		tposition.z = position.z + speed.z;
-
+		
 		xmark = mark;
 
 		if(collision(ll,mark)==0)
 		{	
 			position = tposition; 
 			
-			tposition.y -= mark;
-			sposition = CLmisc3d::project(tposition);
-			tposition.y += mark;
+			position.y -= mark;
+			sposition = CLmisc3d::project(position);
+			position.y += mark;
 		}
 		
 		lastupdate = temp;
@@ -368,7 +371,8 @@ void CLplayer::display()
 //~ tposition.y-boundingbox[0]->b4.y - xmark,
 //~ 0x0000FFFF);
 
-	CLgfx1::drawbigpixel(tv.x,tv.y-xmark,0x000FFFFFF);
+	//~ CLgfx1::drawbigpixel(tv.x,tv.y-xmark,0x000FFFFFF);
+	//~ CLgfx1::drawbigpixel(sposition.x,sposition.y,0x000FFFFFF);
 
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 

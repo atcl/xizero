@@ -157,29 +157,33 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	clvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
 	clvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
 
-//seems like x is shifted somehow ca 200px to the right map compared to display
-//wroking when only drving parallel to axes, as soon as other rotations, not working
+//working when only driving parallel to axes, as soon as other rotations, not working
 
 	tv.x = p.x;
 	tv.y = p.y;
-
+	lv.x = l.x;
+	lv.y = l.y;
+	
+	//(*ll)[ (xlong(p.y)*xres) + xlong(p.x) ] = 0x000FFFFFF;
+	//(*ll)[ (xlong(l.y)*xres) + xlong(l.x) ] = 0x000FFFF00; 
+	
 	//p1<l1
-	if( ((*ll)[ (p.y * xres) + p.x ]) < ((*ll)[ (l.y * xres) + l.x ]) )
+	if( (*ll)[ (xlong(p.y) * xres) + xlong(p.x) ] < (*ll)[ (xlong(l.y) * xres) + xlong(l.x) ] )
 	{
-		CLsystem::print((*ll)[ (p.y * xres) + p.x ],0);
+		CLsystem::print((*ll)[ (xlong(p.y) * xres) + xlong(p.x) ],0);
 		CLsystem::print(" vs ",0);
-		CLsystem::print((*ll)[ (l.y * xres) + l.x ]);
+		CLsystem::print((*ll)[ (xlong(l.y) * xres) + xlong(l.x) ]);
 		return 1;
 	}
-	
-	//p2<l2
-	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
-	
-	//p3<l3
-	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
-	
-	//p4<l4
-	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
+	//~ 
+	//~ //p2<l2
+	//~ if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
+	//~ 
+	//~ //p3<l3
+	//~ if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
+	//~ 
+	//~ //p4<l4
+	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
 	
 	return 0;
 }
