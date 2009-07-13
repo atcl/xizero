@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv)
 {
-	std::string argfile = "../dat/other/test.y3d";
+	std::string argfile = "../dat/terrain/0000.y3d";
 	xlong  argfileindex =-1;
 
 	if(argc>2)

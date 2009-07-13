@@ -44,9 +44,6 @@ namespace CLgfx1
 	void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
 	void fill(xlong x,xlong y,uxlong oc,uxlong nc);
 	void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
-	xlong getspritesize(sprite* s);
-	xlong getspritewidth(sprite* s);
-	xlong getspriteheight(sprite* s);
 	void drawsprite(xlong x,xlong y,sprite* s);
 	void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
 	void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
@@ -58,7 +55,7 @@ namespace CLgfx1
 	void drawtile(xlong x,xlong y,sprites *s,xlong ti);
 }
 
-//implementation:
+
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
 	xlong b1 = (yc*xres)+xc;
@@ -368,21 +365,6 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 	return;
 }
 
-xlong CLgfx1::getspritesize(sprite* s)
-{
-	return s->size;
-}
-
-xlong CLgfx1::getspritewidth(sprite* s)
-{
-	return s->width;
-}
-
-xlong CLgfx1::getspriteheight(sprite* s)
-{
-	return s->height;
-}
-
 void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 {
 	//init
@@ -404,10 +386,9 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	if(ye>yres) ye = yres-1;
 
 	//draw vars
-	xlong ewidth = xe - xs + 1;
-	xlong eheight = ye - ys + 1;
-	xlong eoffset = (y - ys) * swidth;
-	xlong xoffset = (ys * xres) + xs + (xs - x); //optimize!
+	xlong ewidth = xe - xs;
+	xlong eheight = ye - ys;
+	xlong xoffset = (ys * xres) + xs;
 	xlong linearc = 0;
 
 	//drawloop
@@ -415,14 +396,13 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	{
 		for(int j=0; j<ewidth ;j++)
 		{
-			if(s->data[linearc] && 0xFF000000 != 0xFF)
+			if( (s->data[linearc] && 0xFF000000) != 0xFF)
 			{
 				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}
 			linearc++;
 		}
 		xoffset += xres;
-		linearc--;
 	}
 	
 }
@@ -515,7 +495,6 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 		toffset += shordiff;
 	}
 }
-//*
 
 #endif
 

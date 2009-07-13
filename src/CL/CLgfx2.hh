@@ -24,8 +24,7 @@ namespace CLgfx2
 	sprites* line;
 	sprites* segm;
 	
-	void drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
-	void drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2);
+	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
 	void drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c);
 	void drawfontchar(xlong p,xchar a,xlong f,uxlong c);
 	void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c);
@@ -38,12 +37,15 @@ namespace CLgfx2
 	void savescreenshot(const xchar*);
 }
 
-//implementation:
-void CLgfx2::drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
+
+void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
 {
 	xlong offset1 = (y1*xres)+x1;
 	xlong offset2 = offset1;
 	xlong doffset = ((y2-y1)*xres);
+	xlong diff    = x2-x1;
+	uxlong c3     = c2;
+	if(f) c3 = 0x000FFFFFF - c2;
 
 	for(int i=y1; i<=y2; i++)
 	{
@@ -54,42 +56,14 @@ void CLgfx2::drawflatrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxl
 			(*CLdoublebuffer)[offset1] = c1;
 			offset1++;
 		}
-		(*CLdoublebuffer)[offset1] = c2;
-		offset1 += xres;
+		(*CLdoublebuffer)[offset1] = c3;
+		offset1 += xres - diff;
 	}
 
 	for(int k=x1; k<x2; k++)
 	{
 		(*CLdoublebuffer)[offset2] = c2;
-		(*CLdoublebuffer)[offset2+doffset] = c2;
-		offset2++;
-	}
-}
-
-void CLgfx2::drawelevrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2)
-{
-
-	xlong offset1 = (y1*xres)+x1;
-	xlong offset2 = offset1;
-	xlong doffset = ((y2-y1)*xres);
-
-	for(int i=y1; i<=y2; i++)
-	{
-		(*CLdoublebuffer)[offset1] = 0x00FFFFFF;
-		offset1++;
-		for(int j=x1+1; j<x2; j++)
-		{
-			(*CLdoublebuffer)[offset1] = c1;
-			offset1++;
-		}
-		(*CLdoublebuffer)[offset1] = 0x00000000;
-		offset1 += xres;
-	}
-
-	for(int k=x1; k<x2; k++)
-	{
-		(*CLdoublebuffer)[offset2] = 0x00FFFFFF;
-		(*CLdoublebuffer)[offset2+doffset] = 0x000000;
+		(*CLdoublebuffer)[offset2+doffset] = c3;
 		offset2++;
 	}
 }
@@ -185,8 +159,6 @@ void CLgfx2::savescreenshot(const xchar*)
 {
 
 }
-
-//*
 
 #endif
 
