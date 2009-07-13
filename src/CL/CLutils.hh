@@ -7,7 +7,7 @@
 #include "CLtypes.hh"
 #include  "CLstruct.hh"
 
-//
+
 namespace CLutils
 {
 	xlong seed = 22695477;
@@ -26,9 +26,8 @@ namespace CLutils
 	xlong endian(xlong l);
 	xlong chararraylength(const xchar* c);
 };
-//
 
-//implentation:
+
 xchar* CLutils::long2char(xlong l)
 {
 	xchar* ch = new xchar[4];
@@ -185,6 +184,6 @@ xlong CLutils::chararraylength(const xchar* c)
 	}
 	return s;
 }
-//*
 
 #endif
+

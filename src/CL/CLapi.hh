@@ -14,14 +14,13 @@
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
-#include "CLmatrix.hh"
 
 
 namespace CLsystem
 {
-	void    exit(xlong r,void(*e)(),const xchar *f="",const xchar *m="");
-	void    exit(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d);
-	void    exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d);
+	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
+	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);
+	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
 	CLfile* getfile(const xchar* fn,bool s=true);
 	xchar** getcsvfile(const char* fn);
 	void    print(const xchar* c,bool i=1);

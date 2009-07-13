@@ -88,13 +88,12 @@
 						</xsl:attribute>
 						<xsl:value-of select="name"/>
 					</b><br/>
-					Returns: <xsl:value-of select="returns"/><br/>
+					Returns: <xsl:value-of select="returntype"/><br/>
 					Parameter:
 						<xsl:for-each select="parameter">
-							<xsl:value-of select="type"/>
-							&#160; <xsl:value-of select="name"/> ,&#160; 
+							<xsl:value-of select="."/>,&#160; 
 						</xsl:for-each><br/>
-					Info: <xsl:value-of select="info"/><br/>
+					Info: <xsl:value-of select="infotext"/><br/>
 				</p>
 
 				<hr/>
