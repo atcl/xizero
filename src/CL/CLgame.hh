@@ -167,16 +167,28 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,c
 	xlong r = 0;
 	
 	//p1<l1
-	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ]) ) r += 1;
+	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ])-3 ) r = 1;
 	
 	//p2<l2
-	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) r += 2;
+	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ])-3 ) r = 2;
 	
 	//p3<l3
-	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) r += 4;
+	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ])-3 ) r = 4;
 	
-	//p4<l4
-	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) r += 8;
+	//~ //p4<l4
+	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ])-3 ) r = 8;
+	//~ 
+	//~ //p1>l1
+	//~ if( ((*ll)[ (p1.y * xres) + p1.x ]) > ((*ll)[ (l1.y * xres) + l1.x ])-3 ) r = -1;
+	//~ 
+	//~ //p2>l2
+	//~ if( ((*ll)[ (p2.y * xres) + p2.x ]) > ((*ll)[ (l2.y * xres) + l2.x ])-3 ) r = -2;
+	//~ 
+	//~ //p3>l3
+	//~ if( ((*ll)[ (p3.y * xres) + p3.x ]) > ((*ll)[ (l3.y * xres) + l3.x ])-3 ) r = -4;
+	//~ 
+	//~ //p4>l4
+	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) > ((*ll)[ (l4.y * xres) + l4.x ])-3 ) r = -8;
 	
 	return r;
 }

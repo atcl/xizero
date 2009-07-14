@@ -9,7 +9,6 @@
 #include "CLmath.hh"
 
 
-//CLvector definition:
 template<typename T>
 struct CLvector
 {
@@ -42,9 +41,7 @@ struct CLvector
 
 	void print();									//console output	
 };
-//*
 
-//CLvector implementation:
 
 //vector addition:
 template<typename T>
@@ -193,16 +190,10 @@ CLvector<T> operator*(T c,CLvector<T>& a)
 }
 //*
 
-//*
-
 //typedefs:
 typedef CLvector<xlong> CLlvector;
 typedef CLvector<float> CLfvector;
 //typedef CLvector<fixed> CLxvector;
-
-//#define v_ template<class clvector> 
-//*
-
 
 #endif
 
