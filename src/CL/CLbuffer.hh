@@ -4,8 +4,8 @@
 #define HH_CLBUFFER
 #pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
-// #include <stdio.h>
-// #include <string.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -111,7 +111,7 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
 	switch(o)
 	{
-		case 0:		//NONE
+		case 0:		//NONE //?default
 			for(int i=size-1;i>=0;i--)
 			{
 				dst[i] = buffer[i];
@@ -174,8 +174,6 @@ template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 {
 	return buffer[i];
 }
-
-//*
 
 //typedefs:
 typedef CLbuffer<float> CLfbuffer;

@@ -13,15 +13,15 @@
 class CLprogress : public CLguibase
 {
 	private:
-		xlong framethickness;
 		uxlong barcolor;
-		uxlong framecolor;
 		xlong progress;
 		xlong start;
 		xlong end;
+		bool  text;
+		bool  flat;
 		
 	public:
-		CLprogress();
+		CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f,bool t);
 		~CLprogress();
 
 		void draw();
@@ -34,9 +34,14 @@ class CLprogress : public CLguibase
 		xlong getprogress();
 };
 
-CLprogress::CLprogress()
+CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f,bool t) : CLguibase(px,py,w,h,fc,bc,rc)
 {
-
+	barcolor = ba;
+	progress = p;
+	start = s;
+	end  = e;
+	flat = f;
+	text = t;
 }
 
 CLprogress::~CLprogress() { }

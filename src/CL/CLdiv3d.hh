@@ -78,7 +78,6 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<
 template<class clvector>
 CLlvector CLmisc3d::project(const clvector& v)
 {
-	//!!! test project, and may be get rid of one parameter!!!
 	CLlvector r;
 	
 	if(v.z > 0)

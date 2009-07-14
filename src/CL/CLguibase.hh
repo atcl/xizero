@@ -11,7 +11,6 @@
 class CLguibase : public virtual CLcl
 {
 	protected:
-		xlong doublebuffer;
 		xlong posx;
 		xlong posy;
 		xlong width;
@@ -21,7 +20,7 @@ class CLguibase : public virtual CLcl
 		uxlong rcolor;
 
 	public:
-		CLguibase();
+		CLguibase(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc);
 		virtual ~CLguibase();
 
 		virtual void draw();
@@ -41,9 +40,15 @@ class CLguibase : public virtual CLcl
 		uxlong getrcolor();
 };
 
-CLguibase::CLguibase()
+CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc)
 {
-
+	posx = px;
+	posy = py;
+	width = w;
+	height = h;
+	fcolor = fc;
+	bcolor = bc;
+	rcolor = rc;
 }
 
 CLguibase::~CLguibase() { } //virtual!

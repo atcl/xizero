@@ -67,6 +67,16 @@ int main()
 				CLmisc3d::drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis);
 				(*testlevel->getlandscape())[ (xlong(tv.y)*xres) + xlong(tv.x) ] = 0x000FFFFFF;
 				(*testlevel->getlandscape())[ (xlong(lv.y)*xres) + xlong(lv.x) ] = 0x000FFFF00; 
+				CLgfx1::drawpolygon(
+				position.x+boundingbox[0]->b1.x,
+				position.y-boundingbox[0]->b1.y - xmark,
+				position.x+boundingbox[0]->b2.x,
+				position.y-boundingbox[0]->b2.y - xmark,
+				position.x+boundingbox[0]->b3.x,
+				position.y-boundingbox[0]->b3.y - xmark,
+				position.x+boundingbox[0]->b4.x,
+				position.y-boundingbox[0]->b4.y - xmark,
+				0x0000FFFF);
 				break;
 
 			case 3:

@@ -450,6 +450,8 @@ void CLgfx1::drawscreen(sprite* s)
 
 void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 {
+	//fix!
+	
 	//find tile
 	xlong toffset = (ti / s->perrow) * s->tilesize;
 	toffset += (ti % s->perrow) * (s->tilewidth-1);

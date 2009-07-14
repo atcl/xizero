@@ -35,7 +35,7 @@ class CLgame : public virtual CLcl
 		template<class clvector>xlong collision(const clvector& v1,const clvector& v2,const clvector& w) const;
 		xlong collision(const CLbox& bb1,const CLbox& bb2) const;
 
-		template<class clvector>xlong impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) const;
+		template<class clvector>xlong impact(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l) const;
 };
 
 
@@ -145,17 +145,17 @@ xlong CLgame::collision(const CLbox& bb1, const CLbox& bb2) const //!test!
 }
 
 template<class clvector>
-xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) const
+xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l) const
 {
 	CLlvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
 	CLlvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
 	CLlvector p3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
 	CLlvector p4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
 	
-	CLlvector l1( (l.x + bb->b1.x), (l.y - bb->b1.y), (l.z + bb->b1.z) );
-	CLlvector l2( (l.x + bb->b2.x), (l.y - bb->b2.y), (l.z + bb->b2.z) );
-	CLlvector l3( (l.x + bb->b3.x), (l.y - bb->b3.y), (l.z + bb->b3.z) );
-	CLlvector l4( (l.x + bb->b4.x), (l.y - bb->b4.y), (l.z + bb->b4.z) );
+	CLlvector l1( (l.x + ob->b1.x), (l.y - ob->b1.y), (l.z + ob->b1.z) );
+	CLlvector l2( (l.x + ob->b2.x), (l.y - ob->b2.y), (l.z + ob->b2.z) );
+	CLlvector l3( (l.x + ob->b3.x), (l.y - ob->b3.y), (l.z + ob->b3.z) );
+	CLlvector l4( (l.x + ob->b4.x), (l.y - ob->b4.y), (l.z + ob->b4.z) );
 	
 	//only for landscape trace
 	lv.x = l.x;
@@ -164,24 +164,21 @@ xlong CLgame::impact(CLfbuffer* ll,const CLbox* bb,clvector& p,clvector& l) cons
 	tv.y = p.y;
 	//*
 
-	xlong df = 0;
+	xlong r = 0;
 	
 	//p1<l1
-	if( (*ll)[ (p1.y * xres) + p1.x ] < (*ll)[ (l1.y * xres) + l1.x ] )
-	{
-		return 1;
-	}
+	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ]) ) r += 1;
 	
 	//p2<l2
-	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) return 2;
+	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ]) ) r += 2;
 	
 	//p3<l3
-	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) return 4;
+	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ]) ) r += 4;
 	
 	//p4<l4
-	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) return 8;
+	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ]) ) r += 8;
 	
-	return 0;
+	return r;
 }
 
 #endif

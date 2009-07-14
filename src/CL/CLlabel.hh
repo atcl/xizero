@@ -14,9 +14,10 @@ class CLlabel : public CLguibase
 {
 	private:
 		xchar* text;
+		bool   frame;
 
 	public:
-		CLlabel();
+		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,xchar* t,bool f);
 		~CLlabel();
 
 		void draw();
@@ -24,9 +25,10 @@ class CLlabel : public CLguibase
 		xchar* gettext();
 };
 
-CLlabel::CLlabel()
+CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,xchar* t,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
 {
-
+	text = t;
+	frame = f;
 }
 
 CLlabel::~CLlabel() { }

@@ -19,21 +19,23 @@ class CLbutton : public CLguibase
 		bool flat;
 		
 	public:
-		CLbutton(void(*a)(),xchar *c);
+		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f);
 		~CLbutton();
 
 		void draw();
 		void setaction(void(*a)());
 		void setcaption(xchar* t);
-		void setcaption(const xchar* t);
+		void setflat(bool f);
 		xchar* getcaption();
 
 };
 
-CLbutton::CLbutton(void(*a)(),xchar *c)
+CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
 {
 	action = a;
 	caption = c;
+	flat = f;
+
 }
 
 CLbutton::~CLbutton()
@@ -43,14 +45,8 @@ CLbutton::~CLbutton()
 
 void CLbutton::draw()
 {
-	if(flat==0)
-	{
-		//drawflatrectangle(posx,posy,posx+width,posy+height,bcolor,rcolor);
-	}
-	else
-	{
-		//drawflatrectangle(posx,posy,posx+width,posy+height,bcolor,rcolor);
-	}
+	CLgfx2::drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
+	
 	//drawtext
 }
 
@@ -61,11 +57,6 @@ void CLbutton::setaction(void(*a)())
 
 void CLbutton::setcaption(xchar* t)
 {
-	caption = t;
-}
-
-void CLbutton::setcaption(const xchar* t)
-{
 	delete caption;
 	xlong s = CLutils::chararraylength(t);
 	caption = new xchar[s];
@@ -73,6 +64,11 @@ void CLbutton::setcaption(const xchar* t)
 	{
 		caption[i] = t[i];
 	}
+}
+
+void CLbutton::setflat(bool f)
+{
+	flat = f;
 }
 
 xchar* CLbutton::getcaption()

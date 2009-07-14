@@ -15,6 +15,9 @@
 bool tdebug = 0;
 //*
 
+CLfvector position;
+CLbox* boundingbox[2];
+
 class CLplayer : public virtual CLcl
 {
 	protected:
@@ -24,7 +27,8 @@ class CLplayer : public virtual CLcl
 		CLgame*   clgame;
 
 	private:
-		CLbox* boundingbox[2];
+		//CLbox* boundingbox[2];
+		CLbox* oboundingbox[2];
 
 		xlong ammotype[4];
 		xlong firerate[4];
@@ -37,7 +41,7 @@ class CLplayer : public virtual CLcl
 		xlong shieldrate;
 		xlong armor;
 
-		CLfvector position;
+		//CLfvector position;
 		CLfvector tposition;
 		CLlvector sposition;
 		CLfvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
@@ -54,6 +58,7 @@ class CLplayer : public virtual CLcl
 		void setspeed();
 		void fire(xlong at);
 		void hurt(xlong am);
+		void pretransform(bool m);
 		void transform(bool m);
 		xlong collision(CLfbuffer* ll,xlong m);
 		
@@ -100,6 +105,31 @@ void CLplayer::hurt(xlong am)
 
 }
 
+void CLplayer::pretransform(bool m)
+{
+		//as soon as 2nd part avail activate
+		//~ boundingbox[1]->b1 = cllinear->transform(boundingbox[1]->b1);
+		//~ boundingbox[1]->b2 = cllinear->transform(boundingbox[1]->b2);
+		//~ boundingbox[1]->b3 = cllinear->transform(boundingbox[1]->b3);
+		//~ boundingbox[1]->b4 = cllinear->transform(boundingbox[1]->b4);
+		//~ boundingbox[1]->t1 = cllinear->transform(boundingbox[1]->t1);
+		//~ boundingbox[1]->t2 = cllinear->transform(boundingbox[1]->t2);
+		//~ boundingbox[1]->t3 = cllinear->transform(boundingbox[1]->t3);
+		//~ boundingbox[1]->t4 = cllinear->transform(boundingbox[1]->t4);
+	
+	if(m==0)
+	{
+		boundingbox[0]->b1 = cllinear->transform(boundingbox[0]->b1);
+		boundingbox[0]->b2 = cllinear->transform(boundingbox[0]->b2);
+		boundingbox[0]->b3 = cllinear->transform(boundingbox[0]->b3);
+		boundingbox[0]->b4 = cllinear->transform(boundingbox[0]->b4);
+		boundingbox[0]->t1 = cllinear->transform(boundingbox[0]->t1);
+		boundingbox[0]->t2 = cllinear->transform(boundingbox[0]->t2);
+		boundingbox[0]->t3 = cllinear->transform(boundingbox[0]->t3);
+		boundingbox[0]->t4 = cllinear->transform(boundingbox[0]->t4);
+	}
+}
+
 void CLplayer::transform(bool m)
 {
 	//bool decides what part, if complete or only tower
@@ -134,14 +164,10 @@ void CLplayer::transform(bool m)
 		//transform ammo direction(s)
 
 	}
-	
-	cllinear->unit();
 }
 
 xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 {
-	if(gear==0) return 0;
-	
 	xlong r = 0;
 
 	//boundary check: (check if game screen is left)
@@ -158,15 +184,14 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 
 	//terrain collision check: (check if player collides with terrain block)
-	xlong tc = clgame->impact(ll,boundingbox[0],tposition,position);
+	xlong tc = clgame->impact(ll,boundingbox[0],oboundingbox[0],tposition,position);
  
 	//compare player current z with surrounding terrain (in zbuffer,since terrain is rendered first)
 	if(tc!=0)
 	{
-		if(tc==1) { gear=0; setspeed(); r++; }
-		if(tc==2) { gear=0; setspeed(); r++; }
-		if(tc==4) { gear=0; setspeed(); r++; }
-		if(tc==8) { gear=0; setspeed(); r++; }
+		gear=0;
+		setspeed();
+		r++;
 	}
 
 	//environment check: (check if player can drive up- or downhill)
@@ -179,11 +204,22 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 
 CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p)
 {
-	//set parameters to attributes:
 	model[0] = cha;
-
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
-	boundingbox[0] = model[0]->getboundingbox();
+	
+	boundingbox[0] = new CLbox;
+	CLbox* oboundinbox[2];
+	oboundingbox[0] = model[0]->getboundingbox();
+	boundingbox[0]->b1 = oboundingbox[0]->b1;
+	boundingbox[0]->b2 = oboundingbox[0]->b2;
+	boundingbox[0]->b3 = oboundingbox[0]->b3;
+	boundingbox[0]->b4 = oboundingbox[0]->b4;
+	boundingbox[0]->t1 = oboundingbox[0]->t1;
+	boundingbox[0]->t2 = oboundingbox[0]->t2;
+	boundingbox[0]->t3 = oboundingbox[0]->t3;
+	boundingbox[0]->t4 = oboundingbox[0]->t4;
+
+	
 	//boundingbox[1] = model[1]->getboundingbox(); //temp reactivate as soon as 2nd model avail
 
 	clgame = clg;
@@ -191,6 +227,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 
 	position = s;
 	position.z += 95;
+	tposition = position;
 
 	points = p;
 
@@ -281,29 +318,39 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 			else { gear=-1; setspeed(); }
 		break;	
 	}
+	
+	float temp = CLsystem::getmilliseconds();
+	if(temp >= lastupdate + 20)
+	{
+		tposition.x = position.x - speed.x;
+		tposition.y = position.y + speed.y;
+		tposition.z = position.z + speed.z;
+		
+		lastupdate = temp;		
+	}
+
+	cllinear->unit();
 
 	switch(turbo)
 	{
 		case 81: //arrow left -> turn left
 			cllinear->rotate(0,0,5);
-			transform(false);
-			setspeed();	
+			pretransform(0);	
 		break;
 
 		case 83: //arrow right -> turn right
 			cllinear->rotate(0,0,-5);
-			transform(false);
-			setspeed();
+			pretransform(0);
 		break;
 
 		case 97: //a -> turn tower left
-			cllinear->rotate(0,0,4);
-			transform(true);
+			cllinear->rotate(0,0,5);
+			pretransform(1);
 		break;
 
 		case 100: //d -> turn tower right
-			cllinear->rotate(0,0,-4);
-			transform(true);
+			cllinear->rotate(0,0,-5);
+			pretransform(1);
 		break;
 
 		case 32: //space -> fire tower weapon
@@ -321,26 +368,29 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 101: //e -> action key
 		break;
 	}
+	
+	xmark = mark;
 
-	float temp = CLsystem::getmilliseconds();
-	if(temp >= lastupdate + 20)
+	if(collision(ll,mark)==0)
+	{	
+		transform(0);
+		setspeed();
+		position = tposition; 
+		
+		position.y -= mark;
+		sposition = CLmisc3d::project(position);
+		position.y += mark;
+	}
+	else
 	{
-		tposition.x = position.x - speed.x;
-		tposition.y = position.y + speed.y;
-		tposition.z = position.z + speed.z;
-		
-		xmark = mark;
-
-		if(collision(ll,mark)==0)
-		{	
-			position = tposition; 
-			
-			position.y -= mark;
-			sposition = CLmisc3d::project(position);
-			position.y += mark;
-		}
-		
-		lastupdate = temp;
+		boundingbox[0]->b1 = oboundingbox[0]->b1;
+		boundingbox[0]->b2 = oboundingbox[0]->b2;
+		boundingbox[0]->b3 = oboundingbox[0]->b3;
+		boundingbox[0]->b4 = oboundingbox[0]->b4;
+		boundingbox[0]->t1 = oboundingbox[0]->t1;
+		boundingbox[0]->t2 = oboundingbox[0]->t2;
+		boundingbox[0]->t3 = oboundingbox[0]->t3;
+		boundingbox[0]->t4 = oboundingbox[0]->t4;
 	}
 }
 
