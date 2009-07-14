@@ -38,10 +38,9 @@ class FLTKwindow : public Fl_Window
 
 	public:
 
-	int mousex;
-	int mousey;
-	int mousebuttonl;
-	int mousebuttonr;
+	xlong mousex;
+	xlong mousey;
+	xlong mousebutton;
 
 	FLTKwindow(int w, int h, const char *name=0) : Fl_Window(w,h,name)
 	{
@@ -74,9 +73,11 @@ class FLTKwindow : public Fl_Window
 			case FL_MOVE:
 				mousex = Fl::event_x();
 				mousey = Fl::event_y();
+			case FL_RELEASE:
+				mousebutton = 0;
+				break;
 			case FL_PUSH:
-				mousebuttonl = Fl::event_button() && 1;
-				mousebuttonr = Fl::event_button() && 2;
+				mousebutton = Fl::event_button() & 3;
 		}
 
 	 	return Fl_Window::handle(event);
@@ -148,24 +149,19 @@ int FLTKwait(int t=0)
 	}
 }
 
-int FLTKgetmousex()
+xlong FLTKgetmousex()
 {
 	return win->mousex;
 }
 
-int FLTKgetmousey()
+xlong FLTKgetmousey()
 {
 	return win->mousey;
 }
 
-int FLTKgetmousebuttonl()
+xlong FLTKgetmousebutton()
 {
-	return win->mousebuttonl;
-}
-
-int FLTKgetmousebuttonr()
-{
-	return win->mousebuttonr;
+	return win->mousebutton;
 }
 
 #endif

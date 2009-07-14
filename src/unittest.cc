@@ -26,9 +26,6 @@ int main(int argc, char** argv)
 	FLTKsetup();
 	//***
 
-	xchar* gg = "manifolds rule";
-	std::cout << gg << " " << CLutils::chararraylength(gg) << std::endl;
-
 //
 // 	xlong* fbcx = CLgetfile_("../dat/test.bcx");
 // 	xlong **bcx;
@@ -63,12 +60,6 @@ int main(int argc, char** argv)
 		//test tree:
 			CLtree* testtree = new CLtree();
 
-		//while(FLTKwait())
-		//{
-		//test gfx1:
-
-		//test gfx2:
-
 		//test button:
 			//CLbutton testbutton = new CLbutton();
 		//test label:
@@ -79,9 +70,7 @@ int main(int argc, char** argv)
 			//CLmsgbox testmsgbox = new CLmsgbox();
 		// //test menu:
 			//CLmenu testmenu = new CLmenu();
-	//
-		//CLwaitforkey_();
-		//}
+			
 	//*
 
 	CLfile* cube;
@@ -98,13 +87,9 @@ int main(int argc, char** argv)
 		cube = cubef;
 	}
 
-	//CLobject + CLpolygon
-
 	CLobject* cubus = new CLobject(cube,0);
 
 	clfps->init();
-
-	xchar* toprint = u8"hi there";
 
 	CLlvector p(400,300,100);
 
@@ -225,7 +210,7 @@ int main(int argc, char** argv)
 
 		CLdoublebuffer->fastclear(0);
 		CLzbuffer->clear(zres-1);
-		//CLstencilbuffer->fastclear(0);
+		CLstencilbuffer->fastclear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
 		//clgfx1->putpixel(xlong x,xlong y,uxlong c,xlong m);
@@ -235,8 +220,6 @@ int main(int argc, char** argv)
 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
 		//clgfx1->drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
 
-		CLgfx1::drawsprite(10,10,testsprite);
-
 		//cubus->display(1,1,1,1,0,0);
 		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 
@@ -245,7 +228,9 @@ int main(int argc, char** argv)
 
 		linearM->unit();
 
-		clfps->increment(); 
+		clfps->increment();
+		
+		CLsystem::print(FLTKgetmousebutton()); 
 	}
 
 	//exit sequence	

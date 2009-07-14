@@ -11,13 +11,6 @@
 #include "CLapi.hh"
 #include "CLgame.hh"
 
-//temp:
-bool tdebug = 0;
-//*
-
-CLfvector position;
-CLbox* boundingbox[2];
-
 class CLplayer : public virtual CLcl
 {
 	protected:
@@ -27,7 +20,7 @@ class CLplayer : public virtual CLcl
 		CLgame*   clgame;
 
 	private:
-		//CLbox* boundingbox[2];
+		CLbox* boundingbox[2];
 		CLbox* oboundingbox[2];
 
 		xlong ammotype[4];
@@ -41,7 +34,7 @@ class CLplayer : public virtual CLcl
 		xlong shieldrate;
 		xlong armor;
 
-		//CLfvector position;
+		CLfvector position;
 		CLfvector tposition;
 		CLlvector sposition;
 		CLfvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
