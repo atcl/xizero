@@ -37,6 +37,8 @@ struct CLvector
 	CLvector& operator=(const CLvector a);			//vector vector assignment //?argument as reference?
 	CLvector& operator=(T c);						//scalar vector assignment
 		      operator CLvector<float>() const;		//cast
+			  
+			T operator%(const CLvector& a);			//angle between vectors
 
 	void print();									//console output	
 };
@@ -160,6 +162,18 @@ template<typename T>
 CLvector<T>::operator CLvector<float>() const
 {
 	return CLvector<float>( float(this->x), float(this->y), float(this->z) );
+}
+//*
+
+//angle between vectors:
+template<typename T>
+T CLvector<T>::operator%(const CLvector& a)
+{
+	float c =           ( (this->x * a.x)     + (this->y * a.y)     + (this->z * a.z) ) /
+		(CLmath::intsqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
+		 CLmath::intsqrt(     (a.x * a.x)     +     (a.y * a.y)     +     (a.z * a.z) ) );
+
+	return(CLmath::arccos(c));
 }
 //*
 

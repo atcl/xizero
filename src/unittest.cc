@@ -72,6 +72,11 @@ int main(int argc, char** argv)
 			//CLmenu testmenu = new CLmenu();
 			
 	//*
+	
+	CLfvector aa(1,0,0);
+	CLfvector bb(1,1,0);
+	
+	std::cout << (aa % bb) << std::endl;
 
 	CLfile* cube;
 	
@@ -229,8 +234,6 @@ int main(int argc, char** argv)
 		linearM->unit();
 
 		clfps->increment();
-		
-		CLsystem::print(FLTKgetmousebutton()); 
 	}
 
 	//exit sequence	

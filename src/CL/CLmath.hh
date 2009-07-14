@@ -7,12 +7,15 @@
 #include <cmath>
 
 #include "CLtypes.hh"
+#include "CLapi.hh"
 
 namespace CLmath
 {
 	float  fxpi;
 	float* sinarray;
 	float* cosarray;
+	float* arcsinarray;
+	float* arccosarray;
 
 	void init();
 	template<typename T> T sign(T x);
@@ -30,6 +33,8 @@ namespace CLmath
 	float pi();
 	float sin(xlong x);
 	float cos(xlong x);
+	float arcsin(float x);
+	float arccos(float x);
 	float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
 };
 
@@ -42,11 +47,15 @@ void CLmath::init()
 
 	sinarray = new float[360];
 	cosarray = new float[360];
+	arcsinarray = new float[360];
+	arccosarray = new float[360];
 
 	for(xlong i=0; i<360; i++)
 	{
 		sinarray[i] = std::sin(i*degtorad);
 		cosarray[i] = std::cos(i*degtorad);
+		arcsinarray[i] = 0;
+		arccosarray[i] = 0;
 	}
 }
 
@@ -162,6 +171,16 @@ float CLmath::cos(xlong x)
 {
 	x = absolute(x)%360;
 	return cosarray[x];
+}
+
+float CLmath::arcsin(float x)
+{ 
+	return std::asin(x) * 180 / M_PI; //!change to lookup table!
+}
+
+float CLmath::arccos(float x)
+{
+	return std::acos(x) * 180 / M_PI; //!change to lookup table!
 }
 
 float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
