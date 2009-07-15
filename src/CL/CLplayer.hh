@@ -187,7 +187,10 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	}
 	
 	//tposition.z += zdiff;
+	CLsystem::print(zdiff);
 	//rotate x about xangle,y about yangle
+	CLsystem::print(xangle);
+	CLsystem::print(yangle);
 
 
 	//enemy collision check: (check if player collides with enemy entity)
