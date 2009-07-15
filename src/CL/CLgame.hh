@@ -19,15 +19,13 @@ namespace CLgame
 
 		void init(xlong bx1=0,xlong by1=0,xlong bx2=xres,xlong by2=yres);
 		
-		template<class clvector>xlong boundary(const clvector& v1,const clvector& v2);
-		template<class clvector>xlong boundary(const clvector& v);
-		template<class clvector>xlong boundary(const clvector& position,const CLbox& bb);
+		template<class clvector>bool boundary(const clvector& p);
+		template<class clvector>bool boundary(const clvector& p,const CLbox& bb);
 		
-		template<class clvector>xlong collision(const clvector& v1,const clvector& v2,const clvector& w1,const clvector& w2);
-		template<class clvector>xlong collision(const clvector& v1,const clvector& v2,const clvector& w);
-		template<class clvector>xlong collision(const CLbox& bb1,const CLbox& bb2);
+		template<class clvector>xlong collision(const clvector& p,const CLbox* bb,const clvector& q);
+		template<class clvector>xlong collision(const clvector& p1,const CLbox& bb1,const clvector& p2,const CLbox& bb2);
 
-		template<class clvector>xlong terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l);
+		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l);
 };
 
 
@@ -40,19 +38,14 @@ void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 }
 
 template<class clvector>
-xlong CLgame::boundary(const clvector& v1,const clvector& v2)
+bool CLgame::boundary(const clvector& p)
 {
-
+	if( (p.x < boundaryx1) || (p.x > boundaryx2) || (p.y < boundaryy1) || (p.y > boundaryy2) ) return 1;
+	return 0;
 }
 
 template<class clvector>
-xlong CLgame::boundary(const clvector& v)
-{
-
-}
-
-template<class clvector>
-xlong CLgame::boundary(const clvector& p,const CLbox& bb)
+bool CLgame::boundary(const clvector& p,const CLbox& bb)
 {
 	if( ( (  bb.t1.x + p.x ) < boundaryx1 ) || ( (  bb.t2.x + p.x ) < boundaryx1 ) || ( (  bb.t3.x + p.x ) < boundaryx1 ) || ( (  bb.t4.x + p.x ) < boundaryx1 ) ) return -1;
 	if( ( (  bb.t1.x + p.x ) > boundaryx2 ) || ( (  bb.t2.x + p.x ) > boundaryx2 ) || ( (  bb.t3.x + p.x ) > boundaryx2 ) || ( (  bb.t4.x + p.x ) > boundaryx2 ) ) return 1;
@@ -62,61 +55,39 @@ xlong CLgame::boundary(const clvector& p,const CLbox& bb)
 	return 0;
 }
 
-//~ xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a1,xlong b1,xlong a2,xlong b2)
-//~ {
-	//~ if( x1>a1 && x1<a2 && y1>b1 && y1<b2 ) return 1;
-	//~ if( x2>a1 && x2<a2 && y2>b1 && y2<b2 ) return 1;
-	//~ if( a1>x1 && a1<x2 && b1>y1 && b1<y2 ) return 1;
-	//~ if( a2>x1 && a2<x2 && b2>y1 && b2<y2 ) return 1;
-	//~ return 0;
-//~ }
-//~ 
-//~ xlong CLgame::collision(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,xlong b)
-//~ {
-	//~ if( a<x1 && a>x2 && b>y1 && b<y2 ) return 1;
-	//~ return 0;
-//~ }
-
 template<class clvector>
-xlong CLgame::collision(const clvector& v1,const clvector& v2,const clvector& w1,const clvector& w2)
+xlong CLgame::collision(const clvector& p,const CLbox* bb,const clvector& q)
 {
-
+	CLlvector a1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
+	CLlvector a2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
+	CLlvector a3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
+	CLlvector a4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
+	
+	//
+	
+	return 0;
 }
 
 template<class clvector>
-xlong CLgame::collision(const clvector& v1,const clvector& v2,const clvector& w)
+xlong CLgame::collision(const clvector& p1,const CLbox* bb1,const clvector& p2,const CLbox* bb2)
 {
+	CLlvector a1( (p1.x + bb1->b1.x), (p1.y - bb1->b1.y), (p1.z + bb1->b1.z) );
+	CLlvector a2( (p1.x + bb1->b2.x), (p1.y - bb1->b2.y), (p1.z + bb1->b2.z) );
+	CLlvector a3( (p1.x + bb1->b3.x), (p1.y - bb1->b3.y), (p1.z + bb1->b3.z) );
+	CLlvector a4( (p1.x + bb1->b4.x), (p1.y - bb1->b4.y), (p1.z + bb1->b4.z) );
+	
+	CLlvector b1( (p2.x + bb2->b1.x), (p2.y - bb2->b1.y), (p2.z + bb2->b1.z) );
+	CLlvector b2( (p2.x + bb2->b2.x), (p2.y - bb2->b2.y), (p2.z + bb2->b2.z) );
+	CLlvector b3( (p2.x + bb2->b3.x), (p2.y - bb2->b3.y), (p2.z + bb2->b3.z) );
+	CLlvector b4( (p2.x + bb2->b4.x), (p2.y - bb2->b4.y), (p2.z + bb2->b4.z) );
 
-}
-
-template<class clvector>
-xlong CLgame::collision(const CLbox& bb1, const CLbox& bb2) //!test!
-{/*
-	if( ( bb1->a.x > bb2->a.x )
-	 && ( bb1->a.x < bb2->b.x )
-	 && ( bb1->a.y > bb2->a.y )
-	 && ( bb1->a.y < bb2->b.y ) ) return 1;
-
-	if( ( bb1->b.x > bb2->a.x )
-	 && ( bb1->b.x < bb2->b.x )
-	 && ( bb1->b.y > bb2->a.y )
-	 && ( bb1->b.y < bb2->b.y ) ) return 1;
-
-	if( ( bb2->a.x > bb1->a.x )
-	 && ( bb2->a.x < bb1->b.x )
-	 && ( bb2->a.y > bb1->a.y )
-	 && ( bb2->a.y < bb1->b.y ) ) return 1;
-
-	if( ( bb2->b.x > bb1->a.x )
-	 && ( bb2->b.x < bb1->b.x )
-	 && ( bb2->b.y > bb1->a.y )
-	 && ( bb2->b.y < bb1->b.y ) ) return 1;*/
+	//
 
 	return 0;
 }
 
 template<class clvector>
-xlong CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l)
+bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l)
 {
 	CLlvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
 	CLlvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
@@ -141,14 +112,14 @@ xlong CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,
 	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ])-3 ) r = 1;
 	
 	//p2<l2
-	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ])-3 ) r = 2;
+	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ])-3 ) r = 1;
 	
 	//p3<l3
-	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ])-3 ) r = 4;
+	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ])-3 ) r = 1;
 	
-	//~ //p4<l4
-	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ])-3 ) r = 8;
-	//~ 
+	//p4<l4
+	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ])-3 ) r = 1;
+	
 	//~ //p1>l1
 	//~ if( ((*ll)[ (p1.y * xres) + p1.x ]) > ((*ll)[ (l1.y * xres) + l1.x ])-3 ) r = -1;
 	//~ 

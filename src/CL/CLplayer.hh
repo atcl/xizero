@@ -166,7 +166,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	xlong bc = CLgame::boundary(tposition,*boundingbox[0]); //boundary check: (check if game screen is left)
 	tposition.y += m;
 
-	if( (bc!=0) && ( (bc==-1 && speed.x>=0) || (bc==1  && speed.x<=0) || (bc==-2 && speed.y<=0) || (bc==2  && speed.y>=0) ) )
+	if(bc!=0)
 	{
 		gear=0;
 		setspeed();
