@@ -17,7 +17,6 @@ class CLplayer : public virtual CLcl
 		CLobject* model[2]; //0 is chassis,1 is tower
 		CLmatrix* cllinear;
 		CLlist*   ammolist;
-		CLgame*   clgame;
 
 	private:
 		CLbox* boundingbox[2];
@@ -56,7 +55,7 @@ class CLplayer : public virtual CLcl
 		xlong collision(CLfbuffer* ll,xlong m);
 		
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p=0);
+		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p=0);
 		~CLplayer();
 
 		void update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
@@ -164,7 +163,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	xlong r = 0;
 
 	tposition.y -= m;
-	xlong bc = clgame->boundary(tposition,*boundingbox[0]); //boundary check: (check if game screen is left)
+	xlong bc = CLgame::boundary(tposition,*boundingbox[0]); //boundary check: (check if game screen is left)
 	tposition.y += m;
 
 	if( (bc!=0) && ( (bc==-1 && speed.x>=0) || (bc==1  && speed.x<=0) || (bc==-2 && speed.y<=0) || (bc==2  && speed.y>=0) ) )
@@ -174,7 +173,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		r++;
 	}
 
-	xlong tc = clgame->impact(ll,boundingbox[0],oboundingbox[0],tposition,position); //terrain collision check: (check if player collides with terrain block)
+	xlong tc = CLgame::terrain(ll,boundingbox[0],oboundingbox[0],tposition,position); //terrain collision check: (check if player collides with terrain block)
  
 	if(tc!=0)
 	{
@@ -188,7 +187,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	return r;
 }
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* clg,xlong p)
+CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 {
 	model[0] = cha;
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
@@ -205,10 +204,8 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,CLgame* c
 	boundingbox[0]->t3 = oboundingbox[0]->t3;
 	boundingbox[0]->t4 = oboundingbox[0]->t4;
 
-	
 	//boundingbox[1] = model[1]->getboundingbox(); //temp reactivate as soon as 2nd model avail
 
-	clgame = clg;
 	cllinear = new CLmatrix(1);
 
 	position = s;

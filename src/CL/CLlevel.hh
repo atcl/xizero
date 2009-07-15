@@ -23,7 +23,6 @@
 class CLlevel : public virtual CLcl
 {
 	protected:
-		CLgame*    clgame;
 		CLmatrix*  cllinear;
 		CLplayer*  clplayer;
 		CLenemy**  clenemy;
@@ -71,8 +70,7 @@ xlong CLlevel::floorheight = 100;
 CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* levelcontainer)
 {
 	cllinear = new CLmatrix(1);
-	//~ clgame   = new CLgame(60,0,740,600); //!fix to projected box
-	clgame   = new CLgame(0,0,800,600);
+	CLgame::init(60,0,740,600);
 
 //terrain:
 	//load terrainlib from .ar to array of xlong* to y3d objects
@@ -277,7 +275,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	if(startposfound==false) CLsystem::exit(1,0,__func__,"no player start position found in entity map");
 
-	clplayer = new CLplayer(playerm,playern,playerd,playerp,clgame,smoothmark);
+	clplayer = new CLplayer(playerm,playern,playerd,playerp,smoothmark);
 
 //***
 
@@ -316,7 +314,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 CLlevel::~CLlevel()
 {
 	delete clplayer;
-	delete clgame;
 }
 
 void CLlevel::update(xchar input,xchar turbo)
