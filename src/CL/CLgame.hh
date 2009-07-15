@@ -25,7 +25,7 @@ namespace CLgame
 		template<class clvector>xlong collision(const clvector& p,const CLbox* bb,const clvector& q);
 		template<class clvector>xlong collision(const clvector& p1,const CLbox& bb1,const clvector& p2,const CLbox& bb2);
 
-		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l);
+		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,xlong& xa,xlong& ya,xlong& zd);
 };
 
 
@@ -87,7 +87,7 @@ xlong CLgame::collision(const clvector& p1,const CLbox* bb1,const clvector& p2,c
 }
 
 template<class clvector>
-bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,clvector& l)
+bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,xlong& xa,xlong& ya,xlong& zd)
 {
 	CLlvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
 	CLlvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
@@ -99,7 +99,7 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,c
 	CLlvector l3( (l.x + ob->b3.x), (l.y - ob->b3.y), (l.z + ob->b3.z) );
 	CLlvector l4( (l.x + ob->b4.x), (l.y - ob->b4.y), (l.z + ob->b4.z) );
 	
-	//only for landscape trace
+	//temp! only for landscape trace
 	lv.x = l.x;
 	lv.y = l.y;
 	tv.x = p.x;
@@ -131,7 +131,12 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,clvector& p,c
 	//~ 
 	//~ //p4>l4
 	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) > ((*ll)[ (l4.y * xres) + l4.x ])-3 ) r = -8;
-	
+
+	//calc xa,ya,zd
+
+
+	//
+
 	return r;
 }
 

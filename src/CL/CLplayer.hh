@@ -173,7 +173,11 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		r++;
 	}
 
-	xlong tc = CLgame::terrain(ll,boundingbox[0],oboundingbox[0],tposition,position); //terrain collision check: (check if player collides with terrain block)
+	xlong xangle = 0;
+	xlong yangle = 0;
+	xlong zdiff  = 0;
+
+	xlong tc = CLgame::terrain(ll,boundingbox[0],oboundingbox[0],tposition,position,xangle,yangle,zdiff); //terrain collision check: (check if player collides with terrain block)
  
 	if(tc!=0)
 	{
@@ -181,6 +185,10 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		setspeed();
 		r++;
 	}
+	
+	//tposition.z += zdiff;
+	//rotate x about xangle,y about yangle
+
 
 	//enemy collision check: (check if player collides with enemy entity)
 
