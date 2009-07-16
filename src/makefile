@@ -8,6 +8,7 @@ O0FLAGS = -O0
 O2FLAGS = -O2
 O3FLAGS = -O3
 LDFLAGS = -lfltk -lX11 -laudiere
+L2FLAGS = -lftgl -lXext -lX11
 OUTPARA = -o 
 CLEANUP = rm
 DEBUG   = -g
@@ -46,6 +47,9 @@ unit:
 
 fast:
 	$(CC) $(CCFLAGS) $(O3FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
+
+test:
+	$(CC) $(CCFLAGS) $(O3FLAGS) $(OUTPARA) $(TARGET5) $(SOURCE5) $(L2FLAGS) $(WWFLAGS) -D BPP32
 
 debug:
 	$(CC) $(CCFLAGS) $(O0FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS)
