@@ -147,12 +147,13 @@ uxlong CLgfx2::getQBcolor(xchar c)
 
 bool CLgfx2::comparecolors(uxlong c1,uxlong c2)
 {
-
+	return 0;
 }
 
 uxlong CLgfx2::blendcolors()
 {
 	//add,mul,alpha,and,or,nand,nor,not,xor
+	return 0;
 }
 
 void CLgfx2::savescreenshot(const xchar*)

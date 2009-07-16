@@ -334,7 +334,6 @@ void CLlevel::display()
 	xlong blockoffsetx = blockwidth >> 1;
 	xlong blockoffsety = blockheight >> 1; 
 	xlong yoffset = smoothmark % blockheight;
-	xlong tempz = 0;
 	xlong localfloorheight = floorheight - 5;
 	CLlvector ckeeper( -(xres >> 1) + blockoffsetx , (yres >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
 	CLlvector current( 0 , 0 , localfloorheight );

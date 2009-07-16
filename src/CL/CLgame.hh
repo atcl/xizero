@@ -134,10 +134,10 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 
 	//calc xa,ya,zd
 	
-	xlong az = -( ( ((*ll)[ (p1.y * xres) + p1.x ]) + ((*ll)[ (p4.y * xres) + p4.x ]) ) / 2 );
+	xlong az = -( ( ((*ll)[ (p1.y * xres) + p1.x ]) + ((*ll)[ (p4.y * xres) + p4.x ]) ) / 2 )
 	           +( ( ((*ll)[ (p2.y * xres) + p2.x ]) + ((*ll)[ (p3.y * xres) + p3.x ]) ) / 2 );
 			   
-	xlong bz = -( ( ((*ll)[ (l1.y * xres) + l1.x ]) + ((*ll)[ (l4.y * xres) + l4.x ]) ) / 2 );
+	xlong bz = -( ( ((*ll)[ (l1.y * xres) + l1.x ]) + ((*ll)[ (l4.y * xres) + l4.x ]) ) / 2 )
 	           +( ( ((*ll)[ (l2.y * xres) + l2.x ]) + ((*ll)[ (l3.y * xres) + l3.x ]) ) / 2 );
 	
 	CLlvector a( (-p1.x+p2.x),(-p1.y+p2.y),az );
@@ -146,10 +146,10 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 	
 	ya = a % b;
 	
-	xlong cz = -( ( ((*ll)[ (p1.y * xres) + p1.x ]) + ((*ll)[ (p2.y * xres) + p2.x ]) ) / 2 );
+	xlong cz = -( ( ((*ll)[ (p1.y * xres) + p1.x ]) + ((*ll)[ (p2.y * xres) + p2.x ]) ) / 2 )
 	           +( ( ((*ll)[ (p4.y * xres) + p4.x ]) + ((*ll)[ (p3.y * xres) + p3.x ]) ) / 2 );
 			   
-	xlong dz = -( ( ((*ll)[ (l1.y * xres) + l1.x ]) + ((*ll)[ (l2.y * xres) + l2.x ]) ) / 2 );
+	xlong dz = -( ( ((*ll)[ (l1.y * xres) + l1.x ]) + ((*ll)[ (l2.y * xres) + l2.x ]) ) / 2 )
 	           +( ( ((*ll)[ (l4.y * xres) + l4.x ]) + ((*ll)[ (l3.y * xres) + l3.x ]) ) / 2 );
 	
 	CLlvector c( (-p1.x+p4.x),(-p1.y+p4.y),cz );

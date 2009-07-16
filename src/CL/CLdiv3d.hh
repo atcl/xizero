@@ -25,8 +25,8 @@ void CLmisc3d::draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>*
 {
 	if(x>0 && x<xres && y>0 && y<yres && z>0 && z<zres)
 	{
-		xlong nx = xlong( ( 80 * x) / z) + xres>>1; //95 wenn xclipping läuft
-		xlong ny = xlong( (-95 * y) / z) + yres>>1;
+		xlong nx = xlong( ( 80 * x) / z) + (xres>>1);
+		xlong ny = xlong( (-95 * y) / z) + (yres>>1);
 
 		(*db)[(ny*xres)+nx] = color;
 	}

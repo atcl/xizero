@@ -118,7 +118,7 @@ void CLenemy::collision()
 
 xlong CLenemy::gethealth()
 {
-
+	return health;
 }
 
 #endif

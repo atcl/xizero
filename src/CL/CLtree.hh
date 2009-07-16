@@ -37,7 +37,7 @@ class CLtree : public virtual CLcl
 		void parent();
 		void next();	//next sibling
 		void* data();
-		void data(void* d);
+		void adddata(void* d);
 		void addchild();
 		void delchild(xlong i);
 		bool isroot();
@@ -48,6 +48,9 @@ CLtree::CLtree()
 {
 	rootnode = new node;
 	rootnode->parent = 0;
+	rootnode->childcount = 0;
+
+	current = rootnode;
 }
 
 CLtree::~CLtree()
@@ -91,7 +94,7 @@ void* CLtree::data()
 	return current->data;
 }
 
-void CLtree::data(void* d)
+void CLtree::adddata(void* d)
 {
 	current->data = d;
 }
@@ -137,7 +140,14 @@ bool CLtree::isroot()
 
 void CLtree::print()
 {
-
+	if(current->name!=0) CLsystem::print(current->name);
+	else CLsystem::print(0);
+	for(int i=0; i<current->childcount; i++)
+	{
+		current = current->child[i];
+		print();
+	}
+	current = current->parent;
 }
 
 #endif

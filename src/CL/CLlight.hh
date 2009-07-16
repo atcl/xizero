@@ -10,7 +10,7 @@
 #include "CLmath.hh"
 #include "CLmatrix.hh"
 
-
+//obsolete!!!! 
 class CLlight : public virtual CLcl
 {
 	protected:

@@ -157,6 +157,7 @@ void* CLlist::delcurrent(bool smash)
 	length--;
 
 	if(smash==true) return current->data;
+	return 0;
 }
 
 xlong CLlist::getlength()

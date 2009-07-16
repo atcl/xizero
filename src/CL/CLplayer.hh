@@ -204,7 +204,6 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	//model[1] = tow; //temp reactivate as soon as 2nd model avail
 	
 	boundingbox[0] = new CLbox;
-	CLbox* oboundinbox[2];
 	oboundingbox[0] = model[0]->getboundingbox();
 	boundingbox[0]->b1 = oboundingbox[0]->b1;
 	boundingbox[0]->b2 = oboundingbox[0]->b2;

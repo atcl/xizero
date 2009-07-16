@@ -226,7 +226,7 @@ void CLmatrix::dyadic(const clvector& a,const clvector& b)
 
 float CLmatrix::trace()
 {
-	return (m[1][1] + m[2][2] + m[3][3] + m[4][4]);
+	return (m[0][0] + m[1][1] + m[2][2] + m[3][3]);
 }
 
 void CLmatrix::print()

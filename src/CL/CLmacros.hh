@@ -12,15 +12,15 @@
 
 xlong inline x800(xlong f)
 {
-	return (f<<9 + f<<8 + f<<5);
+	return ( (f<<9) + (f<<8) + (f<<5) );
 }
 
 xlong inline x600(xlong f)
 {
-	return (f<<9 + f<<6 + f<<4 + f<<3);
+	return ( (f<<9) + (f<<6) + (f<<4) + (f<<3) );
 }
 
-void inline say(const xchar* c)
+void inline say(const xchar* c="hi")
 {
 	std::cout << c << std::endl;
 }
@@ -43,11 +43,6 @@ void inline CLstosd(xlong* dst,xlong val,xlong cnt)
 void inline CLmovsd(xlong* dst,void* src,xlong cnt)
 {
 	memcpy(dst,src,cnt);
-}
-
-void inline ttyout(const xchar m)
-{
-	CLsystem::print(m,0);
 }
 
 #endif

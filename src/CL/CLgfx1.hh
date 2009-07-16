@@ -15,12 +15,10 @@
 
 namespace CLgfx1
 {
-	static xlong last_p;
-	static xlong interval_p;
-	static xlong last_s;
-	static xlong interval_s;
-	xlong locmaxx;
-	xlong locmaxy;
+	//~ xlong last_p;
+	//~ xlong interval_p;
+	//~ xlong last_s;
+	//~ xlong interval_s;
 
 	void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 	uxlong readpixel(xlong x,xlong y);
@@ -187,7 +185,6 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
-	xlong temp = 0;
 
 	if(dx<0)
 	{
@@ -235,7 +232,6 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
-	xlong temp = 0;
 
 	if(dx<0)
 	{
@@ -369,10 +365,10 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 {
 	//init
 	if(x>xres || y>yres) return;
-	xlong ssize = s->size;
+	//xlong ssize = s->size;
 	xlong swidth = s->width;
 	xlong sheight = s->height;
-	xlong hordiff = xres - s->width;
+	//xlong hordiff = xres - s->width;
 	xlong xs = x;
 	xlong ys = y;
 	xlong xe = x + swidth;

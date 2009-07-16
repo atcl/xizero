@@ -17,7 +17,6 @@
 #include "CLlight.hh"
 
 
-//change CLbox members to pointers?
 struct CLbox
 {
 	CLvector<float> t1;
@@ -75,7 +74,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 
 	xlong sobjcount = 0;
 
-	xlong sobjcounter = 0;
+	//xlong sobjcounter = 0;
 	xlong polycounter = 0;
 	xlong dockcounter = 0;
 

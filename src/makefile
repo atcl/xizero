@@ -2,7 +2,9 @@
 
 CC      = g++
 CCFLAGS = -I/usr/include/freetype2 
-WWFLAGS = -Wno-multichar -Wno-write-strings
+WWFLAGS = -Wno-multichar -Wno-write-strings -Wno-pragmas
+WAFLAGS = -Wall
+O0FLAGS = -O0
 O2FLAGS = -O2
 O3FLAGS = -O3
 LDFLAGS = -lfltk -lX11 -laudiere
@@ -45,8 +47,8 @@ unit:
 fast:
 	$(CC) $(CCFLAGS) $(O3FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
 
-testx:
-	$(CC) $(CCFLAGS) $(O3FLAGS) $(OUTPARA) $(TARGET5) $(SOURCE5) $(LDFLAGS) $(WWFLAGS)
+debug:
+	$(CC) $(CCFLAGS) $(O0FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS)
 
 all:
 	$(CC) $(CCFLAGS) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS)
@@ -56,4 +58,3 @@ all:
 
 clean:
 	$(CLEANUP) $(TARGET1)
-	$(CLEANUP) $(TARGET2)

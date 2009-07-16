@@ -18,7 +18,6 @@ int main()
 
 	xchar input = 0;
 	xchar turbo = 0;
-	xlong mark  = 0;
 	xlong mode  = 1;
 	xlong dis   = 0;
 

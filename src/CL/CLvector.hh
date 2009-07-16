@@ -26,6 +26,7 @@ struct CLvector
 	CLvector operator-();							//vector additive negation
 	       T operator*(const CLvector& a) const;	//dot product
 	CLvector operator*(T c) const;					//scalar multiplication
+	template<typename S> friend CLvector<S> operator*(S c,CLvector<S>& a);		//scalar multiplication friend
 	CLvector operator^(const CLvector& a) const;	//cross product
 	       T operator!() const;						//vector length
 	

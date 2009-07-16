@@ -36,7 +36,7 @@ namespace CLformat
 
 xchar** CLformat::loadcsv(CLfile* sf)
 {
-
+	return 0;
 }
 
 arfile* CLformat::loadar(CLfile* sf)
@@ -199,19 +199,19 @@ arfile* CLformat::loadar(CLfile* sf)
 		} while( tsize > 0 );	//wo kommen die 3 her in level.a ???
 
 		//create return value
-		arfile* af = new arfile;
-		af->filecount = fc;
-		af->members = new armember*[fc];
+		arfile* arf = new arfile;
+		arf->filecount = fc;
+		arf->members = new armember*[fc];
 		//return value created
 
 		//place file contents in return value
 		for(int j=0; j<fc; j++)
 		{ 
-			af->members[j] = tindex[j];
+			arf->members[j] = tindex[j];
 		}
-		//af is now complete
+		//arf is now complete
 
-		return af;
+		return arf;
 	}
 
 	return 0;
@@ -264,7 +264,7 @@ xlong** CLformat::loadbcx(CLfile* bf)
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
 	xchar* bf = sf->text;
-	xlong bs = sf->size;
+	//xlong bs = sf->size;
 	xlong lc = CLutils::getlinecount(sf);
 
 	//determine line length
@@ -307,32 +307,33 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 sprite* CLformat::loadtga(CLfile* sf)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
+
 	xchar* bf = sf->text;
 
-	xchar	imageid		= bf[0];
+	//xchar	imageid		= bf[0];
 
-	xchar	colormap	= bf[1];
+	//xchar	colormap	= bf[1];
 	xchar	imagetype	= bf[2];
 
 	if(imagetype > 2) return 0; //no TGA!
 
-	xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
-	xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
-	xchar	colormaprentry	= bf[7];
+	//xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
+	//xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
+	//xchar	colormaprentry	= bf[7];
 
-	xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
-	xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
+	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
+	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
 	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
 	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
-	xchar	imagepixelsize	= bf[16];
+	//xchar	imagepixelsize	= bf[16];
 
 	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
 
-	xchar	imagedescriptor	= bf[17];
+	//xchar	imagedescriptor	= bf[17];
 
 	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
 
-	xshort imageoffset = imageid + colormaplength;
+	//xshort imageoffset = imageid + colormaplength;
 
 	sprite* r = new sprite;
 	r->size = imagewidth * imageheight;
@@ -345,22 +346,22 @@ sprite* CLformat::loadtga(CLfile* sf)
 
 sprites* CLformat::loadtileset(CLfile* sf)
 {
-
+	return 0;
 }
 
 sprites* CLformat::loadfont(CLfile* sf)
 {
-
+	return 0;
 }
 
 xlong** CLformat::loadlvl()
 {
-
+	return 0;
 }
 
 xlong** CLformat::loadini()
 {
-
+	return 0;
 }
 
 #endif
