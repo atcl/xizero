@@ -12,16 +12,18 @@ SET(CMAKE_VERBOSE_MAKEFILE "ON")
 SET( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true )
 SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".lib" ".a")
 
-#----------------------------------------------------------------------------------------------------
-# Load needed Modules
-#----------------------------------------------------------------------------------------------------
-# PKG-Config
-FIND_PACKAGE( PkgConfig )
 
 
 #----------------------------------------------------------------------------------------------------
 # Options, that can be changed be the User in order to customise xizero
 #----------------------------------------------------------------------------------------------------
+
+
+SET( EXTRA_FLAGS
+	"-O3 -funroll-loops -fomit-frame-pointer" CACHE STRING
+	"" )
+
+
 SET( FLTK_CONFIG
 	/usr/bin/fltk-config CACHE STRING
 	"" )
@@ -58,7 +60,7 @@ EXECUTE_PROCESS(
 
 # We define the include paths here, our minimal source dir is one
 
-INCLUDE_DIRECTORIES(${xizero_SOURCE_DIR} )
+INCLUDE_DIRECTORIES(${xizero_SOURCE_DIR}  )
 
 SET(xizeroSrc
 	src/xizero.cc
@@ -84,6 +86,7 @@ cmake_policy(SET CMP0004 OLD)
 cmake_policy(SET CMP0006 OLD)
 
 ADD_DEFINITIONS( ${freetypeCFLAGS} "-g" )
+ADD_DEFINITIONS( ${EXTRA_FLAGS} )
 
 ADD_EXECUTABLE(xizero ${xizeroSrc} )
 #ADD_EXECUTABLE(testx ${testxSrc} )
