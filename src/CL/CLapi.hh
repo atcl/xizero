@@ -25,6 +25,7 @@ namespace CLsystem
 	xchar** getcsvfile(const char* fn);
 	void    print(const xchar* c,bool i=1);
 	void    print(const xlong l,bool i=1);
+	void    print(const float l,bool i=1);
 	void    waitforkey();
 	void    wait(xlong milliseconds);
 	xlong   getmilliseconds(); //since midnight
@@ -150,6 +151,16 @@ void CLsystem::print(const xchar* c,bool i)
 }
 
 void CLsystem::print(const xlong l,bool i)
+{
+	std::cout << l;
+
+	if(i)
+	{
+		std::cout << std::endl;
+	}
+}
+
+void CLsystem::print(const float l,bool i)
 {
 	std::cout << l;
 

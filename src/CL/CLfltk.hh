@@ -12,7 +12,7 @@
 
 #include "CLtypes.hh"
 
-#define UPDATE_RATE 0.05
+#define UPDATE_RATE 0.02
 
 
 class FLTKwindow : public Fl_Window

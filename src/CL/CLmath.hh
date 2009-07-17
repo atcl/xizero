@@ -110,8 +110,6 @@ T CLmath::rounddown(T x)
 template<typename T>
 T CLmath::intsqrt(T x)
 {
-//!replace div by 2 with >> (first create >> operators in fixed, and specialize for float)
-
 	if(x<=0) return 0;
 
 	T num = x;

@@ -12,69 +12,69 @@ struct xshush
 	uxshort frc;
 };
 
-union fixedp
+union xfixed
 {
 	xlong  i;
 	xshush p;
 
-			fixedp& operator=(fixedp &a);
-			fixedp& operator=(xshort& a);
+			xfixed& operator=(xfixed &a);
+			xfixed& operator=(xshort& a);
 			
-			fixedp operator-();
+			xfixed operator-();
 			
-			fixedp& operator++();
-			fixedp& operator--();
+			xfixed& operator++();
+			xfixed& operator--();
 			
-			fixedp& operator+=(fixedp& a);
-			fixedp& operator+=(xshort& a);
-			fixedp& operator-=(fixedp& a);
-			fixedp& operator-=(xshort& a);
-			fixedp& operator*=(fixedp& a);
-			fixedp& operator*=(xshort& a);
-			fixedp& operator/=(fixedp& a);
-			fixedp& operator/=(xshort& a);
+			xfixed& operator+=(xfixed& a);
+			xfixed& operator+=(xshort& a);
+			xfixed& operator-=(xfixed& a);
+			xfixed& operator-=(xshort& a);
+			xfixed& operator*=(xfixed& a);
+			xfixed& operator*=(xshort& a);
+			xfixed& operator/=(xfixed& a);
+			xfixed& operator/=(xshort& a);
 	
-			fixedp operator+(fixedp& a);
-			fixedp operator+(xshort& a);
-	friend  fixedp operator+(short& a,fixedp& b);
-			fixedp operator-(fixedp& a);
-			fixedp operator-(xshort& a);
-	friend  fixedp operator-(short& a,fixedp& b);
-			fixedp operator*(fixedp& a);
-			fixedp operator*(xshort& a);
-	friend  fixedp operator*(short& a,fixedp& b);
-			fixedp operator/(fixedp& a);
-			fixedp operator/(xshort& a);
-	friend  fixedp operator/(short& a,fixedp& b);
+			xfixed operator+(xfixed& a);
+			xfixed operator+(xshort& a);
+	friend  xfixed operator+(short& a,xfixed& b);
+			xfixed operator-(xfixed& a);
+			xfixed operator-(xshort& a);
+	friend  xfixed operator-(short& a,xfixed& b);
+			xfixed operator*(xfixed& a);
+			xfixed operator*(xshort& a);
+	friend  xfixed operator*(short& a,xfixed& b);
+			xfixed operator/(xfixed& a);
+			xfixed operator/(xshort& a);
+	friend  xfixed operator/(short& a,xfixed& b);
 	
 	
-			bool operator==(fixedp& a);
+			bool operator==(xfixed& a);
 			bool operator==(xshort& a);
-	friend  bool operator==(short& a,fixedp& b);
-			bool operator!=(fixedp& a);
+	friend  bool operator==(short& a,xfixed& b);
+			bool operator!=(xfixed& a);
 			bool operator!=(xshort& a);
-	friend  bool operator!=(short& a,fixedp& b);
-			bool operator<=(fixedp& a);
+	friend  bool operator!=(short& a,xfixed& b);
+			bool operator<=(xfixed& a);
 			bool operator<=(xshort& a);
-	friend  bool operator<=(short& a,fixedp& b);
-			bool operator>=(fixedp& a);
+	friend  bool operator<=(short& a,xfixed& b);
+			bool operator>=(xfixed& a);
 			bool operator>=(xshort& a);
-	friend  bool operator>=(short& a,fixedp& b);
-			bool operator<(fixedp& a);
+	friend  bool operator>=(short& a,xfixed& b);
+			bool operator<(xfixed& a);
 			bool operator<(xshort& a);
-	friend  bool operator<(short& a,fixedp& b);
-			bool operator>(fixedp& a);
+	friend  bool operator<(short& a,xfixed& b);
+			bool operator>(xfixed& a);
 			bool operator>(xshort& a);
-	friend  bool operator>(short& a,fixedp& b);
+	friend  bool operator>(short& a,xfixed& b);
 };
 
-fixedp& fixedp::operator=(fixedp &a)
+xfixed& xfixed::operator=(xfixed &a)
 {
 	this->i = a.i;
 	return *this;
 }
 
-fixedp& fixedp::operator=(xshort &a)
+xfixed& xfixed::operator=(xshort &a)
 {
 	this->p.num = a;
 	this->p.frc = 0;
@@ -83,60 +83,60 @@ fixedp& fixedp::operator=(xshort &a)
 
 //friends:
 
-fixedp operator+(short& a,fixedp& b)
+xfixed operator+(short& a,xfixed& b)
 {
-	fixedp temp;
+	xfixed temp;
 
 	return temp;
 }
 
-fixedp operator-(short& a,fixedp& b)
+xfixed operator-(short& a,xfixed& b)
 {
-	fixedp temp;
+	xfixed temp;
 
 	return temp;
 }
 
-fixedp operator*(short& a,fixedp& b)
+xfixed operator*(short& a,xfixed& b)
 {
-	fixedp temp;
+	xfixed temp;
 
 	return temp;
 }
 
-fixedp operator/(short& a,fixedp& b)
+xfixed operator/(short& a,xfixed& b)
 {
-	fixedp temp;
+	xfixed temp;
 
 	return temp;	
 }
 
-bool operator==(short& a,fixedp& b)
+bool operator==(short& a,xfixed& b)
 {
 	return 0;	
 }
 
-bool operator!=(short& a,fixedp& b)
+bool operator!=(short& a,xfixed& b)
 {
 	return 0;
 }
 
-bool operator<=(short& a,fixedp& b)
+bool operator<=(short& a,xfixed& b)
 {
 	return 0;
 }
 
-bool operator>=(short& a,fixedp& b)
+bool operator>=(short& a,xfixed& b)
 {
 	return 0;
 }
 
-bool operator<(short& a,fixedp& b)
+bool operator<(short& a,xfixed& b)
 {
 	return 0;	
 }
 
-bool operator>(short& a,fixedp& b)
+bool operator>(short& a,xfixed& b)
 {
 	return 0;
 }

@@ -186,11 +186,13 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		r++;
 	}
 	
-	//tposition.z += zdiff;
-	CLsystem::print(zdiff);
+	tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+	//if(zdiff!=0) CLsystem::print(zdiff);
+	
 	//rotate x about xangle,y about yangle
-	CLsystem::print(xangle);
-	CLsystem::print(yangle);
+	cllinear->rotate(xangle,0,0);
+	//if(xangle!=0) CLsystem::print(xangle);
+	//if(yangle!=0) CLsystem::print(yangle);
 
 
 	//enemy collision check: (check if player collides with enemy entity)
