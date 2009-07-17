@@ -48,7 +48,6 @@
 
 //non-static classes IIII (3D engine)
 #include "CL/CLmatrix.hh"
-#include "CL/CLlight.hh"
 #include "CL/CLpolygon.hh"
 #include "CL/CLobject.hh"
 
@@ -65,8 +64,8 @@
 #include "CL/CLmacros.hh"
 
 //GUI dependent
-#include "CL/CLfltk.hh"
-//#include "CL/CLwindow.hh"
+//#include "CL/CLfltk.hh"
+#include "CL/CLwindow.hh"
 #include "CL/CLsound.hh"
 
 //super constructor

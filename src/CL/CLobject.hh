@@ -14,7 +14,6 @@
 #include "CLglobal.hh"
 #include "CLpolygon.hh"
 #include "CLmatrix.hh"
-#include "CLlight.hh"
 
 
 struct CLbox

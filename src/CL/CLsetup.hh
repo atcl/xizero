@@ -9,8 +9,6 @@
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
 #include "CLfps.hh"
-
-#include "CLlight.hh"
 #include "CLmatrix.hh"
 
 
@@ -25,6 +23,8 @@ void CLsetup()
 	CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
 	CLstencilbuffer = new CLbuffer<xlong>(xres*yres);
 	CLzbuffer       = new CLbuffer<float>(xres*yres);
+	
+	win = new CLwindow(xres,yres,"atCROSSLEVEL",CLdoublebuffer->getbuffer());
 
 	clfps    = new CLfps(3,true);
 

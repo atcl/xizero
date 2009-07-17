@@ -6,7 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
-#include "CLlight.hh"
+#include "CLwindow.hh"
 #include "CLmatrix.hh"
 #include "CLfps.hh"
 
@@ -20,6 +20,8 @@ uxlong CLscreenmemsize = xres * yres * 4;
 CLlbuffer* CLdoublebuffer;
 CLlbuffer* CLstencilbuffer;
 CLfbuffer* CLzbuffer;
+
+CLwindow* win;
 
 CLfvector clplane(0,0,1);
 CLfvector cllight(1,1,-1);

@@ -12,7 +12,6 @@
 #include "CLvector.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
-#include "CLlight.hh"
 #include "CLpolyinc.hh"
 
 

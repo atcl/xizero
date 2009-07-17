@@ -88,7 +88,7 @@ CLvector<T> CLvector<T>::operator^(const CLvector<T>& a) const
 template<typename T>
 T CLvector<T>::operator!() const
 {
-	return CLmath::intsqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) );
+	return CLmath::sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) );
 }
 //*
 
@@ -168,8 +168,8 @@ template<typename T>
 T CLvector<T>::operator%(const CLvector& a)
 {
 	float c =           ( (this->x * a.x)     + (this->y * a.y)     + (this->z * a.z) ) /
-		(CLmath::intsqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
-		 CLmath::intsqrt(     (a.x * a.x)     +     (a.y * a.y)     +     (a.z * a.z) ) );
+		(CLmath::sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
+		 CLmath::sqrt(     (a.x * a.x)     +     (a.y * a.y)     +     (a.z * a.z) ) );
 
 	return(CLmath::arccos(c));
 }

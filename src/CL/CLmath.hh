@@ -26,7 +26,7 @@ namespace CLmath
 	template<typename T> T round(T x);
 	template<typename T> T roundup(T x);
 	template<typename T> T rounddown(T x);
-	template<typename T> T intsqrt(T x);
+	template<typename T> T sqrt(T x);
 	template<typename T> T deg2rad(xlong d);
 	xlong faculty(xlong f);
 	xlong power(xlong b,xlong e);
@@ -108,7 +108,7 @@ T CLmath::rounddown(T x)
 }
 
 template<typename T>
-T CLmath::intsqrt(T x)
+T CLmath::sqrt(T x)
 {
 	if(x<=0) return 0;
 

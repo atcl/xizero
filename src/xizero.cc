@@ -10,7 +10,6 @@ int main()
 {
 	//init sequence
 	CLsetup();
-	FLTKsetup();
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/player/player.a","../dat/level/level0.a");
 
@@ -21,10 +20,10 @@ int main()
 	xlong mode  = 1;
 	xlong dis   = 0;
 
-	while(FLTKwait())
+	while(win->run()) 
 	{
-		turbo = FLTKgetturbokeystate();
-		input = FLTKgetkeystate();
+		turbo = win->getturbo();
+		input = win->getkey();
 
 		switch(turbo)
 		{
@@ -75,7 +74,9 @@ int main()
 				break;
 		}
 		
-		clfps->increment(); 
+		clfps->increment();
+		
+		win->redraw();
 	}
 
 	return 0;

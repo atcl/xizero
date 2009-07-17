@@ -16,7 +16,6 @@
 #include "CLplayer.hh"
 #include "CLenemy.hh"
 #include "CLgame.hh"
-#include "CLlight.hh"
 #include "CLmacros.hh"
 
 

@@ -1,3 +1,8 @@
+//atCROSSLEVEL studios 2009
+//licensed under zlib/libpng license
+#ifndef HH_CLWINDOW
+#define HH_CLWINDOW
+
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
@@ -43,9 +48,9 @@ int CLwindow::handle(int event)
 {
 	switch(event)
 	{
-		case FL_KEYBOARD:
+		case FL_KEYDOWN:
 			turbo = Fl::event_key();
-			key =  Fl::event_key();
+			key = Fl::event_key();
 			break;
 		case FL_KEYUP:
 			keyup = Fl::event_key();
@@ -61,6 +66,8 @@ int CLwindow::handle(int event)
 			mouseb = Fl::event_button() & 3;
 			break;		
 	}
+	
+	return Fl_Window::handle(event);
 }
 
 CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
@@ -71,7 +78,7 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
 	buffer = b;
 	
 	box(FL_NO_BOX);
-	hdelta = 4* height;
+	hdelta = 4* width;
 	
 	Fl::visual(FL_RGB);
 	
@@ -88,7 +95,6 @@ void CLwindow::redraw()
 
 xlong CLwindow::run()
 {
-	//return Fl::run();
 	return Fl::wait();
 }
 
@@ -105,12 +111,10 @@ xlong CLwindow::getturbo()
 	{
 		turbo = 0;
 		keyup = 0;
-		return 0;
 	}
-	else
-	{
-		return turbo;
-	}
+
+	return turbo;
+
 }
 
 xlong CLwindow::getmousex()
@@ -127,4 +131,6 @@ xlong CLwindow::getmouseb()
 {
 	return mouseb;
 }
+
+#endif
 
