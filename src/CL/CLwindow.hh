@@ -1,85 +1,130 @@
-//#include "fastgl/fastgl.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/fl_draw.H>
 
 #include "CLtypes.hh"
 
-namespace CLwindow
+class CLwindow : public Fl_Window
 {
-	fgl::FGApp* 		app;
-	fgl::FGWindow* 		win;
-	fgl::FGDrawBuffer* 	vram;
-	
-	xlong key;
-	xlong tkey;
-	xlong mousex;
-	xlong mousey;
-	xlong mouseb;
-	
-	void init(xlong w,xlong h,const xchar* t,int argc, char *argv[]);
-	void run();
-	void flush(xlong* db);
-	void exit();
-	void update(fgl::FGEvent *e);
-	
-	xlong getkey();
-	xlong turbokey();
-	xlong getmousex();
-	xlong getmousey();
-	xlong getmouseb();
-	
-	
-	
+	private:
+		xlong width;
+		xlong height;
+		xlong hdelta;
+		xchar* title;
+		xlong* buffer;
+		xlong key;
+		xlong turbo;
+		xlong mousex;
+		xlong mousey;
+		xlong mouseb;
+		xlong keyup;
+		
+		void draw();
+		virtual int handle(int event);
+		
+	public:
+		CLwindow(xlong w,xlong h,const xchar* t,xlong* b);
+		~CLwindow();
+		void redraw();
+		xlong run();
+		xlong getkey();
+		xlong getturbo();
+		xlong getmousex();
+		xlong getmousey();
+		xlong getmouseb();
 };
 
-
-void CLwindow::init(xlong w,xlong h,const xchar* t,int argc, char *argv[])
+void CLwindow::draw()
 {
-	app = new fgl::FGApp(fgl::G800x600,argc,argv,fgl::CBLACK,fgl::APP_ENABLEALTX);
-	win = new fgl::FGWindow(0, 0,0,w,h,t,CLwindow::update);
-	vram = new fgl::FGDrawBuffer(w,h);	
+	fl_draw_image((const uxchar*)&buffer[0],0,0,width,height,4,hdelta);
 }
 
-void CLwindow::run()
+int CLwindow::handle(int event)
 {
-	app->Run();
-}
-
-void CLwindow::flush(xlong* db)
-{
-	win->WindowPutBitmap(0,0,0,0,800,600,vram);
-}
-
-void CLwindow::exit()
-{
-	fgl::FGApp::AppDone();
-}
-
-void CLwindow::update(fgl::FGEvent *e)
-{
-	switch(e->GetType())
+	switch(event)
 	{
-		case fgl::INITEVENT:
-			//on start
+		case FL_KEYBOARD:
+			turbo = Fl::event_key();
+			key =  Fl::event_key();
 			break;
-			
-		case fgl::KEYEVENT:
-
+		case FL_KEYUP:
+			keyup = Fl::event_key();
 			break;
-			
-		case fgl::MOVEEVENT:
-
+		case FL_MOVE:
+			mousex = Fl::event_x();
+			mousey = Fl::event_y();
 			break;
-			
-		case fgl::CLICKLEFTEVENT:
-
+		case FL_RELEASE:
+			mouseb = 0;
 			break;
-			
-		case fgl::CLICKRIGHTEVENT:
-			
-			break;
-			
-		case fgl::TERMINATEEVENT:
-			//on exit
-			break;
+		case FL_PUSH:
+			mouseb = Fl::event_button() & 3;
+			break;		
 	}
+}
+
+CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
+{
+	width = w;
+	height = h;
+	//title = t;
+	buffer = b;
+	
+	box(FL_NO_BOX);
+	hdelta = 4* height;
+	
+	Fl::visual(FL_RGB);
+	
+	this->end();
+	this->show();
+}
+
+CLwindow::~CLwindow() {}
+
+void CLwindow::redraw()
+{
+	Fl::redraw();
+}
+
+xlong CLwindow::run()
+{
+	//return Fl::run();
+	return Fl::wait();
+}
+
+xlong CLwindow::getkey()
+{
+	xlong temp = key;
+	key = 0;
+	return temp;
+}
+
+xlong CLwindow::getturbo()
+{
+	if(keyup == turbo)
+	{
+		turbo = 0;
+		keyup = 0;
+		return 0;
+	}
+	else
+	{
+		return turbo;
+	}
+}
+
+xlong CLwindow::getmousex()
+{
+	return mousex;
+}
+
+xlong CLwindow::getmousey()
+{
+	return mousey;
+}
+
+xlong CLwindow::getmouseb()
+{
+	return mouseb;
 }
 

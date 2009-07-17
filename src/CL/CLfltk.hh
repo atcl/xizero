@@ -104,8 +104,6 @@ class FLTKwindow : public Fl_Window
 			return tkeystate;
 		}
 	}
-
-	void setwindowtitle();
 };
 
 
