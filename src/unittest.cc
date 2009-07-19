@@ -23,7 +23,6 @@ int main(int argc, char** argv)
 
 	//init sequence
 	CLsetup();
-	FLTKsetup();
 	//***
 
 //
@@ -94,16 +93,16 @@ int main(int argc, char** argv)
 
 	CLobject* cubus = new CLobject(cube,0);
 
-	clfps->init();
+	clbench->init();
 
 	CLlvector p(400,300,100);
 
 	bool mode=false;
 
-	while(FLTKwait())
+	while(win->run())
 	{
 
-		switch(FLTKgetturbokeystate())
+		switch(win->getturbo())
 		{
 			case 0:
 			break;
@@ -223,7 +222,7 @@ int main(int argc, char** argv)
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-		//clgfx1->drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
+		CLgfx1::drawellipse(400,300,40,60,0x00FFFFFF);
 
 		//cubus->display(1,1,1,1,0,0);
 		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
@@ -233,7 +232,7 @@ int main(int argc, char** argv)
 
 		linearM->unit();
 
-		clfps->increment();
+		clbench->inc();
 	}
 
 	//exit sequence	

@@ -20,7 +20,7 @@ namespace CLmath
 	void init();
 	template<typename T> T sign(T x);
 	template<typename T> T heaviside(T x);
-	template<typename T> T absolute(T x);
+	template<typename T> T absolute(T x); //with logic operators, without ifs
 	template<typename T> T min(T a,T b);
 	template<typename T> T max(T a,T b);
 	template<typename T> T round(T x);

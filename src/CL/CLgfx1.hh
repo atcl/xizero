@@ -21,6 +21,7 @@ namespace CLgfx1
 	//~ xlong interval_s;
 
 	void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
+	void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 	uxlong readpixel(xlong x,xlong y);
 	void drawpixel(xlong x,xlong y,uxlong c);
 	void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
@@ -68,6 +69,17 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
  	(*CLdoublebuffer)[b2-a2+y] = c;
  	(*CLdoublebuffer)[b2+a2-y] = c;
  	(*CLdoublebuffer)[b2-a2-y] = c;
+}
+
+void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
+{
+	xlong a = (yc*xres)+xc;
+	xlong b = (y*xres);
+
+	(*CLdoublebuffer)[a+x+b] = c;
+	(*CLdoublebuffer)[a-x+b] = c;
+	(*CLdoublebuffer)[a-x-b] = c;
+	(*CLdoublebuffer)[a+x-b] = c;
 }
 
 uxlong CLgfx1::readpixel(xlong x,xlong y)
@@ -330,7 +342,54 @@ void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c)
 
 void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 {
-
+	xlong x = r1;
+	xlong y = 0;
+	xlong xd = r2 * r2 * (1 - (r1<<1));
+	xlong yd = r1 * r1;
+	xlong as = (r1 * r1)<<1;
+	xlong bs = (r2 * r2)<<1;
+	xlong ee = 0;
+	xlong sx = bs * r1;
+	xlong sy = 0;
+	
+	while(sx>sy)
+	{
+		drawellipsepixel(xc,yc,x,y,c);
+		y++;
+		sy += as;
+		ee += yd;
+		yd += as;
+		if( ((ee<<1) + xd) > 0 )
+		{
+			x--;
+			sx -= bs;
+			ee += xd;
+			xd += bs;
+		}
+	}
+	
+	x = 0;
+	y = r2;
+	xd = r2 * r2;
+	yd = r1 * r1 * (1-(r2<<1));
+	ee = 0;
+	sx = 0;
+	sy = as * r2;
+	while(sx <= sy)
+	{
+		drawellipsepixel(xc,yc,x,y,c);
+		x++;
+		sx += bs;
+		ee += xd;
+		xd += bs;
+		if( (ee<<1) + yd > 0 )
+		{
+			y--;
+			sy -= as;
+			ee += yd;
+			yd += as;
+		}
+	}
 }
 
 void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
