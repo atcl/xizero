@@ -82,7 +82,6 @@ CLlvector CLmisc3d::project(const clvector& v)
 	
 	if(v.z > 0)
 	{
-		//instead of xlong conversion rather use CLmath::round?
 		r.x = xlong( (prjx / v.z) * (v.x - 400)  ) +400;
 		r.y = xlong( (prjy / v.z) * (v.y - 300)  ) +300;
 		r.z = v.z; // + cleartrans;

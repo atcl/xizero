@@ -197,9 +197,8 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 	{
 		if(ppoint[x].z > 0)
 		{
-			//instead of xlong conversion rather use CLmath::round?
-			spoint[x].x = float(xlong( ( prjx * ppoint[x].x) / (ppoint[x].z) ) + px );
-			spoint[x].y = float(xlong( (-prjy * ppoint[x].y) / (ppoint[x].z) ) + py );
+			spoint[x].x = xlong( ( prjx * (ppoint[x].x / ppoint[x].z) ) + px );
+			spoint[x].y = xlong( (-prjy * (ppoint[x].y / ppoint[x].z) ) + py );
 			spoint[x].z = ppoint[x].z; // + cleartrans;
 		}
 		else
@@ -562,7 +561,6 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	{
 		if(ppoint[x].z > 0)
 		{
-			//instead of xlong conversion rather use CLmath::round?
 			spoint[x].x = float(xlong(  ppoint[x].x ) + p.x );
 			spoint[x].y = float(xlong( -ppoint[x].y ) + p.y );
 			spoint[x].z = ppoint[x].z; // + cleartrans;

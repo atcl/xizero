@@ -349,7 +349,7 @@ void CLlevel::display()
 			for(int j=0; j<blocksperscreenx; j++)
 			{
 				currentterrain = xlong(levellayers[0][blockmark+i][j]);
-				if(currentterrain != -1)
+				if(currentterrain!=-1)
 				{
 					currentheight = levellayers[1][blockmark+i][j];
 					currententity = levellayers[2][blockmark+i][j];
