@@ -26,6 +26,16 @@
 #define SHAPE   0b00000010
 #define DEBUG   0b00000001
 
+//bench flags
+#define FPS		 0b00000001
+#define RAM		 0b00000010
+#define VRAM	 0b00000100
+#define CPU		 0b00001000
+#define COUT_FPS 0b00010001
+#define COUT_RAM 0b00100010
+#define COUT_VRAM 0b01000100
+#define COUT_CPU 0b10001000
+
 //keycodes
 #define LEFT    81
 #define RIGHT   83

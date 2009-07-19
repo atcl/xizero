@@ -22,7 +22,6 @@ namespace CLsystem
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
 	CLfile* getfile(const xchar* fn,bool s=true);
-	xchar** getcsvfile(const char* fn);
 	void    print(const xchar* c,bool i=1);
 	void    print(const xlong l,bool i=1);
 	void    print(const float l,bool i=1);
@@ -84,60 +83,11 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 	re->lsize = re->size>>2;
 	fseek (of,0,SEEK_SET );
 	re->text = new xchar[re->size];
-	re->data = reinterpret_cast<xlong*>(&re->text[0]);
+	re->data = reinterpret_cast<xlong*>(&re->text[0]); //!
 	fread(re->text,1,re->size,of);
 	fclose(of);
 
 	return re;
-}
-
-xchar** CLsystem::getcsvfile(const char* fn)
-{
-	std::ifstream of;
-	char **bf;
-	uxlong vc = 0;
-
-	std::string line;
-	std::string value;
-	of.open(fn);
-	if( of.fail() ) exit(1,0,__func__,"cannot open file",fn);
-	
-	while( getline(of,line) )
-	{
-		std::istringstream csvstream(line);
-
-		while( getline(csvstream, value, ',') )
-		{
-			vc++;
-		}
-
-	}
-	bf = new char*[vc];
-	vc = 0;
-
-	of.close();
-	of.open(fn);
-	if( of.fail() ) exit(1,0,__func__,"cannot open file",fn);
-
-	while( getline(of,line) )
-	{
-		std::istringstream csvstream(line);
-
-		while( getline(csvstream, value, ',') )
-		{
-			bf[vc] = new char[4];
-			bf[vc][0] = value[0];
-			bf[vc][1] = value[1];
-			bf[vc][2] = value[2];
-			bf[vc][3] = value[3];
-			vc++;
-		}
-
-	}
-
-	of.close();
-
-	return bf;
 }
 
 void CLsystem::print(const xchar* c,bool i)

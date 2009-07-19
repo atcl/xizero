@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLconsts.hh"
 #include "CLmath.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
@@ -26,7 +27,7 @@ void CLsetup()
 	
 	win = new CLwindow(xres,yres,"atCROSSLEVEL",CLdoublebuffer->getbuffer());
 
-	clfps    = new CLfps(3,true);
+	clbench    = new CLbench(3,COUT_FPS);
 
 	CLmath::init();
 
@@ -45,7 +46,7 @@ void CLgarbage()
 	delete CLstencilbuffer;
 	delete CLzbuffer;
 
-	delete clfps;
+	delete clbench;
 
 	delete linearM;
 	delete shadowM;

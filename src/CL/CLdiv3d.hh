@@ -9,35 +9,86 @@
 #include "CLbuffer.hh"
 #include "CLvector.hh"
 #include "CLglobal.hh"
+#include "CLgfx1.hh"
+
 
 namespace CLmisc3d
 {
-	void draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db);
-	void draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa);
-	void drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db);
 	template<class clvector>CLlvector project(const clvector& v);
-	void drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db,xlong srcdis=0);
-	void drawlight();
+	template<class clvector>void draw3dpixel(clvector& p,uxlong c);
+	template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
+	template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
+	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
+	void drawfloor(xlong z, xlong w,uxlong c);
+};
+
+
+template<class clvector>
+CLlvector CLmisc3d::project(const clvector& v)
+{
+	CLlvector r;
+	
+	if(v.z > 0)
+	{
+		r.x = xlong( (prjx / v.z) * (v.x - 400)  ) +400;
+		r.y = xlong( (prjy / v.z) * (v.y - 300)  ) +300;
+		r.z = v.z; // + cleartrans;
+	}
+	
+	return r;
 }
 
-
-void CLmisc3d::draw3dpixel(xlong x,xlong y,xlong z,uxlong color,CLbuffer<xlong>* db)
+template<class clvector>
+void CLmisc3d::draw3dpixel(clvector p,uxlong c)
 {
-	if(x>0 && x<xres && y>0 && y<yres && z>0 && z<zres)
+	if(p.x>0 && p.x<xres && p.y>0 && p.y<yres && p.z>0 && p.z<zres)
 	{
-		xlong nx = xlong( ( 80 * x) / z) + (xres>>1);
-		xlong ny = xlong( (-95 * y) / z) + (yres>>1);
+		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
+		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
 
-		(*db)[(ny*xres)+nx] = color;
+		(*CLdoublebuffer)[(ny*xres)+nx] = c;
 	}
 }
 
-void CLmisc3d::draw3dline(xlong x1,xlong y1,xlong z1,xlong x2,xlong y2,xlong z2,uxlong color,CLbuffer<xlong>* db,bool aa)
+template<class clvector>
+void CLmisc3d::draw3dline(clvector p,clvector q,uxlong c,bool aa)
 {
+	if(p.z>0 && p.z<zres && q.z >0 && q.z<zres)
+	{
+		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
+		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
+		
+		xlong ox = xlong( ( 80 * q.x) / q.z) + (xres>>1);
+		xlong oy = xlong( (-95 * q.y) / q.z) + (yres>>1);
 
+		if(aa) CLgfx1::drawantiline(nx,ny,ox,oy,c);
+		else   CLgfx1::drawanyline(nx,ny,ox,oy,c);
+	}
 }
 
-void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<xlong>* db)
+template<class clvector>
+void CLmisc3d::drawlight(clvector& p,xlong i,uxlong c)
+{
+	
+}
+
+void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
+{
+	float z;
+	
+	if(zb==0) zb = CLzbuffer;
+
+	for(int i=0; i<yres-1;i++)
+	{
+		for(int j=0; j<xres-1; j++)
+		{
+			z = (*zb)[(i*xres)+j+srcdis] * 4;
+			(*CLdoublebuffer)[(i*xres)+j] = z;
+		}
+	}
+}
+
+void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c)
 {
 	//shade floor
 	doubleword argb = { 0 };
@@ -55,7 +106,6 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<
 	s = argb.dd;
 	//
 	
-	
 	//!!!optimize up the for-loops !!! causes 60fps drop!!!!!!!!! 
 
 	//draw screen
@@ -69,44 +119,11 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c,CLbuffer<float>* zb,CLbuffer<
 	{
 		for(int j=yres-1; j>=0; j--)
 		{
-			(*db)[(j*xres)+(x1+i)] = s;
-			(*zb)[(j*xres)+(x1+i)] = z;
+			(*CLdoublebuffer)[(j*xres)+(x1+i)] = s;
+			(*CLzbuffer)[(j*xres)+(x1+i)] = z;
 		}
 	}
 }
 
-template<class clvector>
-CLlvector CLmisc3d::project(const clvector& v)
-{
-	CLlvector r;
-	
-	if(v.z > 0)
-	{
-		r.x = xlong( (prjx / v.z) * (v.x - 400)  ) +400;
-		r.y = xlong( (prjy / v.z) * (v.y - 300)  ) +300;
-		r.z = v.z; // + cleartrans;
-	}
-	
-	return r;
-}
-
-void CLmisc3d::drawzbuffer(CLbuffer<float>* zb,CLbuffer<xlong>* db,xlong srcdis)
-{
-	float z;
-
-	for(int i=0; i<yres-1;i++)
-	{
-		for(int j=0; j<xres-1; j++)
-		{
-			z = (*zb)[(i*xres)+j+srcdis] * 4;
-			(*db)[(i*xres)+j] = z;
-		}
-	}
-}
-
-void CLmisc3d::drawlight()
-{
-	
-}
 
 #endif

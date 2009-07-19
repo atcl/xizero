@@ -13,14 +13,15 @@ int main()
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemies/enemies.a","../dat/enemies/enemydat.a","../dat/player/player.a","../dat/level/level0.a");
 
-	clfps->init();
+	clbench->init();
 
 	xchar input = 0;
 	xchar turbo = 0;
 	xlong mode  = 1;
 	xlong dis   = 0;
+	bool running  = 1;
 
-	while(win->run()) 
+	while(running && win->run()) 
 	{
 		turbo = win->getturbo();
 		input = win->getkey();
@@ -28,6 +29,7 @@ int main()
 		switch(turbo)
 		{
 			case '0':
+				running = 0;
 				delete testlevel;
 				CLsystem::exit(0,0,__func__,"xizero says: bye");
 			break;
@@ -56,27 +58,25 @@ int main()
 		switch(mode)
 		{
 			case 1: 
-				CLmisc3d::drawfloor(100,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawfloor(100,670,0x0000b0b0);
 				testlevel->display();
 				break;
 
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
-				CLmisc3d::drawzbuffer(testlevel->getlandscape(),CLdoublebuffer,dis);
+				CLmisc3d::drawzbuffer(testlevel->getlandscape(),dis);
 				(*testlevel->getlandscape())[ (xlong(tv.y)*xres) + xlong(tv.x) ] = 0x000FFFFFF;
 				(*testlevel->getlandscape())[ (xlong(lv.y)*xres) + xlong(lv.x) ] = 0x000FFFF00; 
 				break;
 
 			case 3:
-				CLmisc3d::drawfloor(100,670,0x0000b0b0,CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawfloor(100,670,0x0000b0b0);
 				testlevel->display();
-				CLmisc3d::drawzbuffer(CLzbuffer,CLdoublebuffer);
+				CLmisc3d::drawzbuffer();
 				break;
 		}
 		
-		clfps->increment();
-		
-		win->redraw();
+		clbench->inc();		
 	}
 
 	return 0;

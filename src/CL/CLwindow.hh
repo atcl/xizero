@@ -9,6 +9,12 @@
 
 #include "CLtypes.hh"
 
+void timeout(void*)
+{
+	Fl::redraw();
+	Fl::repeat_timeout(0.02,timeout);
+}
+
 class CLwindow : public Fl_Window
 {
 	private:
@@ -81,6 +87,7 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
 	hdelta = 4* width;
 	
 	Fl::visual(FL_RGB);
+	Fl::add_timeout(0.02,timeout);
 	
 	this->end();
 	this->show();

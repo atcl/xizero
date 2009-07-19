@@ -7,6 +7,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLbuffer.hh"
+#include "CLgfx2.hh"
 
 
 class CLconio : public virtual CLcl

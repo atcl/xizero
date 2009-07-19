@@ -29,7 +29,7 @@ CLfvector cllight(1,1,-1);
 CLmatrix* linearM;
 CLmatrix* shadowM;
 
-CLfps*    clfps;
+CLbench*    clbench;
 
 //temp:
 xlong xmark;

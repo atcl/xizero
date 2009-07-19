@@ -1,15 +1,15 @@
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
-#ifndef HH_CLFPS
-#define HH_CLFPS
+#ifndef HH_CLBENCH
+#define HH_CLBENCH
 #pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval correct"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLapi.hh"
 
-
-class CLfps : public virtual CLcl
+//rename file to CLbench.hh
+class CLbench : public virtual CLcl
 {
 	private:
 		xlong framespersecond;
@@ -18,42 +18,36 @@ class CLfps : public virtual CLcl
 		xlong temptime;
 		xlong frames;
 		xlong lastupdate;
+		
 		xlong interval;
-		bool output;
-		xlong* out;
+		xchar flags;
 		
 	public:
-		CLfps(xlong i,bool o);
-		CLfps(xlong i,bool o,xlong* outtoo);
-		~CLfps();
+		CLbench(xlong i,xchar flags);
+		~CLbench();
 		void init();
-		void increment();
-		float get();
+		void inc();
+		float getfps();
+		void print();
 };
 
-CLfps::CLfps(xlong i,bool o)
+
+CLbench::CLbench(xlong i,xchar f)
 {
 	interval = i*1000;
-	output = o;
+	flags = f;	
 }
 
-CLfps::CLfps(xlong i,bool o,xlong* outtoo)
-{
-	interval = i*1000;
-	output = o;
-	out = outtoo;
-}
+CLbench::~CLbench() { }
 
-CLfps::~CLfps() { }
-
-void CLfps::init()
+void CLbench::init()
 {
 	frames = 0;
 	lastupdate = CLsystem::getmilliseconds();
 	elapsedtime = 0;
 }
 
-void CLfps::increment()
+void CLbench::inc()
 {
 	frames++;
 	currenttime = CLsystem::getmilliseconds();
@@ -63,14 +57,7 @@ void CLfps::increment()
 	if(temptime >= interval)
 	{
 		framespersecond = xlong(frames*1000/temptime);
-
-		if(output==true)
-		{
-			CLsystem::print("fps: ",0);
-			CLsystem::print(framespersecond);
-			//cout << "fps: " << framespersecond << endl;
-		}
-
+		print();
 		frames = 0;
 		elapsedtime = 0;
 	}
@@ -78,9 +65,32 @@ void CLfps::increment()
 	lastupdate = currenttime;
 }
 
-float CLfps::get()
+float CLbench::getfps()
 {
 	return framespersecond;
+}
+
+void CLbench::print()
+{
+		if(flags & COUT_FPS)
+		{
+			CLsystem::print("fps: ",0);
+			CLsystem::print(framespersecond);
+		}
+		
+		//~ if(flags & COUT_RAM)
+		//~ {
+			//~ CLsystem::print("ram: ",0);
+			//~ CLsystem::print( float(usedmem/1048576),0);
+			//~ CLsystem::print("MB");
+		//~ }
+		//~ 
+		//~ if(flags & COUT_VRAM)
+		//~ {
+			//~ CLsystem::print("vram: ",0);
+			//~ CLsystem::print( float(usedvmem/1048576),0);
+			//~ CLsystem::print("MB");
+		//~ }
 }
 
 #endif

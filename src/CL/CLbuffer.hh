@@ -62,7 +62,7 @@ template <typename T>void CLbuffer<T>::fastclear(xlong v)
 
 template <typename T>void CLbuffer<T>::ultraclear(xlong v)
 {
-	xlong puredst = reinterpret_cast<xlong>(&buffer[0]);
+	xlong puredst = reinterpret_cast<xlong>(&buffer[0]); //!
 
 __asm__ __volatile__ ( \
 			"cld\n\t" \
@@ -97,8 +97,8 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
 	//add prefetch 
 
-	xlong puresrc = reinterpret_cast<xlong>(&buffer[0]);
-	xlong puredst = reinterpret_cast<xlong>(&dst[0]);
+	xlong puresrc = reinterpret_cast<xlong>(&buffer[0]); //!
+	xlong puredst = reinterpret_cast<xlong>(&dst[0]);    //!
 
 __asm__ __volatile__ ( \
 			"cld\n\t" \

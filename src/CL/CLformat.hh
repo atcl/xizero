@@ -27,8 +27,8 @@ namespace CLformat
 	xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
 	sprite* loadtga(CLfile* sf);
 	
-	sprites* loadtileset(CLfile* sf);
-	sprites* loadfont(CLfile* sf);
+	sprites* loadtileset(CLfile* sf,xlong tw,xlong th,xlong pr);
+	sprites* loadfont(CLfile* sf,xlong fw,xlong fh);
 	xlong** loadlvl();
 	xlong** loadini();
 }
@@ -36,6 +36,10 @@ namespace CLformat
 
 xchar** CLformat::loadcsv(CLfile* sf)
 {
+	//count lines
+	//for each line count commas
+	//copy symbols between commas to seperate char arrays (remove leading and trailing spaces)
+	
 	return 0;
 }
 
@@ -172,7 +176,7 @@ arfile* CLformat::loadar(CLfile* sf)
 			xlong fs2 = fs>>2;
 
 			xlong* tb = new xlong[fs2+1];
-			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]);
+			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]); //!
 
 			for(int i=0; i<fs2+1; i++)
 			{
@@ -187,7 +191,7 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc]->lsize = fs2;
 			tindex[fc]->name = new xchar[16]; CLutils::copychararray(tindex[fc]->name,&fn[0],16);
 			tindex[fc]->data = tb;
-			tindex[fc]->text = reinterpret_cast<xchar *>(&tb[0]);
+			tindex[fc]->text = reinterpret_cast<xchar *>(&tb[0]); //!
 			//tindex[fc] contains complete armember
 
 			if(fs%4!=0) tsize -= (4 - (fs % 4)); //if filesize % 4 != 0 adjust
@@ -339,19 +343,97 @@ sprite* CLformat::loadtga(CLfile* sf)
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
 	r->height = imageheight;
-	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset);
+	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
 
 	return r;
 }
 
-sprites* CLformat::loadtileset(CLfile* sf)
+sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th,xlong pr)
 {
-	return 0;
+//loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
+
+	xchar* bf = sf->text;
+
+	//xchar	imageid		= bf[0];
+
+	//xchar	colormap	= bf[1];
+	xchar	imagetype	= bf[2];
+
+	if(imagetype > 2) return 0; //no TGA!
+
+	//xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
+	//xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
+	//xchar	colormaprentry	= bf[7];
+
+	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
+	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
+	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
+	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
+	//xchar	imagepixelsize	= bf[16];
+
+	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
+
+	//xchar	imagedescriptor	= bf[17];
+
+	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
+
+	//xshort imageoffset = imageid + colormaplength;
+
+	sprites* r = new sprites;
+	r->size = imagewidth * imageheight;
+	r->width = imagewidth;
+	r->height = imageheight;
+	r->tilesize = tw * th;
+	r->tilewidth = tw;
+	r->tileheight = th;
+	r->perrow = pr;
+	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+
+	return r;
 }
 
-sprites* CLformat::loadfont(CLfile* sf)
+sprites* CLformat::loadfont(CLfile* sf,xlong fw,xlong fh)
 {
-	return 0;
+//loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
+
+	xchar* bf = sf->text;
+
+	//xchar	imageid		= bf[0];
+
+	//xchar	colormap	= bf[1];
+	xchar	imagetype	= bf[2];
+
+	if(imagetype > 2) return 0; //no TGA!
+
+	//xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
+	//xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
+	//xchar	colormaprentry	= bf[7];
+
+	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
+	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
+	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
+	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
+	//xchar	imagepixelsize	= bf[16];
+
+	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
+
+	//xchar	imagedescriptor	= bf[17];
+
+	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
+
+	//xshort imageoffset = imageid + colormaplength;
+
+	sprites* r = new sprites;
+	r->size = imagewidth * imageheight;
+	r->width = imagewidth;
+	r->height = imageheight;
+	r->tilesize = fw * fh;
+	r->tilewidth = fw;
+	r->tileheight = fh;
+	r->perrow = 256;
+	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+
+	return r;
 }
 
 xlong** CLformat::loadlvl()
