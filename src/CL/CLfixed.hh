@@ -20,7 +20,7 @@ union xfixed
 			xfixed& operator=(xfixed &a);
 			xfixed& operator=(xshort& a);
 			
-			xfixed operator-();
+			xfixed& operator-();
 			
 			xfixed& operator++();
 			xfixed& operator--();
@@ -79,6 +79,11 @@ xfixed& xfixed::operator=(xshort &a)
 	this->p.num = a;
 	this->p.frc = 0;
 	return *this;
+}
+
+xfixed& xfixed::operator-()
+{
+	this->p.num = -this->p.num;
 }
 
 //friends:

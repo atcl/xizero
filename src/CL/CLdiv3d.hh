@@ -30,8 +30,8 @@ CLlvector CLmisc3d::project(const clvector& v)
 	
 	if(v.z > 0)
 	{
-		r.x = xlong( (prjx / v.z) * (v.x - 400)  ) +400;
-		r.y = xlong( (prjy / v.z) * (v.y - 300)  ) +300;
+		r.x = xlong( (prjx / v.z) * (v.x - 400) ) + 400;
+		r.y = xlong( (prjy / v.z) * (v.y - 300) ) + 300;
 		r.z = v.z; // + cleartrans;
 	}
 	
@@ -78,13 +78,19 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 	
 	if(zb==0) zb = CLzbuffer;
 
+	xlong ii = 0;
+	xlong tt = 0;
+
 	for(int i=0; i<yres-1;i++)
 	{
 		for(int j=0; j<xres-1; j++)
 		{
-			z = (*zb)[(i*xres)+j+srcdis] * 4;
-			(*CLdoublebuffer)[(i*xres)+j] = z;
+			tt = ii + j;
+			z = (*zb)[tt+srcdis] * 4;
+			(*CLdoublebuffer)[tt] = z;
 		}
+		
+		ii +=xres;
 	}
 }
 
@@ -112,16 +118,20 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c)
 	xlong x1 = (xres-w)>>1;
 	xlong x2 = xres-((xres-w)>>1);
 	
-	
+	xlong ii = 0;
+	xlong tt = 0;
 	
 	//draw filled rectangle and fill zbuffer
-	for(int i=(x2-x1)-1; i>=0; i--)
+	for(int i=0; i<yres; i++)
 	{
-		for(int j=yres-1; j>=0; j--)
+		for(int j=0; j<(x2-x1); j++)
 		{
-			(*CLdoublebuffer)[(j*xres)+(x1+i)] = s;
-			(*CLzbuffer)[(j*xres)+(x1+i)] = z;
+			tt = ii+x1+j;
+			(*CLdoublebuffer)[tt] = s;
+			(*CLzbuffer)[tt] = z;
 		}
+		
+		ii += xres;
 	}
 }
 

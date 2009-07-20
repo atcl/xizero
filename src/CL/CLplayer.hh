@@ -45,7 +45,7 @@ class CLplayer : public virtual CLcl
 		xlong active;
 		xlong points;
 		xlong firing;
-		float lastupdate;
+		xlong lastupdate;
 
 		void setspeed();
 		void fire(xlong at);
@@ -58,7 +58,7 @@ class CLplayer : public virtual CLcl
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p=0);
 		~CLplayer();
 
-		void update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
+		xlong update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
 		void display();
 		void setxyz(xlong x,xlong y,xlong z);
 		xlong gethealth();
@@ -126,7 +126,7 @@ void CLplayer::transform(bool m)
 {
 	//bool decides what part, if complete or only tower
 
-	if(m==false)
+	if(m==0)
 	{
 		//transform model(s)
 		model[0]->update(cllinear);
@@ -186,11 +186,11 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		r++;
 	}
 	
-	tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+	//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
 	//if(zdiff!=0) CLsystem::print(zdiff);
 	
 	//rotate x about xangle,y about yangle
-	cllinear->rotate(xangle,0,0);
+	//cllinear->rotate(xangle,0,0);
 	//if(xangle!=0) CLsystem::print(xangle);
 	//if(yangle!=0) CLsystem::print(yangle);
 
@@ -299,7 +299,7 @@ CLplayer::~CLplayer()
 	delete ammolist;
 }
 
-void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
 	switch(input)
 	{
@@ -313,16 +313,6 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 			else { gear=-1; setspeed(); }
 		break;	
 	}
-	
-	float temp = CLsystem::getmilliseconds();
-	if(temp >= lastupdate + 20)
-	{
-		tposition.x = position.x - speed.x;
-		tposition.y = position.y + speed.y;
-		tposition.z = position.z + speed.z;
-		
-		lastupdate = temp;		
-	}
 
 	cllinear->unit();
 
@@ -331,11 +321,13 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 81: //arrow left -> turn left
 			cllinear->rotate(0,0,5);
 			pretransform(0);	
+			setspeed();
 		break;
 
 		case 83: //arrow right -> turn right
 			cllinear->rotate(0,0,-5);
 			pretransform(0);
+			setspeed();
 		break;
 
 		case 97: //a -> turn tower left
@@ -366,11 +358,21 @@ void CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	
 	xmark = mark;
 
+	xlong temp = CLsystem::getmilliseconds();
+	if(temp >= lastupdate + 20)
+	{
+		tposition.x = position.x - speed.x;
+		tposition.y = position.y + speed.y;
+		tposition.z = position.z + speed.z;
+		
+		lastupdate = temp;	
+	}
+
 	if(collision(ll,mark)==0)
 	{	
 		transform(0);
-		setspeed();
-		position = tposition; 
+		
+		position = tposition;
 		
 		position.y -= mark;
 		sposition = CLmisc3d::project(position);
