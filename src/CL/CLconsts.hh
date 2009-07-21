@@ -46,6 +46,10 @@
 #define CTRL    -29
 #define ENTER   13
 
+//CPUFLAGS
+#define MMXFLAG 0b00000000100000000000000000000000
+#define SSEFLAG 0b00000010000000000000000000000000
+
 //3d engine consts
 #define prjx 80
 #define prjy 95

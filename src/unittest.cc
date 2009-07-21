@@ -20,6 +20,11 @@ int main(int argc, char** argv)
 	{
 		argfile = argv[1];
 	}
+	
+	bool m=0;
+	bool s=0;
+	detectCPU(m,s);
+	CLsystem::print(m); CLsystem::print(s);
 
 	//init sequence
 	CLsetup();

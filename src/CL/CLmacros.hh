@@ -35,15 +35,27 @@ void inline bye()
 	CLsystem::exit(0,0,__func__,"bye");
 }
 
-void inline CLstosd(xlong* dst,xlong val,xlong cnt)
+void inline CLstosd(xlong* dst,xlong val)
 {
-	memset(dst,val,cnt);
+	 __asm__ __volatile__("stosd": :"a"(val),"D"(dst):"%eax","%edi");
 }
 
-void inline CLmovsd(xlong* dst,void* src,xlong cnt)
+void inline CLlodsd(xlong* src,xlong& var)
 {
-	memcpy(dst,src,cnt);
+	__asm__ __volatile__("lodsd":"=a"(var):"S"(src):"%eax","%esi");
 }
+
+//move to CLdetect
+void detectCPU(bool& mmx,bool& sse)
+{
+	xlong edx;
+	
+	__asm__ __volatile__ ("cpuid":"=d"(edx):"a"(1));
+	
+	if(edx&MMXFLAG) mmx=1;
+	if(edx&SSEFLAG) sse=1;
+}
+//*
 
 #endif
 

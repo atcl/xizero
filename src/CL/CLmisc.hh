@@ -62,23 +62,17 @@ xlong getmousey();
 xlong getmouseb1();
 xlong getmouseb2();
 
-
 //console: clk,end,info,ver,mem,set,run,see,
 
+void detectCPU(bool& mmx,bool& sse)
+{
+	xlong edx;
+	
+	__asm__ __volatile__ ("cpuid":"=d"(edx):"a"(1));
+	
+	if(edx&MMXFLAG) mmx=1;
+	if(edx&SSEFLAG) sse=1;
+}
 
 #endif
-
-//old functions, just for reference:
-
-//from level-constructor, display a level:
-// 	for(int s=0; s<levelheight ;s++)
-// 	{
-// 		for(int t=0; t<levelwidth ;t++)
-// 		{
-// 			cout << xchar(levellayers[0][s][t]+20) << " ";
-// 		}
-// 		cout << endl;
-// 	}
-// 	cout << endl;
-//*
 
