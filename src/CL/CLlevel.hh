@@ -275,8 +275,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	if(startposfound==false) CLsystem::exit(1,0,__func__,"no player start position found in entity map");
 
 	clplayer = new CLplayer(playerm,playern,playerd,playerp,smoothmark);
-	
-	oy = clplayer->gety();
 
 //***
 
@@ -315,17 +313,19 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 CLlevel::~CLlevel()
 {
 	delete clplayer;
+	delete cllinear;
+	delete levellandscape;
 }
 
 void CLlevel::update(xchar input,xchar turbo)
 {
-	//this is why it shakes
+	clplayer->update(input,turbo,levellandscape,smoothmark);
+	
 	xlong tempy = 3*(yres>>2);
 	xlong py = clplayer->gety();
-	if( (py<smoothlevelheight+tempy) && (py>tempy) ) subsmark(smoothmark+tempy-py);
-	//
-	
-	clplayer->update(input,turbo,levellandscape,smoothmark);
+	if(py<tempy) setmark(smoothmarkmin);
+	else if(py>(smoothmarkmax+tempy)) setmark(smoothmarkmax);
+	else setmark(py - tempy);
 }
 
 void CLlevel::display()
@@ -387,7 +387,7 @@ void CLlevel::display()
 	//
 
 	//display player:
-	clplayer->display();
+	clplayer->display(smoothmark);
 	//
 	
 	//display enemies:
@@ -409,6 +409,7 @@ void CLlevel::subsmark(xlong m)
 void CLlevel::setmark(xlong m)
 {
 	smoothmark = m;
+	blockmark = smoothmark / blockheight;
 }
 
 xlong CLlevel::getmark()

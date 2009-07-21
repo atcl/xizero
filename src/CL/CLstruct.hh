@@ -75,26 +75,26 @@ struct every
 
 	xlong last;      //last time done;
 
-	every(void(*f)(),xlong i,xlong t,xlong d)
-	{
-		function = f;
-		interval = i;
-		times = t;
-		id = d;
-
-		last = 0;
-		count = 0;
-		active = true;
-	}
+	//~ every(void(*f)(),xlong i,xlong t,xlong d)
+	//~ {
+		//~ function = f;
+		//~ interval = i;
+		//~ times = t;
+		//~ id = d;
+//~ 
+		//~ last = 0;
+		//~ count = 0;
+		//~ active = true;
+	//~ }
 };
 
-struct exe
-{
-	xchar*  name;
-	xchar*  title;
-	xlong   size;
-	xlong   version;
-	sprite* splash;
-};
+//~ struct exe
+//~ {
+	//~ xchar*  name;
+	//~ xchar*  title;
+	//~ xlong   size;
+	//~ xlong   version;
+	//~ sprite* splash;
+//~ };
 
 #endif

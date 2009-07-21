@@ -86,6 +86,11 @@ xfixed& xfixed::operator-()
 	this->p.num = -this->p.num;
 }
 
+xfixed& xfixed::operator++()
+{
+	this->p.num += 1; 
+}
+
 //friends:
 
 xfixed operator+(short& a,xfixed& b)

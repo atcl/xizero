@@ -34,7 +34,7 @@ struct CLvector
 	CLvector& operator-=(const CLvector& a);		//vector subtraction
 	CLvector& operator*=(T c);						//scalar multiplication
 
-	CLvector& operator=(const CLvector a);			//vector vector assignment //?argument as reference?
+	CLvector& operator=(const CLvector& a);			//vector vector assignment
 	CLvector& operator=(T c);						//scalar vector assignment
 		      operator CLvector<float>() const;		//cast
 			  
@@ -135,7 +135,7 @@ CLvector<T> CLvector<T>::operator-()
 
 //vector vector assignment:
 template<typename T>
-CLvector<T>& CLvector<T>::operator=(const CLvector<T> a)
+CLvector<T>& CLvector<T>::operator=(const CLvector<T>& a)
 {
 	this->x = a.x;
 	this->y = a.y;

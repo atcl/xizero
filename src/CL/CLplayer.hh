@@ -59,7 +59,7 @@ class CLplayer : public virtual CLcl
 		~CLplayer();
 
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
-		void display();
+		void display(xlong m);
 		void setxyz(xlong x,xlong y,xlong z);
 		xlong gethealth();
 		xlong getshield();
@@ -391,8 +391,12 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	}
 }
 
-void CLplayer::display()
+void CLplayer::display(xlong m)
 {
+	position.y -= m;
+	sposition = CLmisc3d::project(position);
+	position.y += m;
+	
 	model[0]->display(sposition,FLAT + AMBIENT);
 
 	//temp!
