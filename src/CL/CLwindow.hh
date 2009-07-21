@@ -36,8 +36,8 @@ class CLwindow : public Fl_Window
 	public:
 		CLwindow(xlong w,xlong h,const xchar* t,xlong* b);
 		~CLwindow();
-		void redraw();
-		xlong run();
+		static void redraw();
+		static xlong run();
 		xlong getkey();
 		xlong getturbo();
 		xlong getmousex();

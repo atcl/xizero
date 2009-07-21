@@ -15,6 +15,9 @@ class CLexplosion : public virtual CLcl
 {
 	protected:
 		CLobject* object;
+		CLmatrix* cllinear;
+		CLlvector a;
+		CLlvector b;
 
 	private:
 		float last_time;
@@ -32,20 +35,26 @@ class CLexplosion : public virtual CLcl
 
 CLexplosion::CLexplosion(CLobject* o)
 {
+	cllinear = new CLmatrix(1);
 	object = o;
 	step = 0;
+	
+	a(-2,1,0);
+	b(2,-1,0);
+	
+	cllinear->dyadic(a,b);
 }
 
 CLexplosion::~CLexplosion() { }
 
 void CLexplosion::draw()
 {
-
+	o->update(cllinear);
 }
 
 void CLexplosion::next()
 {
-
+	
 }
 
 #endif

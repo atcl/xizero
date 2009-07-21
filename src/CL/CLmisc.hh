@@ -64,15 +64,10 @@ xlong getmouseb2();
 
 //console: clk,end,info,ver,mem,set,run,see,
 
-void detectCPU(bool& mmx,bool& sse)
-{
-	xlong edx;
-	
-	__asm__ __volatile__ ("cpuid":"=d"(edx):"a"(1));
-	
-	if(edx&MMXFLAG) mmx=1;
-	if(edx&SSEFLAG) sse=1;
-}
+//CLversion
+//ASCIImissile
+//CLxml
+
 
 #endif
 
