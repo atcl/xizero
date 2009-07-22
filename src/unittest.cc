@@ -205,6 +205,11 @@ int main(int argc, char** argv)
 				CLsystem::exit(rval,0,"user","exit");
 			break;
 		}
+		
+		switch(win->getkey())
+		{
+			
+		}
 
 		//render sequence:
 		//1. all non shadow objects (floor,terrain)

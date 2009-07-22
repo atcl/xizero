@@ -27,6 +27,7 @@ class CLexplosion : public virtual CLcl
 		xlong lastupdate;
 		xlong interval;
 		xlong step;
+		float transdir;
 
 	public:
 		CLexplosion(CLobject* o);
@@ -41,11 +42,13 @@ CLexplosion::CLexplosion(CLobject* o)
 	object = o;
 	step = 0;
 	interval = 30;
+	transdir = 1.1f;
 	
-	a = CLfvector(1.0f,0.0f,0.0f);
-	b = CLfvector(1.0f,0.0f,0.0f);
+	a = CLfvector(1,0.5,0.3);
+	b = CLfvector(-1,0,1);
 	
-	cllinear->dyadic(a,b);
+	//cllinear->dyadic(a,b);
+	//cllinear->shear(0,0,0.1);
 }
 
 CLexplosion::~CLexplosion() { }
@@ -55,11 +58,16 @@ void CLexplosion::next()
 	xlong temp = CLsystem::getmilliseconds();
 	if(temp >= lastupdate + interval)
 	{
+		cllinear->transpone();
+		cllinear->shear(0.1,0,0);
+		cllinear->shear(0.1,0.1,0);
 		object->update(cllinear);
 		
-		//object->translatealongnormals(1.1);
+		//object->translatealongnormals(transdir);
 		
-		lastupdate = temp;	
+		lastupdate = temp;
+		interval++;
+		//~ if(interval>50 && transdir>0) transdir*=-1;
 	}
 }
 
