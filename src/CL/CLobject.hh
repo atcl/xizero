@@ -52,7 +52,7 @@ class CLobject : public virtual CLcl
 		xlong getname();
 		CLlvector* getdockingpoint(xlong i);
 		CLlvector* getdockingpoint(xlong t,xlong i);
-		void translatealongnormals(float size);
+		void translatealongnormals(float speed);
 		CLbox* getboundingbox();
 		void reset();
 };
@@ -318,16 +318,16 @@ CLlvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point o
 	else return dockptr[c]; 
 }
 
-void CLobject::translatealongnormals(float size)
+void CLobject::translatealongnormals(float speed)
 {
 	CLfvector t;
 
 	for(int i=0;i<polycount;i++)
 	{
 		t = polyptr[i]->getnormal();
-		t.x = (t.x / !t) * size;
-		t.y = (t.y / !t) * size;
-		t.z = (t.z / !t) * size;
+		t.x = (t.x / !t) * speed;
+		t.y = (t.y / !t) * speed;
+		t.z = (t.z / !t) * speed;
 
 		polyptr[i]->add(t);
 	}

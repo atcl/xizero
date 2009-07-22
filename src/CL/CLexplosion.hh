@@ -5,7 +5,11 @@
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
+#include "CLvector.hh"
+#include "CLmatrix.hh"
+#include "CLobject.hh"
 #include "CLcl.hh"
+#include "CLapi.hh"
 
 
 //combine "translate along normals" + "dyadic product"
@@ -16,12 +20,11 @@ class CLexplosion : public virtual CLcl
 	protected:
 		CLobject* object;
 		CLmatrix* cllinear;
-		CLlvector a;
-		CLlvector b;
+		CLfvector a;
+		CLfvector b;
 
 	private:
-		float last_time;
-		float curr_time;
+		xlong lastupdate;
 		xlong interval;
 		xlong step;
 
@@ -29,7 +32,6 @@ class CLexplosion : public virtual CLcl
 		CLexplosion(CLobject* o);
 		~CLexplosion();
 
-		void draw();
 		void next();
 };
 
@@ -38,23 +40,27 @@ CLexplosion::CLexplosion(CLobject* o)
 	cllinear = new CLmatrix(1);
 	object = o;
 	step = 0;
+	interval = 30;
 	
-	a(-2,1,0);
-	b(2,-1,0);
+	a = CLfvector(1.0f,0.0f,0.0f);
+	b = CLfvector(1.0f,0.0f,0.0f);
 	
 	cllinear->dyadic(a,b);
 }
 
 CLexplosion::~CLexplosion() { }
 
-void CLexplosion::draw()
-{
-	o->update(cllinear);
-}
-
 void CLexplosion::next()
 {
-	
+	xlong temp = CLsystem::getmilliseconds();
+	if(temp >= lastupdate + interval)
+	{
+		object->update(cllinear);
+		
+		//object->translatealongnormals(1.1);
+		
+		lastupdate = temp;	
+	}
 }
 
 #endif

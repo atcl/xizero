@@ -20,11 +20,6 @@ int main(int argc, char** argv)
 	{
 		argfile = argv[1];
 	}
-	
-	bool m=0;
-	bool s=0;
-	detectCPU(m,s);
-	CLsystem::print(m); CLsystem::print(s);
 
 	//init sequence
 	CLsetup();
@@ -76,11 +71,6 @@ int main(int argc, char** argv)
 			//CLmenu testmenu = new CLmenu();
 			
 	//*
-	
-	CLfvector aa(1,0,0);
-	CLfvector bb(1,1,0);
-	
-	std::cout << (aa % bb) << std::endl;
 
 	CLfile* cube;
 	
@@ -97,6 +87,8 @@ int main(int argc, char** argv)
 	}
 
 	CLobject* cubus = new CLobject(cube,0);
+
+	CLexplosion* ex = new CLexplosion(cubus);
 
 	clbench->init();
 
@@ -203,6 +195,9 @@ int main(int argc, char** argv)
 				if(mode==false) mode=true;
 				else mode=false;
 			break;
+			case '#':
+				ex->next();
+			break;
 
 			//System:
 			case '0':
@@ -227,7 +222,6 @@ int main(int argc, char** argv)
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-		CLgfx1::drawellipse(400,300,40,60,0x00FFFFFF);
 
 		//cubus->display(1,1,1,1,0,0);
 		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);

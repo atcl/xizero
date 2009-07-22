@@ -25,6 +25,7 @@ class CLmatrix : public virtual CLcl
 		void translate(xlong x,xlong y,xlong z);
 		void scale(float x,float y,float z);
 		void aspectscale(float x);
+		void superscale(float x);
 		template<class clvector>clvector transform(const clvector& t);
 		void clear(xlong i);
 		void zero();
@@ -114,6 +115,14 @@ void CLmatrix::scale(float x,float y,float z)
 void CLmatrix::aspectscale(float x)
 {
 	multiplicate(x,0,0,0,0,x,0,0,0,0,x,0,0,0,0,1);
+}
+
+void CLmatrix::superscale(float x)
+{
+	m[0][0] *= x; m[0][1] *= x; m[0][2] *= x; m[0][3] *= x;
+	m[1][0] *= x; m[1][1] *= x; m[1][2] *= x; m[1][3] *= x;
+	m[2][0] *= x; m[2][1] *= x; m[2][2] *= x; m[2][3] *= x;
+	m[3][0] *= x; m[3][1] *= x; m[3][2] *= x; m[3][3] *= x;
 }
 
 template<class clvector>
