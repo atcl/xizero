@@ -99,15 +99,14 @@ void CLplayer::hurt(xlong am)
 
 void CLplayer::pretransform(bool m)
 {
-		//as soon as 2nd part avail activate
-		//~ boundingbox[1]->b1 = cllinear->transform(boundingbox[1]->b1);
-		//~ boundingbox[1]->b2 = cllinear->transform(boundingbox[1]->b2);
-		//~ boundingbox[1]->b3 = cllinear->transform(boundingbox[1]->b3);
-		//~ boundingbox[1]->b4 = cllinear->transform(boundingbox[1]->b4);
-		//~ boundingbox[1]->t1 = cllinear->transform(boundingbox[1]->t1);
-		//~ boundingbox[1]->t2 = cllinear->transform(boundingbox[1]->t2);
-		//~ boundingbox[1]->t3 = cllinear->transform(boundingbox[1]->t3);
-		//~ boundingbox[1]->t4 = cllinear->transform(boundingbox[1]->t4);
+		boundingbox[1]->b1 = cllinear->transform(boundingbox[1]->b1);
+		boundingbox[1]->b2 = cllinear->transform(boundingbox[1]->b2);
+		boundingbox[1]->b3 = cllinear->transform(boundingbox[1]->b3);
+		boundingbox[1]->b4 = cllinear->transform(boundingbox[1]->b4);
+		boundingbox[1]->t1 = cllinear->transform(boundingbox[1]->t1);
+		boundingbox[1]->t2 = cllinear->transform(boundingbox[1]->t2);
+		boundingbox[1]->t3 = cllinear->transform(boundingbox[1]->t3);
+		boundingbox[1]->t4 = cllinear->transform(boundingbox[1]->t4);
 	
 	if(m==0)
 	{
@@ -130,7 +129,7 @@ void CLplayer::transform(bool m)
 	{
 		//transform model(s)
 		model[0]->update(cllinear);
-		//model[1]->update(cllinear);
+		model[1]->update(cllinear);
 	
 		//transform direction vector
 		direction[0] = cllinear->transform(direction[0]);
@@ -148,7 +147,7 @@ void CLplayer::transform(bool m)
 	else
 	{
 		//transform model(s)
-		//model[1]->update(cllinear);
+		model[1]->update(cllinear);
 
 		//transform direction vector
 		direction[1] = cllinear->transform(direction[1]);
@@ -186,7 +185,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		r++;
 	}
 	
-	tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+	//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
 	if(zdiff!=0) CLsystem::print(zdiff);
 	
 	//rotate x about xangle,y about yangle
@@ -203,7 +202,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 {
 	model[0] = cha;
-	//model[1] = tow; //temp reactivate as soon as 2nd model avail
+	model[1] = tow;
 	
 	boundingbox[0] = new CLbox;
 	oboundingbox[0] = model[0]->getboundingbox();
@@ -216,7 +215,7 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	boundingbox[0]->t3 = oboundingbox[0]->t3;
 	boundingbox[0]->t4 = oboundingbox[0]->t4;
 
-	//boundingbox[1] = model[1]->getboundingbox(); //temp reactivate as soon as 2nd model avail
+	boundingbox[1] = model[1]->getboundingbox();
 
 	cllinear = new CLmatrix(1);
 
@@ -315,6 +314,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	}
 
 	cllinear->unit();
+	bool what = 0;
 
 	switch(turbo)
 	{
@@ -333,11 +333,13 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 97: //a -> turn tower left
 			cllinear->rotate(0,0,5);
 			pretransform(1);
+			what=1;
 		break;
 
 		case 100: //d -> turn tower right
 			cllinear->rotate(0,0,-5);
 			pretransform(1);
+			what=1;
 		break;
 
 		case 32: //space -> fire tower weapon
@@ -370,7 +372,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 	if(collision(ll,mark)==0)
 	{	
-		transform(0);
+		transform(what);
 		
 		position = tposition;
 		
@@ -398,6 +400,7 @@ void CLplayer::display(xlong m)
 	position.y += m;
 	
 	model[0]->display(sposition,FLAT + AMBIENT);
+	model[1]->display(sposition,FLAT + AMBIENT);
 
 	//temp!
 	//~ CLgfx1::drawpolygon(

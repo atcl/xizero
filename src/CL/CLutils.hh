@@ -108,10 +108,11 @@ xlong CLutils::getlinecount(CLfile* sf)
 
 bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
 {
+	//! get argument el from fe with stringlength of fe!
 	xlong es;
 	for(int l=0; l<nl; l++)
 	{
-		if(fn[l]=='.')
+		if(fn[l]==fe[0])
 		{
 			es = l;
 		}

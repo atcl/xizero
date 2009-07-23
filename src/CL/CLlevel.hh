@@ -240,20 +240,26 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 	//find player model part I, has to have extension .y3d
 	xlong pm = -1;
+	xlong pn = -1;
 	for(int h=0; h<playera->filecount; h++)
 	{
-		if(CLutils::checkextension(playera->members[h]->name,16,".y3d",4)==true)
+		if(CLutils::checkextension(playera->members[h]->name,16,"0.y3d",5)==true)
 		{
 			pm=h;
-			break;
+		}
+		
+		if(CLutils::checkextension(playera->members[h]->name,16,"1.y3d",5)==true)
+		{
+			pn=h;
 		}
 	}
 	//pm holds index of first model
 
 	if(pm==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
+	if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part II file found");
 
 	CLobject* playerm = new CLobject(playera->members[pm],0);
-	CLobject* playern = NULL; //2nd part of player model as soon as avail.
+	CLobject* playern = new CLobject(playera->members[pn],0);
 
 	bool startposfound = false;
 	CLlvector playerp;

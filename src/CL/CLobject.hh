@@ -202,7 +202,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
 			}
-			for(int k=0;k<localdockcount;k++,dockcounter++)
+			for(int k=0;k<localdockcount;k++)
 			{
 				s.dd = dataptr[d]; d++; //"DP"+docktype
 				localdocktype = s.dw[1];
@@ -216,6 +216,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				dockptr[dockcounter]->y = t[0].y;
 				dockptr[dockcounter]->z = t[0].z;
 				dockptr[dockcounter]->e = xlong(localdocktype);
+				dockcounter++;
 			}
 		}
 
