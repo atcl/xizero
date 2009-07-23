@@ -84,16 +84,25 @@ xfixed& xfixed::operator=(xshort &a)
 xfixed& xfixed::operator-()
 {
 	this->p.num = -this->p.num;
+	return *this;
 }
 
 xfixed& xfixed::operator++()
 {
-	this->p.num++; 
+	this->p.num++;
+	return *this;
 }
 
 xfixed& xfixed::operator--()
 {
-	this->p.num--; 
+	this->p.num--;
+	return *this;
+}
+
+xfixed& xfixed::operator+=(xfixed& a)
+{
+	this->i += a.i;
+	return *this;
 }
 
 //friends:

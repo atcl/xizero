@@ -60,7 +60,6 @@ void CLexplosion::next()
 	{
 		cllinear->transpone();
 		cllinear->shear(0.1,0,0);
-		cllinear->shear(0.1,0.1,0);
 		object->update(cllinear);
 		
 		//object->translatealongnormals(transdir);

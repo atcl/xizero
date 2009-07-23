@@ -186,8 +186,8 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		r++;
 	}
 	
-	//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
-	//if(zdiff!=0) CLsystem::print(zdiff);
+	tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+	if(zdiff!=0) CLsystem::print(zdiff);
 	
 	//rotate x about xangle,y about yangle
 	//cllinear->rotate(xangle,0,0);
