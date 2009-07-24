@@ -28,7 +28,6 @@ void pausecd() { }
 void ejectcd() { }
 
 //detect
-void detectcpu() { }
 void detectram() { }
 void detectgpu() { }
 void detectvram() { }
@@ -57,10 +56,6 @@ void appendfile() { }
 void hide() { }
 void show() { }
 void setto() { }
-xlong getmousex();
-xlong getmousey();
-xlong getmouseb1();
-xlong getmouseb2();
 
 //console: clk,end,info,ver,mem,set,run,see,
 

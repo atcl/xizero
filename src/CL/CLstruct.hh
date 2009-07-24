@@ -88,13 +88,13 @@ struct every
 	//~ }
 };
 
-//~ struct exe
-//~ {
-	//~ xchar*  name;
-	//~ xchar*  title;
-	//~ xlong   size;
-	//~ xlong   version;
-	//~ sprite* splash;
-//~ };
+struct exe
+{
+	xchar*  name;
+	xchar*  title;
+	xlong   size;
+	xlong   version;
+	sprite* splash;
+};
 
 #endif

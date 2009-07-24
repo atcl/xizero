@@ -6,28 +6,66 @@
 
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
+#include "CLglobal.hh"
 
 
 namespace CLsprites
 {
-	void drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y);
-	void drawplasma(CLbuffer<xlong>* db,xlong x,xlong y);
-	void drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y);
+	void drawantimatter(xlong x,xlong y);
+	void drawplasma(xlong x,xlong y);
 };
 
-void CLsprites::drawantimatter(CLbuffer<xlong>* db,xlong x,xlong y)
+void CLsprites::drawantimatter(xlong x,xlong y)
 {
 
 }
 
-void CLsprites::drawplasma(CLbuffer<xlong>* db,xlong x,xlong y)
+void CLsprites::drawplasma(xlong x,xlong y)
 {
-
-}
-
-void CLsprites::drawlowpowerlaser(CLbuffer<xlong>* db,xlong x,xlong y)
-{
-
+	xlong l1 = ((y-2)*xres)+(x-1);
+	xlong l2 = l1 + xres - 1;
+	xlong l3 = l2 + xres;
+	xlong l4 = l3 + xres;
+	xlong l5 = l4 + xres;
+	xlong l6 = l5 + xres + 1;
+	
+	(*CLdoublebuffer)[l1] = 0x00FF0000; l1++;
+	(*CLdoublebuffer)[l1] = 0x00FF0000; l1++;
+	(*CLdoublebuffer)[l1] = 0x00FF0000; l1++;
+	(*CLdoublebuffer)[l1] = 0x00FF0000;
+	
+	(*CLdoublebuffer)[l2] = 0x00FF0000; l2++;
+	(*CLdoublebuffer)[l2] = 0x00800000; l2++;
+	(*CLdoublebuffer)[l2] = 0x00800000; l2++;
+	(*CLdoublebuffer)[l2] = 0x00800000; l2++;
+	(*CLdoublebuffer)[l2] = 0x00800000; l2++;
+	(*CLdoublebuffer)[l2] = 0x00FF0000;
+	
+	(*CLdoublebuffer)[l3] = 0x00FF0000; l3++;
+	(*CLdoublebuffer)[l3] = 0x00800000; l3++;
+	(*CLdoublebuffer)[l3] = 0x00800000; l3++;
+	(*CLdoublebuffer)[l3] = 0x00800000; l3++;
+	(*CLdoublebuffer)[l3] = 0x00800000; l3++;
+	(*CLdoublebuffer)[l3] = 0x00FF0000;
+	
+	(*CLdoublebuffer)[l4] = 0x00FF0000; l4++;
+	(*CLdoublebuffer)[l4] = 0x00800000; l4++;
+	(*CLdoublebuffer)[l4] = 0x00800000; l4++;
+	(*CLdoublebuffer)[l4] = 0x00800000; l4++;
+	(*CLdoublebuffer)[l4] = 0x00800000; l4++;
+	(*CLdoublebuffer)[l4] = 0x00FF0000;
+	
+	(*CLdoublebuffer)[l5] = 0x00FF0000; l5++;
+	(*CLdoublebuffer)[l5] = 0x00800000; l5++;
+	(*CLdoublebuffer)[l5] = 0x00800000; l5++;
+	(*CLdoublebuffer)[l5] = 0x00800000; l5++;
+	(*CLdoublebuffer)[l5] = 0x00800000; l5++;
+	(*CLdoublebuffer)[l5] = 0x00FF0000;
+	
+	(*CLdoublebuffer)[l6] = 0x00FF0000; l6++;
+	(*CLdoublebuffer)[l6] = 0x00FF0000; l6++;
+	(*CLdoublebuffer)[l6] = 0x00FF0000; l6++;
+	(*CLdoublebuffer)[l6] = 0x00FF0000;
 }
 
 #endif

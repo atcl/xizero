@@ -19,6 +19,7 @@
 
 //utility toolbox
 #include "CL/CLutils.hh"
+#include "CL/CLsprites.hh"
 
 //pseudo static classes
 #include "CL/CLfps.hh"
