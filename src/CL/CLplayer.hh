@@ -10,6 +10,16 @@
 #include "CLcl.hh"
 #include "CLapi.hh"
 #include "CLgame.hh"
+#include "CLsprites.hh"
+
+
+struct CLammo
+{
+	void(*comsprite)(xlong x,xlong y);
+	CLfvector p;
+	CLfvector d;
+	float v;
+};
 
 class CLplayer : public virtual CLcl
 {
@@ -22,11 +32,9 @@ class CLplayer : public virtual CLcl
 		CLbox* boundingbox[2];
 		CLbox* oboundingbox[2];
 
-		xlong ammotype[4];
+		CLammo* ammotype[4];
+		CLammo* currammo;
 		xlong firerate[4];
-		xlong ammoloadrate[4];
-
-		CLfvector ammodirection[4];
 		
 		xlong health;
 		xlong shield;
@@ -244,21 +252,29 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	speeddir.y  = -6;
 	speeddir.z  = 0;
 
-	ammotype[0]	= dat[1][12];
+	//~ ammotype[0]	= dat[1][12];
+	//~ ammotype[1]	= dat[1][15];
+	//~ ammotype[2]	= dat[1][18];
+	//~ ammotype[3]	= dat[1][21];
+	
+	ammotype[0] = new CLammo;
+	ammotype[0]->comsprite = CLsprites::drawplasma;
+	ammotype[0]->v = 2;
+	ammotype[0]->p = CLfvector();
+	ammotype[0]->d = CLfvector();
+	
+	ammotype[1] = new CLammo;
+	ammotype[1]->comsprite = CLsprites::drawplasma;
+	ammotype[1]->v = 2;
+	ammotype[1]->p = CLfvector();
+	ammotype[1]->d = CLfvector();
+	
 	firerate[0]	= dat[1][13];
-	ammoloadrate[0]	= dat[1][14];
-
-	ammotype[1]	= dat[1][15];
 	firerate[1]	= dat[1][16];
-	ammoloadrate[1]	= dat[1][17];
-
-	ammotype[2]	= dat[1][18];
 	firerate[2]	= dat[1][19];
-	ammoloadrate[2]	= dat[1][20];
-
-	ammotype[3]	= dat[1][21];
 	firerate[3]	= dat[1][22];
-	ammoloadrate[3] = dat[1][23];
+
+
 
 	//set other attributes to init:
 	speed = 0;
@@ -269,22 +285,6 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	direction[1].x = 0;
 	direction[1].y = 1;
 	direction[1].z = 0;
-
-	ammodirection[0].x = 0;
-	ammodirection[0].y = 0;
-	ammodirection[0].z = 0;
-	
-	ammodirection[1].x = 0;
-	ammodirection[1].y = 0;
-	ammodirection[1].z = 0;
-
-	ammodirection[2].x = 0;
-	ammodirection[2].y = 0;
-	ammodirection[2].z = 0;
-
-	ammodirection[3].x = 0;
-	ammodirection[3].y = 0;
-	ammodirection[3].z = 0;
 
 	gear = 0;
 	active = true;
@@ -300,6 +300,21 @@ CLplayer::~CLplayer()
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
+	//ammo update
+	for(int i=0; i<ammolist->getlength();i++)
+	{
+		ammolist->setindex(i);
+		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+		if(CLgame::boundary(currammo->p)) ammolist->delcurrent(0);
+		else
+		{
+			currammo->p.x -= currammo->v * currammo->d.x;
+			currammo->p.y -= currammo->v * currammo->d.y;
+			currammo->p.z -= currammo->v * currammo->d.z;
+		}
+	}
+	//
+	
 	switch(input)
 	{
 		case 82:
@@ -315,6 +330,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 	cllinear->unit();
 	bool what = 0;
+	
 
 	switch(turbo)
 	{
@@ -343,9 +359,16 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 
 		case 32: //space -> fire tower weapon
+			currammo = new CLammo();
+			currammo->comsprite = ammotype[0]->comsprite;
+			currammo->v = ammotype[0]->v;
+			currammo->p = *(model[1]->getdockingpoint(4,0));
+			currammo->d = direction[1];
+			ammolist->append(currammo,"at1");
 		break;
 
 		case -29: //strg -> fire chassis weapon(s)
+		
 		break;
 
 		case 119: //w -> fire (tachyon) laser
@@ -401,6 +424,16 @@ void CLplayer::display(xlong m)
 	
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
+	
+	//ammo display
+	for(int i=0; i<ammolist->getlength();i++)
+	{
+		ammolist->setindex(i);
+		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+		CLlvector sa = CLmisc3d::project(currammo->p);
+		currammo->comsprite(sa.x,sa.y);
+	}
+	//
 
 	//temp!
 	//~ CLgfx1::drawpolygon(

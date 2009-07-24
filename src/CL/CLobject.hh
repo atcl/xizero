@@ -50,8 +50,7 @@ class CLobject : public virtual CLcl
 		void display(CLlvector p,xchar flags);
 		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		xlong getname();
-		CLlvector* getdockingpoint(xlong i);
-		CLlvector* getdockingpoint(xlong t,xlong i);
+		CLfvector* getdockingpoint(xlong t,xlong i);
 		void translatealongnormals(float speed);
 		CLbox* getboundingbox();
 		void reset();
@@ -293,12 +292,7 @@ xlong CLobject::getname()
 	return name;
 }
 
-CLlvector* CLobject::getdockingpoint(xlong i) //get i-th docking point
-{
-	return dockptr[i];
-}
-
-CLlvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
+CLfvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
 {
 	xlong c=-1;
 
@@ -314,9 +308,16 @@ CLlvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point o
 			}
 		}
 	}
-
+	
 	if(c==-1) return 0;
-	else return dockptr[c]; 
+	else
+	{
+		CLfvector* temp = new CLfvector();
+		temp->x = dockptr[c]->x;
+		temp->y = dockptr[c]->y;
+		temp->z = dockptr[c]->z;
+		return temp;
+	} 
 }
 
 void CLobject::translatealongnormals(float speed)
