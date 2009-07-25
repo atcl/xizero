@@ -188,7 +188,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	}
 	
 	//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
-	if(zdiff!=0) CLsystem::print(zdiff);
+	if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
 	
 	//rotate x about xangle,y about yangle
 	//cllinear->rotate(xangle,0,0);
@@ -301,7 +301,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
 		//add time dependency
 		currammo->p.y -= mark;
-		if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0); //ammolist delcurrent causes crash on exit
+		if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
 		else
 		{
 			currammo->p.x += currammo->v * currammo->d.x;
@@ -310,7 +310,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		}
 		currammo->p.y += mark;
 	}
-	//
+	//*
 	
 	switch(input)
 	{
@@ -359,8 +359,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 32: //space -> fire tower weapon
 			//add time dependency
 			currammo = new CLammo();
-			currammo->comsprite = ammotype[0]->comsprite;
-			currammo->v = ammotype[0]->v;
+			currammo->comsprite = ammotype[1]->comsprite;
+			currammo->v = ammotype[1]->v;
 			ta = model[1]->getdockingpoint(4,0);
 			currammo->p.x = position.x + ta->x;
 			currammo->p.y = position.y - ta->y;
@@ -370,7 +370,25 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 
 		case -29: //strg -> fire chassis weapon(s)
-		
+			//add time dependency
+			currammo = new CLammo();
+			currammo->comsprite = ammotype[0]->comsprite;
+			currammo->v = ammotype[0]->v;
+			ta = model[0]->getdockingpoint(3,0);
+			currammo->p.x = position.x + ta->x;
+			currammo->p.y = position.y - ta->y;
+			currammo->p.z = position.z + ta->z;
+			currammo->d = direction[0];
+			ammolist->append(currammo,"at0");
+			currammo = new CLammo();
+			currammo->comsprite = ammotype[0]->comsprite;
+			currammo->v = ammotype[0]->v;
+			ta = model[0]->getdockingpoint(3,1);
+			currammo->p.x = position.x + ta->x;
+			currammo->p.y = position.y - ta->y;
+			currammo->p.z = position.z + ta->z;
+			currammo->d = direction[0];
+			ammolist->append(currammo,"at0");
 		break;
 
 		case 119: //w -> fire (tachyon) laser

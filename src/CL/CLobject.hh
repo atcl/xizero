@@ -220,7 +220,6 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		}
 
 		//"ENDO"
-
 	}
 	else if(dataptr[1] == 'D_X>')
 	{

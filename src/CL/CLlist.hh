@@ -127,10 +127,18 @@ xchar* CLlist::getcurrentname()
 
 void* CLlist::delcurrent(bool smash)
 {
-	//casues memory corruption on program exit!
 	if(length==0) return 0;
 
-	if(current==last)
+	void* temp = current->data;
+
+	if(current==last && current==first)
+	{
+		delete current;
+		current = 0;
+		first = 0;
+		last = 0;
+	}
+	else if(current==last)
 	{
 		setprev();
 		delete current->next;
@@ -157,7 +165,7 @@ void* CLlist::delcurrent(bool smash)
 
 	length--;
 
-	if(smash==true) return current->data;
+	if(smash==true) return temp;
 	return 0;
 }
 

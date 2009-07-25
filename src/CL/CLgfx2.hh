@@ -34,6 +34,7 @@ namespace CLgfx2
 	uxlong getQBcolor(xchar c); //get 16 EGA colors
 	bool comparecolors(uxlong c1,uxlong c2);
 	uxlong blendcolors();
+	uxlong getgradient(uxlong s,uxlong e,xchar i);
 	void savescreenshot(const xchar*);
 }
 
@@ -154,6 +155,11 @@ uxlong CLgfx2::blendcolors()
 {
 	//add,mul,alpha,and,or,nand,nor,not,xor
 	return 0;
+}
+
+uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i)
+{
+	//((s.r-e.r)/255)*i, ((s.g - e.g)/255)*i, ((s.b - e.b)/255)*i
 }
 
 void CLgfx2::savescreenshot(const xchar*)
