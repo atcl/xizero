@@ -253,13 +253,13 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	
 	ammotype[0] = new CLammo;
 	ammotype[0]->comsprite = CLsprites::drawplasma;
-	ammotype[0]->v = 2;
+	ammotype[0]->v = 4;
 	ammotype[0]->p = CLfvector();
 	ammotype[0]->d = CLfvector();
 	
 	ammotype[1] = new CLammo;
 	ammotype[1]->comsprite = CLsprites::drawplasma;
-	ammotype[1]->v = 2;
+	ammotype[1]->v = 4;
 	ammotype[1]->p = CLfvector();
 	ammotype[1]->d = CLfvector();
 	
@@ -294,19 +294,21 @@ CLplayer::~CLplayer()
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
-	//ammo update ,furthermore it crashes here on exit...
+	//ammo update
 	for(int i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);
 		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
 		//add time dependency
-		//~ if(CLgame::boundary(currammo->p)) ammolist->delcurrent(0);
-		//~ else
-		//~ {
-			//~ currammo->p.x -= currammo->v * currammo->d.x;
-			//~ currammo->p.y -= currammo->v * currammo->d.y;
-			//~ currammo->p.z -= currammo->v * currammo->d.z;
-		//~ }
+		currammo->p.y -= mark;
+		if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0); //ammolist delcurrent causes crash on exit
+		else
+		{
+			currammo->p.x += currammo->v * currammo->d.x;
+			currammo->p.y -= currammo->v * currammo->d.y;
+			currammo->p.z += currammo->v * currammo->d.z;
+		}
+		currammo->p.y += mark;
 	}
 	//
 	

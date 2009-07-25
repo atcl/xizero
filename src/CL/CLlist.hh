@@ -127,6 +127,7 @@ xchar* CLlist::getcurrentname()
 
 void* CLlist::delcurrent(bool smash)
 {
+	//casues memory corruption on program exit!
 	if(length==0) return 0;
 
 	if(current==last)
