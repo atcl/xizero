@@ -38,7 +38,7 @@ class CLobject : public virtual CLcl
 		xlong polycount;
 		xlong dockcount;
 		xlong vertexptr;
-		CLlvector** dockptr;
+		CLfvector** dockptr;
 		CLbox* boundingbox;
 		xlong name;
 	
@@ -109,7 +109,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		dockcount = dataptr[7];
 		if(dockcount!=0)
 		{
-			dockptr = new CLlvector*[dockcount];
+			dockptr = new CLfvector*[dockcount];
 		}
 		else
 		{
@@ -205,12 +205,12 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 			{
 				s.dd = dataptr[d]; d++; //"DP"+docktype
 				localdocktype = s.dw[1];
-				
+
 				t[0].x = dataptr[d] + xoff; d++; //dx
 				t[0].y = dataptr[d] + yoff; d++; //dy
 				t[0].z = (dataptr[d]>>zshift) + zoff; d++; //dz
 
-				dockptr[dockcounter] = new CLlvector(0,0,0);
+				dockptr[dockcounter] = new CLfvector(0,0,0);
 				dockptr[dockcounter]->x = t[0].x;
 				dockptr[dockcounter]->y = t[0].y;
 				dockptr[dockcounter]->z = t[0].z;
@@ -294,15 +294,17 @@ xlong CLobject::getname()
 
 CLfvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
 {
-	xlong c=-1;
+	xlong c= -1;
+	xlong d= 0;
 
 	for(int j=0;j<dockcount;j++)
 	{
 		if(dockptr[j]->e == t)
 		{
-			c++;
-
-			if(c==i)
+			c=j;
+			d++;
+			
+			if(d==i)
 			{
 				break;
 			}
