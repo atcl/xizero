@@ -30,7 +30,7 @@ namespace CLformat
 	sprites* loadtileset(CLfile* sf,xlong tw,xlong th,xlong pr);
 	sprites* loadfont(CLfile* sf,xlong fw,xlong fh);
 	xlong** loadlvl();
-	xlong** loadini();
+	xlong** loadini(CLfile* bf);
 }
 
 
@@ -441,8 +441,13 @@ xlong** CLformat::loadlvl()
 	return 0;
 }
 
-xlong** CLformat::loadini()
+xlong** CLformat::loadini(CLfile* bf)
 {
+	//get line count
+	//read string before '=' ignoring leading and trailing  whitespaces
+	//read string after '=' ignoring leading and trailing whitespaces
+	//values after '=' are float unless quotemarks are found
+	
 	return 0;
 }
 
