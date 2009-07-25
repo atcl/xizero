@@ -300,19 +300,20 @@ CLplayer::~CLplayer()
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
-	//ammo update
-	for(int i=0; i<ammolist->getlength();i++)
-	{
-		ammolist->setindex(i);
-		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
-		if(CLgame::boundary(currammo->p)) ammolist->delcurrent(0);
-		else
-		{
-			currammo->p.x -= currammo->v * currammo->d.x;
-			currammo->p.y -= currammo->v * currammo->d.y;
-			currammo->p.z -= currammo->v * currammo->d.z;
-		}
-	}
+	//ammo update ,furthermore it crashes here on exit...
+	//~ for(int i=0; i<ammolist->getlength();i++)
+	//~ {
+		//~ ammolist->setindex(i);
+		//~ currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+		//~ //add time dependency
+		//~ if(CLgame::boundary(currammo->p)) ammolist->delcurrent(0);
+		//~ else
+		//~ {
+			//~ currammo->p.x -= currammo->v * currammo->d.x;
+			//~ currammo->p.y -= currammo->v * currammo->d.y;
+			//~ currammo->p.z -= currammo->v * currammo->d.z;
+		//~ }
+	//~ }
 	//
 	
 	switch(input)
@@ -359,12 +360,14 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 
 		case 32: //space -> fire tower weapon
+			//add time dependency
 			currammo = new CLammo();
 			currammo->comsprite = ammotype[0]->comsprite;
 			currammo->v = ammotype[0]->v;
-			currammo->p = *(model[1]->getdockingpoint(4,0));
+			currammo->p = position + *(model[1]->getdockingpoint(4,0)); //docking point correct?
 			currammo->d = direction[1];
 			ammolist->append(currammo,"at1");
+			//say();
 		break;
 
 		case -29: //strg -> fire chassis weapon(s)
@@ -430,7 +433,9 @@ void CLplayer::display(xlong m)
 	{
 		ammolist->setindex(i);
 		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+		currammo->p.y -= m;
 		CLlvector sa = CLmisc3d::project(currammo->p);
+		currammo->p.y += m; 
 		currammo->comsprite(sa.x,sa.y);
 	}
 	//

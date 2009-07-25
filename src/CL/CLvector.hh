@@ -40,7 +40,7 @@ struct CLvector
 			  
 			T operator%(const CLvector& a);			//angle between vectors
 
-	void print();									//console output	
+			void print();							//console output	
 };
 
 

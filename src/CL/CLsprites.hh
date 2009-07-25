@@ -22,6 +22,8 @@ void CLsprites::drawantimatter(xlong x,xlong y)
 
 void CLsprites::drawplasma(xlong x,xlong y)
 {
+	if(x<0 || x>=xres || y<0 || y>=yres) return;
+	
 	xlong l1 = ((y-2)*xres)+(x-1);
 	xlong l2 = l1 + xres - 1;
 	xlong l3 = l2 + xres;
