@@ -148,9 +148,6 @@ void CLplayer::transform(bool m)
 
 		//transform tilt vector
 		//tilt = cllinear->transform(tilt);
-
-		//transform ammo direction(s)
-
 	}
 	else
 	{
@@ -159,9 +156,6 @@ void CLplayer::transform(bool m)
 
 		//transform direction vector
 		direction[1] = cllinear->transform(direction[1]);
-
-		//transform ammo direction(s)
-
 	}
 }
 
@@ -332,7 +326,6 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	cllinear->unit();
 	bool what = 0;
 	
-
 	switch(turbo)
 	{
 		case 81: //arrow left -> turn left
@@ -364,10 +357,9 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 			currammo = new CLammo();
 			currammo->comsprite = ammotype[0]->comsprite;
 			currammo->v = ammotype[0]->v;
-			currammo->p = position + *(model[1]->getdockingpoint(4,0)); //docking point correct?
+			currammo->p = position + *(model[1]->getdockingpoint(4,0));
 			currammo->d = direction[1];
 			ammolist->append(currammo,"at1");
-			//say();
 		break;
 
 		case -29: //strg -> fire chassis weapon(s)
@@ -401,10 +393,6 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		transform(what);
 		
 		position = tposition;
-		
-		position.y -= mark;
-		sposition = CLmisc3d::project(position);
-		position.y += mark;
 	}
 	else
 	{
@@ -421,12 +409,14 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 void CLplayer::display(xlong m)
 {
-	position.y -= m;
-	sposition = CLmisc3d::project(position);
-	position.y += m;
+	//model display
+	sposition.x = position.x;
+	sposition.y = position.y - m;
+	sposition.z = position.z;
 	
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
+	//*
 	
 	//ammo display
 	for(int i=0; i<ammolist->getlength();i++)
@@ -435,10 +425,10 @@ void CLplayer::display(xlong m)
 		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
 		currammo->p.y -= m;
 		CLlvector sa = CLmisc3d::project(currammo->p);
-		currammo->p.y += m; 
 		currammo->comsprite(sa.x,sa.y);
+		currammo->p.y += m;
 	}
-	//
+	//*
 
 	//temp!
 	//~ CLgfx1::drawpolygon(
