@@ -25,8 +25,8 @@ namespace CLgfx2
 	sprites* segm;
 	
 	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
-	void drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c);
-	void drawfontstring(xlong x,xlong y,xchar* a,CLfont* f,uxlong c);
+	xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c);
+	void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c);
 	uxlong getQBcolor(xchar c); //get 16 EGA colors
 	bool comparecolors(uxlong c1,uxlong c2);
 	uxlong blendcolors();
@@ -65,10 +65,10 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	}
 }
 
-void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c)
+xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
 {
 	//init
-	if(x>xres || y>yres) return;
+	if(x>xres || y>yres) return 0;
 	
 	//find tile
 	xlong off = a * f->tilewidth; 
@@ -78,7 +78,7 @@ void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c)
 	xlong ys = y;
 	xlong xe = x + f->tilewidth;
 	xlong ye = y + f->tileheight;
-	if(xe<0 || ye<0) return;
+	if(xe<0 || ye<0) return 0;
 
 	//clipping
 	if(xs<0) xs = 0;
@@ -91,26 +91,41 @@ void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c)
 	xlong eheight = ye - ys;
 	xlong xoffset = (ys * xres) + xs;
 	xlong linearc = off;
+	xlong rx = x;
 
 	//drawloop
 	for(int i=0; i<eheight ;i++)
 	{
+		rx = x;
 		for(int j=0; j<ewidth ;j++)
 		{
-			if( (f->data[linearc] & 0xFF000000) != 0xFF)
+			if(f->data[linearc] == 0x0FFFF0000)
 			{
 				(*CLdoublebuffer)[xoffset+j] = c;
 			}
 			linearc++;
+			if(f->data[linearc] != 0x0FF000000)
+			{
+				rx++;
+				//break;
+			}
 		}
 		xoffset += xres;
 		linearc += hordiff;
 	}
+	
+	return rx;
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,CLfont* f,uxlong c)
+void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c)
 {
-
+	xlong l = CLutils::chararraylength(a);
+	xlong t = x;
+	
+	for(int i=0; i<l; i++)
+	{
+		t = drawfontchar(t,y,a[i],f,c);
+	}
 }
 
 uxlong CLgfx2::getQBcolor(xchar c)

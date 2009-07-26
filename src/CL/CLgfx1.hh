@@ -536,7 +536,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	{
 		for(int j=0; j<ewidth ;j++)
 		{
-			if( (s->data[linearc] & 0xFF000000) != 0xFF)
+			if( (s->data[linearc] & 0xFF000000) != 0xFF000000)
 			{
 				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}

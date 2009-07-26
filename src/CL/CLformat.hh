@@ -327,8 +327,8 @@ sprite* CLformat::loadtga(CLfile* sf)
 
 	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
 	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
-	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
-	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
+	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<8);
+	xshort	imageheight	= bf[14] + (xshort(bf[15])<<8);
 	//xchar	imagepixelsize	= bf[16];
 
 	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
@@ -367,8 +367,8 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 
 	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
 	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
-	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
-	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
+	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<8);
+	xshort	imageheight	= bf[14] + (xshort(bf[15])<<8);
 	//xchar	imagepixelsize	= bf[16];
 
 	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
@@ -413,8 +413,8 @@ sprites* CLformat::loadfont(CLfile* sf)
 
 	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
 	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
-	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<16);
-	xshort	imageheight	= bf[14] + (xshort(bf[15])<<16);
+	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<8);
+	xshort	imageheight	= bf[14] + (xshort(bf[15])<<8);
 	//xchar	imagepixelsize	= bf[16];
 
 	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
