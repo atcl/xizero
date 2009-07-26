@@ -20,7 +20,7 @@ namespace CLutils
 	void copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
 	bool comparechararrays(xchar* t1, xchar* t2,xlong tl);
 	xlong getlinecount(CLfile* sf);
-	bool checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el);
+	bool checkextension(xchar* fn,xlong nl,const xchar* fe);
 	xlong getrandom(xlong range);
 	xchar* color2string(uxlong c);
 	xlong endian(xlong l);
@@ -106,10 +106,10 @@ xlong CLutils::getlinecount(CLfile* sf)
 	return lc;
 }
 
-bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe,xlong el)
+bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe)
 {
-	//! get argument el from fe with stringlength of fe!
-	xlong es;
+	xlong el = chararraylength(fe);
+	xlong es = 0;
 	for(int l=0; l<nl; l++)
 	{
 		if(fn[l]==fe[0])

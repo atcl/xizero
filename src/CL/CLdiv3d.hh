@@ -125,8 +125,6 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c)
 	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t);
 	s = argb.dd;
 	//
-	
-	//!!!optimize up the for-loops !!! causes 60fps drop!!!!!!!!! 
 
 	//draw screen
 	xlong x1 = (xres-w)>>1;

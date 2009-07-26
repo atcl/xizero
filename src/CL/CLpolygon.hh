@@ -362,12 +362,12 @@ void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s)
 
 xlong CLpolygon::circleinc(xlong x,xlong pc)
 {
-	return ( (x+1) >= pc ) ? 0 : x+1; //!replace x+1 durch x++ at first and by x at second occur
+	return ( (x+1) >= pc ) ? 0 : x+1;
 }
 
 xlong CLpolygon::circledec(xlong x,xlong pc)
 {
-	return ( (x-1) < 0 ) ? pc-1 : x-1; //!replace x-1 durch x-- at first and by x at second occur, also pc-1 by pc--
+	return ( (x-1) < 0 ) ? pc-1 : x-1;
 }
 
 void CLpolygon::rasterize(xlong shadow)

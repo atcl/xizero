@@ -95,7 +95,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong tf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(CLutils::checkextension(levela->members[h]->name,16,".mapt",5)==true)
+		if(CLutils::checkextension(levela->members[h]->name,16,".mapt")==true)
 		{
 			tf=h;
 			break;
@@ -126,7 +126,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong hf = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(CLutils::checkextension(levela->members[h]->name,16,".maph",5)==true)
+		if(CLutils::checkextension(levela->members[h]->name,16,".maph")==true)
 		{
 			hf=h;
 			break;
@@ -144,7 +144,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong ef = -1;
 	for(int h=0; h<levela->filecount; h++)
 	{
-		if(CLutils::checkextension(levela->members[h]->name,16,".mape",5)==true)
+		if(CLutils::checkextension(levela->members[h]->name,16,".mape")==true)
 		{
 			ef=h;
 			break;
@@ -226,7 +226,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong pd = -1;
 	for(int h=0; h<playera->filecount; h++)
 	{
-		if(CLutils::checkextension(playera->members[h]->name,16,".bcx",4)==true)
+		if(CLutils::checkextension(playera->members[h]->name,16,".bcx")==true)
 		{
 			pd=h;
 			break;
@@ -243,12 +243,12 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	xlong pn = -1;
 	for(int h=0; h<playera->filecount; h++)
 	{
-		if(CLutils::checkextension(playera->members[h]->name,16,"0.y3d",5)==true)
+		if(CLutils::checkextension(playera->members[h]->name,16,"0.y3d")==true)
 		{
 			pm=h;
 		}
 		
-		if(CLutils::checkextension(playera->members[h]->name,16,"1.y3d",5)==true)
+		if(CLutils::checkextension(playera->members[h]->name,16,"1.y3d")==true)
 		{
 			pn=h;
 		}
