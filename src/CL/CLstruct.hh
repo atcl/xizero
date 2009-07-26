@@ -50,11 +50,11 @@ struct sprites
 	xlong  width;
 	xlong  height;
 
-	xlong  perrow;
 	xlong  tilesize;
 	xlong  tilewidth;
 	xlong  tileheight;
 
+	xlong  tilecount;
 	xlong* data;
 };
 

@@ -117,6 +117,12 @@ xfixed& xfixed::operator-=(xfixed& a)
 	return *this;
 }
 
+xfixed& xfixed::operator-=(xshort& a)
+{
+	this->p.num -= a;
+	return *this;
+}
+
 //friends:
 
 xfixed operator+(short& a,xfixed& b)

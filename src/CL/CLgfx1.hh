@@ -505,22 +505,18 @@ void CLgfx1::drawscreen(sprite* s)
 
 void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 {
-	//fix!
-	
-	//find tile
-	xlong toffset = (ti / s->perrow) * s->tilesize;
-	toffset += (ti % s->perrow) * (s->tilewidth-1);
-
 	//init
 	if(x>xres || y>yres) return;
-	xlong tsize = s->tilesize;
-	xlong twidth = s->tilewidth;
-	xlong theight = s->tileheight;
-	xlong hordiff = xres - s->tilewidth;
+	
+	//find tile
+	xlong pr = (s->width / s->tilewidth);
+	xlong off = ((ti % pr) * (s->width*s->tileheight)) + ((ti / pr) * s->tilewidth); 
+
+	xlong hordiff = s->width-s->tilewidth;
 	xlong xs = x;
 	xlong ys = y;
-	xlong xe = x + twidth;
-	xlong ye = y + theight;
+	xlong xe = x + s->tilewidth;
+	xlong ye = y + s->tileheight;
 	if(xe<0 || ye<0) return;
 
 	//clipping
@@ -530,26 +526,24 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	if(ye>yres) ye = yres-1;
 
 	//draw vars
-	xlong ewidth = xe - xs + 1;
-	xlong eheight = ye - ys + 1;
-	xlong eoffset = (y - ys) * twidth;
-	xlong xoffset = (ys * xres) + xs + (xs - x); //optimize!
-	xlong linearc = toffset;
-	xlong shordiff = s->width - s->tilewidth;
+	xlong ewidth = xe - xs;
+	xlong eheight = ye - ys;
+	xlong xoffset = (ys * xres) + xs;
+	xlong linearc = off;
 
 	//drawloop
 	for(int i=0; i<eheight ;i++)
 	{
 		for(int j=0; j<ewidth ;j++)
 		{
-			if(s->data[linearc] && 0xFF000000 != 0xFF)
+			if( (s->data[linearc] && 0xFF000000) != 0xFF)
 			{
 				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}
 			linearc++;
 		}
-		xoffset += hordiff;
-		toffset += shordiff;
+		xoffset += xres;
+		linearc += hordiff;
 	}
 }
 

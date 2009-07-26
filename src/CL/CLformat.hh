@@ -27,7 +27,7 @@ namespace CLformat
 	xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
 	sprite* loadtga(CLfile* sf);
 	
-	sprites* loadtileset(CLfile* sf,xlong tw,xlong th,xlong pr);
+	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 	sprites* loadfont(CLfile* sf,xlong fw,xlong fh);
 	xlong** loadlvl();
 	xlong** loadini(CLfile* bf);
@@ -348,7 +348,7 @@ sprite* CLformat::loadtga(CLfile* sf)
 	return r;
 }
 
-sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th,xlong pr)
+sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 
@@ -386,8 +386,10 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th,xlong pr)
 	r->tilesize = tw * th;
 	r->tilewidth = tw;
 	r->tileheight = th;
-	r->perrow = pr;
 	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	
+	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) CLsystem::exit(1,0,__func__,"tile dimensions do not match image dimensions");
+	r->tilecount = (r->width/r->tilewidth) * (r->height*r->tileheight);
 
 	return r;
 }
@@ -430,7 +432,6 @@ sprites* CLformat::loadfont(CLfile* sf,xlong fw,xlong fh)
 	r->tilesize = fw * fh;
 	r->tilewidth = fw;
 	r->tileheight = fh;
-	r->perrow = 256;
 	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
 
 	return r;

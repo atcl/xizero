@@ -53,8 +53,9 @@ int main(int argc, char** argv)
 			//~ doubleword tt;
 			//~ bcx = CLformat::loadbcx(fbcx);
 		//test tga loading:
-			CLfile* ftga = CLsystem::getfile("../dat/other/7segment.tga");
-			sprite* testsprite = CLformat::loadtga(ftga);
+			CLfile* ftga = CLsystem::getfile("../dat/other/testtile.tga");
+			sprites* tiles = CLformat::loadtileset(ftga,20,20);
+			sprite* spr = CLformat::loadtga(ftga);
 
 		//test tree:
 			CLtree* testtree = new CLtree();
@@ -227,6 +228,7 @@ int main(int argc, char** argv)
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+		
 
 		//cubus->display(1,1,1,1,0,0);
 		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
