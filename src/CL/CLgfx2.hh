@@ -26,11 +26,7 @@ namespace CLgfx2
 	
 	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
 	void drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c);
-	void drawfontchar(xlong p,xchar a,xlong f,uxlong c);
-	void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c);
-	void drawfontstring(xlong p,xchar* a,xlong f,uxlong c);
-	void drawfontpartstring(xlong x,xlong y,xchar* a,xlong b,xlong e,xlong f,uxlong c);
-	void drawfontpartstring(xlong p,xchar* a,xlong b,xlong e,xlong f,uxlong c);
+	void drawfontstring(xlong x,xlong y,xchar* a,CLfont* f,uxlong c);
 	uxlong getQBcolor(xchar c); //get 16 EGA colors
 	bool comparecolors(uxlong c1,uxlong c2);
 	uxlong blendcolors();
@@ -101,7 +97,7 @@ void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c)
 	{
 		for(int j=0; j<ewidth ;j++)
 		{
-			if( (f->data[linearc] && 0xFF000000) != 0xFF)
+			if( (f->data[linearc] & 0xFF000000) != 0xFF)
 			{
 				(*CLdoublebuffer)[xoffset+j] = c;
 			}
@@ -112,17 +108,7 @@ void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c)
 	}
 }
 
-void CLgfx2::drawfontchar(xlong p,xchar a,xlong f,uxlong c)
-{
-
-}
-
-void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c)
-{
-
-}
-
-void CLgfx2::drawfontstring(xlong p,xchar* a,xlong f,uxlong c)
+void CLgfx2::drawfontstring(xlong x,xlong y,xchar* a,CLfont* f,uxlong c)
 {
 
 }

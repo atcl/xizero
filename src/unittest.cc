@@ -55,10 +55,10 @@ int main(int argc, char** argv)
 		//test tga loading:
 			CLfile* ftga = CLsystem::getfile("../dat/other/testtile.tga");
 			sprites* tiles = CLformat::loadtileset(ftga,20,20);
-			sprite* spr = CLformat::loadtga(ftga);
 			
 			CLfile* fonttga = CLsystem::getfile("../dat/other/CLtele.tga");
 			CLfont* font = CLformat::loadfont(fonttga);
+			sprite* spr = CLformat::loadtga(fonttga);
 
 		//test tree:
 			CLtree* testtree = new CLtree();
@@ -232,7 +232,8 @@ int main(int argc, char** argv)
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
 		
-		CLgfx2::drawfontchar(100,100,'a',font,0x0000FFFF);
+		CLgfx2::drawfontchar(100,100,'a',font,0x00FFFFFF);
+		CLgfx1::drawsprite(100,200,spr);
 
 		//cubus->display(1,1,1,1,0,0);
 		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);

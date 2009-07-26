@@ -44,12 +44,8 @@ namespace CLgfx1
 	void fill(xlong x,xlong y,uxlong oc,uxlong nc);
 	void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
 	void drawsprite(xlong x,xlong y,sprite* s);
-	void drawspritescaled(xlong x,xlong y,sprite* s,xlong z);
-	void drawspriterotated(xlong x,xlong y,sprite* s,xlong d);
-	void drawspriterotated90(xlong x,xlong y,sprite* s,xlong c);
-	void drawspritemirrored(xlong x,xlong y,sprite* s,xlong b);
 	void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
-	void putsprite(xlong x,xlong y,sprite* s,xlong m);
+	void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0);
 	void drawscreen(sprite* s);
 	void drawtile(xlong x,xlong y,sprites *s,xlong ti);
 }
@@ -451,7 +447,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	{
 		for(int j=0; j<ewidth ;j++)
 		{
-			if( (s->data[linearc] && 0xFF000000) != 0xFF)
+			if( (s->data[linearc] & 0xFF000000) != 0xFF)
 			{
 				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}
@@ -462,34 +458,38 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	
 }
 
-void CLgfx1::drawspritescaled(xlong x,xlong y,sprite* s,xlong z)
-{
-
-}
-
-void CLgfx1::drawspriterotated(xlong x,xlong y,sprite* s,xlong d)
-{
-
-}
-
-void CLgfx1::drawspriterotated90(xlong x,xlong y,sprite* s,xlong c)
-{
-
-}
-
-void CLgfx1::drawspritemirrored(xlong x,xlong y,sprite* s,xlong b)
-{
-
-}
-
 void CLgfx1::drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
 {
 
 }
 
-void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m)
+void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m,float e)
 {
-
+	
+	switch(m)
+	{
+		case 0: //normal
+		
+		case 1: //mirrored horizontal
+		
+		case 2: //mirrored vertical
+		
+		case 3: //rotated 90° left
+		
+		case 4: //rotated 180° left
+		
+		case 5: //rotated 270° left
+		
+		case 6: //rotated 90° right
+		
+		case 7: //rotated 180° right
+		
+		case 8: //rotated 270° right
+		
+		case 9: //scaled about e
+		
+		case 10: ; //rotated about e
+	}
 }
 
 void CLgfx1::drawscreen(sprite* s)
@@ -536,7 +536,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	{
 		for(int j=0; j<ewidth ;j++)
 		{
-			if( (s->data[linearc] && 0xFF000000) != 0xFF)
+			if( (s->data[linearc] & 0xFF000000) != 0xFF)
 			{
 				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
 			}
