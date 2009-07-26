@@ -28,7 +28,7 @@ namespace CLformat
 	sprite* loadtga(CLfile* sf);
 	
 	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
-	sprites* loadfont(CLfile* sf,xlong fw,xlong fh);
+	sprites* loadfont(CLfile* sf);
 	xlong** loadlvl();
 	xlong** loadini(CLfile* bf);
 }
@@ -394,7 +394,7 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 	return r;
 }
 
-sprites* CLformat::loadfont(CLfile* sf,xlong fw,xlong fh)
+sprites* CLformat::loadfont(CLfile* sf)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 
@@ -425,14 +425,17 @@ sprites* CLformat::loadfont(CLfile* sf,xlong fw,xlong fh)
 
 	//xshort imageoffset = imageid + colormaplength;
 
-	sprites* r = new sprites;
+	if( (imagewidth%256)!=0 ) CLsystem::exit(1,0,__func__,"Not 256 font tiles in one row!");
+
+	CLfont* r = new CLfont;
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
 	r->height = imageheight;
-	r->tilesize = fw * fh;
-	r->tilewidth = fw;
-	r->tileheight = fh;
+	r->tilewidth = imagewidth / 256;
+	r->tileheight = imageheight;
+	r->tilesize = (imagewidth / 256) * imageheight;
 	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	r->tilecount = 256;
 
 	return r;
 }

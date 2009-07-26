@@ -25,7 +25,7 @@ namespace CLgfx2
 	sprites* segm;
 	
 	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
-	void drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c);
+	void drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c);
 	void drawfontchar(xlong p,xchar a,xlong f,uxlong c);
 	void drawfontstring(xlong x,xlong y,xchar* a,xlong f,uxlong c);
 	void drawfontstring(xlong p,xchar* a,xlong f,uxlong c);
@@ -69,9 +69,47 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	}
 }
 
-void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,xlong f,uxlong c)
+void CLgfx2::drawfontchar(xlong x,xlong y,xchar a,CLfont* f,uxlong c)
 {
+	//init
+	if(x>xres || y>yres) return;
+	
+	//find tile
+	xlong off = a * f->tilewidth; 
 
+	xlong hordiff = f->width-f->tilewidth;
+	xlong xs = x;
+	xlong ys = y;
+	xlong xe = x + f->tilewidth;
+	xlong ye = y + f->tileheight;
+	if(xe<0 || ye<0) return;
+
+	//clipping
+	if(xs<0) xs = 0;
+	if(xe>xres) xe = xres-1;
+	if(ys<0) ys = 0;
+	if(ye>yres) ye = yres-1;
+
+	//draw vars
+	xlong ewidth = xe - xs;
+	xlong eheight = ye - ys;
+	xlong xoffset = (ys * xres) + xs;
+	xlong linearc = off;
+
+	//drawloop
+	for(int i=0; i<eheight ;i++)
+	{
+		for(int j=0; j<ewidth ;j++)
+		{
+			if( (f->data[linearc] && 0xFF000000) != 0xFF)
+			{
+				(*CLdoublebuffer)[xoffset+j] = c;
+			}
+			linearc++;
+		}
+		xoffset += xres;
+		linearc += hordiff;
+	}
 }
 
 void CLgfx2::drawfontchar(xlong p,xchar a,xlong f,uxlong c)

@@ -58,6 +58,8 @@ struct sprites
 	xlong* data;
 };
 
+typedef sprites CLfont;
+
 struct xmlelement
 {
 	xchar*  value;
