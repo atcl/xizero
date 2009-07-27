@@ -8,6 +8,7 @@
 #include <FL/fl_draw.H>
 
 #include "CLtypes.hh"
+#include "CLgamepad.hh"
 
 void timeout(void*)
 {
@@ -29,6 +30,8 @@ class CLwindow : public Fl_Window
 		xlong mousey;
 		xlong mouseb;
 		xlong keyup;
+		
+		bool  havegamepad;
 		
 		void draw();
 		virtual int handle(int event);
@@ -73,6 +76,8 @@ int CLwindow::handle(int event)
 			break;		
 	}
 	
+	if(havegamepad) CLgamepad::handle();
+	
 	return Fl_Window::handle(event);
 }
 
@@ -88,6 +93,8 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
 	
 	Fl::visual(FL_RGB);
 	Fl::add_timeout(0.02,timeout);
+	
+	havegamepad = CLgamepad::init();
 	
 	this->end();
 	this->show();

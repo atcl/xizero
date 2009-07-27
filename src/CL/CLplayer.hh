@@ -53,7 +53,7 @@ class CLplayer : public virtual CLcl
 		xlong active;
 		xlong points;
 		xlong firing;
-		xlong lastupdate;
+		xlong lastupdate[3];
 
 		void setspeed();
 		void fire(xlong at);
@@ -253,13 +253,13 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	
 	ammotype[0] = new CLammo;
 	ammotype[0]->comsprite = CLsprites::drawplasma;
-	ammotype[0]->v = 4;
+	ammotype[0]->v = 16;
 	ammotype[0]->p = CLfvector();
 	ammotype[0]->d = CLfvector();
 	
 	ammotype[1] = new CLammo;
 	ammotype[1]->comsprite = CLsprites::drawplasma;
-	ammotype[1]->v = 4;
+	ammotype[1]->v = 16;
 	ammotype[1]->p = CLfvector();
 	ammotype[1]->d = CLfvector();
 	
@@ -282,7 +282,9 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 
 	gear = 0;
 	active = true;
-	lastupdate = CLsystem::getmilliseconds();
+	lastupdate[0] = CLsystem::getmilliseconds();
+	lastupdate[1] = CLsystem::getmilliseconds();
+	lastupdate[2] = CLsystem::getmilliseconds();
 	firing=-1;
 }
 
@@ -294,21 +296,26 @@ CLplayer::~CLplayer()
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
+	xlong time = CLsystem::getmilliseconds();
+	
 	//ammo update
-	for(int i=0; i<ammolist->getlength();i++)
+	if(time >= lastupdate[0] + 20)
 	{
-		ammolist->setindex(i);
-		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
-		//add time dependency
-		currammo->p.y -= mark;
-		if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
-		else
+		for(int i=0; i<ammolist->getlength();i++)
 		{
-			currammo->p.x += currammo->v * currammo->d.x;
-			currammo->p.y -= currammo->v * currammo->d.y;
-			currammo->p.z += currammo->v * currammo->d.z;
+			ammolist->setindex(i);
+			currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+			currammo->p.y -= mark;
+			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
+			else
+			{
+				currammo->p.x += currammo->v * currammo->d.x;
+				currammo->p.y -= currammo->v * currammo->d.y;
+				currammo->p.z += currammo->v * currammo->d.z;
+			}
+			currammo->p.y += mark;
 		}
-		currammo->p.y += mark;
+		lastupdate[0] = time;
 	}
 	//*
 	
@@ -327,9 +334,9 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 	cllinear->unit();
 	bool what = 0;
-	
+	//time = CLsystem::getmilliseconds();
 	CLfvector* ta;
-		
+	
 	switch(turbo)
 	{
 		case 81: //arrow left -> turn left
@@ -357,38 +364,44 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 
 		case 32: //space -> fire tower weapon
-			//add time dependency
-			currammo = new CLammo();
-			currammo->comsprite = ammotype[1]->comsprite;
-			currammo->v = ammotype[1]->v;
-			ta = model[1]->getdockingpoint(4,0);
-			currammo->p.x = position.x + ta->x;
-			currammo->p.y = position.y - ta->y;
-			currammo->p.z = position.z + ta->z;
-			currammo->d = direction[1];
-			ammolist->append(currammo,"at1");
+			if(time >= lastupdate[1] + 100)
+			{
+				currammo = new CLammo();
+				currammo->comsprite = ammotype[1]->comsprite;
+				currammo->v = ammotype[1]->v;
+				ta = model[1]->getdockingpoint(4,0);
+				currammo->p.x = position.x + ta->x;
+				currammo->p.y = position.y - ta->y;
+				currammo->p.z = position.z + ta->z;
+				currammo->d = direction[1];
+				ammolist->append(currammo,"at1");
+				lastupdate[1] = time;
+			}
 		break;
 
 		case -29: //strg -> fire chassis weapon(s)
-			//add time dependency
-			currammo = new CLammo();
-			currammo->comsprite = ammotype[0]->comsprite;
-			currammo->v = ammotype[0]->v;
-			ta = model[0]->getdockingpoint(3,0);
-			currammo->p.x = position.x + ta->x;
-			currammo->p.y = position.y - ta->y;
-			currammo->p.z = position.z + ta->z;
-			currammo->d = direction[0];
-			ammolist->append(currammo,"at0");
-			currammo = new CLammo();
-			currammo->comsprite = ammotype[0]->comsprite;
-			currammo->v = ammotype[0]->v;
-			ta = model[0]->getdockingpoint(3,1);
-			currammo->p.x = position.x + ta->x;
-			currammo->p.y = position.y - ta->y;
-			currammo->p.z = position.z + ta->z;
-			currammo->d = direction[0];
-			ammolist->append(currammo,"at0");
+			if(time >= lastupdate[1] + 100)
+			{
+				currammo = new CLammo();
+				currammo->comsprite = ammotype[0]->comsprite;
+				currammo->v = ammotype[0]->v;
+				ta = model[0]->getdockingpoint(3,0);
+				currammo->p.x = position.x + ta->x;
+				currammo->p.y = position.y - ta->y;
+				currammo->p.z = position.z + ta->z;
+				currammo->d = direction[0];
+				ammolist->append(currammo,"at0");
+				currammo = new CLammo();
+				currammo->comsprite = ammotype[0]->comsprite;
+				currammo->v = ammotype[0]->v;
+				ta = model[0]->getdockingpoint(3,1);
+				currammo->p.x = position.x + ta->x;
+				currammo->p.y = position.y - ta->y;
+				currammo->p.z = position.z + ta->z;
+				currammo->d = direction[0];
+				ammolist->append(currammo,"at0");
+				lastupdate[1] = time;
+			}
 		break;
 
 		case 119: //w -> fire (tachyon) laser
@@ -403,14 +416,14 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	
 	xmark = mark;
 
-	xlong temp = CLsystem::getmilliseconds();
-	if(temp >= lastupdate + 20)
+	//time = CLsystem::getmilliseconds();
+	if(time >= lastupdate[2] + 20)
 	{
 		tposition.x = position.x - speed.x;
 		tposition.y = position.y + speed.y;
 		tposition.z = position.z + speed.z;
 		
-		lastupdate = temp;	
+		lastupdate[2] = time;	
 	}
 
 	if(collision(ll,mark)==0)
@@ -477,12 +490,8 @@ void CLplayer::display(xlong m)
 //~ tposition.y-boundingbox[0]->b4.y - xmark,
 //~ 0x0000FFFF);
 
-	//~ CLgfx1::drawbigpixel(tv.x,tv.y-xmark,0x000FFFFFF);
-	//~ CLgfx1::drawbigpixel(sposition.x,sposition.y,0x000FFFFFF);
-
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
-	//CLgfx1::drawbigpixel(sposition.x+boundingbox[0]->b1.x,sposition.y-boundingbox[0]->b1.y,0x00FF00FF);
 	//*
 }
 
