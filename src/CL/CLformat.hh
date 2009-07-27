@@ -4,12 +4,16 @@
 #define HH_CLFORMAT
 #pragma message "Compiling " __FILE__ " ! TODO: fix rare loadar crash"
 
+#include <stdlib.h>
+#include <map> 
+
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLutils.hh"
 #include "CLmacros.hh"
 
+typedef std::map <xchar*,xchar*> xmap;
 
 typedef CLfile armember;
 
@@ -21,7 +25,7 @@ struct arfile
 
 namespace CLformat
 {
-	xchar** loadcsv(CLfile* sf);
+	xlong*  loadcsv(CLfile* sf,xchar sep=',');
 	arfile* loadar(CLfile* sf);
 	xlong** loadbcx(CLfile* bf);
 	xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
@@ -30,17 +34,67 @@ namespace CLformat
 	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 	sprites* loadfont(CLfile* sf);
 	xlong** loadlvl();
-	xlong** loadini(CLfile* bf);
+	xmap    loadini(CLfile* bf); //!
 }
 
 
-xchar** CLformat::loadcsv(CLfile* sf)
+xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {
-	//count lines
-	//for each line count commas
-	//copy symbols between commas to seperate char arrays (remove leading and trailing spaces)
+	//Works only for integers!
 	
-	return 0;
+	xchar* bf = sf->text;
+	
+	//get linecount
+	xlong  lc = CLutils::getlinecount(sf);
+	//*
+	
+	//get comma count per line
+	xlong* cc = new xlong[lc];
+	xlong tfc = 0;
+	xlong tcc = 0;
+	xlong tlc = 0;
+	while(tlc<lc)
+	{
+		if(bf[tfc]==sep) tcc++;
+		else if(bf[tfc]==CLsystem::eol)
+		{
+			cc[tlc] = tcc;
+			tcc = 0;
+			tlc++;
+		}
+		tfc++;
+	}
+	//*
+
+	//get value count
+	xlong vc = 0;
+	
+	for(int i=0; i<lc; i++)
+	{
+		vc += cc[i] + 1; 	
+	}
+	vc++;
+	//*
+	
+	//copy values
+	xlong* r = new xlong[vc];	
+	xlong tvc = 1; tfc = 0;
+	r[0] = vc;
+	
+	while(tvc<vc)
+	{
+		r[tvc] = atoi(&bf[tfc]);
+		tvc++;
+		while(bf[tfc]!=sep || bf[tfc]!=CLsystem::eol)
+		{
+			tfc++;
+		}
+		tfc++;
+	}
+	//*
+	
+	//r is now array of xlongs, r[0] is coutn of values
+	return r;
 }
 
 arfile* CLformat::loadar(CLfile* sf)
@@ -445,14 +499,99 @@ xlong** CLformat::loadlvl()
 	return 0;
 }
 
-xlong** CLformat::loadini(CLfile* bf)
+xmap CLformat::loadini(CLfile* sf)
 {
 	//get line count
 	//read string before '=' ignoring leading and trailing  whitespaces
 	//read string after '=' ignoring leading and trailing whitespaces
 	//values after '=' are float unless quotemarks are found
+	//use map
+	xmap r;
+	xchar* bf = sf->text;
 	
-	return 0;
+	//get linecount
+	xlong  lc = CLutils::getlinecount(sf);
+	//*
+	
+	xlong cc=0;
+	xlong tc0=0;
+	xlong tc1=0;
+	xchar* tp0=0;
+	xchar* tp1=0;
+	bool apos=0;
+	xlong aps=0;
+	xlong ape=0;
+	for(int i=0; i<lc; i++)
+	{
+		while(bf[cc]==' ') cc++;
+		if(bf[cc]!=';' || bf[cc]!='#')
+		{
+			//pre equal sign
+			tc0 = cc;
+			while(bf[cc]!='=')
+			{
+				if(bf[cc]!=' ') tc1++;
+			}
+			cc ^= tc0 ^= cc ^= tc0; //xor swap trick
+			
+			tp0 = new xchar[tc1+1];
+			tp0[tc1]=0;
+			for(int j=0; j<tc1; j++)
+			{
+				tp0[j] = bf[cc+j];
+			}
+			cc = tc0;
+			cc++;
+			//*
+			
+			//post equal sign
+			while(bf[cc]==' ') cc++;
+			
+			tc0 = cc;
+			while(bf[cc]!=CLsystem::eol)
+			{
+				if(bf[cc]=='"' || bf[cc]=='\'' && apos==0) { apos=1; aps=cc+1; }
+				else if(bf[cc]=='"' || bf[cc]=='\'' && apos==1) { apos=0; ape=cc-1; break; }
+				if( (bf[cc]!=' ' && apos==0) && bf[cc]!='"' && bf[cc]!='\'') tc1++;
+			}
+			
+			cc ^= tc0 ^= cc ^= tc0; //xor swap trick
+			
+			if(aps==0 && ape==0)
+			{
+				tp1 = new xchar[tc1+1];
+				tp1[tc1]=0;
+				for(int j=0; j<tc1; j++)
+				{
+					tp1[j] = bf[cc+j];
+				}
+			}
+			else 
+			{
+				tp1 = new xchar[ape-aps+2];
+				tp1[ape-aps+1]=0;
+				for(int j=aps; j<ape+1; j++)
+				{
+					tp1[j] = bf[aps+j];
+				}
+			}
+			cc = tc0;
+			//*
+			
+			//map values in xmap
+			r[tp0] = tp1;
+			//*
+			
+			//reset fopr next line
+			while(bf[cc]!=CLsystem::eol) cc++;
+			cc++;
+			aps=0;
+			ape=0;
+			//*
+		}
+	}
+	
+	return r;
 }
 
 #endif

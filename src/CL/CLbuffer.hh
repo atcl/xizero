@@ -47,7 +47,9 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	//ds = s >> 2;
 	//qs = s >> 4;
 	
-	detectCPU(mmx,sse); 
+	mmx = 0;
+	sse = 0;
+	//detectCPU(mmx,sse); //crashes..
 }
 
 template <typename T>CLbuffer<T>::~CLbuffer() { }

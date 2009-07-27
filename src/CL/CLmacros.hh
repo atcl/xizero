@@ -48,12 +48,12 @@ void inline CLlodsd(xlong* src,xlong& var)
 //move to CLdetect
 void detectCPU(bool& mmx,bool& sse)
 {
-	xlong edx;
+	xlong dd;
 	
-	__asm__ __volatile__ ("cpuid":"=d"(edx):"a"(1));
+	__asm__ __volatile__ ("cpuid":"=d"(dd):"a"(1));
 	
-	if(edx&MMXFLAG) mmx=1;
-	if(edx&SSEFLAG) sse=1;
+	if(dd && MMXFLAG) mmx=1;
+	if(dd && SSEFLAG) sse=1;
 }
 //*
 

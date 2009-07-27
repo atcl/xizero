@@ -391,6 +391,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 				currammo->p.z = position.z + ta->z;
 				currammo->d = direction[0];
 				ammolist->append(currammo,"at0");
+				
 				currammo = new CLammo();
 				currammo->comsprite = ammotype[0]->comsprite;
 				currammo->v = ammotype[0]->v;

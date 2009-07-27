@@ -8,7 +8,7 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 
-
+//copy constructor!
 class CLenemy : public virtual CLcl
 {
 	protected:

@@ -20,6 +20,8 @@
 
 namespace CLsystem
 {
+	xchar eol = '\n';
+	
 	CLexe*	exe(xchar** a);
 	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);

@@ -59,6 +59,14 @@ void setto() { }
 
 //console: clk,end,info,ver,mem,set,run,see,
 
+class CLmap
+{
+	xchar** key;
+	xchar** dat;
+	
+	xchar* operator[](xchar* i);
+};
+
 //ASCIImissile
 //CLxml
 //CLjoypad
