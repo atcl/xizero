@@ -121,7 +121,6 @@ xlong CLwindow::getturbo()
 	}
 
 	return turbo;
-
 }
 
 xlong CLwindow::getmousex()

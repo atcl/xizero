@@ -90,13 +90,14 @@ struct every
 	//~ }
 };
 
-struct exe
+struct CLexe
 {
-	xchar*  name;
-	xchar*  title;
-	xlong   size;
-	xlong   version;
-	sprite* splash;
+	xchar* name;
+	xchar* title;
+	xlong  size;
+	xlong  version;
+	xlong* icon;
+	xlong* splash;
 };
 
 #endif

@@ -14,6 +14,7 @@
 #define yres 600
 #define zres 400 
 
-//#define title xizero
+#define CLtitle "atCROSSLEVEL's XiZero"
+
 
 #endif

@@ -59,11 +59,9 @@ void setto() { }
 
 //console: clk,end,info,ver,mem,set,run,see,
 
-//CLversion
 //ASCIImissile
 //CLxml
 //CLjoypad
-
 
 #endif
 

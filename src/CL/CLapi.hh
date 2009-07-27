@@ -14,10 +14,13 @@
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+#include "CLversion.hh"
+#include "CLresource.hh"
 
 
 namespace CLsystem
 {
+	CLexe*	exe(xchar** a);
 	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
@@ -33,6 +36,18 @@ namespace CLsystem
 	void    installsystemkey(xchar scancode,void *action);
 };
 
+
+CLexe* CLsystem::exe(xchar** a)
+{
+	CLexe* r = new CLexe;
+	r->name = a[0];
+	r->title = CLtitle;
+	r->size = 0;
+	r->version = (CLmajor<<24)+(CLminor<<16)+(CLbuild<<8)+CLextra;
+	r->icon = &CLicon[0];
+	r->splash = &CLsplash[0];
+	return r;
+}
 
 void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
 {
