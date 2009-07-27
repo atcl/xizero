@@ -9,6 +9,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLmacros.hh"
 
 
 template <typename T>class CLbuffer : public virtual CLcl
@@ -18,6 +19,8 @@ template <typename T>class CLbuffer : public virtual CLcl
 		uxlong size;
 		uxlong ds;
 		uxlong qs;
+		bool   mmx;
+		bool   sse;
 		
 	public:
 		CLbuffer(uxlong s);
@@ -43,6 +46,8 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	buffer = new T[s];
 	//ds = s >> 2;
 	//qs = s >> 4;
+	
+	detectCPU(mmx,sse); 
 }
 
 template <typename T>CLbuffer<T>::~CLbuffer() { }
@@ -63,13 +68,33 @@ template <typename T>void CLbuffer<T>::fastclear(xlong v)
 template <typename T>void CLbuffer<T>::ultraclear(xlong v)
 {
 	xlong puredst = reinterpret_cast<xlong>(&buffer[0]); //!
+	xlong i=0;
 
-__asm__ __volatile__ ( \
-			"cld\n\t" \
-			"rep\n\t" \
-			"stosl" \
-			: : "a" (v), "D" (puredst), "c" (size) : );
-
+	if(size>262144 && sse)
+	{
+		i=0;
+		for(;i>0;i--)
+		{
+			//blast wth all 8 xmm regs
+			//__asm__ __volatile__ ();
+		}
+	}
+	else if(size>65536 && mmx)
+	{
+		i=0;
+		for(;i>0;i--)
+		{
+			//blast with all 8 mm regs
+			//__asm__ __volatile__ ();
+		}
+	}
+	else
+	{
+		__asm__ __volatile__ (	"cld;"\
+								"rep;"\
+								"stosl;"\
+								: : "a"(v),"D"(puredst),"c"(size));
+	}
 }
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
@@ -95,16 +120,36 @@ template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 
 template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
-	//add prefetch 
-
 	xlong puresrc = reinterpret_cast<xlong>(&buffer[0]); //!
 	xlong puredst = reinterpret_cast<xlong>(&dst[0]);    //!
-
-__asm__ __volatile__ ( \
-			"cld\n\t" \
-			"rep\n\t" \
-			"movsl" \
-			: : "S" (puresrc), "D" (puredst), "c" (size) : );
+	xlong i=0;
+		
+	if(size>262144 && sse)
+	{
+		i=0;
+		for(;i>0;i--)
+		{
+			//prefetch
+			//blast with all 8 xmm regs
+			//__asm__ __volatile__ ();
+		}
+	}
+	else if(size>65536 && mmx)
+	{
+		i=0;
+		for(;i>0;i--)
+		{
+			//blast with all 8 mm regs
+			//__asm__ __volatile__ ();
+		}
+	}
+	else
+	{
+		__asm__ __volatile__ (	"cld;"\
+								"rep;"\
+								"movsl;"\
+								: :"S"(puresrc),"D"(puredst),"c"(size));
+	}
 }
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
