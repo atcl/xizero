@@ -35,7 +35,7 @@ namespace CLsystem
 	xlong   getmilliseconds(); //since midnight
 	xlong   doevery(every* e);
 	xlong   system(const xchar* c);
-	xlong   ato(const xchar* c);
+	xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
 	xlong   cmpcstr(const xchar* a,const xchar* b);
 	void    installsystemkey(xchar scancode,void *action);
 };

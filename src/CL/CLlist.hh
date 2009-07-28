@@ -9,6 +9,7 @@
 #include "CLapi.hh"
 
 
+//add type info by RTTI
 struct listmember
 {
 	void*       data;

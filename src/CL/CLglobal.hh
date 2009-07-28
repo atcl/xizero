@@ -10,6 +10,11 @@
 #include "CLmatrix.hh"
 #include "CLfps.hh"
 
+namespace CLglobal
+{
+	
+};
+
 //variables
 uxlong CLscreenwidth = xres;
 uxlong CLscreenheight = yres;
@@ -29,7 +34,7 @@ CLfvector cllight(1,1,-1);
 CLmatrix* linearM;
 CLmatrix* shadowM;
 
-CLbench*    clbench;
+CLbench*  clbench;
 
 //temp:
 xlong xmark;

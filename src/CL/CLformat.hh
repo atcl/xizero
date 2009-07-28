@@ -38,11 +38,11 @@ namespace CLformat
 	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 	sprites* loadfont(CLfile* sf);
 	xlong**  loadlvl();
-	xmap*    loadini(CLfile* bf); //!
+	xmap*    loadini(CLfile* bf);
 }
 
 
-//add template parameter to change between xlong* and xchar** 
+//add template parameter to change between xlong*,xchar**,xfixed* and float*
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {
 	//Works only for integers!
