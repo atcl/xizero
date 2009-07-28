@@ -69,7 +69,11 @@ class CLmap
 
 //ASCIImissile
 //CLxml
-//CLjoypad
+
+//change z orientation (polygon.visible, polygon.rasterize,object.ctor)
+//flatshade in asm
+//enemy copy ctor
+//terrain dep transformations and zlevel
 
 #endif
 

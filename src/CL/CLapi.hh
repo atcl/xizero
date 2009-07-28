@@ -20,7 +20,7 @@
 
 namespace CLsystem
 {
-	xchar eol = '\n';
+	xchar eol = '\n'; //change for WIN32
 	
 	CLexe*	exe(xchar** a);
 	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");

@@ -25,28 +25,20 @@ int main(int argc, char** argv)
 	CLsetup();
 	//***
 
-//
-// 	xlong* fbcx = CLgetfile_("../dat/test.bcx");
-// 	xlong **bcx;
-// 	xlong lines = CLgetfilelinecount_("../dat/test.bcx");
-// 	doubleword tt;
-// 	//cout << "linecount: " << lines << endl;
-// 	bcx = clformat->loadbcx(fbcx,lines);
-// 	//cout << "array size: " << bcx[0][0] << endl;
-// 	tt.dd = bcx[0][1];
-// 	//cout << "array0[1]: " << tt.db[0] << tt.db[1] <<tt.db[2] <<tt.db[3] << endl;
-// 	tt.dd = bcx[1][1];
-// 	//cout << "array1[1]: " << tt.db[0] << tt.db[1] <<tt.db[2] <<tt.db[3] << endl;
-// 	tt.dd = bcx[0][3];
-// 	//cout << "array0[3]: " << tt.db[0] << tt.db[1] <<tt.db[2] <<tt.db[3] << endl;
-// 	//cout << "array1[3]: " << bcx[1][3] << endl;
-// 
-
-
 	//test section:
 		CLdoublebuffer->clear(0);
 	//
+	
+	CLfile* initest = CLsystem::getfile("../dat/other/test.ini");
 
+	xmap ini = CLformat::loadini(initest);
+	
+	CLsystem::print(ini["name"]);
+	CLsystem::print(ini["value"]);
+	CLsystem::print(ini["other"]);
+	CLsystem::print(ini["form"]);
+	CLsystem::print(ini["xxx"]);
+	
 		//test bcx loading:
 			//~ CLfile* fbcx = CLsystem::getfile("../dat/test.bcx");
 			//~ xlong** bcx;

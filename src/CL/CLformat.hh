@@ -38,6 +38,7 @@ namespace CLformat
 }
 
 
+//add template parameter to change between xlong* and xchar** 
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {
 	//Works only for integers!
@@ -47,7 +48,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	//get linecount
 	xlong  lc = CLutils::getlinecount(sf);
 	//*
-	
+
 	//get comma count per line
 	xlong* cc = new xlong[lc];
 	xlong tfc = 0;
@@ -71,28 +72,28 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	
 	for(int i=0; i<lc; i++)
 	{
-		vc += cc[i] + 1; 	
+		if(cc[i]!=0) vc += cc[i] + 1; 	
 	}
 	vc++;
 	//*
 	
 	//copy values
-	xlong* r = new xlong[vc];	
+	xlong* r = new xlong[vc+1];	
 	xlong tvc = 1; tfc = 0;
 	r[0] = vc;
-	
-	while(tvc<vc)
+
+	while(tvc<=vc)
 	{
 		r[tvc] = atoi(&bf[tfc]);
 		tvc++;
-		while(bf[tfc]!=sep || bf[tfc]!=CLsystem::eol)
+		while(bf[tfc]!=sep && bf[tfc]!=CLsystem::eol)
 		{
 			tfc++;
 		}
 		tfc++;
 	}
 	//*
-	
+
 	//r is now array of xlongs, r[0] is coutn of values
 	return r;
 }
@@ -501,17 +502,14 @@ xlong** CLformat::loadlvl()
 
 xmap CLformat::loadini(CLfile* sf)
 {
-	//get line count
-	//read string before '=' ignoring leading and trailing  whitespaces
-	//read string after '=' ignoring leading and trailing whitespaces
-	//values after '=' are float unless quotemarks are found
-	//use map
+	//steckt in irgendeiner whileschleife fest...
 	xmap r;
 	xchar* bf = sf->text;
 	
 	//get linecount
 	xlong  lc = CLutils::getlinecount(sf);
 	//*
+	CLsystem::print(lc);
 	
 	xlong cc=0;
 	xlong tc0=0;
@@ -524,7 +522,7 @@ xmap CLformat::loadini(CLfile* sf)
 	for(int i=0; i<lc; i++)
 	{
 		while(bf[cc]==' ') cc++;
-		if(bf[cc]!=';' || bf[cc]!='#')
+		if(bf[cc]!=';' || bf[cc]!='#' || bf[cc]!=CLsystem::eol)
 		{
 			//pre equal sign
 			tc0 = cc;
