@@ -4,8 +4,7 @@
 #define HH_CLFORMAT
 #pragma message "Compiling " __FILE__ " ! TODO: fix rare loadar crash"
 
-#include <stdlib.h>
-#include <map> 
+#include <map>
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -13,7 +12,12 @@
 #include "CLutils.hh"
 #include "CLmacros.hh"
 
-typedef std::map <xchar*,xchar*> xmap;
+struct cmpstr
+{
+	bool operator()(const xchar* a,const xchar* b) { return CLsystem::cmpcstr(a,b) < 0; }
+};
+
+typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
 typedef CLfile armember;
 
@@ -84,7 +88,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 
 	while(tvc<=vc)
 	{
-		r[tvc] = atoi(&bf[tfc]);
+		r[tvc] = CLsystem::ato(&bf[tfc]);
 		tvc++;
 		while(bf[tfc]!=sep && bf[tfc]!=CLsystem::eol)
 		{
@@ -112,7 +116,7 @@ arfile* CLformat::loadar(CLfile* sf)
 	xlong tsize = cfs - 8;
 
 	//check for "magic-string"
-	if( CLutils::comparechararrays(bf,"!<arch>",6) == 1 )
+	if( CLutils::comparechararrays(bf,"!<arch>",6) == 0 )
 	{
 		xlong bc = 8;
 		xlong fc = 0;
@@ -584,6 +588,7 @@ xmap* CLformat::loadini(CLfile* sf)
 			
 			//map values in xmap
 			(*r)[tp0] = tp1;
+			//~ CLsystem::print(tp0);
 			//*
 		}
 			

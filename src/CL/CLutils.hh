@@ -18,7 +18,7 @@ namespace CLutils
 	xchar long2char(xlong l,xlong i);
 	xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
 	void copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
-	bool comparechararrays(xchar* t1, xchar* t2,xlong tl);
+	bool comparechararrays(const xchar* t1,const xchar* t2,xlong tl=0);
 	xlong getlinecount(CLfile* sf);
 	bool checkextension(xchar* fn,xlong nl,const xchar* fe);
 	xlong getrandom(xlong range);
@@ -83,14 +83,16 @@ void CLutils::copychararray(xchar* dst,xchar* src,xlong length)
 	}
 }
 
-bool CLutils::comparechararrays(xchar* t1, xchar* t2,xlong tl)
+bool CLutils::comparechararrays(const xchar* t1,const xchar* t2,xlong tl)
 {
+	if(tl==0) tl = chararraylength(t1);
+	
 	for(int i=0; i<tl; i++)
 	{
-		if(t1[i]!=t2[i]) return false;
+		if(t1[i]!=t2[i]) return 1;
 	}
 
-	return true;
+	return 0;
 }
 
 xlong CLutils::getlinecount(CLfile* sf)

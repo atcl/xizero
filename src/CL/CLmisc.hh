@@ -70,6 +70,10 @@ class CLmap
 //ASCIImissile
 //CLxml
 
+//static polymorphism for CLvector, CLfixed
+//template version of CLformat.loadcsv 
+//CLmath.acos,asin mit lookup tables
+//template version of CLsystem.ato
 //change z orientation (polygon.visible, polygon.rasterize,object.ctor)
 //flatshade in asm
 //enemy copy ctor

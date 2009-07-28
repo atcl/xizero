@@ -35,6 +35,8 @@ namespace CLsystem
 	xlong   getmilliseconds(); //since midnight
 	xlong   doevery(every* e);
 	xlong   system(const xchar* c);
+	xlong   ato(const xchar* c);
+	xlong   cmpcstr(const xchar* a,const xchar* b);
 	void    installsystemkey(xchar scancode,void *action);
 };
 
@@ -179,6 +181,16 @@ xlong CLsystem::doevery(every* e)
 xlong CLsystem::system(const xchar* c)
 {
 	return ::system(c);
+}
+
+xlong CLsystem::ato(const xchar* c)
+{
+	return atoi(c);
+}
+
+xlong CLsystem::cmpcstr(const xchar* a,const xchar* b)
+{
+	return strcmp(a,b);
 }
 
 void CLsystem::installsystemkey(xchar scancode,void *action)
