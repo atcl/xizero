@@ -25,6 +25,16 @@ void inline say(const xchar* c="hi")
 	std::cout << c << std::endl;
 }
 
+void inline say(xlong l)
+{
+	std::cout << l << std::endl;
+}
+
+void inline say(float f)
+{
+	std::cout << f << std::endl;
+}
+
 void inline debug(const xchar* c,xlong v)
 {
 	std::cout << c << ": " << v << std::endl;

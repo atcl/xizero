@@ -33,8 +33,8 @@ namespace CLformat
 	
 	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 	sprites* loadfont(CLfile* sf);
-	xlong** loadlvl();
-	xmap    loadini(CLfile* bf); //!
+	xlong**  loadlvl();
+	xmap*    loadini(CLfile* bf); //!
 }
 
 
@@ -500,10 +500,10 @@ xlong** CLformat::loadlvl()
 	return 0;
 }
 
-xmap CLformat::loadini(CLfile* sf)
+xmap* CLformat::loadini(CLfile* sf)
 {
 	//steckt in irgendeiner whileschleife fest...
-	xmap r;
+	xmap* r = new xmap;
 	xchar* bf = sf->text;
 	
 	//get linecount
@@ -518,18 +518,21 @@ xmap CLformat::loadini(CLfile* sf)
 	xchar* tp1=0;
 	bool apos=0;
 	xlong aps=0;
-	xlong ape=0;
 	for(int i=0; i<lc; i++)
 	{
 		while(bf[cc]==' ') cc++;
-		if(bf[cc]!=';' || bf[cc]!='#' || bf[cc]!=CLsystem::eol)
+		
+		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!=CLsystem::eol)
 		{
 			//pre equal sign
 			tc0 = cc;
+			tc1=0;
 			while(bf[cc]!='=')
 			{
 				if(bf[cc]!=' ') tc1++;
+				cc++;
 			}
+
 			cc ^= tc0 ^= cc ^= tc0; //xor swap trick
 			
 			tp0 = new xchar[tc1+1];
@@ -544,18 +547,21 @@ xmap CLformat::loadini(CLfile* sf)
 			
 			//post equal sign
 			while(bf[cc]==' ') cc++;
-			
+
 			tc0 = cc;
-			while(bf[cc]!=CLsystem::eol)
+			tc1=0;
+			while(bf[cc] != CLsystem::eol)
 			{
-				if(bf[cc]=='"' || bf[cc]=='\'' && apos==0) { apos=1; aps=cc+1; }
-				else if(bf[cc]=='"' || bf[cc]=='\'' && apos==1) { apos=0; ape=cc-1; break; }
-				if( (bf[cc]!=' ' && apos==0) && bf[cc]!='"' && bf[cc]!='\'') tc1++;
+				     if( (bf[cc]=='"' || bf[cc]=='\'') && apos==0) { apos=1; cc++; aps=cc; }
+				else if( (bf[cc]=='"' || bf[cc]=='\'') && apos==1) { apos=0; break; }
+				else if(bf[cc]!=' ' && apos==0) { tc1++; cc++; }
+				else if(apos==1) {tc1++; cc++; }
+				else if( bf[cc]=='#' || bf[cc]==';') break;
 			}
-			
+
 			cc ^= tc0 ^= cc ^= tc0; //xor swap trick
 			
-			if(aps==0 && ape==0)
+			if(aps==0)
 			{
 				tp1 = new xchar[tc1+1];
 				tp1[tc1]=0;
@@ -566,9 +572,9 @@ xmap CLformat::loadini(CLfile* sf)
 			}
 			else 
 			{
-				tp1 = new xchar[ape-aps+2];
-				tp1[ape-aps+1]=0;
-				for(int j=aps; j<ape+1; j++)
+				tp1 = new xchar[tc1+1];
+				tp1[tc1]=0;
+				for(int j=0; j<tc1; j++)
 				{
 					tp1[j] = bf[aps+j];
 				}
@@ -577,16 +583,16 @@ xmap CLformat::loadini(CLfile* sf)
 			//*
 			
 			//map values in xmap
-			r[tp0] = tp1;
-			//*
-			
-			//reset fopr next line
-			while(bf[cc]!=CLsystem::eol) cc++;
-			cc++;
-			aps=0;
-			ape=0;
+			(*r)[tp0] = tp1;
 			//*
 		}
+			
+		//reset fopr next line
+		while(bf[cc]!=CLsystem::eol) cc++;
+		cc++;
+		aps=0;
+		//*
+
 	}
 	
 	return r;

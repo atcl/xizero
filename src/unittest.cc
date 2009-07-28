@@ -31,13 +31,13 @@ int main(int argc, char** argv)
 	
 	CLfile* initest = CLsystem::getfile("../dat/other/test.ini");
 
-	xmap ini = CLformat::loadini(initest);
+	xmap* ini = CLformat::loadini(initest);
 	
-	CLsystem::print(ini["name"]);
-	CLsystem::print(ini["value"]);
-	CLsystem::print(ini["other"]);
-	CLsystem::print(ini["form"]);
-	CLsystem::print(ini["xxx"]);
+	CLsystem::print((*ini)["name"]);
+	CLsystem::print((*ini)["value"]);
+	CLsystem::print((*ini)["other"]);
+	CLsystem::print((*ini)["form"]);
+	CLsystem::print((*ini)["xxx"]);
 	
 		//test bcx loading:
 			//~ CLfile* fbcx = CLsystem::getfile("../dat/test.bcx");
