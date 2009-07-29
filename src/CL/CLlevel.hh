@@ -102,22 +102,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	//*
 	
 	//terrain map:
-		//find terrain map, has to have extension .mapt
-		xlong tf = -1;
-		for(int h=0; h<levela->filecount; h++)
-		{
-			if(CLutils::checkextension(levela->members[h]->name,16,".mapt")==true)
-			{
-				tf=h;
-				break;
-			}
-		}
-		if(tf==-1) CLsystem::exit(1,0,__func__,"no terrain map found");
-		//tf holds index of armember terrain map
-
-		//convert terrain map to 2d xchar array, and remove lineends
-		xchar** terrainmap = CLformat::loadmap(levela->members[tf],33,' ',-1);
-		//now terrain map holds 2d xchar array of terrain objects
+	xlong tf = CLutils::findarmember(levela,".mapt");
+	if(tf==-1) CLsystem::exit(1,0,__func__,"no terrain map found");
+	xchar** terrainmap = CLformat::loadmap(levela->members[tf],33,' ',-1);
 	//**
 
 	//determine level constants
@@ -134,41 +121,15 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	//*
 
 	//height map:
-		//find height map, has to have extension .maph
-		xlong hf = -1;
-		for(int h=0; h<levela->filecount; h++)
-		{
-			if(CLutils::checkextension(levela->members[h]->name,16,".maph")==true)
-			{
-				hf=h;
-				break;
-			}
-		}
-		if(tf==-1) CLsystem::exit(1,0,__func__,"no height map found");
-		//tf holds index of armember height map
-
-		//convert height map to 2d xchar array, and remove lineends
-		xchar** heightmap = CLformat::loadmap(levela->members[hf],48,' ',0);
-		//now height map holds 2d xchar array of height levels	
+	xlong hf = CLutils::findarmember(levela,".maph");
+	if(hf==-1) CLsystem::exit(1,0,__func__,"no height map found");
+	xchar** heightmap = CLformat::loadmap(levela->members[hf],48,' ',0);
 	//**
 
 	//entity map:
-		//find entity map, has to have extension .mape
-		xlong ef = -1;
-		for(int h=0; h<levela->filecount; h++)
-		{
-			if(CLutils::checkextension(levela->members[h]->name,16,".mape")==true)
-			{
-				ef=h;
-				break;
-			}
-		}
-		if(ef==-1) CLsystem::exit(1,0,__func__,"no entitiy map found");
-		//tf holds index of armember entity map
-
-		//convert entity map to 2d xchar array, and remove lineends
-		xchar** entitymap = CLformat::loadmap(levela->members[ef],33,'.',-1);
-		//now entity map holds 2d xchar array of entity objects	
+	xlong ef = CLutils::findarmember(levela,".mape");
+	if(ef==-1) CLsystem::exit(1,0,__func__,"no entity map found");
+	xchar** entitymap = CLformat::loadmap(levela->members[ef],33,' ',-1);
 	//**
 
 	//build levellayerscontaining all sub maps
@@ -245,46 +206,47 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	arfile* playera = CLformat::loadar(playerraw);
 	//*
 
-	//find player definition, has to have extension .bcx
-	xlong pd = -1;
-	for(int h=0; h<playera->filecount; h++)
-	{
-		if(CLutils::checkextension(playera->members[h]->name,16,".bcx")==true)
-		{
-			pd=h;
-			break;
-		}
-	}
-	if(pd==-1) CLsystem::exit(1,0,__func__,"no player definition file found");
-	//pd holds index of player definition
-
-	//temp till ini's avail
+	//find player definition, has to have extension .bcx, change to ini as soon as works and avail
+	xlong pd = CLutils::findarmember(playera,".bcx");
+	if(pd==-1) CLsystem::exit(1,0,__func__,"no player definition found");
 	xlong** playerd = CLformat::loadbcx(playera->members[pd]);
 	//*
-
-	//find player models, have to have extension .y3d
-	xlong pm = -1;
-	xlong pn = -1;
-	for(int h=0; h<playera->filecount; h++)
-	{
-		if(CLutils::checkextension(playera->members[h]->name,16,"0.y3d")==true)
-		{
-			pm=h;
-		}
-		
-		if(CLutils::checkextension(playera->members[h]->name,16,"1.y3d")==true)
-		{
-			pn=h;
-		}
-	}
+	
+	//find first part of player model
+	xlong pm = CLutils::findarmember(playera,"0.y3d");
 	if(pm==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
-	if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part II file found");
-	//pm holds index of first model
-
-	//create player models from y3d
 	CLobject* playerm = new CLobject(playera->members[pm],0);
+	//*
+	
+	//find second part of player model
+	xlong pn = CLutils::findarmember(playera,"1.y3d");
+	if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
 	CLobject* playern = new CLobject(playera->members[pn],0);
 	//*
+
+	//~ //find player models, have to have extension .y3d
+	//~ xlong pm = -1;
+	//~ xlong pn = -1;
+	//~ for(int h=0; h<playera->filecount; h++)
+	//~ {
+		//~ if(CLutils::checkextension(playera->members[h]->name,16,"0.y3d")==true)
+		//~ {
+			//~ pm=h;
+		//~ }
+		//~ 
+		//~ if(CLutils::checkextension(playera->members[h]->name,16,"1.y3d")==true)
+		//~ {
+			//~ pn=h;
+		//~ }
+	//~ }
+	//~ if(pm==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
+	//~ if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part II file found");
+	//~ //pm holds index of first model
+//~ 
+	//~ //create player models from y3d
+	//~ CLobject* playerm = new CLobject(playera->members[pm],0);
+	//~ CLobject* playern = new CLobject(playera->members[pn],0);
+	//~ //*
 
 	//search player start pos and set player pos to it
 	bool startposfound = false;

@@ -5,7 +5,7 @@
 #pragma message: "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
-#include  "CLstruct.hh"
+#include "CLstruct.hh"
 
 
 namespace CLutils
@@ -25,6 +25,7 @@ namespace CLutils
 	xlong getrandom(xlong range);
 	xchar* color2string(uxlong c);
 	xlong endian(xlong l);
+	xlong findarmember(arfile* a,const xchar* e);
 };
 
 
@@ -186,6 +187,22 @@ xlong CLutils::endian(xlong l)
 	tl.db[2] = tc;
 
 	return tl.dd;
+}
+
+xlong CLutils::findarmember(arfile* a,const xchar* e)
+{
+		xlong r = -1;
+		
+		for(int h=0; h<a->filecount; h++)
+		{
+			if(CLutils::checkextension(a->members[h]->name,16,e)==true)
+			{
+				r=h;
+				break;
+			}
+		}
+		
+		return r;
 }
 
 #endif

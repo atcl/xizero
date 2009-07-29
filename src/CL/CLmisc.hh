@@ -77,6 +77,8 @@ class CLmap
 //flatshade in asm
 //enemy copy ctor
 //terrain dep transformations and zlevel
+//CLvector.cross,CLvector.dot return type overloading
+//CLgfx1.drawsprite ao: transparency check with logic-ops instead of if
 
 #endif
 

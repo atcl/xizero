@@ -24,6 +24,14 @@ struct CLfile
 	xlong  lsize;
 };
 
+typedef CLfile armember;
+
+struct arfile
+{
+	xlong      filecount;
+	armember**  members;
+};
+
 struct screenside
 {
 	xlong offset;

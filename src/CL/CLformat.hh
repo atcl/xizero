@@ -19,14 +19,6 @@ struct cmpstr
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
-typedef CLfile armember;
-
-struct arfile
-{
-	xlong      filecount;
-	armember**  members;
-};
-
 namespace CLformat
 {
 	xlong*  loadcsv(CLfile* sf,xchar sep=',');
