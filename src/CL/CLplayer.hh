@@ -11,6 +11,7 @@
 #include "CLapi.hh"
 #include "CLgame.hh"
 #include "CLsprites.hh"
+#include "CLformat.hh"
 
 //CLplayer todo: structure,give ctor args: playerlib,levellandscape,startpos and init yourself
 
@@ -25,60 +26,46 @@ struct CLammo
 class CLplayer : public virtual CLcl
 {
 	protected:
-		CLmatrix* cllinear; //no pointer
 		CLobject* model[2]; //0 is chassis,1 is tower
-		CLlist*   ammolist; //no pointer
+		CLmatrix* cllinear;
+		CLlist*   ammolist;
 
 	private:
-		CLbox* boundingbox[2]; //no pointer
-		CLbox* oboundingbox[2]; //no pointer
-
-		CLammo* ammotype[4];
-		xlong firerate[4];
+		CLbox* boundingbox[2];
+		CLbox* oboundingbox[2];
 		
-		xlong health;
-		xlong shield;
-		xlong shieldrate;
-		xlong armor;
-
 		CLfvector position;
 		CLfvector tposition;
-		CLlvector sposition; //not needed
+		CLlvector sposition;
 		CLfvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
 		CLfvector speed;
 		CLfvector speeddir;
 		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
-
+		
+		CLammo* ammotype[4];
+		xlong firerate[4];
+		xlong health;
+		xlong shield;
+		xlong shieldrate;
+		xlong armor;
 		xlong gear;
 		xlong active;
 		xlong points;
 		xlong lastupdate[3];
 
 		void setspeed();
-		void fire(xlong at);
-		void hurt(xlong am);
+		void fire(xlong at,bool m,xlong d,xlong i);
+		void hit();
 		void pretransform(bool m);
 		void transform(bool m);
 		xlong collision(CLfbuffer* ll,xlong m);
 		
-		//inline?
-		void update_ammo();
-		void update_postion();
-		void collision_screen();
-		void collision_terrain();
-		void collision_enemy();
-		void collision_ammo();
-		void display_ammo();
-		void display_model();
-		//*
-		
 	public:
-		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p=0);
+		CLplayer(xchar* playerlib,CLlvector& s,xlong p=0);
 		~CLplayer();
-
+		
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
 		void display(xlong m);
-		void setxyz(xlong x,xlong y,xlong z);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -91,88 +78,79 @@ void CLplayer::setspeed()
 {
 	switch(gear)
 	{
-		case 0:
-			speed = 0;
-			break;
-
-		case 1:
-			speed = speeddir;
-			break;
-
-		case -1:
-			speed = -speeddir;
-			break;
+		case 0: speed = 0; break;
+		case 1: speed = speeddir; break;
+		case -1: speed = -speeddir; break;
 	}
 }
 
-void CLplayer::fire(xlong at)
+void CLplayer::fire(xlong at,bool m,xlong d,xlong i)
 {
-
-}
-
-void CLplayer::hurt(xlong am)
-{
-
+	if(at<4)
+	{
+		CLammo* currammo = new CLammo();
+		currammo->comsprite = ammotype[at]->comsprite;
+		currammo->v = ammotype[at]->v;
+		CLfvector* ta = model[m]->getdockingpoint(d,i);
+		currammo->p.x = position.x + ta->x;
+		currammo->p.y = position.y - ta->y;
+		currammo->p.z = position.z + ta->z;
+		currammo->d = direction[m];
+		ammolist->append(currammo,"at" + xchar(at+30) );
+	}
 }
 
 void CLplayer::pretransform(bool m)
 {
-		boundingbox[1]->b1 = cllinear->transform(boundingbox[1]->b1);
-		boundingbox[1]->b2 = cllinear->transform(boundingbox[1]->b2);
-		boundingbox[1]->b3 = cllinear->transform(boundingbox[1]->b3);
-		boundingbox[1]->b4 = cllinear->transform(boundingbox[1]->b4);
-		boundingbox[1]->t1 = cllinear->transform(boundingbox[1]->t1);
-		boundingbox[1]->t2 = cllinear->transform(boundingbox[1]->t2);
-		boundingbox[1]->t3 = cllinear->transform(boundingbox[1]->t3);
-		boundingbox[1]->t4 = cllinear->transform(boundingbox[1]->t4);
+	//transform tower boundng box
+	boundingbox[1]->c[0] = cllinear->transform(boundingbox[1]->c[0]);
+	boundingbox[1]->c[1] = cllinear->transform(boundingbox[1]->c[1]);
+	boundingbox[1]->c[2] = cllinear->transform(boundingbox[1]->c[2]);
+	boundingbox[1]->c[3] = cllinear->transform(boundingbox[1]->c[3]);
+	boundingbox[1]->c[4] = cllinear->transform(boundingbox[1]->c[4]);
+	boundingbox[1]->c[5] = cllinear->transform(boundingbox[1]->c[5]);
+	boundingbox[1]->c[6] = cllinear->transform(boundingbox[1]->c[6]);
+	boundingbox[1]->c[7] = cllinear->transform(boundingbox[1]->c[7]);
+	//*
 	
+	//transform chassis if wanted
 	if(m==0)
 	{
-		boundingbox[0]->b1 = cllinear->transform(boundingbox[0]->b1);
-		boundingbox[0]->b2 = cllinear->transform(boundingbox[0]->b2);
-		boundingbox[0]->b3 = cllinear->transform(boundingbox[0]->b3);
-		boundingbox[0]->b4 = cllinear->transform(boundingbox[0]->b4);
-		boundingbox[0]->t1 = cllinear->transform(boundingbox[0]->t1);
-		boundingbox[0]->t2 = cllinear->transform(boundingbox[0]->t2);
-		boundingbox[0]->t3 = cllinear->transform(boundingbox[0]->t3);
-		boundingbox[0]->t4 = cllinear->transform(boundingbox[0]->t4);
+		boundingbox[0]->c[0] = cllinear->transform(boundingbox[0]->c[0]);
+		boundingbox[0]->c[1] = cllinear->transform(boundingbox[0]->c[1]);
+		boundingbox[0]->c[2] = cllinear->transform(boundingbox[0]->c[2]);
+		boundingbox[0]->c[3] = cllinear->transform(boundingbox[0]->c[3]);
+		boundingbox[0]->c[4] = cllinear->transform(boundingbox[0]->c[4]);
+		boundingbox[0]->c[5] = cllinear->transform(boundingbox[0]->c[5]);
+		boundingbox[0]->c[6] = cllinear->transform(boundingbox[0]->c[6]);
+		boundingbox[0]->c[7] = cllinear->transform(boundingbox[0]->c[7]);
 	}
+	//*
 }
 
 void CLplayer::transform(bool m)
 {
-	//bool decides what part, if complete or only tower
-
+	//transform tower
+	model[1]->update(cllinear); //transform model(s)
+	direction[1] = cllinear->transform(direction[1]); //transform direction vector
+	//*
+	
+	//transform chassis if wanted
 	if(m==0)
 	{
-		//transform model(s)
-		model[0]->update(cllinear);
-		model[1]->update(cllinear);
-	
-		//transform direction vector
-		direction[0] = cllinear->transform(direction[0]);
-		direction[1] = cllinear->transform(direction[1]);
-
-		//transform (constant) speeddir vector
-		speeddir = cllinear->transform(speeddir);
-
-		//transform tilt vector
-		//tilt = cllinear->transform(tilt);
+		model[0]->update(cllinear); //transform model(s)
+		direction[0] = cllinear->transform(direction[0]); //transform direction vector
+		speeddir = cllinear->transform(speeddir); //transform (constant) speeddir vector
+		//tilt = cllinear->transform(tilt); //transform tilt vector
 	}
-	else
-	{
-		//transform model(s)
-		model[1]->update(cllinear);
-
-		//transform direction vector
-		direction[1] = cllinear->transform(direction[1]);
-	}
+	//*
 }
 
 xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 {
 	xlong r = 0;
 
+	//screen boundary collision test
 	tposition.y -= m;
 	xlong bc = CLgame::boundary(tposition,*boundingbox[0]); //boundary check: (check if game screen is left)
 	tposition.y += m;
@@ -183,11 +161,12 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		setspeed();
 		r++;
 	}
+	//*
 
+	//terrain collision test
 	xlong xangle = 0;
 	xlong yangle = 0;
 	xlong zdiff  = 0;
-
 	xlong tc = CLgame::terrain(ll,boundingbox[0],oboundingbox[0],tposition,position,xangle,yangle,zdiff); //terrain collision check: (check if player collides with terrain block)
  
 	if(tc!=0)
@@ -196,119 +175,138 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		setspeed();
 		r++;
 	}
+	//*
 	
-	//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
-	if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
+	//temp
+		//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+		if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
+		
+		//rotate x about xangle,y about yangle
+		//cllinear->rotate(xangle,0,0);
+		//if(xangle!=0) CLsystem::print(xangle);
+		//if(yangle!=0) CLsystem::print(yangle);
+	//*
+
+	//enemy collision check
 	
-	//rotate x about xangle,y about yangle
-	//cllinear->rotate(xangle,0,0);
-	//if(xangle!=0) CLsystem::print(xangle);
-	//if(yangle!=0) CLsystem::print(yangle);
-
-
-	//enemy collision check: (check if player collides with enemy entity)
+		//...
+	
+	//*
 
 	return r;
 }
 
-CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
+CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 {
-	model[0] = cha;
-	model[1] = tow;
+	//matrix for player transformations
+	cllinear = new CLmatrix(1);
+	//*
 	
+	//set points
+	points = p;
+	//*
+	
+	//load playerstuff 
+	CLfile* playerraw = CLsystem::getfile(playerlib);
+	arfile* playera = CLformat::loadar(playerraw);
+	//*
+
+	//find player definition, has to have extension .bcx, change to ini as soon as works and avail
+	xlong pd = CLutils::findarmember(playera,".ini");
+	if(pd==-1) CLsystem::exit(1,0,__func__,"no player definition found");
+	xmap* pini = CLformat::loadini(playera->members[pd]);
+	//*
+	
+	//find first part of player model
+	xlong pm = CLutils::findarmember(playera,"0.y3d");
+	if(pm==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
+	model[0] = new CLobject(playera->members[pm],0);
+	//*
+	
+	//find second part of player model
+	xlong pn = CLutils::findarmember(playera,"1.y3d");
+	if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
+	model[1] = new CLobject(playera->members[pn],0);
+	//*
+
+	//set and copy bounding box of first model
 	boundingbox[0] = new CLbox;
 	oboundingbox[0] = model[0]->getboundingbox();
-	boundingbox[0]->b1 = oboundingbox[0]->b1;
-	boundingbox[0]->b2 = oboundingbox[0]->b2;
-	boundingbox[0]->b3 = oboundingbox[0]->b3;
-	boundingbox[0]->b4 = oboundingbox[0]->b4;
-	boundingbox[0]->t1 = oboundingbox[0]->t1;
-	boundingbox[0]->t2 = oboundingbox[0]->t2;
-	boundingbox[0]->t3 = oboundingbox[0]->t3;
-	boundingbox[0]->t4 = oboundingbox[0]->t4;
+	*boundingbox[0] = *oboundingbox[0];
+	//*
 
-	boundingbox[1] = model[1]->getboundingbox();
-
-	cllinear = new CLmatrix(1);
-
+	//set and copy bounding box of second model
+	boundingbox[1] = new CLbox;
+	oboundingbox[1] = model[1]->getboundingbox();
+	*boundingbox[1] = *oboundingbox[1];
+	//*
+	
+	//set and adjust (start) position to floor
 	position = s;
 	position.z += 95;
 	tposition = position;
-
-	points = p;
-
-	//create attribute objects:
-	ammolist = new CLlist();
-
-	//construct bounding box from model:
-	//CLbox = model->getboundingbox();
-
-	//load player attribtes from data-file provided in parameters (dat)
-
-	//if( dat[1][0] != 'PLYR' ) CLexit_(1,__func__,"wrong bcx type");
-	//if( dat[1][1] != model[0]->getname() ) CLexit_(__func__,1,"bcx and y3d are not fitting");
-	health		= dat[1][2];
-	shield		= dat[1][3];
-	shieldrate	= dat[1][4];
-	armor		= dat[1][5];
-
-	speeddir.x  = 0;
-	speeddir.y  = -6;
-	speeddir.z  = 0;
-
-	//~ ammotype[0]	= dat[1][12];
-	//~ ammotype[1]	= dat[1][15];
-	//~ ammotype[2]	= dat[1][18];
-	//~ ammotype[3]	= dat[1][21];
+	//*
 	
+	//create list for all ammo fired by player
+	ammolist = new CLlist();
+	//*
+	
+	//load player info from definition file (...later ini)
+	health		= CLsystem::ato((*pini)["health"]);
+	shield		= CLsystem::ato((*pini)["shield"]);
+	shieldrate	= CLsystem::ato((*pini)["shieldrate"]);
+	armor		= CLsystem::ato((*pini)["armor"]);
+	speeddir.x  = 0;
+	speeddir.y  = -CLsystem::ato((*pini)["speed"]);
+	speeddir.z  = 0;
 	ammotype[0] = new CLammo;
-	ammotype[0]->comsprite = CLsprites::drawplasma;
+	switch(CLsystem::ato((*pini)["ammo0"])) { case 0: ammotype[0]->comsprite = CLsprites::drawplasma; break; }
 	ammotype[0]->v = 16;
 	ammotype[0]->p = CLfvector();
 	ammotype[0]->d = CLfvector();
-	
 	ammotype[1] = new CLammo;
-	ammotype[1]->comsprite = CLsprites::drawplasma;
+	firerate[0]	= CLsystem::ato((*pini)["firerate0"]); //every X ms
+	switch(CLsystem::ato((*pini)["ammo1"])) { case 0: ammotype[1]->comsprite = CLsprites::drawplasma; break; }
 	ammotype[1]->v = 16;
 	ammotype[1]->p = CLfvector();
 	ammotype[1]->d = CLfvector();
+	firerate[1]	= CLsystem::ato((*pini)["firerate1"]); //every X ms
+	//*
 	
-	firerate[0]	= dat[1][13];
-	firerate[1]	= dat[1][16];
-	firerate[2]	= dat[1][19];
-	firerate[3]	= dat[1][22];
-
-
-
-	//set other attributes to init:
+	//set remaining player attributes
 	speed = 0;
-
-	direction[0].x = 0;
-	direction[0].y = 1;
-	direction[0].z = 0;
-	direction[1].x = 0;
-	direction[1].y = 1;
-	direction[1].z = 0;
-
 	gear = 0;
-	active = true;
+	active = 1;
+	direction[0].x = direction[1].x = 0;
+	direction[0].y = direction[1].y = 1;
+	direction[0].z = direction[1].z = 0;	
 	lastupdate[0] = CLsystem::getmilliseconds();
 	lastupdate[1] = CLsystem::getmilliseconds();
 	lastupdate[2] = CLsystem::getmilliseconds();
+	//*
+	
+	//delete pini;
 }
 
 CLplayer::~CLplayer()
 {
 	delete cllinear;
 	delete ammolist;
+	delete ammotype[0];
+	delete ammotype[1];
+	delete boundingbox[0];
+	delete boundingbox[1];
+	delete model[0];
+	delete model[1];
+	
 }
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
 	xlong time = CLsystem::getmilliseconds();
-	CLammo* currammo;
 	
 	//ammo update
+	CLammo* currammo;
 	if(time >= lastupdate[0] + 20)
 	{
 		for(int i=0; i<ammolist->getlength();i++)
@@ -331,103 +329,92 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	
 	switch(input)
 	{
+		//stop backward driving and drive forward
 		case 82:
 			if(gear==-1) { gear=0; setspeed(); }
 			else { gear=1; setspeed(); }
 		break;
+		//*
 
+		//stop forward driving and drive backward
 		case 84:
 			if(gear==1) { gear=0; setspeed(); }
 			else { gear=-1; setspeed(); }
-		break;	
+		break;
+		//*
 	}
 
 	cllinear->unit();
 	bool what = 0;
-	//time = CLsystem::getmilliseconds();
-	CLfvector* ta;
 	
 	switch(turbo)
 	{
-		case 81: //arrow left -> turn left
+		//arrow left -> turn left
+		case 81: 
 			cllinear->rotate(0,0,5);
 			pretransform(0);	
 			setspeed();
 		break;
+		//*
 
-		case 83: //arrow right -> turn right
+		//arrow right -> turn right
+		case 83: 
 			cllinear->rotate(0,0,-5);
 			pretransform(0);
 			setspeed();
 		break;
+		//*
 
-		case 97: //a -> turn tower left
+		//a -> turn tower left
+		case 97: 
 			cllinear->rotate(0,0,5);
 			pretransform(1);
 			what=1;
 		break;
+		//*
 
-		case 100: //d -> turn tower right
+		//d -> turn tower right
+		case 100: 
 			cllinear->rotate(0,0,-5);
 			pretransform(1);
 			what=1;
 		break;
+		//*
 
-		case 32: //space -> fire tower weapon
-			if(time >= lastupdate[1] + 100)
+		//space -> fire tower weapon
+		case 32: 
+			if(time >= lastupdate[1] + firerate[1])
 			{
-				currammo = new CLammo();
-				currammo->comsprite = ammotype[1]->comsprite;
-				currammo->v = ammotype[1]->v;
-				ta = model[1]->getdockingpoint(4,0);
-				currammo->p.x = position.x + ta->x;
-				currammo->p.y = position.y - ta->y;
-				currammo->p.z = position.z + ta->z;
-				currammo->d = direction[1];
-				ammolist->append(currammo,"at1");
+				fire(1,1,4,0);
 				lastupdate[1] = time;
 			}
 		break;
+		//*
 
-		case -29: //strg -> fire chassis weapon(s)
-			if(time >= lastupdate[1] + 100)
+		//strg -> fire chassis weapon(s)
+		case -29: 
+			if(time >= lastupdate[1] + firerate[0])
 			{
-				currammo = new CLammo();
-				currammo->comsprite = ammotype[0]->comsprite;
-				currammo->v = ammotype[0]->v;
-				ta = model[0]->getdockingpoint(3,0);
-				currammo->p.x = position.x + ta->x;
-				currammo->p.y = position.y - ta->y;
-				currammo->p.z = position.z + ta->z;
-				currammo->d = direction[0];
-				ammolist->append(currammo,"at0");
-				
-				currammo = new CLammo();
-				currammo->comsprite = ammotype[0]->comsprite;
-				currammo->v = ammotype[0]->v;
-				ta = model[0]->getdockingpoint(3,1);
-				currammo->p.x = position.x + ta->x;
-				currammo->p.y = position.y - ta->y;
-				currammo->p.z = position.z + ta->z;
-				currammo->d = direction[0];
-				ammolist->append(currammo,"at0");
+				fire(0,0,3,0);
+				fire(0,0,3,1);
 				lastupdate[1] = time;
 			}
 		break;
+		//*
 
 		case 119: //w -> fire (tachyon) laser
-		break;
+		break; //*
 
 		case 115: //s -> fire laser
-		break;
+		break; //*
 
 		case 101: //e -> action key
-		break;
+		break; //*
 	}
 	
-	xmark = mark;
+	xmark = mark; //temp
 
-	//time = CLsystem::getmilliseconds();
+	//update test position
 	if(time >= lastupdate[2] + 20)
 	{
 		tposition.x = position.x - speed.x;
@@ -436,24 +423,23 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		
 		lastupdate[2] = time;	
 	}
+	//*
 
+	//check if test position doesn't collide with anything
 	if(collision(ll,mark)==0)
 	{	
 		transform(what);
 		
 		position = tposition;
 	}
+	//*
+	
+	//if collision reset bounding box to state before pretransformation
 	else
 	{
-		boundingbox[0]->b1 = oboundingbox[0]->b1;
-		boundingbox[0]->b2 = oboundingbox[0]->b2;
-		boundingbox[0]->b3 = oboundingbox[0]->b3;
-		boundingbox[0]->b4 = oboundingbox[0]->b4;
-		boundingbox[0]->t1 = oboundingbox[0]->t1;
-		boundingbox[0]->t2 = oboundingbox[0]->t2;
-		boundingbox[0]->t3 = oboundingbox[0]->t3;
-		boundingbox[0]->t4 = oboundingbox[0]->t4;
+		*boundingbox[0] = *oboundingbox[0];
 	}
+	//*
 }
 
 void CLplayer::display(xlong m)
@@ -462,7 +448,6 @@ void CLplayer::display(xlong m)
 	sposition.x = position.x;
 	sposition.y = position.y - m;
 	sposition.z = position.z;
-	
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
 	//*
@@ -505,17 +490,6 @@ void CLplayer::display(xlong m)
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
 	//*
-}
-
-void CLplayer::setxyz(xlong x,xlong y,xlong z)
-{
-	//not to be used for regular player movement!
-	//For regular movement x and y are controlled indirectly through the speed.
-	//This is only to be used for special purposes like resetting after death.
-
-	position.x = x;
-	position.y = y;
-	if(z!=0) position.z = z;
 }
 
 xlong CLplayer::gethealth()

@@ -18,14 +18,7 @@
 
 struct CLbox
 {
-	CLvector<float> t1;
-	CLvector<float> t2;
-	CLvector<float> t3;
-	CLvector<float> t4;
-	CLvector<float> b1;
-	CLvector<float> b2;
-	CLvector<float> b3;
-	CLvector<float> b4;
+	CLfvector c[8]; //c[0-3] bottom, c[4-7] top
 };
 
 class CLobject : public virtual CLcl
@@ -58,15 +51,17 @@ class CLobject : public virtual CLcl
 
 CLobject::CLobject(CLfile* fileptr,bool zs)
 {
+	//init bounding box
 	boundingbox = new CLbox;
-	boundingbox->t1 = 0;
-	boundingbox->t2 = 0;
-	boundingbox->t3 = 0;
-	boundingbox->t4 = 0;
-	boundingbox->b1 = 0;
-	boundingbox->b2 = 0;
-	boundingbox->b3 = 0;
-	boundingbox->b4 = 0;
+	boundingbox->c[0] = 0;
+	boundingbox->c[1] = 0;
+	boundingbox->c[2] = 0;
+	boundingbox->c[3] = 0;
+	boundingbox->c[4] = 0;
+	boundingbox->c[5] = 0;
+	boundingbox->c[6] = 0;
+	boundingbox->c[7] = 0;
+	//*
 
 	xlong* dataptr = fileptr->data;
 
@@ -91,18 +86,26 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	xlong d = 0;
 	CLlvector t[4];
 
+	//scale z values by 4 through left shifts by two if zs is set
 	xlong zshift = 2;
 	if(zs==0) zshift = 0;
+	//*
 
+	//check if first 4 bytes of file have y3d id
 	if(dataptr[0] != '<CLY') CLsystem::exit(1,0,__func__,"wrong y3d format, may be endianess?");
+	//*
 
+	//check if second 4 bytes of file have binary id
 	if(dataptr[1] == '3DB>')
 	{
+		//create polygon array
 		polycount = dataptr[2];
 		polyptr = new CLpolygon*[polycount];
+		//*
+		
 		//dataptr[3] is empty
-
-		//dataptr[4] = "OBJT"
+		
+		//read OBJT tag ( 'OBJT' , object_name , subobject_count , dockingpoint_count )
 		if(dataptr[4] != 'OBJT' ) CLsystem::exit(1,0,__func__,"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
@@ -115,120 +118,154 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		{
 			dockptr=0;
 		}
+		//*
 		
+		//subobject read loop
 		d = 8;
-
 		for(int i=0;i<sobjcount;i++)
 		{
+			//read SOBJ tag ( 'SOBJ' , subobject_name , subobject_polygon_count , subobject_dockingpoint_count )
 			if(dataptr[d] != 'SOBJ' ) CLsystem::exit(1,0,__func__,"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
 			localdockcount = dataptr[d]; d++;
+			//*
 
+			//read CONN tag ( 'CONN' , x_reference , y_reference , z_reference )
 			if(dataptr[d] != 'CONN' ) CLsystem::exit(1,0,__func__,"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
 			zoff = dataptr[d]; d++;
+			//*
 
+			//polygon read loop
 			for(int j=0;j<localpolycount;j++,polycounter++)
 			{
+				//read POLY tag ( 'POLY' , polygon_name , polygon_color , 0 )
 				if(dataptr[d] != 'POLY' ) CLsystem::exit(1,0,__func__,"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				localcolor = dataptr[d]; d++; //color
 				d++; //0
+				//*
 
+				//read 1st VECT tag ( 'VECT' , x_value , y_value , z_value )
 				if(dataptr[d] != 'VECT' ) CLsystem::exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[0].x = dataptr[d] + xoff; d++; //x1
 				t[0].y = dataptr[d] + yoff; d++; //y1
 				t[0].z = (dataptr[d]>>zshift) + zoff; d++; //z1
-
-				//bounding box generation
-				if( t[0].x < boundingbox->t1.x) { boundingbox->t1.x = t[0].x; boundingbox->b1.x = t[0].x; boundingbox->t4.x = t[0].x; boundingbox->b4.x = t[0].x; } 
-				if( t[0].x > boundingbox->b2.x) { boundingbox->t2.x = t[0].x; boundingbox->b2.x = t[0].x; boundingbox->t3.x = t[0].x; boundingbox->b3.x = t[0].x; } 
-				if( t[0].y < boundingbox->t1.y) { boundingbox->t1.y = t[0].y; boundingbox->b1.y = t[0].y; boundingbox->t2.y = t[0].y; boundingbox->b2.y = t[0].y; } 
-				if( t[0].y > boundingbox->b3.y) { boundingbox->t3.y = t[0].y; boundingbox->b3.y = t[0].y; boundingbox->t4.y = t[0].y; boundingbox->b4.y = t[0].y; } 
-				if( t[0].z < boundingbox->t1.z) { boundingbox->t1.z = t[0].z; boundingbox->t2.z = t[0].z; boundingbox->t3.z = t[0].z; boundingbox->t4.z = t[0].z; } 
-				if( t[0].z > boundingbox->b1.z) { boundingbox->b1.z = t[0].z; boundingbox->b2.z = t[0].z; boundingbox->b3.z = t[0].z; boundingbox->b4.z = t[0].z; } 
 				//*
 
+				//bounding box generation
+				if( t[0].x < boundingbox->c[4].x) { boundingbox->c[4].x = t[0].x; boundingbox->c[0].x = t[0].x; boundingbox->c[7].x = t[0].x; boundingbox->c[3].x = t[0].x; } 
+				if( t[0].x > boundingbox->c[1].x) { boundingbox->c[5].x = t[0].x; boundingbox->c[1].x = t[0].x; boundingbox->c[6].x = t[0].x; boundingbox->c[2].x = t[0].x; } 
+				if( t[0].y < boundingbox->c[4].y) { boundingbox->c[4].y = t[0].y; boundingbox->c[0].y = t[0].y; boundingbox->c[5].y = t[0].y; boundingbox->c[1].y = t[0].y; } 
+				if( t[0].y > boundingbox->c[2].y) { boundingbox->c[6].y = t[0].y; boundingbox->c[2].y = t[0].y; boundingbox->c[7].y = t[0].y; boundingbox->c[3].y = t[0].y; } 
+				if( t[0].z < boundingbox->c[4].z) { boundingbox->c[4].z = t[0].z; boundingbox->c[5].z = t[0].z; boundingbox->c[6].z = t[0].z; boundingbox->c[7].z = t[0].z; } 
+				if( t[0].z > boundingbox->c[0].z) { boundingbox->c[0].z = t[0].z; boundingbox->c[1].z = t[0].z; boundingbox->c[2].z = t[0].z; boundingbox->c[3].z = t[0].z; } 
+				//*
+
+				//read 2nd VECT tag ( 'VECT' , x_value , y_value , z_value )
 				if(dataptr[d] != 'VECT' ) CLsystem::exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[1].x = dataptr[d] + xoff; d++; //x2
 				t[1].y = dataptr[d] + yoff; d++; //y2
 				t[1].z = (dataptr[d]>>zshift) + zoff; d++; //z2
-
-				//bounding box generation
-				if( t[1].x < boundingbox->t1.x) { boundingbox->t1.x = t[1].x; boundingbox->b1.x = t[1].x; boundingbox->t4.x = t[1].x; boundingbox->b4.x = t[1].x; } 
-				if( t[1].x > boundingbox->b2.x) { boundingbox->t2.x = t[1].x; boundingbox->b2.x = t[1].x; boundingbox->t3.x = t[1].x; boundingbox->b3.x = t[1].x; } 
-				if( t[1].y < boundingbox->t1.y) { boundingbox->t1.y = t[1].y; boundingbox->b1.y = t[1].y; boundingbox->t2.y = t[1].y; boundingbox->b2.y = t[1].y; } 
-				if( t[1].y > boundingbox->b3.y) { boundingbox->t3.y = t[1].y; boundingbox->b3.y = t[1].y; boundingbox->t4.y = t[1].y; boundingbox->b4.y = t[1].y; } 
-				if( t[1].z < boundingbox->t1.z) { boundingbox->t1.z = t[1].z; boundingbox->t2.z = t[1].z; boundingbox->t3.z = t[1].z; boundingbox->t4.z = t[1].z; } 
-				if( t[1].z > boundingbox->b1.z) { boundingbox->b1.z = t[1].z; boundingbox->b2.z = t[1].z; boundingbox->b3.z = t[1].z; boundingbox->b4.z = t[1].z; } 
 				//*
 
+				//bounding box generation
+				if( t[1].x < boundingbox->c[4].x) { boundingbox->c[4].x = t[1].x; boundingbox->c[0].x = t[1].x; boundingbox->c[7].x = t[1].x; boundingbox->c[3].x = t[1].x; } 
+				if( t[1].x > boundingbox->c[1].x) { boundingbox->c[5].x = t[1].x; boundingbox->c[1].x = t[1].x; boundingbox->c[6].x = t[1].x; boundingbox->c[2].x = t[1].x; } 
+				if( t[1].y < boundingbox->c[4].y) { boundingbox->c[4].y = t[1].y; boundingbox->c[0].y = t[1].y; boundingbox->c[5].y = t[1].y; boundingbox->c[1].y = t[1].y; } 
+				if( t[1].y > boundingbox->c[2].y) { boundingbox->c[6].y = t[1].y; boundingbox->c[2].y = t[1].y; boundingbox->c[7].y = t[1].y; boundingbox->c[3].y = t[1].y; } 
+				if( t[1].z < boundingbox->c[4].z) { boundingbox->c[4].z = t[1].z; boundingbox->c[5].z = t[1].z; boundingbox->c[6].z = t[1].z; boundingbox->c[7].z = t[1].z; } 
+				if( t[1].z > boundingbox->c[0].z) { boundingbox->c[0].z = t[1].z; boundingbox->c[1].z = t[1].z; boundingbox->c[2].z = t[1].z; boundingbox->c[3].z = t[1].z; } 
+				//*
+
+				//read 3rd VECT tag ( 'VECT' , x_value , y_value , z_value )
 				if(dataptr[d] != 'VECT' ) CLsystem::exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[2].x = dataptr[d] + xoff; d++; //x3
 				t[2].y = dataptr[d] + yoff; d++; //y3
 				t[2].z = (dataptr[d]>>zshift) + zoff; d++; //z3
-
-				//bounding box generation
-				if( t[2].x < boundingbox->t1.x) { boundingbox->t1.x = t[2].x; boundingbox->b1.x = t[2].x; boundingbox->t4.x = t[2].x; boundingbox->b4.x = t[2].x; } 
-				if( t[2].x > boundingbox->b2.x) { boundingbox->t2.x = t[2].x; boundingbox->b2.x = t[2].x; boundingbox->t3.x = t[2].x; boundingbox->b3.x = t[2].x; } 
-				if( t[2].y < boundingbox->t1.y) { boundingbox->t1.y = t[2].y; boundingbox->b1.y = t[2].y; boundingbox->t2.y = t[2].y; boundingbox->b2.y = t[2].y; } 
-				if( t[2].y > boundingbox->b3.y) { boundingbox->t3.y = t[2].y; boundingbox->b3.y = t[2].y; boundingbox->t4.y = t[2].y; boundingbox->b4.y = t[2].y; } 
-				if( t[2].z < boundingbox->t1.z) { boundingbox->t1.z = t[2].z; boundingbox->t2.z = t[2].z; boundingbox->t3.z = t[2].z; boundingbox->t4.z = t[2].z; } 
-				if( t[2].z > boundingbox->b1.z) { boundingbox->b1.z = t[2].z; boundingbox->b2.z = t[2].z; boundingbox->b3.z = t[2].z; boundingbox->b4.z = t[2].z; } 
 				//*
 
+				//bounding box generation
+				if( t[2].x < boundingbox->c[4].x) { boundingbox->c[4].x = t[2].x; boundingbox->c[0].x = t[2].x; boundingbox->c[7].x = t[2].x; boundingbox->c[3].x = t[2].x; } 
+				if( t[2].x > boundingbox->c[1].x) { boundingbox->c[5].x = t[2].x; boundingbox->c[1].x = t[2].x; boundingbox->c[6].x = t[2].x; boundingbox->c[2].x = t[2].x; } 
+				if( t[2].y < boundingbox->c[4].y) { boundingbox->c[4].y = t[2].y; boundingbox->c[0].y = t[2].y; boundingbox->c[5].y = t[2].y; boundingbox->c[1].y = t[2].y; } 
+				if( t[2].y > boundingbox->c[2].y) { boundingbox->c[6].y = t[2].y; boundingbox->c[2].y = t[2].y; boundingbox->c[7].y = t[2].y; boundingbox->c[3].y = t[2].y; } 
+				if( t[2].z < boundingbox->c[4].z) { boundingbox->c[4].z = t[2].z; boundingbox->c[5].z = t[2].z; boundingbox->c[6].z = t[2].z; boundingbox->c[7].z = t[2].z; } 
+				if( t[2].z > boundingbox->c[0].z) { boundingbox->c[0].z = t[2].z; boundingbox->c[1].z = t[2].z; boundingbox->c[2].z = t[2].z; boundingbox->c[3].z = t[2].z; } 
+				//*
+
+				//read 4th VECT tag ( 'VECT' , x_value , y_value , z_value )
 				if(dataptr[d] != 'VECT' ) CLsystem::exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3].x = dataptr[d] + xoff; d++; //x4
 				t[3].y = dataptr[d] + yoff; d++; //y4
 				t[3].z = (dataptr[d]>>zshift) + zoff; d++; //z4
+				//*
 
 				//bounding box generation
-				if( t[3].x < boundingbox->t1.x) { boundingbox->t1.x = t[3].x; boundingbox->b1.x = t[3].x; boundingbox->t4.x = t[3].x; boundingbox->b4.x = t[3].x; } 
-				if( t[3].x > boundingbox->b2.x) { boundingbox->t2.x = t[3].x; boundingbox->b2.x = t[3].x; boundingbox->t3.x = t[3].x; boundingbox->b3.x = t[3].x; } 
-				if( t[3].y < boundingbox->t1.y) { boundingbox->t1.y = t[3].y; boundingbox->b1.y = t[3].y; boundingbox->t2.y = t[3].y; boundingbox->b2.y = t[3].y; } 
-				if( t[3].y > boundingbox->b3.y) { boundingbox->t3.y = t[3].y; boundingbox->b3.y = t[3].y; boundingbox->t4.y = t[3].y; boundingbox->b4.y = t[3].y; } 
-				if( t[3].z < boundingbox->t1.z) { boundingbox->t1.z = t[3].z; boundingbox->t2.z = t[3].z; boundingbox->t3.z = t[3].z; boundingbox->t4.z = t[3].y; } 
-				if( t[3].z > boundingbox->b1.z) { boundingbox->b1.z = t[3].z; boundingbox->b2.z = t[3].z; boundingbox->b3.z = t[3].z; boundingbox->b4.z = t[3].y; } 
+				if( t[3].x < boundingbox->c[4].x) { boundingbox->c[4].x = t[3].x; boundingbox->c[0].x = t[3].x; boundingbox->c[7].x = t[3].x; boundingbox->c[3].x = t[3].x; } 
+				if( t[3].x > boundingbox->c[1].x) { boundingbox->c[5].x = t[3].x; boundingbox->c[1].x = t[3].x; boundingbox->c[6].x = t[3].x; boundingbox->c[2].x = t[3].x; } 
+				if( t[3].y < boundingbox->c[4].y) { boundingbox->c[4].y = t[3].y; boundingbox->c[0].y = t[3].y; boundingbox->c[5].y = t[3].y; boundingbox->c[1].y = t[3].y; } 
+				if( t[3].y > boundingbox->c[2].y) { boundingbox->c[6].y = t[3].y; boundingbox->c[2].y = t[3].y; boundingbox->c[7].y = t[3].y; boundingbox->c[3].y = t[3].y; } 
+				if( t[3].z < boundingbox->c[4].z) { boundingbox->c[4].z = t[3].z; boundingbox->c[5].z = t[3].z; boundingbox->c[6].z = t[3].z; boundingbox->c[7].z = t[3].y; } 
+				if( t[3].z > boundingbox->c[0].z) { boundingbox->c[0].z = t[3].z; boundingbox->c[1].z = t[3].z; boundingbox->c[2].z = t[3].z; boundingbox->c[3].z = t[3].y; } 
 				//*
+				
+				//init polygon
 				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
+				//*
 			}
+			//*
+			
+			//docking point read loop
 			for(int k=0;k<localdockcount;k++)
 			{
+				//read DP tag ( 'DP' , docckingpoint_type , x_value , y_value , z_value )
 				s.dd = dataptr[d]; d++; //"DP"+docktype
 				localdocktype = s.dw[1];
-
 				t[0].x = dataptr[d] + xoff; d++; //dx
 				t[0].y = dataptr[d] + yoff; d++; //dy
 				t[0].z = (dataptr[d]>>zshift) + zoff; d++; //dz
+				//*
 
+				//init dockingpoint
 				dockptr[dockcounter] = new CLfvector(0,0,0);
 				dockptr[dockcounter]->x = t[0].x;
 				dockptr[dockcounter]->y = t[0].y;
 				dockptr[dockcounter]->z = t[0].z;
 				dockptr[dockcounter]->e = xlong(localdocktype);
 				dockcounter++;
+				//*
 			}
+			//*
 		}
+		//*
 
 		//"ENDO"
 	}
+	//*
+	
+	//check if second 4 bytes have XML id
 	else if(dataptr[1] == 'D_X>')
 	{
 
 	}
+	//*
+	
+	//check if second 4 bytes have sequential id
 	else if(dataptr[1] == 'D_T>')
 	{
 
 	}
+	//*
 }
 
 CLobject::~CLobject()
@@ -248,14 +285,14 @@ void CLobject::update(CLmatrix* m)
 		*dockptr[j] = m->transform(*dockptr[j]);
 	}
 
-	boundingbox->t1 = m->transform(boundingbox->t1);
-	boundingbox->t2 = m->transform(boundingbox->t2);
-	boundingbox->t3 = m->transform(boundingbox->t3);
-	boundingbox->t4 = m->transform(boundingbox->t4);
-	boundingbox->b1 = m->transform(boundingbox->b1);
-	boundingbox->b2 = m->transform(boundingbox->b2);
-	boundingbox->b3 = m->transform(boundingbox->b3);
-	boundingbox->b4 = m->transform(boundingbox->b4);
+	boundingbox->c[0] = m->transform(boundingbox->c[0]);
+	boundingbox->c[1] = m->transform(boundingbox->c[1]);
+	boundingbox->c[2] = m->transform(boundingbox->c[2]);
+	boundingbox->c[3] = m->transform(boundingbox->c[3]);
+	boundingbox->c[4] = m->transform(boundingbox->c[4]);
+	boundingbox->c[5] = m->transform(boundingbox->c[5]);
+	boundingbox->c[6] = m->transform(boundingbox->c[6]);
+	boundingbox->c[7] = m->transform(boundingbox->c[7]);
 }
 
 void CLobject::display(CLlvector p,xchar flags)

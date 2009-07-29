@@ -201,29 +201,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 //player:
 
-	//load playerstuff 
-	CLfile* playerraw = CLsystem::getfile(playerlib);
-	arfile* playera = CLformat::loadar(playerraw);
-	//*
-
-	//find player definition, has to have extension .bcx, change to ini as soon as works and avail
-	xlong pd = CLutils::findarmember(playera,".bcx");
-	if(pd==-1) CLsystem::exit(1,0,__func__,"no player definition found");
-	xlong** playerd = CLformat::loadbcx(playera->members[pd]);
-	//*
-	
-	//find first part of player model
-	xlong pm = CLutils::findarmember(playera,"0.y3d");
-	if(pm==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
-	CLobject* playerm = new CLobject(playera->members[pm],0);
-	//*
-	
-	//find second part of player model
-	xlong pn = CLutils::findarmember(playera,"1.y3d");
-	if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
-	CLobject* playern = new CLobject(playera->members[pn],0);
-	//*
-
 	//search player start pos and set player pos to it
 	bool startposfound = false;
 	CLlvector playerp;
@@ -245,7 +222,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	//*
 
 	//create player
-	clplayer = new CLplayer(playerm,playern,playerd,playerp,smoothmark);
+	clplayer = new CLplayer(playerlib,playerp);
 	//*
 
 //***
