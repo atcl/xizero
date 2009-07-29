@@ -46,7 +46,6 @@ void loadconfig() { }
 void systemfontout() { }
 
 //kern
-xchar* getexename() { }
 xchar* getexesize() { }
 void getenv() { }
 void writetofile() { }

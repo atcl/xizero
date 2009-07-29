@@ -5,13 +5,8 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLvector.hh"
 
-
-struct CLpoint
-{
-	xlong x;
-	xlong y;
-};
 
 union doubleword
 {

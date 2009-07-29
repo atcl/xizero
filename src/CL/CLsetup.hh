@@ -45,12 +45,9 @@ void CLgarbage()
 	delete CLdoublebuffer;
 	delete CLstencilbuffer;
 	delete CLzbuffer;
-
 	delete clbench;
-
 	delete linearM;
 	delete shadowM;
-
 	delete leftside;
 	delete rightside;
 }

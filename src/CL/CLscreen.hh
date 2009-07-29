@@ -30,12 +30,12 @@ void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t,CLbuffer<xlong>*
 
 void CLtransitions::dissolve(xlong t,CLbuffer<xlong>* db)
 {
-
+	//color random pixel black
 }
 
 void CLtransitions::fadetoblack(xlong t,CLbuffer<xlong>* db)
 {
-
+	//reduce each pixel color components
 }
 
 #endif

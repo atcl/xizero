@@ -136,11 +136,9 @@ template<class clvector>
 clvector CLmatrix::transform(const clvector& t)
 {
 	clvector r;
-
 	r.x = (m[0][0] * float(t.x) + m[0][1] * float(t.y) + m[0][2] * float(t.z) + m[0][3]);
 	r.y = (m[1][0] * float(t.x) + m[1][1] * float(t.y) + m[1][2] * float(t.z) + m[1][3]);
 	r.z = (m[2][0] * float(t.x) + m[2][1] * float(t.y) + m[2][2] * float(t.z) + m[2][3]);
-
 	return r;
 }
 

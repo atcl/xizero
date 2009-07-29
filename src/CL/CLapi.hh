@@ -2,14 +2,13 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLAPI
 #define HH_CLAPI
-#pragma message "Compiling " __FILE__ " ! TODO: underscores everywhere"
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include <stdio.h>
 #include <iomanip>
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
-#include <sstream>
 #include <cstring>
 
 #include "CLtypes.hh"
@@ -26,7 +25,11 @@ namespace CLsystem
 	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
-	CLfile* getfile(const xchar* fn,bool s=true);
+	CLfile* getfile(const xchar* fn,bool s=true); //CLfile as parameter and return bool for if ok?
+	bool    appendfile(const xchar* f,xlong* b,xlong s);
+	bool    appendfile(const xchar* f,xchar* b,xlong s);
+	bool    writefile(const xchar* f,xlong* b,xlong s,bool ow=0);
+	bool    writefile(const xchar* f,xchar* b,xlong s,bool ow=0);
 	void    print(const xchar* c,bool i=1);
 	void    print(const xlong l,bool i=1);
 	void    print(const float l,bool i=1);
@@ -107,6 +110,26 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 	fclose(of);
 
 	return re;
+}
+
+bool CLsystem::appendfile(const xchar* f,xlong* b,xlong s)
+{
+	return 0;
+}
+
+bool CLsystem::appendfile(const xchar* f,xchar* b,xlong s)
+{
+	return 0;
+}
+
+bool CLsystem::writefile(const xchar* f,xlong* b,xlong s,bool ow)
+{
+	return 0;
+}
+
+bool CLsystem::writefile(const xchar* f,xchar* b,xlong s,bool ow)
+{
+	return 0;
 }
 
 void CLsystem::print(const xchar* c,bool i)

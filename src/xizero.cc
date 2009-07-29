@@ -65,8 +65,8 @@ int main()
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
 				CLmisc3d::drawzbuffer(testlevel->getlandscape(),dis);
-				(*testlevel->getlandscape())[ (xlong(tv.y)*xres) + xlong(tv.x) ] = 0x000FFFFFF;
-				(*testlevel->getlandscape())[ (xlong(lv.y)*xres) + xlong(lv.x) ] = 0x000FFFF00; 
+				(*testlevel->getlandscape())[ (xlong(tv.y)*xres) + xlong(tv.x) ] = 0x000FFFFFF; //temp
+				(*testlevel->getlandscape())[ (xlong(lv.y)*xres) + xlong(lv.x) ] = 0x000FFFF00; //temp
 				break;
 
 			case 3:

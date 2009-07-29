@@ -31,26 +31,33 @@ namespace CLgame
 
 void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {
+	//set screen boundaries
 	boundaryx1 = bx1;
 	boundaryx2 = bx2;
 	boundaryy1 = by1;
 	boundaryy2 = by2;
+	//*
 }
 
 template<class clvector>
 bool CLgame::boundary(const clvector& p)
 {
+	//check if p id inside screen boundaries
 	if( (p.x < boundaryx1) || (p.x > boundaryx2) || (p.y < boundaryy1) || (p.y > boundaryy2) ) return 1;
+	//*
+	
 	return 0;
 }
 
 template<class clvector>
 bool CLgame::boundary(const clvector& p,const CLbox& bb)
 {
+	//check if bounding box bb at position p is inside screen boundaries
 	if( ( (  bb.t1.x + p.x ) < boundaryx1 ) || ( (  bb.t2.x + p.x ) < boundaryx1 ) || ( (  bb.t3.x + p.x ) < boundaryx1 ) || ( (  bb.t4.x + p.x ) < boundaryx1 ) ) return -1;
 	if( ( (  bb.t1.x + p.x ) > boundaryx2 ) || ( (  bb.t2.x + p.x ) > boundaryx2 ) || ( (  bb.t3.x + p.x ) > boundaryx2 ) || ( (  bb.t4.x + p.x ) > boundaryx2 ) ) return 1;
 	if( ( ( -bb.t1.y + p.y ) < boundaryy1 ) || ( ( -bb.t2.y + p.y ) < boundaryy1 ) || ( ( -bb.t3.y + p.y ) < boundaryy1 ) || ( ( -bb.t4.y + p.y ) < boundaryy1 ) ) return -2;
 	if( ( ( -bb.t1.y + p.y ) > boundaryy2 ) || ( ( -bb.t2.y + p.y ) > boundaryy2 ) || ( ( -bb.t3.y + p.y ) > boundaryy2 ) || ( ( -bb.t4.y + p.y ) > boundaryy2 ) ) return 2;
+	//*
 
 	return 0;
 }
@@ -58,12 +65,18 @@ bool CLgame::boundary(const clvector& p,const CLbox& bb)
 template<class clvector>
 xlong CLgame::collision(const clvector& p,const CLbox* bb,const clvector& q)
 {
+	//calc levelposition of bounding box
 	CLlvector a1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
 	CLlvector a2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
 	CLlvector a3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
 	CLlvector a4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
+	//*
 	
-	//
+	//check if q is inside bb at p
+	
+	//...
+	
+	//*
 	
 	return 0;
 }
@@ -71,17 +84,25 @@ xlong CLgame::collision(const clvector& p,const CLbox* bb,const clvector& q)
 template<class clvector>
 xlong CLgame::collision(const clvector& p1,const CLbox* bb1,const clvector& p2,const CLbox* bb2)
 {
+	//calc levelposition of first bounding box bb1 at p1 
 	CLlvector a1( (p1.x + bb1->b1.x), (p1.y - bb1->b1.y), (p1.z + bb1->b1.z) );
 	CLlvector a2( (p1.x + bb1->b2.x), (p1.y - bb1->b2.y), (p1.z + bb1->b2.z) );
 	CLlvector a3( (p1.x + bb1->b3.x), (p1.y - bb1->b3.y), (p1.z + bb1->b3.z) );
 	CLlvector a4( (p1.x + bb1->b4.x), (p1.y - bb1->b4.y), (p1.z + bb1->b4.z) );
+	//*
 	
+	////calc levelposition of second bounding box bb2 at p2
 	CLlvector b1( (p2.x + bb2->b1.x), (p2.y - bb2->b1.y), (p2.z + bb2->b1.z) );
 	CLlvector b2( (p2.x + bb2->b2.x), (p2.y - bb2->b2.y), (p2.z + bb2->b2.z) );
 	CLlvector b3( (p2.x + bb2->b3.x), (p2.y - bb2->b3.y), (p2.z + bb2->b3.z) );
 	CLlvector b4( (p2.x + bb2->b4.x), (p2.y - bb2->b4.y), (p2.z + bb2->b4.z) );
+	//*
 
-	//
+	//check if bb2 at p2 intersects bb1 at p1
+	
+	//...
+	
+	//*
 
 	return 0;
 }
@@ -89,88 +110,68 @@ xlong CLgame::collision(const clvector& p1,const CLbox* bb1,const clvector& p2,c
 template<class clvector>
 bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,xlong& xa,xlong& ya,xlong& zd)
 {
+	//calc levelposition of current bounding box
 	CLlvector p1( (p.x + bb->b1.x), (p.y - bb->b1.y), (p.z + bb->b1.z) );
 	CLlvector p2( (p.x + bb->b2.x), (p.y - bb->b2.y), (p.z + bb->b2.z) );
 	CLlvector p3( (p.x + bb->b3.x), (p.y - bb->b3.y), (p.z + bb->b3.z) );
 	CLlvector p4( (p.x + bb->b4.x), (p.y - bb->b4.y), (p.z + bb->b4.z) );
+	//*
 	
+	//calc levelposition of last bounding box
 	CLlvector l1( (l.x + ob->b1.x), (l.y - ob->b1.y), (l.z + ob->b1.z) );
 	CLlvector l2( (l.x + ob->b2.x), (l.y - ob->b2.y), (l.z + ob->b2.z) );
 	CLlvector l3( (l.x + ob->b3.x), (l.y - ob->b3.y), (l.z + ob->b3.z) );
 	CLlvector l4( (l.x + ob->b4.x), (l.y - ob->b4.y), (l.z + ob->b4.z) );
+	//*
 	
-	//temp! only for landscape trace
+	//temp! only for landscape trace, see xizero.cc l68,l69
 	lv.x = l.x;
 	lv.y = l.y;
 	tv.x = p.x;
 	tv.y = p.y;
 	//*
 
-	xlong r = 0;
+	//calc zlevel of current bounding box corners in levellandscape
+	float n1 = (*ll)[ (p1.y * xres) + p1.x ];
+	float n2 = (*ll)[ (p2.y * xres) + p2.x ];
+	float n3 = (*ll)[ (p3.y * xres) + p3.x ];
+	float n4 = (*ll)[ (p4.y * xres) + p4.x ];
+	//*
 	
-	//p1<l1
-	if( ((*ll)[ (p1.y * xres) + p1.x ]) < ((*ll)[ (l1.y * xres) + l1.x ])-2 ) r = 1;
-	
-	//p2<l2
-	if( ((*ll)[ (p2.y * xres) + p2.x ]) < ((*ll)[ (l2.y * xres) + l2.x ])-2 ) r = 1;
-	
-	//p3<l3
-	if( ((*ll)[ (p3.y * xres) + p3.x ]) < ((*ll)[ (l3.y * xres) + l3.x ])-2 ) r = 1;
-	
-	//p4<l4
-	if( ((*ll)[ (p4.y * xres) + p4.x ]) < ((*ll)[ (l4.y * xres) + l4.x ])-2 ) r = 1;
-	
-	//~ //p1>l1
-	//~ if( ((*ll)[ (p1.y * xres) + p1.x ]) > ((*ll)[ (l1.y * xres) + l1.x ])-3 ) r = -1;
-	//~ 
-	//~ //p2>l2
-	//~ if( ((*ll)[ (p2.y * xres) + p2.x ]) > ((*ll)[ (l2.y * xres) + l2.x ])-3 ) r = -2;
-	//~ 
-	//~ //p3>l3
-	//~ if( ((*ll)[ (p3.y * xres) + p3.x ]) > ((*ll)[ (l3.y * xres) + l3.x ])-3 ) r = -4;
-	//~ 
-	//~ //p4>l4
-	//~ if( ((*ll)[ (p4.y * xres) + p4.x ]) > ((*ll)[ (l4.y * xres) + l4.x ])-3 ) r = -8;
+	//calc zlevel of last bounding box corners in levellandscape
+	float o1 = (*ll)[ (l1.y * xres) + l1.x ];
+	float o2 = (*ll)[ (l2.y * xres) + l2.x ];
+	float o3 = (*ll)[ (l3.y * xres) + l3.x ];
+	float o4 = (*ll)[ (l4.y * xres) + l4.x ];
+	//*
 
-	//calc xa,ya,zd
+	//check if zlevel from current bbox corners differ more than 3
+	xlong r = 0; //this is the return value
+	if( n1 < o1-3 ) r = 1;
+	if( n2 < o2-3 ) r = 1;
+	if( n3 < o3-3 ) r = 1;
+	if( n4 < o4-3 ) r = 1;
+	//*
 	
-	float az = -( ( ((*ll)[ (p1.y * xres) + p1.x ]) + ((*ll)[ (p4.y * xres) + p4.x ]) ) / 2 )
-	           +( ( ((*ll)[ (p2.y * xres) + p2.x ]) + ((*ll)[ (p3.y * xres) + p3.x ]) ) / 2 );
-			   
-	float bz = -( ( ((*ll)[ (l1.y * xres) + l1.x ]) + ((*ll)[ (l4.y * xres) + l4.x ]) ) / 2 )
-	           +( ( ((*ll)[ (l2.y * xres) + l2.x ]) + ((*ll)[ (l3.y * xres) + l3.x ]) ) / 2 );
-	
+	//calc y angle ya
+	float az = ( n2+n3-n1-n4 ); // /2?
+	float bz = ( o2+o3-o1-o4 ); // /2?
 	CLfvector a( (-p1.x+p2.x),(-p1.y+p2.y),az );
-	
 	CLfvector b( (-p1.x+p2.x),(-p1.y+p2.y),bz );	
-	
 	ya = -(a % b);
+	//*
 	
-	float cz = -( ( ((*ll)[ (p1.y * xres) + p1.x ]) + ((*ll)[ (p2.y * xres) + p2.x ]) ) / 2 )
-	           +( ( ((*ll)[ (p4.y * xres) + p4.x ]) + ((*ll)[ (p3.y * xres) + p3.x ]) ) / 2 );
-			   
-	float dz = -( ( ((*ll)[ (l1.y * xres) + l1.x ]) + ((*ll)[ (l2.y * xres) + l2.x ]) ) / 2 )
-	           +( ( ((*ll)[ (l4.y * xres) + l4.x ]) + ((*ll)[ (l3.y * xres) + l3.x ]) ) / 2 );
-	
+	//calc x angle xa
+	float cz = ( n3+n4-n1-n2 ); // /2?
+	float dz = ( o3+o4-o1-o2 ); // /2?
 	CLfvector c( (-p1.x+p4.x),(-p1.y+p4.y),cz );
-	
 	CLfvector d( (-p1.x+p4.x),(-p1.y+p4.y),dz );
-	
 	xa = -(c % d);
+	//*
 	
-	zd = ( ((*ll)[ (p1.y * xres) + p1.x ]) 
-	   +   ((*ll)[ (p2.y * xres) + p2.x ])
-	   +   ((*ll)[ (p3.y * xres) + p3.x ])
-	   +   ((*ll)[ (p4.y * xres) + p4.x ]) )
-	   / 4;
-	   
-	zd -=( ((*ll)[ (l1.y * xres) + l1.x ]) 
-	   +   ((*ll)[ (l2.y * xres) + l2.x ])
-	   +   ((*ll)[ (l3.y * xres) + l3.x ])
-	   +   ((*ll)[ (l4.y * xres) + l4.x ]) )
-	   / 4;
-
-
+	//calc z difference in bbox center between current and last
+	//if(r==0) //activate when working correctly
+	zd = (n1+n2+n3+n4-o1-o2-o3-o4)/4;
 	//*
 
 	return r;

@@ -179,7 +179,7 @@ T CLvector<T>::operator%(const CLvector& a)
 template<typename T>
 void CLvector<T>::print()
 {
-	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl; 
+	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl;
 }
 //*
 
@@ -194,7 +194,7 @@ CLvector<T> operator*(T c,CLvector<T>& a)
 //typedefs:
 typedef CLvector<xlong> CLlvector;
 typedef CLvector<float> CLfvector;
-//typedef CLvector<fixed> CLxvector;
+//typedef CLvector<xfixed> CLxvector;
 
 #endif
 

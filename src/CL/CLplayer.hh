@@ -24,8 +24,8 @@ struct CLammo
 class CLplayer : public virtual CLcl
 {
 	protected:
-		CLobject* model[2]; //0 is chassis,1 is tower
 		CLmatrix* cllinear;
+		CLobject* model[2]; //0 is chassis,1 is tower
 		CLlist*   ammolist;
 
 	private:
@@ -33,7 +33,6 @@ class CLplayer : public virtual CLcl
 		CLbox* oboundingbox[2];
 
 		CLammo* ammotype[4];
-		CLammo* currammo;
 		xlong firerate[4];
 		
 		xlong health;
@@ -297,6 +296,7 @@ CLplayer::~CLplayer()
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
 	xlong time = CLsystem::getmilliseconds();
+	CLammo* currammo;
 	
 	//ammo update
 	if(time >= lastupdate[0] + 20)
@@ -458,6 +458,7 @@ void CLplayer::display(xlong m)
 	//*
 	
 	//ammo display
+	CLammo* currammo;
 	for(int i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);
