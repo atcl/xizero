@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLAPI
 #define HH_CLAPI
-#pragma message "Compiling " __FILE__ " ! TODO: "
+//#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include <stdio.h>
 #include <iomanip>

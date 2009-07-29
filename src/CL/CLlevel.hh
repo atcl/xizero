@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLLEVEL
 #define HH_CLLEVEL
-#pragma message "Compiling " __FILE__ " ! TODO: "
+//#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -224,30 +224,6 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 	CLobject* playern = new CLobject(playera->members[pn],0);
 	//*
 
-	//~ //find player models, have to have extension .y3d
-	//~ xlong pm = -1;
-	//~ xlong pn = -1;
-	//~ for(int h=0; h<playera->filecount; h++)
-	//~ {
-		//~ if(CLutils::checkextension(playera->members[h]->name,16,"0.y3d")==true)
-		//~ {
-			//~ pm=h;
-		//~ }
-		//~ 
-		//~ if(CLutils::checkextension(playera->members[h]->name,16,"1.y3d")==true)
-		//~ {
-			//~ pn=h;
-		//~ }
-	//~ }
-	//~ if(pm==-1) CLsystem::exit(1,0,__func__,"no player model part I file found");
-	//~ if(pn==-1) CLsystem::exit(1,0,__func__,"no player model part II file found");
-	//~ //pm holds index of first model
-//~ 
-	//~ //create player models from y3d
-	//~ CLobject* playerm = new CLobject(playera->members[pm],0);
-	//~ CLobject* playern = new CLobject(playera->members[pn],0);
-	//~ //*
-
 	//search player start pos and set player pos to it
 	bool startposfound = false;
 	CLlvector playerp;
@@ -276,7 +252,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 //enemies:
 
-//...
+	//...
 
 //***
 }

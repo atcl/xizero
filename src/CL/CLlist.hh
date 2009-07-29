@@ -2,14 +2,14 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLLIST
 #define HH_CLLIST
-#pragma message "Compiling " __FILE__ " ! TODO: all" 
+//#pragma message "Compiling " __FILE__ " ! TODO: all" 
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLapi.hh"
 
 
-//add type info by RTTI
+//add type info by RTTI?
 struct listmember
 {
 	void*       data;

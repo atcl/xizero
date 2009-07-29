@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
+//#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
@@ -12,6 +12,7 @@
 #include "CLgame.hh"
 #include "CLsprites.hh"
 
+//CLplayer todo: structure,give ctor args: playerlib,levellandscape,startpos and init yourself
 
 struct CLammo
 {
@@ -24,13 +25,13 @@ struct CLammo
 class CLplayer : public virtual CLcl
 {
 	protected:
-		CLmatrix* cllinear;
+		CLmatrix* cllinear; //no pointer
 		CLobject* model[2]; //0 is chassis,1 is tower
-		CLlist*   ammolist;
+		CLlist*   ammolist; //no pointer
 
 	private:
-		CLbox* boundingbox[2];
-		CLbox* oboundingbox[2];
+		CLbox* boundingbox[2]; //no pointer
+		CLbox* oboundingbox[2]; //no pointer
 
 		CLammo* ammotype[4];
 		xlong firerate[4];
@@ -42,7 +43,7 @@ class CLplayer : public virtual CLcl
 
 		CLfvector position;
 		CLfvector tposition;
-		CLlvector sposition;
+		CLlvector sposition; //not needed
 		CLfvector direction[2]; //0 is chassis, 1 is tower, whereas tilt in all but x,y-plane will be chained together, meaning tilt (ie on ramps) and rotating of ie tower
 		CLfvector speed;
 		CLfvector speeddir;
@@ -51,7 +52,6 @@ class CLplayer : public virtual CLcl
 		xlong gear;
 		xlong active;
 		xlong points;
-		xlong firing;
 		xlong lastupdate[3];
 
 		void setspeed();
@@ -60,6 +60,17 @@ class CLplayer : public virtual CLcl
 		void pretransform(bool m);
 		void transform(bool m);
 		xlong collision(CLfbuffer* ll,xlong m);
+		
+		//inline?
+		void update_ammo();
+		void update_postion();
+		void collision_screen();
+		void collision_terrain();
+		void collision_enemy();
+		void collision_ammo();
+		void display_ammo();
+		void display_model();
+		//*
 		
 	public:
 		CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p=0);
@@ -284,7 +295,6 @@ CLplayer::CLplayer(CLobject* cha,CLobject* tow,xlong** dat,CLlvector s,xlong p)
 	lastupdate[0] = CLsystem::getmilliseconds();
 	lastupdate[1] = CLsystem::getmilliseconds();
 	lastupdate[2] = CLsystem::getmilliseconds();
-	firing=-1;
 }
 
 CLplayer::~CLplayer()

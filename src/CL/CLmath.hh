@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMATH
 #define HH_CLMATH
-#pragma message "Compiling " __FILE__ " ! TODO: "
+//#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include <cmath>
 

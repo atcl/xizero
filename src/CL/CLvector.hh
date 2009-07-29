@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLVECTOR
 #define HH_CLVECTOR
-#pragma message "Compiling " __FILE__  "! TODO: "
+//#pragma message "Compiling " __FILE__  "! TODO: "
 
 #include  <iostream>
 #include "CLtypes.hh"

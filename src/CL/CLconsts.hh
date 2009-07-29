@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLCONSTS
 #define HH_CLCONSTS
-#pragma message "warning " __FILE__ " ! TODO: more"
+//#pragma message "warning " __FILE__ " ! TODO: more"
 
 //basic colors
 #define CLsyscol 0x00C0C0C0

@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLBUFFER
 #define HH_CLBUFFER
-#pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
+//#pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
 #include <stdio.h>
 #include <string.h>

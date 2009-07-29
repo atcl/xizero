@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license  
 #ifndef HH_CLGFX2
 #define HH_CLGFX2
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+//#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

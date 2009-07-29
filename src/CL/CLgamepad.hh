@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLGAMEPAD
 #define HH_CLGAMEPAD
-#pragma message "Compiling " __FILE__
+//#pragma message "Compiling " __FILE__
 
 #ifdef LINUX
 
@@ -46,7 +46,7 @@ namespace CLgamepad
 
 bool CLgamepad::init()
 {
-	if(gamepad_device = open("/dev/js0",O_RDONLY) == -1)
+	if( (gamepad_device = open("/dev/js0",O_RDONLY)) == -1)
 	{
 		CLsystem::print("No Gamepad found");
 		return 0;

@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLENEMY
 #define HH_CLENEMY
-#pragma message "Compiling " __FILE__ " ! TODO: interaction, see player for ctor and attr"
+//#pragma message "Compiling " __FILE__ " ! TODO: interaction, see player for ctor and attr"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

@@ -1,6 +1,8 @@
+//atCROSSLEVEL studios 2009
+//licensed under zlib/libpng license
 #ifndef HH_CLRESOURCE
 #define HH_CLRESOURCE
-#pragma message "Compiling " __FILE__
+//#pragma message "Compiling " __FILE__
 
 xlong CLicon[] = { 0,0,0 };
 

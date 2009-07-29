@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLVERSION
 #define HH_CLVERSION
-#pragma message "Compiling " __FILE__ 
+//#pragma message "Compiling " __FILE__ 
 
 #define CLmajor 0
 #define CLminor 1
