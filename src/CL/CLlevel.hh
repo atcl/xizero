@@ -24,7 +24,7 @@ class CLlevel : public virtual CLcl
 	protected:
 		CLmatrix*  cllinear;
 		CLplayer*  clplayer;
-		CLenemy**  clenemy;
+		CLlist*    clenemy;
 		CLobject** clterrain;
 
 		CLfbuffer* levellandscape;
@@ -48,7 +48,7 @@ class CLlevel : public virtual CLcl
 		xlong smoothlevelwidth;
 
 	public:
-		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* levelcontainer);
+		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer);
 		~CLlevel();
 
 		void update(xchar input,xchar turbo);
@@ -66,7 +66,7 @@ xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
 
 
-CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* playerlib, xchar* levelcontainer)
+CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer)
 {
 	//matrix for linear transformations of level objects
 	cllinear = new CLmatrix(1);
@@ -228,6 +228,8 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 //***
 
 //enemies:
+
+	clenemy = new CLlist();
 
 	//load enemy archive
 	

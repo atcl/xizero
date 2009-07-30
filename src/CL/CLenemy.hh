@@ -55,6 +55,7 @@ class CLenemy : public virtual CLcl
 		xlong points;
 		xlong lastupdate[3];
 		xlong* aiarray;
+		xlong airightside;
 
 		void setspeed();
 		void fire(xlong at,xlong d,xlong i);
@@ -62,6 +63,7 @@ class CLenemy : public virtual CLcl
 		void pretransform();
 		void transform();
 		xlong collision(CLfbuffer* ll,xlong m);
+		xlong aihelper();
 		
 	public:
 		CLenemy(xchar* enemylib,CLlvector& s);
@@ -177,6 +179,11 @@ xlong CLenemy::collision(CLfbuffer* ll,xlong m)
 	//*
 
 	return r;
+}
+
+xlong CLenemy::aihelper()
+{
+	return airightside;	
 }
 
 CLenemy::CLenemy(xchar* enemylib,CLlvector& s)
