@@ -23,7 +23,6 @@ namespace CLformat
 {
 	xlong*  loadcsv(CLfile* sf,xchar sep=',');
 	arfile* loadar(CLfile* sf);
-	xlong** loadbcx(CLfile* bf);
 	xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
 	sprite* loadtga(CLfile* sf);
 	
@@ -94,6 +93,8 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	return r;
 }
 
+
+//!!!!!!!!!!!!!!!members have too big filesize!!!!!!!!!!!!!!!!! i.e: 4byte in the ini in e001.a
 arfile* CLformat::loadar(CLfile* sf)
 {
 	//all .ar members must be aligned on 4byte (long) borders
@@ -270,50 +271,6 @@ arfile* CLformat::loadar(CLfile* sf)
 	}
 
 	return 0;
-}
-
-xlong** CLformat::loadbcx(CLfile* bf)
-{
-	xlong lc = CLutils::getlinecount(bf);
-
-	doubleword nl = { 0 };
-	xlong bc = 0;	
-
-	xlong *arr0 = new xlong[lc];
-	xlong *arr1 = new xlong[lc];
-
-	arr0[0] = lc-2;
-	arr1[0] = lc-2;
-
-	if( bf->data[bc] == 'BLC<' )
-	{
-		bc += 4;
-
-		for(int i=1; i < lc; i++)
-		{
-			if( bf->data[bc] == 'LUN<' ) break;
-
-			arr0[i] = bf->data[bc]; bc++;
-			arr1[i] = bf->data[bc]; bc++;
-			nl.dd   = bf->data[bc]; bc++;
-
-			if( nl.dw[0] == '##' )
-			{
-				//CLprint_(&nl.db[0]);
-				nl.dd = bf->data[bc-2];
-				arr1[i]  = (nl.db[0] - 0x30) * 1000;
-				arr1[i] += (nl.db[1] - 0x30) * 100; 
-				arr1[i] += (nl.db[2] - 0x30) * 10; 
-				arr1[i] += (nl.db[3] - 0x30);
-			}
-			bc++;
-		}
-	}
-
-	xlong **re = new xlong*[2];
-	re[0] = arr0;
-	re[1] = arr1;
-	return re;
 }
 
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
@@ -522,65 +479,72 @@ xmap* CLformat::loadini(CLfile* sf)
 			//pre equal sign
 			tc0 = cc;
 			tc1=0;
+			bool noinfo = 0;
+			bool noequal = 0;
 			while(bf[cc]!='=')
 			{
+				if(bf[cc]!=' ') noinfo = 1;
+				if(bf[cc]==CLsystem::eol && noinfo==1) noequal = 1;
 				if(bf[cc]!=' ') tc1++;
 				cc++;
 			}
-
-			cc ^= tc0 ^= cc ^= tc0; //xor swap trick
 			
-			tp0 = new xchar[tc1+1];
-			tp0[tc1]=0;
-			for(int j=0; j<tc1; j++)
+			if(noequal==0)
 			{
-				tp0[j] = bf[cc+j];
-			}
-			cc = tc0;
-			cc++;
-			//*
-			
-			//post equal sign
-			while(bf[cc]==' ') cc++;
-
-			tc0 = cc;
-			tc1=0;
-			while(bf[cc] != CLsystem::eol)
-			{
-				     if( (bf[cc]=='"' || bf[cc]=='\'') && apos==0) { apos=1; cc++; aps=cc; }
-				else if( (bf[cc]=='"' || bf[cc]=='\'') && apos==1) { apos=0; break; }
-				else if(bf[cc]!=' ' && apos==0) { tc1++; cc++; }
-				else if(apos==1) {tc1++; cc++; }
-				else if( bf[cc]=='#' || bf[cc]==';') break;
-			}
-
-			cc ^= tc0 ^= cc ^= tc0; //xor swap trick
-			
-			if(aps==0)
-			{
-				tp1 = new xchar[tc1+1];
-				tp1[tc1]=0;
+				cc ^= tc0 ^= cc ^= tc0; //xor swap trick
+				
+				tp0 = new xchar[tc1+1];
+				tp0[tc1]=0;
 				for(int j=0; j<tc1; j++)
 				{
-					tp1[j] = bf[cc+j];
+					tp0[j] = bf[cc+j];
 				}
-			}
-			else 
-			{
-				tp1 = new xchar[tc1+1];
-				tp1[tc1]=0;
-				for(int j=0; j<tc1; j++)
+				cc = tc0;
+				cc++;
+				//*
+				
+				//post equal sign
+				while(bf[cc]==' ') cc++;
+
+				tc0 = cc;
+				tc1=0;
+				while(bf[cc] != CLsystem::eol)
 				{
-					tp1[j] = bf[aps+j];
+						 if( (bf[cc]=='"' || bf[cc]=='\'') && apos==0) { apos=1; cc++; aps=cc; }
+					else if( (bf[cc]=='"' || bf[cc]=='\'') && apos==1) { apos=0; break; }
+					else if(bf[cc]!=' ' && apos==0) { tc1++; cc++; }
+					else if(apos==1) {tc1++; cc++; }
+					else if( bf[cc]=='#' || bf[cc]==';') break;
 				}
+
+				cc ^= tc0 ^= cc ^= tc0; //xor swap trick
+				
+				if(aps==0)
+				{
+					tp1 = new xchar[tc1+1];
+					tp1[tc1]=0;
+					for(int j=0; j<tc1; j++)
+					{
+						tp1[j] = bf[cc+j];
+					}
+				}
+				else 
+				{
+					tp1 = new xchar[tc1+1];
+					tp1[tc1]=0;
+					for(int j=0; j<tc1; j++)
+					{
+						tp1[j] = bf[aps+j];
+					}
+				}
+				cc = tc0;
+				//*
+				
+				//map values in xmap
+				(*r)[tp0] = tp1;
+				//~ CLsystem::print(tp0);
+				//*
 			}
-			cc = tc0;
-			//*
-			
-			//map values in xmap
-			(*r)[tp0] = tp1;
-			//~ CLsystem::print(tp0);
-			//*
 		}
 			
 		//reset fopr next line

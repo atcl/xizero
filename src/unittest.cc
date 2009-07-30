@@ -38,6 +38,17 @@ int main(int argc, char** argv)
 			
 			CLfile* fonttga = CLsystem::getfile("../dat/other/CLteletype.fnt");
 			CLfont* font = CLformat::loadfont(fonttga);
+			
+			
+			//temp
+			CLfile* etest = CLsystem::getfile("../dat/enemy/e001.a");
+			arfile* ebr   = CLformat::loadar(etest);
+			//arfile* ebr   = CLformat::loadar(ear->members[0]);
+			xlong in      = CLutils::findarmember(ebr,".ini");
+			//xmap* et      = CLformat::loadini(ebr->members[1]); //infinite loop!!!
+			say();
+			//CLsystem::print((*et)["health"]);
+			//*
 
 		//test tree:
 			CLtree* testtree = new CLtree();

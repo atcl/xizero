@@ -5,6 +5,6 @@ if [ "$1" != "" ]; then
 else
 	echo -n "Enter enemy name: "
 	read enemy
-	ar -q $enemy'.a' $enemy'.y3d' $enemy'.ini' $level'.csv'
+	ar -q $enemy'.a' $enemy'.y3d' $enemy'.ini' $enemy'.csv'
 fi
 

@@ -66,7 +66,7 @@ class CLenemy : public virtual CLcl
 		xlong aihelper();
 		
 	public:
-		CLenemy(xchar* enemylib,CLlvector& s);
+		CLenemy(CLfile* enemylib,CLlvector& s);
 		CLenemy(CLenemy* e);
 		~CLenemy();
 		
@@ -186,23 +186,24 @@ xlong CLenemy::aihelper()
 	return airightside;	
 }
 
-CLenemy::CLenemy(xchar* enemylib,CLlvector& s)
+CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
 {
 	//matrix for enemy transformations
 	cllinear = new CLmatrix(1);
 	//*
 	
 	//load enemy archive 
-	CLfile* enemyraw = CLsystem::getfile(enemylib);
-	arfile* enemya = CLformat::loadar(enemyraw);
+	//CLfile* enemyraw = CLsystem::getfile(enemylib);
+	arfile* enemya = CLformat::loadar(enemylib);
 	//*
 
 	//find enemy definition, has to have extension .ini
-	xlong pd = CLutils::findarmember(enemya,".ini");
-	if(pd==-1) CLsystem::exit(1,0,__func__,"no enemy definition found");
-	xmap* eini = CLformat::loadini(enemya->members[pd]);
+	xlong ed = CLutils::findarmember(enemya,".ini");
+	say(ed);
+	if(ed==-1) CLsystem::exit(1,0,__func__,"no enemy definition found");
+	xmap* eini = CLformat::loadini(enemya->members[ed]);
 	//*
-	
+
 	//find enemy ai, has to have extension .csv
 	xlong pa = CLutils::findarmember(enemya,".csv");
 	if(pa==-1) CLsystem::exit(1,0,__func__,"no enemy ai found");
@@ -270,17 +271,76 @@ CLenemy::CLenemy(xchar* enemylib,CLlvector& s)
 
 CLenemy::CLenemy(CLenemy* e)
 {
-	//! todo: copy ctor
+	//matrix for enemy transformations
+	cllinear = new CLmatrix(1);
+	//*
+	
+	//copy aiarray and model
+	aiarray = e->aiarray;
+	model = e->model;
+	//
+
+	//set and copy bounding box of model
+	boundingbox = new CLbox;
+	oboundingbox = model->getboundingbox();
+	*boundingbox = *oboundingbox;
+	//*
+	
+	//~ //set and adjust (start) position to floating X pixel above ground
+	//~ position = s;
+	//~ position.z += 95;
+	//~ tposition = position;
+	//~ //*
+	
+	//create list for all ammo fired by enemy
+	ammolist = new CLlist();
+	//*
+	
+	//load enemy info from definition file (...later ini)
+	health		= e->health;
+	shield		= e->shield;
+	shieldrate	= e->shieldrate;
+	armor		= e->armor;
+	speeddir.x  = 0;
+	speeddir.y  = e->speed.y;
+	speeddir.z  = 0;
+	ammotype[0] = new CLammo;
+	ammotype[0]->comsprite = e->ammotype[0]->comsprite;
+	ammotype[0]->v = 16;
+	ammotype[0]->p = CLfvector();
+	ammotype[0]->d = CLfvector();
+	firerate[0]	= e->firerate[0]; //every X ms
+	ammotype[1] = new CLammo;
+	ammotype[1]->comsprite = e->ammotype[0]->comsprite;
+	ammotype[1]->v = 16;
+	ammotype[1]->p = CLfvector();
+	ammotype[1]->d = CLfvector();
+	firerate[1]	= e->firerate[1]; //every X ms
+	//*
+	
+	//set remaining enemy attributes
+	speed = 0;
+	gear = 0;
+	active = 0;
+	direction.x = 0;
+	direction.y = -1;
+	direction.z = 0;	
+	lastupdate[0] = CLsystem::getmilliseconds();
+	lastupdate[1] = CLsystem::getmilliseconds();
+	lastupdate[2] = CLsystem::getmilliseconds();
+	//*
 }
 
 CLenemy::~CLenemy()
 {
+	//release everything this class grabbed
 	delete cllinear;
 	delete ammolist;
 	delete ammotype[0];
 	delete ammotype[1];
 	delete boundingbox;
 	delete model;
+	//*
 }
 
 xlong CLenemy::update(CLfbuffer* ll,xlong mark)
@@ -298,7 +358,7 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 		for(int i=0; i<ammolist->getlength();i++)
 		{
 			ammolist->setindex(i);
-			currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 			currammo->p.y -= mark;
 			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
 			else
@@ -367,7 +427,7 @@ void CLenemy::display(xlong m)
 	for(int i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);
-		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 		currammo->p.y -= m;
 		currammo->comsprite(currammo->p.x,currammo->p.y);
 		currammo->p.y += m;

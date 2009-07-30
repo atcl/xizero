@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-//#pragma message "Compiling " __FILE__ " ! TODO: interaction, new bcx,ev else,brking (speed=0),correct turning (speed)"
+//#pragma message "Compiling " __FILE__ " ! TODO: interaction"
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
@@ -291,6 +291,7 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 
 CLplayer::~CLplayer()
 {
+	//release everything this class grabbed
 	delete cllinear;
 	delete ammolist;
 	delete ammotype[0];
@@ -299,7 +300,7 @@ CLplayer::~CLplayer()
 	delete boundingbox[1];
 	delete model[0];
 	delete model[1];
-	
+	//*
 }
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
@@ -313,7 +314,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		for(int i=0; i<ammolist->getlength();i++)
 		{
 			ammolist->setindex(i);
-			currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 			currammo->p.y -= mark;
 			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
 			else
@@ -458,7 +459,7 @@ void CLplayer::display(xlong m)
 	for(int i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);
-		currammo = reinterpret_cast<CLammo*>(ammolist->getcurrentdata());
+		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 		currammo->p.y -= m;
 		currammo->comsprite(currammo->p.x,currammo->p.y);
 		currammo->p.y += m;

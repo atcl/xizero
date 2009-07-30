@@ -129,7 +129,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//entity map:
 	xlong ef = CLutils::findarmember(levela,".mape");
 	if(ef==-1) CLsystem::exit(1,0,__func__,"no entity map found");
-	xchar** entitymap = CLformat::loadmap(levela->members[ef],33,' ',-1);
+	xchar** entitymap = CLformat::loadmap(levela->members[ef],34,' ',-1);
 	//**
 
 	//build levellayerscontaining all sub maps
@@ -208,7 +208,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	{
 		for(int i=0; i<levelwidth; i++)
 		{
-			if(levellayers[2][h][i] == 0)
+			if(levellayers[2][h][i] == -1)
 			{
 				startposfound = true;
 				playerp.x = i * blockwidth;
@@ -229,13 +229,42 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 //enemies:
 
-	clenemy = new CLlist();
-
 	//load enemy archive
+	CLfile* enemyraw = CLsystem::getfile(enemylib);
+	arfile* enemya = CLformat::loadar(enemyraw);
+	//*
 	
-	//load all enemies in archive (base enemies)
-	
-	//create list of all enemies in level
+	//load all enemies in archive (base enemies) into list
+	clenemy = new CLlist();
+	CLenemy* tempenemy;
+	startposfound = 0;
+	CLlvector enemyp;
+	for(int k=0; k<enemya->filecount; k++)
+	{
+		//find enemy startpos with index fitting current enemy indey in enemya
+		for(int l=0; l<levelheight; l++)
+		{
+			for(int m=0; m<levelwidth; m++)
+			{
+				if(levellayers[2][l][m] == k)
+				{
+					startposfound = true;
+					enemyp.x = m * blockwidth;
+					enemyp.y = l * blockheight;
+					enemyp.z = levellayers[1][l][m] * blockdepth + 100; //correct or - 100 ???
+					break;
+				}
+			}
+		}
+		if(startposfound==0) CLsystem::exit(1,0,__func__,"no (suitable) enemy start position found in entity map");
+		//*
+		
+		//tempenemy = new CLenemy(enemya->members[k],enemyp);
+		//clenemy->append(tempenemy);
+
+		startposfound = 0;
+	}
+	//*
 	
 	//create all enemies in level through copying from base enemies from archive
 
