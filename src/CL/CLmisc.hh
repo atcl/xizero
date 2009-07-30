@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMISC
 #define HH_CLMISC
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+//#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 void crosslevel()
 {

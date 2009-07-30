@@ -19,10 +19,10 @@
 
 namespace CLgfx2
 {
-	sprites* tele;
-	sprites* mono;
-	sprites* line;
-	sprites* segm;
+	CLfont* tele;
+	CLfont* mono;
+	CLfont* line;
+	CLfont* segm;
 	
 	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
 	xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c);

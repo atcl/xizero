@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLDIV3D
 #define HH_CLDIV3D
-//#pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
+#pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
@@ -18,7 +18,7 @@ namespace CLmisc3d
 	template<class clvector>void draw3dpixel(clvector& p,uxlong c);
 	template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
 	template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
-	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
+	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0); //too slow!
 	void drawfloor(xlong z, xlong w,uxlong c);
 };
 

@@ -206,7 +206,7 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	points = p;
 	//*
 	
-	//load playerstuff 
+	//load player archive 
 	CLfile* playerraw = CLsystem::getfile(playerlib);
 	arfile* playera = CLformat::loadar(playerraw);
 	//*
@@ -285,7 +285,7 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	lastupdate[2] = CLsystem::getmilliseconds();
 	//*
 	
-	//delete pini;
+	delete pini;
 }
 
 CLplayer::~CLplayer()
@@ -475,17 +475,6 @@ void CLplayer::display(xlong m)
 //~ sposition.x+boundingbox[0]->b4.x,
 //~ sposition.y-boundingbox[0]->b4.y,
 //~ 0x00FFFFFF);
-
-	//~ CLgfx1::drawpolygon(
-//~ tposition.x+boundingbox[0]->b1.x,
-//~ tposition.y-boundingbox[0]->b1.y - xmark,
-//~ tposition.x+boundingbox[0]->b2.x,
-//~ tposition.y-boundingbox[0]->b2.y - xmark,
-//~ tposition.x+boundingbox[0]->b3.x,
-//~ tposition.y-boundingbox[0]->b3.y - xmark,
-//~ tposition.x+boundingbox[0]->b4.x,
-//~ tposition.y-boundingbox[0]->b4.y - xmark,
-//~ 0x0000FFFF);
 
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
