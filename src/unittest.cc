@@ -29,11 +29,6 @@ int main(int argc, char** argv)
 		CLdoublebuffer->clear(0);
 	//
 	
-		//test bcx loading:
-			//~ CLfile* fbcx = CLsystem::getfile("../dat/test.bcx");
-			//~ xlong** bcx;
-			//~ doubleword tt;
-			//~ bcx = CLformat::loadbcx(fbcx);
 		//test tga loading:
 			
 			CLfile* fonttga = CLsystem::getfile("../dat/other/CLteletype.fnt");
@@ -45,7 +40,7 @@ int main(int argc, char** argv)
 			arfile* ebr   = CLformat::loadar(etest);
 			//arfile* ebr   = CLformat::loadar(ear->members[0]);
 			xlong in      = CLutils::findarmember(ebr,".ini");
-			//xmap* et      = CLformat::loadini(ebr->members[1]); //infinite loop!!!
+			//xmap* et      = CLformat::loadini(ebr->members[1]); //infinite loop!!! because ar returns too big size !?
 			say();
 			//CLsystem::print((*et)["health"]);
 			//*
@@ -191,6 +186,9 @@ int main(int argc, char** argv)
 			break;
 			case '+':
 				cubus->reset();
+			break;
+			case '-':
+				//activate shadows
 			break;
 			case '#':
 				ex->next();
