@@ -9,7 +9,7 @@
 
 int main(int argc, char** argv)
 {
-	std::string argfile = "../dat/terrain/0000.y3d";
+	std::string argfile = "../dat/other/test.y3d";
 	xlong  argfileindex =-1;
 
 	if(argc>2)
@@ -28,16 +28,6 @@ int main(int argc, char** argv)
 	//test section:
 		CLdoublebuffer->clear(0);
 	//
-	
-	CLfile* initest = CLsystem::getfile("../dat/other/test.ini");
-
-	xmap* ini = CLformat::loadini(initest);
-	
-	CLsystem::print((*ini)["name"]);
-	CLsystem::print((*ini)["value"]);
-	CLsystem::print((*ini)["other"]);
-	CLsystem::print((*ini)["form"]);
-	CLsystem::print((*ini)["xxx"]);
 	
 		//test bcx loading:
 			//~ CLfile* fbcx = CLsystem::getfile("../dat/test.bcx");
@@ -87,7 +77,7 @@ int main(int argc, char** argv)
 
 	CLlvector p(400,300,100);
 
-	bool mode=false;
+	bool mode=true;
 
 	while(win->run())
 	{
@@ -188,6 +178,9 @@ int main(int argc, char** argv)
 				if(mode==false) mode=true;
 				else mode=false;
 			break;
+			case '+':
+				cubus->reset();
+			break;
 			case '#':
 				ex->next();
 			break;
@@ -221,8 +214,13 @@ int main(int argc, char** argv)
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
 		
-		CLgfx2::drawfontchar(100,100,'a',font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,150,"Hi there, 123456 bla bla!!!",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,50,"Use arrow keys for translating",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,70,"Use + for reseting",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,90,"Use # for exploding",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,110,"Use ^ for toggling between shading",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,130,"Use 0 to exit",font,0x00FFFFFF);
 
 		//cubus->display(1,1,1,1,0,0);
 		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);

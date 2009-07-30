@@ -16,7 +16,7 @@
 #include "CLversion.hh"
 #include "CLresource.hh"
 
-
+//more comments!
 namespace CLsystem
 {
 	xchar eol = '\n'; //change for WIN32
