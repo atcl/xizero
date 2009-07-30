@@ -16,7 +16,7 @@
 #include "CLversion.hh"
 #include "CLresource.hh"
 
-//more comments!
+
 namespace CLsystem
 {
 	xchar eol = '\n'; //change for WIN32
@@ -47,6 +47,7 @@ namespace CLsystem
 
 CLexe* CLsystem::exe(xchar** a)
 {
+	//fill CLexe struct
 	CLexe* r = new CLexe;
 	r->name = a[0];
 	r->title = CLtitle;
@@ -55,6 +56,7 @@ CLexe* CLsystem::exe(xchar** a)
 	r->icon = &CLicon[0];
 	r->splash = &CLsplash[0];
 	return r;
+	//*
 }
 
 void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
@@ -87,6 +89,7 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 
 	FILE *of;
 
+	//check if file exists
 	if( !( of = fopen(fn,"rb") ) ) 
 	{
 		if(s==0)
@@ -100,15 +103,26 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 			exit(1,0,__func__,"cannot open file",fn);
 		}
 	}
-	of = fopen(fn,"rb");
+	//*
+	
+	of = fopen(fn,"rb"); //necessary?
+	
+	//get file size
 	fseek (of,0,SEEK_END);
 	re->size = (ftell(of));
 	re->lsize = re->size>>2;
+	//*
+	
+	//read file contents
 	fseek (of,0,SEEK_SET );
 	re->text = new xchar[re->size];
 	re->data = reinterpret_cast<xlong*>(&re->text[0]); //!
 	fread(re->text,1,re->size,of);
+	//*
+	
+	//close file
 	fclose(of);
+	//*
 
 	return re;
 }
@@ -135,32 +149,38 @@ bool CLsystem::writefile(const xchar* f,xchar* b,xlong s,bool ow)
 
 void CLsystem::print(const xchar* c,bool i)
 {
+	//print xchar array, i decides if line end is output
 	std::cout << c;
 
 	if(i)
 	{
 		std::cout << std::endl;
 	}
+	//*
 }
 
 void CLsystem::print(const xlong l,bool i)
 {
+	//print xlong, i decides if line end is output
 	std::cout << l;
 
 	if(i)
 	{
 		std::cout << std::endl;
 	}
+	//*
 }
 
 void CLsystem::print(const float l,bool i)
 {
+	//print float, i decides if line end is output
 	std::cout << l;
 
 	if(i)
 	{
 		std::cout << std::endl;
 	}
+	//*
 }
 
 void CLsystem::waitforkey()
@@ -170,14 +190,15 @@ void CLsystem::waitforkey()
 
 void CLsystem::wait(xlong milliseconds)
 {
+	//get current time and calc stop time
 	xlong starttime = clock() / CLOCKS_PER_SEC * 1000;
 	xlong stoptime = (starttime + milliseconds) / 1000 * CLOCKS_PER_SEC;
-	xlong nowtime = 0;
+	//*
 
-	do
-	{
-		nowtime = clock();
-	} while(nowtime < stoptime);
+	//do nothing while waiting for stoptime
+	xlong nowtime = 0;
+	while(nowtime < stoptime) nowtime = clock();
+	//*
 }
 
 xlong CLsystem::getmilliseconds() //since midnight
