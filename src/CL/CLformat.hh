@@ -505,7 +505,6 @@ xmap* CLformat::loadini(CLfile* sf)
 	//get linecount
 	xlong  lc = CLutils::getlinecount(sf);
 	//*
-	CLsystem::print(lc);
 	
 	xlong cc=0;
 	xlong tc0=0;

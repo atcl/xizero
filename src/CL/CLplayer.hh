@@ -13,8 +13,8 @@
 #include "CLsprites.hh"
 #include "CLformat.hh"
 
-//CLplayer todo: structure,give ctor args: playerlib,levellandscape,startpos and init yourself
-
+#ifndef CLAMMO
+#define CLAMMO
 struct CLammo
 {
 	void(*comsprite)(xlong x,xlong y);
@@ -22,6 +22,7 @@ struct CLammo
 	CLfvector d;
 	float v;
 };
+#endif
 
 class CLplayer : public virtual CLcl
 {
@@ -211,7 +212,7 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	arfile* playera = CLformat::loadar(playerraw);
 	//*
 
-	//find player definition, has to have extension .bcx, change to ini as soon as works and avail
+	//find player definition, has to have extension .ini
 	xlong pd = CLutils::findarmember(playera,".ini");
 	if(pd==-1) CLsystem::exit(1,0,__func__,"no player definition found");
 	xmap* pini = CLformat::loadini(playera->members[pd]);
@@ -264,8 +265,8 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	ammotype[0]->v = 16;
 	ammotype[0]->p = CLfvector();
 	ammotype[0]->d = CLfvector();
-	ammotype[1] = new CLammo;
 	firerate[0]	= CLsystem::ato((*pini)["firerate0"]); //every X ms
+	ammotype[1] = new CLammo;
 	switch(CLsystem::ato((*pini)["ammo1"])) { case 0: ammotype[1]->comsprite = CLsprites::drawplasma; break; }
 	ammotype[1]->v = 16;
 	ammotype[1]->p = CLfvector();

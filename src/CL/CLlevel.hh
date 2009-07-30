@@ -229,6 +229,14 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* enedatlib, xchar* pl
 
 //enemies:
 
+	//load enemy archive
+	
+	//load all enemies in archive (base enemies)
+	
+	//create list of all enemies in level
+	
+	//create all enemies in level through copying from base enemies from archive
+
 	//...
 
 //***
@@ -245,6 +253,10 @@ void CLlevel::update(xchar input,xchar turbo)
 {
 	//update player
 	clplayer->update(input,turbo,levellandscape,smoothmark);
+	//*
+	
+	//update enemies
+	
 	//*
 	
 	//adjust section of level t be displayed by ("new") player position
@@ -321,8 +333,8 @@ void CLlevel::display()
 	//*
 	
 	//display enemies:
-	
-	//
+		//...
+	//*
 }
 
 void CLlevel::subsmark(xlong m)
