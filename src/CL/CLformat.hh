@@ -92,14 +92,8 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	return r;
 }
 
-
-//!!!fix wrong filesizes!!!!
 arfile* CLformat::loadar(CLfile* sf)
 {
-	//all .ar members must be aligned on 4byte (long) borders
-	//so the filesize is fully dividable by 4
-	//test with: if(fs%4==0) ...
-
 	xchar* bf = sf->text;
 	xlong cfs = sf->size;
 
@@ -223,22 +217,26 @@ arfile* CLformat::loadar(CLfile* sf)
 				ts[9]  = (bf[bc] -   0x30);
 				fs = ts[9];
 			}
-			//fs contains filesize
+			//*
 
 			bc+=12; //goto end of header
 
-			//build array for current ar member
+			//create xlong array for current ar member
 			xlong fs2 = fs>>2;
+			if(fs%4!=0) fs2++;
+			fs2++;
+			xlong* tb = new xlong[fs2];
+			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]); //! cannot use simple static_cast here (cast to void before?)
+			//*
 
-			xlong* tb = new xlong[fs2+1];
-			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]); //!
-
-			for(int i=0; i<fs2+1; i++)
+			//fill array
+			for(int i=0; i<fs2; i++)
 			{
 				tb[i] = bf2[i];
 			}
+			tb[fs2] = CLsystem::eof;
 			bc += fs;
-			//tb contains file contents
+			//*
 
 			//make new armember
 			tindex[fc] = new armember;
@@ -246,16 +244,16 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc]->lsize = fs2;
 			tindex[fc]->name = new xchar[16]; CLutils::copychararray(tindex[fc]->name,&fn[0],16);
 			tindex[fc]->data = tb;
-			tindex[fc]->text = reinterpret_cast<xchar *>(&tb[0]); //!
-			//tindex[fc] contains complete armember
+			tindex[fc]->text = reinterpret_cast<xchar*>(&tb[0]); //!
+			//*
 
-			if(fs%4!=0) tsize -= (4 - (fs % 4)); //if filesize % 4 != 0 adjust
-
+			//adjust global ar variables
+			if(fs%2!=0) { bc++; tsize--; }
 			tsize -= (fs+60); //subtract reading size from global size
-
 			fc++; //increment filecount
+			//*
 
-		} while( tsize > 0 );	//wo kommen die 3 her in level.a ???
+		} while( tsize > 0 );
 		//*
 
 		//create arfile

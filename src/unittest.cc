@@ -35,15 +35,14 @@ int main(int argc, char** argv)
 			CLfont* font = CLformat::loadfont(fonttga);
 			
 			
-			//temp
-			CLfile* etest = CLsystem::getfile("../dat/enemy/e001.a");
-			arfile* ebr   = CLformat::loadar(etest);
-			//arfile* ebr   = CLformat::loadar(ear->members[0]);
-			xlong in      = CLutils::findarmember(ebr,".ini");
-			xmap* et      = CLformat::loadini(ebr->members[1]); //infinite loop!!! because ar returns too big size !?
-			say();
-			//CLsystem::print((*et)["health"]);
-			//*
+			//~ //temp
+			//~ CLfile* etest = CLsystem::getfile("../dat/enemy/enemies.a");
+			//~ arfile* ear   = CLformat::loadar(etest);
+			//~ arfile* ebr   = CLformat::loadar(ear->members[0]);
+			//~ xlong in      = CLutils::findarmember(ebr,".ini");
+			//~ xmap* et      = CLformat::loadini(ebr->members[1]);
+			//~ CLsystem::print((*et)["health"]);
+			//~ //*
 
 		//test tree:
 			CLtree* testtree = new CLtree();
