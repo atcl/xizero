@@ -69,7 +69,6 @@ class CLmap
 //ASCIImissile
 //CLxml
 
-//static polymorphism for CLvector, CLfixed
 //template version of CLformat.loadcsv 
 //CLmath.acos,asin mit lookup tables
 //template version of CLsystem.ato
@@ -77,10 +76,36 @@ class CLmap
 //flatshade in asm
 //enemy copy ctor
 //terrain dep transformations and zlevel
-//CLvector.cross,CLvector.dot return type overloading
 //CLgfx1.drawsprite ao: transparency check with logic-ops instead of if
 //tristate-bool class
 //bump mapping
+
+
+//CLvector.cross,CLvector.dot return type overloading
+template<typename T>
+struct _CLvector_mul
+{
+	friend _CLvector_mul operator*(const CLvector<T> &l, const CLvector<T> &r);
+	
+	private:
+		const CLvector<T> &l;
+		const CLvector<T> &r;
+		
+		_CLvector_mul(const CLvector<T> &L, const CLvector<T> &R) : l(L), r(R) { ; } //inline
+	
+	public:
+		operator T() const { return l.dot(r); }
+		operator CLvector<T> const { return l.cross(r); }
+
+};
+
+//inline
+template<typename T>
+_CLvector_mul operator*(const CLvector<T> &l, const CLvector<T> &r)
+{
+    return _CLvector_mul(l, r);
+}
+//*
 
 #endif
 

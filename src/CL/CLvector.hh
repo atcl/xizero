@@ -8,9 +8,33 @@
 #include "CLtypes.hh"
 #include "CLmath.hh"
 
+template<typename T,class clvector>
+struct CLvectorbase
+{
+	public:
+		clvector  operator+(const clvector& a) const { static_cast<clvector*>(this)->operator+(a); }
+		clvector  operator-(const clvector& a) const { static_cast<clvector*>(this)->operator-(a); }
+		clvector  operator-()                        { static_cast<clvector*>(this)->operator-(); }
+		       T  operator*(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
+		clvector  operator*(T c) const               { static_cast<clvector*>(this)->operator*(c); }
+		//does the friend need to be crtp'ed?
+		clvector  operator^(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
+		       T  operator!() const                  { static_cast<clvector*>(this)->operator!(); }
+		clvector& operator+=(const clvector& a)      { static_cast<clvector*>(this)->operator+=(a); }
+		clvector& operator-=(const clvector& a)      { static_cast<clvector*>(this)->operator-=(a); }
+		clvector& operator*=(T c)                    { static_cast<clvector*>(this)->operator*=(c); }
+		
+		clvector& operator=(const clvector& a)       { static_cast<clvector*>(this)->operator=(a); }
+		clvector& operator=(T c)                     { static_cast<clvector*>(this)->operator=(c); }
+		//does the cast need to be crtp'ed
+		       T  operator%(const clvector& a)       { static_cast<clvector*>(this)->operator%(a); }
+	
+		void print() { static_cast<clvector*>(this)->print(); }
+};
 
+//inline all methods and friends!
 template<typename T>
-struct CLvector
+struct CLvector : public CLvectorbase<T,CLvector<T> >
 {
 	T x;
 	T y;
@@ -18,7 +42,7 @@ struct CLvector
 	T e;
 
 	CLvector() { x=y=z=0; }
-	CLvector(T tx,T ty,T tz) { x=tx; y=ty; z=tz; }
+	CLvector(T tx,T ty,T tz) : x(tx) , y(ty) , z(tz) { ; } 
 	~CLvector() { }
 
 	CLvector operator+(const CLvector& a) const;	//vector addition
