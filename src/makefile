@@ -27,23 +27,30 @@ TARGET4 = asciimissile
 SOURCE5 = testx.cc
 TARGET5 = testx
 
+STRIP   = strip -s -R .comment -R .gnu.version
+
 #options to test:
 CPUa    = -mcpu pentium-mmx
 CPUb    = -mcpu pentium3
 MATH    = -ffast-math
 ATOM    = -xL
+OPT     = -fsingle-precision-constant -floop-optimize
+EXP     = -fprefetch-loop-arrays -funit-at-a-time
+ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
 #
 
 
 # Compile!
 default:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
+	$(STRIP) $(TARGET1)
 
 static:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(STATIC) $(WWFLAGS) $(LINUX) 
 
 unit:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
+	$(STRIP) $(TARGET2)
 
 fast:
 	$(CC) $(O3FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX)
