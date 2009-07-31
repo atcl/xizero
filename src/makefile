@@ -39,7 +39,6 @@ EXP     = -fprefetch-loop-arrays -funit-at-a-time -funroll-loops
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -malign-int
 #
 
-
 # Compile!
 default:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)

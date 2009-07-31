@@ -12,6 +12,7 @@ int main()
 	CLsetup();
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemy/enemies.a","../dat/player/player.a","../dat/level/level0.a");
+	CLfloor::init(100,670,0x0000b0b0);
 
 	clbench->init();
 
@@ -58,7 +59,7 @@ int main()
 		switch(mode)
 		{
 			case 1: 
-				CLmisc3d::drawfloor(100,670,0x0000b0b0);
+				CLfloor::draw();
 				testlevel->display();
 				break;
 
@@ -70,7 +71,7 @@ int main()
 				break;
 
 			case 3:
-				CLmisc3d::drawfloor(100,670,0x0000b0b0);
+				CLfloor::draw();
 				testlevel->display();
 				CLmisc3d::drawzbuffer();
 				break;

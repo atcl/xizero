@@ -18,8 +18,7 @@ namespace CLmisc3d
 	template<class clvector>void draw3dpixel(clvector& p,uxlong c);
 	template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
 	template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
-	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0); //too slow!
-	void drawfloor(xlong z, xlong w,uxlong c);
+	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
 
 
@@ -108,44 +107,61 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 	}
 }
 
-void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c)
+//********
+
+namespace CLfloor
 {
+	uxlong floorshade;
+	xlong  floorz;
+	uxlong floorxstart;
+	uxlong floorxend;
+	uxlong floorwidth;
+	
+	void init(xlong z,xlong w,uxlong c);
+	void draw();
+};
+
+void CLfloor::init(xlong z,xlong w,uxlong c)
+{
+	//set floor z and width
+	floorz = z;
+	floorwidth = w;
+	//*
+	
+	//set floor start and end
+	floorxstart = (xres-w)>>1;
+	floorxend   = xres-((xres-w)>>1);
+	//*
+	
 	//shade floor
 	doubleword argb = { 0 };
-	uxlong s;
-
 	float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
-
 	//if(t > 1) t = 1;
 	//if(t < 0.2) s = nolight;
-
 	argb.dd = c;
 	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t);
 	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t);
 	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t);
-	s = argb.dd;
-	//
-
-	//draw screen
-	xlong x1 = (xres-w)>>1;
-	xlong x2 = xres-((xres-w)>>1);
-	
-	xlong ii = 0;
-	xlong tt = 0;
-	
-	//draw filled rectangle and fill zbuffer
-	for(uxlong i=0; i<yres; i++)
-	{
-		for(uxlong j=0; j<(x2-x1); j++)
-		{
-			tt = ii+x1+j;
-			(*CLdoublebuffer)[tt] = s;
-			(*CLzbuffer)[tt] = z;
-		}
-		
-		ii += xres;
-	}
+	floorshade = argb.dd;
+	//*	
 }
 
+void CLfloor::draw()
+{
+	//fast floor drawing
+	uxlong runningfloorxstart = floorxstart;
+	uxlong runningfloorxend = floorxend;
+	for(uxlong i=0; i<yres; i++)
+	{
+		for(uxlong j=runningfloorxstart; j<runningfloorxend; j++)
+		{
+			(*CLdoublebuffer)[j] = floorshade;
+			(*CLzbuffer)[j] = floorz;
+		}
+		runningfloorxstart += xres;
+		runningfloorxend += xres;
+	}
+	//*
+}
 
 #endif
