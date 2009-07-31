@@ -86,7 +86,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//use array of y3ds to  create array of CLobjects
 	clterrain = new CLobject*[terraina->filecount];
-	for(int g=0; g<terraina->filecount; g++)
+	for(uxlong g=0; g<terraina->filecount; g++)
 	{
 		clterrain[g] = new CLobject(terraina->members[g],1);
 	}
@@ -162,9 +162,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 
 	//render landscape
-	for(int i=0; i<levelheight; i++)
+	for(uxlong i=0; i<levelheight; i++)
 	{
-		for(int j=0; j<levelwidth; j++)
+		for(uxlong j=0; j<levelwidth; j++)
 		{
 			currentterrain = xlong(levellayers[0][i][j]);
 			if(currentterrain != -1)
@@ -204,9 +204,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//search player start pos and set player pos to it
 	bool startposfound = false;
 	CLlvector playerp;
-	for(int h=0; h<levelheight; h++)
+	for(uxlong h=0; h<levelheight; h++)
 	{
-		for(int i=0; i<levelwidth; i++)
+		for(uxlong i=0; i<levelwidth; i++)
 		{
 			if(levellayers[2][h][i] == -1)
 			{
@@ -239,12 +239,12 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	CLenemy* tempenemy;
 	startposfound = 0;
 	CLlvector enemyp;
-	for(int k=0; k<enemya->filecount; k++)
+	for(uxlong k=0; k<enemya->filecount; k++)
 	{
 		//find enemy startpos with index fitting current enemy indey in enemya
-		for(int l=0; l<levelheight; l++)
+		for(uxlong l=0; l<levelheight; l++)
 		{
-			for(int m=0; m<levelwidth; m++)
+			for(uxlong m=0; m<levelwidth; m++)
 			{
 				if(levellayers[2][l][m] == k)
 				{
@@ -323,7 +323,7 @@ void CLlevel::display()
 		{
 		if( !( i==blocksperscreeny+1 && smoothmark>=smoothmarkmax-blockheight ) )
 		{
-			for(int j=0; j<blocksperscreenx; j++)
+			for(uxlong j=0; j<blocksperscreenx; j++)
 			{
 				currentterrain = xlong(levellayers[0][blockmark+i][j]);
 				if(currentterrain!=-1)

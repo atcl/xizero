@@ -94,10 +94,10 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
 	xlong rx = x;
 
 	//drawloop
-	for(int i=0; i<eheight ;i++)
+	for(uxlong i=0; i<eheight ;i++)
 	{
 		rx = x;
-		for(int j=0; j<ewidth ;j++)
+		for(uxlong j=0; j<ewidth ;j++)
 		{
 			if(f->data[linearc] == 0x0FFFF0000)
 			{
@@ -122,7 +122,7 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c)
 	xlong l = CLutils::chararraylength(a);
 	xlong t = x;
 	
-	for(int i=0; i<l; i++)
+	for(uxlong i=0; i<l; i++)
 	{
 		t = drawfontchar(t,y,a[i],f,c);
 	}

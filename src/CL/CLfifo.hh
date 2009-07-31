@@ -82,7 +82,7 @@ void* CLfifo::out()
 
 void CLfifo::clear()
 {
-	for(int i=0; i<length; i++)
+	for(uxlong i=0; i<length; i++)
 	{
 		fifomember* t = tail;
 		tail = tail->prev;

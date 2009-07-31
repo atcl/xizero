@@ -56,7 +56,7 @@ template <typename T>CLbuffer<T>::~CLbuffer() { }
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {
-	for(int i=size-1;i>=0;i--)
+	for(xlong i=size-1;i>=0;i--)
 	{
 		buffer[i] = v;
 	}
@@ -69,7 +69,7 @@ template <typename T>void CLbuffer<T>::fastclear(xlong v)
 
 template <typename T>void CLbuffer<T>::ultraclear(xlong v)
 {
-	xlong puredst = reinterpret_cast<xlong>(&buffer[0]); //!
+	xlong puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong i=0;
 
 	if(size>262144 && sse)
@@ -101,7 +101,7 @@ template <typename T>void CLbuffer<T>::ultraclear(xlong v)
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
 {
-	for(int i=size-1;i>=0;i--)
+	for(xlong i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
 	}
@@ -109,7 +109,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 
 template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
 {
-	for(int i=size-1;i>=0;i--)
+	for(xlong i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
 	}
@@ -122,8 +122,8 @@ template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 
 template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
-	xlong puresrc = reinterpret_cast<xlong>(&buffer[0]); //!
-	xlong puredst = reinterpret_cast<xlong>(&dst[0]);    //!
+	xlong puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
+	xlong puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	xlong i=0;
 		
 	if(size>262144 && sse)
@@ -159,42 +159,42 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	switch(o)
 	{
 		case 0:		//NONE //?default
-			for(int i=size-1;i>=0;i--)
+			for(xlong i=size-1;i>=0;i--)
 			{
 				dst[i] = buffer[i];
 			}
 		break;
 		
 		case 1:		//AND
-			for(int i=size-1;i>=0;i--)
+			for(xlong i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] && buffer[i];
 			}
 		break;
 		
 		case 2:		//OR
-			for(int i=size-1;i>=0;i--)
+			for(xlong i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] || buffer[i];
 			}
 		break;
 		
 		case 3:		//OR
-			for(int i=size-1;i>=0;i--)
+			for(xlong i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] ^ buffer[i];
 			}
 		break;
 		
 		case 4:		//ADD
-			for(int i=size-1;i>=0;i--)
+			for(xlong i=size-1;i>=0;i--)
 			{
 				dst[i] = dst[i] + buffer[i];
 			}
 		break;
 		
 		case 5:		//AA
-			for(int i=size-1;i>=0;i--)
+			for(xlong i=size-1;i>=0;i--)
 			{
 				//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
 			}

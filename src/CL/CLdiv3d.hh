@@ -95,9 +95,9 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 	xlong ii = 0;
 	xlong tt = 0;
 
-	for(int i=0; i<yres-1;i++)
+	for(uxlong i=0; i<yres-1;i++)
 	{
-		for(int j=0; j<xres-1; j++)
+		for(uxlong j=0; j<xres-1; j++)
 		{
 			tt = ii + j;
 			z = (*zb)[tt+srcdis] * 4;
@@ -134,9 +134,9 @@ void CLmisc3d::drawfloor(xlong z, xlong w,uxlong c)
 	xlong tt = 0;
 	
 	//draw filled rectangle and fill zbuffer
-	for(int i=0; i<yres; i++)
+	for(uxlong i=0; i<yres; i++)
 	{
-		for(int j=0; j<(x2-x1); j++)
+		for(uxlong j=0; j<(x2-x1); j++)
 		{
 			tt = ii+x1+j;
 			(*CLdoublebuffer)[tt] = s;

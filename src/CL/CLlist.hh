@@ -181,7 +181,7 @@ void CLlist::setindex(xlong i)
 	{
 		setfirst();
 
-		for(int j=0;j<i;j++)
+		for(uxlong j=0;j<i;j++)
 		{
 			setnext();
 		}

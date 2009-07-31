@@ -133,7 +133,7 @@ xlong CLmath::faculty(xlong f)
 {
 	xlong r = 1;
 
-	for(int i=2;i<=f;i++)
+	for(uxlong i=2;i<=f;i++)
 	{
 		r *= i;
 	}
@@ -145,7 +145,7 @@ xlong CLmath::power(xlong b,xlong e)
 {
 	xlong r = 1;
 
-	for(int i=1;i<=e;i++)
+	for(uxlong i=1;i<=e;i++)
 	{
 		r *= b;
 	}

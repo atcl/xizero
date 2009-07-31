@@ -88,7 +88,7 @@ xlong CLutils::chararraylength(const xchar* c)
 
 void CLutils::copychararray(xchar* dst,xchar* src,xlong length)
 {
-	for(int i=0; i<length; i++)
+	for(uxlong i=0; i<length; i++)
 	{
 		dst[i] = src[i];
 	}
@@ -98,7 +98,7 @@ xlong CLutils::comparechararrays(const xchar* t1,const xchar* t2,xlong tl)
 {
 	if(tl==0) tl = chararraylength(t1);
 	
-	for(int i=0; i<tl; i++)
+	for(uxlong i=0; i<tl; i++)
 	{
 		if(t1[i]!=t2[i]) return 1;
 	}
@@ -110,7 +110,7 @@ xlong CLutils::getlinecount(CLfile* sf)
 {
 	xlong lc = 0;	//line count
 
-	for(int c=0; c<sf->size; c++)
+	for(uxlong c=0; c<sf->size; c++)
 	{
 		if( sf->text[c] == '\n' ) lc++;
 	}
@@ -123,7 +123,7 @@ bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe)
 {
 	xlong el = chararraylength(fe);
 	xlong es = 0;
-	for(int l=0; l<nl; l++)
+	for(uxlong l=0; l<nl; l++)
 	{
 		if(fn[l]==fe[0])
 		{
@@ -131,7 +131,7 @@ bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe)
 		}
 	}
 
-	for(int m=0; m<el; m++)
+	for(uxlong m=0; m<el; m++)
 	{
 		if(fn[es+m]!=fe[m]) return false;
 	}
@@ -193,7 +193,7 @@ xlong CLutils::findarmember(arfile* a,const xchar* e)
 {
 		xlong r = -1;
 		
-		for(int h=0; h<a->filecount; h++)
+		for(uxlong h=0; h<a->filecount; h++)
 		{
 			if(CLutils::checkextension(a->members[h]->name,16,e)==true)
 			{

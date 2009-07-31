@@ -122,7 +122,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		
 		//subobject read loop
 		d = 8;
-		for(int i=0;i<sobjcount;i++)
+		for(uxlong i=0;i<sobjcount;i++)
 		{
 			//read SOBJ tag ( 'SOBJ' , subobject_name , subobject_polygon_count , subobject_dockingpoint_count )
 			if(dataptr[d] != 'SOBJ' ) CLsystem::exit(1,0,__func__,"No SOBJ tag");
@@ -141,7 +141,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 			//*
 
 			//polygon read loop
-			for(int j=0;j<localpolycount;j++,polycounter++)
+			for(uxlong j=0;j<localpolycount;j++,polycounter++)
 			{
 				//read POLY tag ( 'POLY' , polygon_name , polygon_color , 0 )
 				if(dataptr[d] != 'POLY' ) CLsystem::exit(1,0,__func__,"No POLY tag");
@@ -226,7 +226,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 			//*
 			
 			//docking point read loop
-			for(int k=0;k<localdockcount;k++)
+			for(uxlong k=0;k<localdockcount;k++)
 			{
 				//read DP tag ( 'DP' , docckingpoint_type , x_value , y_value , z_value )
 				s.dd = dataptr[d]; d++; //"DP"+docktype
@@ -275,12 +275,12 @@ CLobject::~CLobject()
 
 void CLobject::update(CLmatrix* m)
 {
-	for(int i=0;i<polycount;i++)
+	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->update(m,0);
 	}
 
-	for(int j=0;j<dockcount;j++)
+	for(uxlong j=0;j<dockcount;j++)
 	{
 		*dockptr[j] = m->transform(*dockptr[j]);
 	}
@@ -300,7 +300,7 @@ void CLobject::display(CLlvector p,xchar flags)
 	if(flags&SHADOW)
 	{
 		CLsystem::print("I shouldn't be here!");
-		for(int i=0;i<polycount;i++)
+		for(uxlong i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);
 			polyptr[i]->display(p,( (flags&CENTER) + FLAT + (flags&AMBIENT) + SHADOW ));
@@ -308,7 +308,7 @@ void CLobject::display(CLlvector p,xchar flags)
 	}
 	else
 	{
-		for(int i=0;i<polycount;i++)
+		for(uxlong i=0;i<polycount;i++)
 		{
 			polyptr[i]->display(p,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
 		}
@@ -317,7 +317,7 @@ void CLobject::display(CLlvector p,xchar flags)
 
 void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
 {
-	for(int i=0;i<polycount;i++)
+	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->display(p,l,r,b,h);
 	}
@@ -333,7 +333,7 @@ CLfvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point o
 	xlong c= -1;
 	xlong d= 0;
 
-	for(int j=0;j<dockcount;j++)
+	for(uxlong j=0;j<dockcount;j++)
 	{
 		if(dockptr[j]->e == t)
 		{
@@ -362,7 +362,7 @@ void CLobject::translatealongnormals(float speed)
 {
 	CLfvector t;
 
-	for(int i=0;i<polycount;i++)
+	for(uxlong i=0;i<polycount;i++)
 	{
 		t = polyptr[i]->getnormal();
 		t.x = (t.x / !t) * speed;
@@ -380,7 +380,7 @@ CLbox* CLobject::getboundingbox()
 
 void CLobject::reset()
 {
-	for(int i=0;i<polycount;i++)
+	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->reset();
 	}

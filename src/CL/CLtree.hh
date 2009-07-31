@@ -142,7 +142,7 @@ void CLtree::print()
 {
 	if(current->name!=0) CLsystem::print(current->name);
 	else CLsystem::print(0);
-	for(int i=0; i<current->childcount; i++)
+	for(uxlong i=0; i<current->childcount; i++)
 	{
 		current = current->child[i];
 		print();

@@ -64,7 +64,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	//get value count
 	xlong vc = 0;
 	
-	for(int i=0; i<lc; i++)
+	for(uxlong i=0; i<lc; i++)
 	{
 		if(cc[i]!=0) vc += cc[i] + 1; 	
 	}
@@ -226,11 +226,11 @@ arfile* CLformat::loadar(CLfile* sf)
 			if(fs%4!=0) fs2++;
 			fs2++;
 			xlong* tb = new xlong[fs2];
-			xlong* bf2 = reinterpret_cast<xlong*>(&bf[bc]); //! cannot use simple static_cast here (cast to void before?)
+			xlong* bf2 = static_cast<xlong*>(static_cast<void*>(&bf[bc]));
 			//*
 
 			//fill array
-			for(int i=0; i<fs2; i++)
+			for(uxlong i=0; i<fs2; i++)
 			{
 				tb[i] = bf2[i];
 			}
@@ -244,7 +244,7 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc]->lsize = fs2;
 			tindex[fc]->name = new xchar[16]; CLutils::copychararray(tindex[fc]->name,&fn[0],16);
 			tindex[fc]->data = tb;
-			tindex[fc]->text = reinterpret_cast<xchar*>(&tb[0]); //!
+			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
 
 			//adjust global ar variables
@@ -263,7 +263,7 @@ arfile* CLformat::loadar(CLfile* sf)
 		//*
 
 		//copy armembers to arfile
-		for(int j=0; j<fc; j++)
+		for(uxlong j=0; j<fc; j++)
 		{ 
 			arf->members[j] = tindex[j];
 		}
@@ -296,7 +296,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 
 	//for each row create xchar array of line length
 	xchar** rev = new xchar*[lc];
-	for(int i=0; i<lc; i++)
+	for(uxlong i=0; i<lc; i++)
 	{
 		rev[i] = new xchar[lw];
 	}
@@ -304,9 +304,9 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 
 	//copy and manipulate contents depending on subconst,rc,rv
 	xlong li = 0;
-	for(int j=0; j<lc; j++)
+	for(uxlong j=0; j<lc; j++)
 	{
-		for(int k=0; k<lw; k++)
+		for(uxlong k=0; k<lw; k++)
 		{
 			if(bf[li]!='\n')
 			{
@@ -360,7 +360,7 @@ sprite* CLformat::loadtga(CLfile* sf)
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
 	r->height = imageheight;
-	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 
 	return r;
@@ -405,7 +405,7 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 	r->tilesize = tw * th;
 	r->tilewidth = tw;
 	r->tileheight = th;
-	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 	
 	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) CLsystem::exit(1,0,__func__,"tile dimensions do not match image dimensions");
@@ -455,7 +455,7 @@ sprites* CLformat::loadfont(CLfile* sf)
 	r->tilewidth = imagewidth / 256;
 	r->tileheight = imageheight;
 	r->tilesize = (imagewidth / 256) * imageheight;
-	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	r->tilecount = 256;
 	//*
 
@@ -484,7 +484,7 @@ xmap* CLformat::loadini(CLfile* sf)
 	xchar* tp1=0;
 	bool apos=0;
 	xlong aps=0;
-	for(int i=0; i<lc; i++)
+	for(uxlong i=0; i<lc; i++)
 	{
 		while(bf[cc]==' ') cc++;
 		
@@ -509,7 +509,7 @@ xmap* CLformat::loadini(CLfile* sf)
 				
 				tp0 = new xchar[tc1+1];
 				tp0[tc1]=0;
-				for(int j=0; j<tc1; j++)
+				for(uxlong j=0; j<tc1; j++)
 				{
 					tp0[j] = bf[cc+j];
 				}
@@ -537,7 +537,7 @@ xmap* CLformat::loadini(CLfile* sf)
 				{
 					tp1 = new xchar[tc1+1];
 					tp1[tc1]=0;
-					for(int j=0; j<tc1; j++)
+					for(uxlong j=0; j<tc1; j++)
 					{
 						tp1[j] = bf[cc+j];
 					}
@@ -546,7 +546,7 @@ xmap* CLformat::loadini(CLfile* sf)
 				{
 					tp1 = new xchar[tc1+1];
 					tp1[tc1]=0;
-					for(int j=0; j<tc1; j++)
+					for(uxlong j=0; j<tc1; j++)
 					{
 						tp1[j] = bf[aps+j];
 					}

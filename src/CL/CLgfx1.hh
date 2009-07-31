@@ -139,7 +139,7 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 
 	if(a>b) a ^= b ^= a ^= b;
 
-	for(int i=a; i<=b; i++)
+	for(uxlong i=a; i<=b; i++)
 	{
 		
 		(*CLdoublebuffer)[offsetbase+i] = c;
@@ -155,7 +155,7 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 
 	xlong offsetbase = (a*xres)+x1;
 
-	for(int i=a; i<=b; i++)
+	for(uxlong i=a; i<=b; i++)
 	{
 		(*CLdoublebuffer)[offsetbase] = c;
 		offsetbase+=xres;
@@ -166,7 +166,7 @@ void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 {
 	xlong offsetbase = (y1*xres)+x1;
 
-	for(int i=0; i<xy; i++)
+	for(uxlong i=0; i<xy; i++)
 	{
 		(*CLdoublebuffer)[offsetbase] = c;
 		offsetbase+=xres+1;
@@ -216,7 +216,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	len = dx+1;
 	e = dy;
 
-	for(int i=0; i<len; i++)
+	for(uxlong i=0; i<len; i++)
 	{
 		(*CLdoublebuffer)[off] = c;
 		off += xs;
@@ -263,7 +263,7 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	len = dx+1;
 	e = dy;
 
-	for(int i=0; i<len; i++)
+	for(uxlong i=0; i<len; i++)
 	{
 		(*CLdoublebuffer)[off] = c;
 
@@ -300,7 +300,7 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
-	for(int i=y1; i<=y2; i++)
+	for(xlong i=y1; i<=y2; i++)
 	{
 		drawhorline(x1,i,x2,c);
 	}
@@ -443,9 +443,9 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	xlong linearc = 0;
 
 	//drawloop
-	for(int i=0; i<eheight ;i++)
+	for(uxlong i=0; i<eheight ;i++)
 	{
-		for(int j=0; j<ewidth ;j++)
+		for(uxlong j=0; j<ewidth ;j++)
 		{
 			if( (s->data[linearc] & 0xFF000000) != 0xFF)
 			{
@@ -496,7 +496,7 @@ void CLgfx1::drawscreen(sprite* s)
 {
 	if(s->width==xres && s->height==yres)
 	{
-		for(int i=0; i<s->size; i++)
+		for(uxlong i=0; i<s->size; i++)
 		{
 			(*CLdoublebuffer)[i] = s->data[i];
 		}
@@ -532,9 +532,9 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	xlong linearc = off;
 
 	//drawloop
-	for(int i=0; i<eheight ;i++)
+	for(uxlong i=0; i<eheight ;i++)
 	{
-		for(int j=0; j<ewidth ;j++)
+		for(uxlong j=0; j<ewidth ;j++)
 		{
 			if( (s->data[linearc] & 0xFF000000) != 0xFF000000)
 			{

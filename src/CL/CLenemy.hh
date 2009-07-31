@@ -355,7 +355,7 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 	CLammo* currammo;
 	if(time >= lastupdate[0] + 20)
 	{
-		for(int i=0; i<ammolist->getlength();i++)
+		for(uxlong i=0; i<ammolist->getlength();i++)
 		{
 			ammolist->setindex(i);
 			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
@@ -424,7 +424,7 @@ void CLenemy::display(xlong m)
 	
 	//ammo display
 	CLammo* currammo;
-	for(int i=0; i<ammolist->getlength();i++)
+	for(uxlong i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());

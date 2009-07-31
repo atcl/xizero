@@ -57,11 +57,11 @@ uxlong CLid::generatecrc(xchar* d,xlong l)
 	r  = ~r;
 	l -= 4;
 
-	for(int i=0; i<l; i++)
+	for(uxlong i=0; i<l; i++)
 	{
 		o = *(d++);
 
-		for(int j=0; j<8; j++)
+		for(uxlong j=0; j<8; j++)
 		{
 			if (r & 0x80000000) r = (r << 1) ^ crc32 ^ (o >> 7);
 

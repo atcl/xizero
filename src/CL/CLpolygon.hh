@@ -93,7 +93,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	len = dx+1;
 	e = dy;
 
-	for(int i=0; i<len; i++)
+	for(uxlong i=0; i<len; i++)
 	{
 		(*CLdoublebuffer)[off] = c;
 		off += xs;

@@ -60,7 +60,7 @@ void CLbutton::setcaption(xchar* t)
 	delete caption;
 	xlong s = CLutils::chararraylength(t);
 	caption = new xchar[s];
-	for(int i=0; i<s ;i++)
+	for(uxlong i=0; i<s ;i++)
 	{
 		caption[i] = t[i];
 	}
