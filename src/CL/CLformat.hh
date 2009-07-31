@@ -21,11 +21,10 @@ typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
 namespace CLformat
 {
-	xlong*  loadcsv(CLfile* sf,xchar sep=',');
-	arfile* loadar(CLfile* sf);
-	xchar** loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
-	sprite* loadtga(CLfile* sf);
-	
+	xlong*   loadcsv(CLfile* sf,xchar sep=',');
+	arfile*  loadar(CLfile* sf);
+	xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
+	sprite*  loadtga(CLfile* sf);
 	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 	sprites* loadfont(CLfile* sf);
 	xlong**  loadlvl();
@@ -33,9 +32,9 @@ namespace CLformat
 }
 
 
-//add template parameter to change between xlong*,xchar**,xfixed* and float*
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {
+	//add template parameter to change between xlong*,xchar**,xfixed* and float*
 	//Works only for integers!
 	
 	xchar* bf = sf->text;
@@ -94,7 +93,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 }
 
 
-//!!!!!!!!!!!!!!!members have too big filesize!!!!!!!!!!!!!!!!! i.e: 4byte in the ini in e001.a
+//!!!fix wrong filesizes!!!!
 arfile* CLformat::loadar(CLfile* sf)
 {
 	//all .ar members must be aligned on 4byte (long) borders
@@ -107,16 +106,20 @@ arfile* CLformat::loadar(CLfile* sf)
 	//ar can contain max 127 files!!!
 	armember* tindex[128];
 	xlong tsize = cfs - 8;
+	//*
 
 	//check for "magic-string"
 	if( CLutils::comparechararrays(bf,"!<arch>",6) == 0 )
 	{
+		//init variables
 		xlong bc = 8;
 		xlong fc = 0;
 		xchar fn[16];
 		xlong fs = 0;
 		xlong ts[10];
+		//*
 
+		//for each member do
 		do
 		{
 			//read member header
@@ -248,24 +251,25 @@ arfile* CLformat::loadar(CLfile* sf)
 
 			if(fs%4!=0) tsize -= (4 - (fs % 4)); //if filesize % 4 != 0 adjust
 
-			tsize -= (fs+60); //subtract readin size from global size
+			tsize -= (fs+60); //subtract reading size from global size
 
 			fc++; //increment filecount
 
 		} while( tsize > 0 );	//wo kommen die 3 her in level.a ???
+		//*
 
-		//create return value
+		//create arfile
 		arfile* arf = new arfile;
 		arf->filecount = fc;
 		arf->members = new armember*[fc];
-		//return value created
+		//*
 
-		//place file contents in return value
+		//copy armembers to arfile
 		for(int j=0; j<fc; j++)
 		{ 
 			arf->members[j] = tindex[j];
 		}
-		//arf is now complete
+		//*
 
 		return arf;
 	}
@@ -275,6 +279,8 @@ arfile* CLformat::loadar(CLfile* sf)
 
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
+	//calc subconst yourself by rc and rv
+	
 	xchar* bf = sf->text;
 	//xlong bs = sf->size;
 	xlong lc = CLutils::getlinecount(sf);
@@ -290,12 +296,15 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 	}
 	//lw contains line length
 
+	//for each row create xchar array of line length
 	xchar** rev = new xchar*[lc];
 	for(int i=0; i<lc; i++)
 	{
 		rev[i] = new xchar[lw];
 	}
+	//*
 
+	//copy and manipulate contents depending on subconst,rc,rv
 	xlong li = 0;
 	for(int j=0; j<lc; j++)
 	{
@@ -312,6 +321,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 		}
 		li++;
 	}
+	//*
 
 	return rev;
 }
@@ -347,11 +357,13 @@ sprite* CLformat::loadtga(CLfile* sf)
 
 	//xshort imageoffset = imageid + colormaplength;
 
+	//fill sprite struct
 	sprite* r = new sprite;
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
 	r->height = imageheight;
 	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	//*
 
 	return r;
 }
@@ -387,6 +399,7 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 
 	//xshort imageoffset = imageid + colormaplength;
 
+	//fill sprites struct
 	sprites* r = new sprites;
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
@@ -395,6 +408,7 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 	r->tilewidth = tw;
 	r->tileheight = th;
 	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
+	//*
 	
 	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) CLsystem::exit(1,0,__func__,"tile dimensions do not match image dimensions");
 	r->tilecount = (r->width/r->tilewidth) * (r->height*r->tileheight);
@@ -435,6 +449,7 @@ sprites* CLformat::loadfont(CLfile* sf)
 
 	if( (imagewidth%256)!=0 ) CLsystem::exit(1,0,__func__,"Not 256 font tiles in one row!");
 
+	//fill CLfont struct
 	CLfont* r = new CLfont;
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
@@ -444,6 +459,7 @@ sprites* CLformat::loadfont(CLfile* sf)
 	r->tilesize = (imagewidth / 256) * imageheight;
 	r->data = reinterpret_cast<xlong*>(&bf[18]); // + imageoffset); //!
 	r->tilecount = 256;
+	//*
 
 	return r;
 }
@@ -455,7 +471,7 @@ xlong** CLformat::loadlvl()
 
 xmap* CLformat::loadini(CLfile* sf)
 {
-	//steckt in irgendeiner whileschleife fest...
+	//stuck in some while, when loaded from ar, because filesize too large
 	xmap* r = new xmap;
 	xchar* bf = sf->text;
 	

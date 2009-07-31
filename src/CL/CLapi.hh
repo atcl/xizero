@@ -115,10 +115,14 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 	
 	//read file contents
 	fseek (of,0,SEEK_SET );
-	re->text = new xchar[re->size];
+	re->text = new xchar[(re->size)+1];
 	re->data = reinterpret_cast<xlong*>(&re->text[0]); //!
 	fread(re->text,1,re->size,of);
 	//*
+	
+	//set end of file marker
+	re->text[(re->size)] = eof;
+	//
 	
 	//close file
 	fclose(of);

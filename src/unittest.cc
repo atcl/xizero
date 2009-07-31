@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 			arfile* ebr   = CLformat::loadar(etest);
 			//arfile* ebr   = CLformat::loadar(ear->members[0]);
 			xlong in      = CLutils::findarmember(ebr,".ini");
-			//xmap* et      = CLformat::loadini(ebr->members[1]); //infinite loop!!! because ar returns too big size !?
+			xmap* et      = CLformat::loadini(ebr->members[1]); //infinite loop!!! because ar returns too big size !?
 			say();
 			//CLsystem::print((*et)["health"]);
 			//*

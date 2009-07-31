@@ -35,8 +35,8 @@ CPUb    = -mcpu pentium3
 MATH    = -ffast-math
 ATOM    = -xL
 OPT     = -fsingle-precision-constant -floop-optimize
-EXP     = -fprefetch-loop-arrays -funit-at-a-time
-ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
+EXP     = -fprefetch-loop-arrays -funit-at-a-time -funroll-loops
+ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -malign-int
 #
 
 

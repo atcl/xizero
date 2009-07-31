@@ -28,8 +28,8 @@ typedef CLfile armember;
 
 struct arfile
 {
+	armember** members;
 	xlong      filecount;
-	armember**  members;
 };
 
 struct screenside
