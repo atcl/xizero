@@ -556,7 +556,6 @@ xmap* CLformat::loadini(CLfile* sf)
 				
 				//map values in xmap
 				(*r)[tp0] = tp1;
-				//~ CLsystem::print(tp0);
 				//*
 			}
 		}

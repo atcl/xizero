@@ -29,6 +29,11 @@ void inline say(xlong l)
 	std::cout << l << std::endl;
 }
 
+void inline say(uxlong l)
+{
+	std::cout << l << std::endl;
+}
+
 void inline say(float f)
 {
 	std::cout << f << std::endl;

@@ -32,7 +32,7 @@ class CLlist : public virtual CLcl
 		CLlist(void* e);
 		~CLlist();
 
-		void append(void* e,const xchar* n);
+		void append(void* e,const xchar* n=" ");
 		void* getcurrentdata();
 		xchar* getcurrentname();
 		void* delcurrent(bool smash); //test smash option

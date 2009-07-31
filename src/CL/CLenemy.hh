@@ -199,7 +199,6 @@ CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
 
 	//find enemy definition, has to have extension .ini
 	xlong ed = CLutils::findarmember(enemya,".ini");
-	say(ed);
 	if(ed==-1) CLsystem::exit(1,0,__func__,"no enemy definition found");
 	xmap* eini = CLformat::loadini(enemya->members[ed]);
 	//*
@@ -211,7 +210,7 @@ CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
 	//*
 	
 	//find enemy model
-	xlong pm = CLutils::findarmember(enemya,"0.y3d");
+	xlong pm = CLutils::findarmember(enemya,".y3d");
 	if(pm==-1) CLsystem::exit(1,0,__func__,"no enemy model file found");
 	model = new CLobject(enemya->members[pm],0);
 	//*

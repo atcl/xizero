@@ -258,9 +258,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 		}
 		if(startposfound==0) CLsystem::exit(1,0,__func__,"no (suitable) enemy start position found in entity map");
 		//*
-		
-		//tempenemy = new CLenemy(enemya->members[k],enemyp);
-		//clenemy->append(tempenemy);
+
+		tempenemy = new CLenemy(enemya->members[k],enemyp);
+		clenemy->append(tempenemy);
 
 		startposfound = 0;
 	}
