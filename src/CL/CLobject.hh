@@ -299,7 +299,7 @@ void CLobject::display(CLlvector p,xchar flags)
 {
 	if(flags&SHADOW)
 	{
-		CLsystem::print("I shouldn't be here!");
+		//CLsystem::print("I shouldn't be here!");
 		for(uxlong i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);

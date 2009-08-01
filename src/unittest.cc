@@ -33,16 +33,6 @@ int main(int argc, char** argv)
 			
 			CLfile* fonttga = CLsystem::getfile("../dat/other/CLteletype.fnt");
 			CLfont* font = CLformat::loadfont(fonttga);
-			
-			
-			//~ //temp
-			//~ CLfile* etest = CLsystem::getfile("../dat/enemy/enemies.a");
-			//~ arfile* ear   = CLformat::loadar(etest);
-			//~ arfile* ebr   = CLformat::loadar(ear->members[0]);
-			//~ xlong in      = CLutils::findarmember(ebr,".ini");
-			//~ xmap* et      = CLformat::loadini(ebr->members[1]);
-			//~ CLsystem::print((*et)["health"]);
-			//~ //*
 
 		//test tree:
 			CLtree* testtree = new CLtree();
@@ -82,7 +72,8 @@ int main(int argc, char** argv)
 
 	CLlvector p(400,300,100);
 
-	bool mode=true;
+	bool mode = 1;
+	bool shadows = 0;
 
 	while(win->run())
 	{
@@ -180,14 +171,13 @@ int main(int argc, char** argv)
 				cubus->update(linearM);
 			break;
 			case '^':
-				if(mode==false) mode=true;
-				else mode=false;
+				mode = !mode;
 			break;
 			case '+':
 				cubus->reset();
 			break;
 			case '-':
-				//activate shadows
+				shadows = !shadows;
 			break;
 			case '#':
 				ex->next();
@@ -228,10 +218,14 @@ int main(int argc, char** argv)
 		CLgfx2::drawfontstring(100,70,"Use + for reseting",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,90,"Use # for exploding",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,110,"Use ^ for toggling between shading",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,130,"Use 0 to exit",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,130,"Use - for toggling between shadowing",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,150,"Use 0 to exit",font,0x00FFFFFF);
 
-		//cubus->display(1,1,1,1,0,0);
-		//CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+		if(shadows==1)
+		{
+			cubus->display(p,CENTER + SHADOW);
+			CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+		}
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + FLAT + DEBUG);
 		else cubus->display(p,CENTER + AMBIENT + FLAT);

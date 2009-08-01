@@ -518,7 +518,7 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 				shade=color;
 				rasterize(0);
 			}
-			else if( ~(flags&SHADOW) )	//default
+			else if( !(flags&SHADOW) )	//default
 			{
 				flatshade(flags&AMBIENT);
 				rasterize(0);

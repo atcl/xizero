@@ -80,32 +80,5 @@ class CLmap
 //tristate-bool class
 //bump mapping
 
-
-//CLvector.cross,CLvector.dot return type overloading
-template<typename T>
-struct _CLvector
-{
-	friend _CLvector operator*(const CLvector<T> &l, const CLvector<T> &r);
-	
-	private:
-		const CLvector<T> &l;
-		const CLvector<T> &r;
-		
-		_CLvector(const CLvector<T> &L, const CLvector<T> &R) : l(L), r(R) { ; } //inline
-	
-	public:
-		operator T() const { return l.dot(r); }
-		operator CLvector<T> const { return l.cross(r); }
-
-};
-
-//inline
-template<typename T>
-_CLvector operator*(const CLvector<T> &l, const CLvector<T> &r)
-{
-    return _CLvector(l, r);
-}
-//*
-
 #endif
 
