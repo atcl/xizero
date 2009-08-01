@@ -56,6 +56,8 @@ class CLenemy : public virtual CLcl
 		xlong lastupdate[3];
 		xlong* aiarray;
 		xlong airightside;
+		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon 
+		xlong aggressiveness;
 
 		void setspeed();
 		void fire(xlong at,xlong d,xlong i);
@@ -66,8 +68,8 @@ class CLenemy : public virtual CLcl
 		xlong aihelper();
 		
 	public:
-		CLenemy(CLfile* enemylib,CLlvector& s);
-		CLenemy(CLenemy* e);
+		CLenemy(CLfile* enemylib);
+		CLenemy(CLenemy* e,CLlvector& s);
 		~CLenemy();
 		
 		xlong update(CLfbuffer* ll,xlong mark);
@@ -77,7 +79,6 @@ class CLenemy : public virtual CLcl
 		xlong getx();
 		xlong gety();
 		xlong getz();
-		bool  isactive();
 };
 
 
@@ -186,7 +187,7 @@ xlong CLenemy::aihelper()
 	return airightside;	
 }
 
-CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
+CLenemy::CLenemy(CLfile* enemylib)
 {
 	//matrix for enemy transformations
 	cllinear = new CLmatrix(1);
@@ -207,6 +208,9 @@ CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
 	xlong pa = CLutils::findarmember(enemya,".csv");
 	if(pa==-1) CLsystem::exit(1,0,__func__,"no enemy ai found");
 	aiarray = CLformat::loadcsv(enemya->members[pa]);
+	aitype = aiarray[0];
+	aggressiveness = aiarray[1];
+	aiarray = &aiarray[2];
 	//*
 	
 	//find enemy model
@@ -220,6 +224,8 @@ CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
 	oboundingbox = model->getboundingbox();
 	*boundingbox = *oboundingbox;
 	//*
+	
+	position = tposition = 0;
 	
 	//~ //set and adjust (start) position to floating X pixel above ground
 	//~ position = s;
@@ -268,7 +274,7 @@ CLenemy::CLenemy(CLfile* enemylib,CLlvector& s)
 	delete eini;
 }
 
-CLenemy::CLenemy(CLenemy* e)
+CLenemy::CLenemy(CLenemy* e,CLlvector& s)
 {
 	//matrix for enemy transformations
 	cllinear = new CLmatrix(1);
@@ -285,11 +291,12 @@ CLenemy::CLenemy(CLenemy* e)
 	*boundingbox = *oboundingbox;
 	//*
 	
-	//~ //set and adjust (start) position to floating X pixel above ground
-	//~ position = s;
-	//~ position.z += 95;
-	//~ tposition = position;
-	//~ //*
+	//set and adjust (start) position to floating X pixel above ground
+	say(s.y);
+	position = s;
+	position.z += 200;
+	tposition = position;
+	//*
 	
 	//create list for all ammo fired by enemy
 	ammolist = new CLlist();
@@ -346,68 +353,77 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 {
 	xlong time = CLsystem::getmilliseconds();
 	
-	//check if active
-	
+	//check if to activate
+	//~ say(position.y);
+	//~ say(mark);
+	if(active!=1 && (mark-180)<position.y)
+	{
+		active=1;
+		say();
+	}
 	//*
 	
-	//ammo update
-	CLammo* currammo;
-	if(time >= lastupdate[0] + 20)
+	
+	if(active==1)
 	{
-		for(uxlong i=0; i<ammolist->getlength();i++)
+		//ammo update
+		CLammo* currammo;
+		if(time >= lastupdate[0] + 20)
 		{
-			ammolist->setindex(i);
-			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			currammo->p.y -= mark;
-			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
-			else
+			for(uxlong i=0; i<ammolist->getlength();i++)
 			{
-				currammo->p.x += currammo->v * currammo->d.x;
-				currammo->p.y -= currammo->v * currammo->d.y;
-				currammo->p.z += currammo->v * currammo->d.z;
+				ammolist->setindex(i);
+				currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+				currammo->p.y -= mark;
+				if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
+				else
+				{
+					currammo->p.x += currammo->v * currammo->d.x;
+					currammo->p.y -= currammo->v * currammo->d.y;
+					currammo->p.z += currammo->v * currammo->d.z;
+				}
+				currammo->p.y += mark;
 			}
-			currammo->p.y += mark;
+			lastupdate[0] = time;
 		}
-		lastupdate[0] = time;
-	}
-	//*
-	
+		//*
 
-
-	cllinear->unit();
-
-	//update enemy through ai array
-	
-		//! todo
-	
-	//
-
-	//update test position
-	if(time >= lastupdate[2] + 20)
-	{
-		tposition.x = position.x - speed.x;
-		tposition.y = position.y + speed.y;
-		tposition.z = position.z + speed.z;
+		cllinear->unit();
+		//update enemy through ai array
 		
-		lastupdate[2] = time;	
-	}
-	//*
-
-	//check if test position doesn't collide with anything
-	if(collision(ll,mark)==0)
-	{	
-		transform();
+			//! todo
 		
-		position = tposition;
+		//
+
+		//update test position
+		if(time >= lastupdate[2] + 20)
+		{
+			tposition.x = position.x - speed.x;
+			tposition.y = position.y + speed.y;
+			tposition.z = position.z + speed.z;
+			
+			lastupdate[2] = time;	
+		}
+		//*
+
+		//check if test position doesn't collide with anything
+		if(collision(ll,mark)==0)
+		{	
+			transform();
+			
+			position = tposition;
+		}
+		//*
+		
+		//if collision reset bounding box to state before pretransformation
+		else
+		{
+			*boundingbox = *oboundingbox;
+		}
+		//*
 	}
-	//*
 	
-	//if collision reset bounding box to state before pretransformation
-	else
-	{
-		*boundingbox = *oboundingbox;
-	}
-	//*
+	return 0;
 }
 
 void CLenemy::display(xlong m)
@@ -473,11 +489,6 @@ xlong CLenemy::gety()
 xlong CLenemy::getz()
 {
 	return position.z;
-}
-
-bool CLenemy::isactive()
-{
-	return active;
 }
 
 #endif

@@ -40,7 +40,7 @@ namespace CLsystem
 	xlong   doevery(every* e);
 	xlong   system(const xchar* c);
 	xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
-	xlong   cmpcstr(const xchar* a,const xchar* b);
+	xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
 	void    installsystemkey(xchar scancode,void *action);
 };
 
@@ -237,9 +237,13 @@ xlong CLsystem::ato(const xchar* c)
 	return atoi(c);
 }
 
-xlong CLsystem::cmpcstr(const xchar* a,const xchar* b)
+xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l)
 {
-	return strcmp(a,b);
+	switch(l)
+	{
+		case 0:	 return strcmp(a,b);
+		default: return strncmp(a,b,l);
+	}
 }
 
 void CLsystem::installsystemkey(xchar scancode,void *action)

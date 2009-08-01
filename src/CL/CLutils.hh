@@ -15,17 +15,16 @@ namespace CLutils
 	xlong incrementor = 1;
 
 	xchar* long2char(xlong l);
-	xchar long2char(xlong l,xlong i);
-	xlong chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
-	xlong chararraylength(const xchar* c);
-	void copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
-	xlong comparechararrays(const xchar* t1,const xchar* t2,xlong tl=0);
-	xlong getlinecount(CLfile* sf);
-	bool checkextension(xchar* fn,xlong nl,const xchar* fe);
-	xlong getrandom(xlong range);
+	xchar  long2char(xlong l,xlong i);
+	xlong  chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
+	xlong  chararraylength(const xchar* c);
+	void   copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
+	xlong  getlinecount(CLfile* sf);
+	bool   checkextension(xchar* fn,xlong nl,const xchar* fe);
+	xlong  getrandom(xlong range);
 	xchar* color2string(uxlong c);
-	xlong endian(xlong l);
-	xlong findarmember(arfile* a,const xchar* e);
+	xlong  endian(xlong l);
+	xlong  findarmember(arfile* a,const xchar* e);
 };
 
 
@@ -92,18 +91,6 @@ void CLutils::copychararray(xchar* dst,xchar* src,xlong length)
 	{
 		dst[i] = src[i];
 	}
-}
-
-xlong CLutils::comparechararrays(const xchar* t1,const xchar* t2,xlong tl)
-{
-	if(tl==0) tl = chararraylength(t1);
-	
-	for(uxlong i=0; i<tl; i++)
-	{
-		if(t1[i]!=t2[i]) return 1;
-	}
-
-	return 0;
 }
 
 xlong CLutils::getlinecount(CLfile* sf)

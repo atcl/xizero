@@ -11,6 +11,7 @@
 #include "CLstruct.hh"
 #include "CLutils.hh"
 #include "CLmacros.hh"
+#include "CLapi.hh"
 
 struct cmpstr
 {
@@ -103,7 +104,7 @@ arfile* CLformat::loadar(CLfile* sf)
 	//*
 
 	//check for "magic-string"
-	if( CLutils::comparechararrays(bf,"!<arch>",6) == 0 )
+	if( CLsystem::cmpcstr(bf,"!<arch>",6) == 0 )
 	{
 		//init variables
 		xlong bc = 8;
@@ -120,106 +121,11 @@ arfile* CLformat::loadar(CLfile* sf)
 			CLutils::copychararray(&fn[0],&bf[bc],16);	//member filename
 			bc += 48;					//no necessary information here, so skip
 			//*
-
+			
 			//decode filesize of current ar member
-			if( bf[bc+9] != 0x20 )
-			{
-				ts[0]  = (bf[bc+9] - 0x30);
-				ts[1]  = (bf[bc+8] - 0x30) * 10;
-				ts[2]  = (bf[bc+7] - 0x30) * 100;
-				ts[3]  = (bf[bc+6] - 0x30) * 1000;
-				ts[4]  = (bf[bc+5] - 0x30) * 10000;
-				ts[5]  = (bf[bc+4] - 0x30) * 100000;
-				ts[6]  = (bf[bc+3] - 0x30) * 1000000;
-				ts[7]  = (bf[bc+2] - 0x30) * 10000000;
-				ts[8]  = (bf[bc+1] - 0x30) * 100000000;
-				ts[9]  = (bf[bc] -   0x30) * 1000000000;
-				fs = ts[0] + ts[1] + ts[2] + ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+8] != 0x20 )
-			{
-				ts[1]  = (bf[bc+8] - 0x30);
-				ts[2]  = (bf[bc+7] - 0x30) * 10;
-				ts[3]  = (bf[bc+6] - 0x30) * 100;
-				ts[4]  = (bf[bc+5] - 0x30) * 1000;
-				ts[5]  = (bf[bc+4] - 0x30) * 10000;
-				ts[6]  = (bf[bc+3] - 0x30) * 100000;
-				ts[7]  = (bf[bc+2] - 0x30) * 1000000;
-				ts[8]  = (bf[bc+1] - 0x30) * 10000000;
-				ts[9]  = (bf[bc] -   0x30) * 100000000;
-				fs = ts[1] + ts[2] + ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+7] != 0x20 )
-			{
-				ts[2]  = (bf[bc+7] - 0x30);
-				ts[3]  = (bf[bc+6] - 0x30) * 10;
-				ts[4]  = (bf[bc+5] - 0x30) * 100;
-				ts[5]  = (bf[bc+4] - 0x30) * 1000;
-				ts[6]  = (bf[bc+3] - 0x30) * 10000;
-				ts[7]  = (bf[bc+2] - 0x30) * 100000;
-				ts[8]  = (bf[bc+1] - 0x30) * 1000000;
-				ts[9]  = (bf[bc] -   0x30) * 10000000;
-				fs = ts[2] + ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+6] != 0x20 )
-			{
-				ts[3]  = (bf[bc+6] - 0x30);
-				ts[4]  = (bf[bc+5] - 0x30) * 10;
-				ts[5]  = (bf[bc+4] - 0x30) * 100;
-				ts[6]  = (bf[bc+3] - 0x30) * 1000;
-				ts[7]  = (bf[bc+2] - 0x30) * 10000;
-				ts[8]  = (bf[bc+1] - 0x30) * 100000;
-				ts[9]  = (bf[bc] -   0x30) * 1000000;
-				fs = ts[3] + ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+5] != 0x20 )
-			{
-				ts[4]  = (bf[bc+5] - 0x30);
-				ts[5]  = (bf[bc+4] - 0x30) * 10;
-				ts[6]  = (bf[bc+3] - 0x30) * 100;
-				ts[7]  = (bf[bc+2] - 0x30) * 1000;
-				ts[8]  = (bf[bc+1] - 0x30) * 10000;
-				ts[9]  = (bf[bc] -   0x30) * 100000;
-				fs = ts[4] + ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+4] != 0x20 )
-			{
-				ts[5]  = (bf[bc+4] - 0x30);
-				ts[6]  = (bf[bc+3] - 0x30) * 10;
-				ts[7]  = (bf[bc+2] - 0x30) * 100;
-				ts[8]  = (bf[bc+1] - 0x30) * 1000;
-				ts[9]  = (bf[bc] -   0x30) * 10000;
-				fs = ts[5] + ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+3] != 0x20 )
-			{
-				ts[6]  = (bf[bc+3] - 0x30);
-				ts[7]  = (bf[bc+2] - 0x30) * 10;
-				ts[8]  = (bf[bc+1] - 0x30) * 100;
-				ts[9]  = (bf[bc] -   0x30) * 1000;
-				fs = ts[6] + ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+2] != 0x20 )
-			{
-				ts[7]  = (bf[bc+2] - 0x30);
-				ts[8]  = (bf[bc+1] - 0x30) * 10;
-				ts[9]  = (bf[bc] -   0x30) * 100;
-				fs = ts[7] + ts[8] + ts[9];
-			}
-			else if( bf[bc+1] != 0x20 )
-			{
-				ts[8]  = (bf[bc+1] - 0x30);
-				ts[9]  = (bf[bc] -   0x30) * 10;
-				fs = ts[8] + ts[9];
-			}
-			else if( bf[bc] != 0x20 )
-			{
-				ts[9]  = (bf[bc] -   0x30);
-				fs = ts[9];
-			}
-			//*
-
+			fs = CLsystem::ato(&bf[bc]);
 			bc+=12; //goto end of header
+			//*
 
 			//create xlong array for current ar member
 			xlong fs2 = fs>>2;
@@ -234,7 +140,6 @@ arfile* CLformat::loadar(CLfile* sf)
 			{
 				tb[i] = bf2[i];
 			}
-			tb[fs2] = CLsystem::eof;
 			bc += fs;
 			//*
 
@@ -246,13 +151,15 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc]->data = tb;
 			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
-
+//~ say(&fn[0]);
+//~ say(tsize);
+//~ say(fs);
 			//adjust global ar variables
 			if(fs%2!=0) { bc++; tsize--; }
 			tsize -= (fs+60); //subtract reading size from global size
 			fc++; //increment filecount
 			//*
-
+//~ say(tsize);
 		} while( tsize > 0 );
 		//*
 

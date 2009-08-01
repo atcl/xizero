@@ -24,7 +24,7 @@ class CLlevel : public virtual CLcl
 	protected:
 		CLmatrix*  cllinear;
 		CLplayer*  clplayer;
-		CLlist*    clenemy;
+		CLlist*    clenemies;
 		CLobject** clterrain;
 
 		CLfbuffer* levellandscape;
@@ -234,41 +234,39 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	arfile* enemya = CLformat::loadar(enemyraw);
 	//*
 	
-	//load all enemies in archive (base enemies) into list
-	clenemy = new CLlist();
-	CLenemy* tempenemy;
-	startposfound = 0;
-	CLlvector enemyp;
+	//load all enemies in archive (base enemies) into array
+	xlong differentenemies = enemya->filecount;
+	CLenemy** baseenemies = new CLenemy*[differentenemies];
 	for(uxlong k=0; k<enemya->filecount; k++)
 	{
-		//find enemy startpos with index fitting current enemy indey in enemya
-		for(uxlong l=0; l<levelheight; l++)
-		{
-			for(uxlong m=0; m<levelwidth; m++)
-			{
-				if(levellayers[2][l][m] == k)
-				{
-					startposfound = true;
-					enemyp.x = m * blockwidth;
-					enemyp.y = l * blockheight;
-					enemyp.z = levellayers[1][l][m] * blockdepth + 100; //correct or - 100 ???
-					break;
-				}
-			}
-		}
-		if(startposfound==0) CLsystem::exit(1,0,__func__,"no (suitable) enemy start position found in entity map");
-		//*
-
-		tempenemy = new CLenemy(enemya->members[k],enemyp);
-		clenemy->append(tempenemy);
-
-		startposfound = 0;
+		baseenemies[k] = new CLenemy(enemya->members[k]);
 	}
 	//*
 	
 	//create all enemies in level through copying from base enemies from archive
-
-	//...
+	//find enemy startpos in entity map and associate (copy) from baseenemy in enemy list
+	clenemies = new CLlist();
+	CLenemy* currentenemy;
+	CLlvector enemyp;
+	for(uxlong l=0; l<differentenemies; l++)
+	{ 
+		for(uxlong m=0; m<levelheight; m++)
+		{
+			for(uxlong n=0; n<levelwidth; n++)
+			{
+				if(levellayers[2][m][n] == l)
+				{
+					enemyp.x = m * blockwidth; //positions are 0 ?!?!
+					enemyp.y = l * blockheight;
+					say(enemyp.y);
+					enemyp.z = levellayers[1][m][n];
+					currentenemy = new CLenemy(baseenemies[l],enemyp);
+					clenemies->append(currentenemy);
+				}
+			}
+		}
+	}
+	//*
 
 //***
 }
@@ -287,7 +285,18 @@ void CLlevel::update(xchar input,xchar turbo)
 	//*
 	
 	//update enemies
-	
+	CLenemy* currentenemy;
+	xlong    isenemydead;
+	for(uxlong i=0; i<clenemies->getlength();i++)
+	{
+		clenemies->setindex(i);
+		currentenemy = static_cast<CLenemy*>(clenemies->getcurrentdata());
+		isenemydead = currentenemy->update(levellandscape,smoothmark);
+		if(isenemydead!=0)
+		{
+			delete  static_cast<CLenemy*>(clenemies->delcurrent(1));
+		}
+	}
 	//*
 	
 	//adjust section of level t be displayed by ("new") player position
