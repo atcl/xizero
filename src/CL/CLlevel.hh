@@ -372,7 +372,13 @@ void CLlevel::display()
 	//*
 	
 	//display enemies:
-		//...
+	CLenemy* currentenemy;
+	for(uxlong i=0; i<clenemies->getlength();i++)
+	{
+		clenemies->setindex(i);
+		currentenemy = static_cast<CLenemy*>(clenemies->getcurrentdata());
+		currentenemy->display(smoothmark);
+	}
 	//*
 }
 

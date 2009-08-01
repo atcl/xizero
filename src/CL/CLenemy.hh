@@ -292,9 +292,8 @@ CLenemy::CLenemy(CLenemy* e,CLlvector& s)
 	//*
 	
 	//set and adjust (start) position to floating X pixel above ground
-	say(s.y);
 	position = s;
-	position.z += 200;
+	position.z += 95;
 	tposition = position;
 	//*
 	
@@ -351,21 +350,18 @@ CLenemy::~CLenemy()
 
 xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 {
-	xlong time = CLsystem::getmilliseconds();
-	
 	//check if to activate
-	//~ say(position.y);
-	//~ say(mark);
-	if(active!=1 && (mark-180)<position.y)
+	if(active!=1 && (mark-100)<position.y)
 	{
 		active=1;
-		say();
 	}
 	//*
 	
 	
 	if(active==1)
 	{
+		xlong time = CLsystem::getmilliseconds();
+		
 		//ammo update
 		CLammo* currammo;
 		if(time >= lastupdate[0] + 20)
@@ -428,26 +424,27 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 
 void CLenemy::display(xlong m)
 {
-	//!todo: check wether enemy is on screen or not
-	
-	//model display
-	sposition.x = position.x;
-	sposition.y = position.y - m;
-	sposition.z = position.z;
-	model->display(sposition,FLAT + AMBIENT);
-	//*
-	
-	//ammo display
-	CLammo* currammo;
-	for(uxlong i=0; i<ammolist->getlength();i++)
+	if(active)
 	{
-		ammolist->setindex(i);
-		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		currammo->p.y -= m;
-		currammo->comsprite(currammo->p.x,currammo->p.y);
-		currammo->p.y += m;
+		//model display
+		sposition.x = position.x;
+		sposition.y = position.y - m;
+		sposition.z = position.z;
+		model->display(sposition,FLAT + AMBIENT);
+		//*
+		
+		//ammo display
+		CLammo* currammo;
+		for(uxlong i=0; i<ammolist->getlength();i++)
+		{
+			ammolist->setindex(i);
+			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+			currammo->p.y -= m;
+			currammo->comsprite(currammo->p.x,currammo->p.y);
+			currammo->p.y += m;
+		}
+		//*
 	}
-	//*
 
 	//temp!
 	//~ CLgfx1::drawpolygon(
