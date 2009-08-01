@@ -129,7 +129,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//entity map:
 	xlong ef = CLutils::findarmember(levela,".mape");
 	if(ef==-1) CLsystem::exit(1,0,__func__,"no entity map found");
-	xchar** entitymap = CLformat::loadmap(levela->members[ef],34,' ',-1);
+	xchar** entitymap = CLformat::loadmap(levela->members[ef],34,'.',-2);
 	//**
 
 	//build levellayerscontaining all sub maps
@@ -256,9 +256,8 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 			{
 				if(levellayers[2][m][n] == l)
 				{
-					enemyp.x = m * blockwidth; //positions are 0 ?!?!
-					enemyp.y = l * blockheight;
-					say(enemyp.y);
+					enemyp.x = n * blockwidth;
+					enemyp.y = m * blockheight;
 					enemyp.z = levellayers[1][m][n];
 					currentenemy = new CLenemy(baseenemies[l],enemyp);
 					clenemies->append(currentenemy);
