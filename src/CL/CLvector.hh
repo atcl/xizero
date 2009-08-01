@@ -8,6 +8,7 @@
 #include "CLtypes.hh"
 #include "CLmath.hh"
 
+//curios base class
 template<typename T,class clvector>
 struct CLvectorbase
 {
@@ -15,10 +16,10 @@ struct CLvectorbase
 		clvector  operator+(const clvector& a) const { static_cast<clvector*>(this)->operator+(a); }
 		clvector  operator-(const clvector& a) const { static_cast<clvector*>(this)->operator-(a); }
 		clvector  operator-()                        { static_cast<clvector*>(this)->operator-(); }
-		       T  operator*(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
+		       T  dot(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
 		clvector  operator*(T c) const               { static_cast<clvector*>(this)->operator*(c); }
 		//does the friend need to be crtp'ed?
-		clvector  operator^(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
+		clvector  cross(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
 		       T  operator!() const                  { static_cast<clvector*>(this)->operator!(); }
 		clvector& operator+=(const clvector& a)      { static_cast<clvector*>(this)->operator+=(a); }
 		clvector& operator-=(const clvector& a)      { static_cast<clvector*>(this)->operator-=(a); }
@@ -31,6 +32,7 @@ struct CLvectorbase
 	
 		void print() { static_cast<clvector*>(this)->print(); }
 };
+//*
 
 //inline all methods and friends!
 template<typename T>
@@ -48,10 +50,10 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 	CLvector operator+(const CLvector& a) const;	//vector addition
 	CLvector operator-(const CLvector& a) const;	//vector subtraction
 	CLvector operator-();							//vector additive negation
-	       T operator*(const CLvector& a) const;	//dot product
+	       T dot(const CLvector& a) const;	//dot product
 	CLvector operator*(T c) const;					//scalar multiplication
 	template<typename S> friend CLvector<S> operator*(S c,CLvector<S>& a);		//scalar multiplication friend
-	CLvector operator^(const CLvector& a) const;	//cross product
+	CLvector cross(const CLvector& a) const;	//cross product
 	       T operator!() const;						//vector length
 	
 	CLvector& operator+=(const CLvector& a);		//vector addition
@@ -86,7 +88,7 @@ CLvector<T> CLvector<T>::operator-(const CLvector<T>& a) const
 
 //dot product:
 template<typename T>
-T CLvector<T>::operator*(const CLvector<T>& a) const
+T CLvector<T>::dot(const CLvector<T>& a) const
 {
 	return ( (this->x * a.x) + (this->y * a.y) + (this->z * a.z) );
 }
@@ -102,7 +104,7 @@ CLvector<T> CLvector<T>::operator*(T c) const
 
 //cross product:
 template<typename T>
-CLvector<T> CLvector<T>::operator^(const CLvector<T>& a) const
+CLvector<T> CLvector<T>::cross(const CLvector<T>& a) const
 {
 	return CLvector( ( (this->y * a.z) - (this->z * a.y) ),( (this->z * a.x) - (this->x * a.z) ),( (this->x * a.y) - (this->y * a.x) ) );
 }
@@ -212,6 +214,32 @@ template<typename T>
 CLvector<T> operator*(T c,CLvector<T>& a)
 {
 	return ( (a.x * c) + (a.y * c) + (a.z * c) );
+}
+//*
+
+//return type overloading container 
+template<typename T>
+struct _CLvector
+{
+	template<typename S> friend _CLvector<S> operator*(const CLvector<S>& l, const CLvector<S>& r);
+	
+	private:
+		const CLvector<T>& l;
+		const CLvector<T>& r;
+		
+		_CLvector(const CLvector<T>& L, const CLvector<T>& R) : l(L), r(R) { ; } //inline
+	
+	public:
+		operator T() const { return l.dot(r); }
+		operator CLvector<T>() const { return l.cross(r); }
+
+};
+
+//inline
+template<typename T>
+_CLvector<T> operator*(const CLvector<T>& l, const CLvector<T>& r)
+{
+    return _CLvector<T>(l,r);
 }
 //*
 

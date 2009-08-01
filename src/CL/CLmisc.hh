@@ -83,15 +83,15 @@ class CLmap
 
 //CLvector.cross,CLvector.dot return type overloading
 template<typename T>
-struct _CLvector_mul
+struct _CLvector
 {
-	friend _CLvector_mul operator*(const CLvector<T> &l, const CLvector<T> &r);
+	friend _CLvector operator*(const CLvector<T> &l, const CLvector<T> &r);
 	
 	private:
 		const CLvector<T> &l;
 		const CLvector<T> &r;
 		
-		_CLvector_mul(const CLvector<T> &L, const CLvector<T> &R) : l(L), r(R) { ; } //inline
+		_CLvector(const CLvector<T> &L, const CLvector<T> &R) : l(L), r(R) { ; } //inline
 	
 	public:
 		operator T() const { return l.dot(r); }
@@ -101,9 +101,9 @@ struct _CLvector_mul
 
 //inline
 template<typename T>
-_CLvector_mul operator*(const CLvector<T> &l, const CLvector<T> &r)
+_CLvector operator*(const CLvector<T> &l, const CLvector<T> &r)
 {
-    return _CLvector_mul(l, r);
+    return _CLvector(l, r);
 }
 //*
 

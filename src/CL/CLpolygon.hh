@@ -473,7 +473,7 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 	points[2] = pointr[2] = pointt[2] = c;
 	points[3] = pointr[3] = pointt[3] = d;
 
-	normal = rnormal = (b-a) ^ (c-a);
+	normal = rnormal = CLfvector((points[1]-points[0]) * (points[2]-points[0]));
 }
 
 CLpolygon::~CLpolygon() { }
