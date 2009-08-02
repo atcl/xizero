@@ -124,7 +124,7 @@ xlong CLenemy::collision(CLfbuffer* ll,xlong m)
 
 	//screen boundary collision test
 	tposition.y -= m;
-	xlong bc = CLgame::boundary(tposition,*boundingbox); //boundary check: (check if game screen is left)
+	xlong bc = CLgame::boundary(tposition,*boundingbox,1); //boundary check: (check if completely outside screen)
 	tposition.y += m;
 
 	if(bc==0)
