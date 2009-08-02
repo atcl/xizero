@@ -11,8 +11,7 @@
 #include "CLmacros.hh"
 
 //BIT flags
-#define SIGNBIT "0b10000000000000000000000000000000"
-#define MONEBIT "0b11111111111111111111111111111111"
+#define SIGNBIT "$0b10000000000000000000000000000000"
 
 
 namespace CLmath
@@ -69,17 +68,15 @@ void CLmath::init()
 template<typename T>
 T CLmath::sign(T x)
 {
-	return (x==0) ? 0 : (x<0 ? -1 : 1);
-	
-	//~ test: 
-	//__asm__ __volatile__ ("xorl %%eax,%%eax; andl $"SIGNBIT",%%ebx; roll $1,%%ebx; subl %%ebx,%%eax;" : "=a"(x) : "b"(x) );
-	//return x;
+	__asm__ __volatile__ ("cdq; cmpl $0,%%eax; seta %%al; orb %%al,%%dl" : "=d"(x) : "a"(x) );
+	return x; 
 }
 
 template<typename T>
 T CLmath::heaviside(T x)
 {
-	return (x<=0) ? 0 : 1;
+	__asm__ __volatile__ ("cdq; incl %%edx;" : "=d"(x) : "a"(x) );
+	return x;
 }
 
 template<typename T>
