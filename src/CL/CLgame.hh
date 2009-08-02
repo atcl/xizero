@@ -23,7 +23,7 @@ namespace CLgame
 		template<class clvector>bool boundary(const clvector& p,const CLbox& bb,bool c=0);
 		
 		template<class clvector>xlong collision(const clvector& p,const CLbox* bb,const clvector& q);
-		template<class clvector>xlong collision(const clvector& p1,const CLbox& bb1,const clvector& p2,const CLbox& bb2);
+		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool c=0);
 
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,xlong& xa,xlong& ya,xlong& zd);
 };
@@ -96,29 +96,39 @@ xlong CLgame::collision(const clvector& p,const CLbox* bb,const clvector& q)
 }
 
 template<class clvector>
-xlong CLgame::collision(const clvector& p1,const CLbox* bb1,const clvector& p2,const CLbox* bb2)
+xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool c)
 {
 	//calc levelposition of first bounding box bb1 at p1 
-	CLlvector a1( (p1.x + bb1->c[0].x), (p1.y - bb1->c[0].y), (p1.z + bb1->c[0].z) );
-	CLlvector a2( (p1.x + bb1->c[1].x), (p1.y - bb1->c[1].y), (p1.z + bb1->c[1].z) );
-	CLlvector a3( (p1.x + bb1->c[2].x), (p1.y - bb1->c[2].y), (p1.z + bb1->c[2].z) );
-	CLlvector a4( (p1.x + bb1->c[3].x), (p1.y - bb1->c[3].y), (p1.z + bb1->c[3].z) );
+	CLlvector a1( (p1.x + bb1.c[0].x), (p1.y - bb1.c[0].y), (p1.z + bb1.c[0].z) );
+	CLlvector a2( (p1.x + bb1.c[1].x), (p1.y - bb1.c[1].y), (p1.z + bb1.c[1].z) );
+	CLlvector a3( (p1.x + bb1.c[2].x), (p1.y - bb1.c[2].y), (p1.z + bb1.c[2].z) );
+	CLlvector a4( (p1.x + bb1.c[3].x), (p1.y - bb1.c[3].y), (p1.z + bb1.c[3].z) );
 	//*
 	
-	////calc levelposition of second bounding box bb2 at p2
-	CLlvector b1( (p2.x + bb2->c[0].x), (p2.y - bb2->c[0].y), (p2.z + bb2->c[0].z) );
-	CLlvector b2( (p2.x + bb2->c[1].x), (p2.y - bb2->c[1].y), (p2.z + bb2->c[1].z) );
-	CLlvector b3( (p2.x + bb2->c[2].x), (p2.y - bb2->c[2].y), (p2.z + bb2->c[2].z) );
-	CLlvector b4( (p2.x + bb2->c[3].x), (p2.y - bb2->c[3].y), (p2.z + bb2->c[3].z) );
-	//*
-
-	//check if bb2 at p2 intersects bb1 at p1
-	
-	//...
-	
+	//calc levelposition of second bounding box bb2 at p2
+	CLlvector b1( (p2.x + bb2.c[0].x), (p2.y - bb2.c[0].y), (p2.z + bb2.c[0].z) );
+	CLlvector b2( (p2.x + bb2.c[1].x), (p2.y - bb2.c[1].y), (p2.z + bb2.c[1].z) );
+	CLlvector b3( (p2.x + bb2.c[2].x), (p2.y - bb2.c[2].y), (p2.z + bb2.c[2].z) );
+	CLlvector b4( (p2.x + bb2.c[3].x), (p2.y - bb2.c[3].y), (p2.z + bb2.c[3].z) );
 	//*
 
-	return 0;
+	//! todo
+	switch(c)
+	{
+		case false:
+		//check if bb2 at p2 intersects bb1 at p1
+
+		//*
+		break;
+		
+		case true:
+		//check if bb2 at p2 intersects bb1 at p1 2D only
+		
+		//*
+		break;
+	}
+
+	return 1;
 }
 
 template<class clvector>

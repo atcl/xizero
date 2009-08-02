@@ -13,6 +13,7 @@
 #include "CLgame.hh"
 #include "CLformat.hh"
 #include "CLammo.hh"
+#include "CLplayer.hh"
 
 
 class CLenemy : public virtual CLcl
@@ -45,18 +46,19 @@ class CLenemy : public virtual CLcl
 		xlong active;
 		xlong visible;
 		xlong points;
-		xlong lastupdate;
+		xlong lastupdate[2];
 		xlong* aiarray;
 		xlong airightside;
 		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon 
-		xlong aggressiveness;
+		xlong aggrolevel;
+		CLbox* aggrobox;
 
 		void setspeed();
 		void fire(xlong at,xlong d,xlong i);
 		void hit();
 		void pretransform();
 		void transform();
-		xlong collision(CLfbuffer* ll,xlong m);
+		xlong collision(xlong m);
 		xlong aihelper();
 		
 	public:
@@ -64,7 +66,7 @@ class CLenemy : public virtual CLcl
 		CLenemy(CLenemy* e,CLlvector& s);
 		~CLenemy();
 		
-		xlong update(CLfbuffer* ll,xlong mark);
+		xlong update(xlong mark,CLplayer* p);
 		void display(xlong mark);
 		xlong gethealth();
 		xlong getshield();
@@ -118,7 +120,7 @@ void CLenemy::transform()
 	//*
 }
 
-xlong CLenemy::collision(CLfbuffer* ll,xlong m)
+xlong CLenemy::collision(xlong m)
 {
 	xlong r = 0;
 
@@ -193,7 +195,7 @@ CLenemy::CLenemy(CLfile* enemylib)
 	if(pa==-1) CLsystem::exit(1,0,__func__,"no enemy ai found");
 	aiarray = CLformat::loadcsv(enemya->members[pa]);
 	aitype = aiarray[0];
-	aggressiveness = aiarray[1];
+	aggrolevel = aiarray[1];
 	aiarray = &aiarray[2];
 	//*
 	
@@ -233,6 +235,14 @@ CLenemy::CLenemy(CLfile* enemylib)
 	ammoman = new CLammomanager(ammotypecount,ammotypes);
 	//*
 	
+	//create agrobox
+	aggrobox = new CLbox;
+	aggrobox->c[0] = aggrobox->c[4] = CLfvector(boundingbox->c[0].x,boundingbox->c[0].y,0);
+	aggrobox->c[1] = aggrobox->c[5] = CLfvector(boundingbox->c[3].x,boundingbox->c[0].y,0);
+	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox->c[3].x,yres>>1,0);
+	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox->c[0].x,yres>>1,0);
+	//*
+	
 	//set remaining enemy attributes
 	speed = 0;
 	gear = 0;
@@ -241,7 +251,8 @@ CLenemy::CLenemy(CLfile* enemylib)
 	direction.x = 0;
 	direction.y = -1;
 	direction.z = 0;	
-	lastupdate = CLsystem::getmilliseconds();
+	lastupdate[0] = CLsystem::getmilliseconds();
+	lastupdate[1] = CLsystem::getmilliseconds();
 	//*
 	
 	delete eini;
@@ -278,8 +289,12 @@ CLenemy::CLenemy(CLenemy* e,CLlvector& s)
 	speeddir.x  = 0;
 	speeddir.y  = e->speeddir.y;
 	speeddir.z  = 0;
+	firerate    = e->firerate;
+	ammotypecount = e->ammotypecount;
+	ammotypes   = e->ammotypes;
 	ammoman = new CLammomanager(ammotypecount,ammotypes);
-	points = e->points;
+	aggrobox = new CLbox(*(e->aggrobox));
+	points      = e->points;
 	//*
 	
 	//set remaining enemy attributes
@@ -290,7 +305,8 @@ CLenemy::CLenemy(CLenemy* e,CLlvector& s)
 	direction.x = 0;
 	direction.y = -1;
 	direction.z = 0;	
-	lastupdate = CLsystem::getmilliseconds();
+	lastupdate[0] = CLsystem::getmilliseconds();
+	lastupdate[1] = CLsystem::getmilliseconds();
 	//*
 }
 
@@ -304,7 +320,7 @@ CLenemy::~CLenemy()
 	//*
 }
 
-xlong CLenemy::update(CLfbuffer* ll,xlong mark)
+xlong CLenemy::update(xlong mark,CLplayer* p)
 {
 	//check if to activate
 	if(active!=1 && (mark-100)<position.y)
@@ -336,20 +352,32 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 			case 0: gear=1; setspeed(); break;
 		}		
 		//*
+		
+		//fire at player?
+		xlong fc = CLgame::collision(position,*aggrobox,p->getposition(),*(p->getboundingbox()),1);
+		if( fc != 0 )
+		{
+			if(time >= lastupdate[1] + firerate[0])
+			{
+				fire(0,4,0);
+				fire(0,4,1);
+				lastupdate[1] = time;
+			}
+		}
 
 		//update test position
-		if(time >= lastupdate + 20)
+		if(time >= lastupdate[0] + 20)
 		{
 			tposition.x = position.x - speed.x;
 			tposition.y = position.y + speed.y;
 			tposition.z = position.z + speed.z;
 			
-			lastupdate = time;	
+			lastupdate[0] = time;	
 		}
 		//*
 
 		//check if test position doesn't collide with anything
-		if(collision(ll,mark)==0)
+		if(collision(mark)==0)
 		{	
 			transform();
 			

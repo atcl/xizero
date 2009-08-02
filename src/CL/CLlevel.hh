@@ -307,7 +307,7 @@ void CLlevel::update(xchar input,xchar turbo)
 	{
 		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		isenemydead = currentenemy->update(levellandscape,smoothmark);
+		isenemydead = currentenemy->update(smoothmark,player);
 		if(isenemydead!=0)
 		{
 			delete static_cast<CLenemy*>(enemies->delcurrent(1));

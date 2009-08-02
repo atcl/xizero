@@ -59,6 +59,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats)
 CLammomanager::~CLammomanager()
 {
 	delete ammolist;
+	delete[] ammotype;
 }
 
 void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction)

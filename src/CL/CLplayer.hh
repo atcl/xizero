@@ -60,6 +60,8 @@ class CLplayer : public virtual CLcl
 		void display(xlong mark);
 		xlong gethealth();
 		xlong getshield();
+		CLfvector& getposition();
+		CLbox* getboundingbox();
 		xlong getx();
 		xlong gety();
 		xlong getz();
@@ -442,6 +444,17 @@ xlong CLplayer::getshield()
 {
 	return shield;
 }
+
+CLfvector& CLplayer::getposition()
+{
+	return position;
+}
+
+CLbox* CLplayer::getboundingbox()
+{
+	return boundingbox[0];
+}
+
 
 xlong CLplayer::getx()
 {
