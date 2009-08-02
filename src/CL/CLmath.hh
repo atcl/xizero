@@ -8,9 +8,12 @@
 
 #include "CLtypes.hh"
 #include "CLapi.hh"
+#include "CLmacros.hh"
 
-#define SIGNBIT 0b10000000000000000000000000000000
-#define ONEBIT  0b00000000000000000000000000000001
+//BIT flags
+#define SIGNBIT "0b10000000000000000000000000000000"
+#define MONEBIT "0b11111111111111111111111111111111"
+
 
 namespace CLmath
 {
@@ -24,6 +27,7 @@ namespace CLmath
 	template<typename T> T sign(T x);
 	template<typename T> T heaviside(T x);
 	template<typename T> T absolute(T x); //with logic operators, without ifs
+	float absolute(float x);
 	template<typename T> T min(T a,T b);
 	template<typename T> T max(T a,T b);
 	template<typename T> T round(T x);
@@ -66,6 +70,10 @@ template<typename T>
 T CLmath::sign(T x)
 {
 	return (x==0) ? 0 : (x<0 ? -1 : 1);
+	
+	//~ test: 
+	//__asm__ __volatile__ ("xorl %%eax,%%eax; andl $"SIGNBIT",%%ebx; roll $1,%%ebx; subl %%ebx,%%eax;" : "=a"(x) : "b"(x) );
+	//return x;
 }
 
 template<typename T>
@@ -77,7 +85,14 @@ T CLmath::heaviside(T x)
 template<typename T>
 T CLmath::absolute(T x)
 {
-	return (x<0) ? -x : x;
+	__asm__ __volatile__ ("cdq; xorl %%edx,%%eax; btl $31,%%ebx; adcl $0,%%eax;" : "=a"(x) : "a"(x),"b"(x) );
+	return x;
+}
+
+float CLmath::absolute(float x)
+{
+	__asm__ __volatile__ ("btrl $31,%%eax;" : "=a"(x) : "a"(x) );
+	return x;
 }
 
 template<typename T>
@@ -164,7 +179,8 @@ float CLmath::pi()
 float CLmath::sin(xlong x)
 {
 	if(x < 0) x -= 180;
-	x = absolute(x)%360;
+	x = absolute(x);
+	x %= 360;
 	return sinarray[x];
 }
 

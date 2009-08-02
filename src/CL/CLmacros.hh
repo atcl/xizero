@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "CLtypes.hh"
+#include "CLconsts.hh"
 
 
 xlong inline x800(xlong f)

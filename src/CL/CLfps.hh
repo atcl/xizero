@@ -53,7 +53,7 @@ void CLbench::inc()
 	currenttime = CLsystem::getmilliseconds();
 	elapsedtime += (currenttime - lastupdate);
 	temptime = elapsedtime;
-
+//nicht durch temptime teilen, da altes zu neuem und druch 2
 	if(temptime >= interval)
 	{
 		framespersecond = xlong(frames*1000/temptime);

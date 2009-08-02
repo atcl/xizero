@@ -92,10 +92,7 @@ template <typename T>void CLbuffer<T>::ultraclear(xlong v)
 	}
 	else
 	{
-		__asm__ __volatile__ (	"cld;"\
-								"rep;"\
-								"stosl;"\
-								: : "a"(v),"D"(puredst),"c"(size));
+		__asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(v),"D"(puredst),"c"(size));
 	}
 }
 
@@ -147,10 +144,7 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 	}
 	else
 	{
-		__asm__ __volatile__ (	"cld;"\
-								"rep;"\
-								"movsl;"\
-								: :"S"(puresrc),"D"(puredst),"c"(size));
+		__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(size));
 	}
 }
 
