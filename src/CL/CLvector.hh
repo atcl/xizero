@@ -30,7 +30,7 @@ struct CLvectorbase
 		//does the cast need to be crtp'ed
 		       T  operator%(const clvector& a)       { static_cast<clvector*>(this)->operator%(a); }
 	
-		void print() { static_cast<clvector*>(this)->print(); }
+		void print() const { static_cast<clvector*>(this)->print(); }
 };
 //*
 
@@ -66,7 +66,7 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 			  
 			T operator%(const CLvector& a);			//angle between vectors
 
-			void print();							//console output	
+			void print() const;							//console output	
 };
 
 
@@ -203,7 +203,7 @@ T CLvector<T>::operator%(const CLvector& a)
 
 //console output
 template<typename T>
-void CLvector<T>::print()
+void CLvector<T>::print() const
 {
 	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl;
 }

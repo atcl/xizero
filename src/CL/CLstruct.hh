@@ -22,6 +22,8 @@ struct CLfile
 	xlong* data;
 	xlong  size;
 	xlong  lsize;
+	
+	//~CLfile() { delete[] text; delete[] name; }
 };
 
 typedef CLfile armember;
@@ -30,6 +32,8 @@ struct arfile
 {
 	armember** members;
 	xlong      filecount;
+	
+	~arfile() { for(int i=0; i<filecount; i++) delete members[i]; }
 };
 
 struct screenside

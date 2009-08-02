@@ -22,10 +22,10 @@
 class CLlevel : public virtual CLcl
 {
 	protected:
-		CLmatrix*  cllinear;
-		CLplayer*  clplayer;
-		CLlist*    clenemies;
-		CLobject** clterrain;
+		CLmatrix*  linear;
+		CLplayer*  player;
+		CLlist*    enemies;
+		CLobject** terrain;
 
 		CLfbuffer* levellandscape;
 
@@ -69,7 +69,7 @@ xlong CLlevel::floorheight = 100;
 CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer)
 {
 	//matrix for linear transformations of level objects
-	cllinear = new CLmatrix(1);
+	linear = new CLmatrix(1);
 	//*
 	
 	//set screen boundaries
@@ -85,11 +85,16 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 
 	//use array of y3ds to  create array of CLobjects
-	clterrain = new CLobject*[terraina->filecount];
+	terrain = new CLobject*[terraina->filecount];
 	for(uxlong g=0; g<terraina->filecount; g++)
 	{
-		clterrain[g] = new CLobject(terraina->members[g],1);
+		terrain[g] = new CLobject(terraina->members[g],1);
 	}
+	//*
+	
+	//release loaded files
+	delete terraina;
+	delete terrainraw;
 	//*
 
 //***
@@ -138,6 +143,11 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	levellayers[1] = heightmap;
 	levellayers[2] = entitymap;
 	//levellayers[3] = specialmap //later when needed.
+	
+	//release loaded files
+	delete levela;
+	delete levelraw;
+	//*
 
 //***
 
@@ -175,14 +185,14 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 				{
 					for(int k=1; k<=currentheight; k++)
 					{
-						clterrain[0]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
+						terrain[0]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
 						current.z -= blockdepth>>2;
 					}
 				}
 
-				clterrain[currentterrain]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
-				clterrain[currentterrain]->reset();
-				cllinear->unit();
+				terrain[currentterrain]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
+				terrain[currentterrain]->reset();
+				linear->unit();
 				current.z = localfloorheight;
 			}
 			current.x += blockwidth;
@@ -222,7 +232,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 
 	//create player
-	clplayer = new CLplayer(playerlib,playerp);
+	player = new CLplayer(playerlib,playerp);
 	//*
 
 //***
@@ -230,22 +240,27 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 //enemies:
 
 	//load enemy archive
-	CLfile* enemyraw = CLsystem::getfile(enemylib);
-	arfile* enemya = CLformat::loadar(enemyraw);
+	CLfile* enemiesraw = CLsystem::getfile(enemylib);
+	arfile* enemiesa = CLformat::loadar(enemiesraw);
 	//*
 	
 	//load all enemies in archive (base enemies) into array
-	xlong differentenemies = enemya->filecount;
+	xlong differentenemies = enemiesa->filecount;
 	CLenemy** baseenemies = new CLenemy*[differentenemies];
-	for(uxlong k=0; k<enemya->filecount; k++)
+	for(uxlong k=0; k<enemiesa->filecount; k++)
 	{
-		baseenemies[k] = new CLenemy(enemya->members[k]);
+		baseenemies[k] = new CLenemy(enemiesa->members[k]);
 	}
+	//*
+	
+	//release loaded files
+	delete enemiesa;
+	delete enemiesraw;
 	//*
 	
 	//create all enemies in level through copying from base enemies from archive
 	//find enemy startpos in entity map and associate (copy) from baseenemy in enemy list
-	clenemies = new CLlist();
+	enemies = new CLlist();
 	CLenemy* currentenemy;
 	CLlvector enemyp;
 	for(uxlong l=0; l<differentenemies; l++)
@@ -260,7 +275,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 					enemyp.y = m * blockheight;
 					enemyp.z = levellayers[1][m][n];
 					currentenemy = new CLenemy(baseenemies[l],enemyp);
-					clenemies->append(currentenemy);
+					enemies->append(currentenemy);
 				}
 			}
 		}
@@ -272,35 +287,37 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 CLlevel::~CLlevel()
 {
-	delete clplayer;
-	delete cllinear;
+	delete player;
+	delete linear;
+	delete enemies;
 	delete levellandscape;
+	delete[] terrain;
 }
 
 void CLlevel::update(xchar input,xchar turbo)
 {
 	//update player
-	clplayer->update(input,turbo,levellandscape,smoothmark);
+	player->update(input,turbo,levellandscape,smoothmark);
 	//*
 	
 	//update enemies
 	CLenemy* currentenemy;
 	xlong    isenemydead;
-	for(uxlong i=0; i<clenemies->getlength();i++)
+	for(uxlong i=0; i<enemies->getlength();i++)
 	{
-		clenemies->setindex(i);
-		currentenemy = static_cast<CLenemy*>(clenemies->getcurrentdata());
+		enemies->setindex(i);
+		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
 		isenemydead = currentenemy->update(levellandscape,smoothmark);
 		if(isenemydead!=0)
 		{
-			delete  static_cast<CLenemy*>(clenemies->delcurrent(1));
+			delete static_cast<CLenemy*>(enemies->delcurrent(1));
 		}
 	}
 	//*
 	
 	//adjust section of level t be displayed by ("new") player position
 	xlong tempy = 3*(yres>>2);
-	xlong py = clplayer->gety();
+	xlong py = player->gety();
 	if(py<tempy) setmark(smoothmarkmin);
 	else if(py>(smoothmarkmax+tempy)) setmark(smoothmarkmax);
 	else setmark(py - tempy);
@@ -322,7 +339,7 @@ void CLlevel::display()
 	//*
 
 	//render level to screen block by block
-	cllinear->unit();
+	linear->unit();
 	for(int i=-1; i<blocksperscreeny+2; i++)
 	{
 		if( !( i<0                   && blockmark<=0 ) )
@@ -338,24 +355,24 @@ void CLlevel::display()
 				{
 					currentheight = levellayers[1][blockmark+i][j];
 					currententity = levellayers[2][blockmark+i][j];
-					cllinear->translate(ckeeper.x,ckeeper.y,0);
+					linear->translate(ckeeper.x,ckeeper.y,0);
 
 					if(currentheight!=0)
 					{
-						clterrain[0]->update(cllinear);
+						terrain[0]->update(linear);
 						for(int k=1; k<=currentheight; k++)
 						{
-							clterrain[0]->display(current,CENTER + FLAT + AMBIENT);
+							terrain[0]->display(current,CENTER + FLAT + AMBIENT);
 							current.z -= blockdepth>>2;
 						}
-						clterrain[0]->reset();
+						terrain[0]->reset();
 					}
 					
-					clterrain[currentterrain]->update(cllinear);
-					clterrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT);
-					clterrain[currentterrain]->reset();
+					terrain[currentterrain]->update(linear);
+					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT);
+					terrain[currentterrain]->reset();
 					current.z = ckeeper.z;
-					cllinear->unit();
+					linear->unit();
 				}
 				ckeeper.x += blockwidth;
 			}
@@ -368,15 +385,15 @@ void CLlevel::display()
 	//*
 
 	//display player:
-	clplayer->display(smoothmark);
+	player->display(smoothmark);
 	//*
 	
 	//display enemies:
 	CLenemy* currentenemy;
-	for(uxlong i=0; i<clenemies->getlength();i++)
+	for(uxlong i=0; i<enemies->getlength();i++)
 	{
-		clenemies->setindex(i);
-		currentenemy = static_cast<CLenemy*>(clenemies->getcurrentdata());
+		enemies->setindex(i);
+		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
 		currentenemy->display(smoothmark);
 	}
 	//*

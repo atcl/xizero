@@ -4,33 +4,25 @@
 #define HH_CLGAMEPAD
 //#pragma message "Compiling " __FILE__
 
-#ifdef LINUX
-
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <linux/joystick.h>
-
-#endif
-
 #ifdef WIN32
-
-#include <mmsystem.h>
-
+	#include <mmsystem.h>
+#else //ifdef LINUX
+	#include <fcntl.h>
+	#include <sys/ioctl.h>
+	#include <linux/joystick.h>
 #endif
 
-#include "CLtypes.hh"
+	#include "CLtypes.hh"
 
 
 namespace CLgamepad
 {
 	int gamepad_device = 0;
 	
-	#ifdef LINUX
-		struct js_event gp;
-	#endif
-
 	#ifdef WIN32
 		struct JOYINFO gp;
+	#else //ifdef LINUX
+		struct js_event gp;	
 	#endif
 
 	xlong axis[2];
@@ -41,50 +33,6 @@ namespace CLgamepad
 	void handle();
 	void exit();
 };
-
-#ifdef LINUX
-
-bool CLgamepad::init()
-{
-	if( (gamepad_device = open("/dev/js0",O_RDONLY)) == -1)
-	{
-		CLsystem::print("No Gamepad found");
-		return 0;
-	}
-	
-	fcntl(gamepad_device,F_SETFL,O_NONBLOCK);
-	
-	return 1;
-}
-
-void CLgamepad::mask()
-{
-	
-}
-
-void CLgamepad::handle()
-{
-	read(gamepad_device,&gp,sizeof(struct js_event));
-	
-	switch (gp.type & ~JS_EVENT_INIT)
-    {
-		case JS_EVENT_AXIS:
-			if(gp.number>1) break;
-			axis[gp.number] = gp.value;
-			break;
-		case JS_EVENT_BUTTON:
-			if(gp.number>9) break;
-			button[gp.number] = gp.value;
-			break;
-    }
-}
-
-void CLgamepad::exit()
-{
-	close(gamepad_device);
-}
-
-#endif
 
 #ifdef WIN32
 
@@ -130,6 +78,48 @@ void CLgamepad::handle()
 }
 
 void CLgamepad::exit() { }
+
+#else //ifdef LINUX
+
+bool CLgamepad::init()
+{
+	if( (gamepad_device = open("/dev/js0",O_RDONLY)) == -1)
+	{
+		CLsystem::print("No Gamepad found");
+		return 0;
+	}
+	
+	fcntl(gamepad_device,F_SETFL,O_NONBLOCK);
+	
+	return 1;
+}
+
+void CLgamepad::mask()
+{
+	
+}
+
+void CLgamepad::handle()
+{
+	read(gamepad_device,&gp,sizeof(struct js_event));
+	
+	switch (gp.type & ~JS_EVENT_INIT)
+    {
+		case JS_EVENT_AXIS:
+			if(gp.number>1) break;
+			axis[gp.number] = gp.value;
+			break;
+		case JS_EVENT_BUTTON:
+			if(gp.number>9) break;
+			button[gp.number] = gp.value;
+			break;
+    }
+}
+
+void CLgamepad::exit()
+{
+	close(gamepad_device);
+}
 
 #endif
 

@@ -11,26 +11,16 @@
 #include "CLcl.hh"
 #include "CLapi.hh"
 #include "CLgame.hh"
-#include "CLsprites.hh"
 #include "CLformat.hh"
+#include "CLammo.hh"
 
-#ifndef CLAMMO
-#define CLAMMO
-struct CLammo
-{
-	void(*comsprite)(xlong x,xlong y);
-	CLfvector p;
-	CLfvector d;
-	float v;
-};
-#endif
 
 class CLenemy : public virtual CLcl
 {
 	protected:
 		CLobject* model;
 		CLmatrix* cllinear;
-		CLlist*   ammolist;
+		CLammomanager* ammoman;
 
 	private:
 		CLbox* boundingbox;
@@ -44,16 +34,18 @@ class CLenemy : public virtual CLcl
 		CLfvector speeddir;
 		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
 		
-		CLammo* ammotype[2];
-		xlong firerate[2];
+		xlong ammotypecount;
+		xlong* ammotypes;
+		xlong* firerate;
 		xlong health;
 		xlong shield;
 		xlong shieldrate;
 		xlong armor;
 		xlong gear;
 		xlong active;
+		xlong visible;
 		xlong points;
-		xlong lastupdate[3];
+		xlong lastupdate;
 		xlong* aiarray;
 		xlong airightside;
 		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon 
@@ -73,7 +65,7 @@ class CLenemy : public virtual CLcl
 		~CLenemy();
 		
 		xlong update(CLfbuffer* ll,xlong mark);
-		void display(xlong m);
+		void display(xlong mark);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -94,18 +86,12 @@ void CLenemy::setspeed()
 
 void CLenemy::fire(xlong at,xlong d,xlong i)
 {
-	if(at<4)
-	{
-		CLammo* currammo = new CLammo();
-		currammo->comsprite = ammotype[at]->comsprite;
-		currammo->v = ammotype[at]->v;
-		CLfvector* ta = model->getdockingpoint(d,i);
-		currammo->p.x = position.x + ta->x;
-		currammo->p.y = position.y - ta->y;
-		currammo->p.z = position.z + ta->z;
-		currammo->d = direction;
-		ammolist->append(currammo,"at" + xchar(at+30) );
-	}
+	CLfvector startposition = position;
+	CLfvector* ammodocking  = model->getdockingpoint(d,i);
+	startposition.x += ammodocking->x;
+	startposition.y -= ammodocking->y;
+	startposition.z += ammodocking->z;
+	ammoman->fire(at,startposition,direction);
 }
 
 void CLenemy::pretransform()
@@ -141,44 +127,42 @@ xlong CLenemy::collision(CLfbuffer* ll,xlong m)
 	xlong bc = CLgame::boundary(tposition,*boundingbox); //boundary check: (check if game screen is left)
 	tposition.y += m;
 
-	if(bc!=0)
+	if(bc==0)
 	{
-		gear=0;
-		setspeed();
-		r++;
+		visible = 1;
 	}
 	//*
 
-	//terrain collision test
-	xlong xangle = 0;
-	xlong yangle = 0;
-	xlong zdiff  = 0;
-	xlong tc = CLgame::terrain(ll,boundingbox,oboundingbox,tposition,position,xangle,yangle,zdiff); //terrain collision check: (check if player collides with terrain block)
- 
-	if(tc!=0)
-	{
-		gear=0;
-		setspeed();
-		r++;
-	}
-	//*
+	//~ //terrain collision test
+	//~ xlong xangle = 0;
+	//~ xlong yangle = 0;
+	//~ xlong zdiff  = 0;
+	//~ xlong tc = CLgame::terrain(ll,boundingbox,oboundingbox,tposition,position,xangle,yangle,zdiff); //terrain collision check: (check if player collides with terrain block)
+ //~ 
+	//~ if(tc!=0)
+	//~ {
+		//~ gear=0;
+		//~ setspeed();
+		//~ r++;
+	//~ }
+	//~ //*
 	
-	//temp
-		//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
-		if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
-		
-		//rotate x about xangle,y about yangle
-		//cllinear->rotate(xangle,0,0);
-		//if(xangle!=0) CLsystem::print(xangle);
-		//if(yangle!=0) CLsystem::print(yangle);
-	//*
-
-	//enemy collision check
+	//~ //temp
+		//~ //tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+		//~ if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
+		//~ 
+		//~ //rotate x about xangle,y about yangle
+		//~ //cllinear->rotate(xangle,0,0);
+		//~ //if(xangle!=0) CLsystem::print(xangle);
+		//~ //if(yangle!=0) CLsystem::print(yangle);
+	//~ //*
+//~ 
+	//~ //enemy collision check
+	//~ 
+		//~ //...
+	//~ 
+	//~ //*
 	
-		//...
-	
-	//*
-
 	return r;
 }
 
@@ -227,48 +211,37 @@ CLenemy::CLenemy(CLfile* enemylib)
 	
 	position = tposition = 0;
 	
-	//~ //set and adjust (start) position to floating X pixel above ground
-	//~ position = s;
-	//~ position.z += 95;
-	//~ tposition = position;
-	//~ //*
-	
-	//create list for all ammo fired by enemy
-	ammolist = new CLlist();
-	//*
-	
-	//load enemy info from definition file (...later ini)
+	//load enemy info from ini definition file
 	health		= CLsystem::ato((*eini)["health"]);
 	shield		= CLsystem::ato((*eini)["shield"]);
 	shieldrate	= CLsystem::ato((*eini)["shieldrate"]);
 	armor		= CLsystem::ato((*eini)["armor"]);
 	speeddir.x  = 0;
-	speeddir.y  = -CLsystem::ato((*eini)["speed"]);
+	speeddir.y  = CLsystem::ato((*eini)["speed"]);
 	speeddir.z  = 0;
-	ammotype[0] = new CLammo;
-	switch(CLsystem::ato((*eini)["ammo0"])) { case 0: ammotype[0]->comsprite = CLsprites::drawplasma; break; }
-	ammotype[0]->v = 16;
-	ammotype[0]->p = CLfvector();
-	ammotype[0]->d = CLfvector();
+	points = CLsystem::ato((*eini)["points"]);
+	ammotypecount = CLsystem::ato((*eini)["ammotypecount"]);
+	ammotypes  = new xlong[ammotypecount];
+	firerate   = new xlong[ammotypecount];
+	ammotypes[0] = CLsystem::ato((*eini)["ammo0"]);
 	firerate[0]	= CLsystem::ato((*eini)["firerate0"]); //every X ms
-	ammotype[1] = new CLammo;
-	switch(CLsystem::ato((*eini)["ammo1"])) { case 0: ammotype[1]->comsprite = CLsprites::drawplasma; break; }
-	ammotype[1]->v = 16;
-	ammotype[1]->p = CLfvector();
-	ammotype[1]->d = CLfvector();
+	ammotypes[1] = CLsystem::ato((*eini)["ammo1"]);
 	firerate[1]	= CLsystem::ato((*eini)["firerate1"]); //every X ms
+	//*
+	
+	//create ammo manager
+	ammoman = new CLammomanager(ammotypecount,ammotypes);
 	//*
 	
 	//set remaining enemy attributes
 	speed = 0;
 	gear = 0;
 	active = 0;
+	visible = 0;
 	direction.x = 0;
 	direction.y = -1;
 	direction.z = 0;	
-	lastupdate[0] = CLsystem::getmilliseconds();
-	lastupdate[1] = CLsystem::getmilliseconds();
-	lastupdate[2] = CLsystem::getmilliseconds();
+	lastupdate = CLsystem::getmilliseconds();
 	//*
 	
 	delete eini;
@@ -297,42 +270,27 @@ CLenemy::CLenemy(CLenemy* e,CLlvector& s)
 	tposition = position;
 	//*
 	
-	//create list for all ammo fired by enemy
-	ammolist = new CLlist();
-	//*
-	
-	//load enemy info from definition file (...later ini)
+	//copy enemy info from argument enemy
 	health		= e->health;
 	shield		= e->shield;
 	shieldrate	= e->shieldrate;
 	armor		= e->armor;
 	speeddir.x  = 0;
-	speeddir.y  = e->speed.y;
+	speeddir.y  = e->speeddir.y;
 	speeddir.z  = 0;
-	ammotype[0] = new CLammo;
-	ammotype[0]->comsprite = e->ammotype[0]->comsprite;
-	ammotype[0]->v = 16;
-	ammotype[0]->p = CLfvector();
-	ammotype[0]->d = CLfvector();
-	firerate[0]	= e->firerate[0]; //every X ms
-	ammotype[1] = new CLammo;
-	ammotype[1]->comsprite = e->ammotype[0]->comsprite;
-	ammotype[1]->v = 16;
-	ammotype[1]->p = CLfvector();
-	ammotype[1]->d = CLfvector();
-	firerate[1]	= e->firerate[1]; //every X ms
+	ammoman = new CLammomanager(ammotypecount,ammotypes);
+	points = e->points;
 	//*
 	
 	//set remaining enemy attributes
 	speed = 0;
 	gear = 0;
 	active = 0;
+	visible = 0;
 	direction.x = 0;
 	direction.y = -1;
 	direction.z = 0;	
-	lastupdate[0] = CLsystem::getmilliseconds();
-	lastupdate[1] = CLsystem::getmilliseconds();
-	lastupdate[2] = CLsystem::getmilliseconds();
+	lastupdate = CLsystem::getmilliseconds();
 	//*
 }
 
@@ -340,9 +298,7 @@ CLenemy::~CLenemy()
 {
 	//release everything this class grabbed
 	delete cllinear;
-	delete ammolist;
-	delete ammotype[0];
-	delete ammotype[1];
+	delete ammoman;
 	delete boundingbox;
 	delete model;
 	//*
@@ -357,48 +313,38 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 	}
 	//*
 	
+	//check if destroyed (return points)
+	
+	//*
+	
+	//check if level is left (return -1)
+	
+	//*
+	
 	
 	if(active==1)
 	{
+		ammoman->update(mark);
+
 		xlong time = CLsystem::getmilliseconds();
-		
-		//ammo update
-		CLammo* currammo;
-		if(time >= lastupdate[0] + 20)
-		{
-			for(uxlong i=0; i<ammolist->getlength();i++)
-			{
-				ammolist->setindex(i);
-				currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-				currammo->p.y -= mark;
-				if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
-				else
-				{
-					currammo->p.x += currammo->v * currammo->d.x;
-					currammo->p.y -= currammo->v * currammo->d.y;
-					currammo->p.z += currammo->v * currammo->d.z;
-				}
-				currammo->p.y += mark;
-			}
-			lastupdate[0] = time;
-		}
-		//*
 
 		cllinear->unit();
+		
 		//update enemy through ai array
-		
-			//! todo
-		
-		//
+		switch(aitype)
+		{
+			case 0: gear=1; setspeed(); break;
+		}		
+		//*
 
 		//update test position
-		if(time >= lastupdate[2] + 20)
+		if(time >= lastupdate + 20)
 		{
 			tposition.x = position.x - speed.x;
 			tposition.y = position.y + speed.y;
 			tposition.z = position.z + speed.z;
 			
-			lastupdate[2] = time;	
+			lastupdate = time;	
 		}
 		//*
 
@@ -422,27 +368,19 @@ xlong CLenemy::update(CLfbuffer* ll,xlong mark)
 	return 0;
 }
 
-void CLenemy::display(xlong m)
+void CLenemy::display(xlong mark)
 {
-	if(active)
+	if(active==1 && visible==1)
 	{
 		//model display
 		sposition.x = position.x;
-		sposition.y = position.y - m;
+		sposition.y = position.y - mark;
 		sposition.z = position.z;
 		model->display(sposition,FLAT + AMBIENT);
 		//*
 		
 		//ammo display
-		CLammo* currammo;
-		for(uxlong i=0; i<ammolist->getlength();i++)
-		{
-			ammolist->setindex(i);
-			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			currammo->p.y -= m;
-			currammo->comsprite(currammo->p.x,currammo->p.y);
-			currammo->p.y += m;
-		}
+		ammoman->display(mark);
 		//*
 	}
 

@@ -10,26 +10,16 @@
 #include "CLcl.hh"
 #include "CLapi.hh"
 #include "CLgame.hh"
-#include "CLsprites.hh"
 #include "CLformat.hh"
+#include "CLammo.hh"
 
-#ifndef CLAMMO
-#define CLAMMO
-struct CLammo
-{
-	void(*comsprite)(xlong x,xlong y);
-	CLfvector p;
-	CLfvector d;
-	float v;
-};
-#endif
 
 class CLplayer : public virtual CLcl
 {
 	protected:
 		CLobject* model[2]; //0 is chassis,1 is tower
 		CLmatrix* cllinear;
-		CLlist*   ammolist;
+		CLammomanager* ammoman;
 
 	private:
 		CLbox* boundingbox[2];
@@ -43,8 +33,9 @@ class CLplayer : public virtual CLcl
 		CLfvector speeddir;
 		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
 		
-		CLammo* ammotype[4];
-		xlong firerate[4];
+		xlong ammotypecount;
+		xlong* ammotypes;
+		xlong* firerate;
 		xlong health;
 		xlong shield;
 		xlong shieldrate;
@@ -66,7 +57,7 @@ class CLplayer : public virtual CLcl
 		~CLplayer();
 		
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
-		void display(xlong m);
+		void display(xlong mark);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -87,18 +78,12 @@ void CLplayer::setspeed()
 
 void CLplayer::fire(xlong at,bool m,xlong d,xlong i)
 {
-	if(at<4)
-	{
-		CLammo* currammo = new CLammo();
-		currammo->comsprite = ammotype[at]->comsprite;
-		currammo->v = ammotype[at]->v;
-		CLfvector* ta = model[m]->getdockingpoint(d,i);
-		currammo->p.x = position.x + ta->x;
-		currammo->p.y = position.y - ta->y;
-		currammo->p.z = position.z + ta->z;
-		currammo->d = direction[m];
-		ammolist->append(currammo,"at" + xchar(at+30) );
-	}
+	CLfvector startposition = position;
+	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
+	startposition.x += ammodocking->x;
+	startposition.y -= ammodocking->y;
+	startposition.z += ammodocking->z;
+	ammoman->fire(at,startposition,direction[m]);
 }
 
 void CLplayer::pretransform(bool m)
@@ -248,10 +233,6 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	tposition = position;
 	//*
 	
-	//create list for all ammo fired by player
-	ammolist = new CLlist();
-	//*
-	
 	//load player info from definition file (...later ini)
 	health		= CLsystem::ato((*pini)["health"]);
 	shield		= CLsystem::ato((*pini)["shield"]);
@@ -260,18 +241,17 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	speeddir.x  = 0;
 	speeddir.y  = -CLsystem::ato((*pini)["speed"]);
 	speeddir.z  = 0;
-	ammotype[0] = new CLammo;
-	switch(CLsystem::ato((*pini)["ammo0"])) { case 0: ammotype[0]->comsprite = CLsprites::drawplasma; break; }
-	ammotype[0]->v = 16;
-	ammotype[0]->p = CLfvector();
-	ammotype[0]->d = CLfvector();
+	ammotypecount = CLsystem::ato((*pini)["ammotypecount"]);
+	ammotypes  = new xlong[ammotypecount];
+	firerate   = new xlong[ammotypecount];
+	ammotypes[0] = CLsystem::ato((*pini)["ammo0"]);
 	firerate[0]	= CLsystem::ato((*pini)["firerate0"]); //every X ms
-	ammotype[1] = new CLammo;
-	switch(CLsystem::ato((*pini)["ammo1"])) { case 0: ammotype[1]->comsprite = CLsprites::drawplasma; break; }
-	ammotype[1]->v = 16;
-	ammotype[1]->p = CLfvector();
-	ammotype[1]->d = CLfvector();
+	ammotypes[1] = CLsystem::ato((*pini)["ammo1"]);
 	firerate[1]	= CLsystem::ato((*pini)["firerate1"]); //every X ms
+	//*
+	
+	//create ammo manager
+	ammoman = new CLammomanager(ammotypecount,ammotypes);
 	//*
 	
 	//set remaining player attributes
@@ -293,9 +273,7 @@ CLplayer::~CLplayer()
 {
 	//release everything this class grabbed
 	delete cllinear;
-	delete ammolist;
-	delete ammotype[0];
-	delete ammotype[1];
+	delete ammoman;
 	delete boundingbox[0];
 	delete boundingbox[1];
 	delete model[0];
@@ -305,29 +283,9 @@ CLplayer::~CLplayer()
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
-	xlong time = CLsystem::getmilliseconds();
+	ammoman->update(mark);
 	
-	//ammo update
-	CLammo* currammo;
-	if(time >= lastupdate[0] + 20)
-	{
-		for(int i=0; i<ammolist->getlength();i++)
-		{
-			ammolist->setindex(i);
-			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			currammo->p.y -= mark;
-			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
-			else
-			{
-				currammo->p.x += currammo->v * currammo->d.x;
-				currammo->p.y -= currammo->v * currammo->d.y;
-				currammo->p.z += currammo->v * currammo->d.z;
-			}
-			currammo->p.y += mark;
-		}
-		lastupdate[0] = time;
-	}
-	//*
+	xlong time = CLsystem::getmilliseconds();
 	
 	switch(input)
 	{
@@ -417,13 +375,13 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	xmark = mark; //temp
 
 	//update test position
-	if(time >= lastupdate[2] + 20)
+	if(time >= lastupdate[0] + 20)
 	{
 		tposition.x = position.x - speed.x;
 		tposition.y = position.y + speed.y;
 		tposition.z = position.z + speed.z;
 		
-		lastupdate[2] = time;	
+		lastupdate[0] = time;	
 	}
 	//*
 
@@ -444,26 +402,18 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	//*
 }
 
-void CLplayer::display(xlong m)
+void CLplayer::display(xlong mark)
 {
 	//model display
 	sposition.x = position.x;
-	sposition.y = position.y - m;
+	sposition.y = position.y - mark;
 	sposition.z = position.z;
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
 	//*
 	
 	//ammo display
-	CLammo* currammo;
-	for(int i=0; i<ammolist->getlength();i++)
-	{
-		ammolist->setindex(i);
-		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		currammo->p.y -= m;
-		currammo->comsprite(currammo->p.x,currammo->p.y);
-		currammo->p.y += m;
-	}
+	ammoman->display(mark);
 	//*
 
 	//temp!

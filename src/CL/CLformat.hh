@@ -376,7 +376,7 @@ xlong** CLformat::loadlvl()
 
 xmap* CLformat::loadini(CLfile* sf)
 {
-	//stuck in some while, when loaded from ar, because filesize too large
+	//inis need newline at end of file!!
 	xmap* r = new xmap;
 	xchar* bf = sf->text;
 	
