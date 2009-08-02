@@ -9,6 +9,9 @@
 #include "CLtypes.hh"
 #include "CLapi.hh"
 
+#define SIGNBIT 0b10000000000000000000000000000000
+#define ONEBIT  0b00000000000000000000000000000001
+
 namespace CLmath
 {
 	float  fxpi;

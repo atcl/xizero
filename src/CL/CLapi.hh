@@ -239,11 +239,8 @@ xlong CLsystem::ato(const xchar* c)
 
 xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l)
 {
-	switch(l)
-	{
-		case 0:	 return strcmp(a,b);
-		default: return strncmp(a,b,l);
-	}
+	if(l==0) return strcmp(a,b);
+	else return strncmp(a,b,l);
 }
 
 void CLsystem::installsystemkey(xchar scancode,void *action)

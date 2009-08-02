@@ -74,11 +74,42 @@ class CLmap
 //template version of CLsystem.ato
 //change z orientation (polygon.visible, polygon.rasterize,object.ctor)
 //flatshade in asm
-//enemy copy ctor
 //terrain dep transformations and zlevel
 //CLgfx1.drawsprite ao: transparency check with logic-ops instead of if
 //tristate-bool class
 //bump mapping
+
+#define 3true   1
+#define 3false -1
+#define 3null   0
+
+struct CLtribool
+{
+	xlong b;
+	
+	operator=();
+	
+	operator-();
+	operator!();
+	
+	operator++();
+	operator--();
+	
+	operator+=();
+	operator-=();
+	operator*=();
+	
+	operator+();
+	operator-();
+	operator*();
+	
+	operator==();
+	operator!=();
+	operator<=();
+	operator>=();
+	operator<();
+	operator>();
+}
 
 #endif
 
