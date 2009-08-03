@@ -18,7 +18,7 @@ struct CLammo
 	float v;
 };
 
-class CLammomanager
+class CLammomanager : public virtual CLcl
 {
 	private:
 		CLlist* ammolist;
