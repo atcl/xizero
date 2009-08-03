@@ -46,6 +46,7 @@ class CLlevel : public virtual CLcl
 		xlong smoothmarkmax;
 		xlong smoothlevelheight;
 		xlong smoothlevelwidth;
+		xlong playerscreenylevel;
 
 	public:
 		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer);
@@ -233,6 +234,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//create player
 	player = new CLplayer(playerlib,playerp);
+	playerscreenylevel = 3*(yres>>2);
 	//*
 
 //***
@@ -316,11 +318,10 @@ void CLlevel::update(xchar input,xchar turbo)
 	//*
 	
 	//adjust section of level to be displayed by ("new") player position
-	xlong tempy = 3*(yres>>2); //set in ctor?!
 	xlong py = player->gety();
-	if(py<tempy) setmark(smoothmarkmin);
-	else if(py>(smoothmarkmax+tempy)) setmark(smoothmarkmax);
-	else setmark(py - tempy);
+	if(py<playerscreenylevel) setmark(smoothmarkmin);
+	else if(py>(smoothmarkmax+playerscreenylevel)) setmark(smoothmarkmax);
+	else setmark(py - playerscreenylevel);
 	//*
 }
 

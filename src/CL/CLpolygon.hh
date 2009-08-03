@@ -199,7 +199,7 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 		{
 			spoint[x].x = xlong( ( prjx * (ppoint[x].x / ppoint[x].z) ) + px );
 			spoint[x].y = xlong( (-prjy * (ppoint[x].y / ppoint[x].z) ) + py );
-			spoint[x].z = ppoint[x].z; // + cleartrans;
+			spoint[x].z = ppoint[x].z;
 		}
 		else
 		{
@@ -295,7 +295,7 @@ bool CLpolygon::visible()
 {
 	xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
 		
-	return( f < 1L ? 1 : 0 );
+	return( (f < 1) ? 1 : 0 );
 }
 
 void CLpolygon::shape()

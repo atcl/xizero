@@ -17,7 +17,7 @@ namespace CLsprites
 
 void CLsprites::drawantimatter(xlong x,xlong y)
 {
-if( (x-2)<0 || (x+3)>=xres || (y-2)<0 || (y+3)>=yres) return;
+	if( (x-2)<0 || (x+3)>=xres || (y-2)<0 || (y+3)>=yres) return;
 	
 	xlong l1 = ((y-2)*xres)+(x-1);
 	xlong l2 = l1 + xres - 1;

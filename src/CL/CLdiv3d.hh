@@ -87,7 +87,7 @@ void CLmisc3d::drawlight(clvector& p,xlong i,uxlong c)
 
 void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 {
-	float z;
+	xlong z;
 	
 	if(zb==0) zb = CLzbuffer;
 
@@ -99,7 +99,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 		for(uxlong j=0; j<xres-1; j++)
 		{
 			tt = ii + j;
-			z = (*zb)[tt+srcdis] * 4;
+			z = xlong((*zb)[tt+srcdis])<<2 ;
 			(*CLdoublebuffer)[tt] = z;
 		}
 		

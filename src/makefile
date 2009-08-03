@@ -10,6 +10,7 @@ LDFLAGS = -lfltk -laudiere
 OUTPARA = -o 
 CLEANUP = rm
 DEBUG   = -g
+ANTIDEBUG = -s
 STATIC  = -L/usr/lib/libfltk.a -lXft -lfontconfig -lXinerama -lm -lX11 -lfltk -static
 LINUX   = -DLINUX
 WIN32   = -DWIN32
@@ -42,7 +43,7 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 # Compile!
 default:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
-	#$(STRIP) $(TARGET1)
+	$(STRIP) $(TARGET1)
 
 static:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(STATIC) $(WWFLAGS) $(LINUX) 
