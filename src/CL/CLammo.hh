@@ -53,7 +53,6 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats)
 				case 1: ammotype[i]->comsprite = CLsprites::drawantimatter; break;
 			}
 	}
-	lastupdate = CLsystem::getmilliseconds();
 }
 
 CLammomanager::~CLammomanager()

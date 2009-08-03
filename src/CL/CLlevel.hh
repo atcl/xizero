@@ -316,10 +316,10 @@ void CLlevel::update(xchar input,xchar turbo)
 	//*
 	
 	//adjust section of level to be displayed by ("new") player position
-	float tempy = 3*(yres/4); //set in ctor?!
-	float py = player->gety();
+	xlong tempy = 3*(yres>>2); //set in ctor?!
+	xlong py = player->gety();
 	if(py<tempy) setmark(smoothmarkmin);
-	else if(py>float(smoothmarkmax+tempy)) setmark(smoothmarkmax);
+	else if(py>(smoothmarkmax+tempy)) setmark(smoothmarkmax);
 	else setmark(py - tempy);
 	//*
 }

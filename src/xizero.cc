@@ -12,7 +12,7 @@ int main()
 	CLsetup();
 
 	CLlevel *testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemy/enemies.a","../dat/player/player.a","../dat/level/level0.a");
-	CLfloor::init(100,670,0x0000b0b0);
+	CLfloor::init(100,680,0x0000b0b0);
 
 	clbench->init();
 

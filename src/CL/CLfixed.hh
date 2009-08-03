@@ -154,8 +154,29 @@ xfixed& xfixed::operator/=(xshort& a)
 
 xfixed xfixed::operator+(xfixed& a)
 {
-	xfixed r;
-	r.i = this->i + a.i;
+	xfixed r = *this;
+	r.i += a.i;
+	return r;
+}
+
+xfixed xfixed::operator+(xshort& a)
+{
+	xfixed r = *this;
+	r.p.num += a;
+	return r;
+}
+
+xfixed xfixed::operator-(xfixed& a)
+{
+	xfixed r = *this;
+	r.i -= a.i;
+	return r;
+}
+
+xfixed xfixed::operator-(xshort& a)
+{
+	xfixed r = *this;
+	r.p.num -= a;
 	return r;
 }
 
