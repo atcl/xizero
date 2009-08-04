@@ -39,7 +39,7 @@ class CLpolygon : public virtual CLcl
 		void xyclipping();
 		bool visible();
 		void shape();
-		void flatshade(float pz,bool ambient);
+		void flatshade(float pz,bool ambient,bool zlight);
 		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
 		void rasterize(xlong shadow);
 		xlong circleinc(xlong x,xlong pc);
@@ -50,7 +50,7 @@ class CLpolygon : public virtual CLcl
 		~CLpolygon();
 		
 		void update(CLmatrix* m,bool i);
-		void display(const CLlvector& p,xchar flags);
+		void display(const CLlvector& p,xshort flags);
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
@@ -311,7 +311,7 @@ void CLpolygon::shape()
 	
 }
 
-void CLpolygon::flatshade(float pz,bool ambient)
+void CLpolygon::flatshade(float pz,bool ambient,bool zlight)
 {
 	doubleword argb = { 0 };
 
@@ -320,7 +320,8 @@ void CLpolygon::flatshade(float pz,bool ambient)
 	
 	if(t > 1) t = 1;
 
-	if(t<0.2)
+	uxchar ambientlighting = 0;
+	if(t<0.1)
 	{
 		switch(ambient)
 		{
@@ -329,21 +330,18 @@ void CLpolygon::flatshade(float pz,bool ambient)
 			return;
 			
 			case true:
-				argb.db[0] += 25;
-				argb.db[1] += 25;
-				argb.db[2] += 25;
-				shade  = argb.dd;
+				ambientlighting = 25;
 			break;
 		}
 	}
 
 	uxchar zlevellighting = 0; 
-	if(normal.x == 0 && normal.y == 0) zlevellighting = 128 - (pz * shadezscale);
+	if(zlight && normal.x == 0 && normal.y == 0) zlevellighting = 128 - (pz * shadezscale); //change == to != for "plain shading" (leave &&)
 	argb.dd = color;
 	//light color!!!
-	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting;
-	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting;
-	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting;
+	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting + ambientlighting;
+	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting + ambientlighting;
+	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting + ambientlighting;
 	shade = argb.dd;
 }
 
@@ -485,7 +483,7 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 
 CLpolygon::~CLpolygon() { }
 
-void CLpolygon::display(const CLlvector& p,xchar flags)
+void CLpolygon::display(const CLlvector& p,xshort flags)
 {
 	if(flags&SHADOW)
 	{
@@ -511,7 +509,6 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 	xyclipping();
 	if(cpointcount == 0) return;
 
-
 	if( !((flags&FLAT) || (flags&SHADOW)) ) //wireframe
 	{
 		shape();
@@ -527,7 +524,7 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 			}
 			else if( !(flags&SHADOW) )	//default
 			{
-				flatshade(p.z,flags&AMBIENT);
+				flatshade(p.z,flags&AMBIENT,flags&ZLIGHT);
 				rasterize(0);
 			}
 			else			//shadow

@@ -18,23 +18,22 @@
 //*
 
 //render flags
-#define CENTER  0b10000000
-#define FLAT    0b01000000
-#define AMBIENT 0b00100000
-#define SHADOW  0b00010000
-#define SHADER  0b00001000
-#define LPROJ   0b00000100
-#define SHAPE   0b00000010
-#define DEBUG   0b00000001
-//*
-
-//don't-render flags
-#define XPLUS    0b00000001
-#define XMINUS   0b00000010
-#define YPLUS    0b00000100
-#define YMINUS   0b00001000
-#define ZPLUS    0b00010000
-#define ZMINUS   0b00100000
+#define CENTER  0b0000000010000000 //center object on screen
+#define FLAT    0b0000000001000000 //use flatshading
+#define AMBIENT 0b0000000000100000 //use ambient lighting
+#define SHADOW  0b0000000000010000 //render blinn shadows (cancels flat shading) 
+#define SHADER  0b0000000000001000 //use pixel shader 
+#define LPROJ   0b0000000000000100 //use linear projection instead of simple projection
+#define SHAPE   0b0000000000000010 //render wireframe
+#define DEBUG   0b0000000000000001 //use not shaded color
+#define XPLUS   0b0000000100000000 //don't render polygons with a normal s*(1,0,0),s>0
+#define XMINUS  0b0000001000000000 //don't render polygons with a normal s*(-1,0,0),s>0
+#define YPLUS   0b0000010000000000 //don't render polygons with a normal s*(0,1,0),s>0
+#define YMINUS  0b0000100000000000 //don't render polygons with a normal s*(0,-1,0),s>0
+#define ZPLUS   0b0001000000000000 //don't render polygons with a normal s*(0,0,1),s>0
+#define ZMINUS  0b0010000000000000 //don't render polygons with a normal s*(0,0,-1),s>0
+#define ZLIGHT  0b0100000000000000 //light polygons with normal s*(0,0,1),s!=0, higher depending on their z position
+//#define ...   0b1000000000000000
 //*
 
 //bench flags

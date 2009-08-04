@@ -367,7 +367,7 @@ void CLlevel::display()
 						terrain[0]->update(linear);
 						for(int k=1; k<=currentheight; k++)
 						{
-							terrain[0]->display(current,CENTER + FLAT + AMBIENT,dontrender);
+							terrain[0]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT);
 							current.z -= blockdepth>>2;
 						}
 						terrain[0]->reset();
@@ -378,7 +378,7 @@ void CLlevel::display()
 					if( (j<blocksperscreenx && levellayers[0][ii][j] == levellayers[0][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
 					if( (i>0                && levellayers[0][ii][j] == levellayers[0][ii-1][j]) || i==-1 ) dontrender += YMINUS;
 					if( (ii<levelheight-1   && levellayers[0][ii][j] == levellayers[0][ii+1][j]) || ii==levelheight-1 ) dontrender += YPLUS;
-					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT,dontrender);
+					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT);
 					terrain[currentterrain]->reset();
 					current.z = ckeeper.z;
 					linear->unit();

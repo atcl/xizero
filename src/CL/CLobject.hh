@@ -40,7 +40,7 @@ class CLobject : public virtual CLcl
 		~CLobject();
 		
 		void update(CLmatrix* m);
-		void display(CLlvector p,xchar flags,xchar moreflags=0);
+		void display(CLlvector p,xshort flags);
 		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		xlong getname();
 		CLfvector* getdockingpoint(xlong t,xlong i);
@@ -295,7 +295,7 @@ void CLobject::update(CLmatrix* m)
 	boundingbox->c[7] = m->transform(boundingbox->c[7]);
 }
 
-void CLobject::display(CLlvector p,xchar flags,xchar moreflags)
+void CLobject::display(CLlvector p,xshort flags)
 {
 	CLfvector currnormal;
 	
@@ -305,7 +305,7 @@ void CLobject::display(CLlvector p,xchar flags,xchar moreflags)
 		for(uxlong i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);
-			polyptr[i]->display(p,( (flags&CENTER) + FLAT + (flags&AMBIENT) + SHADOW ));
+			polyptr[i]->display(p,flags);
 		}
 	}
 	else
@@ -313,14 +313,14 @@ void CLobject::display(CLlvector p,xchar flags,xchar moreflags)
 		for(uxlong i=0;i<polycount;i++)
 		{
 			currnormal = polyptr[i]->getnormal();
-			if( !(moreflags&XPLUS  && currnormal.x>0 && currnormal.y!=0 && currnormal.z!=0) ||
-				!(moreflags&XMINUS && currnormal.x<0 && currnormal.y!=0 && currnormal.z!=0) ||
-				!(moreflags&YPLUS  && currnormal.x!=0 && currnormal.y>0 && currnormal.z!=0) ||
-				!(moreflags&YMINUS && currnormal.x!=0 && currnormal.y<0 && currnormal.z!=0) ||
-				!(moreflags&ZPLUS  && currnormal.x!=0 && currnormal.y!=0 && currnormal.z>0) ||
-				!(moreflags&ZMINUS && currnormal.x!=0 && currnormal.y!=0 && currnormal.z<0) )
+			if( !(flags&XPLUS  && currnormal.x>0 && currnormal.y!=0 && currnormal.z!=0) ||
+				!(flags&XMINUS && currnormal.x<0 && currnormal.y!=0 && currnormal.z!=0) ||
+				!(flags&YPLUS  && currnormal.x!=0 && currnormal.y>0 && currnormal.z!=0) ||
+				!(flags&YMINUS && currnormal.x!=0 && currnormal.y<0 && currnormal.z!=0) ||
+				!(flags&ZPLUS  && currnormal.x!=0 && currnormal.y!=0 && currnormal.z>0) ||
+				!(flags&ZMINUS && currnormal.x!=0 && currnormal.y!=0 && currnormal.z<0) )
 			{
-				polyptr[i]->display(p,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
+				polyptr[i]->display(p,flags);
 			}
 		}
 	}
