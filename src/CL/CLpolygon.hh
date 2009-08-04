@@ -595,7 +595,7 @@ void CLpolygon::update(CLmatrix* m,bool i=0)
 			points[1] = m->transform(points[1]);
 			points[2] = m->transform(points[2]);
 			points[3] = m->transform(points[3]);
-			normal = m->transform(normal);
+			normal = CLfvector((points[1]-points[0]) * (points[2]-points[0]));
 			break;
 
 		case 1:

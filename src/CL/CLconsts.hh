@@ -15,6 +15,7 @@
 #define CLyellow 0x00FFFF00
 #define CLpink   0x00FF00FF
 #define CLcyan   0x0000FFFF
+//*
 
 //render flags
 #define CENTER  0b10000000
@@ -25,6 +26,16 @@
 #define LPROJ   0b00000100
 #define SHAPE   0b00000010
 #define DEBUG   0b00000001
+//*
+
+//don't-render flags
+#define XPLUS    0b00000001
+#define XMINUS   0b00000010
+#define YPLUS    0b00000100
+#define YMINUS   0b00001000
+#define ZPLUS    0b00010000
+#define ZMINUS   0b00100000
+//*
 
 //bench flags
 #define FPS		 0b00000001
@@ -35,6 +46,7 @@
 #define COUT_RAM 0b00100010
 #define COUT_VRAM 0b01000100
 #define COUT_CPU 0b10001000
+//*
 
 //keycodes
 #define LEFT    81
@@ -45,14 +57,17 @@
 #define SPACE   32
 #define CTRL    -29
 #define ENTER   13
+//*
 
 //CPU flags
 #define MMXFLAG 0b00000000100000000000000000000000
 #define SSEFLAG 0b00000010000000000000000000000000
+//*
 
 //3d engine consts
 #define prjx 80
 #define prjy 95
+//*
 
 #endif
 

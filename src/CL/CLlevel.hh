@@ -337,12 +337,16 @@ void CLlevel::display()
 	xlong localfloorheight = floorheight - 5;
 	CLlvector ckeeper( -(xres >> 1) + blockoffsetx , (yres >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
 	CLlvector current( 0 , 0 , localfloorheight );
+	xchar dontrender = 0; 
+	uxlong ii = 0;
 	//*
 
 	//render level to screen block by block
 	linear->unit();
 	for(int i=-1; i<blocksperscreeny+2; i++)
 	{
+		ii = blockmark + i;
+		
 		if( !( i<0                   && blockmark<=0 ) )
 		{
 		if( !( i==blocksperscreeny   && smoothmark>=smoothmarkmax ) )
@@ -351,11 +355,11 @@ void CLlevel::display()
 		{
 			for(uxlong j=0; j<blocksperscreenx; j++)
 			{
-				currentterrain = xlong(levellayers[0][blockmark+i][j]);
+				currentterrain = xlong(levellayers[0][ii][j]);
 				if(currentterrain!=-1)
 				{
-					currentheight = levellayers[1][blockmark+i][j];
-					currententity = levellayers[2][blockmark+i][j];
+					currentheight = levellayers[1][ii][j];
+					currententity = levellayers[2][ii][j];
 					linear->translate(ckeeper.x,ckeeper.y,0);
 
 					if(currentheight!=0)
@@ -363,14 +367,18 @@ void CLlevel::display()
 						terrain[0]->update(linear);
 						for(int k=1; k<=currentheight; k++)
 						{
-							terrain[0]->display(current,CENTER + FLAT + AMBIENT);
+							terrain[0]->display(current,CENTER + FLAT + AMBIENT,dontrender);
 							current.z -= blockdepth>>2;
 						}
 						terrain[0]->reset();
 					}
 					
 					terrain[currentterrain]->update(linear);
-					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT);
+					if( (j>0                && levellayers[0][ii][j] == levellayers[0][ii][j-1]) || j==0 ) dontrender += XMINUS;
+					if( (j<blocksperscreenx && levellayers[0][ii][j] == levellayers[0][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
+					if( (i>0                && levellayers[0][ii][j] == levellayers[0][ii-1][j]) || i==-1 ) dontrender += YMINUS;
+					if( (ii<levelheight-1 && levellayers[0][ii][j] == levellayers[0][ii+1][j]) || ii==levelheight-1 ) dontrender += YPLUS;
+					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT,dontrender);
 					terrain[currentterrain]->reset();
 					current.z = ckeeper.z;
 					linear->unit();

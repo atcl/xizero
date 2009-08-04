@@ -40,7 +40,7 @@ class CLobject : public virtual CLcl
 		~CLobject();
 		
 		void update(CLmatrix* m);
-		void display(CLlvector p,xchar flags);
+		void display(CLlvector p,xchar flags,xchar moreflags=0);
 		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		xlong getname();
 		CLfvector* getdockingpoint(xlong t,xlong i);
@@ -295,8 +295,10 @@ void CLobject::update(CLmatrix* m)
 	boundingbox->c[7] = m->transform(boundingbox->c[7]);
 }
 
-void CLobject::display(CLlvector p,xchar flags)
+void CLobject::display(CLlvector p,xchar flags,xchar moreflags)
 {
+	CLfvector currnormal;
+	
 	if(flags&SHADOW)
 	{
 		//CLsystem::print("I shouldn't be here!");
@@ -310,7 +312,16 @@ void CLobject::display(CLlvector p,xchar flags)
 	{
 		for(uxlong i=0;i<polycount;i++)
 		{
-			polyptr[i]->display(p,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
+			currnormal = polyptr[i]->getnormal();
+			if( !(moreflags&XPLUS  && currnormal.x>0 && currnormal.y!=0 && currnormal.z!=0) ||
+				!(moreflags&XMINUS && currnormal.x<0 && currnormal.y!=0 && currnormal.z!=0) ||
+				!(moreflags&YPLUS  && currnormal.x!=0 && currnormal.y>0 && currnormal.z!=0) ||
+				!(moreflags&YMINUS && currnormal.x!=0 && currnormal.y<0 && currnormal.z!=0) ||
+				!(moreflags&ZPLUS  && currnormal.x!=0 && currnormal.y!=0 && currnormal.z>0) ||
+				!(moreflags&ZMINUS && currnormal.x!=0 && currnormal.y!=0 && currnormal.z<0) )
+			{
+				polyptr[i]->display(p,( (flags&CENTER) + (flags&FLAT) + (flags&AMBIENT) + (flags&SHADER) + (flags&DEBUG) ));
+			}
 		}
 	}
 }

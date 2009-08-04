@@ -62,7 +62,9 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 
 	CLvector& operator=(const CLvector& a);			//vector vector assignment
 	CLvector& operator=(T c);						//scalar vector assignment
-		      operator CLvector<float>() const;		//cast
+		      operator CLvector<float>() const;		//cast to float
+			  operator CLvector<xlong>() const;		//cast to xlong
+			  //operator CLvector<xfixed>() const;	//cast to fixed
 			  
 			T operator%(const CLvector& a);			//angle between vectors
 
@@ -186,6 +188,14 @@ template<typename T>
 CLvector<T>::operator CLvector<float>() const
 {
 	return CLvector<float>( float(this->x), float(this->y), float(this->z) );
+}
+//*
+
+//vector assignment:
+template<typename T>
+CLvector<T>::operator CLvector<xlong>() const
+{
+	return CLvector<xlong>( xlong(this->x), xlong(this->y), xlong(this->z) );
 }
 //*
 
