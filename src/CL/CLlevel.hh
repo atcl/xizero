@@ -377,7 +377,7 @@ void CLlevel::display()
 					if( (j>0                && levellayers[0][ii][j] == levellayers[0][ii][j-1]) || j==0 ) dontrender += XMINUS;
 					if( (j<blocksperscreenx && levellayers[0][ii][j] == levellayers[0][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
 					if( (i>0                && levellayers[0][ii][j] == levellayers[0][ii-1][j]) || i==-1 ) dontrender += YMINUS;
-					if( (ii<levelheight-1 && levellayers[0][ii][j] == levellayers[0][ii+1][j]) || ii==levelheight-1 ) dontrender += YPLUS;
+					if( (ii<levelheight-1   && levellayers[0][ii][j] == levellayers[0][ii+1][j]) || ii==levelheight-1 ) dontrender += YPLUS;
 					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT,dontrender);
 					terrain[currentterrain]->reset();
 					current.z = ckeeper.z;
