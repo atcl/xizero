@@ -114,16 +114,22 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	
 	//calc intersections at q
 	xlong intersections2[6];
-	intersections[0] = q.x + ( (q.y - q.z) / (slopes[0].z-slopes[0].y) ) * slopes[0].x;
-	intersections[1] = q.x + ( (q.y - q.z) / (slopes[1].z-slopes[1].y) ) * slopes[1].x;
-	intersections[2] = q.y + ( (q.x - q.z) / (slopes[0].z-slopes[0].x) ) * slopes[0].y;
-	intersections[3] = q.y + ( (q.x - q.z) / (slopes[1].z-slopes[1].x) ) * slopes[1].y;
-	intersections[4] = q.z + ( (q.x - q.y) / (slopes[0].y-slopes[0].x) ) * slopes[0].z;
-	intersections[5] = q.z + ( (q.x - q.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
+	intersections2[0] = q.x + ( (q.y - q.z) / (slopes[0].z-slopes[0].y) ) * slopes[0].x;
+	intersections2[1] = q.x + ( (q.y - q.z) / (slopes[1].z-slopes[1].y) ) * slopes[1].x;
+	intersections2[2] = q.y + ( (q.x - q.z) / (slopes[0].z-slopes[0].x) ) * slopes[0].y;
+	intersections2[3] = q.y + ( (q.x - q.z) / (slopes[1].z-slopes[1].x) ) * slopes[1].y;
+	intersections2[4] = q.z + ( (q.x - q.y) / (slopes[0].y-slopes[0].x) ) * slopes[0].z;
+	intersections2[5] = q.z + ( (q.x - q.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
 	//*
 	
 	//check if intersections overlap
-	
+	xlong r = 1;
+	if(intersections2[0]<intersections[0][0] && intersections2[0]<intersections[0][1]) r--;
+	if(intersections2[1]<intersections[1][0] && intersections2[0]<intersections[1][1]) r--;
+	if(intersections2[2]<intersections[2][0] && intersections2[0]<intersections[2][1]) r--;
+	if(intersections2[3]<intersections[3][0] && intersections2[0]<intersections[3][1]) r--;
+	if(intersections2[4]<intersections[4][0] && intersections2[0]<intersections[4][1]) r--;
+	if(intersections2[5]<intersections[5][0] && intersections2[0]<intersections[5][1]) r--;
 	//*
 	
 	return 0;
@@ -186,7 +192,13 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
 	//*
 	
 	//check if intersection intervals overlap
-	
+	xlong r = 1;
+	if(intersections2[0][0]<intersections[0][0] && intersections2[0][0]<intersections[0][1] && intersections2[0][1]<intersections[0][0] && intersections2[0][1]<intersections[0][1]) r--;
+	if(intersections2[1][0]<intersections[1][0] && intersections2[0][0]<intersections[1][1] && intersections2[1][1]<intersections[1][0] && intersections2[1][1]<intersections[1][1]) r--;
+	if(intersections2[2][0]<intersections[2][0] && intersections2[0][0]<intersections[2][1] && intersections2[2][1]<intersections[2][0] && intersections2[2][1]<intersections[2][1]) r--;
+	if(intersections2[3][0]<intersections[3][0] && intersections2[0][0]<intersections[3][1] && intersections2[3][1]<intersections[3][0] && intersections2[3][1]<intersections[3][1]) r--;
+	if(intersections2[4][0]<intersections[4][0] && intersections2[0][0]<intersections[4][1] && intersections2[4][1]<intersections[4][0] && intersections2[4][1]<intersections[4][1]) r--;
+	if(intersections2[5][0]<intersections[5][0] && intersections2[0][0]<intersections[5][1] && intersections2[5][1]<intersections[5][0] && intersections2[5][1]<intersections[5][1]) r--;
 	//*
 
 	return 1;
