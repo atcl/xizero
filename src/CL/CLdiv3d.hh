@@ -138,10 +138,11 @@ void CLfloor::init(xlong z,xlong w,uxlong c)
 	float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
 	//if(t > 1) t = 1;
 	//if(t < 0.2) s = nolight;
+	uxchar zlevellighting = 128 - (z * (128/100));
 	argb.dd = c;
-	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t);
-	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t);
-	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t);
+	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting;
+	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting;
+	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting;
 	floorshade = argb.dd;
 	//*	
 }

@@ -19,6 +19,7 @@ class CLpolygon : public virtual CLcl
 {
 	private:
 		static xlong pointcount;
+		static float shadezscale;
 
 		uxlong shade;
 		uxlong scolor;
@@ -38,7 +39,7 @@ class CLpolygon : public virtual CLcl
 		void xyclipping();
 		bool visible();
 		void shape();
-		void flatshade(bool ambient);
+		void flatshade(float pz,bool ambient);
 		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
 		void rasterize(xlong shadow);
 		xlong circleinc(xlong x,xlong pc);
@@ -59,6 +60,7 @@ class CLpolygon : public virtual CLcl
 };
 
 xlong CLpolygon::pointcount = 4;
+float CLpolygon::shadezscale = 128/100;
 
 void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
@@ -309,35 +311,40 @@ void CLpolygon::shape()
 	
 }
 
-void CLpolygon::flatshade(bool ambient)
+void CLpolygon::flatshade(float pz,bool ambient)
 {
 	doubleword argb = { 0 };
 
 	float t = (normal * cllight) / ( !normal * !cllight );
 	t = CLmath::absolute(t);
-
+	
 	if(t > 1) t = 1;
 
-	if(t < 0.2 && ambient==false)
+	if(t<0.2)
 	{
-		shade = nolight;
-		return;
+		switch(ambient)
+		{
+			case false:
+				shade = nolight;
+			return;
+			
+			case true:
+				argb.db[0] += 25;
+				argb.db[1] += 25;
+				argb.db[2] += 25;
+				shade  = argb.dd;
+			break;
+		}
 	}
 
+	uxchar zlevellighting = 0; 
+	if(normal.x == 0 && normal.y == 0) zlevellighting = 128 - (pz * shadezscale);
 	argb.dd = color;
 	//light color!!!
-	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t);
-	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t);
-	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t);
+	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting;
+	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting;
+	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting;
 	shade = argb.dd;
-
-	if(ambient==true && t<0.2)
-	{
-		argb.db[0] += 25;
-		argb.db[1] += 25;
-		argb.db[2] += 25;
-		shade  = argb.dd;
-	}
 }
 
 template<class clvector>
@@ -520,7 +527,7 @@ void CLpolygon::display(const CLlvector& p,xchar flags)
 			}
 			else if( !(flags&SHADOW) )	//default
 			{
-				flatshade(flags&AMBIENT);
+				flatshade(p.z,flags&AMBIENT);
 				rasterize(0);
 			}
 			else			//shadow
