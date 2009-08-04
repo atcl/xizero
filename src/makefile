@@ -33,16 +33,15 @@ STRIP   = strip -s -R .comment -R .gnu.version
 #options to test:
 CPUa    = -mcpu pentium-mmx
 CPUb    = -mcpu pentium3
-MATH    = -ffast-math
+MATH    = -ffast-math -fsingle-precision-constant 
 ATOM    = -xL
-OPT     = -fsingle-precision-constant -floop-optimize
-EXP     = -fprefetch-loop-arrays -funit-at-a-time -funroll-loops
+EXP     = -fprefetch-loop-arrays -funit-at-a-time -funroll-loops -floop-optimize
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -malign-int
 #
 
 # Compile!
 default:
-	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
+	$(CC) $(O2FLAGS) $(MATH) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
 	$(STRIP) $(TARGET1)
 
 static:
@@ -50,7 +49,7 @@ static:
 
 unit:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
-	$(STRIP) $(TARGET2)
+	#$(STRIP) $(TARGET2)
 
 fast:
 	$(CC) $(O3FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX)

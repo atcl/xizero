@@ -16,32 +16,42 @@
 //prototypes:
 void CLsetup();
 void CLgarbage();
-//
+//*
 
 
 void CLsetup()
 {
+	//init core buffers
 	CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
 	CLstencilbuffer = new CLbuffer<xlong>(xres*yres);
 	CLzbuffer       = new CLbuffer<float>(xres*yres);
+	//*
 	
+	//open window
 	win = new CLwindow(xres,yres,"atCROSSLEVEL",CLdoublebuffer->getbuffer());
+	//*
 
-	clbench    = new CLbench(3,COUT_FPS);
+	//init benchmarking
+	clbench = new CLbench(3,COUT_FPS);
+	//*
 
+	//init math library
 	CLmath::init();
+	//*
 
+	//init matrices
 	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);
-
 	shadowM->shadow(cllight,clplane);
-
+	//*
+	
 	leftside = new screenside[yres];
 	rightside = new screenside[yres];
 }
 
 void CLgarbage()
 {
+	//free globals
 	delete CLdoublebuffer;
 	delete CLstencilbuffer;
 	delete CLzbuffer;
@@ -50,6 +60,7 @@ void CLgarbage()
 	delete shadowM;
 	delete leftside;
 	delete rightside;
+	//*
 }
 
 #endif

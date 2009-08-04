@@ -220,7 +220,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 				
 				//init polygon
-				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x000000C0);
+				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x0000C000);
 				//*
 			}
 			//*
@@ -312,13 +312,14 @@ void CLobject::display(CLlvector p,xshort flags)
 	{
 		for(uxlong i=0;i<polycount;i++)
 		{
+			//! check if normal catching works
 			currnormal = polyptr[i]->getnormal();
-			if( !(flags&XPLUS  && currnormal.x>0 && currnormal.y!=0 && currnormal.z!=0) ||
-				!(flags&XMINUS && currnormal.x<0 && currnormal.y!=0 && currnormal.z!=0) ||
-				!(flags&YPLUS  && currnormal.x!=0 && currnormal.y>0 && currnormal.z!=0) ||
-				!(flags&YMINUS && currnormal.x!=0 && currnormal.y<0 && currnormal.z!=0) ||
-				!(flags&ZPLUS  && currnormal.x!=0 && currnormal.y!=0 && currnormal.z>0) ||
-				!(flags&ZMINUS && currnormal.x!=0 && currnormal.y!=0 && currnormal.z<0) )
+			if( !( (flags&XPLUS  && currnormal.x>0 && currnormal.y!=0 && currnormal.z!=0) ||
+				(flags&XMINUS && currnormal.x<0 && currnormal.y!=0 && currnormal.z!=0) ||
+				(flags&YPLUS  && currnormal.x!=0 && currnormal.y>0 && currnormal.z!=0) ||
+				(flags&YMINUS && currnormal.x!=0 && currnormal.y<0 && currnormal.z!=0) ||
+				(flags&ZPLUS  && currnormal.x!=0 && currnormal.y!=0 && currnormal.z>0) ||
+				(flags&ZMINUS && currnormal.x!=0 && currnormal.y!=0 && currnormal.z<0) ) )
 			{
 				polyptr[i]->display(p,flags);
 			}

@@ -54,7 +54,7 @@ int main()
 
 		CLdoublebuffer->fastclear(0);
 		CLzbuffer->clear(zres); //optimze by: fastclear for float(reinterpret_cast), get rid of clear translation 
-		//CLstencilbuffer->fastclear(0);
+		CLstencilbuffer->fastclear(0);
 
 		switch(mode)
 		{

@@ -28,7 +28,7 @@ CLfbuffer* CLzbuffer;
 
 CLwindow* win;
 
-CLfvector clplane(0,0,-1);
+CLfvector clplane(0,0,1);
 CLfvector cllight(-1,-1,1);
 
 CLmatrix* linearM;

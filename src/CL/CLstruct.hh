@@ -23,7 +23,7 @@ struct CLfile
 	xlong  size;
 	xlong  lsize;
 	
-	//~CLfile() { delete[] text; delete[] name; }
+	//~CLfile() { delete text; delete name; }
 };
 
 typedef CLfile armember;

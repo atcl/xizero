@@ -392,13 +392,25 @@ void CLlevel::display()
 		ckeeper.y -= blockheight;	
 	}
 	//*
+	
+	CLenemy* currentenemy;
+	
+	//cast shadows of entities
+	player->shadow(smoothmark);
+	for(uxlong i=0; i<enemies->getlength();i++)
+	{
+		enemies->setindex(i);
+		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
+		currentenemy->shadow(smoothmark);
+	}
+	CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+	//*
 
 	//display player:
 	player->display(smoothmark);
 	//*
 	
 	//display enemies:
-	CLenemy* currentenemy;
 	for(uxlong i=0; i<enemies->getlength();i++)
 	{
 		enemies->setindex(i);

@@ -58,6 +58,7 @@ class CLplayer : public virtual CLcl
 		
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
 		void display(xlong mark);
+		void shadow(xlong mark);
 		xlong gethealth();
 		xlong getshield();
 		CLfvector& getposition();
@@ -410,6 +411,9 @@ void CLplayer::display(xlong mark)
 	sposition.x = position.x;
 	sposition.y = position.y - mark;
 	sposition.z = position.z;
+	//~ model[0]->display(sposition,SHADOW);
+	//~ model[1]->display(sposition,SHADOW);
+	//~ CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
 	//*
@@ -433,6 +437,15 @@ void CLplayer::display(xlong mark)
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
 	//*
+}
+
+void CLplayer::shadow(xlong mark)
+{
+	sposition.x = position.x;
+	sposition.y = position.y - mark;
+	sposition.z = position.z;
+	model[0]->display(sposition,SHADOW);
+	model[1]->display(sposition,SHADOW);
 }
 
 xlong CLplayer::gethealth()

@@ -68,6 +68,7 @@ class CLenemy : public virtual CLcl
 		
 		xlong update(xlong mark,CLplayer* p);
 		void display(xlong mark);
+		void shadow(xlong mark);
 		xlong gethealth();
 		xlong getshield();
 		xlong getx();
@@ -427,6 +428,14 @@ void CLenemy::display(xlong mark)
 	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
 
 	//*
+}
+
+void CLenemy::shadow(xlong mark)
+{
+	sposition.x = position.x;
+	sposition.y = position.y - mark;
+	sposition.z = position.z;
+	model->display(sposition,SHADOW);
 }
 
 xlong CLenemy::gethealth()

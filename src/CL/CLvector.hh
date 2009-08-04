@@ -18,7 +18,6 @@ struct CLvectorbase
 		clvector  operator-()                        { static_cast<clvector*>(this)->operator-(); }
 		       T  dot(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
 		clvector  operator*(T c) const               { static_cast<clvector*>(this)->operator*(c); }
-		//does the friend need to be crtp'ed?
 		clvector  cross(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
 		       T  operator!() const                  { static_cast<clvector*>(this)->operator!(); }
 		clvector& operator+=(const clvector& a)      { static_cast<clvector*>(this)->operator+=(a); }
@@ -27,7 +26,6 @@ struct CLvectorbase
 		
 		clvector& operator=(const clvector& a)       { static_cast<clvector*>(this)->operator=(a); }
 		clvector& operator=(T c)                     { static_cast<clvector*>(this)->operator=(c); }
-		//does the cast need to be crtp'ed
 		       T  operator%(const clvector& a)       { static_cast<clvector*>(this)->operator%(a); }
 	
 		void print() const { static_cast<clvector*>(this)->print(); }
@@ -50,10 +48,10 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 	CLvector operator+(const CLvector& a) const;	//vector addition
 	CLvector operator-(const CLvector& a) const;	//vector subtraction
 	CLvector operator-();							//vector additive negation
-	       T dot(const CLvector& a) const;	//dot product
+	       T dot(const CLvector& a) const;			//dot product
 	CLvector operator*(T c) const;					//scalar multiplication
 	template<typename S> friend CLvector<S> operator*(S c,CLvector<S>& a);		//scalar multiplication friend
-	CLvector cross(const CLvector& a) const;	//cross product
+	CLvector cross(const CLvector& a) const;		//cross product
 	       T operator!() const;						//vector length
 	
 	CLvector& operator+=(const CLvector& a);		//vector addition
@@ -68,7 +66,7 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 			  
 			T operator%(const CLvector& a);			//angle between vectors
 
-			void print() const;							//console output	
+			void print() const;						//console output	
 };
 
 

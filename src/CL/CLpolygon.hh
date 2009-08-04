@@ -295,20 +295,25 @@ void CLpolygon::xyclipping()
 
 bool CLpolygon::visible()
 {
+	//calc z component of cross product of two edges (with one comon corner)
 	xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
-		
+	//*
+
+	//poly is visible if z component of cross product is below zero (below one to rule out rundng erros)
 	return( (f < 1) ? 1 : 0 );
+	//*
 }
 
 void CLpolygon::shape()
 {
+	//draw wireframe of polygon
 	xlong x = 0;
 	xlong y = 0;
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
 		polyline(xlong(spoint[x].x),xlong(spoint[x].y),xlong(spoint[y].x),xlong(spoint[y].y),0x000000FF);
 	}
-	
+	//*
 }
 
 void CLpolygon::flatshade(float pz,bool ambient,bool zlight)
@@ -469,16 +474,22 @@ void CLpolygon::rasterize(xlong shadow)
 
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
 {
+	//set colors and pointcount
 	color = co;
 	scolor = sc;
 	cpointcount = 4;
+	//*
 
+	//set poly vertices
 	points[0] = pointr[0] = pointt[0] = a;
 	points[1] = pointr[1] = pointt[1] = b;
 	points[2] = pointr[2] = pointt[2] = c;
 	points[3] = pointr[3] = pointt[3] = d;
+	//*
 
+	//calc normals
 	normal = rnormal = CLfvector((points[1]-points[0]) * (points[2]-points[0]));
+	//*
 }
 
 CLpolygon::~CLpolygon() { }
@@ -595,19 +606,23 @@ void CLpolygon::update(CLmatrix* m,bool i=0)
 	switch(i)
 	{
 		case 0:
+			//transform temp vertices
 			points[0] = m->transform(points[0]);
 			points[1] = m->transform(points[1]);
 			points[2] = m->transform(points[2]);
 			points[3] = m->transform(points[3]);
 			normal = CLfvector((points[1]-points[0]) * (points[2]-points[0]));
-			break;
-
+			//*
+		break;
+			
 		case 1:
+			//transform temp vertices for shadow casting
 			pointt[0] = m->transform(points[0]);
 			pointt[1] = m->transform(points[1]);
 			pointt[2] = m->transform(points[2]);
 			pointt[3] = m->transform(points[3]);
-			break;
+			//*
+		break;
 	}
 }
 
