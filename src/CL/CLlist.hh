@@ -47,7 +47,7 @@ class CLlist : public virtual CLcl
 		void setnext();
 		bool islast();
 		bool isfirst();
-		void exchangesort();
+		void exchangesort(bool updown);
 		void print();
 };
 
@@ -264,9 +264,26 @@ bool CLlist::islast()
 	else return false;
 }
 
-void CLlist::exchangesort()
+void CLlist::exchangesort(bool updown)
 {
-
+	listmember* temp;
+		
+	for(uxlong i=0; i<length-1; i++)
+	{
+		for(uxlong j=(i+1); j<length; j++)
+		{
+			if(current->hash<current->next->hash)
+			{
+				temp = current->next;
+				
+				current->next = temp->next;
+				temp->next = current;
+				
+				temp->prev = current->prev;
+				current->prev = temp;
+			}
+		}
+	}
 }
 
 void CLlist::print()
