@@ -33,7 +33,7 @@
 #define ZPLUS   0b0001000000000000 //don't render polygons with a normal s*(0,0,1),s>0
 #define ZMINUS  0b0010000000000000 //don't render polygons with a normal s*(0,0,-1),s>0
 #define ZLIGHT  0b0100000000000000 //light polygons with normal s*(0,0,1),s!=0, higher depending on their z position
-//#define ...   0b1000000000000000
+#define ANTICY  0b1000000000000000 //purposely screw the order of polygon vertices up anti-cyclicly
 //*
 
 //bench flags

@@ -17,39 +17,24 @@ void drawmouseorbitter() { }
 void clearbuffer() { }
 xlong* getbufferptr() { }
 
-//fakecd
-void loadcd() { }
-void playcd() { }
-void stopcd() { }
-void settrack() { }
-void skiptrack() { }
-void prevtrack() { }
-void pausecd() { }
-void ejectcd() { }
-
-//detect
-void detectram() { }
-void detectgpu() { }
-void detectvram() { }
-void detectsb() { }
-void detectps() { }
+//~ //fakecd
+//~ void loadcd() { }
+//~ void playcd() { }
+//~ void stopcd() { }
+//~ void settrack() { }
+//~ void skiptrack() { }
+//~ void prevtrack() { }
+//~ void pausecd() { }
+//~ void ejectcd() { }
 
 //basic
 bool eof() { }
 xchar inkey() { }
 void int() { }
 
-//cfg
-void loadconfig() { }
-
-//fltk
-void systemfontout() { }
-
 //kern
 xchar* getexesize() { }
 void getenv() { }
-void writetofile() { }
-void appendfile() { }
 
 //class mouse
 void hide() { }
@@ -57,14 +42,6 @@ void show() { }
 void setto() { }
 
 //console: clk,end,info,ver,mem,set,run,see,
-
-class CLmap
-{
-	xchar** key;
-	xchar** dat;
-	
-	xchar* operator[](xchar* i);
-};
 
 //ASCIImissile
 //CLxml

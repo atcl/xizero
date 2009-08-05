@@ -503,6 +503,13 @@ void CLpolygon::display(const CLlvector& p,xshort flags)
 		ppoint[2] = pointt[2];
 		ppoint[3] = pointt[3];
 	}
+	else if(flags&ANTICY)
+	{
+		ppoint[0] = points[0];
+		ppoint[2] = points[1];
+		ppoint[1] = points[2];
+		ppoint[3] = points[3];
+	}
 	else
 	{
 		ppoint[0] = points[0];

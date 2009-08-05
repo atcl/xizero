@@ -42,7 +42,7 @@ void CLsetup()
 	//init matrices
 	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);
-	shadowM->shadow(cllight,clplane);
+	shadowM->shadow(clslight,clplane);
 	//*
 	
 	leftside = new screenside[yres];

@@ -10,6 +10,11 @@
 namespace CLdetect
 {
 	void detectCPU(bool& mmx,bool& sse);
+	void detectram();
+	void detectgpu();
+	void detectvram();
+	void detectsb();
+	void detectps();
 };
 
 void detectCPU(bool& mmx,bool& sse)

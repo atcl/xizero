@@ -278,7 +278,7 @@ CLenemy::CLenemy(CLenemy* e,CLlvector& s)
 	
 	//set and adjust (start) position to floating X pixel above ground
 	position = s;
-	position.z += 95;
+	position.z = 100 - position.z - 12 - 30;
 	tposition = position;
 	//*
 	

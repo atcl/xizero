@@ -232,7 +232,7 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	
 	//set and adjust (start) position to floor
 	position = s;
-	position.z += 95;
+	position.z = 100 - position.z - 12;
 	tposition = position;
 	//*
 	

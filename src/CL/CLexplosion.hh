@@ -13,7 +13,9 @@
 
 
 //combine "translate along normals" + "dyadic product"
+//use anti cyclic ordered poly vertices
 //use dyadic product to crumple object
+//reorder cyclic / or reset
 //then translate along normals for explosion
 class CLexplosion : public virtual CLcl
 {
@@ -48,7 +50,6 @@ CLexplosion::CLexplosion(CLobject* o)
 	b = CLfvector(-1,0,1);
 	
 	//cllinear->dyadic(a,b);
-	//cllinear->shear(0,0,0.1);
 }
 
 CLexplosion::~CLexplosion() { }

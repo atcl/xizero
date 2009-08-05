@@ -117,11 +117,11 @@ namespace CLfloor
 	uxlong floorxend;
 	uxlong floorwidth;
 	
-	void init(xlong z,xlong w,uxlong c);
+	void init(xlong z,xlong w,uxlong c,bool s);
 	void draw();
 };
 
-void CLfloor::init(xlong z,xlong w,uxlong c)
+void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 {
 	//set floor z and width
 	floorz = z;
@@ -133,18 +133,23 @@ void CLfloor::init(xlong z,xlong w,uxlong c)
 	floorxend   = xres-((xres-w)>>1);
 	//*
 	
-	//shade floor
-	doubleword argb = { 0 };
-	float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
-	//if(t > 1) t = 1;
-	//if(t < 0.2) s = nolight;
-	uxchar zlevellighting = 128 - (z * (128/100));
-	argb.dd = c;
-	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting;
-	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting;
-	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting;
-	floorshade = argb.dd;
-	//*	
+	if(s)
+	{
+		//shade floor
+		doubleword argb = { 0 };
+		float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
+		//if(t > 1) t = 1;
+		//if(t < 0.2) s = nolight;
+		uxchar zlevellighting = 128 - (z * (128/100));
+		argb.dd = c;
+		argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting;
+		argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting;
+		argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting;
+		floorshade = argb.dd;
+		//*
+	}
+	else floorshade = c;
+	
 }
 
 void CLfloor::draw()

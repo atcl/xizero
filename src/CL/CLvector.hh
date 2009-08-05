@@ -41,8 +41,8 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 	T z;
 	T e;
 
-	CLvector() { x=y=z=0; }
-	CLvector(T tx,T ty,T tz) : x(tx) , y(ty) , z(tz) { ; } 
+	CLvector() { x=y=z=e=0; }
+	CLvector(T tx,T ty,T tz,T te=0) : x(tx) , y(ty) , z(tz), e(te) { ; } 
 	~CLvector() { }
 
 	CLvector operator+(const CLvector& a) const;	//vector addition
