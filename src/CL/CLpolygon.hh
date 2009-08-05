@@ -435,7 +435,7 @@ void CLpolygon::rasterize(xlong shadow)
 			case 0:
 				while(length > 0)
 				{
-					if(actz < (*CLzbuffer)[offset])
+					if(actz < (*CLzbuffer)[offset] || (actz==(*CLzbuffer)[offset] &&normal.z<0) )
 					{
 						(*CLdoublebuffer)[offset] = shade;
 						(*CLzbuffer)[offset] = actz;
@@ -620,7 +620,7 @@ void CLpolygon::update(CLmatrix* m,bool i=0)
 			points[1] = m->transform(points[1]);
 			points[2] = m->transform(points[2]);
 			points[3] = m->transform(points[3]);
-			normal = CLfvector((points[1]-points[0]) * (points[2]-points[0]));
+			normal = CLfvector((points[1]-points[0]) * (points[3]-points[0]));
 			//*
 		break;
 			
