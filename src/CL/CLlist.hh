@@ -267,23 +267,50 @@ bool CLlist::islast()
 void CLlist::exchangesort(bool updown)
 {
 	listmember* temp;
-		
-	for(uxlong i=0; i<length-1; i++)
+	
+	//sort descending
+	if(updown)
 	{
-		for(uxlong j=(i+1); j<length; j++)
+		for(uxlong i=0; i<length-1; i++)
 		{
-			if(current->hash<current->next->hash)
+			for(uxlong j=(i+1); j<length; j++)
 			{
-				temp = current->next;
-				
-				current->next = temp->next;
-				temp->next = current;
-				
-				temp->prev = current->prev;
-				current->prev = temp;
+				if(current->hash<current->next->hash)
+				{
+					temp = current->next;
+					
+					current->next = temp->next;
+					temp->next = current;
+					
+					temp->prev = current->prev;
+					current->prev = temp;
+				}
 			}
 		}
 	}
+	//*
+	
+	//sort ascending
+	else
+	{
+		for(uxlong i=0; i<length-1; i++)
+		{
+			for(uxlong j=(i+1); j<length; j++)
+			{
+				if(current->hash>current->next->hash)
+				{
+					temp = current->next;
+					
+					current->next = temp->next;
+					temp->next = current;
+					
+					temp->prev = current->prev;
+					current->prev = temp;
+				}
+			}
+		}
+	}
+	//*
 }
 
 void CLlist::print()
