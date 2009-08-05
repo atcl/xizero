@@ -55,6 +55,11 @@ void inline bye()
 	CLsystem::exit(0,0,__func__,"bye");
 }
 
+void inline CLneg(xlong& x)
+{
+	 __asm__ __volatile__("notl %%eax, inc %%eax;":"=a"(x) :"a"(x):"%eax");
+}
+
 void inline CLstosd(xlong* dst,xlong val)
 {
 	 __asm__ __volatile__("stosd": :"a"(val),"D"(dst):"%eax","%edi");

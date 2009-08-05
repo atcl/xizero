@@ -98,7 +98,8 @@ T CLvector<T>::dot(const CLvector<T>& a) const
 template<typename T>
 CLvector<T> CLvector<T>::operator*(T c) const
 {
-	return ( (this->x * c) + (this->y * c) + (this->z * c) );
+ 
+	return CLvector<T>( (this->x * c),(this->y * c),(this->z * c) );
 }
 //*
 

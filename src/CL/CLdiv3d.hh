@@ -23,7 +23,7 @@ namespace CLmisc3d
 
 
 template<class clvector>
-CLlvector CLmisc3d::project(const clvector& v,bool c)
+CLfvector CLmisc3d::project(const clvector& v,bool c)
 {
 	//rewrite!!
 	CLlvector r;
@@ -41,7 +41,7 @@ CLlvector CLmisc3d::project(const clvector& v,bool c)
 	{
 		r.x = xlong( ( prjx * (v.x / v.z ) ) + px );
 		r.y = xlong( (-prjy * (v.y / v.z ) ) + py );
-		r.z = v.z; // + cleartrans;
+		r.z = v.z;
 	}
 	else
 	{

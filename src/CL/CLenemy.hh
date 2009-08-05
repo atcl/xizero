@@ -54,7 +54,7 @@ class CLenemy : public virtual CLcl
 		CLbox* aggrobox;
 
 		void setspeed();
-		void fire(xlong at,xlong d,xlong i);
+		void fire(xlong at,xlong d,xlong i,xlong mark);
 		void hit();
 		void pretransform();
 		void transform();
@@ -87,14 +87,14 @@ void CLenemy::setspeed()
 	}
 }
 
-void CLenemy::fire(xlong at,xlong d,xlong i)
+void CLenemy::fire(xlong at,xlong d,xlong i,xlong mark)
 {
 	CLfvector startposition = position;
 	CLfvector* ammodocking  = model->getdockingpoint(d,i);
 	startposition.x += ammodocking->x;
 	startposition.y -= ammodocking->y;
 	startposition.z += ammodocking->z;
-	ammoman->fire(at,startposition,direction);
+	ammoman->fire(at,startposition,direction,mark);
 }
 
 void CLenemy::pretransform()
@@ -341,7 +341,7 @@ xlong CLenemy::update(xlong mark,CLplayer* p)
 	
 	if(active==1)
 	{
-		ammoman->update(mark);
+		ammoman->update();
 
 		xlong time = CLsystem::getmilliseconds();
 
@@ -360,8 +360,8 @@ xlong CLenemy::update(xlong mark,CLplayer* p)
 		{
 			if(time >= lastupdate[1] + firerate[0])
 			{
-				fire(0,4,0);
-				fire(0,4,1);
+				fire(0,4,0,mark);
+				fire(0,4,1,mark);
 				lastupdate[1] = time;
 			}
 		}
@@ -409,7 +409,7 @@ void CLenemy::display(xlong mark)
 		//*
 		
 		//ammo display
-		ammoman->display(mark);
+		ammoman->display();
 		//*
 	}
 

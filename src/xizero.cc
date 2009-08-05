@@ -37,23 +37,21 @@ int main()
 			
 			case '1':
 				mode = 1;
-				break;
+			break;
 			
 			case '2':
 				mode = 2;
-				break;
+			break;
 			
 			case '3':
 				mode = 3;
-				break;
-
-			default:
-				testlevel->update(input,turbo);
 			break;
 		}
+		
+		testlevel->update(input,turbo);
 
 		CLdoublebuffer->fastclear(0);
-		CLzbuffer->clear(zres); //optimze by: fastclear for float(reinterpret_cast), get rid of clear translation 
+		CLzbuffer->clear(zres); //optimze by: fastclear for float(reinterpret_cast)
 		CLstencilbuffer->fastclear(0);
 
 		switch(mode)

@@ -48,7 +48,7 @@ class CLplayer : public virtual CLcl
 		xlong lastupdate[3];
 
 		void setspeed();
-		void fire(xlong at,bool m,xlong d,xlong i);
+		void fire(xlong at,bool m,xlong d,xlong i,xlong mark);
 		void hit();
 		void pretransform(bool m);
 		void transform(bool m);
@@ -81,14 +81,14 @@ void CLplayer::setspeed()
 	}
 }
 
-void CLplayer::fire(xlong at,bool m,xlong d,xlong i)
+void CLplayer::fire(xlong at,bool m,xlong d,xlong i,xlong mark)
 {
 	CLfvector startposition = position;
 	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
 	startposition.x += ammodocking->x;
 	startposition.y -= ammodocking->y;
 	startposition.z += ammodocking->z;
-	ammoman->fire(at,startposition,direction[m]);
+	ammoman->fire(at,startposition,direction[m],mark);
 }
 
 void CLplayer::pretransform(bool m)
@@ -104,7 +104,7 @@ void CLplayer::pretransform(bool m)
 	boundingbox[1]->c[7] = cllinear->transform(boundingbox[1]->c[7]);
 	//*
 	
-	//transform chassis if wanted
+	//transform chassis bounding box if wanted
 	if(m==0)
 	{
 		boundingbox[0]->c[0] = cllinear->transform(boundingbox[0]->c[0]);
@@ -290,7 +290,9 @@ CLplayer::~CLplayer()
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
-	ammoman->update(mark);
+	ammoman->update();
+	
+	xmark = mark; //temp
 	
 	xlong time = CLsystem::getmilliseconds();
 	
@@ -355,7 +357,9 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		
 		//reset tower
 		case 'w':
-		tempangle = CLmath::sign( chassisangle - (towerangle%360) ) * 5;
+		if(towerangle>180) towerangle-=360;
+		if(towerangle<-180) towerangle+=360;
+		tempangle = CLmath::sign(chassisangle-towerangle) * 5;
 		cllinear->rotate(0,0,tempangle);
 		pretransform(1);
 		what=1;
@@ -366,7 +370,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 32: 
 			if(time >= lastupdate[1] + firerate[1])
 			{
-				fire(1,1,4,0);
+				fire(1,1,4,0,mark);
 				lastupdate[1] = time;
 			}
 		break;
@@ -376,8 +380,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case -29: 
 			if(time >= lastupdate[1] + firerate[0])
 			{
-				fire(0,0,3,0);
-				fire(0,0,3,1);
+				fire(0,0,3,0,mark);
+				fire(0,0,3,1,mark);
 				lastupdate[1] = time;
 			}
 		break;
@@ -392,16 +396,13 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		case 'e': //action (use) key
 		break; //*
 	}
-	
-	xmark = mark; //temp
 
 	//update test position
 	if(time >= lastupdate[0] + 20)
 	{
 		tposition.x = position.x - speed.x;
 		tposition.y = position.y + speed.y;
-		tposition.z = position.z + speed.z;
-		
+		tposition.z = position.z - speed.z;
 		lastupdate[0] = time;	
 	}
 	//*
@@ -410,8 +411,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	if(collision(ll,mark)==0)
 	{	
 		transform(what);
-		if(what==0) { chassisangle += tempangle; towerangle += tempangle; }
-		else towerangle += tempangle;
+		if(what==0) { chassisangle = (chassisangle + tempangle)%360; towerangle = (tempangle + towerangle)%360; }
+		else towerangle = (tempangle + towerangle)%360;
 		position = tposition;
 	}
 	//*
@@ -430,15 +431,12 @@ void CLplayer::display(xlong mark)
 	sposition.x = position.x;
 	sposition.y = position.y - mark;
 	sposition.z = position.z;
-	//~ model[0]->display(sposition,SHADOW);
-	//~ model[1]->display(sposition,SHADOW);
-	//~ CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
 	//*
 	
 	//ammo display
-	ammoman->display(mark);
+	ammoman->display();
 	//*
 
 	//temp!

@@ -14,8 +14,7 @@ struct CLammo
 {
 	void(*comsprite)(xlong x,xlong y);
 	CLfvector p;
-	CLfvector d;
-	float v;
+	CLfvector s;
 };
 
 class CLammomanager : public virtual CLcl
@@ -25,19 +24,21 @@ class CLammomanager : public virtual CLcl
 		CLammo** ammotype;
 		CLammo* currammo;
 		xlong ammotypecount;
+		float ammospeed;
 		xlong lastupdate;
 	
 	public:
 		CLammomanager(xlong atc,xlong* ats);
 		~CLammomanager();
 		
-		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction);
-		void update(xlong mark);
-		void display(xlong mark);
+		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction,xlong mark);
+		void update();
+		void display();
 };
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats)
 {
+	ammospeed = 16;
 	ammotypecount = atc;
 	ammolist = new CLlist();
 	ammotype = new CLammo*[atc];
@@ -45,8 +46,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats)
 	{
 			ammotype[i] = new CLammo;
 			ammotype[i]->p = CLfvector();
-			ammotype[i]->d = CLfvector();
-			ammotype[i]->v = 16;
+			ammotype[i]->s = CLfvector();
 			switch(ats[i])
 			{
 				case 0: ammotype[i]->comsprite = CLsprites::drawplasma; break;
@@ -61,20 +61,21 @@ CLammomanager::~CLammomanager()
 	delete[] ammotype;
 }
 
-void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction)
+void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction,xlong mark)
 {
 	if(at<=ammotypecount)
 	{
 		currammo = new CLammo();
 		currammo->comsprite = ammotype[at]->comsprite;
-		currammo->v = ammotype[at]->v;
+		//currammo->v = ammotype[at]->v;
 		currammo->p = startposition;
-		currammo->d = direction;
+		currammo->p.y -= mark;
+		currammo->s = direction*ammospeed;
 		ammolist->append(currammo,"at" + xchar(at+30) );
 	}
 }
 
-void CLammomanager::update(xlong mark)
+void CLammomanager::update()
 {
 	xlong time = CLsystem::getmilliseconds();
 	
@@ -84,29 +85,25 @@ void CLammomanager::update(xlong mark)
 		{
 			ammolist->setindex(i);
 			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			currammo->p.y -= mark;
 			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
 			else
 			{
-				currammo->p.x += currammo->v * currammo->d.x;
-				currammo->p.y -= currammo->v * currammo->d.y;
-				currammo->p.z += currammo->v * currammo->d.z;
+				currammo->p.x += currammo->s.x;
+				currammo->p.y -= currammo->s.y;
+				currammo->p.z += currammo->s.z;
 			}
-			currammo->p.y += mark;
 		}
 		lastupdate = time;
 	}
 }
 
-void CLammomanager::display(xlong mark)
+void CLammomanager::display()
 {
 	for(int i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		currammo->p.y -= mark;
 		currammo->comsprite(currammo->p.x,currammo->p.y);
-		currammo->p.y += mark;
 	}
 }
 
