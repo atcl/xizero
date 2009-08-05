@@ -21,8 +21,10 @@ class CLpolygon : public virtual CLcl
 		static xlong pointcount;
 		static float shadezscale;
 
-		uxlong shade;
+		uxlong color;
+		uxlong rcolor;
 		uxlong scolor;
+		uxlong shade;
 		xlong cpointcount;
 		CLfvector pointr[4];
 		CLfvector points[4];
@@ -54,9 +56,9 @@ class CLpolygon : public virtual CLcl
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
+		void setcolor(uxlong co);
+		void resetcolor();
 		CLfvector getnormal();
-
-		uxlong color;
 };
 
 xlong CLpolygon::pointcount = 4;
@@ -475,7 +477,7 @@ void CLpolygon::rasterize(xlong shadow)
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
 {
 	//set colors and pointcount
-	color = co;
+	rcolor = color = co;
 	scolor = sc;
 	cpointcount = 4;
 	//*
@@ -649,6 +651,16 @@ void CLpolygon::reset()
 	points[2] = pointr[2];
 	points[3] = pointr[3];
 	normal    = rnormal;
+}
+
+void CLpolygon::setcolor(uxlong co)
+{
+	color = co;
+}
+
+void CLpolygon::resetcolor()
+{
+	color = rcolor;
 }
 
 CLfvector CLpolygon::getnormal()

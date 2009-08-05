@@ -47,6 +47,8 @@ class CLobject : public virtual CLcl
 		void translatealongnormals(float speed);
 		CLbox* getboundingbox();
 		void reset();
+		void setcolor(uxlong co);
+		void resetcolor();
 };
 
 CLobject::CLobject(CLfile* fileptr,bool zs)
@@ -400,5 +402,20 @@ void CLobject::reset()
 	}
 }
 
+void CLobject::setcolor(uxlong co)
+{
+	for(uxlong i=0;i<polycount;i++)
+	{
+		polyptr[i]->setcolor(co);
+	}
+}
+
+void CLobject::resetcolor()
+{
+	for(uxlong i=0;i<polycount;i++)
+	{
+		polyptr[i]->resetcolor();
+	}	
+}
 #endif
 
