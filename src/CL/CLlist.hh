@@ -9,14 +9,14 @@
 #include "CLapi.hh"
 
 
-//add type info by RTTI?
+//make template version
 struct listmember
 {
 	void*       data;
 	listmember* next;
 	listmember* prev;
 	xchar*      name;
-	xlong*      hash;
+	xlong       hash;
 };
 
 class CLlist : public virtual CLcl
@@ -32,7 +32,7 @@ class CLlist : public virtual CLcl
 		CLlist(void* e);
 		~CLlist();
 
-		void append(void* e,const xchar* n=" ");
+		void append(void* e,const xchar* n=" ",xlong h=0);
 		void* getcurrentdata();
 		xchar* getcurrentname();
 		void* delcurrent(bool smash); //test smash option
@@ -47,7 +47,7 @@ class CLlist : public virtual CLcl
 		void setnext();
 		bool islast();
 		bool isfirst();
-		void radixsort();
+		void exchangesort();
 		void print();
 };
 
@@ -75,8 +75,15 @@ CLlist::CLlist(void* e)
 	current->prev = current;
 }
 
-void CLlist::append(void* e,const xchar* n)
+void CLlist::append(void* e,const xchar* n,xlong h)
 {
+	//move these out of the if's
+	//~ current = new listmember;
+	//~ current->data = e;
+	//~ current->name = (xchar*)n;
+	//~ current->hash = h;
+	//*
+	
 	if(length==0)
 	{
 		current = new listmember;
@@ -86,6 +93,7 @@ void CLlist::append(void* e,const xchar* n)
 		current->next = current;
 		current->prev = current;
 		current->name = (xchar*)n;
+		current->hash = h;
 	}
 	else
 	{
@@ -97,6 +105,7 @@ void CLlist::append(void* e,const xchar* n)
 		current->next->next = current->next;
 		current = current->next;
 		current->name = (xchar*)n;
+		current->hash = h;
 	}
 
 	length++;
@@ -255,7 +264,7 @@ bool CLlist::islast()
 	else return false;
 }
 
-void CLlist::radixsort()
+void CLlist::exchangesort()
 {
 
 }

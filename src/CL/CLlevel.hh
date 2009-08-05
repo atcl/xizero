@@ -380,7 +380,7 @@ void CLlevel::display()
 					//~ if( (j<blocksperscreenx && currentterrain == levellayers[0][ii][j+1] && currentheight == levellayers[1][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
 					//~ if( (i>0                && currentterrain == levellayers[0][ii-1][j] && currentheight == levellayers[1][ii-1][j]) || i==-1 ) dontrender += YPLUS;
 					//~ if( (ii<levelheight-1   && currentterrain == levellayers[0][ii+1][j] && currentheight == levellayers[1][ii+1][j]) || ii==levelheight-1 ) dontrender += YMINUS;
-					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT + dontrender); //+ZMINUS //should remove all terrain up facing polygons
+					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT + dontrender);
 					terrain[currentterrain]->reset();
 					current.z = ckeeper.z;
 					linear->unit();

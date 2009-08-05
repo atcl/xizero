@@ -67,7 +67,6 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 	{
 		currammo = new CLammo();
 		currammo->comsprite = ammotype[at]->comsprite;
-		//currammo->v = ammotype[at]->v;
 		currammo->p = startposition;
 		currammo->p.y -= mark;
 		currammo->s = direction*ammospeed;
@@ -78,14 +77,14 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 void CLammomanager::update()
 {
 	xlong time = CLsystem::getmilliseconds();
-	
+
 	if(time >= lastupdate + 20)
 	{
 		for(int i=0; i<ammolist->getlength();i++)
 		{
 			ammolist->setindex(i);
 			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			if(CLgame::boundary(currammo->p)!=0) ammolist->delcurrent(0);
+			if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
 			else
 			{
 				currammo->p.x += currammo->s.x;

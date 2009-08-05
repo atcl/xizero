@@ -269,25 +269,25 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	}
 	//*
 	
-	//sort polygons by z
-	//~ CLpolygon* temp;
-	//~ CLfvector normi;
-	//~ CLfvector normj;
-	//~ 
-	//~ for(uxlong i=0; i<(polycount-1); i++)
-	//~ {
-		//~ for(uxlong j=(i+1); j<polycount; j++)
-		//~ {
-			//~ normi = polyptr[i]->getnormal();
-			//~ normj = polyptr[j]->getnormal();
-			//~ if(normi.z==0 && normj.z!=0)
-			//~ {
-				//~ temp = polyptr[i];
-				//~ polyptr[i] = polyptr[j];
-				//~ polyptr[j] = temp;
-			//~ }
-		//~ }
-	//~ }
+	//sort polygons by polygons normal.z
+	CLpolygon* temp;
+	CLfvector normi;
+	CLfvector normj;
+	
+	for(uxlong i=0; i<(polycount-1); i++)
+	{
+		for(uxlong j=(i+1); j<polycount; j++)
+		{
+			normi = polyptr[i]->getnormal();
+			normj = polyptr[j]->getnormal();
+			if(normi.z<normj.z)
+			{
+				temp = polyptr[i];
+				polyptr[i] = polyptr[j];
+				polyptr[j] = temp;
+			}
+		}
+	}
 	//*
 }
 
