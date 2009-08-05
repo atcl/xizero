@@ -10,7 +10,6 @@ LDFLAGS = -lfltk -laudiere
 OUTPARA = -o 
 CLEANUP = rm
 DEBUG   = -g
-ANTIDEBUG = -s
 STATIC  = -L/usr/lib/libfltk.a -lXft -lfontconfig -lXinerama -lm -lX11 -lfltk -static
 LINUX   = -DLINUX
 WIN32   = -DWIN32
@@ -33,7 +32,7 @@ STRIP   = strip -s -R .comment -R .gnu.version
 #options to test:
 CPUa    = -mcpu pentium-mmx
 CPUb    = -mcpu pentium3
-MATH    = -ffast-math -fsingle-precision-constant 
+MATH    = -ffast-math -fsingle-precision-constant -fomit-frame-pointer
 ATOM    = -xL
 EXP     = -fprefetch-loop-arrays -funit-at-a-time -funroll-loops -floop-optimize
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -malign-int

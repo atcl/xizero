@@ -187,6 +187,13 @@ xfixed xfixed::operator*(xfixed& a)
 	return r;
 }
 
+xfixed xfixed::operator*(xshort& a)
+{
+	xfixed r = *this;
+	__asm__ __volatile__ ( "shll $16,%%ebx; imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(r.i) : "a"(r.i),"b"(a) ); //swap eax,edx in shrd?
+	return r;
+}
+
 //friends:
 
 xfixed operator+(short& a,xfixed& b)
