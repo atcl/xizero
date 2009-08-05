@@ -12,6 +12,7 @@
 #include "CLgame.hh"
 #include "CLformat.hh"
 #include "CLammo.hh"
+#include "CLdiv3d.hh"
 
 
 class CLplayer : public virtual CLcl
@@ -85,9 +86,10 @@ void CLplayer::fire(xlong at,bool m,xlong d,xlong i,xlong mark)
 {
 	CLfvector startposition = position;
 	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
-	startposition.x += ammodocking->x;
-	startposition.y -= ammodocking->y;
+	startposition.x = ammodocking->x;
+	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
+	startposition = CLmisc3d::project(startposition,position);
 	ammoman->fire(at,startposition,direction[m],mark);
 }
 

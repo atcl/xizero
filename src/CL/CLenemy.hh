@@ -14,6 +14,7 @@
 #include "CLformat.hh"
 #include "CLammo.hh"
 #include "CLplayer.hh"
+#include "CLdiv3d.hh"
 
 
 class CLenemy : public virtual CLcl
@@ -91,9 +92,10 @@ void CLenemy::fire(xlong at,xlong d,xlong i,xlong mark)
 {
 	CLfvector startposition = position;
 	CLfvector* ammodocking  = model->getdockingpoint(d,i);
-	startposition.x += ammodocking->x;
-	startposition.y -= ammodocking->y;
+	startposition.x = ammodocking->x;
+	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
+	startposition = CLmisc3d::project(startposition,position);
 	ammoman->fire(at,startposition,direction,mark);
 }
 

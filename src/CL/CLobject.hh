@@ -269,26 +269,27 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	}
 	//*
 	
-	//sort polygons by polygons normal.z
-	CLpolygon* temp;
-	CLfvector normi;
-	CLfvector normj;
-	
-	for(uxlong i=0; i<(polycount-1); i++)
-	{
-		for(uxlong j=(i+1); j<polycount; j++)
-		{
-			normi = polyptr[i]->getnormal();
-			normj = polyptr[j]->getnormal();
-			if(normi.z<normj.z)
-			{
-				temp = polyptr[i];
-				polyptr[i] = polyptr[j];
-				polyptr[j] = temp;
-			}
-		}
-	}
-	//*
+	//! causes parts of player to be rendered wrong
+	//~ //sort polygons by polygons normal.z
+	//~ CLpolygon* temp;
+	//~ CLfvector normi;
+	//~ CLfvector normj;
+	//~ 
+	//~ for(uxlong i=0; i<(polycount-1); i++)
+	//~ {
+		//~ for(uxlong j=(i+1); j<polycount; j++)
+		//~ {
+			//~ normi = polyptr[i]->getnormal();
+			//~ normj = polyptr[j]->getnormal();
+			//~ if(normi.z<normj.z)
+			//~ {
+				//~ temp = polyptr[i];
+				//~ polyptr[i] = polyptr[j];
+				//~ polyptr[j] = temp;
+			//~ }
+		//~ }
+	//~ }
+	//~ //*
 }
 
 CLobject::~CLobject()
@@ -324,7 +325,6 @@ void CLobject::display(CLlvector p,xshort flags)
 	
 	if(flags&SHADOW)
 	{
-		//CLsystem::print("I shouldn't be here!");
 		for(uxlong i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);
@@ -335,9 +335,6 @@ void CLobject::display(CLlvector p,xshort flags)
 	{
 		for(uxlong i=0;i<polycount;i++)
 		{
-			//~ if(flags&XMINUS) say("a");
-			//~ if(flags&XMINUS && currnormal.x<0 && currnormal.y==0 && currnormal.z==0) say("b");
-			//! check if normal catching works
 			currnormal = polyptr[i]->getnormal();
 			if( !( (flags&XPLUS  && currnormal.x>0 && currnormal.y==0 && currnormal.z==0) ||
 				   (flags&XMINUS && currnormal.x<0 && currnormal.y==0 && currnormal.z==0) ||
