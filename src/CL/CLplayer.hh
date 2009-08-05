@@ -33,6 +33,8 @@ class CLplayer : public virtual CLcl
 		CLfvector speeddir;
 		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
 		
+		xlong chassisangle;
+		xlong towerangle;
 		xlong ammotypecount;
 		xlong* ammotypes;
 		xlong* firerate;
@@ -258,6 +260,8 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	//*
 	
 	//set remaining player attributes
+	chassisangle = 0;
+	towerangle = 0;
 	speed = 0;
 	gear = 0;
 	active = 1;
@@ -290,6 +294,10 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	
 	xlong time = CLsystem::getmilliseconds();
 	
+	cllinear->unit();
+	bool what = 0;
+	xlong tempangle = 0;
+	
 	switch(input)
 	{
 		//stop backward driving and drive forward
@@ -306,14 +314,12 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 		//*
 	}
-
-	cllinear->unit();
-	bool what = 0;
 	
 	switch(turbo)
 	{
 		//arrow left -> turn left
 		case 81: 
+			tempangle = 5;
 			cllinear->rotate(0,0,5);
 			pretransform(0);	
 			setspeed();
@@ -322,6 +328,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 		//arrow right -> turn right
 		case 83: 
+			tempangle = -5;
 			cllinear->rotate(0,0,-5);
 			pretransform(0);
 			setspeed();
@@ -330,6 +337,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 		//a -> turn tower left
 		case 97: 
+			tempangle = 5;
 			cllinear->rotate(0,0,5);
 			pretransform(1);
 			what=1;
@@ -338,9 +346,19 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 
 		//d -> turn tower right
 		case 100: 
+			tempangle = -5;
 			cllinear->rotate(0,0,-5);
 			pretransform(1);
 			what=1;
+		break;
+		//*
+		
+		//reset tower
+		case 'w':
+		tempangle = CLmath::sign(chassisangle - towerangle) * 5;
+		cllinear->rotate(0,0,tempangle);
+		pretransform(1);
+		what=1;
 		break;
 		//*
 
@@ -365,13 +383,13 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		break;
 		//*
 
-		case 119: //w -> fire (tachyon) laser
+		case 'q': //fire (tachyon) laser
 		break; //*
 
-		case 115: //s -> fire laser
+		case 's': //fire laser
 		break; //*
 
-		case 101: //e -> action key
+		case 'e': //action (use) key
 		break; //*
 	}
 	
@@ -392,7 +410,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 	if(collision(ll,mark)==0)
 	{	
 		transform(what);
-		
+		if(what==0) { chassisangle += tempangle; towerangle += tempangle; }
+		else towerangle += tempangle;
 		position = tposition;
 	}
 	//*
