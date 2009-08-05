@@ -27,8 +27,8 @@ template <typename T>class CLbuffer : public virtual CLcl
 		~CLbuffer();
 		
 		void clear(T v);
-		void fastclear(xlong v);
-		void ultraclear(xlong v);
+		void fastclear(T v);
+		void ultraclear(T v);
 		void copy(T* dst);
 		void copy(CLbuffer* dst);
 		void fastcopy(xlong* dst);
@@ -62,14 +62,19 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	}
 }
 
-template <typename T>void CLbuffer<T>::fastclear(xlong v)
+template <typename T>void CLbuffer<T>::fastclear(T v)
 {
-	memset(buffer,v,size<<2);
+	xlong* btemp = reinterpret_cast<xlong*>(&buffer[0]);
+	xlong* vtemp = reinterpret_cast<xlong*>(&v);
+
+	//memset(btemp,*vtemp,size<<2);
+
+	__asm__ __volatile__ ( "cld; rep stosl;" : : "a"(*vtemp),"D"(btemp),"c"(size) );
 }
 
-template <typename T>void CLbuffer<T>::ultraclear(xlong v)
+template <typename T>void CLbuffer<T>::ultraclear(T v)
 {
-	xlong puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
+	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong i=0;
 
 	if(size>262144 && sse)
@@ -119,8 +124,8 @@ template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 
 template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
-	xlong puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
-	xlong puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
+	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
+	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	xlong i=0;
 		
 	if(size>262144 && sse)

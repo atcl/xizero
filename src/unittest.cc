@@ -202,7 +202,7 @@ int main(int argc, char** argv)
 		//4. all shadow casting objects
 
 		CLdoublebuffer->fastclear(0);
-		CLzbuffer->clear(zres-1);
+		CLzbuffer->fastclear(zres-1);
 		CLstencilbuffer->fastclear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);

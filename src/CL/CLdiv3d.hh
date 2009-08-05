@@ -148,9 +148,11 @@ void CLfloor::draw()
 	//fast floor drawing
 	uxlong runningfloorxstart = floorxstart;
 	uxlong runningfloorxend = floorxend;
-	for(uxlong i=0; i<yres; i++)
+	uxlong i=0;
+	uxlong j=0;
+	for(i=0; i<yres; i++)
 	{
-		for(uxlong j=runningfloorxstart; j<runningfloorxend; j++)
+		for(j=runningfloorxstart; j<runningfloorxend; j++)
 		{
 			(*CLdoublebuffer)[j] = floorshade;
 			(*CLzbuffer)[j] = floorz;

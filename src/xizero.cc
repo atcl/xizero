@@ -50,14 +50,14 @@ int main()
 		
 		testlevel->update(input,turbo);
 
-		CLdoublebuffer->fastclear(0);
-		CLzbuffer->clear(zres); //optimze by: fastclear for float(reinterpret_cast)
+		CLdoublebuffer->fastclear(CLfloor::floorshade);
+		CLzbuffer->fastclear(CLfloor::floorz);
 		CLstencilbuffer->fastclear(0);
 
 		switch(mode)
 		{
 			case 1: 
-				CLfloor::draw();
+				//CLfloor::draw();
 				testlevel->display();
 				break;
 
