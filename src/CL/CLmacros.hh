@@ -20,6 +20,11 @@ xlong inline x600(xlong f)
 	return ( (f<<9) + (f<<6) + (f<<4) + (f<<3) );
 }
 
+void inline tty(const xchar* c="\n")
+{
+	std::cout << c;
+}
+
 void inline say(const xchar* c="hi")
 {
 	std::cout << c << std::endl;

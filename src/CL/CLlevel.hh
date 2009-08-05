@@ -337,7 +337,7 @@ void CLlevel::display()
 	xlong localfloorheight = floorheight - 5;
 	CLlvector ckeeper( -(xres >> 1) + blockoffsetx , (yres >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
 	CLlvector current( 0 , 0 , localfloorheight );
-	xchar dontrender = 0; 
+	xshort dontrender = 0; 
 	uxlong ii = 0;
 	//*
 
@@ -374,14 +374,15 @@ void CLlevel::display()
 					}
 					
 					terrain[currentterrain]->update(linear);
-					if( (j>0                && levellayers[0][ii][j] == levellayers[0][ii][j-1]) || j==0 ) dontrender += XMINUS;
-					if( (j<blocksperscreenx && levellayers[0][ii][j] == levellayers[0][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
-					if( (i>0                && levellayers[0][ii][j] == levellayers[0][ii-1][j]) || i==-1 ) dontrender += YMINUS;
-					if( (ii<levelheight-1   && levellayers[0][ii][j] == levellayers[0][ii+1][j]) || ii==levelheight-1 ) dontrender += YPLUS;
-					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT);
+					if( (j>0                && currentterrain == levellayers[0][ii][j-1] && currentheight == levellayers[1][ii][j-1]) || j==0 ) dontrender += XMINUS;
+					if( (j<blocksperscreenx && currentterrain == levellayers[0][ii][j+1] && currentheight == levellayers[1][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
+					if( (i>0                && currentterrain == levellayers[0][ii-1][j] && currentheight == levellayers[1][ii-1][j]) || i==-1 ) dontrender += YPLUS;
+					if( (ii<levelheight-1   && currentterrain == levellayers[0][ii+1][j] && currentheight == levellayers[1][ii+1][j]) || ii==levelheight-1 ) dontrender += YMINUS;
+					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT + dontrender); //+ZMINUS //should remove all terrain up facing polygons
 					terrain[currentterrain]->reset();
 					current.z = ckeeper.z;
 					linear->unit();
+					dontrender = 0;
 				}
 				ckeeper.x += blockwidth;
 			}

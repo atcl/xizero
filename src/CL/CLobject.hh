@@ -312,14 +312,16 @@ void CLobject::display(CLlvector p,xshort flags)
 	{
 		for(uxlong i=0;i<polycount;i++)
 		{
+			//~ if(flags&XMINUS) say("a");
+			//~ if(flags&XMINUS && currnormal.x<0 && currnormal.y==0 && currnormal.z==0) say("b");
 			//! check if normal catching works
 			currnormal = polyptr[i]->getnormal();
-			if( !( (flags&XPLUS  && currnormal.x>0 && currnormal.y!=0 && currnormal.z!=0) ||
-				(flags&XMINUS && currnormal.x<0 && currnormal.y!=0 && currnormal.z!=0) ||
-				(flags&YPLUS  && currnormal.x!=0 && currnormal.y>0 && currnormal.z!=0) ||
-				(flags&YMINUS && currnormal.x!=0 && currnormal.y<0 && currnormal.z!=0) ||
-				(flags&ZPLUS  && currnormal.x!=0 && currnormal.y!=0 && currnormal.z>0) ||
-				(flags&ZMINUS && currnormal.x!=0 && currnormal.y!=0 && currnormal.z<0) ) )
+			if( !( (flags&XPLUS  && currnormal.x>0 && currnormal.y==0 && currnormal.z==0) ||
+				   (flags&XMINUS && currnormal.x<0 && currnormal.y==0 && currnormal.z==0) ||
+				   (flags&YPLUS  && currnormal.x==0 && currnormal.y>0 && currnormal.z==0) ||
+				   (flags&YMINUS && currnormal.x==0 && currnormal.y<0 && currnormal.z==0) ||
+				   (flags&ZPLUS  && currnormal.x==0 && currnormal.y==0 && currnormal.z>0) ||
+				   (flags&ZMINUS && currnormal.x==0 && currnormal.y==0 && currnormal.z<0) ) )
 			{
 				polyptr[i]->display(p,flags);
 			}

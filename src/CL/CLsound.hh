@@ -122,6 +122,7 @@ float CLsound::getvolume()
 //~ #else //ifdef LINUX
 //~ #include <linux/soundcard.h>
 //~ #include <sys/ioctl.h>
+//~ #include <unistd.h>
 //~ 
 //~ bool init()
 //~ {
@@ -134,7 +135,7 @@ float CLsound::getvolume()
 	//~ //set bits per sample
 	//~ //set number of channels
 	//~ //set sample rate
-	//~ //start async playing (how?, maybe fork!)
+	//~ //start async playing (fork here)
 	//~ 
 //~ }
 //~ 
