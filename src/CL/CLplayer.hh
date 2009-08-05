@@ -355,7 +355,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 		
 		//reset tower
 		case 'w':
-		tempangle = CLmath::sign(chassisangle - towerangle) * 5;
+		tempangle = CLmath::sign( chassisangle - (towerangle%360) ) * 5;
 		cllinear->rotate(0,0,tempangle);
 		pretransform(1);
 		what=1;
