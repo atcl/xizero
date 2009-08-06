@@ -21,7 +21,7 @@ int main()
 	xlong mode  = 1;
 	xlong dis   = 0;
 	bool running  = 1;
-
+	
 	while(running && win->run()) 
 	{
 		turbo = win->getturbo();
@@ -64,8 +64,7 @@ int main()
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
 				CLmisc3d::drawzbuffer(testlevel->getlandscape(),dis);
-				(*testlevel->getlandscape())[ (xlong(tv.y)*xres) + xlong(tv.x) ] = 0x000FFFFFF; //temp
-				(*testlevel->getlandscape())[ (xlong(lv.y)*xres) + xlong(lv.x) ] = 0x000FFFF00; //temp
+				testlevel->getplayer()->showbox(testlevel->getmark());
 				break;
 
 			case 3:

@@ -28,7 +28,7 @@ namespace CLgame
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
 
-		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,xlong& xa,xlong& ya,xlong& zd);
+		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
 
 
@@ -205,7 +205,7 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
 }
 
 template<class clvector>
-bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,xlong& xa,xlong& ya,xlong& zd)
+bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd)
 {
 	//calc levelposition of current bounding box
 	CLlvector p1( (p.x + bb->c[0].x), (p.y - bb->c[0].y), (p.z + bb->c[0].z) );
@@ -219,13 +219,6 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 	CLlvector l2( (l.x + ob->c[1].x), (l.y - ob->c[1].y), (l.z + ob->c[1].z) );
 	CLlvector l3( (l.x + ob->c[2].x), (l.y - ob->c[2].y), (l.z + ob->c[2].z) );
 	CLlvector l4( (l.x + ob->c[3].x), (l.y - ob->c[3].y), (l.z + ob->c[3].z) );
-	//*
-	
-	//temp! only for landscape trace, see xizero.cc l68,l69
-	lv.x = l.x;
-	lv.y = l.y;
-	tv.x = p.x;
-	tv.y = p.y;
 	//*
 
 	//calc zlevel of current bounding box corners in levellandscape

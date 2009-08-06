@@ -58,6 +58,7 @@ class CLlevel : public virtual CLcl
 		void setmark(xlong m);
 		xlong getmark();
 		CLfbuffer* getlandscape();
+		CLplayer* getplayer();
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -448,6 +449,11 @@ xlong CLlevel::getmark()
 CLfbuffer* CLlevel::getlandscape()
 {
 	return levellandscape;	
+}
+
+CLplayer* CLlevel::getplayer()
+{
+	return player;
 }
 
 #endif

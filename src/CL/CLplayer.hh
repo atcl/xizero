@@ -62,6 +62,7 @@ class CLplayer : public virtual CLcl
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark);
 		void display(xlong mark);
 		void shadow(xlong mark);
+		void showbox(xlong mark);
 		xlong gethealth();
 		xlong getshield();
 		CLfvector& getposition();
@@ -157,9 +158,9 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 
 	//terrain collision test
-	xlong xangle = 0;
-	xlong yangle = 0;
-	xlong zdiff  = 0;
+	float xangle = 0;
+	float yangle = 0;
+	float zdiff  = 0;
 	xlong tc = CLgame::terrain(ll,boundingbox[0],oboundingbox[0],tposition,position,xangle,yangle,zdiff); //terrain collision check: (check if player collides with terrain block)
  
 	if(tc!=0)
@@ -171,13 +172,13 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 	
 	//temp
-		//tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
-		if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
+	if(zdiff>-1) tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+		//if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
 		
 		//rotate x about xangle,y about yangle
 		//cllinear->rotate(xangle,0,0);
-		//if(xangle!=0) CLsystem::print(xangle);
-		//if(yangle!=0) CLsystem::print(yangle);
+		if(CLmath::absolute(xangle)>0.1) CLsystem::print(xangle);
+		if(CLmath::absolute(yangle)>0.1) CLsystem::print(yangle);
 	//*
 
 	//enemy collision check
@@ -293,8 +294,6 @@ CLplayer::~CLplayer()
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,xlong mark)
 {
 	ammoman->update();
-	
-	xmark = mark; //temp
 	
 	xlong time = CLsystem::getmilliseconds();
 	
@@ -440,23 +439,38 @@ void CLplayer::display(xlong mark)
 	//ammo display
 	ammoman->display();
 	//*
-
-	//temp!
-	//~ CLgfx1::drawpolygon(
-//~ sposition.x+boundingbox[0]->b1.x,
-//~ sposition.y-boundingbox[0]->b1.y,
-//~ sposition.x+boundingbox[0]->b2.x,
-//~ sposition.y-boundingbox[0]->b2.y,
-//~ sposition.x+boundingbox[0]->b3.x,
-//~ sposition.y-boundingbox[0]->b3.y,
-//~ sposition.x+boundingbox[0]->b4.x,
-//~ sposition.y-boundingbox[0]->b4.y,
-//~ 0x00FFFFFF);
-
-	//CLgfx1::drawrectangle(65,0,735,599,0x00FF00FF);
-
-	//*
+	
+	showbox(mark);
 }
+
+//for debug only:
+void CLplayer::showbox(xlong mark)
+{
+	CLfvector bposition;
+	bposition.x = position.x;
+	bposition.y = position.y - mark;
+	bposition.z = position.z;
+	
+	CLfvector a = bposition;
+	a.x += boundingbox[0]->c[0].x;
+	a.y -= boundingbox[0]->c[0].y;
+	a.z -= boundingbox[0]->c[0].z;
+	CLfvector b = bposition;
+	b.x += boundingbox[0]->c[1].x;
+	b.y -= boundingbox[0]->c[1].y;
+	b.z -= boundingbox[0]->c[1].z;
+	CLfvector c = bposition;
+	c.x += boundingbox[0]->c[2].x;
+	c.y -= boundingbox[0]->c[2].y;
+	c.z -= boundingbox[0]->c[2].z;
+	CLfvector d = bposition;
+	d.x += boundingbox[0]->c[3].x;
+	d.y -= boundingbox[0]->c[3].y;
+	d.z -= boundingbox[0]->c[3].z;
+	
+	CLgfx1::drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
+}
+//*
 
 void CLplayer::shadow(xlong mark)
 {
