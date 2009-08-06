@@ -182,7 +182,13 @@ int main(int argc, char** argv)
 			case '#':
 				ex->next();
 			break;
-
+			case '.':
+				cubus->translatealongnormals(1.1);
+			break;
+			case ',':
+				cubus->translatealongnormals(-1.1);
+			break;
+			
 			//System:
 			case '0':
 				xlong rval = CLsystem::system("Xdialog --msgbox 'bye' 0 0");
@@ -219,7 +225,8 @@ int main(int argc, char** argv)
 		CLgfx2::drawfontstring(100,90,"Use # for exploding",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,110,"Use ^ for toggling between shading",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,130,"Use - for toggling between shadowing",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,150,"Use 0 to exit",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,150,"Use . and  , to translate along normals",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,170,"Use 0 to exit",font,0x00FFFFFF);
 
 		if(shadows==1)
 		{
