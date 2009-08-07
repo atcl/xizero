@@ -172,7 +172,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 	
 	//temp
-	if(zdiff>-1) tposition.z += zdiff; //only growth when uphill, constant on downhill, funny :)
+	if(zdiff>-1) tposition.z += zdiff;
 		//if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
 		
 		//rotate x about xangle,y about yangle
@@ -469,6 +469,7 @@ void CLplayer::showbox(xlong mark)
 	d.z -= boundingbox[0]->c[3].z;
 	
 	CLgfx1::drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
+	CLgfx1::drawbigpixel(d.x,d.y,0);
 }
 //*
 

@@ -69,6 +69,7 @@ void CLmath::init()
 template<typename T>
 T CLmath::sign(T x)
 {
+	//only xlong!
 	__asm__ __volatile__ ("cdq; cmpl $0,%%eax; seta %%al; orb %%al,%%dl" : "=d"(x) : "a"(x) );
 	return x; 
 }
@@ -76,6 +77,7 @@ T CLmath::sign(T x)
 template<typename T>
 T CLmath::heaviside(T x)
 {
+	//only xlong!
 	__asm__ __volatile__ ("cdq; incl %%edx;" : "=d"(x) : "a"(x) );
 	return x;
 }

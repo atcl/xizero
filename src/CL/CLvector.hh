@@ -202,7 +202,7 @@ CLvector<T>::operator CLvector<xlong>() const
 template<typename T>
 T CLvector<T>::operator%(const CLvector& a)
 {
-	float c =           ( (this->x * a.x)     + (this->y * a.y)     + (this->z * a.z) ) /
+	float c =        ( (this->x * a.x)     + (this->y * a.y)     + (this->z * a.z) ) /
 		(CLmath::sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
 		 CLmath::sqrt(     (a.x * a.x)     +     (a.y * a.y)     +     (a.z * a.z) ) );
 

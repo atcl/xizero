@@ -243,25 +243,37 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 	if( n4 < o4-3 ) r = 1;
 	//*
 	
-	//calc y angle ya
-	float az = ( n2+n3-n1-n4 ); // /2?
-	float bz = ( o2+o3-o1-o4 ); // /2?
-	CLfvector a( (-p1.x+p2.x),(-p1.y+p2.y),az );
-	CLfvector b( (-p1.x+p2.x),(-p1.y+p2.y),bz );	
-	ya = -(a % b);
+	//calc z difference in bbox center between current and last
+	//if(r==0) //activate when working correctly
+	zd = (n1+n2+n3+n4-o1-o2-o3-o4)/4;
 	//*
 	
-	//calc x angle xa
+	xlong mp = 0;
+	
+	//calc y angle ya (rotate about yaxis, here sideways)
+	float az = ( n2+n3-n1-n4 ); // /2?
+	float bz = ( o2+o3-o1-o4 ); // /2?
+	CLfvector a( (bb->c[2].x+bb->c[3].x)/2,(bb->c[2].y+bb->c[3].y)/2,az );
+	CLfvector b( (bb->c[2].x+bb->c[3].x)/2,(bb->c[2].y+bb->c[3].y)/2,bz );
+	//~ if(az-bz>=0) ya = -(a%b);
+	//~ else ya = (a%b);
+	ya = az-bz;
+	
+	//*
+	
+	//calc x angle xa (rotate about xaxis, here forback)
 	float cz = ( n3+n4-n1-n2 ); // /2?
 	float dz = ( o3+o4-o1-o2 ); // /2?
 	CLfvector c( (-p1.x+p4.x),(-p1.y+p4.y),cz );
 	CLfvector d( (-p1.x+p4.x),(-p1.y+p4.y),dz );
-	xa = -(c % d);
-	//*
-	
-	//calc z difference in bbox center between current and last
-	//if(r==0) //activate when working correctly
-	zd = (n1+n2+n3+n4-o1-o2-o3-o4)/4;
+	//~ mp = CLmath::sign(cz-dz);
+	//~ switch(mp)
+	//~ {
+		//~ case 0: xa = 0;
+		//~ case -1: xa = -(c % d);
+		//~ case 1: xa = (c % d);
+	//~ }
+	xa = cz-dz;
 	//*
 
 	return r;
