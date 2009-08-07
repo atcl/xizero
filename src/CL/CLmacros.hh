@@ -9,15 +9,34 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 
-
-xlong inline x800(xlong f)
+xlong inline x20(xlong f)
 {
-	return ( (f<<9) + (f<<8) + (f<<5) );
+	return ( (f<<4) + (f<<2) );
+}
+
+xlong inline x40(xlong f)
+{
+	return ( (f<<5) + (f<<3) );
+}
+
+xlong inline x180(xlong f)
+{
+	return ( (f<<7) + (f<<5) + (f<<4) + (f<<2) );
+}
+
+xlong inline x360(xlong f)
+{
+	return ( (f<<8) + (f<<6) + (f<<5) + (f<<3) );
 }
 
 xlong inline x600(xlong f)
 {
 	return ( (f<<9) + (f<<6) + (f<<4) + (f<<3) );
+}
+
+xlong inline x800(xlong f)
+{
+	return ( (f<<9) + (f<<8) + (f<<5) );
 }
 
 void inline tty(const xchar* c="\n")

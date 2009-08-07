@@ -176,9 +176,9 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 		//if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
 		
 		//rotate x about xangle,y about yangle
-		//cllinear->rotate(xangle,0,0);
-		if(CLmath::absolute(xangle)>0.1) CLsystem::print(xangle);
-		if(CLmath::absolute(yangle)>0.1) CLsystem::print(yangle);
+		//if(CLmath::absolute(xangle)>0.1) cllinear->rotate(xangle,0,0);
+		//if(CLmath::absolute(xangle)>0.1) CLsystem::print(xangle);
+		//if(CLmath::absolute(yangle)>0.1) CLsystem::print(yangle);
 	//*
 
 	//enemy collision check

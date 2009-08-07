@@ -13,14 +13,17 @@
 //BIT flags
 #define SIGNBIT "$0b10000000000000000000000000000000"
 
+//degree to radian and vice versa
+#define DEGTORAD M_PI/180
+#define RADTODEG 180/M_PI
 
 namespace CLmath
 {
 	float  fxpi;
 	float* sinarray;
 	float* cosarray;
-	float* arcsinarray;
-	float* arccosarray;
+	xlong* arcsinarray;
+	xlong* arccosarray;
 
 	void init();
 	template<typename T> T sign(T x);
@@ -49,17 +52,15 @@ void CLmath::init()
 {
 	fxpi = 355/113;
 
-	float degtorad = M_PI/180;
-
 	sinarray = new float[360];
 	cosarray = new float[360];
-	arcsinarray = new float[360];
-	arccosarray = new float[360];
+	arcsinarray = new xlong[360];
+	arccosarray = new xlong[360];
 
 	for(xlong i=0; i<360; i++)
 	{
-		sinarray[i] = std::sin(i*degtorad);
-		cosarray[i] = std::cos(i*degtorad);
+		sinarray[i] = std::sin(i*DEGTORAD);
+		cosarray[i] = std::cos(i*DEGTORAD);
 		arcsinarray[i] = 0;
 		arccosarray[i] = 0;
 	}
@@ -189,12 +190,12 @@ float CLmath::cos(xlong x)
 
 float CLmath::arcsin(float x)
 { 
-	return std::asin(x) * 180 / M_PI; //!change to lookup table!
+	return std::asin(x) * RADTODEG; //!change to lookup table!
 }
 
 float CLmath::arccos(float x)
 {
-	return std::acos(x) * 180 / M_PI; //!change to lookup table!
+	return std::acos(x) * RADTODEG; //!change to lookup table!
 }
 
 float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)

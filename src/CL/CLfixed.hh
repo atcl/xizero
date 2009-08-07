@@ -210,7 +210,7 @@ xfixed xfixed::operator/(xshort& a)
 
 bool xfixed::operator==(xfixed& a)
 {
-	return !(r->i ^ a.i);
+	return !(this->i ^ a.i);
 }
 
 //friends:
