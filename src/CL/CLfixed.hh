@@ -208,6 +208,11 @@ xfixed xfixed::operator/(xshort& a)
 	return r;
 }
 
+bool xfixed::operator==(xfixed& a)
+{
+	return !(r->i ^ a.i);
+}
+
 //friends:
 
 xfixed operator+(short& a,xfixed& b)

@@ -19,6 +19,7 @@ class CLprogress : public CLguibase
 		xlong end;
 		bool  text;
 		bool  flat;
+		bool  horver;
 		
 	public:
 		CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f,bool t);
