@@ -116,13 +116,13 @@ T CLmath::round(T x)
 template<typename T>
 T CLmath::roundup(T x)
 {
-	return xlong(ceil(x));
+	return T(ceil(x));
 }
 
 template<typename T>
 T CLmath::rounddown(T x)
 {
-	return xlong(floor(x));
+	return T(floor(x));
 }
 
 template<typename T>

@@ -34,6 +34,8 @@ class CLplayer : public virtual CLcl
 		CLfvector speeddir;
 		CLfvector tilt; //meaning mainly z-tilt (ie on ramps)
 		
+		float xangle;
+		float yangle;
 		xlong chassisangle;
 		xlong towerangle;
 		xlong ammotypecount;
@@ -158,8 +160,6 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 
 	//terrain collision test
-	float xangle = 0;
-	float yangle = 0;
 	float zdiff  = 0;
 	xlong tc = CLgame::terrain(ll,boundingbox[0],oboundingbox[0],tposition,position,xangle,yangle,zdiff); //terrain collision check: (check if player collides with terrain block)
  
@@ -172,13 +172,13 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 	
 	//temp
-	if(zdiff>-1) tposition.z += zdiff;
+	if(CLmath::absolute(zdiff)>1) tposition.z = zdiff-12;
 		//if(zdiff!=0) { CLsystem::print("z level change: ",0); CLsystem::print(zdiff); }
 		
 		//rotate x about xangle,y about yangle
-		//if(CLmath::absolute(xangle)>0.1) cllinear->rotate(xangle,0,0);
-		//if(CLmath::absolute(xangle)>0.1) CLsystem::print(xangle);
-		//if(CLmath::absolute(yangle)>0.1) CLsystem::print(yangle);
+		if(CLmath::absolute(xangle)>=1) cllinear->rotate(xangle,yangle,0);
+		//if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
+		//if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
 
 	//enemy collision check
@@ -275,6 +275,9 @@ CLplayer::CLplayer(xchar* playerlib,CLlvector& s,xlong p)
 	lastupdate[1] = CLsystem::getmilliseconds();
 	lastupdate[2] = CLsystem::getmilliseconds();
 	//*
+	
+	xangle=0;
+	yangle=0;
 	
 	delete pini;
 }
@@ -432,6 +435,9 @@ void CLplayer::display(xlong mark)
 	sposition.x = position.x;
 	sposition.y = position.y - mark;
 	sposition.z = position.z;
+	
+	//sposition = CLmisc3d::project(sposition);
+	
 	model[0]->display(sposition,FLAT + AMBIENT);
 	model[1]->display(sposition,FLAT + AMBIENT);
 	//*
@@ -470,6 +476,7 @@ void CLplayer::showbox(xlong mark)
 	
 	CLgfx1::drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
 	CLgfx1::drawbigpixel(d.x,d.y,0);
+	CLgfx1::drawbigpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0);
 }
 //*
 

@@ -14,6 +14,7 @@
 
 namespace CLmisc3d
 {
+	template<class clvector>clvector& project(const clvector& v);
 	template<class clvector>clvector& project(const clvector& v,const clvector& p);
 	template<class clvector>void draw3dpixel(clvector& p,uxlong c);
 	template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
@@ -21,11 +22,33 @@ namespace CLmisc3d
 	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
 
+template<class clvector>
+clvector& CLmisc3d::project(const clvector& v)
+{
+	clvector* r = new clvector;
+	
+	float px = xres>>1;
+	float py = yres>>1;
+	
+	if(v.z > 0)
+	{
+		v.print();
+		r->x = xlong( ( prjx * (v.x / v.z ) ) + v.x );
+		r->y = xlong( ( -prjy * (v.y / v.z ) ) + v.y );
+		r->z = v.z;
+		r->print();
+	}
+	else
+	{
+		CLsystem::exit(1,0,__func__,"Invalid z value: ",v.z);
+	}
+	
+	return *r;
+}
 
 template<class clvector>
 clvector& CLmisc3d::project(const clvector& v,const clvector& p)
 {
-	//rewrite!!
 	clvector* r = new clvector;
 	
 	if(v.z > 0)
