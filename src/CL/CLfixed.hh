@@ -213,6 +213,11 @@ bool xfixed::operator==(xfixed& a)
 	return !(this->i ^ a.i);
 }
 
+bool xfixed::operator!=(xfixed& a)
+{
+	return (this->i ^ a.i);
+}
+
 //friends:
 
 xfixed operator+(short& a,xfixed& b)

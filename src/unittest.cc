@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	//test section:
 		CLdoublebuffer->clear(0);
 	//
-	
+
 		//test tga loading:
 			
 			CLfile* fonttga = CLsystem::getfile("../dat/other/CLteletype.fnt");
