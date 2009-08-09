@@ -182,9 +182,7 @@ xlong CLplayer::collision(CLfbuffer* ll,xlong m)
 	//*
 
 	//enemy collision check
-	
-		//...
-	
+
 	//*
 
 	return r;

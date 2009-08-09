@@ -28,8 +28,9 @@ namespace CLmath
 	void init();
 	template<typename T> T sign(T x);
 	template<typename T> T heaviside(T x);
-	template<typename T> T absolute(T x); //with logic operators, without ifs
-	                 float absolute(float x);
+	template<typename T> T absolute(T x);
+	template<>       float absolute<float>(float x);
+	template<typename T> T delta(T x);
 	template<typename T> T min(T a,T b);
 	template<typename T> T max(T a,T b);
 	template<typename T> T round(T x);
@@ -89,9 +90,18 @@ T CLmath::absolute(T x)
 	return x;
 }
 
-float CLmath::absolute(float x)
+template<>
+float CLmath::absolute<float>(float x)
 {
 	__asm__ __volatile__ ("btrl $31,%%eax;" : "=a"(x) : "a"(x) );
+	return x;
+}
+
+template<typename T>
+T CLmath::delta(T x)
+{
+	//only xlong
+	__asm__ __volatile__ ("xorl %%ebx,%%ebx; orl $0,%%eax; setz %%bl ;" : "=b"(x) : "a"(x) );
 	return x;
 }
 

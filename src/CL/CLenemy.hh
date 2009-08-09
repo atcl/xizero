@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLENEMY
 #define HH_CLENEMY
-//#pragma message "Compiling " __FILE__ " ! TODO: interaction, see player for ctor and attr"
+//#pragma message "Compiling " __FILE__ " ! TODO: "
 
 
 #include "CLtypes.hh"
@@ -72,6 +72,8 @@ class CLenemy : public virtual CLcl
 		void shadow(xlong mark);
 		xlong gethealth();
 		xlong getshield();
+		CLfvector& getposition();
+		CLbox* getboundingbox();
 		xlong getx();
 		xlong gety();
 		xlong getz();
@@ -448,6 +450,16 @@ xlong CLenemy::gethealth()
 xlong CLenemy::getshield()
 {
 	return shield;
+}
+
+CLfvector& CLenemy::getposition()
+{
+	return position;
+}
+
+CLbox* CLenemy::getboundingbox()
+{
+	return boundingbox;
 }
 
 xlong CLenemy::getx()

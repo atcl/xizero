@@ -8,6 +8,9 @@
 #include "CLlist.hh"
 #include "CLsprites.hh"
 #include "CLgame.hh"
+#include "CLmath.hh"
+//~ #include "CLplayer.hh"
+//~ #include "CLenemy.hh"
 
 
 struct CLammo
@@ -32,7 +35,9 @@ class CLammomanager : public virtual CLcl
 		~CLammomanager();
 		
 		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction,xlong mark);
-		void update();
+		xlong update();
+		//xlong update(CLplayer* p);
+		//xlong update(CLenemy* e);
 		void display();
 };
 
@@ -74,8 +79,9 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 	}
 }
 
-void CLammomanager::update()
+xlong CLammomanager::update()
 {
+	xlong r = 0;
 	xlong time = CLsystem::getmilliseconds();
 
 	if(time >= lastupdate + 20)
@@ -94,7 +100,67 @@ void CLammomanager::update()
 		}
 		lastupdate = time;
 	}
+	
+	return r;
 }
+
+//~ xlong CLammomanager::update(CLplayer* p)
+//~ {
+	//~ xlong r = 0;
+	//~ xlong time = CLsystem::getmilliseconds();
+//~ 
+	//~ if(time >= lastupdate + 20)
+	//~ {
+		//~ for(int i=0; i<ammolist->getlength();i++)
+		//~ {
+			//~ ammolist->setindex(i);
+			//~ currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+			//~ if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
+			//~ else if(CLgame::collision(p->getposition(),*(p->getboundingbox()),currammo->p,CLmath::delta(i))!=0)
+			//~ {
+				//~ 
+			//~ }
+			//~ else
+			//~ {
+				//~ currammo->p.x += currammo->s.x;
+				//~ currammo->p.y -= currammo->s.y;
+				//~ currammo->p.z += currammo->s.z;
+			//~ }
+		//~ }
+		//~ lastupdate = time;
+	//~ }
+	//~ 
+	//~ return r;
+//~ }
+
+//~ xlong CLammomanager::update(CLenemy* e)
+//~ {
+	//~ xlong r = 0;
+	//~ xlong time = CLsystem::getmilliseconds();
+//~ 
+	//~ if(time >= lastupdate + 20)
+	//~ {
+		//~ for(int i=0; i<ammolist->getlength();i++)
+		//~ {
+			//~ ammolist->setindex(i);
+			//~ currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+			//~ if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
+			//~ else if(CLgame::collision(e->getposition(),*(e->getboundingbox()),currammo->p,CLmath::delta(i))!=0)
+			//~ {
+				//~ 
+			//~ }
+			//~ else
+			//~ {
+				//~ currammo->p.x += currammo->s.x;
+				//~ currammo->p.y -= currammo->s.y;
+				//~ currammo->p.z += currammo->s.z;
+			//~ }
+		//~ }
+		//~ lastupdate = time;
+	//~ }
+	//~ 
+	//~ return r;
+//~ }
 
 void CLammomanager::display()
 {
