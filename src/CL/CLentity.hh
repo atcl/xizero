@@ -13,32 +13,31 @@
 #include "CLapi.hh"
 #include "CLformat.hh"
 
-
+template<int I>
 class CLentity : public virtual CLcl
 {
 	protected:
 		CLmatrix* linear;
 		CLammomanager* ammoman;
-		CLobject** model;
+		CLobject* model[I];
 		xmap* def;
 		xlong* csv;
 		
-		CLbox** boundingbox[2];
+		CLbox* boundingbox[2][I];
 		CLfvector position;
 		CLfvector tposition;
 		CLlvector sposition;
-		CLfvector* direction;
+		CLfvector direction[I];
 		CLfvector speed;
 		CLfvector speeddir;
-		CLfvector* angles;
-		uxlong models;
+		CLfvector angles[I];
 		xlong* mark;
 		xlong gear;
 		xlong active;
 		xlong lastupdate;
 		
-		xlong ammotypecount;
-		CLlvector* ammotypes;
+		xlong ammomounts;
+		xlong* ammotype;
 		xlong* firerate;
 		xlong health;
 		xlong shield;
@@ -47,24 +46,27 @@ class CLentity : public virtual CLcl
 		xlong points;
 		
 		void setspeed();
-		void fire();
-		void hit();
-		void pretransform(xlong m);
-		void transform(xlong m);
-		xlong collision();
+		void fire(xlong at,xlong d,xlong i,xlong m=0);
+		void pretransform() virtual;
+		void transform() virtual;
+		xlong collision() virtual;
 	
 	public:
 		CLentity(CLfile* entitya,xlong* markptr);
+		CLentity(CLentity* entityptr);
 		~CLentity();
 		
-		xlong update();
+		xlong update() virtual;
 		void display(bool modelorshadow=0);
+		
+		void hit(xlong h) health -= h;
 		xlong gethealth() return health;
 		xlong getshield() return shield;
 		CLfvector* getposition() return &position
 		CLbox* getboundingbox() return boundingbox[0][0];
 };
 
+template<int I>
 void CLentity::setspeed()
 {
 	switch(gear)
@@ -75,31 +77,20 @@ void CLentity::setspeed()
 	}
 }
 
-void CLentity::fire()
+template<int I>
+void CLentity::fire(xlong at,xlong d,xlong i,xlong m)
 {
-	
+	if( (d+i)>=ammomounts && m>=I) return;
+	CLfvector startposition = position;
+	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
+	startposition.x = ammodocking->x;
+	startposition.y = ammodocking->y;
+	startposition.z += ammodocking->z;
+	startposition = CLmisc3d::project(startposition,position);
+	ammoman->fire(at,startposition,direction[m],mark);
 }
 
-void CLentity::hit()
-{
-	
-}
-
-void CLentity::pretransform(xlong m)
-{
-	
-}
-
-void CLentity::transform(xlong m)
-{
-	
-}
-
-xlong CLentity::collision()
-{
-	
-}
-
+template<int I>
 CLentity::CLentity(CLfile* ea,xlong* markptr)
 {
 	//create transformation matrix
@@ -114,20 +105,8 @@ CLentity::CLentity(CLfile* ea,xlong* markptr)
 	arfile* entitya = CLformat::loadar(ea);
 	//*
 
-	//count models
-	while(CLutils::findarmember(entitya,".y3d")!=-1)
-	{
-		models++;
-	}
-	model = new CLobject*[models];
-	boundingbox[0] = new CLbox*[models]; 
-	boundingbox[1] = new CLbox*[models]; 
-	direction = new CLfvector[models];
-	angles = new CLfvector[models];
-	//*
-
 	//for each model
-	for(uxlong i=0; i<models; i++)
+	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
 		xlong em = CLutils::findarmember(entitya,xchar(48+i)".y3d");
@@ -157,14 +136,21 @@ CLentity::CLentity(CLfile* ea,xlong* markptr)
 	shield		= CLsystem::ato((*def)["shield"]);
 	shieldrate	= CLsystem::ato((*def)["shieldrate"]);
 	armor		= CLsystem::ato((*def)["armor"]);
+	ammomounts	= CLsystem::ato((*def)["ammomounts"]);
 	//*
 	
 	//load ammo types
-	
+	ammotype = new xlong[ammomounts];
+	firerate = new xlong[ammomounts];
+	for(uxlong j=0; j<ammomounts; j++)
+	{
+		ammotype[j] = CLsystem::ato((*def)["ammotype"xchar(j)]);
+		firerate[j] = CLsystem::ato((*def)["firerate"xchar(j)]);
+	}
 	//*
 	
 	//create ammo manager
-	
+	ammoman = new CLammomanager(ammomounts,ammotype);
 	//*
 	
 	//load csv if present (*.csv)
@@ -176,35 +162,91 @@ CLentity::CLentity(CLfile* ea,xlong* markptr)
 	angles = 0;
 	speed = 0;
 	gear = 0;
-	lastupdate[2] = CLsystem::getmilliseconds();
+	lastupdate = CLsystem::getmilliseconds();
 	//*
 }
 
+template<int I>
+CLentity::CLentity(CLentity* entityptr)
+{
+	
+}
+
+template<int I>
 CLentity::~CLentity()
 {
 	delete linear;
-	for(uxlong i=0; i<models; i++)
-	{
-		delete model[i];
-		delete boundingbox[1];
-		delete model;
-		delete boundingbox[0]; 
-		delete boundingbox[1];
-		delete direction;
-		delete angles;
-	}
+	delete ammoman;
+	delete[] model;
+	delete[] boundingbox[0];
+	delete[] boundingbox[1]; 
+	delete[] ammotype;
+	delete[] firerate;
 	
 	//...
 }
 
-xlong CLentity::update()
-{
-	
-}
-
+template<int I>
 void CLentity::display(bool modelorshadow)
 {
+	//set screen position
+	sposition.x = position.x;
+	sposition.y = position.y - *mark;
+	sposition.z = position.z;
+	//sposition = CLmisc3d::project(sposition); //fix point projections
+	//*
 	
+	switch(modelorshadow)
+	{
+		case 0:
+			//display model(s)
+			for(uxlong i=0; i<I; i++) model[i]->display(sposition,FLAT + AMBIENT);
+			//*
+			
+			//display ammo
+			ammoman->display();
+			//*
+		break;
+		
+		case 1:
+			//display shadow(s)
+			for(uxlong i=0; i<I; i++) model[i]->display(sposition,SHADOW);
+			//*
+		break;
+	}
 }
+
+//********
+
+class CLplayer : CLentity<2>
+{
+	private:
+		void pretransform();
+		void transform();
+		xlong collision();
+	
+	public:
+		CLplayer();
+		~CLplayer();
+		
+		xlong update();
+};
+
+//********
+
+class CLenemy : CLentity<1>
+{
+	private:
+		void pretransform();
+		void transform();
+		xlong collision();
+	
+	public:
+		CLenemy();
+		CLenemy();
+		~CLenemy();
+		
+		xlong update();
+};
 
 #endif
