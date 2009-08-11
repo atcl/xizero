@@ -11,6 +11,8 @@
 #include "CLmath.hh"
 
 
+template<int I> class CLentity; //forward declaration
+
 struct CLammo
 {
 	void(*comsprite)(xlong x,xlong y);
@@ -23,7 +25,6 @@ class CLammomanager : public virtual CLcl
 	private:
 		CLlist* ammolist;
 		CLammo** ammotype;
-		CLammo* currammo;
 		xlong ammotypecount;
 		float ammospeed;
 		xlong lastupdate;
@@ -34,7 +35,7 @@ class CLammomanager : public virtual CLcl
 		
 		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction,xlong mark);
 		xlong update();
-		//xlong update(CLentity* e);
+		template<int I>xlong update(CLentity<I>* e);
 		void display();
 };
 
@@ -67,7 +68,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 {
 	if(at<=ammotypecount)
 	{
-		currammo = new CLammo();
+		CLammo* currammo = new CLammo();
 		currammo->comsprite = ammotype[at]->comsprite;
 		currammo->p = startposition;
 		currammo->p.y -= mark;
@@ -83,6 +84,7 @@ xlong CLammomanager::update()
 
 	if(time >= lastupdate + 20)
 	{
+		CLammo* currammo = 0;
 		for(int i=0; i<ammolist->getlength();i++)
 		{
 			ammolist->setindex(i);
@@ -101,37 +103,42 @@ xlong CLammomanager::update()
 	return r;
 }
 
-//~ xlong CLammomanager::update(CLentity* e)
-//~ {
-	//~ xlong r = 0;
-	//~ xlong time = CLsystem::getmilliseconds();
-//~ 
-	//~ if(time >= lastupdate + 20)
-	//~ {
-		//~ for(int i=0; i<ammolist->getlength();i++)
-		//~ {
-			//~ ammolist->setindex(i);
-			//~ currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			//~ if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
-			//~ else if(CLgame::collision(e->getposition(),*(e->getboundingbox()),currammo->p,CLmath::delta(i))!=0)
-			//~ {
-				//~ 
-			//~ }
-			//~ else
-			//~ {
-				//~ currammo->p.x += currammo->s.x;
-				//~ currammo->p.y -= currammo->s.y;
-				//~ currammo->p.z += currammo->s.z;
-			//~ }
-		//~ }
-		//~ lastupdate = time;
-	//~ }
-	//~ 
-	//~ return r;
-//~ }
+template<int I>
+xlong CLammomanager::update(CLentity<I>* e)
+{
+	xlong r = 0;
+	xlong time = CLsystem::getmilliseconds();
+
+	if(time >= lastupdate + 20)
+	{
+		CLammo* currammo = 0;
+		for(int i=0; i<ammolist->getlength();i++)
+		{
+			ammolist->setindex(i);
+			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+			if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
+			else if(CLgame::collision(e->getposition(),*(e->getboundingbox()),currammo->p,CLmath::delta(i))!=0)
+			{
+				r++;
+				ammolist->delcurrent(0);
+				i--;
+			}
+			else
+			{
+				currammo->p.x += currammo->s.x;
+				currammo->p.y -= currammo->s.y;
+				currammo->p.z += currammo->s.z;
+			}
+		}
+		lastupdate = time;
+	}
+	
+	return r;
+}
 
 void CLammomanager::display()
 {
+	CLammo* currammo = 0;
 	for(int i=0; i<ammolist->getlength();i++)
 	{
 		ammolist->setindex(i);

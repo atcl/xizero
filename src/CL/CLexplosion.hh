@@ -52,7 +52,10 @@ CLexplosion::CLexplosion(CLobject* o)
 	//cllinear->dyadic(a,b);
 }
 
-CLexplosion::~CLexplosion() { }
+CLexplosion::~CLexplosion()
+{ 
+	delete cllinear;	
+}
 
 void CLexplosion::next()
 {

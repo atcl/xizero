@@ -50,7 +50,7 @@ void setto() { }
 //CLmath.acos,asin mit lookup tables
 //template version of CLsystem.ato
 //flatshade in asm
-//terrain dep transformations and zlevel
+//terrain dep transformations
 //CLgfx1.drawsprite ao: transparency check with logic-ops instead of if
 //bump mapping
 

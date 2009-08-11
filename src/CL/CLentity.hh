@@ -61,7 +61,7 @@ class CLentity : public virtual CLcl
 	public:
 		CLentity(CLfile* entitya,xlong* markptr);
 		CLentity(CLentity* entityptr);
-		~CLentity();
+		virtual ~CLentity();
 		
 		//virtual xlong update() = 0;
 		void display(bool modelorshadow=0);

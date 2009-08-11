@@ -48,7 +48,7 @@ namespace CLgfx1
 	void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0);
 	void drawscreen(sprite* s);
 	void drawtile(xlong x,xlong y,sprites *s,xlong ti);
-}
+};
 
 
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)

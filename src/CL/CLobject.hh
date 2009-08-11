@@ -321,7 +321,7 @@ void CLobject::update(CLmatrix* m)
 
 void CLobject::display(CLlvector p,xshort flags)
 {
-	CLfvector currnormal;
+	CLfvector currnormal = CLfvector();
 	
 	if(flags&SHADOW)
 	{
