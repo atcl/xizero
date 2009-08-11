@@ -64,7 +64,7 @@ int main()
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
 				CLmisc3d::drawzbuffer(testlevel->getlandscape(),dis);
-				testlevel->getplayer()->showbox(testlevel->getmark());
+				testlevel->getplayer()->showbox();
 				break;
 
 			case 3:

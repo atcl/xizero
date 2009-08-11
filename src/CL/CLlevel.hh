@@ -234,7 +234,8 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 
 	//create player
-	player = new CLplayer(playerlib,playerp);
+	CLfile* playera = CLsystem::getfile(playerlib);
+	player = new CLplayer(playera,&smoothmark,playerp);
 	playerscreenylevel = 3*(yres>>2);
 	//*
 
@@ -252,7 +253,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	CLenemy** baseenemies = new CLenemy*[differentenemies];
 	for(uxlong k=0; k<enemiesa->filecount; k++)
 	{
-		baseenemies[k] = new CLenemy(enemiesa->members[k]);
+		baseenemies[k] = new CLenemy(enemiesa->members[k],&smoothmark);
 	}
 	//*
 	
@@ -300,7 +301,7 @@ CLlevel::~CLlevel()
 void CLlevel::update(xchar input,xchar turbo)
 {
 	//update player
-	player->update(input,turbo,levellandscape,smoothmark);
+	player->update(input,turbo,levellandscape);
 	//*
 	
 	//update enemies
@@ -310,7 +311,7 @@ void CLlevel::update(xchar input,xchar turbo)
 	{
 		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		isenemydead = currentenemy->update(smoothmark,player);
+		isenemydead = currentenemy->update(player);
 		if(isenemydead!=0)
 		{
 			delete static_cast<CLenemy*>(enemies->delcurrent(1));
@@ -319,7 +320,7 @@ void CLlevel::update(xchar input,xchar turbo)
 	//*
 	
 	//adjust section of level to be displayed by ("new") player position
-	xlong py = player->gety();
+	xlong py = player->getposition()->y;
 	if(py<playerscreenylevel) setmark(smoothmarkmin);
 	else if(py>(smoothmarkmax+playerscreenylevel)) setmark(smoothmarkmax);
 	else setmark(py - playerscreenylevel);
@@ -400,18 +401,18 @@ void CLlevel::display()
 	CLenemy* currentenemy;
 	
 	//cast shadows of entities
-	player->shadow(smoothmark);
+	player->display(1);
 	for(uxlong i=0; i<enemies->getlength();i++)
 	{
 		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		currentenemy->shadow(smoothmark);
+		currentenemy->display(1);
 	}
 	CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 	//*
 
 	//display player:
-	player->display(smoothmark);
+	player->display();
 	//*
 	
 	//display enemies:
@@ -419,7 +420,7 @@ void CLlevel::display()
 	{
 		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		currentenemy->display(smoothmark);
+		currentenemy->display();
 	}
 	//*
 }

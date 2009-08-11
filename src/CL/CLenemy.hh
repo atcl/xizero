@@ -8,16 +8,214 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
-#include "CLcl.hh"
 #include "CLapi.hh"
 #include "CLgame.hh"
-#include "CLformat.hh"
 #include "CLammo.hh"
+#include "CLentity.hh"
 #include "CLplayer.hh"
-#include "CLdiv3d.hh"
 
 
-class CLenemy : public virtual CLcl
+class CLenemy : public CLentity<1>
+{
+	private:
+		xlong* aiarray;
+		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon 
+		xlong aggrolevel;
+		CLbox* aggrobox;
+	
+		void pretransform();
+		void transform();
+		xlong collision();
+	
+	public:
+		CLenemy(CLfile* enemya,xlong* m);
+		CLenemy(CLenemy* enemyptr,CLlvector& enemyp);
+		~CLenemy();
+		
+		xlong update(CLplayer* p);
+};
+
+void CLenemy::pretransform()
+{
+	//transform enemy bounding box
+	boundingbox[1][0]->c[0] = linear->transform(boundingbox[1][0]->c[0]);
+	boundingbox[1][0]->c[1] = linear->transform(boundingbox[1][0]->c[1]);
+	boundingbox[1][0]->c[2] = linear->transform(boundingbox[1][0]->c[2]);
+	boundingbox[1][0]->c[3] = linear->transform(boundingbox[1][0]->c[3]);
+	boundingbox[1][0]->c[4] = linear->transform(boundingbox[1][0]->c[4]);
+	boundingbox[1][0]->c[5] = linear->transform(boundingbox[1][0]->c[5]);
+	boundingbox[1][0]->c[6] = linear->transform(boundingbox[1][0]->c[6]);
+	boundingbox[1][0]->c[7] = linear->transform(boundingbox[1][0]->c[7]);
+	//*
+}
+
+void CLenemy::transform()
+{
+	//transform enemy
+	model[0]->update(linear);
+	direction[0] = linear->transform(direction[0]);
+	speeddir = linear->transform(speeddir);
+	//*
+}
+
+xlong CLenemy::collision()
+{
+	xlong r = 0;
+
+	//screen boundary collision test
+	tposition.y -= *mark;
+	xlong bc = CLgame::boundary(tposition,*boundingbox[1][0],1);
+	tposition.y += *mark;
+
+	if(bc==0)
+	{
+		visible = 1;
+	}
+	//*
+	
+	return r;
+}
+
+CLenemy::CLenemy(CLfile* enemya,xlong* m) : CLentity<1>(enemya,m)
+{
+	//load enemy ai
+	aitype = csv[1];
+	aggrolevel = csv[2];
+	aiarray = &csv[3];
+	//*
+	
+	//create agrobox
+	aggrobox = new CLbox;
+	aggrobox->c[0] = aggrobox->c[4] = CLfvector(boundingbox[0][0]->c[0].x,boundingbox[0][0]->c[0].y,0);
+	aggrobox->c[1] = aggrobox->c[5] = CLfvector(boundingbox[0][0]->c[3].x,boundingbox[0][0]->c[0].y,0);
+	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox[0][0]->c[3].x,yres>>1,0);
+	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox[0][0]->c[0].x,yres>>1,0);
+	//*
+	
+	//set enemy specific attributes
+	points = CLsystem::ato((*def)["points"]);
+	speeddir.y  = CLsystem::ato((*def)["speed"]);
+	direction[0].y = -1;
+	visible = 0;
+	//*
+}
+
+CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
+{
+	//set and adjust (start) position to floating X pixel above ground
+	position = enemyp;
+	position.z = 100 - position.z - 12 - 30;
+	tposition = position;
+	//*
+	
+	//load enemy ai
+	aitype = enemyptr->aitype;
+	aggrolevel = enemyptr->aggrolevel;
+	aiarray = enemyptr->aiarray;
+	//*
+	
+	//create agrobox
+	aggrobox = new CLbox;
+	aggrobox->c[0] = aggrobox->c[4] = CLfvector(boundingbox[0][0]->c[0].x,boundingbox[0][0]->c[0].y,0);
+	aggrobox->c[1] = aggrobox->c[5] = CLfvector(boundingbox[0][0]->c[3].x,boundingbox[0][0]->c[0].y,0);
+	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox[0][0]->c[3].x,yres>>1,0);
+	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox[0][0]->c[0].x,yres>>1,0);
+	//*
+	
+	//set enemy specific attributes
+	points = enemyptr->points;
+	speeddir.y  = enemyptr->speeddir.y; //signed in ini
+	direction[0].y = -1; //through sign of speed
+	visible = 0;
+	//*	
+}
+
+CLenemy::~CLenemy()
+{
+	delete def;
+	delete[] aiarray;
+	delete aggrobox;
+}
+
+xlong CLenemy::update(CLplayer* p)
+{
+	//check if to activate
+	if(active!=1 && ( (*mark)-100)<position.y)
+	{
+		active=1;
+	}
+	//*
+	
+	//check if destroyed (return points)
+	
+	//*
+	
+	//check if level is left (return -1)
+	
+	//*
+	
+	if(active==1)
+	{
+		ammoman->update();
+
+		xlong time = CLsystem::getmilliseconds();
+
+		linear->unit();
+		
+		//update enemy through ai array
+		switch(aitype)
+		{
+			case 0: gear=1; setspeed(); break;
+		}		
+		//*
+		
+		//fire at player?
+		xlong fc = CLgame::collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
+		if( fc != 0 )
+		{
+			if(time >= fireupdate[0] + firerate[0])
+			{
+				fire(0,4,0);
+				fire(0,4,1);
+				fireupdate[0] = time;
+			}
+		}
+
+		//update test position
+		if(time >= lastupdate + 20)
+		{
+			tposition.x = position.x - speed.x;
+			tposition.y = position.y + speed.y;
+			tposition.z = position.z + speed.z;
+			
+			lastupdate = time;
+		}
+		//*
+
+		//check if test position doesn't collide with anything
+		if(collision()==0)
+		{	
+			transform();
+			position = tposition;
+		}
+		//*
+		
+		//if collision reset bounding box to state before pretransformation
+		else
+		{
+			*boundingbox[1] = *boundingbox[0];
+		}
+		//*
+	}
+	
+	return 0;
+}
+
+
+//******** old:
+
+
+/*class CLenemy : public virtual CLcl
 {
 	protected:
 		CLobject* model;
@@ -359,7 +557,7 @@ xlong CLenemy::update(xlong mark,CLplayer* p)
 		//*
 		
 		//fire at player?
-		xlong fc = CLgame::collision(position,*aggrobox,p->getposition(),*(p->getboundingbox()),1);
+		xlong fc = CLgame::collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
 		if( fc != 0 )
 		{
 			if(time >= lastupdate[1] + firerate[0])
@@ -475,7 +673,7 @@ xlong CLenemy::gety()
 xlong CLenemy::getz()
 {
 	return position.z;
-}
+}*/
 
 #endif
 
