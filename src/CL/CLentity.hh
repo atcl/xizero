@@ -71,6 +71,7 @@ class CLentity : public virtual CLcl
 		xlong getshield() { return shield; }
 		CLfvector* getposition() { return &position; }
 		CLbox* getboundingbox() { return boundingbox[0][0]; }
+		bool isvisible() { return visible; } 
 };
 
 template<int I>
@@ -181,6 +182,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr)
 	speeddir = 0;
 	speed = 0;
 	gear = 0;
+	visible = 0;
+	active = 0;
 	lastupdate = CLsystem::getmilliseconds();
 	//*
 }
@@ -253,6 +256,8 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	speeddir = 0;
 	speed = 0;
 	gear = 0;
+	visible = 0;
+	active = 0;
 	lastupdate = CLsystem::getmilliseconds();
 	//*
 }

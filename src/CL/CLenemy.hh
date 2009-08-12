@@ -95,7 +95,6 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m) : CLentity<1>(enemya,m)
 	points = CLsystem::ato((*def)["points"]);
 	speeddir.y  = CLsystem::ato((*def)["speed"]);
 	direction[0].y = -1;
-	visible = 0;
 	//*
 }
 
@@ -125,7 +124,6 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
 	points = enemyptr->points;
 	speeddir.y  = enemyptr->speeddir.y;
 	direction[0].y = -1;
-	visible = 0;
 	//*	
 }
 
@@ -155,7 +153,9 @@ xlong CLenemy::update(CLplayer* p)
 	
 	if(active==1)
 	{
-		ammoman->update();
+		xlong temp;
+		temp = ammoman->update(p);
+		if(temp!=0) say(temp);
 
 		xlong time = CLsystem::getmilliseconds();
 

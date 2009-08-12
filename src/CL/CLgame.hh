@@ -82,6 +82,8 @@ bool CLgame::boundary(const clvector& p,const CLbox& bb,bool c)
 template<class clvector>
 xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 {
+	//! todo ! make work !
+	
 	//calc levelposition of bounding box
 	CLlvector a1( (p.x + bb.c[0].x), (p.y - bb.c[0].y), (p.z + bb.c[0].z) );
 	CLlvector a2( (p.x + bb.c[1].x), (p.y - bb.c[1].y), (p.z + bb.c[1].z) );
@@ -123,16 +125,16 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	//*
 	
 	//check if intersections overlap
-	xlong r = 1;
-	if(intersections2[0]<intersections[0][0] && intersections2[0]<intersections[0][1]) r--;
-	if(intersections2[1]<intersections[1][0] && intersections2[0]<intersections[1][1]) r--;
-	if(intersections2[2]<intersections[2][0] && intersections2[0]<intersections[2][1]) r--;
-	if(intersections2[3]<intersections[3][0] && intersections2[0]<intersections[3][1]) r--;
-	if(intersections2[4]<intersections[4][0] && intersections2[0]<intersections[4][1]) r--;
-	if(intersections2[5]<intersections[5][0] && intersections2[0]<intersections[5][1]) r--;
+	xlong r = 0;
+	if(intersections2[0]<intersections[0][0] && intersections2[0]<intersections[0][1]) r++;
+	if(intersections2[1]<intersections[1][0] && intersections2[0]<intersections[1][1]) r++;
+	if(intersections2[2]<intersections[2][0] && intersections2[0]<intersections[2][1]) r++;
+	if(intersections2[3]<intersections[3][0] && intersections2[0]<intersections[3][1]) r++;
+	if(intersections2[4]<intersections[4][0] && intersections2[0]<intersections[4][1]) r++;
+	if(intersections2[5]<intersections[5][0] && intersections2[0]<intersections[5][1]) r++;
 	//*
-	
-	return 0;
+
+	return r;
 }
 
 template<class clvector>

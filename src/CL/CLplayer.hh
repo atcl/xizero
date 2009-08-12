@@ -133,6 +133,7 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts) : CLen
 	speeddir.y  = -CLsystem::ato((*def)["speed"]);
 	direction[0].y = direction[1].y = 1;
 	active = 1;
+	visible = 1;
 	//*
 }
 

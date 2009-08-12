@@ -117,7 +117,7 @@ xlong CLammomanager::update(CLentity<I>* e)
 			ammolist->setindex(i);
 			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 			if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
-			else if(CLgame::collision(e->getposition(),*(e->getboundingbox()),currammo->p,CLmath::delta(i))!=0)
+			else if(CLgame::collision(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 			{
 				r++;
 				ammolist->delcurrent(0);
