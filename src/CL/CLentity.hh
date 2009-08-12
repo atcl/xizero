@@ -260,6 +260,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 template<int I>
 CLentity<I>::~CLentity<I>()
 {
+	delete def;
 	delete linear;
 	delete ammoman; 
 	delete[] ammotype;
