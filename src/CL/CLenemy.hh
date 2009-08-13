@@ -18,7 +18,7 @@ class CLenemy : public CLentity<1>
 {
 	private:
 		xlong* aiarray;
-		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon 
+		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk
 		xlong aggrolevel;
 		CLbox* aggrobox;
 	
@@ -153,9 +153,8 @@ xlong CLenemy::update(CLplayer* p)
 	
 	if(active==1)
 	{
-		xlong temp;
 		temp = ammoman->update(p);
-		if(temp!=0) say(temp);
+
 
 		xlong time = CLsystem::getmilliseconds();
 
@@ -183,9 +182,9 @@ xlong CLenemy::update(CLplayer* p)
 		//update test position
 		if(time >= lastupdate + 20)
 		{
-			tposition.x = position.x - speed.x;
-			tposition.y = position.y + speed.y;
-			tposition.z = position.z + speed.z;
+			//~ tposition.x = position.x - speed.x;
+			//~ tposition.y = position.y + speed.y;
+			//~ tposition.z = position.z + speed.z;
 			
 			lastupdate = time;
 		}

@@ -91,10 +91,11 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong m)
 	if( (d+i)>=ammomounts && m>=I) return;
 	CLfvector startposition = position;
 	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
-	startposition.x += ammodocking->x;
-	startposition.y -= ammodocking->y;
+	startposition.x = ammodocking->x;
+	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
-	ammoman->fire(at,startposition,direction[m],*mark);
+	CLmisc3d::project(startposition,position);
+	ammoman->fire(at,startposition,direction[m]);
 }
 
 template<int I>

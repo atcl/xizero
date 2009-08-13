@@ -34,7 +34,7 @@ class CLammomanager : public virtual CLcl
 		CLammomanager(xlong atc,xlong* ats,xlong* m);
 		~CLammomanager();
 		
-		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction,xlong mark);
+		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction);
 		xlong update();
 		template<int I>xlong update(CLentity<I>* e);
 		void display();
@@ -66,14 +66,13 @@ CLammomanager::~CLammomanager()
 	delete[] ammotype;
 }
 
-void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction,xlong mark)
+void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction)
 {
 	if(at<=ammotypecount)
 	{
 		CLammo* currammo = new CLammo();
 		currammo->comsprite = ammotype[at]->comsprite;
 		currammo->p = startposition;
-		//~ currammo->p.y -= mark;
 		currammo->s = direction*ammospeed;
 		ammolist->append(currammo,"at" + xchar(at+30) );
 	}
@@ -146,7 +145,6 @@ void CLammomanager::display()
 	{
 		ammolist->setindex(i);
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		//startposition = CLmisc3d::project(startposition,position);
 		currammo->comsprite(currammo->p.x,currammo->p.y-(*mark));
 	}
 }

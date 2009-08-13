@@ -186,9 +186,9 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
 	//check if intersections overlap
 	xlong r = -4;
 	if(intersections2[0]>CLmath::min(intersections[0][0],intersections[0][1]) && intersections2[0]<CLmath::max(intersections[0][0],intersections[0][1])) r++;
-	if(intersections2[1]>CLmath::min(intersections[1][0],intersections[1][1]) && intersections2[0]<CLmath::max(intersections[1][0],intersections[1][1])) r++;
-	if(intersections2[2]>CLmath::min(intersections[2][0],intersections[2][1]) && intersections2[0]<CLmath::max(intersections[2][0],intersections[2][1])) r++;
-	if(intersections2[3]>CLmath::min(intersections[3][0],intersections[3][1]) && intersections2[0]<CLmath::max(intersections[3][0],intersections[3][1])) r++;
+	if(intersections2[1]>CLmath::min(intersections[1][0],intersections[1][1]) && intersections2[1]<CLmath::max(intersections[1][0],intersections[1][1])) r++;
+	if(intersections2[2]>CLmath::min(intersections[2][0],intersections[2][1]) && intersections2[2]<CLmath::max(intersections[2][0],intersections[2][1])) r++;
+	if(intersections2[3]>CLmath::min(intersections[3][0],intersections[3][1]) && intersections2[3]<CLmath::max(intersections[3][0],intersections[3][1])) r++;
 	//*
 
 	return r;
