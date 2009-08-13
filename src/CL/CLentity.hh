@@ -91,10 +91,9 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong m)
 	if( (d+i)>=ammomounts && m>=I) return;
 	CLfvector startposition = position;
 	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
-	startposition.x = ammodocking->x;
-	startposition.y = ammodocking->y;
+	startposition.x += ammodocking->x;
+	startposition.y -= ammodocking->y;
 	startposition.z += ammodocking->z;
-	startposition = CLmisc3d::project(startposition,position);
 	ammoman->fire(at,startposition,direction[m],*mark);
 }
 
@@ -169,7 +168,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr)
 	//*
 	
 	//create ammo manager
-	ammoman = new CLammomanager(ammomounts,ammotype);
+	ammoman = new CLammomanager(ammomounts,ammotype,mark);
 	//*
 	
 	//load csv if present (*.csv)
@@ -245,7 +244,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	//*
 	
 	//create ammo manager
-	ammoman = new CLammomanager(ammomounts,ammotype);
+	ammoman = new CLammomanager(ammomounts,ammotype,mark);
 	//*
 
 	//load csv if present

@@ -301,7 +301,7 @@ CLlevel::~CLlevel()
 void CLlevel::update(xchar input,xchar turbo)
 {
 	//update player
-	player->update(input,turbo,levellandscape);
+	player->update(input,turbo,levellandscape,enemies);
 	//*
 	
 	//update enemies

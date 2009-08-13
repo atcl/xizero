@@ -28,9 +28,10 @@ class CLammomanager : public virtual CLcl
 		xlong ammotypecount;
 		float ammospeed;
 		xlong lastupdate;
+		xlong* mark;
 	
 	public:
-		CLammomanager(xlong atc,xlong* ats);
+		CLammomanager(xlong atc,xlong* ats,xlong* m);
 		~CLammomanager();
 		
 		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction,xlong mark);
@@ -39,8 +40,9 @@ class CLammomanager : public virtual CLcl
 		void display();
 };
 
-CLammomanager::CLammomanager(xlong atc,xlong* ats)
+CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 {
+	mark = m;
 	ammospeed = 16;
 	ammotypecount = atc;
 	ammolist = new CLlist();
@@ -71,7 +73,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 		CLammo* currammo = new CLammo();
 		currammo->comsprite = ammotype[at]->comsprite;
 		currammo->p = startposition;
-		currammo->p.y -= mark;
+		//~ currammo->p.y -= mark;
 		currammo->s = direction*ammospeed;
 		ammolist->append(currammo,"at" + xchar(at+30) );
 	}
@@ -89,7 +91,7 @@ xlong CLammomanager::update()
 		{
 			ammolist->setindex(i);
 			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
+			if(CLgame::boundary(currammo->p,*mark)!=0) { ammolist->delcurrent(0); i--; }
 			else
 			{
 				currammo->p.x += currammo->s.x;
@@ -116,8 +118,8 @@ xlong CLammomanager::update(CLentity<I>* e)
 		{
 			ammolist->setindex(i);
 			currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-			if(CLgame::boundary(currammo->p)!=0) { ammolist->delcurrent(0); i--; }
-			else if(CLgame::collision(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
+			if(CLgame::boundary(currammo->p,*mark)!=0) { ammolist->delcurrent(0); i--; }
+			else if(CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 			{
 				r++;
 				ammolist->delcurrent(0);
@@ -131,6 +133,7 @@ xlong CLammomanager::update(CLentity<I>* e)
 			}
 		}
 		lastupdate = time;
+		e->hit(r);
 	}
 	
 	return r;
@@ -143,7 +146,8 @@ void CLammomanager::display()
 	{
 		ammolist->setindex(i);
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		currammo->comsprite(currammo->p.x,currammo->p.y);
+		//startposition = CLmisc3d::project(startposition,position);
+		currammo->comsprite(currammo->p.x,currammo->p.y-(*mark));
 	}
 }
 

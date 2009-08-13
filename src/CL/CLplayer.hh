@@ -23,7 +23,7 @@ class CLplayer : public CLentity<2>
 		CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts=0);
 		~CLplayer();
 
-		xlong update(xchar input,xchar turbo,CLfbuffer* ll);
+		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* ee);
 		void showbox();
 };
 
@@ -142,7 +142,7 @@ CLplayer::~CLplayer()
 	delete def;
 }
 
-xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* ee)
 {
 	//update ammo
 	ammoman->update();

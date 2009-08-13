@@ -22,10 +22,11 @@ namespace CLgame
 
 		void init(xlong bx1=0,xlong by1=0,xlong bx2=xres,xlong by2=yres);
 		
-		template<class clvector>bool boundary(const clvector& p);
+		template<class clvector>bool boundary(const clvector& p,xlong mark=0);
 		template<class clvector>bool boundary(const clvector& p,const CLbox& bb,bool c=0);
 		
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
+		template<class clvector>xlong collision2d(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
 
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
@@ -43,13 +44,13 @@ void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 }
 
 template<class clvector>
-bool CLgame::boundary(const clvector& p)
+bool CLgame::boundary(const clvector& p,xlong mark)
 {
 	//check if p id inside screen boundaries
-	if( (p.x < boundaryx1) || (p.x > boundaryx2) || (p.y < boundaryy1) || (p.y > boundaryy2) ) return 1;
+	if( (p.x > boundaryx1) && (p.x < boundaryx2) && ( (p.y-mark) > boundaryy1) && ( (p.y-mark) < boundaryy2) ) return 0;
 	//*
 	
-	return 0;
+	return 1;
 }
 
 template<class clvector>
@@ -82,8 +83,6 @@ bool CLgame::boundary(const clvector& p,const CLbox& bb,bool c)
 template<class clvector>
 xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 {
-	//! todo ! make work !
-	
 	//calc levelposition of bounding box
 	CLlvector a1( (p.x + bb.c[0].x), (p.y - bb.c[0].y), (p.z + bb.c[0].z) );
 	CLlvector a2( (p.x + bb.c[1].x), (p.y - bb.c[1].y), (p.z + bb.c[1].z) );
@@ -95,22 +94,22 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	{
 		//calc slopes
 		slopes[0] = -a1+a2;
-		slopes[1] = -a1+a3;
+		slopes[1] = -a1+a4;
 		//*
 		
 		//calc intersections of bb1 at p1
 		intersections[0][0] = a1.x + ( (a1.y - a1.z) / (slopes[0].z-slopes[0].y) ) * slopes[0].x;
-		intersections[0][1] = a3.x + ( (a3.y - a3.z) / (slopes[0].z-slopes[0].y) ) * slopes[0].x;
+		intersections[0][1] = a4.x + ( (a4.y - a4.z) / (slopes[0].z-slopes[0].y) ) * slopes[0].x;
 		intersections[1][0] = a1.x + ( (a1.y - a1.z) / (slopes[1].z-slopes[1].y) ) * slopes[1].x;
-		intersections[1][1] = a3.x + ( (a3.y - a3.z) / (slopes[1].z-slopes[1].y) ) * slopes[1].x;
+		intersections[1][1] = a2.x + ( (a2.y - a2.z) / (slopes[1].z-slopes[1].y) ) * slopes[1].x;
 		intersections[2][0] = a1.y + ( (a1.x - a1.z) / (slopes[0].z-slopes[0].x) ) * slopes[0].y;
-		intersections[2][1] = a3.y + ( (a3.x - a3.z) / (slopes[0].z-slopes[0].x) ) * slopes[0].y;
+		intersections[2][1] = a4.y + ( (a4.x - a4.z) / (slopes[0].z-slopes[0].x) ) * slopes[0].y;
 		intersections[3][0] = a1.y + ( (a1.x - a1.z) / (slopes[1].z-slopes[1].x) ) * slopes[1].y;
-		intersections[3][1] = a3.y + ( (a3.x - a3.z) / (slopes[1].z-slopes[1].x) ) * slopes[1].y;
+		intersections[3][1] = a2.y + ( (a2.x - a2.z) / (slopes[1].z-slopes[1].x) ) * slopes[1].y;
 		intersections[4][0] = a1.z + ( (a1.x - a1.y) / (slopes[0].y-slopes[0].x) ) * slopes[0].z;
-		intersections[4][1] = a3.z + ( (a3.x - a3.y) / (slopes[0].y-slopes[0].x) ) * slopes[0].z;
+		intersections[4][1] = a4.z + ( (a4.x - a4.y) / (slopes[0].y-slopes[0].x) ) * slopes[0].z;
 		intersections[5][0] = a1.z + ( (a1.x - a1.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
-		intersections[6][1] = a3.z + ( (a3.x - a3.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
+		intersections[6][1] = a2.z + ( (a2.x - a2.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
 		//*
 	}
 	
@@ -125,13 +124,71 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	//*
 	
 	//check if intersections overlap
-	xlong r = 0;
-	if(intersections2[0]<intersections[0][0] && intersections2[0]<intersections[0][1]) r++;
-	if(intersections2[1]<intersections[1][0] && intersections2[0]<intersections[1][1]) r++;
-	if(intersections2[2]<intersections[2][0] && intersections2[0]<intersections[2][1]) r++;
-	if(intersections2[3]<intersections[3][0] && intersections2[0]<intersections[3][1]) r++;
-	if(intersections2[4]<intersections[4][0] && intersections2[0]<intersections[4][1]) r++;
-	if(intersections2[5]<intersections[5][0] && intersections2[0]<intersections[5][1]) r++;
+	xlong r = -4;
+	//~ if(intersections2[0]<intersections[0][0] && intersections2[0]<intersections[0][1]) r++;
+	//~ if(intersections2[1]<intersections[1][0] && intersections2[0]<intersections[1][1]) r++;
+	//~ if(intersections2[2]<intersections[2][0] && intersections2[0]<intersections[2][1]) r++;
+	//~ if(intersections2[3]<intersections[3][0] && intersections2[0]<intersections[3][1]) r++;
+	//~ if(intersections2[4]<intersections[4][0] && intersections2[0]<intersections[4][1]) r++;
+	//~ if(intersections2[5]<intersections[5][0] && intersections2[0]<intersections[5][1]) r++;
+	
+	if(intersections2[0]>CLmath::min(intersections[0][0],intersections[0][1]) && intersections2[0]<CLmath::max(intersections[0][0],intersections[0][1])) r++;
+	if(intersections2[1]>CLmath::min(intersections[1][0],intersections[1][1]) && intersections2[0]<CLmath::max(intersections[1][0],intersections[1][1])) r++;
+	if(intersections2[2]>CLmath::min(intersections[2][0],intersections[2][1]) && intersections2[0]<CLmath::max(intersections[2][0],intersections[2][1])) r++;
+	if(intersections2[3]>CLmath::min(intersections[3][0],intersections[3][1]) && intersections2[0]<CLmath::max(intersections[3][0],intersections[3][1])) r++;
+	if(intersections2[4]>CLmath::min(intersections[4][0],intersections[4][1]) && intersections2[0]<CLmath::max(intersections[4][0],intersections[4][1])) r++;
+	if(intersections2[5]>CLmath::min(intersections[5][0],intersections[5][1]) && intersections2[0]<CLmath::max(intersections[5][0],intersections[5][1])) r++;
+	//*
+	
+	say(r);
+
+	return r;
+}
+
+template<class clvector>
+xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
+{
+	//calc levelposition of bounding box
+	CLlvector a1( (p.x + bb.c[0].x), (p.y - bb.c[0].y), (p.z + bb.c[0].z) );
+	CLlvector a2( (p.x + bb.c[1].x), (p.y - bb.c[1].y), (p.z + bb.c[1].z) );
+	CLlvector a3( (p.x + bb.c[2].x), (p.y - bb.c[2].y), (p.z + bb.c[2].z) );
+	CLlvector a4( (p.x + bb.c[3].x), (p.y - bb.c[3].y), (p.z + bb.c[3].z) );
+	//*
+	
+	//float intersections[6][2];
+	//~ if(n)
+	//~ {
+		//calc slopes
+		slopes[0] = -a1+a2;
+		slopes[1] = -a1+a4;
+		//*
+		
+		//calc intersections of bb1 at p1
+		intersections[0][0] = a1.x + ( -a1.y / slopes[0].y ) * slopes[0].x;
+		intersections[0][1] = a4.x + ( -a4.y / slopes[0].y ) * slopes[0].x;
+		intersections[1][0] = a1.x + ( -a1.y / slopes[1].y ) * slopes[1].x;
+		intersections[1][1] = a2.x + ( -a2.y / slopes[1].y ) * slopes[1].x;
+		intersections[2][0] = a1.y + ( -a1.x / slopes[0].x ) * slopes[0].y;
+		intersections[2][1] = a4.y + ( -a4.x / slopes[0].x ) * slopes[0].y;
+		intersections[3][0] = a1.y + ( -a1.x / slopes[1].x ) * slopes[1].y;
+		intersections[3][1] = a2.y + ( -a2.x / slopes[1].x ) * slopes[1].y;
+		//*
+	//~ }
+	
+	//calc intersections at q
+	float intersections2[6];
+	intersections2[0] = q.x + ( -q.y / slopes[0].y ) * slopes[0].x;
+	intersections2[1] = q.x + ( -q.y / slopes[1].y ) * slopes[1].x;
+	intersections2[2] = q.y + ( -q.x / slopes[0].x ) * slopes[0].y;
+	intersections2[3] = q.y + ( -q.x / slopes[1].x ) * slopes[1].y;
+	//*
+	
+	//check if intersections overlap
+	xlong r = -4;
+	if(intersections2[0]>CLmath::min(intersections[0][0],intersections[0][1]) && intersections2[0]<CLmath::max(intersections[0][0],intersections[0][1])) r++;
+	if(intersections2[1]>CLmath::min(intersections[1][0],intersections[1][1]) && intersections2[0]<CLmath::max(intersections[1][0],intersections[1][1])) r++;
+	if(intersections2[2]>CLmath::min(intersections[2][0],intersections[2][1]) && intersections2[0]<CLmath::max(intersections[2][0],intersections[2][1])) r++;
+	if(intersections2[3]>CLmath::min(intersections[3][0],intersections[3][1]) && intersections2[0]<CLmath::max(intersections[3][0],intersections[3][1])) r++;
 	//*
 
 	return r;
