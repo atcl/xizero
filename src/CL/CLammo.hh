@@ -82,20 +82,17 @@ void CLammomanager::update(CLentity<I>* e,bool n)
 	xlong time = CLsystem::getmilliseconds();
 
 	CLammo* currammo = 0;
-	for(int i=0; i<ammolist->getlength();i++)
+	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
 	{
-		ammolist->setindex(i);
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 		if(CLgame::boundary(currammo->p,*mark)!=0 && n)
 		{
 			ammolist->delcurrent(0);
-			i--;
 		}
 		else if(e->isvisible() && CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 		{
 			r++;
 			ammolist->delcurrent(0);
-			i--;
 		}
 		else if(n)
 		{
@@ -112,9 +109,8 @@ void CLammomanager::update(CLentity<I>* e,bool n)
 void CLammomanager::display()
 {
 	CLammo* currammo = 0;
-	for(int i=0; i<ammolist->getlength();i++)
+	for(xlong i=ammolist->setfirst(); i<ammolist->getlength();i+=ammolist->setnext())
 	{
-		ammolist->setindex(i);
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
 		currammo->comsprite(currammo->p.x,currammo->p.y-(*mark));
 	}

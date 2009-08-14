@@ -22,7 +22,7 @@ class CLcl
 		xlong getversion();
 };
 
-xlong CLcl::version = 0x00010000;
+xlong CLcl::version = CLmajor<<24 + CLminor<<16 + CLbuild<<8 + CLextra;
 
 CLcl::CLcl()
 { 

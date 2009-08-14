@@ -41,10 +41,10 @@ class CLlist : public virtual CLcl
 		xlong getindex();
 		void clear();
 		void smash(); //test
-		void setfirst();
-		void setlast();
-		void setprev();
-		void setnext();
+		xlong setfirst();
+		xlong setlast();
+		xlong setprev();
+		xlong setnext();
 		bool islast();
 		bool isfirst();
 		void exchangesort(bool updown);
@@ -161,6 +161,7 @@ void* CLlist::delcurrent(bool smash)
 		delete current->prev;
 		current->prev = current;
 		first = current;
+		setprev();
 	}
 	else
 	{
@@ -171,10 +172,11 @@ void* CLlist::delcurrent(bool smash)
 		current->next = tempnext;
 		setnext();
 		current->prev = tempprev;
+		setprev();
 	}
 
 	length--;
-
+	
 	if(smash==true) return temp;
 	return 0;
 }
@@ -232,24 +234,28 @@ void CLlist::smash()
 	
 }
 
-void CLlist::setfirst()
+xlong CLlist::setfirst()
 {
 	current = first;
+	return 0;
 }
 
-void CLlist::setlast()
+xlong CLlist::setlast()
 {
 	current = last;
+	return length;
 }
 
-void CLlist::setnext()
+xlong CLlist::setnext()
 {
-	current = current->next;
+	if(length!=0) current = current->next;
+	return 1;
 }
 
-void CLlist::setprev()
+xlong CLlist::setprev()
 {
-	current = current->prev;
+	if(length!=0) current = current->prev;
+	return -1;
 }
 
 bool CLlist::isfirst()

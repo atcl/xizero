@@ -307,9 +307,8 @@ void CLlevel::update(xchar input,xchar turbo)
 	//update enemies
 	CLenemy* currentenemy;
 	xlong    isenemydead;
-	for(uxlong i=0; i<enemies->getlength();i++)
+	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
 		isenemydead = currentenemy->update(player);
 		if(isenemydead!=0)
@@ -402,9 +401,8 @@ void CLlevel::display()
 	
 	//cast shadows of entities
 	player->display(1);
-	for(uxlong i=0; i<enemies->getlength();i++)
+	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
 		currentenemy->display(1);
 	}
@@ -416,9 +414,8 @@ void CLlevel::display()
 	//*
 	
 	//display enemies:
-	for(uxlong i=0; i<enemies->getlength();i++)
+	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		enemies->setindex(i);
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
 		currentenemy->display();
 	}

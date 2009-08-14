@@ -24,7 +24,7 @@ class CLplayer : public CLentity<2>
 		CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts=0);
 		~CLplayer();
 
-		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* ee);
+		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies);
 		void showbox();
 };
 
@@ -144,14 +144,13 @@ CLplayer::~CLplayer()
 	delete def;
 }
 
-xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* ee)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
 {
 	//update ammo
 	CLenemy* currenemy = 0;
-	for(int i=0; i<ee->getlength(); i++)
+	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		ee->setindex(i);
-		currenemy = static_cast<CLenemy*>(ee->getcurrentdata());
+		currenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
 		ammoman->update(currenemy);
 	}
 	//*
