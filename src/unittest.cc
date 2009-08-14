@@ -74,6 +74,7 @@ int main(int argc, char** argv)
 
 	bool mode = 1;
 	bool shadows = 0;
+	short ac = 0;
 
 	while(win->run())
 	{
@@ -175,6 +176,7 @@ int main(int argc, char** argv)
 			break;
 			case '+':
 				cubus->reset();
+				ac = 0;
 			break;
 			case '-':
 				shadows = !shadows;
@@ -187,6 +189,10 @@ int main(int argc, char** argv)
 			break;
 			case ',':
 				cubus->translatealongnormals(-1.1);
+			break;
+			case '<':
+				if(ac==0) ac = ANTICY;
+				else ac = 0;
 			break;
 			
 			//System:
@@ -226,7 +232,8 @@ int main(int argc, char** argv)
 		CLgfx2::drawfontstring(100,110,"Use ^ for toggling between shading",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,130,"Use - for toggling between shadowing",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,150,"Use . and  , to translate along normals",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,170,"Use 0 to exit",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,170,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,190,"Use 0 to exit",font,0x00FFFFFF);
 
 		if(shadows==1)
 		{
@@ -234,8 +241,8 @@ int main(int argc, char** argv)
 			CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
 		}
 
-		if(mode==false) cubus->display(p,CENTER + AMBIENT + FLAT + DEBUG);
-		else cubus->display(p,CENTER + AMBIENT + FLAT);
+		if(mode==false) cubus->display(p,CENTER + AMBIENT + FLAT + DEBUG + ac);
+		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
 		linearM->unit();
 
