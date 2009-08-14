@@ -87,7 +87,7 @@ void CLammomanager::update(CLentity<I>* e,bool n)
 	{
 		if(listfix) { i+=ammolist->setprev(); listfix=0; }
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		if(CLgame::boundary(currammo->p,*mark)!=0 && n)
+		if(n && CLgame::boundary(currammo->p,*mark)!=0)
 		{
 			ammolist->delcurrent(0);
 			listfix = ammolist->isfirst();

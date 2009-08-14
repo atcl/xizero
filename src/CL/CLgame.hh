@@ -307,51 +307,30 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 	zd = (n1+n2+n3+n4)/4;
 	//*
 	
-	//~ CLfvector nxa = CLfvector( 0,(-p1.y+p4.y),(n4+n3-n2-n1)/2 );
-	//~ CLfvector nxb = CLfvector( (-p1.x+p2.x),0,0 ); 
-	//~ CLfvector nx = CLfvector(nxa*nxb);
-	//~ CLfvector lxa = CLfvector( 0,(-p1.y+p4.y),(p4.z+p3.z-p2.z-p1.z)/2);
-	//~ CLfvector lxb = CLfvector( (-p1.x+p2.x),0,0 );
-	//~ CLfvector lx = CLfvector(lxa*lxb);
-	//~ if( CLmath::absolute((nx.z-lx.z)<0.1) ) xa = 0;
-	//~ //say(nx.z);
-	//~ nx.print();
-	//~ if(nx.z>lx.z) xa=(nx%lx);
-	//~ else xa=-(nx%lx);
-	//~ //xa=(nx%lx);
-	//~ //if( xa>3 || xa<-3 ) xa = 0;
-	//~ say(xa);
+	CLfvector unitx = CLfvector(1,0,0);
+	CLfvector unity = CLfvector(0,1,0);
 	
-	xa = 0;
-	ya = 0; 
+	//calc new ground touching box with normal
+	CLfvector na = CLfvector((-p1.x+p4.x),(-p1.y+p4.y),(n4+n3-n2-n1)/2);
+	CLfvector nb = CLfvector((-p1.x+p2.x),(-p1.y+p2.y),(n1+n4-n2-n3)/2);
+	CLfvector nn = (na*nb);
+	//*
 	
-	//~ CLfvector nh = CLfvector( (-p1.x+p4.x),(-p1.y+p4.y),(n1+n2-n3-n4)/2 );
-	//~ CLfvector nv = CLfvector( (-p1.x+p2.x),(-p1.y+p2.y),(n1+n4-n2-n3)/2 );
-	//~ CLfvector nn = (nh*nv);
-	//~ 
-	//~ CLfvector oh = CLfvector( (-l1.x+p4.x),(-l1.y+l4.y),(o1+o2-o3-o4)/2 );
-	//~ CLfvector ov = CLfvector( (-l1.x+p2.x),(-l1.y+l2.y),(o1+o4-o2-o3)/2 );
-	//~ CLfvector on = (oh*ov);
-	//~ 
-	//~ //get xangle
-	//~ CLfvector nx = CLfvector( 0,nn.y,nn.z );
-	//~ CLfvector ox = CLfvector( 0,0,1 );
-	//~ if(CLmath::absolute(n1+n2-n3-n4-o1-o2+o3+o4)<1) xa=0;
-	//~ if(CLmath::absolute(n1+n2-n3-n4-o1-o2+o3+o4)>3) xa=0;
-	//~ if((n1+n2-n3-n4)>(o1+o2-o3-o4)) xa = -xa +(nx%ox);
-	//~ else xa = -xa -(nx%ox);
-	//~ if(CLmath::absolute(n1+n2-n3-n4-o1-o2+o3+o4)>1) say(xa);
-	//~ //*
-	//~ 
-	//~ //get yangle
-	//~ CLfvector ny = CLfvector( nn.x,0,nn.z );
-	//~ CLfvector oy = CLfvector( 0,0,1 );
-	//~ if(CLmath::absolute(n1+n4-n2-n3-o1-o4+o2+o3)<1) ya=0;
-	//~ if(CLmath::absolute(n1+n4-n2-n3-o1-o4+o2+o3)>3) ya=0;
-	//~ if((n1+n4-n2-n3)>(o1+o4-o2-o3)) ya = -ya + (ny%oy);
-	//~ else ya = -ya - (ny%oy);
-	//~ if(CLmath::absolute(n1+n4-n2-n3-o1-o4+o2+o3)>1) say(ya);
-	//~ //*
+	//calc old ground touching box with normal
+	CLfvector oa = CLfvector((-l1.x+l4.x),(-l1.y+l4.y),(l4.z+l3.z-l2.z-l1.z)/2);
+	CLfvector oc = CLfvector((-l1.x+l2.x),(-l1.y+l2.y),(l1.z+l4.z-l2.z-l3.z)/2);
+	CLfvector oo = (oa*oc);
+	//*
+	
+	//calc x and y angle
+	xa = 0; //-(nn%unitx) + (oo%unitx);
+	ya = 0; //(nn%unity) - (oo%unity);
+	//*
+	
+	//adjust angles depending on z values
+	//~ if(nn.z < oo.z) xa = -xa; //replace by xa*=CLmath::sign(nx.z-lx.z)?
+	//~ if(nn.z < oo.z) ya = -ya; //replace by ya*=CLmath::sign(nx.z-lx.z)?
+	//*
 
 	return r;
 }

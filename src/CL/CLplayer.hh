@@ -110,9 +110,9 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	
 	//adjust rotation around x andy axis
 		//rotate x about xangle,y about yangle
-		//if(CLmath::absolute(xangle)>=1) cllinear->rotate(xangle,yangle,0);
-		//if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
-		//if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
+		if(CLmath::absolute(xangle)>=1) linear->rotate(xangle,yangle,0);
+		//~ if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
+		//~ if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
 
 	return r;
@@ -151,7 +151,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
 		currenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		ammoman->update(currenemy);
+		ammoman->update(currenemy,CLmath::delta(i));
 	}
 	//*
 	
