@@ -161,18 +161,16 @@ void* CLlist::delcurrent(bool smash)
 		delete current->prev;
 		current->prev = current;
 		first = current;
-		setprev();
 	}
 	else
 	{
 		listmember* tempnext = current->next;
 		listmember* tempprev = current->prev;
-		setprev();
-		delete current->next;
-		current->next = tempnext;
 		setnext();
+		delete current->prev;
 		current->prev = tempprev;
 		setprev();
+		current->next = tempnext;
 	}
 
 	length--;
@@ -260,13 +258,13 @@ xlong CLlist::setprev()
 
 bool CLlist::isfirst()
 {
-	if(current==first) return true;
+	if(current==first) return true; //return current-first
 	else return false;
 }
 
 bool CLlist::islast()
 {
-	if(current==last) return true;
+	if(current==last) return true; //return current-first
 	else return false;
 }
 
