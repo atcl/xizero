@@ -10,6 +10,7 @@
 #include "CLgame.hh"
 #include "CLammo.hh"
 #include "CLentity.hh"
+#include "CLenemy.hh"
 
 
 class CLplayer : public CLentity<2>
@@ -131,6 +132,7 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts) : CLen
 	
 	//set player specific attributes
 	speeddir.y  = -CLsystem::ato((*def)["speed"]);
+	speeddir.y /= 20;
 	direction[0].y = direction[1].y = 1;
 	active = 1;
 	visible = 1;
@@ -145,7 +147,13 @@ CLplayer::~CLplayer()
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* ee)
 {
 	//update ammo
-	ammoman->update();
+	CLenemy* currenemy = 0;
+	for(int i=0; i<ee->getlength(); i++)
+	{
+		ee->setindex(i);
+		currenemy = static_cast<CLenemy*>(ee->getcurrentdata());
+		ammoman->update(currenemy);
+	}
 	//*
 	
 	//init variables
@@ -252,14 +260,12 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* ee)
 		break; //*
 	}
 
-	//update test position
-	if(time >= lastupdate + 20)
-	{
-		tposition.x = position.x - speed.x;
-		tposition.y = position.y + speed.y;
-		tposition.z = position.z - speed.z;
-		lastupdate = time;	
-	}
+	//update position
+	float inter = time-lastupdate;
+	tposition.x = position.x - (inter*speed.x);
+	tposition.y = position.y + (inter*speed.y);
+	tposition.z = position.z - (inter*speed.z);
+	lastupdate = time;	
 	//*
 
 	//check if test position doesn't collide with anything

@@ -154,7 +154,7 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
 	CLlvector a3( (p.x + bb.c[2].x), (p.y - bb.c[2].y), (p.z + bb.c[2].z) );
 	CLlvector a4( (p.x + bb.c[3].x), (p.y - bb.c[3].y), (p.z + bb.c[3].z) );
 	//*
-	
+
 	//float intersections[6][2];
 	//~ if(n)
 	//~ {
@@ -176,7 +176,7 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
 	//~ }
 	
 	//calc intersections at q
-	float intersections2[6];
+	float intersections2[4];
 	intersections2[0] = q.x + ( -q.y / slopes[0].y ) * slopes[0].x;
 	intersections2[1] = q.x + ( -q.y / slopes[1].y ) * slopes[1].x;
 	intersections2[2] = q.y + ( -q.x / slopes[0].x ) * slopes[0].y;
@@ -185,12 +185,12 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
 	
 	//check if intersections overlap
 	xlong r = -4;
-	if(intersections2[0]>CLmath::min(intersections[0][0],intersections[0][1]) && intersections2[0]<CLmath::max(intersections[0][0],intersections[0][1])) r++;
-	if(intersections2[1]>CLmath::min(intersections[1][0],intersections[1][1]) && intersections2[1]<CLmath::max(intersections[1][0],intersections[1][1])) r++;
-	if(intersections2[2]>CLmath::min(intersections[2][0],intersections[2][1]) && intersections2[2]<CLmath::max(intersections[2][0],intersections[2][1])) r++;
-	if(intersections2[3]>CLmath::min(intersections[3][0],intersections[3][1]) && intersections2[3]<CLmath::max(intersections[3][0],intersections[3][1])) r++;
+	if(intersections2[0]>=CLmath::min(intersections[0][0],intersections[0][1]) && intersections2[0]<=CLmath::max(intersections[0][0],intersections[0][1])) r++; //player ammo does not work here
+	if(intersections2[1]>=CLmath::min(intersections[1][0],intersections[1][1]) && intersections2[1]<=CLmath::max(intersections[1][0],intersections[1][1])) r++;
+	if(intersections2[2]>=CLmath::min(intersections[2][0],intersections[2][1]) && intersections2[2]<=CLmath::max(intersections[2][0],intersections[2][1])) r++;
+	if(intersections2[3]>=CLmath::min(intersections[3][0],intersections[3][1]) && intersections2[3]<=CLmath::max(intersections[3][0],intersections[3][1])) r++; //player ammo does not work here
 	//*
-
+//~ say(r);
 	return r;
 }
 

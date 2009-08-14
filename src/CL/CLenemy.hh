@@ -11,7 +11,6 @@
 #include "CLgame.hh"
 #include "CLammo.hh"
 #include "CLentity.hh"
-#include "CLplayer.hh"
 
 
 class CLenemy : public CLentity<1>
@@ -31,7 +30,7 @@ class CLenemy : public CLentity<1>
 		CLenemy(CLenemy* enemyptr,CLlvector& enemyp);
 		~CLenemy();
 		
-		xlong update(CLplayer* p);
+		template<int I>xlong update(CLentity<I>* p);
 };
 
 void CLenemy::pretransform()
@@ -94,6 +93,7 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m) : CLentity<1>(enemya,m)
 	//set enemy specific attributes
 	points = CLsystem::ato((*def)["points"]);
 	speeddir.y  = CLsystem::ato((*def)["speed"]);
+	speeddir.y /= 20;
 	direction[0].y = -1;
 	//*
 }
@@ -134,7 +134,8 @@ CLenemy::~CLenemy()
 	delete aggrobox;
 }
 
-xlong CLenemy::update(CLplayer* p)
+template<int I>
+xlong CLenemy::update(CLentity<I>* p)
 {
 	//check if to activate
 	if(active!=1 && ( (*mark)-100)<position.y)
@@ -153,7 +154,7 @@ xlong CLenemy::update(CLplayer* p)
 	
 	if(active==1)
 	{
-		temp = ammoman->update(p);
+		ammoman->update(p);
 
 
 		xlong time = CLsystem::getmilliseconds();
@@ -179,15 +180,12 @@ xlong CLenemy::update(CLplayer* p)
 			}
 		}
 
-		//update test position
-		if(time >= lastupdate + 20)
-		{
-			//~ tposition.x = position.x - speed.x;
-			//~ tposition.y = position.y + speed.y;
-			//~ tposition.z = position.z + speed.z;
-			
-			lastupdate = time;
-		}
+		//update position
+		float inter = time-lastupdate;
+		tposition.x = position.x - (inter*speed.x);
+		tposition.y = position.y + (inter*speed.y);
+		tposition.z = position.z - (inter*speed.z);
+		lastupdate = time;	
 		//*
 
 		//check if test position doesn't collide with anything
@@ -205,6 +203,7 @@ xlong CLenemy::update(CLplayer* p)
 		}
 		//*
 	}
+	else lastupdate = CLsystem::getmilliseconds();
 	
 	return 0;
 }
