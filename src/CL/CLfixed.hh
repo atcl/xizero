@@ -258,6 +258,16 @@ bool xfixed::operator<(xshort& a)
 	return (this->i<xlong(a)<<16);
 }
 
+bool xfixed::operator>(xfixed& a)
+{
+	return (this->i>a.i);
+}
+
+bool xfixed::operator>(xshort& a)
+{
+	return (this->i>xlong(a)<<16);
+}
+
 //friends:
 
 xfixed operator+(short& a,xfixed& b)
