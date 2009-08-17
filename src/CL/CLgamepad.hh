@@ -38,6 +38,19 @@ namespace CLgamepad
 
 bool CLgamepad::init()
 {
+	axis[0] = 0;
+	axis[1] = 0;
+	button[0] = 0;
+	button[1] = 0;
+	button[2] = 0;
+	button[3] = 0;
+	button[4] = 0;
+	button[5] = 0;
+	button[6] = 0;
+	button[7] = 0;
+	button[8] = 0;
+	button[9] = 0;
+	
 	if(joyGetNumDevs() == -1)
 	{
 		CLsystem::print("No Gamepad driver found");
@@ -83,7 +96,20 @@ void CLgamepad::exit() { }
 
 bool CLgamepad::init()
 {
-	if( (gamepad_device = open("/dev/js0",O_RDONLY)) == -1)
+	axis[0] = 0;
+	axis[1] = 0;
+	button[0] = 0;
+	button[1] = 0;
+	button[2] = 0;
+	button[3] = 0;
+	button[4] = 0;
+	button[5] = 0;
+	button[6] = 0;
+	button[7] = 0;
+	button[8] = 0;
+	button[9] = 0;
+	
+	if( (gamepad_device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
 		CLsystem::print("No Gamepad found");
 		return 0;

@@ -46,6 +46,11 @@ class CLwindow : public Fl_Window
 		xlong getmousex();
 		xlong getmousey();
 		xlong getmouseb();
+		//gamepad
+		xlong getxaxis();
+		xlong getyaxis();
+		bool  getbutton(xlong i);
+		//*
 };
 
 void CLwindow::draw()
@@ -124,7 +129,7 @@ xlong CLwindow::getturbo()
 	if(keyup == turbo)
 	{
 		turbo = 0;
-		keyup = 0;
+		keyup = -1;
 	}
 
 	return turbo;
@@ -143,6 +148,22 @@ xlong CLwindow::getmousey()
 xlong CLwindow::getmouseb()
 {
 	return mouseb;
+}
+
+xlong getxaxis()
+{
+	return CLgamepad::axis[0];
+}
+
+xlong getyaxis()
+{
+	return CLgamepad::axis[1];
+}
+
+bool getbutton(xlong i)
+{
+	if(i<=10) return CLgamepad::button[i];
+	else return 0;
 }
 
 #endif
