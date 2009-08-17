@@ -272,60 +272,64 @@ bool xfixed::operator>(xshort& a)
 
 xfixed operator+(short& a,xfixed& b)
 {
-	xfixed temp;
-
-	return temp;
+	xfixed r = b;
+	r.p.num += a;
+	return r;
 }
 
 xfixed operator-(short& a,xfixed& b)
 {
-	xfixed temp;
-
-	return temp;
+	xfixed r;
+	r.i = 0;
+	r.p.num = a;
+	r.i -= b.i;
+	return r;
 }
 
 xfixed operator*(short& a,xfixed& b)
 {
-	xfixed temp;
-
-	return temp;
+	xfixed r = b;
+	__asm__ __volatile__ ( "shll $16,%%ebx; imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(r.i) : "a"(r.i),"b"(a) ); //swap eax,edx in shrd?
+	return r;
 }
 
 xfixed operator/(short& a,xfixed& b)
 {
-	xfixed temp;
-
-	return temp;	
+	xfixed r;
+	r.i = 0;
+	r.p.num = a;
+	__asm__ __volatile__ ( "sarl $16,%%edx; shll $16,%%eax; idiv %%ebx;" : "=a"(r.i) : "a"(r.i),"d"(r.i),"b"(b) );
+	return r;
 }
 
 bool operator==(short& a,xfixed& b)
 {
-	return 0;	
+	return !((xlong(a)<<16) ^ b.i);	
 }
 
 bool operator!=(short& a,xfixed& b)
 {
-	return 0;
+	return ((xlong(a)<<16) ^ b.i);
 }
 
 bool operator<=(short& a,xfixed& b)
 {
-	return 0;
+	return ((xlong(a)<<16)<=b.i);
 }
 
 bool operator>=(short& a,xfixed& b)
 {
-	return 0;
+	return ((xlong(a)<<16)>=b.i);
 }
 
 bool operator<(short& a,xfixed& b)
 {
-	return 0;	
+	return ((xlong(a)<<16)<b.i);
 }
 
 bool operator>(short& a,xfixed& b)
 {
-	return 0;
+	return ((xlong(a)<<16)>b.i);
 }
 
 #endif

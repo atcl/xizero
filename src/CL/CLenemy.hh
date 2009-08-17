@@ -140,22 +140,31 @@ xlong CLenemy::update(CLentity<I>* p)
 	//check if to activate
 	if(active!=1 && ( (*mark)-100)<position.y)
 	{
-		active=1;
+		active = 1;
 	}
 	//*
 	
-	//check if destroyed (return points)
-	
+	//check if level is left (return -1)
+	//~ else if(active==1 && ( (*mark)+yres+100>position.y)
+	//~ {
+		//~ active = 0;
+		//~ visible = 0;
+		//~ return -1;
+	//~ }
 	//*
 	
-	//check if level is left (return -1)
-	
+	//check if destroyed (return points)
+	if(health<=0)
+	{
+		//deactivate and start explosion
+		
+		//*
+	}
 	//*
 	
 	if(active==1)
 	{
 		ammoman->update(p);
-
 
 		xlong time = CLsystem::getmilliseconds();
 
