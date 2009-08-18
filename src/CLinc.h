@@ -13,7 +13,7 @@
 #include "CL/CLfixed.hh"
 #include "CL/CLstruct.hh"
 #include "CL/CLconsts.hh"
-#include "CL/CLtribool.hh"
+#include "CL/CLboool.hh"
 
 //API dependent
 #include "CL/CLapi.hh"
