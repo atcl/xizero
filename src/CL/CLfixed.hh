@@ -67,6 +67,8 @@ union xfixed
 			bool operator>(xfixed& a);
 			bool operator>(xshort& a);
 	friend  bool operator>(short& a,xfixed& b);
+	
+	// <<,>>,
 };
 
 xfixed& xfixed::operator=(xfixed &a)

@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLmath.hh"
+#include "CLmacros.hh"
 
 #define tritrue   1
 #define trifalse -1
@@ -32,17 +33,48 @@ struct tribool
 	tribool operator-(xlong a);
 	tribool operator*(xlong a);
 	
+	tribool operator&&(xlong a);
+	tribool operator||(xlong a);
+	tribool operator^(xlong a);
+	
 	bool operator==(xlong a);
 	bool operator!=(xlong a);
 	bool operator<=(xlong a);
 	bool operator>=(xlong a);
 	bool operator<(xlong a);
 	bool operator>(xlong a);
+	
+	//tribool,bool as args
 };
 
 tribool& tribool::operator=(xlong a)
 {
-	b = CLmath::sign(a);
+	this->b = CLmath::sign(a);
+	return *this;
+}
+
+tribool& tribool::operator-()
+{
+	this->b = -(this->b); //CLneg(this->b);
+	return *this;
+}
+
+tribool& tribool::operator!()
+{
+	this->b = -(this->b); //CLneg(this->b);
+	return *this;
+}
+	
+tribool& tribool::operator++()
+{
+	if(this->b<1) this->b++;
+	return *this;
+}
+
+tribool& tribool::operator--()
+{
+	if(this->b>-1) this->b--;
+	return *this;
 }
 
 #endif
