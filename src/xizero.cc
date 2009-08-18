@@ -21,6 +21,7 @@ int main()
 	xlong mode  = 1;
 	xlong dis   = 0;
 	bool running  = 1;
+	bool pause = 0;
 	
 	while(running && win->run()) 
 	{
@@ -46,9 +47,13 @@ int main()
 			case '3':
 				mode = 3;
 			break;
+			
+			case 'p':
+				pause = !pause;
+			break;
 		}
 		
-		testlevel->update(input,turbo);
+		if(!pause) testlevel->update(input,turbo);
 
 		CLdoublebuffer->fastclear(CLfloor::floorshade);
 		CLzbuffer->fastclear(CLfloor::floorz);
