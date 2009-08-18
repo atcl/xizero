@@ -5,38 +5,44 @@
 //#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
+#include "CLmath.hh"
 
-#define 3true   1
-#define 3false -1
-#define 3null   0
+#define tritrue   1
+#define trifalse -1
+#define trinull   0
 
 
-struct CLtribool
+struct tribool
 {
 	xlong b;
 	
-	operator=();
+	tribool& operator=(xlong a);
 	
-	operator-();
-	operator!();
+	tribool& operator-();
+	tribool& operator!();
 	
-	operator++();
-	operator--();
+	tribool& operator++();
+	tribool& operator--();
 	
-	operator+=();
-	operator-=();
-	operator*=();
+	tribool& operator+=(xlong a);
+	tribool& operator-=(xlong a);
+	tribool& operator*=(xlong a);
 	
-	operator+();
-	operator-();
-	operator*();
+	tribool operator+(xlong a);
+	tribool operator-(xlong a);
+	tribool operator*(xlong a);
 	
-	operator==();
-	operator!=();
-	operator<=();
-	operator>=();
-	operator<();
-	operator>();
+	bool operator==(xlong a);
+	bool operator!=(xlong a);
+	bool operator<=(xlong a);
+	bool operator>=(xlong a);
+	bool operator<(xlong a);
+	bool operator>(xlong a);
 };
+
+tribool& tribool::operator=(xlong a)
+{
+	b = CLmath::sign(a);
+}
 
 #endif
