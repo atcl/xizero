@@ -25,6 +25,7 @@ class CLplayer : public CLentity<2>
 		~CLplayer();
 
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies);
+		void addpoints(xlong p);
 		void showbox();
 };
 
@@ -155,149 +156,173 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
 	}
 	//*
 	
-	//init variables
-	xlong time = CLsystem::getmilliseconds();
-	linear->unit();
-	bool what = 0;
-	xlong tempangle = 0;
-	//*
-
-	//temp use gamepad	
-	if(CLgamepad::axis[1]<0) input = 82;
-	if(CLgamepad::axis[1]>0) input = 84;
-	if(CLgamepad::axis[0]<0) turbo = 81;
-	if(CLgamepad::axis[0]>0) turbo = 83;
-	if(CLgamepad::button[0]!=0) turbo = 97;
-	if(CLgamepad::button[1]!=0) turbo = 100;
-	if(CLgamepad::button[2]!=0) turbo = 'w';
-	if(CLgamepad::button[3]!=0) turbo = 32;
-	if(CLgamepad::button[4]!=0) turbo = -29;
-	if(CLgamepad::button[5]!=0) turbo = 'q';
-	if(CLgamepad::button[6]!=0) turbo = 's';
-	if(CLgamepad::button[7]!=0) turbo = 'e';
-	//*
-
-	switch(input)
+	//check if destroyed
+	if(health<=0 && active!=-1)
 	{
-		//stop backward driving and drive forward
-		case 82:
-			if(gear==-1) { gear=0; setspeed(); }
-			else { gear=1; setspeed(); }
-		break;
-		//*
-
-		//stop forward driving and drive backward
-		case 84:
-			if(gear==1) { gear=0; setspeed(); }
-			else { gear=-1; setspeed(); }
-		break;
+		//deactivate and start explosion
+		active = -1;
+		expl[0]->first(0);
 		//*
 	}
+	//*
 	
-	switch(turbo)
+	if(active==1)
 	{
-		//arrow left -> turn left
-		case 81: 
-			tempangle = 5;
-			linear->rotate(0,0,5);
-			pretransform(0);	
-			setspeed();
-		break;
+		//init variables
+		xlong time = CLsystem::getmilliseconds();
+		linear->unit();
+		bool what = 0;
+		xlong tempangle = 0;
 		//*
 
-		//arrow right -> turn right
-		case 83: 
-			tempangle = -5;
-			linear->rotate(0,0,-5);
-			pretransform(0);
-			setspeed();
-		break;
+		//temp use gamepad	
+		if(CLgamepad::axis[1]<0) input = 82;
+		if(CLgamepad::axis[1]>0) input = 84;
+		if(CLgamepad::axis[0]<0) turbo = 81;
+		if(CLgamepad::axis[0]>0) turbo = 83;
+		if(CLgamepad::button[0]!=0) turbo = 97;
+		if(CLgamepad::button[1]!=0) turbo = 100;
+		if(CLgamepad::button[2]!=0) turbo = 'w';
+		if(CLgamepad::button[3]!=0) turbo = 32;
+		if(CLgamepad::button[4]!=0) turbo = -29;
+		if(CLgamepad::button[5]!=0) turbo = 'q';
+		if(CLgamepad::button[6]!=0) turbo = 's';
+		if(CLgamepad::button[7]!=0) turbo = 'e';
 		//*
 
-		//a -> turn tower left
-		case 97: 
-			tempangle = 5;
-			linear->rotate(0,0,5);
+		switch(input)
+		{
+			//stop backward driving and drive forward
+			case 82:
+				if(gear==-1) { gear=0; setspeed(); }
+				else { gear=1; setspeed(); }
+			break;
+			//*
+
+			//stop forward driving and drive backward
+			case 84:
+				if(gear==1) { gear=0; setspeed(); }
+				else { gear=-1; setspeed(); }
+			break;
+			//*
+		}
+		
+		switch(turbo)
+		{
+			//arrow left -> turn left
+			case 81: 
+				tempangle = 5;
+				linear->rotate(0,0,5);
+				pretransform(0);	
+				setspeed();
+			break;
+			//*
+
+			//arrow right -> turn right
+			case 83: 
+				tempangle = -5;
+				linear->rotate(0,0,-5);
+				pretransform(0);
+				setspeed();
+			break;
+			//*
+
+			//a -> turn tower left
+			case 97: 
+				tempangle = 5;
+				linear->rotate(0,0,5);
+				pretransform(1);
+				what=1;
+			break;
+			//*
+
+			//d -> turn tower right
+			case 100: 
+				tempangle = -5;
+				linear->rotate(0,0,-5);
+				pretransform(1);
+				what=1;
+			break;
+			//*
+			
+			//reset tower
+			case 'w':
+			if(angles[1].z>180) angles[1].z-=360;
+			if(angles[1].z<-180) angles[1].z+=360;
+			tempangle = CLmath::sign(angles[0].z-angles[1].z) * 5;
+			linear->rotate(0,0,tempangle);
 			pretransform(1);
 			what=1;
-		break;
+			break;
+			//*
+
+			//space -> fire tower weapon
+			case 32: 
+				if(time >= fireupdate[1] + firerate[1])
+				{
+					fire(1,4,0,1);
+					fireupdate[1] = time;
+				}
+			break;
+			//*
+
+			//strg -> fire chassis weapon(s)
+			case -29: 
+				if(time >= fireupdate[0] + firerate[0])
+				{
+					fire(0,3,0,0);
+					fire(0,3,1,0);
+					fireupdate[0] = time;
+				}
+			break;
+			//*
+
+			case 'q': //fire (tachyon) laser
+			break; //*
+
+			case 's': //fire laser
+			break; //*
+
+			case 'e': //action (use) key
+			break; //*
+		}
+
+		//update position
+		float inter = time-lastupdate;
+		tposition.x = position.x - (inter*speed.x);
+		tposition.y = position.y + (inter*speed.y);
+		tposition.z = position.z - (inter*speed.z);
+		lastupdate = time;	
 		//*
 
-		//d -> turn tower right
-		case 100: 
-			tempangle = -5;
-			linear->rotate(0,0,-5);
-			pretransform(1);
-			what=1;
-		break;
+		//check if test position doesn't collide with anything
+		if(collision(ll)==0)
+		{	
+			transform(what);
+			if(what==0) { angles[0].z = (angles[0].z + tempangle)%360; angles[1].z = (tempangle + angles[1].z)%360; }
+			else angles[1].z = (tempangle + angles[1].z)%360;
+			position = tposition;
+		}
 		//*
 		
-		//reset tower
-		case 'w':
-		if(angles[1].z>180) angles[1].z-=360;
-		if(angles[1].z<-180) angles[1].z+=360;
-		tempangle = CLmath::sign(angles[0].z-angles[1].z) * 5;
-		linear->rotate(0,0,tempangle);
-		pretransform(1);
-		what=1;
-		break;
+		//if collision reset bounding box to state before pretransform
+		else
+		{
+			*(boundingbox[1][0]) = *(boundingbox[0][0]);
+		}
 		//*
-
-		//space -> fire tower weapon
-		case 32: 
-			if(time >= fireupdate[1] + firerate[1])
-			{
-				fire(1,4,0,1);
-				fireupdate[1] = time;
-			}
-		break;
-		//*
-
-		//strg -> fire chassis weapon(s)
-		case -29: 
-			if(time >= fireupdate[0] + firerate[0])
-			{
-				fire(0,3,0,0);
-				fire(0,3,1,0);
-				fireupdate[0] = time;
-			}
-		break;
-		//*
-
-		case 'q': //fire (tachyon) laser
-		break; //*
-
-		case 's': //fire laser
-		break; //*
-
-		case 'e': //action (use) key
-		break; //*
 	}
-
-	//update position
-	float inter = time-lastupdate;
-	tposition.x = position.x - (inter*speed.x);
-	tposition.y = position.y + (inter*speed.y);
-	tposition.z = position.z - (inter*speed.z);
-	lastupdate = time;	
-	//*
-
-	//check if test position doesn't collide with anything
-	if(collision(ll)==0)
-	{	
-		transform(what);
-		if(what==0) { angles[0].z = (angles[0].z + tempangle)%360; angles[1].z = (tempangle + angles[1].z)%360; }
-		else angles[1].z = (tempangle + angles[1].z)%360;
-		position = tposition;
-	}
-	//*
-	
-	//if collision reset bounding box to state before pretransform
-	else
+	else if(active==-1)
 	{
-		*(boundingbox[1][0]) = *(boundingbox[0][0]);
+		if(expl[0]->next()==1) return points;
 	}
-	//*
+	
+	return -1;
+}
+
+void CLplayer::addpoints(xlong p)
+{
+	points += p;
 }
 
 //for debug only:

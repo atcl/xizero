@@ -27,19 +27,20 @@ class CLobject : public virtual CLcl
 		CLpolygon** polyptr;
 
 	private:
-		xlong vertexcount;
 		xlong polycount;
 		xlong dockcount;
-		xlong vertexptr;
 		CLfvector** dockptr;
 		CLbox* boundingbox;
+		CLbox* rboundingbox;
 		xlong name;
 	
 	public:
 		CLobject(CLfile* fileptr,bool zs);
+		CLobject(CLobject* obj);
 		~CLobject();
 		
 		void update(CLmatrix* m);
+		void partupdate(CLmatrix* m);
 		void display(CLlvector p,xshort flags);
 		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		xlong getname();
@@ -54,6 +55,7 @@ class CLobject : public virtual CLcl
 CLobject::CLobject(CLfile* fileptr,bool zs)
 {
 	//init bounding box
+	rboundingbox = new CLbox;
 	boundingbox = new CLbox;
 	boundingbox->c[0] = 0;
 	boundingbox->c[1] = 0;
@@ -221,6 +223,10 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				if( t[3].z > boundingbox->c[0].z) { boundingbox->c[0].z = t[3].z; boundingbox->c[1].z = t[3].z; boundingbox->c[2].z = t[3].z; boundingbox->c[3].z = t[3].y; } 
 				//*
 				
+				//set backup bounding box
+				*rboundingbox = *boundingbox;
+				//*
+				
 				//init polygon
 				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x0000C000);
 				//*
@@ -292,6 +298,27 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	//~ //*
 }
 
+CLobject::CLobject(CLobject* obj)
+{
+		polycount = obj->polycount;
+		polyptr = new CLpolygon*[polycount];
+		dockcount = obj->dockcount;
+		dockptr = new CLfvector*[dockcount];
+		boundingbox = new CLbox(*(obj->boundingbox));
+		rboundingbox = new CLbox(*(obj->rboundingbox));
+		name = obj->name;
+		
+		for(uxlong i=0; i<polycount; i++)
+		{
+			polyptr[i] = new CLpolygon(*(obj->polyptr[i]));
+		}
+		
+		for(uxlong j=0; j<dockcount; j++)
+		{
+			dockptr[j] = new CLfvector(*(obj->dockptr[j]));
+		}
+}
+
 CLobject::~CLobject()
 {
 	delete boundingbox;
@@ -299,16 +326,21 @@ CLobject::~CLobject()
 
 void CLobject::update(CLmatrix* m)
 {
+	//transform each polygon
 	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->update(m,0);
 	}
+	//*
 
+	//transform each docking point
 	for(uxlong j=0;j<dockcount;j++)
 	{
 		*dockptr[j] = m->transform(*dockptr[j]);
 	}
+	//*
 
+	//transform bounding box
 	boundingbox->c[0] = m->transform(boundingbox->c[0]);
 	boundingbox->c[1] = m->transform(boundingbox->c[1]);
 	boundingbox->c[2] = m->transform(boundingbox->c[2]);
@@ -317,6 +349,35 @@ void CLobject::update(CLmatrix* m)
 	boundingbox->c[5] = m->transform(boundingbox->c[5]);
 	boundingbox->c[6] = m->transform(boundingbox->c[6]);
 	boundingbox->c[7] = m->transform(boundingbox->c[7]);
+	//*
+}
+
+void CLobject::partupdate(CLmatrix* m)
+{
+	//transform each polygon
+	for(uxlong i=0;i<polycount;i++)
+	{
+		polyptr[i]->partupdate(m);
+	}
+	//*
+
+	//transform each docking point
+	for(uxlong j=0;j<dockcount;j++)
+	{
+		*dockptr[j] = m->transform(*dockptr[j]);
+	}
+	//*
+
+	//after partupdate boundingbox is without value
+	boundingbox->c[0] = 0;
+	boundingbox->c[1] = 0;
+	boundingbox->c[2] = 0;
+	boundingbox->c[3] = 0;
+	boundingbox->c[4] = 0;
+	boundingbox->c[5] = 0;
+	boundingbox->c[6] = 0;
+	boundingbox->c[7] = 0;
+	//*
 }
 
 void CLobject::display(CLlvector p,xshort flags)
@@ -418,6 +479,8 @@ void CLobject::reset()
 	{
 		polyptr[i]->reset();
 	}
+	
+	*boundingbox = *rboundingbox;
 }
 
 void CLobject::setcolor(uxlong co)

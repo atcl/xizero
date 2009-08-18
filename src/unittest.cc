@@ -75,6 +75,7 @@ int main(int argc, char** argv)
 	bool mode = 1;
 	bool shadows = 0;
 	short ac = 0;
+	bool exp = 0;
 
 	while(win->run())
 	{
@@ -171,17 +172,31 @@ int main(int argc, char** argv)
 				linearM->scale(1,1,0.9);
 				cubus->update(linearM);
 			break;
+			case 'y':
+				linearM->aspectscale(1.1);
+				cubus->update(linearM);
+			break;
+			case 'x':
+				linearM->aspectscale(0.9);
+				cubus->update(linearM);
+			break;
 			case '^':
 				mode = !mode;
 			break;
 			case '+':
 				cubus->reset();
 				ac = 0;
+				exp = 0;				
 			break;
 			case '-':
 				shadows = !shadows;
 			break;
 			case '#':
+				if(exp==0)
+				{
+					exp=1;
+					ex->first(1);
+				}
 				ex->next();
 			break;
 			case '.':
@@ -226,14 +241,15 @@ int main(int argc, char** argv)
 		
 		CLgfx2::drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,50,"Use arrow keys for translating",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,70,"Use + for reseting",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,90,"Use # for exploding",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,110,"Use ^ for toggling between shading",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,130,"Use - for toggling between shadowing",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,150,"Use . and  , to translate along normals",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,170,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,190,"Use 0 to exit",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,50,"Use x,y for aspect-scaling",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,90,"Use + for reseting",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,110,"Use # for exploding",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,130,"Use ^ for toggling between shading",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,150,"Use - for toggling between shadowing",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,170,"Use . and  , to translate along normals",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
+		CLgfx2::drawfontstring(100,210,"Use 0 to exit",font,0x00FFFFFF);
 
 		if(shadows==1)
 		{

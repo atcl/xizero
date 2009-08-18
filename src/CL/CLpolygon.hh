@@ -52,6 +52,7 @@ class CLpolygon : public virtual CLcl
 		~CLpolygon();
 		
 		void update(CLmatrix* m,bool i);
+		void partupdate(CLmatrix* m);
 		void display(const CLlvector& p,xshort flags);
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
@@ -633,6 +634,15 @@ void CLpolygon::update(CLmatrix* m,bool i=0)
 			//*
 		break;
 	}
+}
+
+void CLpolygon::partupdate(CLmatrix* m)
+{
+			points[0] = m->transform(points[0]);
+			//~ points[1] = m->transform(points[1]);
+			points[2] = m->transform(points[2]);
+			//~ points[3] = m->transform(points[3]);
+			//~ normal = CLfvector((points[1]-points[0]) * (points[3]-points[0]));	
 }
 
 template<class clvector>

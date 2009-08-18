@@ -138,26 +138,27 @@ template<int I>
 xlong CLenemy::update(CLentity<I>* p)
 {
 	//check if to activate
-	if(active!=1 && ( (*mark)-100)<position.y)
+	if(active==0 && ( (*mark)-100)<position.y)
 	{
 		active = 1;
 	}
 	//*
 	
-	//check if level is left (return -1)
-	//~ else if(active==1 && ( (*mark)+yres+100>position.y)
+	//check if screen is left behind player (return -1)
+	//~ else if(active==1 && ( (*mark)+yres+100>position.y) )
 	//~ {
 		//~ active = 0;
 		//~ visible = 0;
-		//~ return -1;
+		//~ return 0;
 	//~ }
 	//*
 	
-	//check if destroyed (return points)
-	if(health<=0)
+	//check if destroyed
+	if(health<=0 && active!=-1)
 	{
 		//deactivate and start explosion
-		
+		active = -1;
+		expl[0]->first(1);
 		//*
 	}
 	//*
@@ -212,9 +213,14 @@ xlong CLenemy::update(CLentity<I>* p)
 		}
 		//*
 	}
+	else if(active==-1)
+	{
+		ammoman->update(p);
+		if(expl[0]->next()==1) return points;
+	}
 	else lastupdate = CLsystem::getmilliseconds();
 	
-	return 0;
+	return -1;
 }
 
 #endif

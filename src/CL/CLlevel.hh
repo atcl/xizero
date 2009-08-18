@@ -261,7 +261,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	delete enemiesa;
 	delete enemiesraw;
 	//*
-	
+
 	//create all enemies in level through copying from base enemies from archive
 	//find enemy startpos in entity map and associate (copy) from baseenemy in enemy list
 	enemies = new CLlist();
@@ -300,24 +300,34 @@ CLlevel::~CLlevel()
 
 void CLlevel::update(xchar input,xchar turbo)
 {
-	//update player
-	player->update(input,turbo,levellandscape,enemies);
-	//*
+	xlong isdead;
 	
+	//update player
+	isdead = player->update(input,turbo,levellandscape,enemies);
+	if(isdead != -1)
+	{
+		CLsystem::exit(0,0,"Game Over! ","points:",isdead);
+	}
+	//*
+
 	//update enemies
 	CLenemy* currentenemy;
-	xlong    isenemydead;
+	bool listfix = 0;
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
+		if(listfix) { i+=enemies->setprev(); listfix=0; }
 		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		isenemydead = currentenemy->update(player);
-		if(isenemydead!=0)
+		isdead = currentenemy->update(player);
+		if(isdead!=-1)
 		{
-			delete static_cast<CLenemy*>(enemies->delcurrent(1));
+			//delete static_cast<CLenemy*>(enemies->delcurrent(1));
+			player->addpoints(isdead);
+			enemies->delcurrent(0);
+			listfix = enemies->isfirst();
 		}
 	}
 	//*
-	
+
 	//adjust section of level to be displayed by ("new") player position
 	xlong py = player->getposition()->y;
 	if(py<playerscreenylevel) setmark(smoothmarkmin);

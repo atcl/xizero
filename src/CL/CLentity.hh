@@ -10,6 +10,7 @@
 #include "CLstruct.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
+#include "CLexplosion.hh"
 #include "CLammo.hh"
 #include "CLapi.hh"
 #include "CLformat.hh"
@@ -25,6 +26,7 @@ class CLentity : public virtual CLcl
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
+		CLexplosion* expl[I];
 		xmap* def;
 		xlong* csv;
 		
@@ -137,6 +139,10 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr)
 		angles[i] = 0;
 		direction[i] = 0;
 		//*
+		
+		//create explosion
+		expl[i] = new CLexplosion(model[i]);
+		//*
 	}
 	//*
 	
@@ -152,6 +158,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr)
 	shieldrate	= CLsystem::ato((*def)["shieldrate"]);
 	armor		= CLsystem::ato((*def)["armor"]);
 	ammomounts	= CLsystem::ato((*def)["ammomounts"]);
+	points		= 10; //CLsystem::ato((*def)["points"]);
 	//*
 	
 	//load ammo types
@@ -203,11 +210,11 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
-		model[i] = entityptr->model[i];
+		model[i] = new CLobject(entityptr->model[i]);
 		//*
 		
 		//set model(s) bounding boxes
-		boundingbox[0][i] = model[i]->getboundingbox();
+		boundingbox[0][i] = new CLbox(*model[i]->getboundingbox());
 		//*
 		
 		//set testing bounding boxes
@@ -218,6 +225,10 @@ CLentity<I>::CLentity(CLentity* entityptr)
 		//set initial model rotation angles
 		angles[i] = 0;
 		direction[i] = 0;
+		//*
+		
+		//create explosion
+		expl[i] = new CLexplosion(model[i]);
 		//*
 	}
 	//*
@@ -232,6 +243,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	shieldrate	= entityptr->shieldrate;
 	armor		= entityptr->armor;
 	ammomounts	= entityptr->ammomounts;
+	points		= entityptr->points;
 	//*
 	
 	//load ammo types
@@ -275,6 +287,7 @@ CLentity<I>::~CLentity<I>()
 	for(uxlong i=0; i<I; i++)
 	{
 		delete model[i];
+		delete expl[i];
 		delete boundingbox[1][i];
 	}
 }
@@ -288,24 +301,27 @@ void CLentity<I>::display(bool modelorshadow)
 	sposition.z = position.z;
 	//sposition = CLmisc3d::project(sposition); //fix point projections
 	//*
-	
-	switch(modelorshadow)
+
+	if(active!=0)
 	{
-		case 0:
-			//display model(s)
-			for(uxlong i=0; i<I; i++) model[i]->display(sposition,FLAT + AMBIENT);
-			//*
+		switch(modelorshadow)
+		{
+			case 0:
+				//display model(s)
+				for(uxlong i=0; i<I; i++) model[i]->display(sposition,FLAT + AMBIENT);
+				//*
+				
+				//display ammo
+				ammoman->display();
+				//*
+			break;
 			
-			//display ammo
-			ammoman->display();
-			//*
-		break;
-		
-		case 1:
-			//display shadow(s)
-			for(uxlong i=0; i<I; i++) model[i]->display(sposition,SHADOW);
-			//*
-		break;
+			case 1:
+				//display shadow(s)
+				for(uxlong i=0; i<I; i++) model[i]->display(sposition,SHADOW);
+				//*
+			break;
+		}
 	}
 }
 
