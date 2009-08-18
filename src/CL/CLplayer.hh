@@ -149,10 +149,11 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
 {
 	//update ammo
 	CLenemy* currenemy = 0;
+	ammoman->update();
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
 		currenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
-		ammoman->update(currenemy,CLmath::delta(i));
+		ammoman->collision(currenemy);
 	}
 	//*
 	

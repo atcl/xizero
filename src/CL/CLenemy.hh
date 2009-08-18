@@ -165,7 +165,8 @@ xlong CLenemy::update(CLentity<I>* p)
 	
 	if(active==1)
 	{
-		ammoman->update(p);
+		ammoman->update();
+		ammoman->collision(p);
 
 		xlong time = CLsystem::getmilliseconds();
 
@@ -215,7 +216,8 @@ xlong CLenemy::update(CLentity<I>* p)
 	}
 	else if(active==-1)
 	{
-		ammoman->update(p);
+		ammoman->update();
+		ammoman->collision(p);
 		if(expl[0]->next()==1) return points;
 	}
 	else lastupdate = CLsystem::getmilliseconds();

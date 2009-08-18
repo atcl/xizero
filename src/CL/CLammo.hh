@@ -34,7 +34,8 @@ class CLammomanager : public virtual CLcl
 		~CLammomanager();
 		
 		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction);
-		template<int I>void update(CLentity<I>* e,bool n=1);
+		void update();
+		template<int I>void collision(CLentity<I>* e);
 		void display();
 };
 
@@ -75,8 +76,34 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 	}
 }
 
+void CLammomanager::update()
+{
+	xlong time = CLsystem::getmilliseconds();
+
+	bool listfix=0;
+	CLammo* currammo = 0;
+	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
+	{
+		if(listfix) { i+=ammolist->setprev(); listfix=0; }
+		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+		
+		float inter = time-lastupdate;
+		currammo->p.x += inter*currammo->s.x;
+		currammo->p.y -= inter*currammo->s.y;
+		currammo->p.z += inter*currammo->s.z;
+		
+		if(CLgame::boundary(currammo->p,*mark)!=0)
+		{
+			ammolist->delcurrent(0);
+			listfix = ammolist->isfirst();
+		}
+	}
+	lastupdate = time;
+
+}
+
 template<int I>
-void CLammomanager::update(CLentity<I>* e,bool n)
+void CLammomanager::collision(CLentity<I>* e)
 {
 	xlong r = 0;
 	xlong time = CLsystem::getmilliseconds();
@@ -87,26 +114,14 @@ void CLammomanager::update(CLentity<I>* e,bool n)
 	{
 		if(listfix) { i+=ammolist->setprev(); listfix=0; }
 		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
-		if(n && CLgame::boundary(currammo->p,*mark)!=0)
-		{
-			ammolist->delcurrent(0);
-			listfix = ammolist->isfirst();
-		}
-		else if(e->isvisible() && CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
+		
+		if(e->isvisible() && CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 		{
 			r++;
 			ammolist->delcurrent(0);
 			listfix = ammolist->isfirst();
 		}
-		else if(n)
-		{
-			float inter = time-lastupdate;
-			currammo->p.x += inter*currammo->s.x;
-			currammo->p.y -= inter*currammo->s.y;
-			currammo->p.z += inter*currammo->s.z;
-		}
 	}
-	lastupdate = time;
 	e->hit(r);
 }
 

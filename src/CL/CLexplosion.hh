@@ -75,7 +75,7 @@ xlong CLexplosion::next()
 			//phase 1:
 			if(temp < starttime + 800)
 			{	
-				object->translatealongnormals( 1 + ( (temp-lastupdate)/2000 ) );
+				object->translatealongnormals( 1 + ( (temp-lastupdate)/1000 ) );
 			}
 			//*
 			
