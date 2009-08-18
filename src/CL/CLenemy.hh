@@ -137,6 +137,11 @@ CLenemy::~CLenemy()
 template<int I>
 xlong CLenemy::update(CLentity<I>* p)
 {
+	//update ammo
+	ammoman->update();
+	ammoman->collision(p);
+	//*
+	
 	//check if to activate
 	if(active==0 && ( (*mark)-100)<position.y)
 	{
@@ -165,9 +170,6 @@ xlong CLenemy::update(CLentity<I>* p)
 	
 	if(active==1)
 	{
-		ammoman->update();
-		ammoman->collision(p);
-
 		xlong time = CLsystem::getmilliseconds();
 
 		linear->unit();
@@ -216,8 +218,6 @@ xlong CLenemy::update(CLentity<I>* p)
 	}
 	else if(active==-1)
 	{
-		ammoman->update();
-		ammoman->collision(p);
 		if(expl[0]->next()==1) return points;
 	}
 	else lastupdate = CLsystem::getmilliseconds();
