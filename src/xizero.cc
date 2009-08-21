@@ -55,14 +55,14 @@ int main()
 		
 		if(!pause) testlevel->update(input,turbo);
 
-		CLdoublebuffer->fastclear(CLfloor::floorshade);
-		CLzbuffer->fastclear(CLfloor::floorz);
+		CLdoublebuffer->fastclear(0);
+		CLzbuffer->fastclear(zres);
 		CLstencilbuffer->fastclear(0);
 
 		switch(mode)
 		{
 			case 1: 
-				//CLfloor::draw();
+				CLfloor::draw();
 				testlevel->display();
 				break;
 

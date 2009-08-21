@@ -72,7 +72,7 @@ class boool
 
 boool::boool()
 {
-	b=0;
+	this->b=0;
 }
 
 boool::~boool() { }
