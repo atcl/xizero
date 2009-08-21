@@ -14,7 +14,7 @@ description=
 run_cmd=
 
 [files]
-current_page=56
+current_page=58
 FILE_NAME_0=3556;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/unittest.cc;0
 FILE_NAME_1=240;C;0;16;1;1;0;/home/atcl/devs/xizero/src/CLinc.h;0
 FILE_NAME_2=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CLproject.hh;0
@@ -73,5 +73,5 @@ FILE_NAME_54=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLresource.hh;0
 FILE_NAME_55=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLversion.hh;0
 FILE_NAME_56=873;Make;0;16;1;1;0;/home/atcl/devs/xizero/src/makefile;0
 FILE_NAME_57=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/xizero.hh;0
-FILE_NAME_58=490;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/xizero.cc;0
+FILE_NAME_58=838;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/xizero.cc;0
 FILE_NAME_59=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLboool.hh;0
