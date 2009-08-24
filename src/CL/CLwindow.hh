@@ -81,7 +81,7 @@ int CLwindow::handle(int event)
 			break;		
 	}
 	
-	if(havegamepad) CLgamepad::handle();
+	CLgamepad::handle();
 	
 	return Fl_Window::handle(event);
 }
@@ -150,17 +150,17 @@ xlong CLwindow::getmouseb()
 	return mouseb;
 }
 
-xlong getxaxis()
+xlong CLwindow::getxaxis()
 {
 	return CLgamepad::axis[0];
 }
 
-xlong getyaxis()
+xlong CLwindow::getyaxis()
 {
 	return CLgamepad::axis[1];
 }
 
-bool getbutton(xlong i)
+bool CLwindow::getbutton(xlong i)
 {
 	if(i<=10) return CLgamepad::button[i];
 	else return 0;

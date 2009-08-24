@@ -176,19 +176,19 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
 		xlong tempangle = 0;
 		//*
 
-		//temp use gamepad	
-		if(CLgamepad::axis[1]<0) input = 82;
-		if(CLgamepad::axis[1]>0) input = 84;
-		if(CLgamepad::axis[0]<0) turbo = 81;
-		if(CLgamepad::axis[0]>0) turbo = 83;
-		if(CLgamepad::button[0]!=0) turbo = 97;
-		if(CLgamepad::button[1]!=0) turbo = 100;
-		if(CLgamepad::button[2]!=0) turbo = 'w';
-		if(CLgamepad::button[3]!=0) turbo = 32;
-		if(CLgamepad::button[4]!=0) turbo = -29;
-		if(CLgamepad::button[5]!=0) turbo = 'q';
-		if(CLgamepad::button[6]!=0) turbo = 's';
-		if(CLgamepad::button[7]!=0) turbo = 'e';
+		//temp use gamepad
+			if(CLgamepad::axis[1]<0) input = 82;
+			if(CLgamepad::axis[1]>0) input = 84;
+			if(CLgamepad::axis[0]<0) turbo = 81;
+			if(CLgamepad::axis[0]>0) turbo = 83;
+			if(CLgamepad::button[0]!=0) turbo = 97;
+			if(CLgamepad::button[1]!=0) turbo = 100;
+			if(CLgamepad::button[2]!=0) turbo = 'w';
+			if(CLgamepad::button[3]!=0) turbo = 32;
+			if(CLgamepad::button[4]!=0) turbo = -29;
+			if(CLgamepad::button[5]!=0) turbo = 'q';
+			if(CLgamepad::button[6]!=0) turbo = 's';
+			if(CLgamepad::button[7]!=0) turbo = 'e';
 		//*
 
 		switch(input)

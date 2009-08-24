@@ -8,9 +8,9 @@
 #include "CLmath.hh"
 #include "CLmacros.hh"
 
-#define ttrue   1
-#define ffalse -1
-#define nnull   0
+#define boooltrue   1
+#define booolfalse -1
+#define booolnull   0
 
 
 class boool

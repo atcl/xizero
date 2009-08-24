@@ -27,6 +27,7 @@ namespace CLgamepad
 
 	xlong axis[2];
 	bool  button[10];
+	bool  tbutton[10];
 	
 	bool init();
 	void mask();
@@ -38,18 +39,9 @@ namespace CLgamepad
 
 bool CLgamepad::init()
 {
-	axis[0] = 0;
-	axis[1] = 0;
-	button[0] = 0;
-	button[1] = 0;
-	button[2] = 0;
-	button[3] = 0;
-	button[4] = 0;
-	button[5] = 0;
-	button[6] = 0;
-	button[7] = 0;
-	button[8] = 0;
-	button[9] = 0;
+	axis[0] = axis[1] = 0;
+	button[0] = button[1] = button[2] = button[3] = button[4] = button[5] = button[6] = button[7] = button[8] = button[9] = 0;
+	tbutton[0] = tbutton[1] = tbutton[2] = tbutton[3] = tbutton[4] = tbutton[5] = tbutton[6] = tbutton[7] = tbutton[8] = tbutton[9] = 0;
 	
 	if(joyGetNumDevs() == -1)
 	{
@@ -96,18 +88,9 @@ void CLgamepad::exit() { }
 
 bool CLgamepad::init()
 {
-	axis[0] = 0;
-	axis[1] = 0;
-	button[0] = 0;
-	button[1] = 0;
-	button[2] = 0;
-	button[3] = 0;
-	button[4] = 0;
-	button[5] = 0;
-	button[6] = 0;
-	button[7] = 0;
-	button[8] = 0;
-	button[9] = 0;
+	axis[0] = axis[1] = 0;
+	button[0] = button[1] = button[2] = button[3] = button[4] = button[5] = button[6] = button[7] = button[8] = button[9] = 0;
+	tbutton[0] = tbutton[1] = tbutton[2] = tbutton[3] = tbutton[4] = tbutton[5] = tbutton[6] = tbutton[7] = tbutton[8] = tbutton[9] = 0;
 	
 	if( (gamepad_device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
@@ -134,10 +117,12 @@ void CLgamepad::handle()
 		case JS_EVENT_AXIS:
 			if(gp.number>1) break;
 			axis[gp.number] = gp.value;
+			
 			break;
 		case JS_EVENT_BUTTON:
 			if(gp.number>9) break;
 			button[gp.number] = gp.value;
+			tbutton[gp.number] = gp.value;
 			break;
     }
 }
