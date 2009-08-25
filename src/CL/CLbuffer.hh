@@ -45,7 +45,7 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	size = s + (s%4); // make sure is amultiple of 16byte
 	buffer = new T[size];
 	
-	mmx = 0;
+	mmx = 1;
 	sse = 0;
 	//detectCPU(mmx,sse); //crashes..
 }
@@ -75,31 +75,39 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* purev = reinterpret_cast<xlong*>(&v);
 	xlong  packed[4] = { *purev, *purev, *purev, *purev };
-	xlong i=size;
+	uxlong i = size;
 
 	if(size>262144 && sse)
 	{
-		i>>=4;
+		i>>=5;
 		for(;i>0;i--)
 		{
 			//blast wth all 8 xmm regs, and movaps instead of movups (?)
 			__asm__ __volatile__ (
+			"prefetch 320(%0);"
 			"movups (%0),%%xmm0;"
 			"movups (%0),%%xmm1;"
 			"movups (%0),%%xmm2;"
 			"movups (%0),%%xmm3;"
+			"movups (%0),%%xmm4;"
+			"movups (%0),%%xmm5;"
+			"movups (%0),%%xmm6;"
+			"movups (%0),%%xmm7;"
 			"movntps %%xmm0,(%1);"
 			"movntps %%xmm1,16(%1);"
 			"movntps %%xmm2,32(%1);"
 			"movntps %%xmm3,48(%1);"
-			"emms;"			
+			"movntps %%xmm4,64(%1);"
+			"movntps %%xmm5,80(%1);"
+			"movntps %%xmm6,96(%1);"
+			"movntps %%xmm7,112(%1);"		
 			: : "r"(&packed[0]),"r"(puredst) );
-			puredst+=64;
+			puredst+=32;
 		}
 	}
 	else if(size>65536 && mmx)
 	{
-		i>>=2;
+		i>>=4;
 		for(;i>0;i--)
 		{
 			//blast with all 8 mm regs
@@ -119,10 +127,9 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 			"movq %%mm4,32(%1);"
 			"movq %%mm5,40(%1);"
 			"movq %%mm6,48(%1);"
-			"movq %%mm7,56(%1);"
-			"emms;"			
+			"movq %%mm7,56(%1);"		
 			: : "r"(&packed[0]),"r"(puredst) );
-			puredst+=64;
+			puredst+=16;
 		}
 	}
 	else
@@ -156,35 +163,40 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
-	xlong i=size;
-	
-	//make sure in ctor that size is a multiple of 16byte!
+	uxlong i = size;
 		
 	if(size>262144 && sse)
 	{
-		i>>=4;
+		i>>=5;
 		for(;i>0;i--)
 		{
 			//blast wth all 8 xmm regs, and movaps instead of movups (?)
 			__asm__ __volatile__ (
 			"prefetch 320(%0);"
-			"movups (%0), %%xmm0;"
-			"movups 16(%0),%%xmm1;"
-			"movups 32(%0),%%xmm2;"
-			"movups 48(%0),%%xmm3;"
+			"movups (%0),   %%xmm0;"
+			"movups 16(%0), %%xmm1;"
+			"movups 32(%0), %%xmm2;"
+			"movups 48(%0), %%xmm3;"
+			"movups 64(%0), %%xmm4;"
+			"movups 80(%0), %%xmm5;"
+			"movups 96(%0), %%xmm6;"
+			"movups 112(%0),%%xmm7;"
 			"movntps %%xmm0,(%1);"
 			"movntps %%xmm1,16(%1);"
 			"movntps %%xmm2,32(%1);"
 			"movntps %%xmm3,48(%1);"
-			"emms;"			
+			"movntps %%xmm4,64(%1);"
+			"movntps %%xmm5,80(%1);"
+			"movntps %%xmm6,96(%1);"
+			"movntps %%xmm7,112(%1);"	
 			: : "r"(puresrc),"r"(puredst) );
-			puresrc+=64;
-			puredst+=64;
+			puresrc+=32;
+			puredst+=32;
 		}
 	}
 	else if(size>65536 && mmx)
 	{
-		i>>=2;
+		i>>=4;
 		for(;i>0;i--)
 		{
 			//blast with all 8 mm regs
@@ -204,11 +216,10 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 			"movq %%mm4,32(%1);"
 			"movq %%mm5,40(%1);"
 			"movq %%mm6,48(%1);"
-			"movq %%mm7,56(%1);"
-			"emms;"			
+			"movq %%mm7,56(%1);"		
 			: : "r"(puresrc),"r"(puredst) );
-			puresrc+=64;
-			puredst+=64;
+			puresrc+=16;
+			puredst+=16;
 		}
 	}
 	else

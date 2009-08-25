@@ -4,7 +4,7 @@
 #define HH_CLWINDOW
 
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <FL/Fl_Window.H> //try Fl_Single_Window and Fl_Double_Window
 #include <FL/fl_draw.H>
 
 #include "CLtypes.hh"
