@@ -6,12 +6,25 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLapi.hh"
 
+
+struct CLwav
+{
+	CLfile* file;
+	xlong pcm;
+	xlong channel;
+	xlong rate;
+	xlong bits;
+	xlong offset;
+	xlong length;
+};
 
 //basic wav player
 namespace CLsound
 {
 	xlong device;
+	xlong isloop = -1;
 	
 	bool init();
 	bool play(const xchar* f,bool l);
@@ -38,6 +51,7 @@ bool CLsound::play(const xchar* f,bool l)
 		break;
 		
 		case true:
+			isloop = 1;
 			return PlaySound(TEXT(f), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		break;
 	}
@@ -61,37 +75,109 @@ void CLsound::exit()
 
 bool CLsound::init()
 {
-	device = open("/dev/dsp", O_WRONLY);
-	return 0;
+	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
+	{
+		CLsystem::print("No Soundblaster found");
+		return 0;
+	}
+	
+	int i = 0;
+	
+	ioctl(device,SNDCTL_DSP_RESET,&i);
+	
+	//~ i = 0x0004000c;
+	//~ ioctl(device,SNDCTL_DSP_SETFRAGMENT,&i);
+	i = 0;
+	ioctl(device,SNDCTL_DSP_STEREO,&i);
+	i = 44100;
+	ioctl(device,SNDCTL_DSP_SPEED,&i);
+	i = AFMT_S16_LE;
+	ioctl(device,SNDCTL_DSP_SETFMT,&i);
+	
+	ioctl(device,SNDCTL_DSP_SYNC,0);
+
+	return 1;
 }
 
 bool CLsound::play(const xchar* f,bool l)
 {
-	//load wav (header + data)
-	//set bits per sample
-	//set number of channels
-	//set sample rate
-	//start async playing (fork here)
+	if(device<0) return 0;
 	
-	 xlong playid = fork();
+	xlong playid = fork();
 	 
 	 if(playid == 0)
 	 {
-		//...
-			
-		return 0;
+		CLwav current;
+		
+		current.file = CLsystem::getfile(f);
+		
+		//check if "RIFF"
+		if(current.file->data[0] != 'FFIR') { say("wav loading error (RIFF)"); return 0; }
+		//*
+		
+		//check if "WAVE"
+		if(current.file->data[2] != 'EVAW') { say("wav loading error (WAVE)"); return 0; }
+		//*
+		
+		//check if "fmt "
+		if(current.file->data[3] != ' tmf') { say("wav loading error (fmt )"); return 0; }
+		//*
+		
+		//get length
+		current.length = current.file->data[4];
+		//*
+		
+		//get and check if pcm
+		current.pcm = (current.file->data[5]>>16);
+		if(current.pcm != 1) { say("wav loading error (pcm)"); return 0; }
+		//*
+		
+		//get and check channels
+		current.channel = (current.file->data[5]<<16)>>16;
+		if(current.channel != 1) { say("wav loading error (channel)"); return 0; }
+		//*
+		
+		//get bitrate
+		current.rate = current.file->data[6];
+		//*
+		
+		//get and check bits
+		current.bits = (current.file->data[8]>>16);
+		if(current.bits != 16) { say("wav loading error (bits)"); return 0; }
+		//*
+		
+		//check if "data"
+		if(current.file->data[9] != 'atad') { say("wav loading error (data)"); return 0; }
+		//*
+
+		//set device
+		//later.. imo in init
+		//*
+
+		//write to dsp device
+		uxlong till = (current.file->size-44);
+		//~ for(uxlong i=0; i<till; i++)
+		//~ {
+			write(device,&current.file->text[44],till);
+		//~ }
+		//*	
+		
+		_exit(playid);
 	 }
 	 else
 	 {
+		if(l) isloop = playid;
+		 
 		return 1;
 	 }
 	 
-	
+	 
 }
 
 void CLsound::stop()
 {
 	//stop async playing
+	_exit(isloop);
 }
 
 void CLsound::exit()

@@ -34,6 +34,10 @@ void CLsetup()
 	//init gamepad
 	CLgamepad::init();
 	//*
+	
+	//init sound
+	CLsound::init();
+	//*
 
 	//init benchmarking
 	clbench = new CLbench(3,COUT_FPS);

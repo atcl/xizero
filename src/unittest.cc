@@ -49,6 +49,12 @@ int main(int argc, char** argv)
 			//CLmenu testmenu = new CLmenu();
 			
 	//*
+	
+	//audio test:
+	
+	CLsound::play("../../cannon.wav",0);
+	
+	//*
 
 	CLfile* cube;
 	
