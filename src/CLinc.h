@@ -67,9 +67,9 @@
 #include "CL/CLmacros.hh"
 
 //GUI dependent
-//#include "CL/CLfltk.hh"
 #include "CL/CLwindow.hh"
 #include "CL/CLsound.hh"
+#include "CL/CLfsprog.hh"
 
 //super constructor
 #include "CL/CLsetup.hh"

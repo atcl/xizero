@@ -23,6 +23,8 @@ int main()
 	bool running  = 1;
 	bool pause = 0;
 	
+	CLfsprogress::set(20);
+	
 	while(running && win->run()) 
 	{
 		turbo = win->getturbo();

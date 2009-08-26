@@ -4,7 +4,7 @@
 #define HH_CLWINDOW
 
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H> //try Fl_Single_Window and Fl_Double_Window
+#include <FL/Fl_Single_Window.H>
 #include <FL/fl_draw.H>
 
 #include "CLtypes.hh"
@@ -16,7 +16,7 @@ void timeout(void*)
 	Fl::repeat_timeout(0.02,timeout);
 }
 
-class CLwindow : public Fl_Window
+class CLwindow : public Fl_Single_Window
 {
 	private:
 		xlong width;
@@ -39,7 +39,7 @@ class CLwindow : public Fl_Window
 	public:
 		CLwindow(xlong w,xlong h,const xchar* t,xlong* b);
 		~CLwindow();
-		static void redraw();
+		void redraw();
 		static xlong run();
 		xlong getkey();
 		xlong getturbo();
@@ -79,7 +79,7 @@ int CLwindow::handle(int event)
 	return Fl_Window::handle(event);
 }
 
-CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
+CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w,h,t)
 {
 	width = w;
 	height = h;
