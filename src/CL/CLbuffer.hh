@@ -11,7 +11,6 @@
 #include "CLcl.hh"
 #include "CLmacros.hh"
 
-
 template <typename T>class CLbuffer : public virtual CLcl
 {
 	private:
@@ -19,8 +18,8 @@ template <typename T>class CLbuffer : public virtual CLcl
 		uxlong size;
 		uxlong ds;
 		uxlong qs;
-		bool   mmx;
-		bool   sse;
+		bool   havemmx;
+		bool   havesse;
 		
 	public:
 		CLbuffer(uxlong s);
@@ -45,9 +44,15 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	size = s + (s%4); // make sure is amultiple of 16byte
 	buffer = new T[size];
 	
-	mmx = 1;
-	sse = 0;
-	//detectCPU(mmx,sse); //crashes..
+	havemmx = 1;
+	havesse = 0; 
+	
+	xlong hm = 0;
+	xlong hs = 0;
+	detectCPU(hm,hs);
+	
+	//havemmx = hm;
+	//havesse = hs;
 }
 
 template <typename T>CLbuffer<T>::~CLbuffer() { }
@@ -65,47 +70,45 @@ template <typename T>void CLbuffer<T>::fastclear(T v)
 	xlong* btemp = reinterpret_cast<xlong*>(&buffer[0]);
 	xlong* vtemp = reinterpret_cast<xlong*>(&v);
 
-	//memset(btemp,*vtemp,size<<2);
-
 	__asm__ __volatile__ ( "cld; rep stosl;" : : "a"(*vtemp),"D"(btemp),"c"(size) );
 }
 
 template <typename T>void CLbuffer<T>::ultraclear(T v)
 {
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
-	xlong* purev = reinterpret_cast<xlong*>(&v);
-	xlong  packed[4] = { *purev, *purev, *purev, *purev };
+	xlong purev = *(reinterpret_cast<xlong*>(&v));
+	xlong  packed[4];
+	packed[0] = packed[1] = packed[2] = packed[3] = purev;
 	uxlong i = size;
 
-	if(size>262144 && sse)
+	if(size>262144 && havesse)
 	{
 		i>>=5;
 		for(;i>0;i--)
 		{
-			//blast wth all 8 xmm regs, and movaps instead of movups (?)
+			//blast with all 8 xmm regs, and movaps instead of movups (?)
 			__asm__ __volatile__ (
-			"prefetch 320(%0);"
 			"movups (%0),%%xmm0;"
-			"movups (%0),%%xmm1;"
-			"movups (%0),%%xmm2;"
-			"movups (%0),%%xmm3;"
-			"movups (%0),%%xmm4;"
-			"movups (%0),%%xmm5;"
-			"movups (%0),%%xmm6;"
-			"movups (%0),%%xmm7;"
-			"movntps %%xmm0,(%1);"
-			"movntps %%xmm1,16(%1);"
-			"movntps %%xmm2,32(%1);"
-			"movntps %%xmm3,48(%1);"
-			"movntps %%xmm4,64(%1);"
-			"movntps %%xmm5,80(%1);"
-			"movntps %%xmm6,96(%1);"
-			"movntps %%xmm7,112(%1);"		
+			"movups %%xmm0,%%xmm1;"
+			"movups %%xmm0,%%xmm2;"
+			"movups %%xmm0,%%xmm3;"
+			"movups %%xmm0,%%xmm4;"
+			"movups %%xmm0,%%xmm5;"
+			"movups %%xmm0,%%xmm6;"
+			"movups %%xmm0,%%xmm7;"
+			"movups %%xmm0,(%1);"
+			"movups %%xmm1,16(%1);"
+			"movups %%xmm2,32(%1);"
+			"movups %%xmm3,48(%1);"
+			"movups %%xmm4,64(%1);"
+			"movups %%xmm5,80(%1);"
+			"movups %%xmm6,96(%1);"
+			"movups %%xmm7,112(%1);"
 			: : "r"(&packed[0]),"r"(puredst) );
 			puredst+=32;
 		}
 	}
-	else if(size>65536 && mmx)
+	else if(size>65536 && havemmx)
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -113,13 +116,13 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 			//blast with all 8 mm regs
 			__asm__ __volatile__ (
 			"movq (%0),%%mm0;"
-			"movq (%0),%%mm1;"
-			"movq (%0),%%mm2;"
-			"movq (%0),%%mm3;"
-			"movq (%0),%%mm4;"
-			"movq (%0),%%mm5;"
-			"movq (%0),%%mm6;"
-			"movq (%0),%%mm7;"
+			"movq %%mm0,%%mm1;"
+			"movq %%mm0,%%mm2;"
+			"movq %%mm0,%%mm3;"
+			"movq %%mm0,%%mm4;"
+			"movq %%mm0,%%mm5;"
+			"movq %%mm0,%%mm6;"
+			"movq %%mm0,%%mm7;"
 			"movq %%mm0,(%1);"
 			"movq %%mm1,8(%1);"
 			"movq %%mm2,16(%1);"
@@ -165,7 +168,7 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	uxlong i = size;
 		
-	if(size>262144 && sse)
+	if(size>262144 && havesse)
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -194,7 +197,7 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 			puredst+=32;
 		}
 	}
-	else if(size>65536 && mmx)
+	else if(size>65536 && havemmx)
 	{
 		i>>=4;
 		for(;i>0;i--)

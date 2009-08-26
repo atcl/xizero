@@ -90,14 +90,14 @@ void inline CLlodsd(xlong* src,xlong& var)
 }
 
 //move to CLdetect
-void detectCPU(bool& mmx,bool& sse)
+void detectCPU(xlong& hmmx,xlong& hsse)
 {
-	xlong dd;
+	static xlong dd = 0;
 	
-	__asm__ __volatile__ ("cpuid":"=d"(dd):"a"(1));
+	if(dd==0) __asm__ __volatile__ ("cpuid;":"=d"(dd):"a"(1));
 	
-	if(dd && MMXFLAG) mmx=1;
-	if(dd && SSEFLAG) sse=1;
+	if(dd & MMXFLAG) hmmx = 1; else hmmx = 0;
+	if(dd & SSEFLAG) hsse = 1; else hsse = 0;
 }
 //*
 

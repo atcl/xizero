@@ -56,7 +56,7 @@ int main()
 		if(!pause) testlevel->update(input,turbo);
 
 		CLdoublebuffer->ultraclear(0);
-		CLzbuffer->fastclear(zres);
+		CLzbuffer->ultraclear(zres);
 		CLstencilbuffer->ultraclear(0);
 
 		switch(mode)
