@@ -20,7 +20,6 @@ struct CLwav
 	xlong length;
 };
 
-//basic wav player
 namespace CLsound
 {
 	xlong device;
@@ -140,6 +139,7 @@ bool CLsound::play(const xchar* f,bool l)
 		
 		//get bitrate
 		current.rate = current.file->data[6];
+		if(current.rate != 44100) { say("wav loading error (rate)"); return 0; }
 		//~ say(current.rate);
 		//*
 		
@@ -160,10 +160,10 @@ bool CLsound::play(const xchar* f,bool l)
 		//write to dsp device
 		while(true)
 		{
-			uxlong till = (current.file->size-44)/4096;
+			uxlong till = (current.file->size-44)/1024;
 			for(uxlong i=0; i<till; i++)
 			{
-				write(device,&current.file->text[44+(i*4096)],4096);
+				write(device,&current.file->text[44+(i*1024)],1024);
 			}
 			
 			if(!l) break;

@@ -12,7 +12,7 @@ struct xshush
 	uxshort frc;
 };
 
-//inline all methods and friends!
+//! inline all methods and friends!
 union xfixed
 {
 	xlong  i;

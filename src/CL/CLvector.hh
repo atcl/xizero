@@ -32,7 +32,7 @@ struct CLvectorbase
 };
 //*
 
-//inline all methods and friends!
+//! inline all methods and friends!
 template<typename T>
 struct CLvector : public CLvectorbase<T,CLvector<T> >
 {

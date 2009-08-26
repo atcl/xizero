@@ -85,8 +85,10 @@ int main()
 		clbench->inc();		
 	}
 
+	//exit sequence
 	delete testlevel;
-
+	CLsound::exit();
 	return 0;
+	//*
 }
 

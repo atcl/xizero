@@ -51,9 +51,7 @@ int main(int argc, char** argv)
 	//*
 	
 	//audio test:
-	
 	CLsound::play("../../toxic.wav",1);
-	
 	//*
 
 	CLfile* cube;
