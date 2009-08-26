@@ -72,6 +72,7 @@ void CLsound::exit()
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <signal.h>
 
 bool CLsound::init()
 {
@@ -85,8 +86,6 @@ bool CLsound::init()
 	
 	ioctl(device,SNDCTL_DSP_RESET,&i);
 	
-	//~ i = 0x0004000c;
-	//~ ioctl(device,SNDCTL_DSP_SETFRAGMENT,&i);
 	i = 0;
 	ioctl(device,SNDCTL_DSP_STEREO,&i);
 	i = 44100;
@@ -130,20 +129,24 @@ bool CLsound::play(const xchar* f,bool l)
 		//get and check if pcm
 		current.pcm = (current.file->data[5]>>16);
 		if(current.pcm != 1) { say("wav loading error (pcm)"); return 0; }
+		//~ say(current.pcm);
 		//*
 		
 		//get and check channels
 		current.channel = (current.file->data[5]<<16)>>16;
 		if(current.channel != 1) { say("wav loading error (channel)"); return 0; }
+		//~ say(current.channel);
 		//*
 		
 		//get bitrate
 		current.rate = current.file->data[6];
+		//~ say(current.rate);
 		//*
 		
 		//get and check bits
 		current.bits = (current.file->data[8]>>16);
 		if(current.bits != 16) { say("wav loading error (bits)"); return 0; }
+		//~ say(current.bits);
 		//*
 		
 		//check if "data"
@@ -155,11 +158,16 @@ bool CLsound::play(const xchar* f,bool l)
 		//*
 
 		//write to dsp device
-		uxlong till = (current.file->size-44);
-		//~ for(uxlong i=0; i<till; i++)
-		//~ {
-			write(device,&current.file->text[44],till);
-		//~ }
+		while(true)
+		{
+			uxlong till = (current.file->size-44)/4096;
+			for(uxlong i=0; i<till; i++)
+			{
+				write(device,&current.file->text[44+(i*4096)],4096);
+			}
+			
+			if(!l) break;
+		}
 		//*	
 		
 		_exit(playid);
@@ -170,19 +178,30 @@ bool CLsound::play(const xchar* f,bool l)
 		 
 		return 1;
 	 }
-	 
-	 
 }
 
 void CLsound::stop()
 {
-	//stop async playing
-	_exit(isloop);
+	if(device != -1)
+	{
+		//stop async playing
+		kill(isloop,SIGKILL);
+		//*
+	}
 }
 
 void CLsound::exit()
 {
-	close(device);
+	if(device != -1)
+	{
+		//stop any loop playing
+		stop();
+		//*
+		
+		//close the audio device
+		close(device);
+		//*
+	}
 }
 #endif
 //*

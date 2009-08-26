@@ -16,6 +16,9 @@
 #include "CLversion.hh"
 #include "CLresource.hh"
 
+//forward declaration
+namespace CLsound {	void exit(); }
+//*
 
 namespace CLsystem
 {
@@ -64,6 +67,7 @@ void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
 	if(e!=0) e();
 
 	std::cout << f << ": "<< m <<  std::endl;
+	CLsound::exit();
 	::exit(r);
 }
 
@@ -72,6 +76,7 @@ void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar
 	if(e!=0) e();
 
 	std::cout << f << ": "<< m << " " << d << std::endl;
+	CLsound::exit();
 	::exit(r);
 }
 
@@ -80,6 +85,7 @@ void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
 	if(e!=0) e();
 
 	std::cout << f << ": "<< m << " " << d << std::endl;
+	CLsound::exit();
 	::exit(r);
 }
 

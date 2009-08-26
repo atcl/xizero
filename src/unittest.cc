@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 	
 	//audio test:
 	
-	CLsound::play("../../cannon.wav",0);
+	CLsound::play("../../toxic.wav",1);
 	
 	//*
 
@@ -215,6 +215,12 @@ int main(int argc, char** argv)
 				if(ac==0) ac = ANTICY;
 				else ac = 0;
 			break;
+			case ' ':
+				CLsound::stop();
+			break;
+			case 'r':
+				CLsound::play("../../cannon.wav",0);
+			break;
 			
 			//System:
 			case '0':
@@ -271,7 +277,8 @@ int main(int argc, char** argv)
 		clbench->inc();
 	}
 
-	//exit sequence	
+	//exit sequence
+	//~ CLsound::exit();
 	return 0;
 	//***
 }
