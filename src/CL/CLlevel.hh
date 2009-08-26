@@ -52,7 +52,7 @@ class CLlevel : public virtual CLcl
 		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer);
 		~CLlevel();
 
-		void update(xchar input,xchar turbo);
+		void update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
 		void subsmark(xlong m);
 		void setmark(xlong m);
@@ -298,12 +298,12 @@ CLlevel::~CLlevel()
 	delete[] terrain;
 }
 
-void CLlevel::update(xchar input,xchar turbo)
+void CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 {
 	xlong isdead;
 	
 	//update player
-	isdead = player->update(input,turbo,levellandscape,enemies);
+	isdead = player->update(input,turbo,levellandscape,enemies,p);
 	if(isdead != -1)
 	{
 		CLsystem::exit(0,0,"Game Over! ","points:",isdead);

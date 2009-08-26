@@ -14,6 +14,13 @@
 
 	#include "CLtypes.hh"
 
+struct CLgamepadstate
+{
+	xlong axis[2];
+	bool  button[10];
+	bool  tbutton[10];
+};
+
 
 namespace CLgamepad
 {
@@ -25,24 +32,20 @@ namespace CLgamepad
 		struct js_event gp;	
 	#endif
 
-	xlong axis[2];
-	bool  button[10];
-	bool  tbutton[10];
+	CLgamepadstate pad = { 0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0 };
 	
 	bool init();
 	void mask();
 	void handle();
 	void exit();
+	
+	CLgamepadstate* getgamepad();
 };
 
 #ifdef WIN32
 
 bool CLgamepad::init()
 {
-	axis[0] = axis[1] = 0;
-	button[0] = button[1] = button[2] = button[3] = button[4] = button[5] = button[6] = button[7] = button[8] = button[9] = 0;
-	tbutton[0] = tbutton[1] = tbutton[2] = tbutton[3] = tbutton[4] = tbutton[5] = tbutton[6] = tbutton[7] = tbutton[8] = tbutton[9] = 0;
-	
 	if(joyGetNumDevs() == -1)
 	{
 		CLsystem::print("No Gamepad driver found");
@@ -68,18 +71,18 @@ void CLgamepad::mask()
 void CLgamepad::handle()
 {
 	joyGetPos(JOYSTICKID1,&gp);
-	axis[0] = gp.wXpos;
-	axis[1] = gp.wYpos;
-	button[0] = (gp.wButtons & JOY_BUTTON1) > 0;
-	button[1] = (gp.wButtons & JOY_BUTTON2) > 0;
-	button[2] = (gp.wButtons & JOY_BUTTON3) > 0;
-	button[3] = (gp.wButtons & JOY_BUTTON4) > 0;
-	button[4] = (gp.wButtons & JOY_BUTTON5) > 0;
-	button[5] = (gp.wButtons & JOY_BUTTON6) > 0;
-	button[6] = (gp.wButtons & JOY_BUTTON7) > 0;
-	button[7] = (gp.wButtons & JOY_BUTTON8) > 0;
-	button[8] = (gp.wButtons & JOY_BUTTON9) > 0;
-	button[9] = (gp.wButtons & JOY_BUTTON10) > 0;
+	pad.axis[0] = gp.wXpos;
+	pad.axis[1] = gp.wYpos;
+	pad.button[0] = (gp.wButtons & JOY_BUTTON1) > 0;
+	pad.button[1] = (gp.wButtons & JOY_BUTTON2) > 0;
+	pad.button[2] = (gp.wButtons & JOY_BUTTON3) > 0;
+	pad.button[3] = (gp.wButtons & JOY_BUTTON4) > 0;
+	pad.button[4] = (gp.wButtons & JOY_BUTTON5) > 0;
+	pad.button[5] = (gp.wButtons & JOY_BUTTON6) > 0;
+	pad.button[6] = (gp.wButtons & JOY_BUTTON7) > 0;
+	pad.button[7] = (gp.wButtons & JOY_BUTTON8) > 0;
+	pad.button[8] = (gp.wButtons & JOY_BUTTON9) > 0;
+	pad.button[9] = (gp.wButtons & JOY_BUTTON10) > 0;
 }
 
 void CLgamepad::exit() { }
@@ -88,10 +91,6 @@ void CLgamepad::exit() { }
 
 bool CLgamepad::init()
 {
-	axis[0] = axis[1] = 0;
-	button[0] = button[1] = button[2] = button[3] = button[4] = button[5] = button[6] = button[7] = button[8] = button[9] = 0;
-	tbutton[0] = tbutton[1] = tbutton[2] = tbutton[3] = tbutton[4] = tbutton[5] = tbutton[6] = tbutton[7] = tbutton[8] = tbutton[9] = 0;
-	
 	if( (gamepad_device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
 		CLsystem::print("No Gamepad found");
@@ -116,13 +115,13 @@ void CLgamepad::handle()
     {
 		case JS_EVENT_AXIS:
 			if(gp.number>1) break;
-			axis[gp.number] = gp.value;
+			pad.axis[gp.number] = gp.value;
 			
 			break;
 		case JS_EVENT_BUTTON:
 			if(gp.number>9) break;
-			button[gp.number] = gp.value;
-			tbutton[gp.number] = gp.value;
+			pad.button[gp.number] = gp.value;
+			pad.tbutton[gp.number] = gp.value;
 			break;
     }
 }
@@ -133,6 +132,12 @@ void CLgamepad::exit()
 }
 
 #endif
+
+CLgamepadstate* CLgamepad::getgamepad()
+{
+	return &pad;
+}
+
 
 #endif
 

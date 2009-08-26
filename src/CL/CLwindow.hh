@@ -46,11 +46,6 @@ class CLwindow : public Fl_Window
 		xlong getmousex();
 		xlong getmousey();
 		xlong getmouseb();
-		//gamepad
-		xlong getxaxis();
-		xlong getyaxis();
-		bool  getbutton(xlong i);
-		//*
 };
 
 void CLwindow::draw()
@@ -81,8 +76,6 @@ int CLwindow::handle(int event)
 			break;		
 	}
 	
-	CLgamepad::handle();
-	
 	return Fl_Window::handle(event);
 }
 
@@ -98,8 +91,6 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Window(w,h,t)
 	
 	Fl::visual(FL_RGB);
 	Fl::add_timeout(0.02,timeout);
-	
-	havegamepad = CLgamepad::init();
 	
 	this->end();
 	this->show();
@@ -148,22 +139,6 @@ xlong CLwindow::getmousey()
 xlong CLwindow::getmouseb()
 {
 	return mouseb;
-}
-
-xlong CLwindow::getxaxis()
-{
-	return CLgamepad::axis[0];
-}
-
-xlong CLwindow::getyaxis()
-{
-	return CLgamepad::axis[1];
-}
-
-bool CLwindow::getbutton(xlong i)
-{
-	if(i<=10) return CLgamepad::button[i];
-	else return 0;
 }
 
 #endif

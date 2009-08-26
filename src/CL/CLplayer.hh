@@ -24,7 +24,7 @@ class CLplayer : public CLentity<2>
 		CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts=0);
 		~CLplayer();
 
-		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies);
+		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies,CLgamepadstate* p);
 		void addpoints(xlong p);
 		void showbox();
 };
@@ -145,7 +145,7 @@ CLplayer::~CLplayer()
 	delete def;
 }
 
-xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies,CLgamepadstate* p)
 {
 	//update ammo
 	CLenemy* currenemy = 0;
@@ -177,18 +177,20 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies)
 		//*
 
 		//temp use gamepad
-			if(CLgamepad::axis[1]<0) input = 82;
-			if(CLgamepad::axis[1]>0) input = 84;
-			if(CLgamepad::axis[0]<0) turbo = 81;
-			if(CLgamepad::axis[0]>0) turbo = 83;
-			if(CLgamepad::button[0]!=0) turbo = 97;
-			if(CLgamepad::button[1]!=0) turbo = 100;
-			if(CLgamepad::button[2]!=0) turbo = 'w';
-			if(CLgamepad::button[3]!=0) turbo = 32;
-			if(CLgamepad::button[4]!=0) turbo = -29;
-			if(CLgamepad::button[5]!=0) turbo = 'q';
-			if(CLgamepad::button[6]!=0) turbo = 's';
-			if(CLgamepad::button[7]!=0) turbo = 'e';
+			if(p->axis[1]<0) input = 82;
+			if(p->axis[1]>0) input = 84;
+			if(p->axis[0]<0) turbo = 81;
+			if(p->axis[0]>0) turbo = 83;
+			if(p->button[0]!=0) turbo = -29;
+			if(p->button[1]!=0) turbo = 32;
+			if(p->button[2]!=0) turbo = 'q';
+			if(p->button[3]!=0) turbo = 'w';
+			if(p->button[4]!=0) turbo = 'e';
+			if(p->button[5]!=0) turbo = 's';
+			if(p->button[6]!=0) turbo = 97;
+			if(p->button[7]!=0) turbo = 100;
+			//if(p->button[8]!=0) turbo = ?;
+			//if(p->button[9]!=0) turbo = ?;
 		//*
 
 		switch(input)

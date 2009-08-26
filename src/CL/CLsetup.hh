@@ -30,6 +30,10 @@ void CLsetup()
 	//open window
 	win = new CLwindow(xres,yres,"atCROSSLEVEL",CLdoublebuffer->getbuffer());
 	//*
+	
+	//init gamepad
+	CLgamepad::init();
+	//*
 
 	//init benchmarking
 	clbench = new CLbench(3,COUT_FPS);
