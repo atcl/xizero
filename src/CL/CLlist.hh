@@ -9,6 +9,17 @@
 #include "CLapi.hh"
 
 
+//test this listmember
+template<class M> struct newlistmember
+{
+	M*				data;
+	newlistmember*	next;
+	newlistmember*	prev;
+	xchar*			name;
+	xlong			hash;
+};
+//*
+
 //make template version
 struct listmember
 {
@@ -33,9 +44,12 @@ class CLlist : public virtual CLcl
 		~CLlist();
 
 		void append(void* e,const xchar* n=" ",xlong h=0);
+		template<class member> void append(member* e,const xchar* n=" ",xlong h=0);
 		void* getcurrentdata();
+		template<class member> member* getcurrentdata();
 		xchar* getcurrentname();
 		void* delcurrent(bool smash); //test smash option
+		template<class member> member* delcurrent(bool smash);
 		xlong getlength();
 		void setindex(xlong i);
 		xlong getindex();
@@ -111,7 +125,57 @@ void CLlist::append(void* e,const xchar* n,xlong h)
 	length++;
 }
 
+template<class member>
+void CLlist::append(member* e,const xchar* n,xlong h)
+{
+	//move these out of the if's
+	//~ current = new listmember;
+	//~ current->data = e;
+	//~ current->name = (xchar*)n;
+	//~ current->hash = h;
+	//*
+	
+	if(length==0)
+	{
+		current = new listmember; //<member>
+		first = current;
+		last = current;
+		current->data = e;
+		current->next = current;
+		current->prev = current;
+		current->name = (xchar*)n;
+		current->hash = h;
+	}
+	else
+	{
+		setlast();
+		current->next = new listmember; //<member>
+		last = current->next;
+		current->next->data = e;
+		current->next->prev = current;
+		current->next->next = current->next;
+		current = current->next;
+		current->name = (xchar*)n;
+		current->hash = h;
+	}
+
+	length++;
+}
+
 void* CLlist::getcurrentdata()
+{
+	if(current!=0)
+	{
+		return current->data;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+template<class member>
+member* CLlist::getcurrentdata()
 {
 	if(current!=0)
 	{
@@ -140,6 +204,51 @@ void* CLlist::delcurrent(bool smash)
 	if(length==0) return 0;
 
 	void* temp = current->data;
+
+	if(current==last && current==first)
+	{
+		delete current;
+		current = 0;
+		first = 0;
+		last = 0;
+	}
+	else if(current==last)
+	{
+		setprev();
+		delete current->next;
+		current->next = current;
+		last = current;
+	}
+	else if(current==first)
+	{
+		setnext();
+		delete current->prev;
+		current->prev = current;
+		first = current;
+	}
+	else
+	{
+		listmember* tempnext = current->next;
+		listmember* tempprev = current->prev;
+		setnext();
+		delete current->prev;
+		current->prev = tempprev;
+		setprev();
+		current->next = tempnext;
+	}
+
+	length--;
+	
+	if(smash==true) return temp;
+	return 0;
+}
+
+template<class member>
+member* CLlist::delcurrent(bool smash)
+{
+	if(length==0) return 0;
+
+	member* temp = current->data;
 
 	if(current==last && current==first)
 	{
