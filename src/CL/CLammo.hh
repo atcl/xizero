@@ -10,7 +10,6 @@
 #include "CLgame.hh"
 #include "CLmath.hh"
 
-
 template<int I> class CLentity; //forward declaration
 
 struct CLammo
@@ -20,10 +19,12 @@ struct CLammo
 	CLfvector s;
 };
 
+typedef CLlist<CLammo> CLammolist;
+
 class CLammomanager : public virtual CLcl
 {
 	private:
-		CLlist* ammolist;
+		CLammolist* ammolist;
 		CLammo** ammotype;
 		xlong ammotypecount;
 		xlong lastupdate;
@@ -43,7 +44,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 {
 	mark = m;
 	ammotypecount = atc;
-	ammolist = new CLlist();
+	ammolist = new CLammolist();
 	ammotype = new CLammo*[atc];
 	for(uxlong i=0; i<atc; i++)
 	{
@@ -85,7 +86,7 @@ void CLammomanager::update()
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
 	{
 		if(listfix) { i+=ammolist->setprev(); listfix=0; }
-		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+		currammo = ammolist->getcurrentdata();
 		
 		float inter = time-lastupdate;
 		currammo->p.x += inter*currammo->s.x;
@@ -113,7 +114,7 @@ void CLammomanager::collision(CLentity<I>* e)
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
 	{
 		if(listfix) { i+=ammolist->setprev(); listfix=0; }
-		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+		currammo = ammolist->getcurrentdata();
 		
 		if(e->isvisible() && CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 		{
@@ -130,7 +131,7 @@ void CLammomanager::display()
 	CLammo* currammo = 0;
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength();i+=ammolist->setnext())
 	{
-		currammo = static_cast<CLammo*>(ammolist->getcurrentdata());
+		currammo = ammolist->getcurrentdata();
 		currammo->comsprite(currammo->p.x,currammo->p.y-(*mark));
 	}
 }

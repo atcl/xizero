@@ -19,15 +19,17 @@
 #include "CLmacros.hh"
 
 
+typedef CLlist<CLenemy> CLenemylist;
+
 class CLlevel : public virtual CLcl
 {
 	protected:
-		CLmatrix*  linear;
-		CLplayer*  player;
-		CLlist*    enemies;
-		CLobject** terrain;
+		CLmatrix*    linear;
+		CLplayer*    player;
+		CLenemylist* enemies;
+		CLobject**   terrain;
 
-		CLfbuffer* levellandscape;
+		CLfbuffer*   levellandscape;
 
 	private:
 		static xlong levelwidth;
@@ -264,7 +266,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//create all enemies in level through copying from base enemies from archive
 	//find enemy startpos in entity map and associate (copy) from baseenemy in enemy list
-	enemies = new CLlist();
+	enemies = new CLenemylist();
 	CLenemy* currentenemy;
 	CLlvector enemyp;
 	for(uxlong l=0; l<differentenemies; l++)
@@ -316,7 +318,7 @@ void CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
 		if(listfix) { i+=enemies->setprev(); listfix=0; }
-		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
+		currentenemy = enemies->getcurrentdata();
 		isdead = currentenemy->update(player);
 		if(isdead!=-1)
 		{
@@ -413,7 +415,7 @@ void CLlevel::display()
 	player->display(1);
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
+		currentenemy = enemies->getcurrentdata();
 		currentenemy->display(1);
 	}
 	CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
@@ -426,7 +428,7 @@ void CLlevel::display()
 	//display enemies:
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		currentenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
+		currentenemy = enemies->getcurrentdata();
 		currentenemy->display();
 	}
 	//*

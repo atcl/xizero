@@ -13,6 +13,8 @@
 #include "CLenemy.hh"
 
 
+typedef CLlist<CLenemy> CLenemylist;
+
 class CLplayer : public CLentity<2>
 {
 	private:
@@ -24,7 +26,7 @@ class CLplayer : public CLentity<2>
 		CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts=0);
 		~CLplayer();
 
-		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies,CLgamepadstate* p);
+		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLgamepadstate* p);
 		void addpoints(xlong p);
 		void showbox();
 };
@@ -145,14 +147,14 @@ CLplayer::~CLplayer()
 	delete def;
 }
 
-xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLlist* enemies,CLgamepadstate* p)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLgamepadstate* p)
 {
 	//update ammo
 	CLenemy* currenemy = 0;
 	ammoman->update();
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
 	{
-		currenemy = static_cast<CLenemy*>(enemies->getcurrentdata());
+		currenemy = enemies->getcurrentdata();
 		ammoman->collision(currenemy);
 	}
 	//*
