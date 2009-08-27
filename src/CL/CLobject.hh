@@ -322,6 +322,7 @@ CLobject::CLobject(CLobject* obj)
 CLobject::~CLobject()
 {
 	delete boundingbox;
+	delete rboundingbox;
 }
 
 void CLobject::update(CLmatrix* m)

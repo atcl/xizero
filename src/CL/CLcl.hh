@@ -10,7 +10,7 @@
 
 class CLcl
 {
-	private:
+	protected:
 		static xlong version;
 		xlong id;
 		const xchar* name;
