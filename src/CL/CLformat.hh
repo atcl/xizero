@@ -11,7 +11,7 @@
 #include "CLstruct.hh"
 #include "CLutils.hh"
 #include "CLmacros.hh"
-#include "CLapi.hh"
+#include "CLsystem.hh"
 
 struct cmpstr
 {

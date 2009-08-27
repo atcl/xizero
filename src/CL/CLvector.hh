@@ -6,7 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLmath.hh"
-#include "CLapi.hh"
+#include "CLsystem.hh"
 
 //curios base class
 template<typename T,class clvector>

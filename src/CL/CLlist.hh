@@ -6,7 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
-#include "CLapi.hh"
+#include "CLsystem.hh"
 
 
 template<class member>

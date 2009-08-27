@@ -16,7 +16,7 @@
 #include "CL/CLboool.hh"
 
 //API dependent
-#include "CL/CLapi.hh"
+#include "CL/CLsystem.hh"
 
 //utility toolbox
 #include "CL/CLutils.hh"

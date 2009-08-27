@@ -7,7 +7,7 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
-#include "CLapi.hh"
+#include "CLsystem.hh"
 #include "CLgame.hh"
 #include "CLammo.hh"
 #include "CLentity.hh"
