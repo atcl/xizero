@@ -4,69 +4,69 @@
 #define HH_CLVECTOR
 //#pragma message "Compiling " __FILE__  "! TODO: "
 
-#include  <iostream>
 #include "CLtypes.hh"
 #include "CLmath.hh"
+#include "CLapi.hh"
 
 //curios base class
 template<typename T,class clvector>
 struct CLvectorbase
 {
 	public:
-		clvector  operator+(const clvector& a) const { static_cast<clvector*>(this)->operator+(a); }
-		clvector  operator-(const clvector& a) const { static_cast<clvector*>(this)->operator-(a); }
-		clvector  operator-()                        { static_cast<clvector*>(this)->operator-(); }
-		       T  dot(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
-		clvector  operator*(T c) const               { static_cast<clvector*>(this)->operator*(c); }
-		clvector  cross(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
-		       T  operator!() const                  { static_cast<clvector*>(this)->operator!(); }
-		clvector& operator+=(const clvector& a)      { static_cast<clvector*>(this)->operator+=(a); }
-		clvector& operator-=(const clvector& a)      { static_cast<clvector*>(this)->operator-=(a); }
-		clvector& operator*=(T c)                    { static_cast<clvector*>(this)->operator*=(c); }
+		inline clvector  operator+(const clvector& a) const { static_cast<clvector*>(this)->operator+(a); }
+		inline clvector  operator-(const clvector& a) const { static_cast<clvector*>(this)->operator-(a); }
+		inline clvector  operator-()                        { static_cast<clvector*>(this)->operator-(); }
+		inline        T  dot(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
+		inline clvector  operator*(T c) const               { static_cast<clvector*>(this)->operator*(c); }
+		inline clvector  cross(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
+		inline        T  operator!() const                  { static_cast<clvector*>(this)->operator!(); }
+		inline clvector& operator+=(const clvector& a)      { static_cast<clvector*>(this)->operator+=(a); }
+		inline clvector& operator-=(const clvector& a)      { static_cast<clvector*>(this)->operator-=(a); }
+		inline clvector& operator*=(T c)                    { static_cast<clvector*>(this)->operator*=(c); }
 		
-		clvector& operator=(const clvector& a)       { static_cast<clvector*>(this)->operator=(a); }
-		clvector& operator=(T c)                     { static_cast<clvector*>(this)->operator=(c); }
-		       T  operator%(const clvector& a)       { static_cast<clvector*>(this)->operator%(a); }
+		inline clvector& operator=(const clvector& a)       { static_cast<clvector*>(this)->operator=(a); }
+		inline clvector& operator=(T c)                     { static_cast<clvector*>(this)->operator=(c); }
+		inline        T  operator%(const clvector& a)       { static_cast<clvector*>(this)->operator%(a); }
 	
-		void print() const { static_cast<clvector*>(this)->print(); }
+					void print() const { static_cast<clvector*>(this)->print(); }
 };
 //*
 
-//! inline all methods and friends!
+
 template<typename T>
 struct CLvector : public CLvectorbase<T,CLvector<T> >
 {
 	T x;
 	T y;
 	T z;
-	T e;
+	T e; //for extra information like light intensity 
 
 	CLvector() { x=y=z=e=0; }
 	CLvector(T tx,T ty,T tz,T te=0) : x(tx) , y(ty) , z(tz), e(te) { ; } 
 	~CLvector() { }
 
-	CLvector operator+(const CLvector& a) const;	//vector addition
-	CLvector operator-(const CLvector& a) const;	//vector subtraction
-	CLvector operator-();							//vector additive negation
-	       T dot(const CLvector& a) const;			//dot product
-	CLvector operator*(T c) const;					//scalar multiplication
+	inline CLvector  operator+(const CLvector& a) const;	//vector addition
+	inline CLvector  operator-(const CLvector& a) const;	//vector subtraction
+	inline CLvector  operator-();							//vector additive negation
+	inline CLvector  operator*(T c) const;					//scalar multiplication
 	template<typename S> friend CLvector<S> operator*(S c,CLvector<S>& a);		//scalar multiplication friend
-	CLvector cross(const CLvector& a) const;		//cross product
-	       T operator!() const;						//vector length
+	inline CLvector  cross(const CLvector& a) const;		//cross product
+	inline        T  dot(const CLvector& a) const;			//dot product
+	inline        T  operator!() const;						//vector length
 	
-	CLvector& operator+=(const CLvector& a);		//vector addition
-	CLvector& operator-=(const CLvector& a);		//vector subtraction
-	CLvector& operator*=(T c);						//scalar multiplication
+	inline CLvector& operator+=(const CLvector& a);			//vector addition
+	inline CLvector& operator-=(const CLvector& a);			//vector subtraction
+	inline CLvector& operator*=(T c);						//scalar multiplication
 
-	CLvector& operator=(const CLvector& a);			//vector vector assignment
-	CLvector& operator=(T c);						//scalar vector assignment
-		      operator CLvector<float>() const;		//cast to float
-			  operator CLvector<xlong>() const;		//cast to xlong
-			  //operator CLvector<xfixed>() const;	//cast to fixed
+	inline CLvector& operator=(const CLvector& a);			//vector vector assignment
+	inline CLvector& operator=(T c);						//scalar vector assignment
+		     		 operator CLvector<float>() const;		//cast to float
+			  		 operator CLvector<xlong>() const;		//cast to xlong
+			 		 //operator CLvector<xfixed>() const;	//cast to fixed
 			  
-			T operator%(const CLvector& a);			//angle between vectors
+	inline		  T  operator%(const CLvector& a);			//angle between vectors
 
-			void print() const;						//console output	
+				void print() const;							//console output	
 };
 
 
@@ -214,13 +214,23 @@ T CLvector<T>::operator%(const CLvector& a)
 template<typename T>
 void CLvector<T>::print() const
 {
-	std::cout << "( " << x << " , " << y << " , " << z << " )" << std::endl;
+	CLsystem::print("( ",0);
+	CLsystem::print(x,0);
+	CLsystem::print(" , ",0);
+	CLsystem::print(y,0);
+	CLsystem::print(" , ",0);
+	CLsystem::print(z,0);
+	//~ CLsystem::print(" , ",0);
+	//~ CLsystem::print(e,0);
+	CLsystem::print(" )");
 }
 //*
 
+
+//friend:
 //scalar multiplication from left:
 template<typename T>
-CLvector<T> operator*(T c,CLvector<T>& a)
+inline CLvector<T> operator*(T c,CLvector<T>& a)
 {
 	return ( (a.x * c) + (a.y * c) + (a.z * c) );
 }
@@ -239,12 +249,13 @@ struct _CLvector
 		_CLvector(const CLvector<T>& L, const CLvector<T>& R) : l(L), r(R) { ; } //inline
 	
 	public:
-		operator T() const { return l.dot(r); }
-		operator CLvector<T>() const { return l.cross(r); }
+		inline operator T() const { return l.dot(r); }
+		inline operator CLvector<T>() const { return l.cross(r); }
 
 };
+//*
 
-//inline
+//container multiplication operator
 template<typename T>
 _CLvector<T> operator*(const CLvector<T>& l, const CLvector<T>& r)
 {
