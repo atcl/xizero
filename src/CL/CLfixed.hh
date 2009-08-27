@@ -12,61 +12,59 @@ struct xshush
 	uxshort frc;
 };
 
-//! inline all methods and friends!
 union xfixed
 {
 	xlong  i;
 	xshush p;
 
-			xfixed& operator=(xfixed &a);
-			xfixed& operator=(xshort& a);
-			
-			xfixed& operator-();
-			
-			xfixed& operator++();
-			xfixed& operator--();
-			
-			xfixed& operator+=(xfixed& a);
-			xfixed& operator+=(xshort& a);
-			xfixed& operator-=(xfixed& a);
-			xfixed& operator-=(xshort& a);
-			xfixed& operator*=(xfixed& a);
-			xfixed& operator*=(xshort& a);
-			xfixed& operator/=(xfixed& a);
-			xfixed& operator/=(xshort& a);
+	inline xfixed& operator=(xfixed &a);
+	inline xfixed& operator=(xshort& a);
 	
-			xfixed operator+(xfixed& a);
-			xfixed operator+(xshort& a);
-	friend  xfixed operator+(short& a,xfixed& b);
-			xfixed operator-(xfixed& a);
-			xfixed operator-(xshort& a);
-	friend  xfixed operator-(short& a,xfixed& b);
-			xfixed operator*(xfixed& a);
-			xfixed operator*(xshort& a);
-	friend  xfixed operator*(short& a,xfixed& b);
-			xfixed operator/(xfixed& a);
-			xfixed operator/(xshort& a);
-	friend  xfixed operator/(short& a,xfixed& b);
+	inline xfixed& operator-();
 	
+	inline xfixed& operator++();
+	inline xfixed& operator--();
 	
-			bool operator==(xfixed& a);
-			bool operator==(xshort& a);
-	friend  bool operator==(short& a,xfixed& b);
-			bool operator!=(xfixed& a);
-			bool operator!=(xshort& a);
-	friend  bool operator!=(short& a,xfixed& b);
-			bool operator<=(xfixed& a);
-			bool operator<=(xshort& a);
-	friend  bool operator<=(short& a,xfixed& b);
-			bool operator>=(xfixed& a);
-			bool operator>=(xshort& a);
-	friend  bool operator>=(short& a,xfixed& b);
-			bool operator<(xfixed& a);
-			bool operator<(xshort& a);
-	friend  bool operator<(short& a,xfixed& b);
-			bool operator>(xfixed& a);
-			bool operator>(xshort& a);
-	friend  bool operator>(short& a,xfixed& b);
+	inline xfixed& operator+=(xfixed& a);
+	inline xfixed& operator+=(xshort& a);
+	inline xfixed& operator-=(xfixed& a);
+	inline xfixed& operator-=(xshort& a);
+	inline xfixed& operator*=(xfixed& a);
+	inline xfixed& operator*=(xshort& a);
+	inline xfixed& operator/=(xfixed& a);
+	inline xfixed& operator/=(xshort& a);
+	
+	inline xfixed operator+(xfixed& a);
+	inline xfixed operator+(xshort& a);
+	friend xfixed operator+(short& a,xfixed& b);
+	inline xfixed operator-(xfixed& a);
+	inline xfixed operator-(xshort& a);
+	friend xfixed operator-(short& a,xfixed& b);
+	inline xfixed operator*(xfixed& a);
+	inline xfixed operator*(xshort& a);
+	friend xfixed operator*(short& a,xfixed& b);
+	inline xfixed operator/(xfixed& a);
+	inline xfixed operator/(xshort& a);
+	friend xfixed operator/(short& a,xfixed& b);
+	
+	inline bool operator==(xfixed& a);
+	inline bool operator==(xshort& a);
+	friend bool operator==(short& a,xfixed& b);
+	inline bool operator!=(xfixed& a);
+	inline bool operator!=(xshort& a);
+	friend bool operator!=(short& a,xfixed& b);
+	inline bool operator<=(xfixed& a);
+	inline bool operator<=(xshort& a);
+	friend bool operator<=(short& a,xfixed& b);
+	inline bool operator>=(xfixed& a);
+	inline bool operator>=(xshort& a);
+	friend bool operator>=(short& a,xfixed& b);
+	inline bool operator<(xfixed& a);
+	inline bool operator<(xshort& a);
+	friend bool operator<(short& a,xfixed& b);
+	inline bool operator>(xfixed& a);
+	inline bool operator>(xshort& a);
+	friend bool operator>(short& a,xfixed& b);
 	
 	// <<,>>,
 };
@@ -272,14 +270,14 @@ bool xfixed::operator>(xshort& a)
 
 //friends:
 
-xfixed operator+(short& a,xfixed& b)
+inline xfixed operator+(short& a,xfixed& b)
 {
 	xfixed r = b;
 	r.p.num += a;
 	return r;
 }
 
-xfixed operator-(short& a,xfixed& b)
+inline xfixed operator-(short& a,xfixed& b)
 {
 	xfixed r;
 	r.i = 0;
@@ -288,14 +286,14 @@ xfixed operator-(short& a,xfixed& b)
 	return r;
 }
 
-xfixed operator*(short& a,xfixed& b)
+inline xfixed operator*(short& a,xfixed& b)
 {
 	xfixed r = b;
 	__asm__ __volatile__ ( "shll $16,%%ebx; imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(r.i) : "a"(r.i),"b"(a) ); //swap eax,edx in shrd?
 	return r;
 }
 
-xfixed operator/(short& a,xfixed& b)
+inline xfixed operator/(short& a,xfixed& b)
 {
 	xfixed r;
 	r.i = 0;
@@ -304,32 +302,32 @@ xfixed operator/(short& a,xfixed& b)
 	return r;
 }
 
-bool operator==(short& a,xfixed& b)
+inline bool operator==(short& a,xfixed& b)
 {
 	return !((xlong(a)<<16) ^ b.i);	
 }
 
-bool operator!=(short& a,xfixed& b)
+inline bool operator!=(short& a,xfixed& b)
 {
 	return ((xlong(a)<<16) ^ b.i);
 }
 
-bool operator<=(short& a,xfixed& b)
+inline bool operator<=(short& a,xfixed& b)
 {
 	return ((xlong(a)<<16)<=b.i);
 }
 
-bool operator>=(short& a,xfixed& b)
+inline bool operator>=(short& a,xfixed& b)
 {
 	return ((xlong(a)<<16)>=b.i);
 }
 
-bool operator<(short& a,xfixed& b)
+inline bool operator<(short& a,xfixed& b)
 {
 	return ((xlong(a)<<16)<b.i);
 }
 
-bool operator>(short& a,xfixed& b)
+inline bool operator>(short& a,xfixed& b)
 {
 	return ((xlong(a)<<16)>b.i);
 }

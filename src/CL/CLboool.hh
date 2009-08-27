@@ -8,10 +8,9 @@
 #include "CLmath.hh"
 #include "CLmacros.hh"
 
-#define boooltrue   1
-#define booolfalse -1
-#define booolnull   0
-
+#define CLtrue   1
+#define CLfalse -1
+#define CLnull   0
 
 class boool
 {
@@ -20,47 +19,61 @@ class boool
 	
 	public:
 		boool();
+		boool(boool& a);
+		boool(bool a);
+		boool(xlong a);
 		~boool();
 	
-		boool& operator=(xlong a);
+		inline boool& operator=(boool a);
+		inline boool& operator=(bool a);
+		inline boool& operator=(xlong a);
 		
-		boool& operator-();
-		boool& operator!();
+		inline boool operator-() const;
+		inline boool operator!() const;
 		
-		boool& operator++();
-		boool& operator--();
+		inline boool& operator++();
+		inline boool& operator--();
 		
-		boool operator+(boool a);
-		boool operator-(boool a);
-		boool operator+(bool a);
-		boool operator-(bool a);
-		boool operator+(xlong a);
-		boool operator-(xlong a);
-		boool operator*(xlong a);
+		inline boool& operator+=(boool a);
+		inline boool& operator-=(boool a);
+		inline boool& operator*=(boool a);
+		inline boool& operator+=(bool a);
+		inline boool& operator-=(bool a);
+		inline boool& operator*=(bool a);
+		inline boool& operator+=(xlong a);
+		inline boool& operator-=(xlong a);
+		inline boool& operator*=(xlong a);
+		
+		inline boool operator+(boool a) const;
+		inline boool operator-(boool a) const;
+		inline boool operator*(boool a) const;
+		inline boool operator+(bool a)  const;
+		inline boool operator-(bool a)  const;
+		inline boool operator*(bool a)  const;
+		inline boool operator+(xlong a) const;
+		inline boool operator-(xlong a) const;
+		inline boool operator*(xlong a) const;
 		
 		friend boool operator+(xlong a,boool b);
 		friend boool operator-(xlong a,boool b);
 		friend boool operator*(xlong a,boool b);
 		
-		boool operator&&(boool a);
-		boool operator||(boool a);
-		boool operator^(boool a);
-		boool operator&&(bool a);
-		boool operator||(bool a);
-		boool operator^(bool a);
+		inline bool operator&&(boool a) const;
+		inline bool operator||(boool a) const;
+		inline bool operator^(boool a)  const;
 		
-		bool operator==(boool a);
-		bool operator!=(boool a);
-		bool operator<=(boool a);
-		bool operator>=(boool a);
-		bool operator<(boool a);
-		bool operator>(boool a);
-		bool operator==(bool a);
-		bool operator!=(bool a);
-		bool operator<=(bool a);
-		bool operator>=(bool a);
-		bool operator<(bool a);
-		bool operator>(bool a);
+		inline bool operator==(boool a) const;
+		inline bool operator!=(boool a) const;
+		inline bool operator<=(boool a) const;
+		inline bool operator>=(boool a) const;
+		inline bool operator<(boool a)  const;
+		inline bool operator>(boool a)  const;
+		inline bool operator==(bool a)  const;
+		inline bool operator!=(bool a)  const;
+		inline bool operator<=(bool a)  const;
+		inline bool operator>=(bool a)  const;
+		inline bool operator<(bool a)   const;
+		inline bool operator>(bool a)   const;
 		
 		friend bool operator==(bool a,boool b);
 		friend bool operator!=(bool a,boool b);
@@ -68,6 +81,9 @@ class boool
 		friend bool operator>=(bool a,boool b);
 		friend bool operator<(bool a,boool b);
 		friend bool operator>(bool a,boool b);
+
+		inline operator bool()  const;		
+		inline operator xlong() const;
 };
 
 boool::boool()
@@ -75,7 +91,33 @@ boool::boool()
 	this->b=0;
 }
 
+boool::boool(boool& a)
+{
+	this->b=a.b;
+}
+
+boool::boool(bool a)
+{
+	this->b=a;
+}
+
+boool::boool(xlong a)
+{
+	this->b=CLmath::sign(a);
+}
+
 boool::~boool() { }
+
+boool& boool::operator=(boool a)
+{
+	this->b = a.b;
+}
+
+boool& boool::operator=(bool a)
+{
+	this->b = a;
+	return *this;
+}
 
 boool& boool::operator=(xlong a)
 {
@@ -83,16 +125,16 @@ boool& boool::operator=(xlong a)
 	return *this;
 }
 
-boool& boool::operator-()
+boool boool::operator-() const
 {
-	this->b = -(this->b); //CLneg(this->b);
-	return *this;
+	boool temp(-(this->b));
+	return temp;
 }
 
-boool& boool::operator!()
+boool boool::operator!() const
 {
-	this->b = -(this->b); //CLneg(this->b);
-	return *this;
+	boool temp(-(this->b));
+	return temp;
 }
 	
 boool& boool::operator++()
@@ -107,49 +149,233 @@ boool& boool::operator--()
 	return *this;
 }
 
+boool& boool::operator+=(boool a)
+{
+	
+}
+
+boool& boool::operator-=(boool a)
+{
+	
+}
+
+boool& boool::operator*=(boool a)
+{
+	
+}
+
+boool& boool::operator+=(bool a)
+{
+	
+}
+
+boool& boool::operator-=(bool a)
+{
+	
+}
+
+boool& boool::operator*=(bool a)
+{
+	
+}
+
+boool& boool::operator+=(xlong a)
+{
+	
+}
+
+boool& boool::operator-=(xlong a)
+{
+	
+}
+
+boool& boool::operator*=(xlong a)
+{
+	
+}
+
+boool boool::operator+(boool a) const
+{
+	boool temp(CLmath::sign(this->b + a.b));
+	return temp;
+}
+
+boool boool::operator-(boool a) const
+{
+	boool temp(CLmath::sign(this->b - a.b));
+	return temp;
+}
+
+boool boool::operator*(boool a) const
+{
+	boool temp(CLmath::sign(this->b * a.b));
+	return temp;
+}
+
+boool boool::operator+(bool a)  const
+{
+	boool temp(CLmath::sign(this->b + xlong(a)));
+	return temp;
+}
+
+boool boool::operator-(bool a)  const
+{
+	boool temp(CLmath::sign(this->b - xlong(a)));
+	return temp;	
+}
+
+boool boool::operator*(bool a)  const
+{
+	boool temp(CLmath::sign(this->b * xlong(a)));
+	return temp;	
+}
+
+boool boool::operator+(xlong a) const
+{
+	boool temp(CLmath::sign(this->b + a));
+	return temp;	
+}
+
+boool boool::operator-(xlong a) const
+{
+	boool temp(CLmath::sign(this->b - a));
+	return temp;	
+}
+
+boool boool::operator*(xlong a) const
+{
+	boool temp(CLmath::sign(this->b + a));
+	return temp;
+}
+		
+bool boool::operator&&(boool a) const
+{
+	
+}
+
+bool boool::operator||(boool a) const
+{
+	
+}
+
+bool boool::operator^(boool a)  const
+{
+	
+}
+		
+bool boool::operator==(boool a) const
+{
+	
+}
+
+bool boool::operator!=(boool a) const
+{
+	
+}
+
+bool boool::operator<=(boool a) const
+{
+	
+}
+
+bool boool::operator>=(boool a) const
+{
+	
+}
+
+bool boool::operator<(boool a)  const
+{
+	
+}
+
+bool boool::operator>(boool a)  const
+{
+	
+}
+
+bool boool::operator==(bool a)  const
+{
+	
+}
+
+bool boool::operator!=(bool a)  const
+{
+	
+}
+
+bool boool::operator<=(bool a)  const
+{
+	
+}
+
+bool boool::operator>=(bool a)  const
+{
+	
+}
+
+bool boool::operator<(bool a)   const
+{
+	
+}
+
+bool boool::operator>(bool a)   const
+{
+	
+}
+
+boool::operator bool()  const
+{
+	return bool(this->b);
+}
+	
+boool::operator xlong() const
+{
+	return b;
+}
+
 //friends:
 
-boool operator+(xlong a,boool b)
+inline boool operator+(xlong a,boool b)
 {
 	
 }
 
-boool operator-(xlong a,boool b)
+inline boool operator-(xlong a,boool b)
 {
 	
 }
 
-boool operator*(xlong a,boool b)
+inline boool operator*(xlong a,boool b)
 {
 	
 }
 
-bool operator==(bool a,boool b)
+inline bool operator==(bool a,boool b)
 {
 	
 }
 
-bool operator!=(bool a,boool b)
+inline bool operator!=(bool a,boool b)
 {
 	
 }
 
-bool operator<=(bool a,boool b)
+inline bool operator<=(bool a,boool b)
 {
 	
 }
 
-bool operator>=(bool a,boool b)
+inline bool operator>=(bool a,boool b)
 {
 	
 }
 
-bool operator<(bool a,boool b)
+inline bool operator<(bool a,boool b)
 {
 	
 }
 
-bool operator>(bool a,boool b)
+inline bool operator>(bool a,boool b)
 {
 	
 }

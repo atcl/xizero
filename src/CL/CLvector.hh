@@ -16,9 +16,9 @@ struct CLvectorbase
 		inline clvector  operator+(const clvector& a) const { static_cast<clvector*>(this)->operator+(a); }
 		inline clvector  operator-(const clvector& a) const { static_cast<clvector*>(this)->operator-(a); }
 		inline clvector  operator-()                        { static_cast<clvector*>(this)->operator-(); }
-		inline        T  dot(const clvector& a) const { static_cast<clvector*>(this)->operator*(a); }
+		inline        T  dot(const clvector& a) const 		{ static_cast<clvector*>(this)->operator*(a); }
 		inline clvector  operator*(T c) const               { static_cast<clvector*>(this)->operator*(c); }
-		inline clvector  cross(const clvector& a) const { static_cast<clvector*>(this)->operator^(a); }
+		inline clvector  cross(const clvector& a) const		{ static_cast<clvector*>(this)->operator^(a); }
 		inline        T  operator!() const                  { static_cast<clvector*>(this)->operator!(); }
 		inline clvector& operator+=(const clvector& a)      { static_cast<clvector*>(this)->operator+=(a); }
 		inline clvector& operator-=(const clvector& a)      { static_cast<clvector*>(this)->operator-=(a); }
@@ -28,10 +28,9 @@ struct CLvectorbase
 		inline clvector& operator=(T c)                     { static_cast<clvector*>(this)->operator=(c); }
 		inline        T  operator%(const clvector& a)       { static_cast<clvector*>(this)->operator%(a); }
 	
-					void print() const { static_cast<clvector*>(this)->print(); }
+					void print() const						{ static_cast<clvector*>(this)->print(); }
 };
 //*
-
 
 template<typename T>
 struct CLvector : public CLvectorbase<T,CLvector<T> >
@@ -68,7 +67,6 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 
 				void print() const;							//console output	
 };
-
 
 //vector addition:
 template<typename T>
@@ -182,7 +180,7 @@ CLvector<T>& CLvector<T>::operator=(T c)
 }
 //*
 
-//vector assignment:
+//vector cast CLvector<float>:
 template<typename T>
 CLvector<T>::operator CLvector<float>() const
 {
@@ -190,13 +188,21 @@ CLvector<T>::operator CLvector<float>() const
 }
 //*
 
-//vector assignment:
+//vector cast CLvector<xlong>:
 template<typename T>
 CLvector<T>::operator CLvector<xlong>() const
 {
 	return CLvector<xlong>( xlong(this->x), xlong(this->y), xlong(this->z) );
 }
 //*
+
+//~ //vector cast CLvector<xfixed>:
+//~ template<typename T>
+//~ CLvector<T>::operator CLvector<xfixed>() const
+//~ {
+	//~ return CLvector<xfixed>( xfixed(this->x), xfixed(this->y), xfixed(this->z) );
+//~ }
+//~ //*
 
 //angle between vectors:
 template<typename T>
@@ -225,7 +231,6 @@ void CLvector<T>::print() const
 	CLsystem::print(" )");
 }
 //*
-
 
 //friend:
 //scalar multiplication from left:
@@ -267,6 +272,7 @@ _CLvector<T> operator*(const CLvector<T>& l, const CLvector<T>& r)
 typedef CLvector<xlong> CLlvector;
 typedef CLvector<float> CLfvector;
 //typedef CLvector<xfixed> CLxvector;
+//*
 
 #endif
 
