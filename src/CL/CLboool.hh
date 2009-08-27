@@ -108,10 +108,12 @@ boool::boool(xlong a)
 
 boool::~boool() { }
 
+//assign boool
 boool& boool::operator=(boool& a)
 {
 	this->b = a.b;
 }
+//*
 
 //assign bool
 boool& boool::operator=(bool a)
