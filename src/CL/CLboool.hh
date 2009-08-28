@@ -54,6 +54,9 @@ class boool
 		inline boool operator-(xlong a) const;
 		inline boool operator*(xlong a) const;
 		
+		friend boool operator+(bool a,boool& b);
+		friend boool operator-(bool a,boool& b);
+		friend boool operator*(bool a,boool& b);
 		friend boool operator+(xlong a,boool& b);
 		friend boool operator-(xlong a,boool& b);
 		friend boool operator*(xlong a,boool& b);
@@ -166,62 +169,71 @@ boool& boool::operator--()
 //assignment addition with boool
 boool& boool::operator+=(boool& a)
 {
-	
+	this->b = CLmath::sign(this->b + a.b);
+	return *this;
 }
 //*
 
 //assignment subtraction with boool
 boool& boool::operator-=(boool& a)
 {
-	
+	this->b = CLmath::sign(this->b - a.b);
+	return *this;
 }
 //*
 
 //assignment multiplication with boool
 boool& boool::operator*=(boool& a)
 {
-	
+	this->b = CLmath::sign(this->b * a.b);
+	return *this;
 }
 
 //assignment addition with bool
 boool& boool::operator+=(bool a)
 {
-	
+	this->b = CLmath::sign(this->b + xlong(a));
+	return *this;
 }
 //*
 
 //assignment subtraction with bool
 boool& boool::operator-=(bool a)
 {
-	
+	this->b = CLmath::sign(this->b - xlong(a));
+	return *this;
 }
 //*
 
 //assignment multiplication with bool
 boool& boool::operator*=(bool a)
 {
-	
+	this->b = CLmath::sign(this->b * xlong(a));
+	return *this;
 }
 //*
 
 //assignment addition with xlong
 boool& boool::operator+=(xlong a)
 {
-	
+	this->b = CLmath::sign(this->b + a);
+	return *this;
 }
 //*
 
 //assignment subtraction with xlong
 boool& boool::operator-=(xlong a)
 {
-	
+	this->b = CLmath::sign(this->b - a);
+	return *this;
 }
 //*
 
 //assignment multiplication with xlong
 boool& boool::operator*=(xlong a)
 {
-	
+	this->b = CLmath::sign(this->b * a);
+	return *this;
 }
 //*
 
@@ -299,21 +311,21 @@ boool boool::operator*(xlong a) const
 //logical and with boool	
 bool boool::operator&&(boool& a) const
 {
-	
+	return (this->b && a);
 }
 //*
 
 //logical or vboool
 bool boool::operator||(boool& a) const
 {
-	
+	return (this->b || a);
 }
 //*
 
 //logical xor with boool
 bool boool::operator^(boool& a)  const
 {
-	
+	return (this->b ^ a);
 }
 //*
 
@@ -419,63 +431,96 @@ boool::operator xlong() const
 //add with xlong from left
 inline boool operator+(xlong a,boool& b)
 {
-	
+	boool temp;
+	temp.b = CLmath::sign(a+b.b);
+	return temp;
 }
 //*
 
 //subtract with xlong from left
 inline boool operator-(xlong a,boool& b)
 {
-	
+	boool temp;
+	temp.b = CLmath::sign(a-b.b);
+	return temp;
 }
 //*
 
 //multiplicate with xlong from left
 inline boool operator*(xlong a,boool& b)
 {
-	
+	boool temp;
+	temp.b = CLmath::sign(a*b.b);
+	return temp;
+}
+//*
+
+//add with bool from left
+inline boool operator+(bool a,boool& b)
+{
+	boool temp;
+	temp.b = CLmath::sign(xlong(a)+b.b);
+	return temp;
+}
+//*
+
+//subtract with bool from left
+inline boool operator-(bool a,boool& b)
+{
+	boool temp;
+	temp.b = CLmath::sign(xlong(a)-b.b);
+	return temp;
+}
+//*
+
+//multiplicate with bool from left
+inline boool operator*(bool a,boool& b)
+{
+	boool temp;
+	temp.b = CLmath::sign(xlong(a)*b.b);
+	return temp;
 }
 //*
 
 //equality with bool from left
 inline bool operator==(bool a,boool& b)
 {
-	
+	return (xlong(a) == b.b);
 }
 //*
 
 //inequality with bool from left
 inline bool operator!=(bool a,boool& b)
 {
-	
+	return (xlong(a) != b.b);
 }
 //*
 
 //less or equal with bool from left
 inline bool operator<=(bool a,boool& b)
 {
-	
+	return (xlong(a) <= b.b);
 }
 //*
 
 //greater or equal with bool from left
 inline bool operator>=(bool a,boool& b)
 {
-	
+	return (xlong(a) >= b.b);
 }
 //*
 
 //less with bool from left
 inline bool operator<(bool a,boool& b)
 {
-	
+	return (xlong(a) < b.b);
 }
 //*
 
 //greater with bool from left
 inline bool operator>(bool a,boool& b)
 {
-	
+	return (xlong(a) > b.b);	
 }
 //*
 
