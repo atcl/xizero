@@ -18,9 +18,14 @@ class CLguibase : public virtual CLcl
 		uxlong fcolor;
 		uxlong bcolor;
 		uxlong rcolor;
+		bool flat;
+		
+		bool visible;
+		
+		void basereset(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 
 	public:
-		CLguibase(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc);
+		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 		virtual ~CLguibase();
 
 		virtual void draw();
@@ -40,7 +45,7 @@ class CLguibase : public virtual CLcl
 		uxlong getrcolor();
 };
 
-CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc)
+CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
 {
 	posx = px;
 	posy = py;
@@ -49,9 +54,22 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlon
 	fcolor = fc;
 	bcolor = bc;
 	rcolor = rc;
+	flat = f;
 }
 
 CLguibase::~CLguibase() { } //virtual!
+
+void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
+{
+	posx = px;
+	posy = py;
+	width = w;
+	height = h;
+	fcolor = fc;
+	bcolor = bc;
+	rcolor = rc;
+	flat = f;
+}
 
 void CLguibase::draw() { } //virtual!
 

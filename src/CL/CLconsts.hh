@@ -17,6 +17,12 @@
 #define CLcyan   0x0000FFFF
 //*
 
+//gui default colors
+#define CLguifront 0x00000000
+#define CLguiback  0x00C0C0C0
+#define CLguiframe 0x00000000
+//*
+
 //render flags
 #define CENTER  0b0000000010000000 //center object on screen
 #define FLAT    0b0000000001000000 //use flatshading

@@ -291,7 +291,7 @@ void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
 }
 
 void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
-{
+{	
 	drawhorline(x1,y1,x2,c);
 	drawhorline(x1,y2,x2,c);
 	drawverline(x1,y1,y2,c);
@@ -300,6 +300,10 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
+	if(x2<x1) x1 ^= x2 ^= x1 ^= x2;
+	if(y2<y1) y1 ^= y2 ^= y1 ^= y2;
+	if(x1<0 || y1<0 || x2>xres || y2>yres || x2<0 || y2<0 || x1>xres || y1>yres) return;
+	
 	for(xlong i=y1; i<=y2; i++)
 	{
 		drawhorline(x1,i,x2,c);

@@ -15,6 +15,9 @@
 
 class CLenemy : public CLentity<1>
 {
+	protected:
+		CLprogress* hprog;
+	
 	private:
 		xlong* aiarray;
 		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk
@@ -26,11 +29,12 @@ class CLenemy : public CLentity<1>
 		xlong collision();
 	
 	public:
-		CLenemy(CLfile* enemya,xlong* m);
+		CLenemy(CLfile* enemya,xlong* m,xlong mm);
 		CLenemy(CLenemy* enemyptr,CLlvector& enemyp);
 		~CLenemy();
 		
 		template<int I>xlong update(CLentity<I>* p);
+		void displayhud();
 };
 
 void CLenemy::pretransform()
@@ -74,7 +78,7 @@ xlong CLenemy::collision()
 	return r;
 }
 
-CLenemy::CLenemy(CLfile* enemya,xlong* m) : CLentity<1>(enemya,m)
+CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 {
 	//load enemy ai
 	aitype = csv[1];
@@ -95,6 +99,10 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m) : CLentity<1>(enemya,m)
 	speeddir.y  = CLsystem::ato((*def)["speed"]);
 	speeddir.y /= 20;
 	direction[0].y = -1;
+	//*
+	
+	//create progress bar
+	hprog = new CLprogress(0,0,0,0,health+shield,0,health+shield,0x00FF0000,1,1,0,0,0);
 	//*
 }
 
@@ -125,6 +133,11 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
 	speeddir.y  = enemyptr->speeddir.y;
 	direction[0].y = -1;
 	//*	
+	
+	//create progress bar
+	hprog = new CLprogress(*(enemyptr->hprog));
+	hprog->reset(0,0,40,10,health+shield,0,health+shield,0x00FF0000,0,1,0,0,0);
+	//*
 }
 
 CLenemy::~CLenemy()
@@ -132,6 +145,7 @@ CLenemy::~CLenemy()
 	delete def;
 	delete[] aiarray;
 	delete aggrobox;
+	delete hprog;
 }
 
 template<int I>
@@ -148,16 +162,16 @@ xlong CLenemy::update(CLentity<I>* p)
 		active = 1;
 	}
 	//*
-	
-	//check if screen is left behind player (return -1)
-	//~ else if(active==1 && ( (*mark)+yres+100>position.y) )
-	//~ {
-		//~ active = 0;
-		//~ visible = 0;
-		//~ return 0;
-	//~ }
+
+	//check if screen is left behind player
+	else if(active==1 && position.y>markmax )
+	{
+		active = 0;
+		visible = 0;
+		return 0;
+	}
 	//*
-	
+
 	//check if destroyed
 	if(health<=0 && active!=-1)
 	{
@@ -166,6 +180,10 @@ xlong CLenemy::update(CLentity<I>* p)
 		expl[0]->first(1);
 		//*
 	}
+	//*
+	
+	//set progressbars
+	hprog->setprogress(health+shield);
 	//*
 	
 	if(active==1)
@@ -223,6 +241,17 @@ xlong CLenemy::update(CLentity<I>* p)
 	else lastupdate = CLsystem::getmilliseconds();
 	
 	return -1;
+}
+
+void CLenemy::displayhud()
+{
+	if(active==1)
+	{
+		xlong tempx = (boundingbox[0][0]->c[0].x + boundingbox[0][0]->c[1].x) / 2;
+		hprog->setx(tempx + sposition.x - 20);
+		hprog->sety(position.y - *mark - 20);
+		hprog->draw();
+	}
 }
 
 #endif

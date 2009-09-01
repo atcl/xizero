@@ -37,6 +37,12 @@ namespace CLgfx2
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
 {
+	//draw to top level of zbuffer!
+	
+	if(x1>x2) x1 ^= x2 ^= x1 ^= x2;
+	if(y1>y2) y1 ^= y2 ^= y1 ^= y2;
+	if(x1<0 || y1<0 || x2>xres || y2>yres || x2<0 || y2<0 || x1>xres || y1>yres) return;
+	
 	xlong offset1 = (y1*xres)+x1;
 	xlong offset2 = offset1;
 	xlong doffset = ((y2-y1)*xres);

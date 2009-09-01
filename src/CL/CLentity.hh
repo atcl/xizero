@@ -39,6 +39,7 @@ class CLentity : public virtual CLcl
 		CLfvector speeddir;
 		CLlvector angles[I];
 		xlong* mark;
+		xlong markmax;
 		xlong gear;
 		xlong active;
 		xlong visible;
@@ -61,12 +62,12 @@ class CLentity : public virtual CLcl
 		//virtual xlong collision() = 0;
 	
 	public:
-		CLentity(CLfile* entitya,xlong* markptr);
+		CLentity(CLfile* entitya,xlong* markptr,xlong mm);
 		CLentity(CLentity* entityptr);
 		virtual ~CLentity();
 		
 		//virtual xlong update() = 0;
-		void display(bool modelorshadow=0);
+		void display(xlong modelorshadow=0);
 		
 		void hit(xlong h) { health -= h; }
 		xlong gethealth() { return health; }
@@ -101,7 +102,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong m)
 }
 
 template<int I>
-CLentity<I>::CLentity(CLfile* ea,xlong* markptr)
+CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 {
 	//create transformation matrix
 	linear = new CLmatrix(1);
@@ -109,6 +110,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr)
 	
 	//set mark pointer from level
 	mark = markptr;
+	markmax = mm;
 	//*
 	
 	//load entity archive 
@@ -204,6 +206,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	
 	//set mark pointer from level
 	mark = entityptr->mark;
+	markmax = entityptr->markmax;
 	//*
 	
 	//for each model
@@ -293,7 +296,7 @@ CLentity<I>::~CLentity<I>()
 }
 
 template<int I>
-void CLentity<I>::display(bool modelorshadow)
+void CLentity<I>::display(xlong modelorshadow)
 {
 	//set screen position
 	sposition.x = position.x;

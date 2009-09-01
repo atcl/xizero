@@ -17,18 +17,23 @@ typedef CLlist<CLenemy> CLenemylist;
 
 class CLplayer : public CLentity<2>
 {
+	protected:
+		CLprogress* hprog;
+		CLprogress* sprog;
+	
 	private:
 		void pretransform(bool m);
 		void transform(bool m);
 		xlong collision(CLfbuffer* ll);
 	
 	public:
-		CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts=0);
+		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pts=0);
 		~CLplayer();
 
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLgamepadstate* p);
 		void addpoints(xlong p);
 		void showbox();
+		void displayhud();
 };
 
 void CLplayer::pretransform(bool m)
@@ -121,7 +126,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	return r;
 }
 
-CLplayer::CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts) : CLentity<2>(playera,m)
+CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pts) : CLentity<2>(playera,m,mm)
 {
 	//set and adjust (start) position to floor
 	position = playerp;
@@ -140,11 +145,18 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,CLlvector& playerp,xlong pts) : CLen
 	active = 1;
 	visible = 1;
 	//*
+	
+	//create progress bars
+	hprog = new CLprogress(5,5,20,yres-10,health,0,health,0x00FF0000,1,1,0,0,0);
+	sprog = new CLprogress(xres-25,5,20,yres-10,shield,0,shield,0x0000FF00,1,1,0,0,0);
+	//*
 }
 
 CLplayer::~CLplayer()
 {
 	delete def;
+	delete hprog;
+	delete sprog;
 }
 
 xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLgamepadstate* p)
@@ -168,9 +180,14 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 	}
 	//*
-	
+
 	if(active==1)
 	{
+		//set progressbars
+		hprog->setprogress(health);
+		sprog->setprogress(shield);
+		//*
+		
 		//init variables
 		xlong time = CLsystem::getmilliseconds();
 		linear->unit();
@@ -360,6 +377,12 @@ void CLplayer::showbox()
 	CLgfx1::drawbigpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0);
 }
 //*
+
+void CLplayer::displayhud()
+{
+	hprog->draw();
+	sprog->draw();
+}
 
 #endif
 

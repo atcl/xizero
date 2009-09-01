@@ -237,7 +237,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//create player
 	CLfile* playera = CLsystem::getfile(playerlib);
-	player = new CLplayer(playera,&smoothmark,playerp);
+	player = new CLplayer(playera,&smoothmark,smoothlevelheight+10,playerp);
 	playerscreenylevel = 3*(yres>>2);
 	//*
 
@@ -255,7 +255,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	CLenemy** baseenemies = new CLenemy*[differentenemies];
 	for(uxlong k=0; k<enemiesa->filecount; k++)
 	{
-		baseenemies[k] = new CLenemy(enemiesa->members[k],&smoothmark);
+		baseenemies[k] = new CLenemy(enemiesa->members[k],&smoothmark,smoothlevelheight+10);
 	}
 	//*
 	
@@ -430,6 +430,15 @@ void CLlevel::display()
 	{
 		currentenemy = enemies->getcurrentdata();
 		currentenemy->display();
+	}
+	//*
+	
+	//display hud
+	player->displayhud();
+	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
+	{
+		currentenemy = enemies->getcurrentdata();
+		currentenemy->displayhud();
 	}
 	//*
 }
