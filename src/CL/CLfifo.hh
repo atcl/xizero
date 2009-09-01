@@ -7,42 +7,45 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
-
+template<class member>
 struct fifomember
 {
-	void*       data;
+	member*     data;
 	fifomember* prev;
 };
 
+template<class member>
 class CLfifo : public virtual CLcl
 {
 	private:
-		fifomember* head;
-		fifomember* tail;
+		fifomember<member>* head;
+		fifomember<member>* tail;
 		xlong length;
-		void** que;
+		member** que;
 
 	public:
 		CLfifo();
 		~CLfifo();
-		void in(void* f);
-		void* out();
+		void in(member* f);
+		member* out();
 		xlong getlength();
 		void clear();
 		bool isempty();
 };
 
-
-CLfifo::CLfifo()
+template<class member>
+CLfifo<member>::CLfifo()
 {
 	length = 0;
 }
 
-CLfifo::~CLfifo() { }
+template<class member>
+CLfifo<member>::~CLfifo() { }
 
-void CLfifo::in(void* f)
+template<class member>
+void CLfifo<member>::in(member* f)
 {
-	fifomember* t = new fifomember;
+	fifomember<member>* t = new fifomember<member>;
 
 	if(length == 0)
 	{
@@ -60,7 +63,8 @@ void CLfifo::in(void* f)
 	length++;
 }
 
-void* CLfifo::out()
+template<class member>
+member* CLfifo<member>::out()
 {
 	if(length == 0)
 	{
@@ -80,23 +84,26 @@ void* CLfifo::out()
 	}
 }
 
-void CLfifo::clear()
+template<class member>
+void CLfifo<member>::clear()
 {
 	for(uxlong i=0; i<length; i++)
 	{
-		fifomember* t = tail;
+		fifomember<member>* t = tail;
 		tail = tail->prev;
 		delete t;
 		length--;
 	}
 }
 
-xlong CLfifo::getlength()
+template<class member>
+xlong CLfifo<member>::getlength()
 {
 	return length;
 }
 
-bool CLfifo::isempty()
+template<class member>
+bool CLfifo<member>::isempty()
 {
 	if(length==0) return true;
 

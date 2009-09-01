@@ -14,7 +14,7 @@ description=
 run_cmd=
 
 [files]
-current_page=55
+current_page=58
 FILE_NAME_0=943;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/unittest.cc;0
 FILE_NAME_1=356;C;0;16;1;1;0;/home/atcl/devs/xizero/src/CLinc.h;0
 FILE_NAME_2=333;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CLproject.hh;0
@@ -73,7 +73,7 @@ FILE_NAME_54=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLversion.hh;0
 FILE_NAME_55=835;Make;0;16;1;1;0;/home/atcl/devs/xizero/src/makefile;0
 FILE_NAME_56=0;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/xizero.hh;0
 FILE_NAME_57=1545;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/xizero.cc;0
-FILE_NAME_58=2716;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLboool.hh;0
+FILE_NAME_58=1491;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLboool.hh;0
 FILE_NAME_59=805;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLfsprog.hh;0
 FILE_NAME_60=217;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLxml.hh;0
 FILE_NAME_61=223;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLxmlgui.hh;0

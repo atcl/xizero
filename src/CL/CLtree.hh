@@ -9,6 +9,7 @@
 #include "CLstruct.hh"
 
 
+template<class member>
 struct node
 {
 	node*  parent;
@@ -16,16 +17,17 @@ struct node
 	node*  prev;
 	node** child;
 	xlong  childcount;
-	void*  data;
+	member*  data;
 	xchar* name;
 	xlong* hash;
 };
 
+template<class member>
 class CLtree : public virtual CLcl
 {
 	private:
-		node* rootnode;
-		node* current;
+		node<member>* rootnode;
+		node<member>* current;
 
 	public:
 		CLtree();
@@ -36,34 +38,38 @@ class CLtree : public virtual CLcl
 		xlong childcount();
 		void parent();
 		void next();	//next sibling
-		void* data();
-		void adddata(void* d);
+		member* data();
+		void adddata(member* d);
 		void addchild();
 		void delchild(xlong i);
 		bool isroot();
 		void print();
 };
 
-CLtree::CLtree()
+template<class member>
+CLtree<member>::CLtree()
 {
-	rootnode = new node;
+	rootnode = new node<member>;
 	rootnode->parent = 0;
 	rootnode->childcount = 0;
 
 	current = rootnode;
 }
 
-CLtree::~CLtree()
+template<class member>
+CLtree<member>::~CLtree()
 {
 	delete rootnode;
 }
 
-void CLtree::root()
+template<class member>
+void CLtree<member>::root()
 {
 	current = rootnode;
 }
 
-void CLtree::child(xlong i)
+template<class member>
+void CLtree<member>::child(xlong i)
 {
 	if(i<current->childcount)
 	{
@@ -71,17 +77,20 @@ void CLtree::child(xlong i)
 	}
 }
 
-xlong CLtree::childcount()
+template<class member>
+xlong CLtree<member>::childcount()
 {
 	return current->childcount;
 }
 
-void CLtree::parent()
+template<class member>
+void CLtree<member>::parent()
 {
 	current = current->parent;
 }
 
-void CLtree::next()
+template<class member>
+void CLtree<member>::next()
 {
 	if(current->next!=0)
 	{
@@ -89,19 +98,22 @@ void CLtree::next()
 	}
 }
 
-void* CLtree::data()
+template<class member>
+member* CLtree<member>::data()
 {
 	return current->data;
 }
 
-void CLtree::adddata(void* d)
+template<class member>
+void CLtree<member>::adddata(member* d)
 {
 	current->data = d;
 }
 
-void CLtree::addchild()
+template<class member>
+void CLtree<member>::addchild()
 {
-	node* newnode = new node;
+	node<member>* newnode = new node<member>;
 
 	newnode->parent = current;
 	newnode->next = newnode;
@@ -123,7 +135,8 @@ void CLtree::addchild()
 
 }
 
-void CLtree::delchild(xlong i)
+template<class member>
+void CLtree<member>::delchild(xlong i)
 {
 	if(i >= current->childcount)
 	{
@@ -132,13 +145,15 @@ void CLtree::delchild(xlong i)
 	}
 }
 
-bool CLtree::isroot()
+template<class member>
+bool CLtree<member>::isroot()
 {
 	if(current==rootnode) return true;
 	else return false;
 }
 
-void CLtree::print()
+template<class member>
+void CLtree<member>::print()
 {
 	if(current->name!=0) CLsystem::print(current->name);
 	else CLsystem::print(0);

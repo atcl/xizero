@@ -20,8 +20,13 @@ class CLprogress : public CLguibase
 		bool  flat;
 		bool  horver;
 		
+		xlong pxx1;
+		xlong pxx2;
+		xlong pxy1;
+		xlong pxy2;
+		
 	public:
-		CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f);
+		CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f,bool hv);
 		~CLprogress();
 
 		void draw();
@@ -34,20 +39,30 @@ class CLprogress : public CLguibase
 		xlong getprogress();
 };
 
-CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
+CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,uxlong ba,xlong p,xlong s,xlong e,bool f,bool hv) : CLguibase(px,py,w,h,fc,bc,rc)
 {
 	barcolor = ba;
 	progress = p;
 	start = s;
 	end  = e;
 	flat = f;
+	horver = hv;
 }
 
 CLprogress::~CLprogress() { }
 
 void CLprogress::draw()
 {
-
+	switch(horver)
+	{
+		case 0:
+		
+		break;
+		
+		case 1:
+		
+		break;
+	}
 }
 
 void CLprogress::setstart(xlong s)
