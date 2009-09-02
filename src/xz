@@ -1,3 +1,31 @@
-#!/bin/sh
+#! /usr/bin/gtkdialog -e
 
-aoss ./xizero 
+function run_xizero()
+{
+	#aoss ./xizero
+	./xizero
+}
+
+export MAIN_DIALOG='
+<window title="XiZero"> 
+
+	<vbox>
+
+		<pixmap>
+			<input file>../../../lc.png</input>
+		</pixmap>
+
+		<button>
+			<label>Run Xizero</label>
+			<action>run_xizero</action>
+		</button>
+		
+		<button>
+			<label>Exit</label>
+		</button>
+	
+	</vbox>
+
+</window>
+'
+
