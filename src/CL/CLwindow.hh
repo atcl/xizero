@@ -8,7 +8,6 @@
 #include <FL/fl_draw.H>
 
 #include "CLtypes.hh"
-#include "CLgamepad.hh"
 
 void timeout(void*)
 {

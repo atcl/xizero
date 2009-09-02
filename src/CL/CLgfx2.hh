@@ -29,11 +29,10 @@ namespace CLgfx2
 	void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c);
 	uxlong getQBcolor(xchar c); //get 16 EGA colors
 	bool comparecolors(uxlong c1,uxlong c2);
-	uxlong blendcolors();
+	uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
 	uxlong getgradient(uxlong s,uxlong e,xchar i);
 	void savescreenshot(const xchar*);
-}
-
+};
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
 {
@@ -75,22 +74,27 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
 {
 	//init
 	if(x>xres || y>yres) return 0;
+	//*
 	
 	//find tile
 	xlong off = a * f->tilewidth; 
+	//*
 
+	//sprite (hiere font) vars
 	xlong hordiff = f->width-f->tilewidth;
 	xlong xs = x;
 	xlong ys = y;
 	xlong xe = x + f->tilewidth;
 	xlong ye = y + f->tileheight;
 	if(xe<0 || ye<0) return 0;
+	//*
 
 	//clipping
 	if(xs<0) xs = 0;
 	if(xe>xres) xe = xres-1;
 	if(ys<0) ys = 0;
 	if(ye>yres) ye = yres-1;
+	//*
 
 	//draw vars
 	xlong ewidth = xe - xs;
@@ -98,6 +102,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
 	xlong xoffset = (ys * xres) + xs;
 	xlong linearc = off;
 	xlong rx = x;
+	//*
 
 	//drawloop
 	for(uxlong i=0; i<eheight ;i++)
@@ -119,6 +124,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
 		xoffset += xres;
 		linearc += hordiff;
 	}
+	//*
 	
 	return rx;
 }
@@ -196,9 +202,84 @@ bool CLgfx2::comparecolors(uxlong c1,uxlong c2)
 	return 0;
 }
 
-uxlong CLgfx2::blendcolors()
+uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2)
 {
-	//add,mul,alpha,and,or,nand,nor,not,xor
+	xchar a1 = 0;
+	xchar a2 = 0;
+	xchar a3 = 0;
+	xchar a4 = 0;
+	xchar b1 = 0;
+	xchar b2 = 0;
+	xchar b3 = 0;
+	xchar b4 = 0;
+	
+	switch(mode)
+	{
+		case 0: //not
+			return (!c1);
+		break;
+		
+		case 1: //add
+			a1 = xchar(c1);
+			a2 = xchar(c1>>8);
+			a3 = xchar(c1>>16);
+			a4 = xchar(c1>>24);
+			b1 = xchar(c2);
+			b2 = xchar(c2>>8);
+			b3 = xchar(c2>>16);
+			b4 = xchar(c2>>24);
+			return ( (xlong(a4+b4)<<24) + (xlong(a3+b3)<<16) + (xlong(a2+b2)<<8) + xlong(a1+b1) );
+		break;
+		
+		case 2: //sub
+			a1 = xchar(c1);
+			a2 = xchar(c1>>8);
+			a3 = xchar(c1>>16);
+			a4 = xchar(c1>>24);
+			b1 = xchar(c2);
+			b2 = xchar(c2>>8);
+			b3 = xchar(c2>>16);
+			b4 = xchar(c2>>24);
+			return ( (xlong(a4-b4)<<24) + (xlong(a3-b3)<<16) + (xlong(a2-b2)<<8) + xlong(a1-b1) );
+		break;
+		
+		case 3: //mul
+			a1 = xchar(c1);
+			a2 = xchar(c1>>8);
+			a3 = xchar(c1>>16);
+			a4 = xchar(c1>>24);
+			b1 = xchar(c2);
+			b2 = xchar(c2>>8);
+			b3 = xchar(c2>>16);
+			b4 = xchar(c2>>24);
+			return ( (xlong(a4*b4)<<24) + (xlong(a3*b3)<<16) + (xlong(a2*b2)<<8) + xlong(a1*b1) );
+		break;
+		
+		case 4: //alpha
+		
+		break;
+		
+		case 5: //and
+			return (c1 && c2);
+		break;
+		
+		case 6: //or
+			return (c1 || c2);
+		break;
+		
+		case 7: //xor
+			return (c1 ^ c2);
+		break;
+		
+		case 8: //nand
+			return !(c1 && c2);
+		break;
+		
+		case 9: //nor
+			return !(c1 || c2);
+		break;
+	}
+	
 	return 0;
 }
 

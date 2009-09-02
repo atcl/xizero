@@ -5,6 +5,7 @@
 //#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLsystem.hh"
 
 //cpucaps constants
 #define FPU   0b00000000000000000000000000000001
@@ -73,7 +74,11 @@ xlong CLdetect::ps()
 
 xlong CLdetect::ram()
 {
+	CLfile* mem = CLsystem::getfile("/proc/meminfo");
 	
+	//seek line beginning with "MemTotal:"
+	//seek end of line " kB"
+	//number before is the total physical memory
 }
 
 xchar* CLdetect::gpu()

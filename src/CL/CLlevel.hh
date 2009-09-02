@@ -17,6 +17,7 @@
 #include "CLenemy.hh"
 #include "CLgame.hh"
 #include "CLmacros.hh"
+#include "CLgamepad.hh"
 
 
 typedef CLlist<CLenemy> CLenemylist;

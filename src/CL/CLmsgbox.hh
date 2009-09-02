@@ -33,6 +33,13 @@ CLmsgbox::~CLmsgbox() { }
 
 void CLmsgbox::draw()
 {
+	//determine width and height of box depending on the textlength
+	
+	//draw box
+	
+	//draw head bar
+	
+	//draw text
 
 }
 

@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 			CLfont* font = CLformat::loadfont(fonttga);
 
 		//test tree:
-			CLtree* testtree = new CLtree();
+			CLtree<xlong>* testtree = new CLtree<xlong>();
 
 		//test button:
 			//CLbutton testbutton = new CLbutton();
