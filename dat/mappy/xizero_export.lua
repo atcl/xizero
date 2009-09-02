@@ -1,7 +1,6 @@
 -- Xizero Map Format Exporter
 
 
-
 function main()
 
 --test if map has correct format

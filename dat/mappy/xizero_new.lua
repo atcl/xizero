@@ -1,7 +1,6 @@
 --XiZero New Map
 
 
-
 function main()
 
 --set format
