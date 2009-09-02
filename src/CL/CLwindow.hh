@@ -63,6 +63,7 @@ int CLwindow::handle(int event)
 			break;
 		case FL_KEYUP:
 			keyup = Fl::event_key();
+			if(keyup==turbo) turbo=0;
 			break;
 		case FL_MOVE:
 			mousex = Fl::event_x();
@@ -117,12 +118,6 @@ xlong CLwindow::getkey()
 
 xlong CLwindow::getturbo()
 {
-	if(keyup == turbo)
-	{
-		turbo = 0;
-		keyup = -1;
-	}
-
 	return turbo;
 }
 
