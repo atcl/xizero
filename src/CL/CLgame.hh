@@ -279,7 +279,7 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 	CLlvector l3( (l.x + ob->c[2].x), (l.y - ob->c[2].y), (l.z + ob->c[2].z) );
 	CLlvector l4( (l.x + ob->c[3].x), (l.y - ob->c[3].y), (l.z + ob->c[3].z) );
 	//*
-
+	
 	//calc zlevel of current bounding box corners in levellandscape
 	float n1 = (*ll)[ (p1.y * xres) + p1.x ];
 	float n2 = (*ll)[ (p2.y * xres) + p2.x ];

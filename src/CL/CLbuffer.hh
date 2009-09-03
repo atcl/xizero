@@ -16,6 +16,7 @@ template <typename T>class CLbuffer : public virtual CLcl
 	private:
 		T* buffer;
 		uxlong size;
+		uxlong bsize;
 		uxlong ds;
 		uxlong qs;
 		bool   havemmx;
@@ -35,13 +36,15 @@ template <typename T>class CLbuffer : public virtual CLcl
 		void blendcopy(T* dst,xlong o);
 		void blendcopy(CLbuffer<T>* dst,xlong o);
 		uxlong getsize();
+		uxlong getbytesize();
 		T* getbuffer();
 		T& operator[](uxlong i);
 };
 
 template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 {
-	size = s + (s%4); // make sure is amultiple of 16byte
+	size = (s+1) + (s%4); // make sure is amultiple of 16byte
+	bsize = size<<2;
 	buffer = new T[size];
 	
 	havemmx = 1;
@@ -289,6 +292,11 @@ template <typename T>uxlong CLbuffer<T>::getsize()
 	return size;
 }
 
+template <typename T>uxlong CLbuffer<T>::getbytesize()
+{
+	return bsize;
+}
+
 template <typename T>T* CLbuffer<T>::getbuffer()
 {
 	return buffer;
@@ -296,6 +304,7 @@ template <typename T>T* CLbuffer<T>::getbuffer()
 
 template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 {
+	if(i>=bsize) return buffer[size];
 	return buffer[i];
 }
 
