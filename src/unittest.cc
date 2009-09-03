@@ -219,6 +219,9 @@ int main(int argc, char** argv)
 			case 'r':
 				CLsound::play("../../cannon.wav",0);
 			break;
+			case 'k':
+				CLintro::atcrosslevel();
+			break;
 			
 			//System:
 			case '0':

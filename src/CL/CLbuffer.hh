@@ -304,7 +304,7 @@ template <typename T>T* CLbuffer<T>::getbuffer()
 
 template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 {
-	if(i>=bsize) return buffer[size];
+	if(i>=size) return buffer[size];
 	return buffer[i];
 }
 

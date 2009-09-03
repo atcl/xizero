@@ -208,7 +208,7 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 		}
 		else
 		{
-			CLsystem::exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
+			//CLsystem::exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
 		}
 	}
 }
