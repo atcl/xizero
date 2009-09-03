@@ -47,9 +47,9 @@ void CLintro::atcrosslevel()
 	xlong anim_start_time = 0;
 	xlong anim_stop_time = 0;
 	xlong anim_last_time = 0;
-	xlong anim_time_diff = 0;
-	float anim_units[13] = { 0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	float anim_curr_trans[13] = { 0,0,0,0,0,0,0,0,0,0,0,0,0 };
+	float anim_time_diff = 0;
+	float anim_units[13] = { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
+	float anim_curr_trans[13] = { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
 	//*
 	
 	//run animation
@@ -59,26 +59,27 @@ void CLintro::atcrosslevel()
 		say(anicsv[anim_pointer]);
 		
 		anim_step_dur = float(anicsv[anim_pointer]);
-		anim_div_temp = 1/anim_step_dur;
 		
 		if(anim_step_dur!=0)
 		{
+			anim_div_temp = 1/anim_step_dur;
+			
 			//make transformation unit steps
 			anim_start_time = CLsystem::getmilliseconds();
 			anim_last_time = anim_start_time;
 			anim_stop_time = anim_start_time + anim_step_dur;
-			anim_units[1] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[1]);
-			anim_units[2] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[2]);
-			anim_units[3] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[3]);
-			anim_units[4] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[4]);
-			anim_units[5] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[5]);
-			anim_units[6] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[6]);
-			anim_units[7] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[7]);
-			anim_units[8] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[8]);
-			anim_units[9] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[9]);
-			anim_units[10] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[10]);
-			anim_units[11] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[11]);
-			anim_units[12] = anim_div_temp * anicsv[anim_pointer]; say(anim_units[12]);
+			anim_units[1] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[2] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[3] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[4] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[5] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[6] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[7] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[8] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[9] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[10] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[11] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_units[12] = anim_div_temp * float(anicsv[anim_pointer]);
 			//*
 			
 			while(win->run())
@@ -91,7 +92,7 @@ void CLintro::atcrosslevel()
 
 				//determine time
 				anim_curr_time = CLsystem::getmilliseconds();
-				anim_time_diff = anim_curr_time - anim_last_time;
+				anim_time_diff = float(anim_curr_time - anim_last_time);
 				if(anim_curr_time >= anim_stop_time) breaker = 1;
 				//*
 				

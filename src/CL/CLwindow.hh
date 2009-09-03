@@ -7,7 +7,6 @@
 #include <FL/Fl_Single_Window.H>
 #include <FL/fl_draw.H>
 
-
 #include "CLtypes.hh"
 #include "CLresource.hh"
 

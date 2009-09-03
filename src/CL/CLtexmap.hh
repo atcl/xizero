@@ -8,28 +8,12 @@
 #include "CLcl.hh"
 
 
-class CLtexmap : public virtual CLcl
+namespace CLtexmap
 {
-	private:
+		linear();
+};
 
-
-	public:
-		CLtexmap();
-		~CLtexmap();
-		maptexlinear();
-}
-
-CLtexmap::CLtexmap()
-{
-
-}
-
-CLtexmap::~CLtexmap()
-{
-
-}
-
-CLtexmap::maptexlinear()
+CLtexmap::linear()
 {
 
 }
