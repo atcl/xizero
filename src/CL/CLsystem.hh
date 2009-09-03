@@ -22,7 +22,7 @@ namespace CLsound {	void exit(); }
 
 namespace CLsystem
 {
-	xchar eol = '\n'; //change for WIN32
+	xchar eol = '\n'; //ignore WIN32 screwed line ends
 	xchar eof = 0x1A;
 	
 	CLexe*	exe(xchar** a);
@@ -56,8 +56,7 @@ CLexe* CLsystem::exe(xchar** a)
 	r->title = CLtitle;
 	r->size = 0;
 	r->version = (CLmajor<<24)+(CLminor<<16)+(CLbuild<<8)+CLextra;
-	r->icon = &CLicon[0];
-	r->splash = &CLsplash[0];
+	//r->icon = &CLicon[0];
 	return r;
 	//*
 }

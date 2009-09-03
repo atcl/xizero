@@ -17,6 +17,7 @@ namespace CLfsprogress
 	void draw();
 	void set(xlong p);
 	void add(xlong a);
+	void reset();
 	xlong get();
 };
 
@@ -50,6 +51,12 @@ void CLfsprogress::add(xlong a)
 	if( (pprogress+a)>100) { pprogress = 100; rprogress = xres; }
 	else if( (pprogress+a)<=0) { rprogress = 0; pprogress = 0; }
 	else { pprogress += a; rprogress = (xres / 100) * pprogress; }
+}
+
+void CLfsprogress::reset()
+{
+	pprogress = 0;
+	rprogress = 0;
 }
 
 xlong CLfsprogress::get()

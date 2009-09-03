@@ -103,8 +103,7 @@ struct CLexe
 	xchar* title;
 	xlong  size;
 	xlong  version;
-	xlong* icon;
-	xlong* splash;
+	xchar* icon;
 };
 
 #endif

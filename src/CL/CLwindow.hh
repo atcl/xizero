@@ -7,7 +7,9 @@
 #include <FL/Fl_Single_Window.H>
 #include <FL/fl_draw.H>
 
+
 #include "CLtypes.hh"
+#include "CLresource.hh"
 
 void timeout(void*)
 {
@@ -91,7 +93,8 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w
 	
 	Fl::visual(FL_RGB);
 	Fl::add_timeout(0.02,timeout);
-	
+
+	this->icon(CLicon);
 	this->end();
 	this->show();
 }
