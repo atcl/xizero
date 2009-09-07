@@ -357,21 +357,21 @@ void CLplayer::showbox()
 	bposition.z = position.z;
 	
 	CLfvector a = bposition;
+	CLfvector b = bposition;
+	CLfvector c = bposition;
+	CLfvector d = bposition;
 	a.x += boundingbox[1][0]->c[0].x;
 	a.y -= boundingbox[1][0]->c[0].y;
-	a.z -= boundingbox[1][0]->c[0].z;
-	CLfvector b = bposition;
+	a.z += boundingbox[1][0]->c[0].z;
 	b.x += boundingbox[1][0]->c[1].x;
 	b.y -= boundingbox[1][0]->c[1].y;
-	b.z -= boundingbox[1][0]->c[1].z;
-	CLfvector c = bposition;
+	b.z += boundingbox[1][0]->c[1].z;
 	c.x += boundingbox[1][0]->c[2].x;
 	c.y -= boundingbox[1][0]->c[2].y;
-	c.z -= boundingbox[1][0]->c[2].z;
-	CLfvector d = bposition;
+	c.z += boundingbox[1][0]->c[2].z;
 	d.x += boundingbox[1][0]->c[3].x;
 	d.y -= boundingbox[1][0]->c[3].y;
-	d.z -= boundingbox[1][0]->c[3].z;
+	d.z += boundingbox[1][0]->c[3].z;
 	
 	CLgfx1::drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
 	CLgfx1::drawbigpixel(d.x,d.y,0);

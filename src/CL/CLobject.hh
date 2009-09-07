@@ -25,13 +25,13 @@ class CLobject : public virtual CLcl
 {
 	protected:
 		CLpolygon** polyptr;
+		CLfvector** dockptr;
+		CLbox* boundingbox;
+		CLbox* rboundingbox;
 
 	private:
 		xlong polycount;
 		xlong dockcount;
-		CLfvector** dockptr;
-		CLbox* boundingbox;
-		CLbox* rboundingbox;
 		xlong name;
 	
 	public:

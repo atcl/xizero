@@ -302,7 +302,7 @@ void CLentity<I>::display(xlong modelorshadow)
 	sposition.x = position.x;
 	sposition.y = position.y - *mark;
 	sposition.z = position.z;
-	//sposition = CLmisc3d::project(sposition); //fix point projections
+	//CLmisc3d::project2(sposition); //fix point projections
 	//*
 
 	if(active!=0)

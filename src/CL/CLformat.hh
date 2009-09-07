@@ -38,6 +38,11 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	//add template parameter to change between xlong*,xchar**,xfixed* and float*
 	//Works only for integers!
 	
+	//! bug with new line at end of file !
+	//! add comma at end of line !
+	//! no comma after value means end of data !
+	//! crashes in line 84 (with new line at end of file) !
+	
 	xchar* bf = sf->text;
 	
 	//get linecount

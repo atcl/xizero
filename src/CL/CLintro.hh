@@ -38,7 +38,7 @@ void CLintro::atcrosslevel()
 	//*
 
 	//set animation attributes
-	CLlvector anim_pos(0,0,100);
+	CLlvector anim_pos(0,0,0);
 	xlong anim_steps = (anicsv[0])/13;
 	xlong anim_pointer = 1;
 	float anim_step_dur = 0;
@@ -51,6 +51,9 @@ void CLintro::atcrosslevel()
 	float anim_units[13] = { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
 	float anim_curr_trans[13] = { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
 	//*
+	
+	say(anicsv[0]);
+	say(anim_steps);
 	
 	//run animation
 	bool breaker = 0;
@@ -68,18 +71,19 @@ void CLintro::atcrosslevel()
 			anim_start_time = CLsystem::getmilliseconds();
 			anim_last_time = anim_start_time;
 			anim_stop_time = anim_start_time + anim_step_dur;
-			anim_units[1] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[2] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[3] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[4] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[5] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[6] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[7] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[8] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[9] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[10] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[11] = anim_div_temp * float(anicsv[anim_pointer]);
-			anim_units[12] = anim_div_temp * float(anicsv[anim_pointer]);
+			anim_pointer++;
+			anim_units[1] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[2] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[3] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[4] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[5] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[6] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[7] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[8] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[9] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[10] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[11] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
+			anim_units[12] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
 			//*
 			
 			while(win->run())
@@ -114,14 +118,14 @@ void CLintro::atcrosslevel()
 				anim_pos.y += anim_curr_trans[2];
 				anim_pos.z += anim_curr_trans[3];
 				
-				if(!( anim_curr_trans[4]==0 && anim_curr_trans[5]==0 && anim_curr_trans[6]==0 ))
-				linear->translate(anim_curr_trans[4],anim_curr_trans[5],anim_curr_trans[6]);
+				//~ if(!( anim_curr_trans[4]==0 && anim_curr_trans[5]==0 && anim_curr_trans[6]==0 ))
+				//~ linear->translate(anim_curr_trans[4],anim_curr_trans[5],anim_curr_trans[6]);
 				
 				if(!( anim_curr_trans[7]==0 && anim_curr_trans[8]==0 && anim_curr_trans[9]==0 ))
-				linear->rotate(anim_curr_trans[7],anim_curr_trans[8],anim_curr_trans[9]);
+				linear->rotate(CLmath::round(anim_curr_trans[7]),CLmath::round(anim_curr_trans[8]),CLmath::round(anim_curr_trans[9]));
 				
-				if(!( anim_curr_trans[10]==0 && anim_curr_trans[11]==0 && anim_curr_trans[12]==0 ))
-				linear->scale(anim_curr_trans[10],anim_curr_trans[11],anim_curr_trans[12]);
+				//~ if(!( anim_curr_trans[10]==0 && anim_curr_trans[11]==0 && anim_curr_trans[12]==0 ))
+				//~ linear->scale(anim_curr_trans[10],anim_curr_trans[11],anim_curr_trans[12]);
 				
 				atcl->update(linear);
 				//*
@@ -148,9 +152,9 @@ void CLintro::atcrosslevel()
 			
 			//update object
 			//!
-			//~ anim_pos.x += anicsv[anim_pointer+1];
-			//~ anim_pos.y += anicsv[anim_pointer+2];
-			//~ anim_pos.z += anicsv[anim_pointer+3];
+			anim_pos.x += anicsv[anim_pointer+1];
+			anim_pos.y += anicsv[anim_pointer+2];
+			anim_pos.z += anicsv[anim_pointer+3];
 			//~ linear->translate(anicsv[anim_pointer+4],anicsv[anim_pointer+5],anicsv[anim_pointer+6]);
 			//~ linear->rotate(anicsv[anim_pointer+7],anicsv[anim_pointer+8],anicsv[anim_pointer+9]);
 			//~ linear->scale(anicsv[anim_pointer+10],anicsv[anim_pointer+11],anicsv[anim_pointer+12]);
@@ -165,9 +169,10 @@ void CLintro::atcrosslevel()
 			//unit matrix
 			linear->unit();
 			//*
+			
+			anim_pointer += 13;
 		}
-		
-		anim_pointer += 13;
+
 		breaker = 0;
 	}	
 	//*
