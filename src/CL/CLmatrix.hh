@@ -106,25 +106,33 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z)
 
 void CLmatrix::translate(xlong x,xlong y,xlong z)
 {
+	//translate using fourth column of matrix
 	multiplicate(1,0,0,float(x),0,1,0,float(y),0,0,1,float(z),0,0,0,1);
+	//*
 }
 
 void CLmatrix::scale(float x,float y,float z)
 {
+	//scale x,y,z seperately
 	multiplicate(x,0,0,0,0,y,0,0,0,0,z,0,0,0,0,1);
+	//*
 }
 
 void CLmatrix::aspectscale(float x)
 {
+	//scale x,y,z alike
 	multiplicate(x,0,0,0,0,x,0,0,0,0,x,0,0,0,0,1);
+	//*
 }
 
 void CLmatrix::superscale(float x)
 {
+	//scale all matrix elements
 	m[0][0] *= x; m[0][1] *= x; m[0][2] *= x; m[0][3] *= x;
 	m[1][0] *= x; m[1][1] *= x; m[1][2] *= x; m[1][3] *= x;
 	m[2][0] *= x; m[2][1] *= x; m[2][2] *= x; m[2][3] *= x;
 	m[3][0] *= x; m[3][1] *= x; m[3][2] *= x; m[3][3] *= x;
+	//*
 }
 
 void CLmatrix::shear(float a01,float a02,float a12)
@@ -144,18 +152,24 @@ clvector CLmatrix::transform(const clvector& t)
 
 void CLmatrix::clear(xlong i)
 {
+	//set matrix to given value
 	m[0][0]=m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][1]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][2]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=m[3][3]=i;
+	//*
 }
 
 void CLmatrix::zero()
 {
+	//zero out matrix
 	m[0][0]=m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][1]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][2]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=m[3][3]=0;
+	//*
 }
 
 void CLmatrix::unit()
 {
+	//set to unit matrix
 	m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=0;
 	m[0][0]=m[1][1]=m[2][2]=m[3][3]=1;
+	//*
 }
 
 void CLmatrix::transpone()
@@ -176,6 +190,7 @@ void CLmatrix::shadow(const clvector& l,const clvector& p)
 {
 	float ldotp = l*p;
 
+	//set matrix to shadow matrix of light l and plane p 
 	m[0][0] = (ldotp - (l.x * p.x));
 	m[0][1] = -(l.x * p.y);
 	m[0][2] = -(l.x * p.z);
@@ -192,6 +207,7 @@ void CLmatrix::shadow(const clvector& l,const clvector& p)
 	m[3][1] = 0;
 	m[3][2] = 0;
 	m[3][3] = 1;
+	//*
 }
 
 void CLmatrix::project()
@@ -199,6 +215,7 @@ void CLmatrix::project()
 	float zmin = 1;
 	float zmax = zres-1;
 
+	//set matrix to linear projection 
 	m[0][0] = (2 * zmin / xres);
 	m[0][1] = 0;
 	m[0][2] = 0;
@@ -215,11 +232,13 @@ void CLmatrix::project()
 	m[3][1] = 0;
 	m[3][2] = 1;
 	m[3][3] = 0;
+	//*
 }
 
 template<class clvector>
 void CLmatrix::dyadic(const clvector& a,const clvector& b)
 {
+	//set matrix to 3x3 dyadic product of a and b
 	m[0][0] = float(a.x * b.x);
 	m[0][1] = float(a.x * b.y);
 	m[0][2] = float(a.x * b.z);
@@ -236,11 +255,14 @@ void CLmatrix::dyadic(const clvector& a,const clvector& b)
 	m[3][1] = 0;
 	m[3][2] = 0;
 	m[3][3] = 1;
+	//*
 }
 
 float CLmatrix::trace()
 {
+	//sum of all main diagonal elements
 	return (m[0][0] + m[1][1] + m[2][2] + m[3][3]);
+	//*
 }
 
 void CLmatrix::print()

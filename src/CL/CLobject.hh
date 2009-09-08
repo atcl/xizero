@@ -429,21 +429,31 @@ CLfvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point o
 	xlong c= -1;
 	xlong d= 0;
 
+	//search requested docking point
 	for(uxlong j=0;j<dockcount;j++)
 	{
+		//requested docking point type found
 		if(dockptr[j]->e == t)
 		{
 			c=j;
 			d++;
 			
+			//requested docking point type with correct index found
 			if(d==i)
 			{
 				break;
 			}
+			//*
 		}
+		//*
 	}
+	//*
 	
+	//requested docking point not found
 	if(c==-1) return 0;
+	//*
+	
+	//return found docking point
 	else
 	{
 		CLfvector* temp = new CLfvector();
@@ -451,13 +461,15 @@ CLfvector* CLobject::getdockingpoint(xlong t,xlong i) //get i-th docking point o
 		temp->y = dockptr[c]->y;
 		temp->z = dockptr[c]->z;
 		return temp;
-	} 
+	}
+	//*
 }
 
 void CLobject::translatealongnormals(float speed)
 {
 	CLfvector t;
 
+	//move all polygons along their normal by given speed
 	for(uxlong i=0;i<polycount;i++)
 	{
 		t = polyptr[i]->getnormal();
@@ -467,6 +479,7 @@ void CLobject::translatealongnormals(float speed)
 
 		polyptr[i]->add(t);
 	}
+	//*
 }
 
 CLbox* CLobject::getboundingbox()
@@ -486,18 +499,22 @@ void CLobject::reset()
 
 void CLobject::setcolor(uxlong co)
 {
+	//set colors of all polygons
 	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->setcolor(co);
 	}
+	//*
 }
 
 void CLobject::resetcolor()
 {
+	//reset colors of all polygons
 	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->resetcolor();
-	}	
+	}
+	//*
 }
 #endif
 

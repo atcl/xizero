@@ -96,6 +96,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 
 	//r is now array of xlongs, r[0] is coutn of values
 	return r;
+	//*
 }
 
 arfile* CLformat::loadar(CLfile* sf)

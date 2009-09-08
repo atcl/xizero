@@ -42,15 +42,19 @@ class CLexplosion : public virtual CLcl
 
 CLexplosion::CLexplosion(CLobject* o)
 {
+	//set up attributes
 	linear = new CLmatrix(1);
 	object = o;
 	step = 0;
 	interval = 30;
 	transdir = 1.1f;
+	//*
 	
+	//set up explosion matrix
 	a = CLfvector(1,0.5,1);
 	b = CLfvector(0.5,1,0.5);
 	linear->dyadic(a,b);
+	//*
 }
 
 CLexplosion::~CLexplosion()

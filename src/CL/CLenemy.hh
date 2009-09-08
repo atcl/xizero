@@ -142,10 +142,12 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
 
 CLenemy::~CLenemy()
 {
+	//delete all allocated objects
 	delete def;
 	delete[] aiarray;
 	delete aggrobox;
 	delete hprog;
+	//*
 }
 
 template<int I>
@@ -247,10 +249,12 @@ void CLenemy::displayhud()
 {
 	if(active==1)
 	{
+		//draw enemy's healthbar
 		xlong tempx = (boundingbox[0][0]->c[0].x + boundingbox[0][0]->c[1].x) / 2;
 		hprog->setx(tempx + sposition.x - 20);
 		hprog->sety(position.y - *mark - 20);
 		hprog->draw();
+		//*
 	}
 }
 

@@ -45,26 +45,29 @@ bool CLsound::play(const xchar* f,bool l)
 {
 	switch(l)
 	{
+		//play sound once
 		case false:
 			return PlaySound(TEXT(f), NULL, SND_FILENAME | SND_ASYNC);
 		break;
+		//*
 		
+		//play sound async in loop
 		case true:
 			isloop = 1;
 			return PlaySound(TEXT(f), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		break;
+		//*
 	}
 }
 
 void CLsound::stop()
 {
+	//stop async playing loop sound
 	PlaySound(NULL, 0, 0);
+	//*
 }
 
-void CLsound::exit()
-{
-	
-}
+void CLsound::exit() { }
 
 #else //ifdef LINUX
 #include <linux/soundcard.h>
@@ -75,16 +78,17 @@ void CLsound::exit()
 
 bool CLsound::init()
 {
+	//check if sound device is installed
 	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
 	{
 		CLsystem::print("No Soundblaster found");
 		return 0;
 	}
+	//*
 	
+	//set up sound device
 	int i = 0;
-	
 	ioctl(device,SNDCTL_DSP_RESET,&i);
-	
 	i = 0;
 	ioctl(device,SNDCTL_DSP_STEREO,&i);
 	i = 44100;
@@ -93,6 +97,7 @@ bool CLsound::init()
 	ioctl(device,SNDCTL_DSP_SETFMT,&i);
 	
 	ioctl(device,SNDCTL_DSP_SYNC,0);
+	//*
 
 	return 1;
 }
@@ -103,8 +108,8 @@ bool CLsound::play(const xchar* f,bool l)
 	
 	xlong playid = fork();
 	 
-	 if(playid == 0)
-	 {
+	if(playid == 0)
+	{
 		CLwav current;
 		
 		current.file = CLsystem::getfile(f);
@@ -171,13 +176,13 @@ bool CLsound::play(const xchar* f,bool l)
 		//*	
 		
 		_exit(playid);
-	 }
-	 else
-	 {
+	}
+	else
+	{
 		if(l) isloop = playid;
 		 
 		return 1;
-	 }
+	}
 }
 
 void CLsound::stop()

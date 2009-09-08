@@ -53,10 +53,14 @@ namespace CLgfx1
 
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
+	//precalculate linear address components (especially multiplications)
 	xlong b1 = (yc*xres)+xc;
 	xlong b2 = (xc*xres)+yc;
  	xlong a1 = y*xres;
  	xlong a2 = x*xres;
+	//*
+	
+	//draw the eight pixels for each (1/8) section of the circle
  	(*CLdoublebuffer)[b1+a1+x] = c;
  	(*CLdoublebuffer)[b1-a1+x] = c;
  	(*CLdoublebuffer)[b1+a1-x] = c;
@@ -65,17 +69,22 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
  	(*CLdoublebuffer)[b2-a2+y] = c;
  	(*CLdoublebuffer)[b2+a2-y] = c;
  	(*CLdoublebuffer)[b2-a2-y] = c;
+	//*
 }
 
 void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
+	//precalculate linear address components (especially multiplications) 
 	xlong a = (yc*xres)+xc;
 	xlong b = (y*xres);
+	//*
 
+	//draw the four pixels for each (1/4) section of the ellipse
 	(*CLdoublebuffer)[a+x+b] = c;
 	(*CLdoublebuffer)[a-x+b] = c;
 	(*CLdoublebuffer)[a-x-b] = c;
 	(*CLdoublebuffer)[a+x-b] = c;
+	//*
 }
 
 uxlong CLgfx1::readpixel(xlong x,xlong y)
@@ -175,8 +184,11 @@ void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
 
 void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
+	//check if necessary to draw at all
 	if(x1==x2 && y1==y2) return;
+	//*
 
+	//clip line against screen borders
 	if(x1<0) x1=0;
 	if(y1<0) y1=0;
 	if(x2<0) x2=0;
@@ -185,14 +197,17 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	if(y1>yres-1) y1=yres-1;
 	if(x2>xres-1) x2=xres-1;
 	if(y2>yres-1) y2=yres-1;
+	//*
 
+	//set up variables
 	xlong dx = x2 - x1;
 	xlong dy = y2 - y1;
-	xlong e;
+	xlong e = 0;
 	xlong xs = 1;
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
+	//*
 
 	if(dx<0)
 	{
@@ -200,13 +215,12 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 		xs = -xs;
 	}
 
-
 	if(dy<0)
 	{
 		dy = -dy;
 		ys = -ys;
 	}
-
+ 
 	if(dy > dx)
 	{
 		dx ^= dy ^= dx ^= dy;
@@ -216,6 +230,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	len = dx+1;
 	e = dy;
 
+	//draw loop
 	for(uxlong i=0; i<len; i++)
 	{
 		(*CLdoublebuffer)[off] = c;
@@ -227,19 +242,35 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 			off += ys;
 		}
 	}
+	//*
 }
 
 void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
+	//check if necessary to draw at all
 	if(x1==x2 && y1==y2) return;
+	//*
+	
+	//clip line against screen borders
+	if(x1<0) x1=0;
+	if(y1<0) y1=0;
+	if(x2<0) x2=0;
+	if(y2<0) y2=0;
+	if(x1>xres-1) x1=xres-1;
+	if(y1>yres-1) y1=yres-1;
+	if(x2>xres-1) x2=xres-1;
+	if(y2>yres-1) y2=yres-1;
+	//*
 
+	//set up variables
 	xlong dx = x2 - x1;
 	xlong dy = y2 - y1;
-	xlong e;
+	xlong e = 0;
 	xlong xs = 1;
 	xlong ys = xres;
 	xlong len;
 	xlong off = y1*xres+x1;
+	//*
 
 	if(dx<0)
 	{
@@ -263,6 +294,7 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	len = dx+1;
 	e = dy;
 
+	//draw loop
 	for(uxlong i=0; i<len; i++)
 	{
 		(*CLdoublebuffer)[off] = c;
@@ -283,6 +315,7 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 			off += ys;
 		}
 	}
+	//*
 }
 
 void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
@@ -291,11 +324,13 @@ void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
 }
 
 void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
-{	
+{
+	//draw outline of rectangle
 	drawhorline(x1,y1,x2,c);
 	drawhorline(x1,y2,x2,c);
 	drawverline(x1,y1,y2,c);
 	drawverline(x2,y1,y2,c);
+	//*
 }
 
 void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
@@ -312,10 +347,12 @@ void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
 {
+	//draw outline of four-sided polygon
 	drawanyline(x1,y1,x2,y2,c);
 	drawanyline(x2,y2,x3,y3,c);
 	drawanyline(x3,y3,x4,y4,c);
 	drawanyline(x4,y4,x1,y1,c);
+	//*
 }
 
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
@@ -434,17 +471,19 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	xlong ye = y + sheight;
 	if(xe<0 || ye<0) return;
 
-	//clipping
+	//clipping against screen borders
 	if(xs<0) xs = 0;
 	if(xe>xres) xe = xres-1;
 	if(ys<0) ys = 0;
 	if(ye>yres) ye = yres-1;
+	//*
 
-	//draw vars
+	//set up variables
 	xlong ewidth = xe - xs;
 	xlong eheight = ye - ys;
 	xlong xoffset = (ys * xres) + xs;
 	xlong linearc = 0;
+	//*
 
 	//drawloop
 	for(uxlong i=0; i<eheight ;i++)
@@ -459,7 +498,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 		}
 		xoffset += xres;
 	}
-	
+	//*	
 }
 
 void CLgfx1::drawspriteanimated(xlong x,xlong y,sprites* s,xlong i)
@@ -498,13 +537,17 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m,float e)
 
 void CLgfx1::drawscreen(sprite* s)
 {
+	//check if sprite has correct dimensions
 	if(s->width==xres && s->height==yres)
 	{
+		//draw loop
 		for(uxlong i=0; i<s->size; i++)
 		{
 			(*CLdoublebuffer)[i] = s->data[i];
 		}
+		//*
 	}
+	//*
 }
 
 void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
@@ -514,7 +557,8 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	
 	//find tile
 	xlong pr = (s->width / s->tilewidth);
-	xlong off = ((ti % pr) * (s->width*s->tileheight)) + ((ti / pr) * s->tilewidth); 
+	xlong off = ((ti % pr) * (s->width*s->tileheight)) + ((ti / pr) * s->tilewidth);
+	//*
 
 	xlong hordiff = s->width-s->tilewidth;
 	xlong xs = x;
@@ -523,17 +567,19 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 	xlong ye = y + s->tileheight;
 	if(xe<0 || ye<0) return;
 
-	//clipping
+	//clipping against screen borders
 	if(xs<0) xs = 0;
 	if(xe>xres) xe = xres-1;
 	if(ys<0) ys = 0;
 	if(ye>yres) ye = yres-1;
+	//*
 
-	//draw vars
+	//set up variables
 	xlong ewidth = xe - xs;
 	xlong eheight = ye - ys;
 	xlong xoffset = (ys * xres) + xs;
 	xlong linearc = off;
+	//*
 
 	//drawloop
 	for(uxlong i=0; i<eheight ;i++)
@@ -549,6 +595,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 		xoffset += xres;
 		linearc += hordiff;
 	}
+	//*
 }
 
 #endif
