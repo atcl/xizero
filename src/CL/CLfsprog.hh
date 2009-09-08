@@ -23,6 +23,7 @@ namespace CLfsprogress
 
 void CLfsprogress::draw()
 {
+	//draw full screen progress bar
 	if(pprogress!=0)
 	{
 		xlong offset = 0;
@@ -37,20 +38,25 @@ void CLfsprogress::draw()
 			offset += diff;
 		}
 	}
+	//*
 }
 
 void CLfsprogress::set(xlong p)
 {
+	//set full screen progress bar to given value
 	if(p>100) { pprogress = 100; rprogress = xres; }
 	else if(p<=0) { rprogress = 0; pprogress = 0; }
 	else { pprogress = p; rprogress = (xres / 100) * pprogress; }
+	//*
 }
 
 void CLfsprogress::add(xlong a)
 {
+	//add given value to progress of full screen progress bar
 	if( (pprogress+a)>100) { pprogress = 100; rprogress = xres; }
 	else if( (pprogress+a)<=0) { rprogress = 0; pprogress = 0; }
 	else { pprogress += a; rprogress = (xres / 100) * pprogress; }
+	//*
 }
 
 void CLfsprogress::reset()

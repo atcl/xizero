@@ -75,6 +75,7 @@ xlong CLexplosion::next()
 
 	switch(type)
 	{
+		//normal explosion (just translate along normals)
 		case 0:
 			//phase 1:
 			if(temp < starttime + 800)
@@ -87,7 +88,9 @@ xlong CLexplosion::next()
 			else return 1;
 			//*
 		break;
+		//*
 		
+		//other dimension explosion (crumple object, then grow, then shring to zero)
 		case 1:
 			//phase 1:
 			if(temp < starttime + 200)
@@ -109,6 +112,7 @@ xlong CLexplosion::next()
 			else return 1;
 			//*
 		break;
+		//*
 	}
 	
 	lastupdate = temp;

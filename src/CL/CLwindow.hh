@@ -13,7 +13,7 @@
 void timeout(void*)
 {
 	Fl::redraw();
-	Fl::repeat_timeout(0.02,timeout);
+	Fl::repeat_timeout(0.02,timeout); //change time interval?
 }
 
 class CLwindow : public Fl_Single_Window

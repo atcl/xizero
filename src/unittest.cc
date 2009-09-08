@@ -83,7 +83,6 @@ int main(int argc, char** argv)
 
 	while(win->run())
 	{
-
 		switch(win->getturbo())
 		{
 			case 0:

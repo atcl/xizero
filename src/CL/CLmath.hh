@@ -37,6 +37,7 @@ namespace CLmath
 	template<typename T> T roundup(T x);
 	template<typename T> T rounddown(T x);
 	template<typename T> T sqrt(T x);
+	template<>       float sqrt<float>(float x);
 	template<typename T> T deg2rad(xlong d);
 	xlong faculty(xlong f);
 	xlong power(xlong b,xlong e);
@@ -51,8 +52,11 @@ namespace CLmath
 
 void CLmath::init()
 {
+	//precalucalte pi approximation
 	fxpi = 355/113;
+	//*
 
+	//fill look up tables for sine and cosine
 	sinarray = new float[360];
 	cosarray = new float[360];
 	arcsinarray = new xlong[360];
@@ -65,6 +69,7 @@ void CLmath::init()
 		arcsinarray[i] = 0;
 		arccosarray[i] = 0;
 	}
+	//*
 }
 
 template<typename T>
@@ -141,7 +146,23 @@ T CLmath::sqrt(T x)
 	if(x<=0) return 0;
 
 	T num = x;
-	T tmp = (x + 1)/2;
+	T tmp = (x + 1) >> 1;
+
+	for(int i=15;i>0;i--)
+	{
+		tmp = ((num/tmp) + tmp) >> 1;
+	}
+
+	return tmp;
+}
+
+template<>
+float CLmath::sqrt<float>(float x)
+{
+	if(x<=0) return 0;
+
+	float num = x;
+	float tmp = (x + 1)/2;
 
 	for(int i=15;i>0;i--)
 	{

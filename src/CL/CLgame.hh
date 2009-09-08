@@ -90,6 +90,7 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	CLlvector a4( (p.x + bb.c[3].x), (p.y - bb.c[3].y), (p.z + bb.c[3].z) );
 	//*
 	
+	//n decides wether or not the intersection of p+bb (useful if p+bb needs to be checked against a lot of q's
 	if(n)
 	{
 		//calc slopes
@@ -112,6 +113,7 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 		intersections[6][1] = a2.z + ( (a2.x - a2.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
 		//*
 	}
+	//*
 	
 	//calc intersections at q
 	xlong intersections2[6];
@@ -211,6 +213,7 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
 	CLfvector b4( (p2.x + bb2.c[3].x), (p2.y - bb2.c[3].y), (p2.z + bb2.c[3].z) );
 	//*
 
+	//n decides wether or not the intersection of p+bb (useful if p+bb1 needs to be checked against a lot of q+bb2's
 	if(n)
 	{
 		//calc slopes
@@ -233,6 +236,7 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
 		intersections[5][1] = a3.z + ( (a3.x - a3.y) / (slopes[1].y-slopes[1].x) ) * slopes[1].z;
 		//*
 	}
+	//*
 
 	//calc intersections of bb2 at p2
 	xlong intersections2[6][2];
@@ -266,6 +270,8 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
 template<class clvector>
 bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd)
 {
+	//! this is still a big constrution site! Especially the not working calculation of the x and y angle !
+	
 	//calc levelposition of current bounding box
 	CLlvector p1( (p.x + bb->c[0].x), (p.y - bb->c[0].y), (p.z + bb->c[0].z) );
 	CLlvector p2( (p.x + bb->c[1].x), (p.y - bb->c[1].y), (p.z + bb->c[1].z) );

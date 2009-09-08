@@ -385,6 +385,7 @@ void CLobject::display(CLlvector p,xshort flags)
 {
 	CLfvector currnormal = CLfvector();
 	
+	//display objects shadow
 	if(flags&SHADOW)
 	{
 		for(uxlong i=0;i<polycount;i++)
@@ -393,6 +394,9 @@ void CLobject::display(CLlvector p,xshort flags)
 			polyptr[i]->display(p,flags);
 		}
 	}
+	//*
+	
+	//display all polygons
 	else
 	{
 		for(uxlong i=0;i<polycount;i++)
@@ -409,14 +413,17 @@ void CLobject::display(CLlvector p,xshort flags)
 			}
 		}
 	}
+	//*
 }
 
 void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
 {
+	//use special display method ONLY for zlevel map construction (see CLlevel Z179-2008)
 	for(uxlong i=0;i<polycount;i++)
 	{
 		polyptr[i]->display(p,l,r,b,h);
 	}
+	//*
 }
 
 xlong CLobject::getname()

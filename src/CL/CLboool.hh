@@ -89,27 +89,37 @@ class boool
 		inline operator xlong() const;
 };
 
+//unassigning constructor
 boool::boool()
 {
 	this->b=0;
 }
+//*
 
+//boool assigning constructor
 boool::boool(boool& a)
 {
 	this->b=a.b;
 }
+//*
 
+//bool assigning constructor
 boool::boool(bool a)
 {
 	this->b=a;
 }
+//*
 
+//xlong assigning construcotr
 boool::boool(xlong a)
 {
 	this->b=CLmath::sign(a);
 }
+//*
 
+//defaut destructor
 boool::~boool() { }
+//*
 
 //assign boool
 boool& boool::operator=(boool& a)

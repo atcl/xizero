@@ -5,18 +5,12 @@
 //#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLconsts.hh"
 #include "CLsystem.hh"
 
-//cpucaps constants
-#define FPU   0b00000000000000000000000000000001
-#define MMX   0b00000000000000000000000000000010
-#define SSE   0b00000000000000000000000000000100
-#define SSE2  0b00000000000000000000000000000000
-#define SSE3  0b00000000000000000000000000000000
-#define SSE41 0b00000000000000000000000000000000
-#define SSE42 0b00000000000000000000000000000000
-#define SSE5a 0b00000000000000000000000000000000
-
+//CPUID flags
+#define MMXFLAG 0b00000000100000000000000000000000
+#define SSEFLAG 0b00000010000000000000000000000000
 //*
 
 namespace CLdetect
@@ -26,7 +20,7 @@ namespace CLdetect
 	xchar* gpu();
 	xlong vram();
 	xchar* sb();
-	xchar ps();
+	xlong ps();
 };
 
 xlong CLdetect::cpu()

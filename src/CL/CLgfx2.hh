@@ -27,7 +27,7 @@ namespace CLgfx2
 	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
 	xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c);
 	void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c);
-	uxlong getQBcolor(xchar c); //get 16 EGA colors
+	uxlong getEGAcolor(xchar c);
 	bool comparecolors(uxlong c1,uxlong c2);
 	uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
 	uxlong getgradient(uxlong s,uxlong e,xchar i);
@@ -140,8 +140,9 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c)
 	}
 }
 
-uxlong CLgfx2::getQBcolor(xchar c)
+uxlong CLgfx2::getEGAcolor(xchar c)
 {
+	//return the 16 EGA colors
 	switch(c)
 	{
 		case 0:
@@ -195,6 +196,7 @@ uxlong CLgfx2::getQBcolor(xchar c)
 		default:
 			return 0;
 	}
+	//*
 }
 
 bool CLgfx2::comparecolors(uxlong c1,uxlong c2)

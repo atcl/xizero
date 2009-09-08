@@ -32,10 +32,11 @@ class CLbutton : public CLguibase
 
 CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
 {
+	//set up attributes
 	action = a;
 	caption = c;
 	flat = f;
-
+	//*
 }
 
 CLbutton::~CLbutton()

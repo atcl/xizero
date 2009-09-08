@@ -42,10 +42,14 @@ class CLammomanager : public virtual CLcl
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 {
+	//set up attributes
 	mark = m;
 	ammotypecount = atc;
 	ammolist = new CLammolist();
 	ammotype = new CLammo*[atc];
+	//*
+	
+	//fill ammotypes
 	for(uxlong i=0; i<atc; i++)
 	{
 			ammotype[i] = new CLammo;
@@ -57,6 +61,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 				case 1: ammotype[i]->comsprite = CLsprites::drawantimatter; break;
 			}
 	}
+	//*
 }
 
 CLammomanager::~CLammomanager()
@@ -67,6 +72,7 @@ CLammomanager::~CLammomanager()
 
 void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction)
 {
+	//append ammolist if ammotype exists
 	if(at<=ammotypecount)
 	{
 		CLammo* currammo = new CLammo();
@@ -75,6 +81,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 		currammo->s = direction;
 		ammolist->append(currammo,"at" + xchar(at+30) );
 	}
+	//*
 }
 
 void CLammomanager::update()
@@ -83,22 +90,32 @@ void CLammomanager::update()
 
 	bool listfix=0;
 	CLammo* currammo = 0;
+	
+	//update all ammolist members
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
 	{
+		//place the ammolist index correctly after deleting ammo from the list
 		if(listfix) { i+=ammolist->setprev(); listfix=0; }
 		currammo = ammolist->getcurrentdata();
+		//*
 		
+		//update current ammo position
 		float inter = time-lastupdate;
 		currammo->p.x += inter*currammo->s.x;
 		currammo->p.y -= inter*currammo->s.y;
 		currammo->p.z += inter*currammo->s.z;
+		//*
 		
+		//check if current ammo left screen
 		if(CLgame::boundary(currammo->p,*mark)!=0)
 		{
 			ammolist->delcurrent(0);
 			listfix = ammolist->isfirst();
 		}
+		//*
 	}
+	//*
+	
 	lastupdate = time;
 
 }
@@ -111,29 +128,40 @@ void CLammomanager::collision(CLentity<I>* e)
 
 	bool listfix=0;
 	CLammo* currammo = 0;
+	
+	//test all ammolist members for collisions
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
 	{
+		//place the ammolist index correctly after deleting ammo from the list
 		if(listfix) { i+=ammolist->setprev(); listfix=0; }
 		currammo = ammolist->getcurrentdata();
+		//*
 		
+		//test the current ammo for collision with any opposite entity
 		if(e->isvisible() && CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 		{
 			r++;
 			ammolist->delcurrent(0);
 			listfix = ammolist->isfirst();
 		}
+		//*
 	}
+	//*
+	
 	e->hit(r);
 }
 
 void CLammomanager::display()
 {
 	CLammo* currammo = 0;
+	
+	//draw all ammo n the ammolist
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength();i+=ammolist->setnext())
 	{
 		currammo = ammolist->getcurrentdata();
 		currammo->comsprite(currammo->p.x,currammo->p.y-(*mark));
 	}
+	//*
 }
 
 #endif

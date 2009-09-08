@@ -85,28 +85,36 @@ union xfixed
 	operator float() const;
 };
 
+//unassigning constructor
 xfixed::xfixed()
 {
 	this->i = 0;
 }
+//*
 
+//xlong assigning constructor
 xfixed::xfixed(xlong a)
 {
 	this->i = 0;
 	this->p.num = xshort(a);
 }
+//*
 
+//xshort assigning construcotr
 xfixed::xfixed(xshort a)
 {
 	this->i = 0;
 	this->p.num = a;
 }
+//*
 
+//float assigning constructor
 xfixed::xfixed(float a)
 {
 	this->p.num = xshort(a);
 	this->p.frc = xshort((a - float(this->p.num))*65536);
 }
+//*
 
 //assign xfixed
 xfixed& xfixed::operator=(xfixed &a)

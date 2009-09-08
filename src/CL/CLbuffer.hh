@@ -9,7 +9,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
-#include "CLmacros.hh"
+#include "CLdetect.hh"
 
 template <typename T>class CLbuffer : public virtual CLcl
 {
@@ -43,37 +43,42 @@ template <typename T>class CLbuffer : public virtual CLcl
 
 template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 {
+	//adjust size and allocate buffer
 	size = (s+1) + (s%4); // make sure is amultiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
+	//*
 	
+	//determine cpu type to decide which copy or clear method can be used
 	havemmx = 1;
 	havesse = 0; 
 	
-	xlong hm = 0;
-	xlong hs = 0;
-	detectCPU(hm,hs);
-	
-	//havemmx = hm;
-	//havesse = hs;
+	xlong cpucaps = CLdetect::cpu();
+	//if( (cpucaps & MMX) != 0 ) havemmx = 1; else havemmx = 0;
+	//if( (cpucaps & SSE) != 0 ) havesse = 1; else havesse = 0;
+	//*
 }
 
 template <typename T>CLbuffer<T>::~CLbuffer() { }
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {
+	//default for loop clear (slow)
 	for(xlong i=size-1;i>=0;i--)
 	{
 		buffer[i] = v;
 	}
+	//*
 }
 
 template <typename T>void CLbuffer<T>::fastclear(T v)
 {
+	//default x86 assembly clear (average)
 	xlong* btemp = reinterpret_cast<xlong*>(&buffer[0]);
 	xlong* vtemp = reinterpret_cast<xlong*>(&v);
 
 	__asm__ __volatile__ ( "cld; rep stosl;" : : "a"(*vtemp),"D"(btemp),"c"(size) );
+	//*
 }
 
 template <typename T>void CLbuffer<T>::ultraclear(T v)
@@ -84,6 +89,7 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 	packed[0] = packed[1] = packed[2] = packed[3] = purev;
 	uxlong i = size;
 
+	//x86 SSE1 assembly clear (very fast)
 	if(size>262144 && havesse)
 	{
 		i>>=5;
@@ -111,6 +117,9 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 			puredst+=32;
 		}
 	}
+	//*
+	
+	//86 MMX assembly clear (fast)
 	else if(size>65536 && havemmx)
 	{
 		i>>=4;
@@ -138,31 +147,42 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 			puredst+=16;
 		}
 	}
+	//*
+	
+	//fallback if no SIMD neither MMX or SSE1 is available
 	else
 	{
 		__asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(v),"D"(puredst),"c"(size));
 	}
+	//*
 }
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
 {
+	//default for loop copy (slow)
 	for(xlong i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
 	}
+	//*
 }
 
 template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
 {
+	//default for loop copy (slow)
 	for(xlong i=size-1;i>=0;i--)
 	{
 		dst[i] = buffer[i];
 	}
+	//*
 }
 
 template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 {
-	memcpy(dst,buffer,size<<2);
+	//default x86 assembly copy (average)
+	memcpy(dst,buffer,size<<2); //temp
+	//
+	//*
 }
 
 template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
@@ -170,7 +190,8 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	uxlong i = size;
-		
+	
+	//x86 SSE1 assembly copy (very fast)
 	if(size>262144 && havesse)
 	{
 		i>>=5;
@@ -200,6 +221,9 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 			puredst+=32;
 		}
 	}
+	//*
+	
+	//x86 MMX assembly copy (very fast)
 	else if(size>65536 && havemmx)
 	{
 		i>>=4;
@@ -228,14 +252,19 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 			puredst+=16;
 		}
 	}
+	//*
+	
+	//fallback if no SIMD neither MMX or SSE1 is available
 	else
 	{
 		__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
 	}
+	//*
 }
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
+	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	switch(o)
 	{
 		case 0:		//NONE //?default
@@ -280,6 +309,7 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 			}
 		break;
 	}
+	//*
 }
 
 template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o)

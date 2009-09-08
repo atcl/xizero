@@ -61,6 +61,7 @@ void CLmisc3d::project2(clvector& o)
 template<class clvector>
 void CLmisc3d::draw3dpixel(clvector p,uxlong c)
 {
+	//if on screen project and draw a pixel 
 	if(p.x>0 && p.x<xres && p.y>0 && p.y<yres && p.z>0 && p.z<zres)
 	{
 		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
@@ -68,11 +69,13 @@ void CLmisc3d::draw3dpixel(clvector p,uxlong c)
 
 		(*CLdoublebuffer)[(ny*xres)+nx] = c;
 	}
+	//*
 }
 
 template<class clvector>
 void CLmisc3d::draw3dline(clvector p,clvector q,uxlong c,bool aa)
 {
+	//if on screen project and draw a line  
 	if(p.z>0 && p.z<zres && q.z >0 && q.z<zres)
 	{
 		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
@@ -84,6 +87,7 @@ void CLmisc3d::draw3dline(clvector p,clvector q,uxlong c,bool aa)
 		if(aa) CLgfx1::drawantiline(nx,ny,ox,oy,c);
 		else   CLgfx1::drawanyline(nx,ny,ox,oy,c);
 	}
+	//*
 }
 
 template<class clvector>
@@ -140,6 +144,7 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 	floorxend   = xres-((xres-w)>>1);
 	//*
 	
+	//draw floor with shaded floor color
 	if(s)
 	{
 		//shade floor
@@ -155,8 +160,11 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 		floorshade = argb.dd;
 		//*
 	}
-	else floorshade = c;
+	//*
 	
+	//draw floor with unshaded color
+	else floorshade = c;
+	//*
 }
 
 void CLfloor::draw()
