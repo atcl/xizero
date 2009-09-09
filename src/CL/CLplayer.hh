@@ -183,7 +183,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 	//*
 
 	if(active==1)
-	{
+	{		
 		//set progressbars
 		hprog->setprogress(health);
 		sprog->setprogress(shield);
@@ -194,6 +194,15 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		linear->unit();
 		bool what = 0;
 		xlong tempangle = 0;
+		//*
+
+		//shield regeneration
+		if( (time >= (shieldupdate + shieldrate) ) && (shield < shieldmax) ) //move shieldrate*1000 into ctor
+		{
+			shield++;
+			shieldupdate = time;
+			if(shield>shieldmax) shield = shieldmax;
+		}
 		//*
 
 		//temp use gamepad

@@ -117,7 +117,6 @@ void CLammomanager::update()
 	//*
 	
 	lastupdate = time;
-
 }
 
 template<int I>

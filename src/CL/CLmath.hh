@@ -59,13 +59,20 @@ void CLmath::init()
 	//fill look up tables for sine and cosine
 	sinarray = new float[360];
 	cosarray = new float[360];
-	arcsinarray = new xlong[360];
-	arccosarray = new xlong[360];
 
 	for(xlong i=0; i<360; i++)
 	{
 		sinarray[i] = std::sin(i*DEGTORAD);
 		cosarray[i] = std::cos(i*DEGTORAD);
+	}
+	//*
+	
+	//fill look up tables for arcsine and arccosine
+	arcsinarray = new xlong[360];
+	arccosarray = new xlong[360];
+	
+	for(xlong i=0; i<360; i++)
+	{
 		arcsinarray[i] = 0;
 		arccosarray[i] = 0;
 	}

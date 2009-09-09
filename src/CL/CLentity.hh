@@ -50,8 +50,11 @@ class CLentity : public virtual CLcl
 		xlong* ammotype;
 		xlong* firerate;
 		xlong health;
+		xlong healthmax;
 		xlong shield;
+		xlong shieldmax;
 		xlong shieldrate;
+		xlong shieldupdate;
 		xlong armor;
 		xlong points;
 		
@@ -68,8 +71,8 @@ class CLentity : public virtual CLcl
 		
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
+		void hit(xlong h);
 		
-		void hit(xlong h) { health -= h; }
 		xlong gethealth() { return health; }
 		xlong getshield() { return shield; }
 		CLfvector* getposition() { return &position; }
@@ -155,8 +158,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//load entity attributes
-	health		= CLsystem::ato((*def)["health"]);
-	shield		= CLsystem::ato((*def)["shield"]);
+	healthmax = health = CLsystem::ato((*def)["health"]);
+	shieldmax = shield = CLsystem::ato((*def)["shield"]);
 	shieldrate	= CLsystem::ato((*def)["shieldrate"]);
 	armor		= CLsystem::ato((*def)["armor"]);
 	ammomounts	= CLsystem::ato((*def)["ammomounts"]);
@@ -193,7 +196,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	gear = 0;
 	visible = 0;
 	active = 0;
-	lastupdate = CLsystem::getmilliseconds();
+	shieldupdate = lastupdate = CLsystem::getmilliseconds();
 	//*
 }
 
@@ -241,8 +244,8 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	//*
 	
 	//load entity attributes
-	health		= entityptr->health;
-	shield		= entityptr->shield;
+	healthmax = health = entityptr->health;
+	shieldmax = shield = entityptr->shield;
 	shieldrate	= entityptr->shieldrate;
 	armor		= entityptr->armor;
 	ammomounts	= entityptr->ammomounts;
@@ -273,7 +276,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	gear = 0;
 	visible = 0;
 	active = 0;
-	lastupdate = CLsystem::getmilliseconds();
+	shieldupdate = lastupdate = CLsystem::getmilliseconds();
 	//*
 }
 
@@ -325,6 +328,18 @@ void CLentity<I>::display(xlong modelorshadow)
 				//*
 			break;
 		}
+	}
+}
+
+template<int I>
+void CLentity<I>::hit(xlong h)
+{
+	if(shield>0) shield -=h;
+	else health -= h; 
+	
+	if(shield<0)
+	{
+		health -= -shield; 
 	}
 }
 

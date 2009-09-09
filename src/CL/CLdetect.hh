@@ -15,6 +15,9 @@
 
 namespace CLdetect
 {
+	xlong cores;
+	xlong l2;
+	
 	xlong cpu();
 	xlong ram();
 	xchar* gpu();
