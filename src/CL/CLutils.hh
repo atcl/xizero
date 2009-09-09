@@ -11,8 +11,6 @@
 namespace CLutils
 {
 	xlong seed = 22695477;
-	xlong multiplicator = 1;
-	xlong incrementor = 1;
 
 	void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
 	xchar  long2char(xlong l,xlong i);
@@ -123,10 +121,12 @@ bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe)
 
 xlong CLutils::getrandom(xlong range)
 {
-	seed *= multiplicator;
-	seed += incrementor;
-	//rotation bitwise?
+	//xor-shift random number generator
+	seed ^= (seed<<15);
+	seed ^= (seed>>21);
+	seed ^= (seed<<4);
 	return seed % range;
+	//*
 }
 
 xchar* CLutils::color2string(uxlong c)

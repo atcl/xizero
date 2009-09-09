@@ -275,13 +275,13 @@ void CLsystem::waitforkey()
 void CLsystem::wait(xlong milliseconds)
 {
 	//get current time and calc stop time
-	xlong starttime = clock() / CLOCKS_PER_SEC * 1000;
-	xlong stoptime = (starttime + milliseconds) / 1000 * CLOCKS_PER_SEC;
+	xlong starttime = xlong(1000 * clock() / CLOCKS_PER_SEC);
+	xlong stoptime = (starttime + milliseconds);
 	//*
 
 	//do nothing while waiting for stoptime
 	xlong nowtime = 0;
-	while(nowtime < stoptime) nowtime = clock();
+	while(nowtime < stoptime) nowtime = xlong(1000 * clock() / CLOCKS_PER_SEC);
 	//*
 }
 

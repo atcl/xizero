@@ -29,6 +29,7 @@
 #include "CL/CLgfx1.hh"
 #include "CL/CLgfx2.hh"
 #include "CL/CLdiv3d.hh"
+#include "CL/CLscreen.hh"
 
 //non-static classes I
 #include "CL/CLbuffer.hh"

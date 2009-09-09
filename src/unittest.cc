@@ -219,13 +219,13 @@ int main(int argc, char** argv)
 				CLsound::play("../../cannon.wav",0);
 			break;
 			case 'k':
-				CLintro::atcrosslevel();
+				//CLintro::atcrosslevel();
+				CLtransitions::fadetoblack();
 			break;
 			
 			//System:
 			case '0':
 				xlong rval = CLsystem::msgbox("bye");
-				//xlong rval = CLsystem::system("Xdialog --msgbox 'bye' 0 0");
 				CLsystem::exit(rval,0,"user","exit");
 			break;
 		}
