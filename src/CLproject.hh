@@ -15,7 +15,8 @@
 
 #define xres 800
 #define yres 600
-#define zres 400 
+#define zres 400
+#define scrs xres*yres
 
 #define CLtitle "atCROSSLEVEL's XiZero"
 

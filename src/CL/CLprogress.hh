@@ -42,6 +42,7 @@ class CLprogress : public CLguibase
 
 CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) : CLguibase(px,py,w,h,f,fc,bc,rc)
 {
+	//set up attributes
 	progress = p;
 	horver = hv;
 	pcolor = pc;
@@ -53,10 +54,12 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	float temp2 = (width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
+	//*
 }
 
 CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv) : CLguibase(px,py,w,h)
 {
+	//set up attributes
 	progress = p;
 	horver = hv;
 	pcolor = pc;
@@ -68,6 +71,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
+	//*
 }
 
 CLprogress::CLprogress() : CLguibase(0,0,0,0)
@@ -96,17 +100,23 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 
 void CLprogress::draw()
 {
+	//draw enclosing frame
 	CLgfx2::drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
+	//*
 
 	switch(horver)
 	{
+		//draw horizontal progress
 		case 0:
 			CLgfx1::drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor);
 		break;
+		//*
 		
+		//draw vertical progress
 		case 1:
 			CLgfx1::drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor);
 		break;
+		//*
 	}
 }
 

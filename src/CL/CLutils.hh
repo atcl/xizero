@@ -14,9 +14,9 @@ namespace CLutils
 	xlong multiplicator = 1;
 	xlong incrementor = 1;
 
-	xchar* long2char(xlong l);
+	void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
 	xchar  long2char(xlong l,xlong i);
-	xlong  chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower);
+	xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4);
 	xlong  chararraylength(const xchar* c);
 	void   copychararray(xchar* dst,xchar* src,xlong length); //for char arrays below 256byte
 	xlong  getlinecount(CLfile* sf);
@@ -28,16 +28,12 @@ namespace CLutils
 };
 
 
-xchar* CLutils::long2char(xlong l)
+void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3)
 {
-	xchar* ch = new xchar[4];
-
-	ch[0] = (l & 0xFF);
-	ch[1] = (l & 0xFF00) >> 8;
-	ch[2] = (l & 0xFF0000) >> 16;
-	ch[3] = (l & 0xFF000000) >> 24;
-
-	return ch;
+	r0 = (l & 0xFF);
+	r1 = (l & 0xFF00) >> 8;
+	r2 = (l & 0xFF0000) >> 16;
+	r3 = (l & 0xFF000000) >> 24;
 }
 
 xchar CLutils::long2char(xlong l,xlong i)
@@ -62,15 +58,14 @@ xchar CLutils::long2char(xlong l,xlong i)
 	return ch;
 }
 
-xlong CLutils::chars2long(uxchar upper,uxchar midup,uxchar midlow, uxchar lower)
+xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3)
 {
 	xlong l;
 
-	l = xlong(lower);
-	l += xlong(midlow) << 8;
-	l += xlong(midup) << 16;
-	l += xlong(upper) << 24;
-
+	l = xlong(i0);
+	l += xlong(i1) << 8;
+	l += xlong(i2) << 16;
+	l += xlong(i3) << 24;
 
 	return l;
 }

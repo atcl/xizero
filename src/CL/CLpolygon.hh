@@ -153,51 +153,74 @@ void CLpolygon::zclipping()
 	xlong y = 0;
 	xlong localpointcount = 0;
 
+	//check all vertices if protruding minimum z 
 	for(x=pointcount-1, y=0; y<pointcount; x=y, y++)
 	{
+		//inside
 		if(ppoint[x].z >= zmin && ppoint[y].z >= zmin)
 		{
 			cpoint[localpointcount++] = ppoint[y];
 		}
+		//*
+		
+		//entering
 		else if(ppoint[x].z >= zmin && ppoint[y].z < zmin)
 		{
 			cpoint[localpointcount++] = getzplanecoords(ppoint[x],ppoint[y],zmin);
 		}
+		//*
+		
+		//leaving
 		else if(ppoint[x].z < zmin && ppoint[y].z >= zmin)
 		{
 			cpoint[localpointcount++] = getzplanecoords(ppoint[x],ppoint[y],zmin);
 			cpoint[localpointcount++] = ppoint[y];
 		}
+		//*
 	}
+	//*
 
 	cpointcount = 0;
 	
+	//check all vertices if protruding maximum z 
 	for(x=localpointcount-1, y=0; y<localpointcount; x=y, y++)
 	{
+		//inside
 		if(cpoint[x].z <= zmax && cpoint[y].z <= zmax)
 		{
 			ppoint[cpointcount++] = cpoint[y];
 		}
+		//*
+		
+		//entering
 		else if(cpoint[x].z <= zmax && cpoint[y].z > zmax)
 		{
 			cpoint[cpointcount++] = getzplanecoords(cpoint[x],cpoint[y],zmax);
 		}
+		//*
+		
+		//leaving
 		else if(cpoint[x].z > zmax && cpoint[y].z <= zmax)
 		{
 			cpoint[cpointcount++] = getzplanecoords(cpoint[x],cpoint[y],zmax);
 			cpoint[cpointcount++] = cpoint[y];
 		}
+		//*
 	}
+	//*
 }
 
 void CLpolygon::project(xlong px,xlong py,bool c)
 {
+	//use screen center as attached position if wanted
 	if(c)
 	{
 		px = (xres>>1);
 		py = (yres>>1);
 	}
+	//*
 
+	//project each vertex if vertex's z is greater zero
 	for(xlong x=0; x<cpointcount; x++)
 	{
 		if(ppoint[x].z > 0)
@@ -211,6 +234,7 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 			//CLsystem::exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
 		}
 	}
+	//*
 }
 
 
@@ -221,79 +245,119 @@ void CLpolygon::xyclipping()
 	xlong y = 0;
 	xlong localpointcount = 0;
 
+	//check all vertices if protruding minimum x 
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
+		//inside
 		if(spoint[x].x >= xmin && spoint[y].x >= xmin)
 		{
 			dpoint[localpointcount++] = spoint[y];
-		}  
+		}
+		//*
+		
+		//entering
 		else if(spoint[x].x >= xmin && spoint[y].x < xmin )
 		{
 			dpoint[localpointcount++] = getxplanecoords(spoint[x],spoint[y],xmin);
-		}  
+		}
+		//*
+		
+		//leaving
 		else if(spoint[x].x < xmin && spoint[y].x >= xmin )
 		{
 			dpoint[localpointcount++] = getxplanecoords(spoint[x],spoint[y],xmin);
 			dpoint[localpointcount++] = spoint[y];	
 		}
+		//*
 	}
+	//*
   
 	cpointcount = 0;
 	
+	//check all vertices if protruding maximum x 
 	for(x=localpointcount-1, y=0; y<localpointcount; x=y, y++)
 	{
+		//inside
 		if(dpoint[x].x <= xmax && dpoint[y].x <= xmax)
 		{
 			spoint[cpointcount++] = dpoint[y];
 		}
+		//*
+		
+		//entering
 		else if(dpoint[x].x <= xmax && dpoint[y].x > xmax)
 		{
 			spoint[cpointcount++] = getxplanecoords(dpoint[x],dpoint[y],xmax);
 		}
+		//*
+		
+		//leaving
 		else if(dpoint[x].x > xmax && dpoint[y].x <= xmax)
 		{
 			spoint[cpointcount++] = getxplanecoords(dpoint[x],dpoint[y],xmax);
 			spoint[cpointcount++] = dpoint[y];	
 		}
+		//*
 	}
+	//*
 
 	localpointcount = 0;
 	
+	//check all vertices if protruding minimum y
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
+		//inside
 		if(spoint[x].y >= ymin && spoint[y].y >= ymin)
 		{
 			dpoint[localpointcount++] = spoint[y];
 		}
+		//*
+		
+		//entering
 		else if(spoint[x].y >= ymin && spoint[y].y < ymin )
 		{
 			dpoint[localpointcount++] = getyplanecoords(spoint[x],spoint[y],ymin);
 		}
+		//*
+		
+		//leaving
 		else if(spoint[x].y < ymin && spoint[y].y >= ymin)
 		{
 			dpoint[localpointcount++] = getyplanecoords(spoint[x],spoint[y],ymin);
 			dpoint[localpointcount++] = spoint[y];	
 		}
+		//*
 	}
+	//*
 
 	cpointcount = 0;
 	
+	//check all vertices if protruding maximum y
 	for(x=localpointcount-1, y=0; y<localpointcount; x=y, y++)
 	{
+		//inside
 		if(dpoint[x].y <= ymax && dpoint[y].y <= ymax)
 		{
 			spoint[cpointcount++] = dpoint[y];
 		}
+		//*
+		
+		//entering
 		else if(dpoint[x].y <= ymax && dpoint[y].y > ymax)
 		{
 			spoint[cpointcount++] = getyplanecoords(dpoint[x],dpoint[y],ymax);
 		}
+		//*
+		
+		//leaving
 		else if(dpoint[x].y > ymax && dpoint[y].y <= ymax)
 		{
 			spoint[cpointcount++] = getyplanecoords(dpoint[x],dpoint[y],ymax);
 			spoint[cpointcount++] = dpoint[y];	
 		}
+		//*
 	}
+	//*
 }
 
 bool CLpolygon::visible()
@@ -390,23 +454,29 @@ void CLpolygon::rasterize(xlong shadow)
 	xlong top = 0;
 	xlong bot = 0;
 
+	//find top and bottom vertex
 	for(x=1; x<cpointcount; x++)
 	{
 		if(xlong(spoint[top].y) > xlong(spoint[x].y)) top = x;
 		if(xlong(spoint[bot].y) < xlong(spoint[x].y)) bot = x;
 	}
+	//*
 
+	//set left side rasterizing start postion(s)
 	x=y=top;
 	for(y=circledec(y,cpointcount); x!=bot; x=y, y=circledec(y,cpointcount))
 	{
 		setside(spoint[x],spoint[y],leftside);
 	}
+	//*
 	
+	//set right side rasterizing start position(s)
 	x=y=top;
 	for(y=circleinc(y,cpointcount); x!=bot; x=y, y=circleinc(y,cpointcount))
 	{
 		setside(spoint[x],spoint[y],rightside);
 	}
+	//*
 
 	xlong m = xlong(spoint[bot].y + spoint[top].y) >> 1;
 	if(leftside[m].offset > rightside[m].offset)
@@ -433,6 +503,7 @@ void CLpolygon::rasterize(xlong shadow)
 
 		switch(shadow)
 		{
+			//normal rasterizing
 			case 0:
 				while(length > 0)
 				{
@@ -446,8 +517,10 @@ void CLpolygon::rasterize(xlong shadow)
 					actz += zstep;
 					length--;
 				}
-				break;
+			break;
+			//*
 
+			//shadow rasterizing
 			case 1:
 				while(length > 0)
 				{
@@ -456,8 +529,10 @@ void CLpolygon::rasterize(xlong shadow)
 					offset++;
 					length--;
 				}
-				break;
-				
+			break;
+			//*
+			
+			//z rasterizing
 			case 2:
 				while(length > 0)
 				{
@@ -470,7 +545,8 @@ void CLpolygon::rasterize(xlong shadow)
 					actz += zstep;
 					length--;
 				}
-				break;
+			break;
+			//*
 		}
 	}
 }

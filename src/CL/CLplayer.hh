@@ -197,7 +197,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 
 		//shield regeneration
-		if( (time >= (shieldupdate + shieldrate) ) && (shield < shieldmax) ) //move shieldrate*1000 into ctor
+		if( (time >= (shieldupdate + shieldrate) ) && (shield < shieldmax) )
 		{
 			shield++;
 			shieldupdate = time;
