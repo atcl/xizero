@@ -15,6 +15,8 @@
 #include "CLstruct.hh"
 #include "CLversion.hh"
 #include "CLresource.hh"
+#include "CLutils.hh"
+
 
 //forward declaration
 namespace CLsound {	void exit(); }
@@ -30,10 +32,10 @@ namespace CLsystem
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);
 	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
 	CLfile* getfile(const xchar* fn,bool s=true); //CLfile as parameter and return bool for if ok?
-	bool    appendfile(const xchar* f,xlong* b,xlong s);
-	bool    appendfile(const xchar* f,xchar* b,xlong s);
-	bool    writefile(const xchar* f,xlong* b,xlong s,bool ow=0);
-	bool    writefile(const xchar* f,xchar* b,xlong s,bool ow=0);
+	bool    appendfile(const xchar* fn,xlong* b,xlong s);
+	bool    appendfile(const xchar* fn,xchar* b,xlong s);
+	bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
+	bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
 	void    print(const xchar* c,bool i=1);
 	void    print(const xlong l,bool i=1);
 	void    print(const float l,bool i=1);
@@ -45,6 +47,7 @@ namespace CLsystem
 	xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
 	xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
 	void    installsystemkey(xchar scancode,void *action);
+	xlong   msgbox(const xchar* message);
 };
 
 
@@ -136,24 +139,96 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 	return re;
 }
 
-bool CLsystem::appendfile(const xchar* f,xlong* b,xlong s)
+bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s)
 {
-	return 0;
+	FILE* of;
+	
+	//open for appending
+	if( (of = fopen(fn,"ab")) == 0 ) return 0;
+	//*
+	
+	//write binary data to file
+	fwrite(b,4,s,of);
+	//*
+	
+	//close file
+	fclose(of);
+	//*
+	
+	return 1;
 }
 
-bool CLsystem::appendfile(const xchar* f,xchar* b,xlong s)
+bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s)
 {
-	return 0;
+	FILE* of;
+	
+	//open for appending
+	if( (of = fopen(fn,"a")) == 0 ) return 0;
+	//*
+	
+	//write sequential data to file
+	fwrite(b,1,s,of);
+	//*
+	
+	//close file
+	fclose(of);
+	//*
+	
+	return 1;
 }
 
-bool CLsystem::writefile(const xchar* f,xlong* b,xlong s,bool ow)
+bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow)
 {
-	return 0;
+	FILE* of;
+	
+	//if file exist and overwrite not set return
+	if( of = fopen(fn,"rb") ) 
+	{
+		fclose(of);
+		if(!ow)	return 0;
+	}
+	//*
+	
+	//open for (over-)writing
+	if( (of = fopen(fn,"wb")) == 0 ) return 0;
+	//*
+	
+	//write binary data to file
+	fwrite(b,4,s,of);
+	//*
+	
+	//close file
+	fclose(of);
+	//*
+	
+	return 1;
 }
 
-bool CLsystem::writefile(const xchar* f,xchar* b,xlong s,bool ow)
+bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow)
 {
-	return 0;
+	FILE* of;
+	
+	//if file exist and overwrite not set return
+	if( of = fopen(fn,"rb") ) 
+	{
+		fclose(of);
+		if(!ow)	return 0;
+	}
+	//*
+	
+	//open for (over-)writing
+	if( (of = fopen(fn,"w")) == 0 ) return 0;
+	//*
+	
+	//write sequential data to file
+	fwrite(b,1,s,of);
+	//*
+	
+	//close file
+	fclose(of);
+	//*
+	
+	return 1;
 }
 
 void CLsystem::print(const xchar* c,bool i)
@@ -251,6 +326,21 @@ xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l)
 void CLsystem::installsystemkey(xchar scancode,void *action)
 {
 
+}
+
+xlong CLsystem::msgbox(const xchar* message)
+{
+	const xchar* cl1 = "Xdialog --msgbox";
+	const xchar* cl3 = " 0 0";
+	xlong cl1l = CLutils::chararraylength(cl1);
+	xlong cl2l = CLutils::chararraylength(message);
+	xlong cl3l = CLutils::chararraylength(cl3);
+	xchar* cl = new xchar[cl1l+cl2l+cl3l+1];
+	CLutils::copychararray(&cl[0],cl1,cl1l);
+	CLutils::copychararray(&cl[cl1l],message,cl2l);
+	CLutils::copychararray(&cl[cl2l],cl3,cl3l);
+	cl[cl1l+cl2l+cl3l] = 0;
+	return ::system(cl);
 }
 
 #endif

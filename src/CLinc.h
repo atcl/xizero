@@ -40,7 +40,6 @@
 
 //non-static classes II
 #include "CL/CLmenu.hh"
-#include "CL/CLmsgbox.hh"
 
 //non-static classes III (GUI elements)
 #include "CL/CLguibase.hh"
