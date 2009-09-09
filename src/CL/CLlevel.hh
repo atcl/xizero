@@ -50,6 +50,7 @@ class CLlevel : public virtual CLcl
 		xlong smoothlevelheight;
 		xlong smoothlevelwidth;
 		xlong playerscreenylevel;
+		bool  paused;
 
 	public:
 		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer);
@@ -62,6 +63,7 @@ class CLlevel : public virtual CLcl
 		xlong getmark();
 		CLfbuffer* getlandscape();
 		CLplayer* getplayer();
+		void pause();
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -81,6 +83,9 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	CLgame::init(60,0,740,600);
 	//*
 
+	//game is not paused from beginning
+	paused = 0;
+	//*
 
 //terrain:
 
@@ -474,6 +479,11 @@ CLfbuffer* CLlevel::getlandscape()
 CLplayer* CLlevel::getplayer()
 {
 	return player;
+}
+
+void CLlevel::pause()
+{
+	
 }
 
 #endif

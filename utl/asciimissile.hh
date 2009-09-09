@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 
 #include <ncurses.h>
-#include <fstream>
+#include <fstream> //replace CLsystem..
 
 using namespace std;
 
@@ -66,18 +66,18 @@ long missile::gethealth()
 	return health;
 }
 
-void missile::display(WINDOW* win)
+void missile::display(WINDOW* con)
 {
-	wattron(win,A_BOLD);
-	wattron(win,COLOR_PAIR(1));
-	wmove(win,y,x);   waddch(win,'A'); wattroff(win,COLOR_PAIR(1)); wattron(win,COLOR_PAIR(2));
-	wmove(win,y+1,x); waddch(win,'H');
-	wmove(win,y+2,x); waddch(win,'H'); wattroff(win,COLOR_PAIR(2)); wattron(win,COLOR_PAIR(1));
-	wmove(win,y+3,x); waddch(win,'M'); wattroff(win,COLOR_PAIR(1)); wattron(win,COLOR_PAIR(4));
-	wmove(win,y+4,x); waddch(win,'^');
-	wmove(win,y+5,x); waddch(win,'^');
-	wattroff(win,COLOR_PAIR(4));
-	wattroff(win,A_BOLD);
+	wattron(con,A_BOLD);
+	wattron(con,COLOR_PAIR(1));
+	wmove(con,y,x);   waddch(con,'A'); wattroff(con,COLOR_PAIR(1)); wattron(con,COLOR_PAIR(2));
+	wmove(con,y+1,x); waddch(con,'H');
+	wmove(con,y+2,x); waddch(con,'H'); wattroff(con,COLOR_PAIR(2)); wattron(con,COLOR_PAIR(1));
+	wmove(con,y+3,x); waddch(con,'M'); wattroff(con,COLOR_PAIR(1)); wattron(con,COLOR_PAIR(4));
+	wmove(con,y+4,x); waddch(con,'^');
+	wmove(con,y+5,x); waddch(con,'^');
+	wattroff(con,COLOR_PAIR(4));
+	wattroff(con,A_BOLD);
 }
 
 class level
@@ -94,7 +94,7 @@ class level
 		level(const char* leveltxt,long sw,long sh);
 		~level();
 		bool addtomark(long m);
-		void display(WINDOW* win);
+		void display(WINDOW* con);
 };
 
 level::level(const char* leveltxt,long sw,long sh)
@@ -143,14 +143,14 @@ bool level::addtomark(long m)
 	}
 }
 
-void level::display(WINDOW* win)
+void level::display(WINDOW* con)
 {
 	for(int i=0; i<screenheight-1; i++)
 	{
 		for(int j=0; j<screenwidth; j++)
 		{
-			wmove(win,i,j);
-			if(levelmap[mark + i][j] != '.') waddch(win,levelmap[mark + i][j]);
+			wmove(con,i,j);
+			if(levelmap[mark + i][j] != '.') waddch(con,levelmap[mark + i][j]);
 		}
 	}
 }
@@ -158,7 +158,7 @@ void level::display(WINDOW* win)
 class screen
 {
 	private:
-		WINDOW* win;
+		WINDOW* con;
 		long width;
 		long height;
 	public:
@@ -177,9 +177,9 @@ screen::screen(long w,long h)
 	height = h;
 
 	initscr();
-	win = newwin(h,w,0,0);
+	con = newwin(h,w,0,0);
 
-	nodelay(win, TRUE);
+	nodelay(con, TRUE);
 	noecho();
 	cbreak();
 	keypad(stdscr, TRUE);
@@ -196,7 +196,7 @@ screen::screen(long w,long h)
 	//init_pair(3, COLOR_ORANGE, COLOR_BLACK);
 
 	clear();
-	wclear(win);
+	wclear(con);
 }
 
 screen::~screen()
@@ -216,17 +216,17 @@ long screen::getheight()
 
 WINDOW* screen::getwindow()
 {
-	return win;
+	return con;
 }
 
 void screen::clear()
 {
-	wclear(win);
+	wclear(con);
 }
 
 void screen::flush()
 {
-	wrefresh(win);
+	wrefresh(con);
 }
 
 class game
@@ -236,8 +236,8 @@ class game
 	public:
 		game();
 		~game();
-		void displayintro(WINDOW* win);
-		void displaystats(WINDOW* win);
+		void displayintro(WINDOW* con);
+		void displaystats(WINDOW* con);
 		bool boundarydetection(long x,long y,long w,long h);
 		bool collisiondetection(long px,long py);
 
@@ -253,26 +253,26 @@ game::~game()
 
 }
 
-void game::displayintro(WINDOW* win)
+void game::displayintro(WINDOW* con)
 {
 
 }
 
-void game::displaystats(WINDOW* win)
+void game::displaystats(WINDOW* con)
 {
-	wattron(win,A_BOLD);
-	wattron(win,COLOR_PAIR(8));
-	wmove(win,24,0);
-	waddstr(win,"HEALTH: ");
-	waddstr(win,"100%"); //temp placeholder
-	waddstr(win,"               ");
-	waddstr(win,"PROGRESS: ");
-	waddstr(win,">>>>>>>>>>>>>>>>>>>+"); //temp placeholder
-	waddstr(win,"               ");
-	waddstr(win,"FPS: ");
-	waddstr(win,"100"); //temp placeholder	
-	wattroff(win,COLOR_PAIR(8));
-	wattroff(win,A_BOLD);
+	wattron(con,A_BOLD);
+	wattron(con,COLOR_PAIR(8));
+	wmove(con,24,0);
+	waddstr(con,"HEALTH: ");
+	waddstr(con,"100%"); //temp placeholder
+	waddstr(con,"               ");
+	waddstr(con,"PROGRESS: ");
+	waddstr(con,">>>>>>>>>>>>>>>>>>>+"); //temp placeholder
+	waddstr(con,"               ");
+	waddstr(con,"FPS: ");
+	waddstr(con,"100"); //temp placeholder	
+	wattroff(con,COLOR_PAIR(8));
+	wattroff(con,A_BOLD);
 }
 
 bool game::boundarydetection(long x,long y,long w,long h)

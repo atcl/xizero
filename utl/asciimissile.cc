@@ -1,8 +1,8 @@
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
 
-#include <time.h>
-#include <iostream>
+#include <time.h> //replace by CLsystem..
+#include <iostream> //to be removed, debug only
 
 #include "asciimissile.hh"
 
