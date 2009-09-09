@@ -330,17 +330,32 @@ void CLsystem::installsystemkey(xchar scancode,void *action)
 
 xlong CLsystem::msgbox(const xchar* message)
 {
-	const xchar* cl1 = "Xdialog --msgbox";
-	const xchar* cl3 = " 0 0";
-	xlong cl1l = CLutils::chararraylength(cl1);
-	xlong cl2l = CLutils::chararraylength(message);
-	xlong cl3l = CLutils::chararraylength(cl3);
-	xchar* cl = new xchar[cl1l+cl2l+cl3l+1];
-	CLutils::copychararray(&cl[0],cl1,cl1l);
-	CLutils::copychararray(&cl[cl1l],message,cl2l);
-	CLutils::copychararray(&cl[cl2l],cl3,cl3l);
-	cl[cl1l+cl2l+cl3l] = 0;
-	return ::system(cl);
+	//commandline enframing
+	const xchar* env1 = "MAIN_DIALOG=<vbox><text><label>";
+	const xchar* env3 = "</label></text><button><label>OK</label></button></vbox>";
+	//*
+	
+	//determine length of commandline parts
+	xlong env1l = CLutils::chararraylength(env1);
+	xlong env2l = CLutils::chararraylength(message);
+	xlong env3l = CLutils::chararraylength(env3);
+	//*
+	
+	//allocate space for complete commandline
+	xchar* env = new xchar[env1l+env2l+env3l+1];
+	//*
+	
+	//assemble commandline
+	CLutils::copychararray(&env[0],env1,env1l);
+	CLutils::copychararray(&env[env1l],message,env2l);
+	CLutils::copychararray(&env[env1l+env2l],env3,env3l);
+	env[env1l+env2l+env3l] = 0;
+	//*
+
+	//call msgbox
+	putenv(env);
+	return ::system("gtkdialog --program=MAIN_DIALOG");
+	//*
 }
 
 #endif

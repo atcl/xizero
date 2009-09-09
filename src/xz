@@ -1,11 +1,5 @@
 #! /usr/bin/gtkdialog -e
 
-function run_xizero()
-{
-	#aoss ./xizero
-	./xizero
-}
-
 export MAIN_DIALOG='
 <window title="XiZero"> 
 
@@ -17,8 +11,13 @@ export MAIN_DIALOG='
 
 		<button>
 			<label>Run Xizero</label>
-			<action>run_xizero</action>
+			<action>./xizero&</action>
 		</button>
+
+		<button>
+			<label>Run Xizero (Sound)</label>
+			<action>#aoss ./xizero&</action>
+		</button>	
 		
 		<button>
 			<label>Exit</label>
