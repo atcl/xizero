@@ -10,6 +10,7 @@
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
 #include "CLfifo.hh"
+#include "CLmath.hh"
 
 
 //add clipping: just break the draw loops if screen is left.
@@ -47,7 +48,7 @@ namespace CLgfx1
 	void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
 	void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 	void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-	void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
+	void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c);
 	void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 	void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 	void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
@@ -319,9 +320,23 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	//*
 }
 
-void CLgfx1::drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c)
+void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c)
 {
-
+	//find circle center
+	xlong xc = 0;
+	xlong yc = 0;
+	
+	//*
+	
+	//find circle angles
+	
+	
+	//*
+	
+	//draw the arc
+	
+	
+	//*
 }
 
 void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
