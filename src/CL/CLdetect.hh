@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLDETECT
 #define HH_CLDETECT
-//#pragma message "Compiling " __FILE__ " ! TODO: ..."
+#pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"

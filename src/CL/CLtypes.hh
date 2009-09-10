@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLTYPES
 #define HH_CLTYPES
-//#pragma message "Compiling " __FILE__ " ! TODO: platform independent type decs"
+#pragma message "Compiling " __FILE__ " ! TODO: platform independent type decs"
 
 #include <inttypes.h>
 

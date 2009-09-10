@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-//#pragma message "Compiling " __FILE__ " ! TODO: interaction"
+#pragma message "Compiling " __FILE__ " ! TODO: interaction"
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"

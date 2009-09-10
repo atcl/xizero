@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLFIFO
 #define HH_CLFIFO
-//#pragma message "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -36,7 +36,9 @@ class CLfifo : public virtual CLcl
 template<class member>
 CLfifo<member>::CLfifo()
 {
+	//init empty fifo que
 	length = 0;
+	//*
 }
 
 template<class member>
@@ -45,36 +47,52 @@ CLfifo<member>::~CLfifo() { }
 template<class member>
 void CLfifo<member>::in(member* f)
 {
+	//create empty fifo member
 	fifomember<member>* t = new fifomember<member>;
+	//*
 
+	//place first fifo member
 	if(length == 0)
 	{
 		tail = t;
 	}
+	//
+	
+	//place default fifo member
 	else
 	{
 		head->prev = t;
 		head = t;
 	}
+	//*
 
+	//set other fifo member attributes
 	t->data = f;
 	t->prev = 0;
 	head = t;
 	length++;
+	//*
 }
 
 template<class member>
 member* CLfifo<member>::out()
 {
+	//is fifo empty
 	if(length == 0)
 	{
 		return 0;
 	}
+	//*
+	
+	//is fifo almost empty
 	else if(length==1)
 	{
 		length--;
 		return tail->data;
 	}
+	//*
+	
+	//default deque
 	else
 	{
 		length--;
@@ -82,11 +100,13 @@ member* CLfifo<member>::out()
 		tail  = tail->prev;
 		return t;
 	}
+	//*
 }
 
 template<class member>
 void CLfifo<member>::clear()
 {
+	//clear complete fifo que
 	for(uxlong i=0; i<length; i++)
 	{
 		fifomember<member>* t = tail;
@@ -94,6 +114,7 @@ void CLfifo<member>::clear()
 		delete t;
 		length--;
 	}
+	//*
 }
 
 template<class member>
@@ -105,9 +126,7 @@ xlong CLfifo<member>::getlength()
 template<class member>
 bool CLfifo<member>::isempty()
 {
-	if(length==0) return true;
-
-	return false;
+	return (length==0);
 }
 
 #endif

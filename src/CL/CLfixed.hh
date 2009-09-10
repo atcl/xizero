@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLFIXED
 #define HH_CLFIXED
-//#pragma message "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 

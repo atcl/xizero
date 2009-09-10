@@ -2,6 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLWINDOW
 #define HH_CLWINDOW
+#pragma message "Compiling " __FILE__ 
 
 #include <FL/Fl.H>
 #include <FL/Fl_Single_Window.H>

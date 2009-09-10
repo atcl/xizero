@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLGAMEPAD
 #define HH_CLGAMEPAD
-//#pragma message "Compiling " __FILE__
+#pragma message "Compiling " __FILE__
 
 #ifdef WIN32
 	#include <mmsystem.h>

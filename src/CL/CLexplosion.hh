@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLEXPLOSION
 #define HH_CLEXPLOSION
-//#pragma message "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLvector.hh"

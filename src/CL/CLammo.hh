@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license 
 #ifndef HH_CLAMMO
 #define HH_CLAMMO
-//#pragma message "Compiling " __FILE__ " ! TODO: "
+#pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
 #include "CLlist.hh"

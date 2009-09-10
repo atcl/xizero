@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLFORMAT
 #define HH_CLFORMAT
-//#pragma message "Compiling " __FILE__ " ! TODO: fix rare loadar crash"
+#pragma message "Compiling " __FILE__ " ! TODO: fix rare loadar crash"
 
 #include <map>
 

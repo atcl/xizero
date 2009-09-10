@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLRESOURCE
 #define HH_CLRESOURCE
-//#pragma message "Compiling " __FILE__
+#pragma message "Compiling " __FILE__
 
 //xpm atcrosslevel icon
 static xchar* CLicon[] = {

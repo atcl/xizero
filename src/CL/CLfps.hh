@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLBENCH
 #define HH_CLBENCH
-//#pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval correct"
+#pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval correct"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"

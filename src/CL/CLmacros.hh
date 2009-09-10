@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLMACROS
 #define HH_CLMACROS
-//#pragma message "Compiling " __FILE__ " ! TODO: ..." 
+#pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
 #include <iostream>
 

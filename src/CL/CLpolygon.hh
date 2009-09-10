@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLPOLYGON
 #define HH_CLPOLYGON
-//#pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix"
+#pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix"
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
