@@ -332,7 +332,7 @@ xlong CLsystem::msgbox(const xchar* message)
 {
 	//commandline enframing
 	const xchar* env1 = "MAIN_DIALOG=<vbox><text><label>";
-	const xchar* env3 = "</label></text><button><label>OK</label></button></vbox>";
+	const xchar* env3 = "</label></text><button><label>[  OK  ]</label></button></vbox>";
 	//*
 	
 	//determine length of commandline parts

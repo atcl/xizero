@@ -219,8 +219,7 @@ int main(int argc, char** argv)
 				CLsound::play("../../cannon.wav",0);
 			break;
 			case 'k':
-				//CLintro::atcrosslevel();
-				CLtransitions::fadetoblack();
+				CLintro::atcrosslevel();
 			break;
 			
 			//System:
@@ -250,7 +249,6 @@ int main(int argc, char** argv)
 		//clgfx1->drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
-		//clgfx1->drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
 		
 		CLgfx2::drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF);
 		CLgfx2::drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);

@@ -13,6 +13,19 @@
 
 //add clipping: just break the draw loops if screen is left.
 
+inline bool isoff(xlong x,xlong y)
+{
+	return (x<0 || x>=xres || y<0 || y>=yres);
+}
+
+inline void clip(xlong& x,xlong& y)
+{
+	if(x<0) x=0;
+	if(x>=xres) x=xres-1;
+	if(y<0) y=0;
+	if(y>=yres) y=yres-1;
+}
+
 namespace CLgfx1
 {
 	//~ xlong last_p;
@@ -31,7 +44,6 @@ namespace CLgfx1
 	void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
 	void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
 	void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
-	void drawdialine(xlong x1,xlong y1,xlong xy,uxlong c);
 	void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 	void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 	void drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
@@ -55,7 +67,6 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
 	//precalculate linear address components (especially multiplications)
 	xlong b1 = (yc*xres)+xc;
-	xlong b2 = (xc*xres)+yc;
  	xlong a1 = y*xres;
  	xlong a2 = x*xres;
 	//*
@@ -65,10 +76,10 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
  	(*CLdoublebuffer)[b1-a1+x] = c;
  	(*CLdoublebuffer)[b1+a1-x] = c;
  	(*CLdoublebuffer)[b1-a1-x] = c;
- 	(*CLdoublebuffer)[b2+a2+y] = c;
- 	(*CLdoublebuffer)[b2-a2+y] = c;
- 	(*CLdoublebuffer)[b2+a2-y] = c;
- 	(*CLdoublebuffer)[b2-a2-y] = c;
+ 	(*CLdoublebuffer)[b1+a2+y] = c;
+ 	(*CLdoublebuffer)[b1-a2+y] = c;
+ 	(*CLdoublebuffer)[b1+a2-y] = c;
+ 	(*CLdoublebuffer)[b1-a2-y] = c;
 	//*
 }
 
@@ -89,21 +100,25 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 
 uxlong CLgfx1::readpixel(xlong x,xlong y)
 {
+	if(isoff(x,y)) return 0;
 	return ((*CLdoublebuffer)[(y*xres)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)
 {
+	clip(x,y);
 	(*CLdoublebuffer)[(y*xres)+x] = c;
 }
 
 void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
 {
+	clip(x,y);
 	b[(y*xres)+x] = c;
 }
 
 void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
 {
+	if(isoff(x1,x2)||isoff(x2,y2)) return;
 	(*CLdoublebuffer)[(y1*xres)+x1] = (*CLdoublebuffer)[(y2*xres)+x2];
 }
 
@@ -117,6 +132,8 @@ void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c)
 
 void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
 {
+	clip(x,y);
+	
 	switch(m)
 	{
 		case 1: //AND
@@ -141,6 +158,9 @@ void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
 
 void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 {
+	clip(x1,y1);
+	clip(x2,y1);
+	
 	xlong offsetbase = (y1*xres);
 
 	xlong a = x1;
@@ -157,6 +177,9 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 
 void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 {
+	clip(x1,y1);
+	clip(x1,y2);
+	
 	xlong a = y1;
 	xlong b = y2;
 
@@ -171,17 +194,6 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 	}
 }
 
-void CLgfx1::drawdialine(xlong x1,xlong y1,xlong xy,uxlong c)
-{
-	xlong offsetbase = (y1*xres)+x1;
-
-	for(uxlong i=0; i<xy; i++)
-	{
-		(*CLdoublebuffer)[offsetbase] = c;
-		offsetbase+=xres+1;
-	}
-}
-
 void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
 	//check if necessary to draw at all
@@ -189,14 +201,8 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	//*
 
 	//clip line against screen borders
-	if(x1<0) x1=0;
-	if(y1<0) y1=0;
-	if(x2<0) x2=0;
-	if(y2<0) y2=0;
-	if(x1>xres-1) x1=xres-1;
-	if(y1>yres-1) y1=yres-1;
-	if(x2>xres-1) x2=xres-1;
-	if(y2>yres-1) y2=yres-1;
+	clip(x1,y1);
+	clip(x2,y2);
 	//*
 
 	//set up variables
@@ -252,14 +258,8 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	//*
 	
 	//clip line against screen borders
-	if(x1<0) x1=0;
-	if(y1<0) y1=0;
-	if(x2<0) x2=0;
-	if(y2<0) y2=0;
-	if(x1>xres-1) x1=xres-1;
-	if(y1>yres-1) y1=yres-1;
-	if(x2>xres-1) x2=xres-1;
-	if(y2>yres-1) y2=yres-1;
+	clip(x1,y1);
+	clip(x2,y2);
 	//*
 
 	//set up variables
@@ -335,14 +335,31 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 {
+	//make sure x1<x2 and y1<y2
 	if(x2<x1) x1 ^= x2 ^= x1 ^= x2;
 	if(y2<y1) y1 ^= y2 ^= y1 ^= y2;
-	if(x1<0 || y1<0 || x2>xres || y2>yres || x2<0 || y2<0 || x1>xres || y1>yres) return;
+	//*
 	
-	for(xlong i=y1; i<=y2; i++)
+	//decide wether to use horizontal or vertical lines
+	if( (x2-x1)>(y2-y1) )
 	{
-		drawhorline(x1,i,x2,c);
+		//longer horizontal runs, so use horizontal lines
+		for(xlong i=y1; i<=y2; i++)
+		{
+			drawhorline(x1,i,x2,c);
+		}
+		//*
 	}
+	else
+	{
+		//longer vertical lines, so use vertical lines
+		for(xlong i=x1; i<=x2; i++)
+		{
+			drawverline(i,y1,y2,c);
+		}
+		//*
+	}
+	//*
 }
 
 void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c)
@@ -357,6 +374,10 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 {
+	//center and radius clipping
+	// ...
+	//*
+	
 	xlong d = 3 - (r<<1);
 	xlong cx = 0;
 	xlong cy = r;
@@ -364,8 +385,8 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c)
 	while(cx<=cy)
 	{
 		drawcirclepixel(xc,yc,cx,cy,c);
-		if(d<0) d += (cx*4)+6;
-		else { d += ((cx-cy)*4)+10; cy--; }
+		if(d<0) d += (cx<<2)+6;
+		else { d += ((cx-cy)<<2)+10; cy--; }
 		cx++; 
 	}
 }
@@ -431,28 +452,32 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 
 void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 {
-	if (readpixel(x,y)!=oc) return;
+	//! rewrite non recursive ! with fifo
+	
+	if(readpixel(x,y)!=oc || readpixel(x,y)==nc) return;
 
 	drawpixel(x,y,nc);
 
-	if(y<yres) fill(x,y+1,oc,nc);
-	if(y>0)    fill(x,y-1,oc,nc);
-	if(x<xres) fill(x+1,y,oc,nc);
-	if(x>0)    fill(x-1,y,oc,nc);
+	if(x<(xres-1)) fill(x+1,y,oc,nc);
+	if(x>1)     fill(x-1,y,oc,nc);
+	if(y<(yres-1)) fill(x,y+1,oc,nc);
+	if(y>1)     fill(x,y-1,oc,nc);
 
 	return;
 }
 
 void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
 {
-	if(readpixel(x,y)==fc || readpixel(x,y)==c) return;
+	//! rewrite non recursive ! with fifo
+	
+	if(readpixel(x,y)==fc) return;
 
 	drawpixel(x,y,c);
 	
-	if(y<yres) fillframe(x,y+1,fc,c);
-	if(y>0) fillframe(x,y-1,fc,c);
-	if(x<xres) fillframe(x+1,y,fc,c);
-	if(x>0) fillframe(x-1,y,fc,c);
+	if(y<yres-1) fillframe(x,y+1,fc,c);
+	if(y>1)    fillframe(x,y-1,fc,c);
+	if(x<xres-1) fillframe(x+1,y,fc,c);
+	if(x>1)    fillframe(x-1,y,fc,c);
 
 	return;
 }
@@ -470,6 +495,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 	xlong xe = x + swidth;
 	xlong ye = y + sheight;
 	if(xe<0 || ye<0) return;
+	//*
 
 	//clipping against screen borders
 	if(xs<0) xs = 0;
@@ -554,6 +580,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 {
 	//init
 	if(x>xres || y>yres) return;
+	//*
 	
 	//find tile
 	xlong pr = (s->width / s->tilewidth);

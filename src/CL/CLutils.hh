@@ -19,7 +19,7 @@ namespace CLutils
 	void   copychararray(xchar* dst,const xchar* src,xlong length); //for char arrays below 256byte
 	xlong  getlinecount(CLfile* sf);
 	bool   checkextension(xchar* fn,xlong nl,const xchar* fe);
-	xlong  getrandom(xlong range);
+	xlong  getrandom(uxlong range);
 	xchar* color2string(uxlong c);
 	xlong  endian(xlong l);
 	xlong  findarmember(arfile* a,const xchar* e);
@@ -119,9 +119,10 @@ bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe)
 	return true;
 }
 
-xlong CLutils::getrandom(xlong range)
+xlong CLutils::getrandom(uxlong range)
 {
 	//xor-shift random number generator
+	seed++;
 	seed ^= (seed<<15);
 	seed ^= (seed>>21);
 	seed ^= (seed<<4);
