@@ -78,7 +78,7 @@ member* CLfifo<member>::out()
 	else
 	{
 		length--;
-		void* t = tail->data;
+		member* t = tail->data;
 		tail  = tail->prev;
 		return t;
 	}

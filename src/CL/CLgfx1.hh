@@ -9,6 +9,7 @@
 #include "CLstruct.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
+#include "CLfifo.hh"
 
 
 //add clipping: just break the draw loops if screen is left.
@@ -54,7 +55,7 @@ namespace CLgfx1
 	void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
 	void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
 	void fill(xlong x,xlong y,uxlong oc,uxlong nc);
-	void fillframe(xlong x,xlong y,uxlong fc,uxlong c);
+	void fillframe(xlong x,xlong y,uxlong fc,uxlong nc);
 	void drawsprite(xlong x,xlong y,sprite* s);
 	void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
 	void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0);
@@ -452,32 +453,106 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c)
 
 void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 {
-	//! rewrite non recursive ! with fifo
+	//set up fifo
+	CLfifo<CLpoint> fillfifo;
+	//*
 	
-	if(readpixel(x,y)!=oc || readpixel(x,y)==nc) return;
-
-	drawpixel(x,y,nc);
-
-	if(x<(xres-1)) fill(x+1,y,oc,nc);
-	if(x>1)     fill(x-1,y,oc,nc);
-	if(y<(yres-1)) fill(x,y+1,oc,nc);
-	if(y>1)     fill(x,y-1,oc,nc);
+	//initial fifo fill with four surroundng pixel
+	CLpoint* u0 = new CLpoint(x,y-1);
+	CLpoint* d0 = new CLpoint(x,y+1);
+	CLpoint* l0 = new CLpoint(x-1,y);
+	CLpoint* r0 = new CLpoint(x+2,y);
+	fillfifo.in(u0);
+	fillfifo.in(d0);
+	fillfifo.in(l0);
+	fillfifo.in(r0);
+	//*
+	
+	CLpoint* temp = 0;
+	
+	//do until all reacable pixels have been recolored
+	while(fillfifo.getlength() != 0)
+	{
+		temp = fillfifo.out();
+		
+		//test if on screen and color is the to-fill-color
+		if( temp->x>=0 && temp->x<xres && temp->y>=0 && temp->y<yres && readpixel(temp->x,temp->y)==oc )
+		{
+			//fill the pixel with the new color
+			(*CLdoublebuffer)[((temp->y)*xres)+(temp->x)] = nc;
+			//*
+			
+			//enque the four surrounding pixel
+			u0 = new CLpoint((temp->x),(temp->y)-1);
+			d0 = new CLpoint((temp->x),(temp->y)+1);
+			l0 = new CLpoint((temp->x)-1,(temp->y));
+			r0 = new CLpoint((temp->x)+1,(temp->y));
+			fillfifo.in(u0);
+			fillfifo.in(d0);
+			fillfifo.in(l0);
+			fillfifo.in(r0);
+			//*
+		}
+		//*
+		
+		//kill the point
+		delete temp;
+		//*
+	}
+	//*
 
 	return;
 }
 
-void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong c)
+void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc)
 {
-	//! rewrite non recursive ! with fifo
+	//set up fifo
+	CLfifo<CLpoint> fillfifo;
+	//*
 	
-	if(readpixel(x,y)==fc) return;
-
-	drawpixel(x,y,c);
+	//initial fifo fill with four surroundng pixel
+	CLpoint* u0 = new CLpoint(x,y-1);
+	CLpoint* d0 = new CLpoint(x,y+1);
+	CLpoint* l0 = new CLpoint(x-1,y);
+	CLpoint* r0 = new CLpoint(x+2,y);
+	fillfifo.in(u0);
+	fillfifo.in(d0);
+	fillfifo.in(l0);
+	fillfifo.in(r0);
+	//*
 	
-	if(y<yres-1) fillframe(x,y+1,fc,c);
-	if(y>1)    fillframe(x,y-1,fc,c);
-	if(x<xres-1) fillframe(x+1,y,fc,c);
-	if(x>1)    fillframe(x-1,y,fc,c);
+	CLpoint* temp = 0;
+	
+	//do until all reacable pixels have been recolored
+	while(fillfifo.getlength() != 0)
+	{
+		temp = fillfifo.out();
+		
+		//test if on screen and color is the to-fill-color
+		if( temp->x>=0 && temp->x<xres && temp->y>=0 && temp->y<yres && readpixel(temp->x,temp->y)!=fc )
+		{
+			//fill the pixel with the new color
+			(*CLdoublebuffer)[((temp->y)*xres)+(temp->x)] = nc;
+			//*
+			
+			//enque the four surrounding pixel
+			u0 = new CLpoint((temp->x),(temp->y)-1);
+			d0 = new CLpoint((temp->x),(temp->y)+1);
+			l0 = new CLpoint((temp->x)-1,(temp->y));
+			r0 = new CLpoint((temp->x)+1,(temp->y));
+			fillfifo.in(u0);
+			fillfifo.in(d0);
+			fillfifo.in(l0);
+			fillfifo.in(r0);
+			//*
+		}
+		//*
+		
+		//kill the point
+		delete temp;
+		//*
+	}
+	//*
 
 	return;
 }
