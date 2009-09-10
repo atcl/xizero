@@ -292,7 +292,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			case 32: 
 				if(time >= fireupdate[1] + firerate[1])
 				{
-					fire(1,4,0,1);
+					fire(1,4,0,ENEMYZLEVEL,1);
 					fireupdate[1] = time;
 				}
 			break;
@@ -302,8 +302,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			case -29: 
 				if(time >= fireupdate[0] + firerate[0])
 				{
-					fire(0,3,0,0);
-					fire(0,3,1,0);
+					fire(0,3,0,ENEMYZLEVEL,0);
+					fire(0,3,1,ENEMYZLEVEL,0);
 					fireupdate[0] = time;
 				}
 			break;

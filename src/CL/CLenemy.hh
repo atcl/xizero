@@ -12,6 +12,7 @@
 #include "CLammo.hh"
 #include "CLentity.hh"
 
+#define ENEMYZLEVEL 55
 
 class CLenemy : public CLentity<1>
 {
@@ -110,7 +111,7 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
 {
 	//set and adjust (start) position to floating X pixel above ground
 	position = enemyp;
-	position.z = 100 - position.z - 12 - 30;
+	position.z = ENEMYZLEVEL;
 	tposition = position;
 	//*
 	
@@ -136,7 +137,7 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
 	
 	//create progress bar
 	hprog = new CLprogress(*(enemyptr->hprog));
-	hprog->reset(0,0,40,10,health+shield,0,health+shield,0x00FF0000,0,1,0,0,0);
+	hprog->reset(0,0,40,10,health+shield,0,health+shield,0x00FF0000,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*
 }
 
@@ -207,8 +208,8 @@ xlong CLenemy::update(CLentity<I>* p)
 		{
 			if(time >= fireupdate[0] + firerate[0])
 			{
-				fire(0,4,0);
-				fire(0,4,1);
+				fire(0,4,0,p->getposition()->z);
+				fire(0,4,1,p->getposition()->z);
 				fireupdate[0] = time;
 			}
 		}

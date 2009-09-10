@@ -59,7 +59,7 @@ class CLentity : public virtual CLcl
 		xlong points;
 		
 		void setspeed();
-		void fire(xlong at,xlong d,xlong i,xlong m=0);
+		void fire(xlong at,xlong d,xlong i,xlong tz,xlong m=0);
 		//virtual void pretransform() = 0;
 		//virtual void transform() = 0;
 		//virtual xlong collision() = 0;
@@ -92,16 +92,18 @@ void CLentity<I>::setspeed()
 }
 
 template<int I>
-void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong m)
+void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 {
 	if( (d+i)>=ammomounts && m>=I) return;
 	CLfvector startposition = position;
+	CLfvector targetdirection = direction[m];
+	//targetdirection.z = -startposition.z + tz;
 	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
 	startposition.x = ammodocking->x;
 	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
 	CLmisc3d::project(startposition,position);
-	ammoman->fire(at,startposition,direction[m]);
+	ammoman->fire(at,startposition,targetdirection);
 }
 
 template<int I>

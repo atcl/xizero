@@ -22,7 +22,7 @@ class CLmatrix : public virtual CLcl
 		CLmatrix(bool i=1);
 		~CLmatrix();
 		void rotate(xlong x,xlong y,xlong z);
-		void translate(xlong x,xlong y,xlong z);
+		void translate(float x,float y,float z);
 		void scale(float x,float y,float z);
 		void aspectscale(float x);
 		void superscale(float x);
@@ -103,10 +103,10 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z)
 	}
 }
 
-void CLmatrix::translate(xlong x,xlong y,xlong z)
+void CLmatrix::translate(float x,float y,float z)
 {
 	//translate using fourth column of matrix
-	multiplicate(1,0,0,float(x),0,1,0,float(y),0,0,1,float(z),0,0,0,1);
+	multiplicate(1,0,0,x,0,1,0,y,0,0,1,z,0,0,0,1);
 	//*
 }
 

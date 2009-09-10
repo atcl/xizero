@@ -328,7 +328,7 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c)
 	
 	//*
 	
-	//find circle angles
+	//find start and end angles
 	
 	
 	//*

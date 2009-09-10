@@ -141,8 +141,6 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	if(intersections2[4]>CLmath::min(intersections[4][0],intersections[4][1]) && intersections2[0]<CLmath::max(intersections[4][0],intersections[4][1])) r++;
 	if(intersections2[5]>CLmath::min(intersections[5][0],intersections[5][1]) && intersections2[0]<CLmath::max(intersections[5][0],intersections[5][1])) r++;
 	//*
-	
-	say(r);
 
 	return r;
 }
