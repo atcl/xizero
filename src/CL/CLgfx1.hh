@@ -13,7 +13,7 @@
 #include "CLmath.hh"
 
 
-//add clipping: just break the draw loops if screen is left.
+//add clipping
 
 inline bool isoff(xlong x,xlong y)
 {

@@ -8,7 +8,7 @@
 #include "CLcl.hh"
 
 
-//test case:
+//test cases:
 //string: atcrosslevel ; crc: 1734979481
 //string: xizero ; crc: 1208686013
 
