@@ -50,9 +50,15 @@ int main()
 			case '3':
 				mode = 3;
 			break;
-			
+		}
+		switch(input)
+		{
 			case 'p':
 				pause = !pause;
+			break;
+			
+			case                                                                                                                                                                                    '4':
+				testlevel->pause();
 			break;
 		}
 		

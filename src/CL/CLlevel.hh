@@ -308,6 +308,8 @@ CLlevel::~CLlevel()
 
 void CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 {
+	if(paused) return;
+	
 	xlong isdead;
 	
 	//update player
@@ -483,7 +485,7 @@ CLplayer* CLlevel::getplayer()
 
 void CLlevel::pause()
 {
-	
+	paused = !paused;
 }
 
 #endif

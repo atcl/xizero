@@ -59,6 +59,7 @@
 #include "CL/CLlevel.hh"
 #include "CL/CLgame.hh"
 #include "CL/CLexplosion.hh"
+#include "CL/CLanim.hh"
 
 //global variables
 #include "CL/CLglobal.hh"

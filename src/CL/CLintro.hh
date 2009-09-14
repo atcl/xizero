@@ -114,6 +114,7 @@ void CLintro::atcrosslevel()
 				anim_curr_trans[10] = anim_time_diff * anim_units[10];
 				anim_curr_trans[11] = anim_time_diff * anim_units[11];
 				anim_curr_trans[12] = anim_time_diff * anim_units[12];
+				//*
 				
 				//move
 				anim_pos.x += anim_curr_trans[1];
