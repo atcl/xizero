@@ -7,24 +7,34 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLsystem.hh"
+#include "CLsingle.hh"
 
 //CPUID flags
 #define MMXFLAG 0b00000000100000000000000000000000
 #define SSEFLAG 0b00000010000000000000000000000000
 //*
 
-namespace CLdetect
+class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 {
-	xlong cores;
-	xlong l2;
+	friend class CLsingle<CLdetect>;
 	
-	xlong cpu();
-	xlong ram();
-	xchar* gpu();
-	xlong vram();
-	xchar* sb();
-	xlong ps();
+	private:
+		xlong cores;
+		xlong l2;
+		CLdetect();
+		~CLdetect();
+	public:
+		xlong cpu();
+		xlong ram();
+		xchar* gpu();
+		xlong vram();
+		xchar* sb();
+		xlong ps();
 };
+
+CLdetect::CLdetect() : CLsingle<CLdetect>() { }
+
+CLdetect::~CLdetect() { }
 
 xlong CLdetect::cpu()
 {

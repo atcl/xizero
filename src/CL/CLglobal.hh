@@ -11,7 +11,7 @@
 #include "CLfps.hh"
 #include "CLsingle.hh"
 
-class CLglobal : public CLsingle
+class CLglobal : public CLsingle<CLglobal>
 {
 	public:
 		uxlong CLscreenbytewidth;

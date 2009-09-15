@@ -51,7 +51,7 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	havemmx = 1;
 	havesse = 0; 
 	
-	xlong cpucaps = CLdetect::cpu();
+	xlong cpucaps = CLdetect::instance()->cpu();
 	//if( (cpucaps & MMX) != 0 ) havemmx = 1; else havemmx = 0;
 	//if( (cpucaps & SSE) != 0 ) havesse = 1; else havesse = 0;
 	//*
