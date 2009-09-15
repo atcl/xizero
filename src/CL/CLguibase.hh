@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
-
 class CLguibase : public virtual CLcl
 {
 	protected:
@@ -19,15 +18,11 @@ class CLguibase : public virtual CLcl
 		uxlong bcolor;
 		uxlong rcolor;
 		bool flat;
-		
 		bool visible;
-		
 		void basereset(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
-
 	public:
 		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 		virtual ~CLguibase();
-
 		virtual void draw();
 		void setwidth(xlong w);
 		void setheight(xlong h);

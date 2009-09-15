@@ -12,7 +12,6 @@
 #include "CLfifo.hh"
 #include "CLmath.hh"
 
-
 //add clipping
 
 inline bool isoff(xlong x,xlong y)
@@ -141,14 +140,18 @@ void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
 		case 1: //AND
 			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] && c;
 		break;
+		
 		case 2: //OR:
 			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] || c;
 		break;
+		
 		case 3: //XOR:
 			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] ^ c;
 		break;
+		
 		default:
 			(*CLdoublebuffer)[(y*xres)+x] = c;
+		break;
 	}
 
 }
@@ -163,12 +166,10 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 	clip(x1,y1);
 	clip(x2,y1);
 	
-	xlong offsetbase = (y1*xres);
-
 	xlong a = x1;
 	xlong b = x2;
-
 	if(a>b) a ^= b ^= a ^= b;
+	xlong offsetbase = (y1*xres);
 
 	for(uxlong i=a; i<=b; i++)
 	{
@@ -184,9 +185,7 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 	
 	xlong a = y1;
 	xlong b = y2;
-
 	if(a>b) a ^= b ^= a ^= b;
-
 	xlong offsetbase = (a*xres)+x1;
 
 	for(uxlong i=a; i<=b; i++)

@@ -18,22 +18,18 @@ class CLenemy : public CLentity<1>
 {
 	protected:
 		CLprogress* hprog;
-	
 	private:
 		xlong* aiarray;
 		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk
 		xlong aggrolevel;
 		CLbox* aggrobox;
-	
 		void pretransform();
 		void transform();
 		xlong collision();
-	
 	public:
 		CLenemy(CLfile* enemya,xlong* m,xlong mm);
 		CLenemy(CLenemy* enemyptr,CLlvector& enemyp);
 		~CLenemy();
-		
 		template<int I>xlong update(CLentity<I>* p);
 		void displayhud();
 };

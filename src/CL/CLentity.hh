@@ -18,7 +18,6 @@
 #include "CLdiv3d.hh"
 #include "CLcl.hh"
 
-
 template<int I>
 class CLentity : public virtual CLcl
 {
@@ -29,7 +28,6 @@ class CLentity : public virtual CLcl
 		CLexplosion* expl[I];
 		xmap* def;
 		xlong* csv;
-		
 		CLbox* boundingbox[2][I];
 		CLfvector position;
 		CLfvector tposition;
@@ -45,7 +43,6 @@ class CLentity : public virtual CLcl
 		xlong visible;
 		xlong lastupdate;
 		xlong* fireupdate;
-		
 		xlong ammomounts;
 		xlong* ammotype;
 		xlong* firerate;
@@ -57,22 +54,19 @@ class CLentity : public virtual CLcl
 		xlong shieldupdate;
 		xlong armor;
 		xlong points;
-		
+
 		void setspeed();
 		void fire(xlong at,xlong d,xlong i,xlong tz,xlong m=0);
 		//virtual void pretransform() = 0;
 		//virtual void transform() = 0;
 		//virtual xlong collision() = 0;
-	
 	public:
 		CLentity(CLfile* entitya,xlong* markptr,xlong mm);
 		CLentity(CLentity* entityptr);
 		virtual ~CLentity();
-		
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
 		void hit(xlong h);
-		
 		xlong gethealth() { return health; }
 		xlong getshield() { return shield; }
 		CLfvector* getposition() { return &position; }

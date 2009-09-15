@@ -10,7 +10,6 @@
 #include "CLformat.hh"
 #include "CLsystem.hh"
 
-
 struct CLframe
 {
 	float duration;
@@ -21,12 +20,10 @@ struct CLframe
 
 class CLanim : public virtual CLcl
 {
-	protected:
+	private:
 		CLmatrix* linear;
 		CLobject* object;
 		xlong*   anicsv;
-		
-	private:
 		bool loop;
 		xlong frames;
 		xlong currframe;
@@ -34,7 +31,6 @@ class CLanim : public virtual CLcl
 		xlong starttime;
 		xlong lastupdate;
 		CLfvector position;
-	
 	public:
 		CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p=0);
 		~CLanim();
@@ -63,7 +59,6 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 	for(uxlong i=0; i<frames; i++)
 	{
 		frame[i] = new CLframe;
-		
 		frame[i]->duration = anicsv[anipointer];
 		
 		//multiplication is faster than divisions

@@ -16,7 +16,6 @@ class boool
 {
 	private:
 		xlong b;
-	
 	public:
 		boool();
 		boool(boool& a);

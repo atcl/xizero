@@ -20,12 +20,10 @@ template <typename T>class CLbuffer : public virtual CLcl
 		uxlong ds;
 		uxlong qs;
 		bool   havemmx;
-		bool   havesse;
-		
+		bool   havesse;	
 	public:
 		CLbuffer(uxlong s);
 		~CLbuffer();
-		
 		void clear(T v);
 		void fastclear(T v);
 		void ultraclear(T v);
@@ -59,7 +57,10 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	//*
 }
 
-template <typename T>CLbuffer<T>::~CLbuffer() { }
+template <typename T>CLbuffer<T>::~CLbuffer()
+{
+	delete[] buffer;
+}
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {
@@ -181,7 +182,6 @@ template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
 {
 	//default x86 assembly copy (average)
 	memcpy(dst,buffer,size<<2); //temp
-	//
 	//*
 }
 

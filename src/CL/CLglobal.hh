@@ -9,10 +9,30 @@
 #include "CLwindow.hh"
 #include "CLmatrix.hh"
 #include "CLfps.hh"
+#include "CLsingle.hh"
 
-namespace CLglobal
+class CLglobal : public CLsingle
 {
-	
+	public:
+		uxlong CLscreenbytewidth;
+		uxlong CLscreenbyteheight;
+		uxlong CLscreenbytedepth;
+		uxlong CLscreenbytesize;
+		uxlong CLscreenpixelwidth;
+		uxlong CLscreenpixelheight;
+		uxlong CLscreenpixelsize;
+		
+		CLlbuffer* CLdoublebuffer;
+		CLlbuffer* CLstencilbuffer;
+		CLfbuffer* CLzbuffer;
+		
+		CLwindow* window;
+		CLbench*  bench;
+		
+		CLfvector light;
+		CLfvector plane;
+		
+		CLglobal();		
 };
 
 //variables

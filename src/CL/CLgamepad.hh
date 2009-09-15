@@ -12,7 +12,7 @@
 	#include <linux/joystick.h>
 #endif
 
-	#include "CLtypes.hh"
+#include "CLtypes.hh"
 
 struct CLgamepadstate
 {
@@ -20,7 +20,6 @@ struct CLgamepadstate
 	bool  button[10];
 	bool  tbutton[10];
 };
-
 
 namespace CLgamepad
 {

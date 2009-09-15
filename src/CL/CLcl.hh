@@ -7,18 +7,15 @@
 #include "CLtypes.hh"
 #include "CLversion.hh"
 
-
 class CLcl
 {
 	protected:
 		static xlong version;
 		xlong id;
 		const xchar* name;
-
 	public:
 		CLcl();
 		 virtual ~CLcl();
-
 		xlong getversion();
 };
 

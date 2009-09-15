@@ -157,15 +157,13 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc]->data = tb;
 			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
-//~ say(&fn[0]);
-//~ say(tsize);
-//~ say(fs);
+
 			//adjust global ar variables
 			if(fs%2!=0) { bc++; tsize--; }
 			tsize -= (fs+60); //subtract reading size from global size
 			fc++; //increment filecount
 			//*
-//~ say(tsize);
+
 		} while( tsize > 0 );
 		//*
 

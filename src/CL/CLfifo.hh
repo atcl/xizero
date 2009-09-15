@@ -22,7 +22,6 @@ class CLfifo : public virtual CLcl
 		fifomember<member>* tail;
 		xlong length;
 		member** que;
-
 	public:
 		CLfifo();
 		~CLfifo();

@@ -18,10 +18,8 @@ class CLbench : public virtual CLcl
 		xlong temptime;
 		xlong frames;
 		xlong lastupdate;
-		
 		xlong interval;
-		xchar flags;
-		
+		xchar flags;	
 	public:
 		CLbench(xlong i,xchar flags);
 		~CLbench();

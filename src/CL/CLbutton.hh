@@ -10,24 +10,20 @@
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
 
-
 class CLbutton : public CLguibase
 {
 	private:
 		void (*action)();
 		xchar* caption;
 		bool flat;
-		
 	public:
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f);
 		~CLbutton();
-
 		void draw();
 		void setaction(void(*a)());
 		void setcaption(xchar* t);
 		void setflat(bool f);
 		xchar* getcaption();
-
 };
 
 CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f) : CLguibase(px,py,w,h,fc,bc,rc)

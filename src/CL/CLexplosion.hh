@@ -11,7 +11,6 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
-
 //combine "translate along normals" + "dyadic product"
 //use dyadic product to crumple object
 //reorder cyclic / or reset
@@ -23,7 +22,6 @@ class CLexplosion : public virtual CLcl
 		CLmatrix* linear;
 		CLfvector a;
 		CLfvector b;
-
 	private:
 		xlong starttime;
 		xlong lastupdate;
@@ -31,11 +29,9 @@ class CLexplosion : public virtual CLcl
 		xlong step;
 		float transdir;
 		bool type;
-
 	public:
 		CLexplosion(CLobject* o);
 		~CLexplosion();
-	
 		void first(bool t);
 		xlong next();
 };

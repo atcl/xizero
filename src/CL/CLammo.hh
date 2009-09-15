@@ -29,11 +29,9 @@ class CLammomanager : public virtual CLcl
 		xlong ammotypecount;
 		xlong lastupdate;
 		xlong* mark;
-	
 	public:
 		CLammomanager(xlong atc,xlong* ats,xlong* m);
 		~CLammomanager();
-		
 		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction);
 		void update();
 		template<int I>void collision(CLentity<I>* e);
@@ -87,7 +85,6 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 void CLammomanager::update()
 {
 	xlong time = CLsystem::getmilliseconds();
-
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
@@ -116,7 +113,9 @@ void CLammomanager::update()
 	}
 	//*
 	
+	//save time
 	lastupdate = time;
+	//*
 }
 
 template<int I>
@@ -124,7 +123,6 @@ void CLammomanager::collision(CLentity<I>* e)
 {
 	xlong r = 0;
 	xlong time = CLsystem::getmilliseconds();
-
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
@@ -147,7 +145,9 @@ void CLammomanager::collision(CLentity<I>* e)
 	}
 	//*
 	
-	e->hit(r);
+	//if hit opposing entity let it know
+	if(r!=0) e->hit(r);
+	//*
 }
 
 void CLammomanager::display()

@@ -10,12 +10,10 @@
 #include "CLbuffer.hh"
 #include "CLformat.hh"
 
-
 #define teletype 0;
 #define monotype 1;
 #define linetype 2;
 #define segmtype 3;
-
 
 namespace CLgfx2
 {

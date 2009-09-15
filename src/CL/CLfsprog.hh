@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLglobal.hh"
 
-
 namespace CLfsprogress
 {
 	xlong pprogress = 0;

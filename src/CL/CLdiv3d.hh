@@ -11,7 +11,6 @@
 #include "CLglobal.hh"
 #include "CLgfx1.hh"
 
-
 namespace CLmisc3d
 {
 	template<class clvector>void project(clvector& v,const clvector& p);
@@ -80,10 +79,8 @@ void CLmisc3d::draw3dline(clvector p,clvector q,uxlong c,bool aa)
 	{
 		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
 		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
-		
 		xlong ox = xlong( ( 80 * q.x) / q.z) + (xres>>1);
 		xlong oy = xlong( (-95 * q.y) / q.z) + (yres>>1);
-
 		if(aa) CLgfx1::drawantiline(nx,ny,ox,oy,c);
 		else   CLgfx1::drawanyline(nx,ny,ox,oy,c);
 	}
@@ -98,7 +95,7 @@ void CLmisc3d::drawlight(clvector& p,xlong i,uxlong c)
 
 void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 {
-	xlong z;
+	xlong z = 0;
 	
 	if(zb==0) zb = CLzbuffer;
 
