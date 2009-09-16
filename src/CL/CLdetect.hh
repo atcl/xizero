@@ -14,6 +14,7 @@
 #define SSEFLAG 0b00000010000000000000000000000000
 //*
 
+//move all detection in ctor and all methods just get's and is's
 class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 {
 	friend class CLsingle<CLdetect>;

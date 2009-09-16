@@ -17,12 +17,11 @@
 //then translate along normals for explosion
 class CLexplosion : public virtual CLcl
 {
-	protected:
+	private:
 		CLobject* object;
 		CLmatrix* linear;
 		CLfvector a;
 		CLfvector b;
-	private:
 		xlong starttime;
 		xlong lastupdate;
 		xlong interval;

@@ -14,11 +14,9 @@ class CLlabel : public CLguibase
 	private:
 		xchar* text;
 		bool   frame;
-
 	public:
 		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,xchar* t,bool f);
 		~CLlabel();
-
 		void draw();
 		void settext(const xchar* t);
 		xchar* gettext();

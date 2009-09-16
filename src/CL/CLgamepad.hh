@@ -145,20 +145,11 @@ void CLgamepad::handle()
     }
 }
 
-void CLgamepad::exit()
-{
-	//close gamepad device
-	close(gamepad_device);
-	//*
-}
+void CLgamepad::exit() { close(gamepad_device); }
 
 #endif
 
-CLgamepadstate* CLgamepad::getgamepad()
-{
-	return &pad;
-}
-
+CLgamepadstate* CLgamepad::getgamepad() { return &pad; }
 
 #endif
 

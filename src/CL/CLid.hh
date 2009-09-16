@@ -29,12 +29,9 @@ class CLid : public virtual CLcl
 
 uxlong CLid::crc32 = 0x04C11DB7;
 
-CLid::CLid()
-{
-	lastid = 0;
-}
+CLid::CLid() { lastid = 0; }
 
-CLid::~Clid() { }
+CLid::~CLid() { }
 
 xlong CLid::generateid()
 {

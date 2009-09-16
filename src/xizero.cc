@@ -23,7 +23,7 @@ int main()
 	bool running  = 1;
 	bool pause = 0;
 	
-	CLfsprogress::set(20);
+	CLfsprogress::instance()->set(20);
 	
 	while(running && win->run()) 
 	{
@@ -57,7 +57,7 @@ int main()
 				pause = !pause;
 			break;
 			
-			case                                                                                                                                                                                    '4':
+			case '4':
 				testlevel->pause();
 			break;
 		}

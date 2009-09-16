@@ -10,6 +10,17 @@
 #include "CLgame.hh"
 #include "CLmath.hh"
 
+/* class name:
+ * 
+ * author:
+ * 
+ * description:
+ * 
+ * notes:
+ * 
+ * version:
+ */
+
 template<int I> class CLentity; //forward declaration
 
 struct CLammo

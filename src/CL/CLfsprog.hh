@@ -7,18 +7,27 @@
 #include "CLtypes.hh"
 #include "CLglobal.hh"
 
-namespace CLfsprogress
+class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 {
-	xlong pprogress = 0;
-	xlong rprogress = 0;
-	uxlong pcolor = 0x000000FF;
+	friend class CLsingle<CLfsprogress>;
 	
-	void draw();
-	void set(xlong p);
-	void add(xlong a);
-	void reset();
-	xlong get();
+	private:
+		xlong pprogress;
+		xlong rprogress;
+		uxlong pcolor;
+		CLfsprogress();
+		~CLfsprogress();
+	public:
+		void draw();
+		void set(xlong p);
+		void add(xlong a);
+		void reset();
+		xlong get();
 };
+
+CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x000000FF;}
+
+CLfsprogress::~CLfsprogress() { } 
 
 void CLfsprogress::draw()
 {

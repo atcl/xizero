@@ -4,6 +4,16 @@
 #define HH_CLSOUND
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
+#ifdef WIN32
+	#include <mmsystem.hh>
+#else //ifdef LINUX
+	#include <linux/soundcard.h>
+	#include <sys/types.h>
+	#include <sys/ioctl.h>
+	#include <unistd.h>
+	#include <signal.h>
+#endif
+
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLsystem.hh"
@@ -32,7 +42,6 @@ namespace CLsound
 
 
 #ifdef WIN32
-#include <mmsystem.hh>
 
 bool CLsound::init()
 {
@@ -69,11 +78,6 @@ void CLsound::stop()
 void CLsound::exit() { }
 
 #else //ifdef LINUX
-#include <linux/soundcard.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <signal.h>
 
 bool CLsound::init()
 {
