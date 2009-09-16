@@ -26,6 +26,7 @@ class CLentity : public virtual CLcl
 		CLammomanager* ammoman;
 		CLobject* model[I];
 		CLexplosion* expl[I];
+		CLutils* utils;
 		xmap* def;
 		xlong* csv;
 		CLbox* boundingbox[2][I];
@@ -54,7 +55,6 @@ class CLentity : public virtual CLcl
 		xlong shieldupdate;
 		xlong armor;
 		xlong points;
-
 		void setspeed();
 		void fire(xlong at,xlong d,xlong i,xlong tz,xlong m=0);
 		//virtual void pretransform() = 0;
@@ -67,11 +67,11 @@ class CLentity : public virtual CLcl
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
 		void hit(xlong h);
-		xlong gethealth() { return health; }
-		xlong getshield() { return shield; }
-		CLfvector* getposition() { return &position; }
-		CLbox* getboundingbox() { return boundingbox[0][0]; }
-		bool isvisible() { return visible; } 
+		xlong gethealth() const;
+		xlong getshield() const;
+		CLfvector* getposition();
+		CLbox* getboundingbox() const;
+		bool isvisible() const;
 };
 
 template<int I>
@@ -103,6 +103,10 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 {
+	//associate utils
+	utils = CLutils::instance();
+	//*
+	
 	//create transformation matrix
 	linear = new CLmatrix(1);
 	//*
@@ -122,7 +126,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
-		xlong em = CLutils::findarmember(entitya,testext[i]);
+		xlong em = utils->findarmember(entitya,testext[i]);
 		if(em==-1) CLsystem::exit(1,0,__func__,"no entity model file found");
 		model[i] = new CLobject(entitya->members[em],0);
 		//*
@@ -148,7 +152,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//find and load definition (*.ini)
-	xlong ed = CLutils::findarmember(entitya,".ini");
+	xlong ed = utils->findarmember(entitya,".ini");
 	if(ed==-1) CLsystem::exit(1,0,__func__,"no entity definition found");
 	def = CLformat::loadini(entitya->members[ed]);
 	//*
@@ -182,7 +186,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	
 	//load csv if present (*.csv)
 	csv=0;
-	xlong ec = CLutils::findarmember(entitya,".csv");
+	xlong ec = utils->findarmember(entitya,".csv");
 	if(ec!=-1) csv = CLformat::loadcsv(entitya->members[ec]);
 	//*
 	
@@ -338,6 +342,21 @@ void CLentity<I>::hit(xlong h)
 		health -= -shield; 
 	}
 }
+
+template<int I>
+xlong CLentity<I>::gethealth() const { return health; }
+
+template<int I>
+xlong CLentity<I>::getshield() const { return shield; }
+
+template<int I>
+CLfvector* CLentity<I>::getposition() { return &position; }
+
+template<int I>
+CLbox* CLentity<I>::getboundingbox() const { return boundingbox[0][0]; }
+
+template<int I>
+bool CLentity<I>::isvisible() const { return visible; } 
 
 #endif
 

@@ -17,6 +17,8 @@
 
 namespace CLgfx2
 {
+	CLutils* utils = CLutils::instance();
+	
 	CLfont* tele;
 	CLfont* mono;
 	CLfont* line;
@@ -129,7 +131,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
 
 void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c)
 {
-	xlong l = CLutils::chararraylength(a);
+	xlong l = utils->chararraylength(a);
 	xlong t = x;
 	
 	for(uxlong i=0; i<l; i++)

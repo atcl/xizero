@@ -12,6 +12,8 @@
 
 namespace CLtransitions
 {
+	CLutils* utils = CLutils::instance();
+	
 	xchar fade_const;
 	xlong diss_const;
 	xlong circ_const;
@@ -46,9 +48,9 @@ void CLtransitions::dissolve()
 	{
 		for(uxlong j=0; j<1000; j++)
 		{
-			rx = CLutils::getrandom(800);
-			ry = CLutils::getrandom(600);
-			c = CLutils::getrandom(-1);
+			rx = utils->getrandom(800);
+			ry = utils->getrandom(600);
+			c = utils->getrandom(-1);
 			CLgfx1::drawbigpixel(rx,ry,c); //alternating colors?
 		}
 		i++;
@@ -65,12 +67,12 @@ void CLtransitions::fadetoblack()
 	{		
 		for(uxlong j=0; j<scrs; j++)
 		{
-			CLutils::long2char((*CLdoublebuffer)[j],comp[0],comp[1],comp[2],comp[3]);
+			utils->long2char((*CLdoublebuffer)[j],comp[0],comp[1],comp[2],comp[3]);
 			if(comp[0] > 0) comp[0]--;
 			if(comp[1] > 0) comp[1]--;
 			if(comp[2] > 0) comp[2]--;
 			if(comp[3] > 0) comp[3]--;
-			(*CLdoublebuffer)[j] = CLutils::chars2long(comp[0],comp[1],comp[2],comp[3]);
+			(*CLdoublebuffer)[j] = utils->chars2long(comp[0],comp[1],comp[2],comp[3]);
 		}
 		i++;
 		CLsystem::wait(5);

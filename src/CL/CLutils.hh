@@ -6,11 +6,20 @@
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+#include "CLcl.hh"
+#include "CLsingle.hh"
 
-namespace CLutils
+#define SEED 22695477
+
+class CLutils : public virtual CLcl, public CLsingle<CLutils>
 {
-	xlong seed = 22695477;
-
+	friend class CLsingle<CLutils>;
+	
+private:
+	xlong seed;
+	CLutils();
+	~CLutils();
+public:
 	void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
 	xchar  long2char(xlong l,xlong i);
 	xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4);
@@ -24,6 +33,9 @@ namespace CLutils
 	xlong  findarmember(arfile* a,const xchar* e);
 };
 
+CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; }
+
+CLutils::~CLutils() { }
 
 void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3)
 {

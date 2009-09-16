@@ -23,21 +23,18 @@ typedef CLlist<CLenemy> CLenemylist;
 
 class CLlevel : public virtual CLcl
 {
-	protected:
+	private:
 		CLmatrix*    linear;
 		CLplayer*    player;
 		CLenemylist* enemies;
 		CLobject**   terrain;
-
 		CLfbuffer*   levellandscape;
-
-	private:
+		CLutils*     utils;
 		static xlong levelwidth;
 		static xlong blockheight;
 		static xlong blockwidth;
 		static xlong blockdepth;
 		static xlong floorheight;
-
 		xchar*** levellayers;
 		xlong levelheight;
 		xlong blocksperscreeny;
@@ -50,11 +47,9 @@ class CLlevel : public virtual CLcl
 		xlong smoothlevelwidth;
 		xlong playerscreenylevel;
 		bool  paused;
-
 	public:
 		CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer);
 		~CLlevel();
-
 		void update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
 		void subsmark(xlong m);
@@ -74,6 +69,10 @@ xlong CLlevel::floorheight = 100;
 
 CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer)
 {
+	//associate utils
+	utils = CLutils::instance();
+	//*
+	
 	//matrix for linear transformations of level objects
 	linear = new CLmatrix(1);
 	//*
@@ -116,13 +115,13 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 	
 	//terrain map:
-	xlong tf = CLutils::findarmember(levela,".mapt");
+	xlong tf = utils->findarmember(levela,".mapt");
 	if(tf==-1) CLsystem::exit(1,0,__func__,"no terrain map found");
 	xchar** terrainmap = CLformat::loadmap(levela->members[tf],33,' ',-1);
 	//**
 
 	//determine level constants
-	levelheight = CLutils::getlinecount(levela->members[tf]);
+	levelheight = utils->getlinecount(levela->members[tf]);
 	blocksperscreeny = yres / blockheight;
 	blocksperscreenx = xres / blockwidth;
 	blockmark = levelheight - blocksperscreeny;
@@ -135,13 +134,13 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 
 	//height map:
-	xlong hf = CLutils::findarmember(levela,".maph");
+	xlong hf = utils->findarmember(levela,".maph");
 	if(hf==-1) CLsystem::exit(1,0,__func__,"no height map found");
 	xchar** heightmap = CLformat::loadmap(levela->members[hf],48,' ',0);
 	//**
 
 	//entity map:
-	xlong ef = CLutils::findarmember(levela,".mape");
+	xlong ef = utils->findarmember(levela,".mape");
 	if(ef==-1) CLsystem::exit(1,0,__func__,"no entity map found");
 	xchar** entitymap = CLformat::loadmap(levela->members[ef],34,'.',-2);
 	//**

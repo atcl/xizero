@@ -13,6 +13,7 @@
 class CLbutton : public CLguibase
 {
 	private:
+		CLutils* utils;
 		void (*action)();
 		xchar* caption;
 		bool flat;
@@ -29,6 +30,7 @@ class CLbutton : public CLguibase
 CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
 {
 	//set up attributes
+	utils = CLutils::instance();
 	action = a;
 	caption = c;
 	flat = f;
@@ -55,7 +57,7 @@ void CLbutton::setaction(void(*a)())
 void CLbutton::setcaption(xchar* t)
 {
 	delete caption;
-	xlong s = CLutils::chararraylength(t);
+	xlong s = utils->chararraylength(t);
 	caption = new xchar[s];
 	for(uxlong i=0; i<s ;i++)
 	{

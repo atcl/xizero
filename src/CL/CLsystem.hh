@@ -25,6 +25,7 @@ namespace CLsystem
 {
 	xchar eol = '\n'; //ignore WIN32 screwed line ends
 	xchar eof = 0x1A;
+	CLutils* utils = CLutils::instance();
 	
 	CLexe*	exe(xchar** a);
 	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
@@ -335,9 +336,9 @@ xlong CLsystem::msgbox(const xchar* message)
 	//*
 	
 	//determine length of commandline parts
-	xlong env1l = CLutils::chararraylength(env1);
-	xlong env2l = CLutils::chararraylength(message);
-	xlong env3l = CLutils::chararraylength(env3);
+	xlong env1l = utils->chararraylength(env1);
+	xlong env2l = utils->chararraylength(message);
+	xlong env3l = utils->chararraylength(env3);
 	//*
 	
 	//allocate space for complete commandline
@@ -345,9 +346,9 @@ xlong CLsystem::msgbox(const xchar* message)
 	//*
 	
 	//assemble commandline
-	CLutils::copychararray(&env[0],env1,env1l);
-	CLutils::copychararray(&env[env1l],message,env2l);
-	CLutils::copychararray(&env[env1l+env2l],env3,env3l);
+	utils->copychararray(&env[0],env1,env1l);
+	utils->copychararray(&env[env1l],message,env2l);
+	utils->copychararray(&env[env1l+env2l],env3,env3l);
 	env[env1l+env2l+env3l] = 0;
 	//*
 

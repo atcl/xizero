@@ -22,6 +22,8 @@ typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
 namespace CLformat
 {
+	CLutils* utils = CLutils::instance();
+	
 	xlong*   loadcsv(CLfile* sf,xchar sep=',');
 	arfile*  loadar(CLfile* sf);
 	xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
@@ -46,7 +48,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = CLutils::getlinecount(sf);
+	xlong  lc = utils->getlinecount(sf);
 	//*
 
 	//get comma count per line
@@ -124,7 +126,7 @@ arfile* CLformat::loadar(CLfile* sf)
 		do
 		{
 			//read member header
-			CLutils::copychararray(&fn[0],&bf[bc],16);	//member filename
+			utils->copychararray(&fn[0],&bf[bc],16);	//member filename
 			bc += 48;					//no necessary information here, so skip
 			//*
 			
@@ -153,7 +155,7 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc] = new armember;
 			tindex[fc]->size = fs;
 			tindex[fc]->lsize = fs2;
-			tindex[fc]->name = new xchar[16]; CLutils::copychararray(tindex[fc]->name,&fn[0],16);
+			tindex[fc]->name = new xchar[16]; utils->copychararray(tindex[fc]->name,&fn[0],16);
 			tindex[fc]->data = tb;
 			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
@@ -192,7 +194,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 	
 	xchar* bf = sf->text;
 	//xlong bs = sf->size;
-	xlong lc = CLutils::getlinecount(sf);
+	xlong lc = utils->getlinecount(sf);
 
 	//determine line length
 	xlong lw = 0;
@@ -385,7 +387,7 @@ xmap* CLformat::loadini(CLfile* sf)
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = CLutils::getlinecount(sf);
+	xlong  lc = utils->getlinecount(sf);
 	//*
 	
 	xlong cc=0;
