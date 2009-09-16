@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	//*
 	
 	//audio test:
-	CLsound::play("../../toxic.wav",1);
+	CLsound::instance()->play("../../toxic.wav",1);
 	//*
 
 	CLfile* cube;
@@ -213,10 +213,10 @@ int main(int argc, char** argv)
 				else ac = 0;
 			break;
 			case ' ':
-				CLsound::stop();
+				CLsound::instance()->stop();
 			break;
 			case 'r':
-				CLsound::play("../../cannon.wav",0);
+				CLsound::instance()->play("../../cannon.wav",0);
 			break;
 			case 'k':
 				CLintro::atcrosslevel();

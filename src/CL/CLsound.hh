@@ -29,25 +29,27 @@ struct CLwav
 	xlong length;
 };
 
-namespace CLsound
+class CLsound : public virtual CLcl, public CLsingle<CLsound>
 {
-	xlong device;
-	xlong isloop = -1;
+	friend class CLsingle<CLsound>;
 	
-	bool init();
-	bool play(const xchar* f,bool l);
-	void stop();
-	void exit();
+	private:
+		xlong device;
+		xlong isloop;
+		xlong nosound;
+		CLsound();
+		~CLsound();
+	public:
+		bool play(const xchar* f,bool l);
+		void stop();
+		void exit();
 };
 
+CLsound::~CLsound() { }
 
 #ifdef WIN32
 
-bool CLsound::init()
-{
-	device = 0;
-	return 0;
-}
+CLsound::CLsound() { isloop = -1; device = 0; }
 
 bool CLsound::play(const xchar* f,bool l)
 {
@@ -79,13 +81,15 @@ void CLsound::exit() { }
 
 #else //ifdef LINUX
 
-bool CLsound::init()
+CLsound::CLsound()
 {
+	isloop = -1;
+	
 	//check if sound device is installed
 	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
 	{
 		CLsystem::print("No Soundblaster found");
-		return 0;
+		nosound = 1;
 	}
 	//*
 	
@@ -101,13 +105,13 @@ bool CLsound::init()
 	
 	ioctl(device,SNDCTL_DSP_SYNC,0);
 	//*
-
-	return 1;
+	
+	nosound = 0;
 }
 
 bool CLsound::play(const xchar* f,bool l)
 {
-	if(device<0) return 0;
+	if(device<0 || nosound==1) return 0;
 	
 	xlong playid = fork();
 	 

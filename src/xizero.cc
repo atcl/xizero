@@ -93,7 +93,7 @@ int main()
 
 	//exit sequence
 	delete testlevel;
-	CLsound::exit();
+	CLsound::instance()->exit();
 	return 0;
 	//*
 }

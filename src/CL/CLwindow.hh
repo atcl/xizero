@@ -31,12 +31,8 @@ class CLwindow : public Fl_Single_Window
 		xlong mousey;
 		xlong mouseb;
 		xlong keyup;
-		
-		bool  havegamepad;
-		
 		void draw();
 		virtual int handle(int event);
-		
 	public:
 		CLwindow(xlong w,xlong h,const xchar* t,xlong* b);
 		~CLwindow();
