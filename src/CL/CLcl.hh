@@ -16,7 +16,7 @@ class CLcl
 	public:
 		CLcl();
 		 virtual ~CLcl();
-		xlong getversion();
+		xlong getversion() const;
 };
 
 xlong CLcl::version = CLmajor<<24 + CLminor<<16 + CLbuild<<8 + CLextra;
@@ -28,10 +28,7 @@ CLcl::CLcl()
 
 CLcl::~CLcl() { }
 
-xlong CLcl::getversion()
-{
-	return version;
-}
+xlong CLcl::getversion() const { return version; }
 
 #endif
 

@@ -8,7 +8,6 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
-
 struct CLwav
 {
 	CLfile* file;

@@ -19,7 +19,6 @@
 #include "CLmacros.hh"
 #include "CLgamepad.hh"
 
-
 typedef CLlist<CLenemy> CLenemylist;
 
 class CLlevel : public virtual CLcl

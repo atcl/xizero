@@ -9,7 +9,6 @@
 #include "CLbuffer.hh"
 #include "CLgfx2.hh"
 
-
 class CLmenu : public virtual CLcl
 {
 	private:

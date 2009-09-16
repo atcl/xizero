@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
-
 class CLstring : public virtual CLcl
 {
 	private:

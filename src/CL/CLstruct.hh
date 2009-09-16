@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLvector.hh"
 
-
 struct CLpoint
 {
 	xlong x;

@@ -13,7 +13,6 @@
 #include "CLenemy.hh"
 #include "CLgamepad.hh"
 
-
 typedef CLlist<CLenemy> CLenemylist;
 
 class CLplayer : public CLentity<2>

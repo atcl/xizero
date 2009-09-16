@@ -12,7 +12,6 @@
 #include "CLfps.hh"
 #include "CLmatrix.hh"
 
-
 //prototypes:
 void CLsetup();
 void CLgarbage();

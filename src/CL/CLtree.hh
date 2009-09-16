@@ -8,7 +8,6 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 
-
 template<class member>
 struct node
 {

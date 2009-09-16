@@ -43,16 +43,13 @@ class CLwindow : public Fl_Single_Window
 		void redraw();
 		static xlong run();
 		xlong getkey();
-		xlong getturbo();
-		xlong getmousex();
-		xlong getmousey();
-		xlong getmouseb();
+		xlong getturbo() const;
+		xlong getmousex() const;
+		xlong getmousey() const;
+		xlong getmouseb() const;
 };
 
-void CLwindow::draw()
-{
-	fl_draw_image((const uxchar*)&buffer[0],0,0,width,height,4,hdelta);
-}
+void CLwindow::draw() { fl_draw_image((const uxchar*)&buffer[0],0,0,width,height,4,hdelta); }
 
 int CLwindow::handle(int event)
 {
@@ -101,42 +98,19 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w
 
 CLwindow::~CLwindow() {}
 
-void CLwindow::redraw()
-{
-	Fl::redraw();
-}
+void CLwindow::redraw() { Fl::redraw(); }
 
-xlong CLwindow::run()
-{
-	return Fl::wait();
-}
+xlong CLwindow::run() { return Fl::wait(); }
 
-xlong CLwindow::getkey()
-{
-	xlong temp = key;
-	key = 0;
-	return temp;
-}
+xlong CLwindow::getkey() { xlong temp = key; key = 0; return temp; }
 
-xlong CLwindow::getturbo()
-{
-	return turbo;
-}
+xlong CLwindow::getturbo() const { return turbo; }
 
-xlong CLwindow::getmousex()
-{
-	return mousex;
-}
+xlong CLwindow::getmousex() const { return mousex; }
 
-xlong CLwindow::getmousey()
-{
-	return mousey;
-}
+xlong CLwindow::getmousey() const {	return mousey; }
 
-xlong CLwindow::getmouseb()
-{
-	return mouseb;
-}
+xlong CLwindow::getmouseb() const {	return mouseb; }
 
 #endif
 

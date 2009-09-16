@@ -58,15 +58,8 @@ void CLfsprogress::add(xlong a)
 	//*
 }
 
-void CLfsprogress::reset()
-{
-	pprogress = 0;
-	rprogress = 0;
-}
+void CLfsprogress::reset() { pprogress = rprogress = 0; }
 
-xlong CLfsprogress::get()
-{
-	return pprogress;
-}
+xlong CLfsprogress::get() { return pprogress; }
 
 #endif

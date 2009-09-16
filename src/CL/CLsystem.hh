@@ -17,7 +17,6 @@
 #include "CLresource.hh"
 #include "CLutils.hh"
 
-
 //forward declaration
 namespace CLsound {	void exit(); }
 //*

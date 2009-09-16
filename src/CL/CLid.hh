@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
-
 //test cases:
 //string: atcrosslevel ; crc: 1734979481
 //string: xizero ; crc: 1208686013
@@ -25,7 +24,7 @@ class CLid : public virtual CLcl
 		xlong generateid();
 		xlong generatecrc(xchar* d,xlong l);
 		bool checkcrc(uxlong c);
-		xlong one();
+		xlong one() const;
 };
 
 uxlong CLid::crc32 = 0x04C11DB7;
@@ -83,10 +82,7 @@ bool CLid::checkcrc(uxlong c)
 	else return false;
 }
 
-xlong CLid::one()
-{
-	return 1;
-}
+xlong CLid::one() const { return 1; }
 
 #endif
 

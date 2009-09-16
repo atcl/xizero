@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
-
 namespace CLtexmap
 {
 		linear();

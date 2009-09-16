@@ -15,7 +15,6 @@
 #include "CLpolygon.hh"
 #include "CLmatrix.hh"
 
-
 struct CLbox
 {
 	CLfvector c[8]; //c[0-3] bottom, c[4-7] top

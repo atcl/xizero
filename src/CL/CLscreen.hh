@@ -10,7 +10,6 @@
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
 
-
 namespace CLtransitions
 {
 	xchar fade_const;

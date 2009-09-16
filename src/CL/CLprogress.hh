@@ -10,7 +10,6 @@
 #include "CLgfx1.hh"
 #include "CLgfx2.hh"
 
-
 class CLprogress : public CLguibase
 {
 	private:

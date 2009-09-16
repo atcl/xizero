@@ -27,9 +27,9 @@ class CLfifo : public virtual CLcl
 		~CLfifo();
 		void in(member* f);
 		member* out();
-		xlong getlength();
+		xlong getlength() const;
 		void clear();
-		bool isempty();
+		bool isempty() const;
 };
 
 template<class member>
@@ -117,16 +117,10 @@ void CLfifo<member>::clear()
 }
 
 template<class member>
-xlong CLfifo<member>::getlength()
-{
-	return length;
-}
+xlong CLfifo<member>::getlength() const { return length; }
 
 template<class member>
-bool CLfifo<member>::isempty()
-{
-	return (length==0);
-}
+bool CLfifo<member>::isempty() const { return (length==0); }
 
 #endif
 

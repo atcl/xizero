@@ -9,7 +9,6 @@
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
 
-
 class CLlabel : public CLguibase
 {
 	private:

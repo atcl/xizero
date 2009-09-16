@@ -8,7 +8,6 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
-
 template<class member>
 struct listmember
 {
@@ -33,10 +32,10 @@ class CLlist : public virtual CLcl
 		~CLlist();
 
 		void append(member* e,const xchar* n=" ",xlong h=0);
-		member* getcurrentdata();
-		xchar* getcurrentname();
+		member* getcurrentdata() const;
+		xchar* getcurrentname() const;
 		void delcurrent(bool smash=0); //test smash option
-		xlong getlength();
+		xlong getlength() const;
 		void setindex(xlong i);
 		xlong getindex();
 		void clear();
@@ -45,10 +44,10 @@ class CLlist : public virtual CLcl
 		xlong setlast();
 		xlong setprev();
 		xlong setnext();
-		bool islast();
-		bool isfirst();
+		bool islast() const;
+		bool isfirst() const;
 		void exchangesort(bool updown);
-		void print();
+		void print() const;
 };
 
 template<class member>
@@ -126,7 +125,7 @@ void CLlist<member>::append(member* e,const xchar* n,xlong h)
 }
 
 template<class member>
-member* CLlist<member>::getcurrentdata()
+member* CLlist<member>::getcurrentdata() const
 {
 	//return current members data
 	if(current!=0) return current->data;
@@ -138,7 +137,7 @@ member* CLlist<member>::getcurrentdata()
 }
 
 template<class member>
-xchar* CLlist<member>::getcurrentname()
+xchar* CLlist<member>::getcurrentname() const
 {
 	//return current members name
 	if(current!=0) return current->name;
@@ -212,12 +211,7 @@ void CLlist<member>::delcurrent(bool smash)
 }
 
 template<class member>
-xlong CLlist<member>::getlength()
-{
-	//return list length
-	return length;
-	//*
-}
+xlong CLlist<member>::getlength() const { return length; }
 
 template<class member>
 void CLlist<member>::setindex(xlong i)
@@ -315,20 +309,18 @@ xlong CLlist<member>::setprev()
 }
 
 template<class member>
-bool CLlist<member>::isfirst()
+bool CLlist<member>::isfirst() const
 {
 	//check if current member is first
-	if(current==first) return true; //return current-first
-	else return false;
+	return (current==first);
 	//*
 }
 
 template<class member>
-bool CLlist<member>::islast()
+bool CLlist<member>::islast() const
 {
 	//check if current member is last
-	if(current==last) return true; //return current-first
-	else return false;
+	return (current==last);
 	//*
 }
 
@@ -383,7 +375,7 @@ void CLlist<member>::exchangesort(bool updown)
 }
 
 template<class member>
-void CLlist<member>::print()
+void CLlist<member>::print() const
 {
 	//print all list members names
 	setfirst();

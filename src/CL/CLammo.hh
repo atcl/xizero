@@ -35,7 +35,7 @@ class CLammomanager : public virtual CLcl
 		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction);
 		void update();
 		template<int I>void collision(CLentity<I>* e);
-		void display();
+		void display() const;
 };
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
@@ -150,7 +150,7 @@ void CLammomanager::collision(CLentity<I>* e)
 	//*
 }
 
-void CLammomanager::display()
+void CLammomanager::display() const
 {
 	CLammo* currammo = 0;
 	

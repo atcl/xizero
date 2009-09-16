@@ -27,7 +27,6 @@ namespace CLgame
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
 
-
 void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {
 	//set screen boundaries

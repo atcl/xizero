@@ -14,7 +14,6 @@
 #include "CLglobal.hh"
 #include "CLpolyinc.hh"
 
-
 class CLpolygon : public virtual CLcl
 {
 	private:
@@ -59,7 +58,7 @@ class CLpolygon : public virtual CLcl
 		void reset();
 		void setcolor(uxlong co);
 		void resetcolor();
-		CLfvector getnormal();
+		CLfvector getnormal() const;
 };
 
 xlong CLpolygon::pointcount = 4;
@@ -739,20 +738,11 @@ void CLpolygon::reset()
 	normal    = rnormal;
 }
 
-void CLpolygon::setcolor(uxlong co)
-{
-	color = co;
-}
+void CLpolygon::setcolor(uxlong co) { color = co; }
 
-void CLpolygon::resetcolor()
-{
-	color = rcolor;
-}
+void CLpolygon::resetcolor() { color = rcolor; }
 
-CLfvector CLpolygon::getnormal()
-{
-	return normal;
-}
+CLfvector CLpolygon::getnormal() const { return normal; }
 
 #endif
 

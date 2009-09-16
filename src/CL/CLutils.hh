@@ -7,7 +7,6 @@
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 
-
 namespace CLutils
 {
 	xlong seed = 22695477;

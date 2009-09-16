@@ -10,7 +10,6 @@
 #include "CLvector.hh"
 #include "CLmath.hh"
 
-
 class CLmatrix : public virtual CLcl
 {
 	private:
@@ -38,7 +37,7 @@ class CLmatrix : public virtual CLcl
 		float trace();
 		float determinate();
 
-		void print();
+		void print() const;
 };
 
 
@@ -259,7 +258,7 @@ float CLmatrix::trace()
 	//*
 }
 
-void CLmatrix::print()
+void CLmatrix::print() const
 {
 	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << std::endl;
 	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << std::endl;

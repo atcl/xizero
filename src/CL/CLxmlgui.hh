@@ -12,7 +12,6 @@
 #include "CLbutton.hh"
 #include "CLprogress.hh"
 
-
 class CLxmlgui : public virtual CLcl
 {
 	protected:

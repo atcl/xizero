@@ -33,9 +33,9 @@ template <typename T>class CLbuffer : public virtual CLcl
 		void ultracopy(xlong* dst);
 		void blendcopy(T* dst,xlong o);
 		void blendcopy(CLbuffer<T>* dst,xlong o);
-		uxlong getsize();
-		uxlong getbytesize();
-		T* getbuffer();
+		uxlong getsize() const;
+		uxlong getbytesize() const;
+		T* getbuffer() const;
 		T& operator[](uxlong i);
 };
 
@@ -317,20 +317,11 @@ template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o)
 
 }
 
-template <typename T>uxlong CLbuffer<T>::getsize()
-{
-	return size;
-}
+template <typename T>uxlong CLbuffer<T>::getsize() const { return size; }
 
-template <typename T>uxlong CLbuffer<T>::getbytesize()
-{
-	return bsize;
-}
+template <typename T>uxlong CLbuffer<T>::getbytesize() const { return bsize; }
 
-template <typename T>T* CLbuffer<T>::getbuffer()
-{
-	return buffer;
-}
+template <typename T>T* CLbuffer<T>::getbuffer() const { return buffer; }
 
 template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 {

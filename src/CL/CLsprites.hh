@@ -8,7 +8,6 @@
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
 
-
 namespace CLsprites
 {
 	void drawantimatter(xlong x,xlong y);
