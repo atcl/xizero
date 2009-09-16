@@ -122,7 +122,6 @@ void CLprogress::draw()
 void CLprogress::setstart(xlong s)
 {
 	start = s;
-
 	xlong temp = float(CLmath::absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
@@ -132,7 +131,6 @@ void CLprogress::setstart(xlong s)
 void CLprogress::setend(xlong e)
 {
 	end = e;
-
 	xlong temp = float(CLmath::absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
@@ -157,20 +155,11 @@ void CLprogress::addprogress(xlong a)
 	pprogress = punit * progress;
 }
 
-xlong CLprogress::getstart()
-{
-	return start;
-}
+xlong CLprogress::getstart() { return start; }
 
-xlong CLprogress::getend()
-{
-	return end;
-}
+xlong CLprogress::getend() { return end; }
 
-xlong CLprogress::getprogress()
-{
-	return progress;
-}
+xlong CLprogress::getprogress() { return progress; }
 
 #endif
 

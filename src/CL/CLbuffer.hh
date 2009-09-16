@@ -11,6 +11,7 @@
 #include "CLcl.hh"
 #include "CLdetect.hh"
 
+//only one copy with defualt mode=0
 template <typename T>class CLbuffer : public virtual CLcl
 {
 	private:

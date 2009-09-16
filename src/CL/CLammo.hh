@@ -82,7 +82,7 @@ CLammomanager::~CLammomanager()
 void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction)
 {
 	//append ammolist if ammotype exists
-	if(at<=ammotypecount)
+	if(at<ammotypecount)
 	{
 		CLammo* currammo = new CLammo();
 		currammo->comsprite = ammotype[at]->comsprite;

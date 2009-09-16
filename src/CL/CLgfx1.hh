@@ -29,11 +29,6 @@ inline void clip(xlong& x,xlong& y)
 
 namespace CLgfx1
 {
-	//~ xlong last_p;
-	//~ xlong interval_p;
-	//~ xlong last_s;
-	//~ xlong interval_s;
-
 	void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 	void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 	uxlong readpixel(xlong x,xlong y);

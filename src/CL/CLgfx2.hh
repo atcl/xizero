@@ -25,8 +25,8 @@ namespace CLgfx2
 	CLfont* segm;
 	
 	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
-	xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c);
-	void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c);
+	xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxlong bc=0);
+	void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,uxlong bc=0);
 	uxlong getEGAcolor(xchar c);
 	bool comparecolors(uxlong c1,uxlong c2);
 	uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
@@ -70,73 +70,60 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	}
 }
 
-xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong c)
+xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxlong bc)
 {
-	//init
-	if(x>xres || y>yres) return 0;
+	//is on screen
+	if( x<0 || y<0 || x>xres || y>yres) return -1;
 	//*
 	
-	//find tile
-	xlong off = a * f->tilewidth; 
-	//*
-
-	//sprite (hiere font) vars
-	xlong hordiff = f->width-f->tilewidth;
-	xlong xs = x;
-	xlong ys = y;
-	xlong xe = x + f->tilewidth;
-	xlong ye = y + f->tileheight;
-	if(xe<0 || ye<0) return 0;
-	//*
-
-	//clipping
-	if(xs<0) xs = 0;
-	if(xe>xres) xe = xres-1;
-	if(ys<0) ys = 0;
-	if(ye>yres) ye = yres-1;
+	//find (font) tile
+	uxlong srcoff = (a * f->tilewidth)-1; 
 	//*
 
 	//draw vars
-	xlong ewidth = xe - xs;
-	xlong eheight = ye - ys;
-	xlong xoffset = (ys * xres) + xs;
-	xlong linearc = off;
+	xlong hordiff = (f->width) - (f->tilewidth);
+	xlong drawwidth = f->tilewidth;
+	xlong drawheight = f->tileheight;
+	uxlong dstoff = (y * xres) + x;
 	xlong rx = x;
+	//*
+	
+	//is completely on screen
+	if(x+drawwidth>xres || y+drawheight>yres) return -1;
 	//*
 
 	//drawloop
-	for(uxlong i=0; i<eheight ;i++)
+	uxlong curroff = dstoff;
+	for(uxlong i=0; i<drawheight; i++)
 	{
-		rx = x;
-		for(uxlong j=0; j<ewidth ;j++)
+		for(uxlong j=0; j<drawwidth; j++)
 		{
-			if(f->data[linearc] == 0x0FFFF0000)
+			if(f->data[srcoff] == 0xFFFF0000) (*CLdoublebuffer)[curroff] = fc;
+			if(bc!=0 && f->data[srcoff] == 0xFFFFFFFF) (*CLdoublebuffer)[curroff] = bc;
+			if(f->data[srcoff] != 0xFF000000)
 			{
-				(*CLdoublebuffer)[xoffset+j] = c;
+				if(i==0) rx++;
+				curroff++;
 			}
-			linearc++;
-			if(f->data[linearc] != 0x0FF000000)
-			{
-				rx++;
-				//break;
-			}
+			srcoff++; 
 		}
-		xoffset += xres;
-		linearc += hordiff;
+		curroff = dstoff += xres;
+		srcoff += hordiff;
 	}
 	//*
 	
 	return rx;
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong c)
+void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,uxlong bc)
 {
 	xlong l = utils->chararraylength(a);
 	xlong t = x;
 	
 	for(uxlong i=0; i<l; i++)
 	{
-		t = drawfontchar(t,y,a[i],f,c);
+		if(a[i]=='\n') { t = x; y += 16; }
+		else t = drawfontchar(t,y,a[i],f,fc,bc);
 	}
 }
 
@@ -145,56 +132,23 @@ uxlong CLgfx2::getEGAcolor(xchar c)
 	//return the 16 EGA colors
 	switch(c)
 	{
-		case 0:
-			return 0x00000000; //black
-		break;
-		case 1:
-			return 0x000000FF; //blue
-		break;
-		case 2:
-			return 0x0000FF00; //green
-		break;
-		case 3:
-			return 0x0000FFFF; //cyan
-		break;
-		case 4:
-			return 0x00FF0000; //red
-		break;
-		case 5:
-			return 0x00FF00FF; //magenta
-		break;
-		case 6:
-			return 0x00FFFF00; //yellow
-		break;
-		case 7:
-			return 0x00808080; //dark white?
-		break;
-		case 8:
-			return 0x00404040; //gray
-		break;
-		case 9:
-			return 0x008080FF; //light blue
-		break;
-		case 10:
-			return 0x0080FF80; //light green
-		break;
-		case 11:
-			return 0x0080FFFF; //light cyan
-		break;
-		case 12:
-			return 0x00FF8080; //light red
-		break;
-		case 13:
-			return 0x00FF80FF; //light magenta
-		break;
-		case 14:
-			return 0x00FFFF80; //light yellow
-		break;
-		case 15:
-			return 0x00FFFFFF; //white
-		break;
-		default:
-			return 0;
+		case 0:  return 0x00000000; break; //black
+		case 1:  return 0x000000FF; break; //blue
+		case 2:  return 0x0000FF00; break; //green
+		case 3:  return 0x0000FFFF; break; //cyan
+		case 4:  return 0x00FF0000; break; //red
+		case 5:  return 0x00FF00FF; break; //magenta
+		case 6:  return 0x00FFFF00; break; //yellow
+		case 7:  return 0x00808080; break; //dark white?
+		case 8:  return 0x00404040; break; //gray
+		case 9:  return 0x008080FF; break; //light blue
+		case 10: return 0x0080FF80; break; //light green
+		case 11: return 0x0080FFFF; break; //light cyan
+		case 12: return 0x00FF8080; break; //light red
+		case 13: return 0x00FF80FF; break; //light magenta
+		case 14: return 0x00FFFF80; break; //light yellow
+		case 15: return 0x00FFFFFF; break; //white
+		default: return 0;
 	}
 	//*
 }
