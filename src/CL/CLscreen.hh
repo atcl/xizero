@@ -16,6 +16,7 @@ class CLtransitions : CLsingle<CLtransitions>
 	
 	private:
 		CLutils* utils;
+		CLsystem* system;
 		xchar fade_const;
 		xlong diss_const;
 		xlong circ_const;
@@ -27,7 +28,7 @@ class CLtransitions : CLsingle<CLtransitions>
 		void fadetoblack();
 };
 
-CLtransitions::CLtransitions() { utils = CLutils::instance(); }
+CLtransitions::CLtransitions() { utils = CLutils::instance(); system = CLsystem::instance(); }
 
 CLtransitions::~CLtransitions() { }
 
@@ -37,7 +38,7 @@ void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t)
 	
 	while(win->run())
 	{
-		if(secondtime) { CLsystem::wait(t); break; }
+		if(secondtime) { system->wait(t); break; }
 		CLgfx1::drawcircle(x,y,r,0x00FFFFFF);
 		CLgfx1::fill(5,30,0,0x00FFFFFF);
 		secondtime = 1;
@@ -61,7 +62,7 @@ void CLtransitions::dissolve()
 			CLgfx1::drawbigpixel(rx,ry,c); //alternating colors?
 		}
 		i++;
-		CLsystem::wait(10);
+		system->wait(10);
 	}
 }
 
@@ -82,7 +83,7 @@ void CLtransitions::fadetoblack()
 			(*CLdoublebuffer)[j] = utils->chars2long(comp[0],comp[1],comp[2],comp[3]);
 		}
 		i++;
-		CLsystem::wait(5);
+		system->wait(5);
 	}
 }
 

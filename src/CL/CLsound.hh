@@ -34,6 +34,7 @@ class CLsound : public virtual CLcl, public CLsingle<CLsound>
 	friend class CLsingle<CLsound>;
 	
 	private:
+		CLsystem* system;
 		xlong device;
 		xlong isloop;
 		xlong nosound;
@@ -49,7 +50,7 @@ CLsound::~CLsound() { }
 
 #ifdef WIN32
 
-CLsound::CLsound() { isloop = -1; device = 0; }
+CLsound::CLsound() { isloop = -1; device = 0; system = CLsystem::instance(); }
 
 bool CLsound::play(const xchar* f,bool l)
 {
@@ -83,12 +84,14 @@ void CLsound::exit() { }
 
 CLsound::CLsound()
 {
+	system = CLsystem::instance();
+	
 	isloop = -1;
 	
 	//check if sound device is installed
 	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
 	{
-		CLsystem::print("No Soundblaster found");
+		system->print("No Soundblaster found");
 		nosound = 1;
 	}
 	//*
@@ -119,7 +122,7 @@ bool CLsound::play(const xchar* f,bool l)
 	{
 		CLwav current;
 		
-		current.file = CLsystem::getfile(f);
+		current.file = system->getfile(f);
 		
 		//check if "RIFF"
 		if(current.file->data[0] != 'FFIR') { say("wav loading error (RIFF)"); return 0; }

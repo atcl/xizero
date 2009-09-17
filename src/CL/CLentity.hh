@@ -22,6 +22,7 @@ template<int I>
 class CLentity : public virtual CLcl
 {
 	protected:
+		CLsystem* system;
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -103,6 +104,8 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 {
+	system = CLsystem::instance();
+	
 	//associate utils
 	utils = CLutils::instance();
 	//*
@@ -127,7 +130,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	{
 		//find and load model(s) (*.y3d)
 		xlong em = utils->findarmember(entitya,testext[i]);
-		if(em==-1) CLsystem::exit(1,0,__func__,"no entity model file found");
+		if(em==-1) system->exit(1,0,__func__,"no entity model file found");
 		model[i] = new CLobject(entitya->members[em],0);
 		//*
 		
@@ -153,17 +156,17 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	
 	//find and load definition (*.ini)
 	xlong ed = utils->findarmember(entitya,".ini");
-	if(ed==-1) CLsystem::exit(1,0,__func__,"no entity definition found");
+	if(ed==-1) system->exit(1,0,__func__,"no entity definition found");
 	def = CLformat::loadini(entitya->members[ed]);
 	//*
 	
 	//load entity attributes
-	healthmax = health = CLsystem::ato((*def)["health"]);
-	shieldmax = shield = CLsystem::ato((*def)["shield"]);
-	shieldrate	= CLsystem::ato((*def)["shieldrate"]);
-	armor		= CLsystem::ato((*def)["armor"]);
-	ammomounts	= CLsystem::ato((*def)["ammomounts"]);
-	points		= 10; //CLsystem::ato((*def)["points"]);
+	healthmax = health = system->ato((*def)["health"]);
+	shieldmax = shield = system->ato((*def)["shield"]);
+	shieldrate	= system->ato((*def)["shieldrate"]);
+	armor		= system->ato((*def)["armor"]);
+	ammomounts	= system->ato((*def)["ammomounts"]);
+	points		= 10; //system->ato((*def)["points"]);
 	//*
 	
 	//load ammo types
@@ -174,9 +177,9 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	fireupdate = new xlong[ammomounts];
 	for(uxlong j=0; j<ammomounts; j++)
 	{
-		ammotype[j] = CLsystem::ato((*def)[ammoext[j]]);
-		firerate[j] = CLsystem::ato((*def)[fireext[j]]);
-		fireupdate[j] = CLsystem::getmilliseconds();
+		ammotype[j] = system->ato((*def)[ammoext[j]]);
+		firerate[j] = system->ato((*def)[fireext[j]]);
+		fireupdate[j] = system->getmilliseconds();
 	}
 	//*
 	
@@ -196,13 +199,15 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	gear = 0;
 	visible = 0;
 	active = 0;
-	shieldupdate = lastupdate = CLsystem::getmilliseconds();
+	shieldupdate = lastupdate = system->getmilliseconds();
 	//*
 }
 
 template<int I>
 CLentity<I>::CLentity(CLentity* entityptr)
 {
+	system = CLsystem::instance();
+	
 	//create transformation matrix
 	linear = new CLmatrix(1);
 	//*
@@ -258,7 +263,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	fireupdate = new xlong[ammomounts];
 	for(uxlong j=0; j<ammomounts; j++)
 	{
-		fireupdate[j] = CLsystem::getmilliseconds();
+		fireupdate[j] = system->getmilliseconds();
 	}
 	//*
 	
@@ -276,7 +281,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	gear = 0;
 	visible = 0;
 	active = 0;
-	shieldupdate = lastupdate = CLsystem::getmilliseconds();
+	shieldupdate = lastupdate = system->getmilliseconds();
 	//*
 }
 

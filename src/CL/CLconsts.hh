@@ -60,7 +60,7 @@
 #define DOWN    84
 #define ESC     27
 #define SPACE   32
-#define CTRL    -29
+#define LCTRL   -29
 #define ENTER   13
 //*
 

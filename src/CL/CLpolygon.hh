@@ -20,6 +20,8 @@ class CLpolygon : public virtual CLcl
 		static xlong pointcount;
 		static float shadezscale;
 
+		CLsystem* system;
+
 		uxlong color;
 		uxlong rcolor;
 		uxlong scolor;
@@ -552,6 +554,8 @@ void CLpolygon::rasterize(xlong shadow)
 
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
 {
+	system = CLsystem::instance();
+	
 	//set colors and pointcount
 	rcolor = color = co;
 	scolor = sc;
@@ -667,7 +671,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 		}
 		else
 		{
-			CLsystem::exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
+			system->exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
 		}
 	}
 	

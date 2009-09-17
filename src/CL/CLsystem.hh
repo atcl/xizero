@@ -17,37 +17,44 @@
 #include "CLresource.hh"
 #include "CLutils.hh"
 
-class CLsound;
-
-namespace CLsystem
+class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 {
-	xchar eol = '\n'; //ignore WIN32 screwed line ends
-	xchar eof = 0x1A;
-	CLutils* utils = CLutils::instance();
+	friend class CLsingle<CLsystem>;
 	
-	CLexe*	exe(xchar** a);
-	void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
-	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,const xchar* d);
-	void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
-	CLfile* getfile(const xchar* fn,bool s=true); //CLfile as parameter and return bool for if ok?
-	bool    appendfile(const xchar* fn,xlong* b,xlong s);
-	bool    appendfile(const xchar* fn,xchar* b,xlong s);
-	bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
-	bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
-	void    print(const xchar* c,bool i=1);
-	void    print(const xlong l,bool i=1);
-	void    print(const float l,bool i=1);
-	void    waitforkey();
-	void    wait(xlong milliseconds);
-	xlong   getmilliseconds(); //since midnight
-	xlong   doevery(every* e);
-	xlong   system(const xchar* c);
-	xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
-	xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
-	void    installsystemkey(xchar scancode,void *action);
-	xlong   msgbox(const xchar* message);
+	private:
+		CLutils* utils;
+		CLsystem();
+		~CLsystem();
+	public:
+		uxchar  eol();
+		uxchar  eof();
+		CLexe*	exe(xchar** a);
+		void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="",xlong d=0);
+		CLfile* getfile(const xchar* fn,bool s=true); //CLfile  reference as parameter and return bool for if ok?
+		bool    appendfile(const xchar* fn,xlong* b,xlong s);
+		bool    appendfile(const xchar* fn,xchar* b,xlong s);
+		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
+		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
+		void    print(const xchar* c,bool i=1);
+		void    print(const xlong l,bool i=1);
+		void    print(const float l,bool i=1);
+		void    waitforkey();
+		void    wait(xlong milliseconds);
+		xlong   getmilliseconds(); //since midnight
+		xlong   system(const xchar* c);
+		xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
+		xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
+		void    installsystemkey(xchar scancode,void *action);
+		xlong   msgbox(const xchar* message);
 };
 
+CLsystem::CLsystem() { utils = CLutils::instance(); }
+
+CLsystem::~CLsystem() { }
+
+uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends
+
+uxchar CLsystem::eof() { return 0x1A; }
 
 CLexe* CLsystem::exe(xchar** a)
 {
@@ -60,24 +67,6 @@ CLexe* CLsystem::exe(xchar** a)
 	//r->icon = &CLicon[0];
 	return r;
 	//*
-}
-
-void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
-{
-	if(e!=0) e();
-
-	std::cout << f << ": "<< m <<  std::endl;
-	//CLsound::instance()->exit();
-	::exit(r);
-}
-
-void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,const xchar* d)
-{
-	if(e!=0) e();
-
-	std::cout << f << ": "<< m << " " << d << std::endl;
-	//CLsound::instance()->exit();
-	::exit(r);
 }
 
 void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
@@ -106,7 +95,7 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 		else
 		{
 			delete re;
-			exit(1,0,__func__,"cannot open file",fn);
+			exit(1,0,__func__,fn);
 		}
 	}
 	//*
@@ -127,7 +116,7 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 	//*
 	
 	//set end of file marker
-	re->text[(re->size)] = eof;
+	re->text[(re->size)] = eof();
 	//
 	
 	//close file
@@ -286,23 +275,6 @@ void CLsystem::wait(xlong milliseconds)
 xlong CLsystem::getmilliseconds() //since midnight
 {
 	return xlong(1000 * clock() / CLOCKS_PER_SEC);
-}
-
-xlong CLsystem::doevery(every* e)
-{
-	float now = getmilliseconds();
-
-	e->last = now;
-
-	if(now - e->last < e->interval) return 1;
-
-	if(e->count == e->times) return 1;
-
-	e->function();
-
-	e->count++;
-
-	return 0;
 }
 
 xlong CLsystem::system(const xchar* c)

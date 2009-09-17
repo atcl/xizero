@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: interaction"
 
 #include "CLtypes.hh"
+#include "CLconsts.hh"
 #include "CLstruct.hh"
 #include "CLvector.hh"
 #include "CLgame.hh"
@@ -139,7 +140,7 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pt
 	//*
 	
 	//set player specific attributes
-	speeddir.y  = -CLsystem::ato((*def)["speed"]);
+	speeddir.y  = -system->ato((*def)["speed"]);
 	speeddir.y /= 20;
 	direction[0].y = direction[1].y = 1;
 	active = 1;
@@ -189,7 +190,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 		
 		//init variables
-		xlong time = CLsystem::getmilliseconds();
+		xlong time = system->getmilliseconds();
 		linear->unit();
 		bool what = 0;
 		xlong tempangle = 0;
@@ -224,14 +225,14 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		switch(input)
 		{
 			//stop backward driving and drive forward
-			case 82:
+			case UP:
 				if(gear==-1) { gear=0; setspeed(); }
 				else { gear=1; setspeed(); }
 			break;
 			//*
 
 			//stop forward driving and drive backward
-			case 84:
+			case DOWN:
 				if(gear==1) { gear=0; setspeed(); }
 				else { gear=-1; setspeed(); }
 			break;
@@ -241,7 +242,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		switch(turbo)
 		{
 			//arrow left -> turn left
-			case 81: 
+			case LEFT: 
 				tempangle = 5;
 				linear->rotate(0,0,5);
 				pretransform(0);	
@@ -250,7 +251,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//*
 
 			//arrow right -> turn right
-			case 83: 
+			case RIGHT: 
 				tempangle = -5;
 				linear->rotate(0,0,-5);
 				pretransform(0);
@@ -259,7 +260,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//*
 
 			//a -> turn tower left
-			case 97: 
+			case 'a': 
 				tempangle = 5;
 				linear->rotate(0,0,5);
 				pretransform(1);
@@ -268,7 +269,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//*
 
 			//d -> turn tower right
-			case 100: 
+			case 'd': 
 				tempangle = -5;
 				linear->rotate(0,0,-5);
 				pretransform(1);
@@ -288,7 +289,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//*
 
 			//space -> fire tower weapon
-			case 32: 
+			case SPACE: 
 				if(time >= fireupdate[1] + firerate[1])
 				{
 					fire(1,4,0,ENEMYZLEVEL,1);
@@ -298,7 +299,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//*
 
 			//strg -> fire chassis weapon(s)
-			case -29: 
+			case LCTRL: 
 				if(time >= fireupdate[0] + firerate[0])
 				{
 					fire(0,3,0,ENEMYZLEVEL,0);

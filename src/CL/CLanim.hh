@@ -21,6 +21,7 @@ struct CLframe
 class CLanim : public virtual CLcl
 {
 	private:
+		CLsystem* system;
 		CLmatrix* linear;
 		CLobject* object;
 		xlong*   anicsv;
@@ -40,6 +41,8 @@ class CLanim : public virtual CLcl
 
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 {
+	system = CLsystem::instance();
+	
 	//create linear transformation matrix
 	linear = new CLmatrix(1);
 	//*
@@ -153,11 +156,11 @@ xlong CLanim::update()
 	else
 	{
 		//is first run in this frame
-		if(starttime==0) lastupdate = starttime = CLsystem::getmilliseconds();
+		if(starttime==0) lastupdate = starttime = system->getmilliseconds();
 		//*
 		
 		//determine time
-		xlong curr_time = CLsystem::getmilliseconds();
+		xlong curr_time = system->getmilliseconds();
 		xlong time_diff = float(curr_time - lastupdate);
 		//*
 		

@@ -19,7 +19,8 @@ class CLbench : public virtual CLcl
 		xlong frames;
 		xlong lastupdate;
 		xlong interval;
-		xchar flags;	
+		xchar flags;
+		CLsystem* system;
 	public:
 		CLbench(xlong i,xchar flags);
 		~CLbench();
@@ -31,6 +32,7 @@ class CLbench : public virtual CLcl
 
 CLbench::CLbench(xlong i,xchar f)
 {
+	system = CLsystem::instance();
 	interval = i*1000;
 	flags = f;	
 }
@@ -40,14 +42,14 @@ CLbench::~CLbench() { }
 void CLbench::init()
 {
 	frames = 0;
-	lastupdate = CLsystem::getmilliseconds();
+	lastupdate = system->getmilliseconds();
 	elapsedtime = 0;
 }
 
 void CLbench::inc()
 {
 	frames++;
-	currenttime = CLsystem::getmilliseconds();
+	currenttime = system->getmilliseconds();
 	elapsedtime += (currenttime - lastupdate);
 	temptime = elapsedtime;
 //nicht durch temptime teilen, da altes zu neuem und durch 2
@@ -71,8 +73,8 @@ void CLbench::print()
 {
 		if(flags & COUT_FPS)
 		{
-			CLsystem::print("fps: ",0);
-			CLsystem::print(framespersecond);
+			system->print("fps: ",0);
+			system->print(framespersecond);
 		}
 		
 		//~ if(flags & COUT_RAM)

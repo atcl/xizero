@@ -5,6 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
+#include "CLsystem.hh"
 #include "CLlist.hh"
 #include "CLsprites.hh"
 #include "CLgame.hh"
@@ -35,6 +36,7 @@ typedef CLlist<CLammo> CLammolist;
 class CLammomanager : public virtual CLcl
 {
 	private:
+		CLsystem* system;
 		CLammolist* ammolist;
 		CLammo** ammotype;
 		xlong ammotypecount;
@@ -51,6 +53,8 @@ class CLammomanager : public virtual CLcl
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 {
+	system = CLsystem::instance();
+	
 	//set up attributes
 	mark = m;
 	ammotypecount = atc;
@@ -95,7 +99,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 
 void CLammomanager::update()
 {
-	xlong time = CLsystem::getmilliseconds();
+	xlong time = system->getmilliseconds();
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
@@ -133,7 +137,7 @@ template<int I>
 void CLammomanager::collision(CLentity<I>* e)
 {
 	xlong r = 0;
-	xlong time = CLsystem::getmilliseconds();
+	xlong time = system->getmilliseconds();
 	bool listfix=0;
 	CLammo* currammo = 0;
 	

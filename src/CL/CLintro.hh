@@ -15,6 +15,7 @@
 namespace CLintro
 {
 	CLmatrix* linear;
+	CLsystem* system = CLsystem::instance();
 	
 	void atcrosslevel();
 	void xizero();
@@ -27,12 +28,12 @@ void CLintro::atcrosslevel()
 	//*
 	
 	//load atcrosslevel model
-	CLfile *cf = CLsystem::getfile("../dat/other/atcl.y3d");
+	CLfile *cf = system->getfile("../dat/other/atcl.y3d");
 	CLobject* atcl = new CLobject(cf,0);
 	//*
 	
 	//load animation file
-	CLfile* aniraw = CLsystem::getfile("../dat/other/atcl.ani");
+	CLfile* aniraw = system->getfile("../dat/other/atcl.ani");
 	xlong*  anicsv = CLformat::loadcsv(aniraw,',');
 	//*
 
@@ -68,7 +69,7 @@ void CLintro::atcrosslevel()
 			anim_div_temp = 1/anim_step_dur;
 			
 			//make transformation unit steps
-			anim_start_time = CLsystem::getmilliseconds();
+			anim_start_time = system->getmilliseconds();
 			anim_last_time = anim_start_time;
 			anim_stop_time = anim_start_time + anim_step_dur;
 			anim_pointer++;
@@ -95,7 +96,7 @@ void CLintro::atcrosslevel()
 				//*
 
 				//determine time
-				anim_curr_time = CLsystem::getmilliseconds();
+				anim_curr_time = system->getmilliseconds();
 				anim_time_diff = float(anim_curr_time - anim_last_time);
 				if(anim_curr_time >= anim_stop_time) breaker = 1;
 				//*

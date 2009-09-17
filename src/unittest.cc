@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
 		//test tga loading:
 			
-			CLfile* fonttga = CLsystem::getfile("../dat/other/CLteletype.fnt");
+			CLfile* fonttga = CLsystem::instance()->getfile("../dat/other/CLteletype.fnt");
 			CLfont* font = CLformat::loadfont(fonttga);
 
 		//test tree:
@@ -58,13 +58,13 @@ int main(int argc, char** argv)
 	
 	if(argfileindex!=-1)
 	{
-		CLfile* arch = CLsystem::getfile(argfile.c_str());
+		CLfile* arch = CLsystem::instance()->getfile(argfile.c_str());
 		arfile* arar = CLformat::loadar(arch);
 		cube = arar->members[argfileindex];
 	}
 	else
 	{
-		CLfile* cubef = CLsystem::getfile(argfile.c_str());
+		CLfile* cubef = CLsystem::instance()->getfile(argfile.c_str());
 		cube = cubef;
 	}
 
@@ -224,8 +224,8 @@ int main(int argc, char** argv)
 			
 			//System:
 			case '0':
-				xlong rval = CLsystem::msgbox("bye");
-				CLsystem::exit(rval,0,"user","exit");
+				xlong rval = CLsystem::instance()->msgbox("bye");
+				CLsystem::instance()->exit(rval,0,"user","exit");
 			break;
 		}
 		

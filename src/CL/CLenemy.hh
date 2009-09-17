@@ -16,9 +16,8 @@
 
 class CLenemy : public CLentity<1>
 {
-	protected:
-		CLprogress* hprog;
 	private:
+		CLprogress* hprog;
 		xlong* aiarray;
 		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk
 		xlong aggrolevel;
@@ -92,8 +91,8 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 	//*
 	
 	//set enemy specific attributes
-	points = CLsystem::ato((*def)["points"]);
-	speeddir.y  = CLsystem::ato((*def)["speed"]);
+	points = system->ato((*def)["points"]);
+	speeddir.y  = system->ato((*def)["speed"]);
 	speeddir.y /= 20;
 	direction[0].y = -1;
 	//*
@@ -187,7 +186,7 @@ xlong CLenemy::update(CLentity<I>* p)
 	
 	if(active==1)
 	{
-		xlong time = CLsystem::getmilliseconds();
+		xlong time = system->getmilliseconds();
 
 		linear->unit();
 		
@@ -237,7 +236,7 @@ xlong CLenemy::update(CLentity<I>* p)
 	{
 		if(expl[0]->next()==1) return points;
 	}
-	else lastupdate = CLsystem::getmilliseconds();
+	else lastupdate = system->getmilliseconds();
 	
 	return -1;
 }

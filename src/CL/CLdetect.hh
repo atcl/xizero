@@ -22,6 +22,7 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 	private:
 		xlong cores;
 		xlong l2;
+		CLsystem* system;
 		CLdetect();
 		~CLdetect();
 	public:
@@ -33,7 +34,7 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		xlong ps();
 };
 
-CLdetect::CLdetect() : CLsingle<CLdetect>() { }
+CLdetect::CLdetect() : CLsingle<CLdetect>() { system = CLsystem::instance(); }
 
 CLdetect::~CLdetect() { }
 
@@ -82,7 +83,7 @@ xlong CLdetect::ps()
 
 xlong CLdetect::ram()
 {
-	CLfile* mem = CLsystem::getfile("/proc/meminfo");
+	CLfile* mem = system->getfile("/proc/meminfo");
 	
 	//seek line beginning with "MemTotal:"
 	//seek end of line " kB"

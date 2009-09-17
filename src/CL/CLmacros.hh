@@ -96,7 +96,7 @@ void inline debug(const xchar* c,xlong v)
 void inline bye()
 {
 	//force program exit
-	CLsystem::exit(0,0,__func__,"bye");
+	CLsystem::instance()->exit(0,0,__func__,"bye");
 	//*
 }
 

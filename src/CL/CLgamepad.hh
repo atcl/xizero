@@ -23,7 +23,8 @@ struct CLgamepadstate
 
 namespace CLgamepad
 {
-	int gamepad_device = 0;
+	CLsystem* system = CLsystem::instance();
+	int device = 0;
 	
 	#ifdef WIN32
 		struct JOYINFO gp;
@@ -61,7 +62,7 @@ bool CLgamepad::init()
 	}
 	//*
 	
-	gamepad_device = 0;
+	device = 0;
 		
 	return 1;
 }
@@ -103,14 +104,14 @@ void CLgamepad::exit() { }
 bool CLgamepad::init()
 {
 	//check if gamepad device exists and so a gamepad is connected
-	if( (gamepad_device = open("/dev/input/js0",O_RDONLY)) == -1)
+	if( (device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
-		CLsystem::print("No Gamepad found");
+		system->print("No Gamepad found");
 		return 0;
 	}
 	//*
 	
-	fcntl(gamepad_device,F_SETFL,O_NONBLOCK);
+	fcntl(device,F_SETFL,O_NONBLOCK);
 	
 	return 1;
 }
@@ -123,7 +124,7 @@ void CLgamepad::mask()
 void CLgamepad::handle()
 {
 	//read gamepad state
-	read(gamepad_device,&gp,sizeof(struct js_event));
+	read(device,&gp,sizeof(struct js_event));
 	//*
 	
 	switch (gp.type & ~JS_EVENT_INIT)
@@ -145,7 +146,7 @@ void CLgamepad::handle()
     }
 }
 
-void CLgamepad::exit() { close(gamepad_device); }
+void CLgamepad::exit() { close(device); }
 
 #endif
 

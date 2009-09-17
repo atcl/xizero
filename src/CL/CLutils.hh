@@ -15,22 +15,22 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 {
 	friend class CLsingle<CLutils>;
 	
-private:
-	xlong seed;
-	CLutils();
-	~CLutils();
-public:
-	void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
-	xchar  long2char(xlong l,xlong i);
-	xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4);
-	xlong  chararraylength(const xchar* c);
-	void   copychararray(xchar* dst,const xchar* src,xlong length); //for char arrays below 256byte
-	xlong  getlinecount(CLfile* sf);
-	bool   checkextension(xchar* fn,xlong nl,const xchar* fe);
-	xlong  getrandom(uxlong range);
-	xchar* color2string(uxlong c);
-	xlong  endian(xlong l);
-	xlong  findarmember(arfile* a,const xchar* e);
+	private:
+		xlong seed;
+		CLutils();
+		~CLutils();
+	public:
+		void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
+		xchar  long2char(xlong l,xlong i);
+		xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4);
+		xlong  chararraylength(const xchar* c);
+		void   copychararray(xchar* dst,const xchar* src,xlong length); //for char arrays below 256byte
+		xlong  getlinecount(CLfile* sf);
+		bool   checkextension(xchar* fn,xlong nl,const xchar* fe);
+		xlong  getrandom(uxlong range);
+		xchar* color2string(uxlong c);
+		xlong  endian(xlong l);
+		xlong  findarmember(arfile* a,const xchar* e);
 };
 
 CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; }
