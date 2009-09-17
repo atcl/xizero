@@ -206,20 +206,23 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 
 		//temp use gamepad
-			if(p->axis[1]<0) input = 82;
-			if(p->axis[1]>0) input = 84;
-			if(p->axis[0]<0) turbo = 81;
-			if(p->axis[0]>0) turbo = 83;
-			if(p->button[0]!=0) turbo = -29;
-			if(p->button[1]!=0) turbo = 32;
+		if(p!=0)
+		{
+			if(p->axis[1]<0) input = UP;
+			if(p->axis[1]>0) input = DOWN;
+			if(p->axis[0]<0) turbo = LEFT;
+			if(p->axis[0]>0) turbo = RIGHT;
+			if(p->button[0]!=0) turbo = LCTRL;
+			if(p->button[1]!=0) turbo = SPACE;
 			if(p->button[2]!=0) turbo = 'q';
 			if(p->button[3]!=0) turbo = 'w';
 			if(p->button[4]!=0) turbo = 'e';
 			if(p->button[5]!=0) turbo = 's';
-			if(p->button[6]!=0) turbo = 97;
-			if(p->button[7]!=0) turbo = 100;
+			if(p->button[6]!=0) turbo = 'a';
+			if(p->button[7]!=0) turbo = 'd';
 			//if(p->button[8]!=0) turbo = ?;
 			//if(p->button[9]!=0) turbo = ?;
+		}
 		//*
 
 		switch(input)

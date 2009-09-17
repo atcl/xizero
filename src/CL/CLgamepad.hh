@@ -21,50 +21,59 @@ struct CLgamepadstate
 	bool  tbutton[10];
 };
 
-namespace CLgamepad
+class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 {
-	CLsystem* system = CLsystem::instance();
-	int device = 0;
+	friend class CLsingle<CLgamepad>;
 	
-	#ifdef WIN32
-		struct JOYINFO gp;
-	#else //ifdef LINUX
-		struct js_event gp;	
-	#endif
+	private:
+		CLsystem* system;
+		xlong device;
+		CLgamepad();
+		~CLgamepad();
+		
+		#ifdef WIN32
+			struct JOYINFO gp;
+		#else //ifdef LINUX
+			struct js_event gp;	
+		#endif
 
-	CLgamepadstate pad = { 0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0 };
-	
-	bool init();
-	void mask();
-	void handle();
-	void exit();
-	
-	CLgamepadstate* getgamepad();
+		CLgamepadstate pad;
+
+	public:
+		void mask();
+		void handle();
+		void exit();
+		bool isavail();
+		CLgamepadstate* getstate();
 };
+
+CLgamepad::~CLgamepad() { }
 
 #ifdef WIN32
 
-bool CLgamepad::init()
+CLgamepad::CLgamepad()
 {
+	system = CLsystem::instance();
+	
 	//check if gamepad driver is installed
 	if(joyGetNumDevs() == -1)
 	{
-		CLsystem::print("No Gamepad driver found");
-		return 0;
+		system->print("No Gamepad driver found");
+		device = -1;
+		return;
 	}
 	//*
 	
 	//check if gamepad is connected
 	if(joygetPos(0,&gp)==JOYERR_UNPLUGGED)
 	{
-		CLsystem::print("No Gamepad found");
-		return 0;
+		system->print("No Gamepad found");
+		device = -1;
+		return;
 	}
 	//*
 	
 	device = 0;
-		
-	return 1;
 }
 
 void CLgamepad::mask()
@@ -101,19 +110,19 @@ void CLgamepad::exit() { }
 
 #else //ifdef LINUX
 
-bool CLgamepad::init()
+CLgamepad::CLgamepad()
 {
+	system = CLsystem::instance();
+	
 	//check if gamepad device exists and so a gamepad is connected
 	if( (device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
 		system->print("No Gamepad found");
-		return 0;
+		return;
 	}
 	//*
 	
 	fcntl(device,F_SETFL,O_NONBLOCK);
-	
-	return 1;
 }
 
 void CLgamepad::mask()
@@ -150,7 +159,9 @@ void CLgamepad::exit() { close(device); }
 
 #endif
 
-CLgamepadstate* CLgamepad::getgamepad() { return &pad; }
+bool CLgamepad::isavail() { return (device!=-1); }
+
+CLgamepadstate* CLgamepad::getstate() { return &pad; }
 
 #endif
 

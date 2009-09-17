@@ -29,7 +29,7 @@ int main()
 	{
 		turbo = win->getturbo();
 		input = win->getkey();
-		CLgamepad::handle();
+		CLgamepad::instance()->handle();
 
 		switch(turbo)
 		{
@@ -62,7 +62,7 @@ int main()
 			break;
 		}
 		
-		if(!pause) testlevel->update(input,turbo,CLgamepad::getgamepad());
+		if(!pause) testlevel->update(input,turbo,CLgamepad::instance()->getstate());
 
 		CLdoublebuffer->ultraclear(0);
 		CLzbuffer->ultraclear(zres);
