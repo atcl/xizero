@@ -7,9 +7,11 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Single_Window.H>
 #include <FL/fl_draw.H>
+#include <FL/x.H>
 
 #include "CLtypes.hh"
 #include "CLresource.hh"
+#include "CLpixmap.hh"
 
 void timeout(void*)
 {
@@ -78,7 +80,6 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w
 {
 	width = w;
 	height = h;
-	//title = t;
 	buffer = b;
 	
 	box(FL_NO_BOX);
@@ -86,8 +87,13 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w
 	
 	Fl::visual(FL_RGB);
 	Fl::add_timeout(0.02,timeout);
-
-	this->icon(CLicon);
+	
+	fl_open_display();
+	
+	uxchar* temp = xpm2ico(CLicon);
+	
+	this->icon(temp);
+	
 	this->end();
 	this->show();
 }
