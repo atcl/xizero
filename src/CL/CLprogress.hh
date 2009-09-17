@@ -139,7 +139,6 @@ void CLprogress::setprogress(xlong p)
 	if(p>end) progress = end;
 	else if(p<start) progress = start;
 	else progress = p;
-
 	pprogress = punit * progress;
 }
 
@@ -148,7 +147,6 @@ void CLprogress::addprogress(xlong a)
 	if(progress+a>end) progress = end;
 	else if(progress+a<start) progress = start;
 	else progress += a;
-
 	pprogress = punit * progress;
 }
 

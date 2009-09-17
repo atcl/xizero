@@ -31,13 +31,13 @@ class CLguibase : public virtual CLcl
 		void setfcolor(uxlong fc);
 		void setbcolor(uxlong bc);
 		void setrcolor(uxlong rc);
-		xlong getwidth();
-		xlong getheight();
-		xlong getx();
-		xlong gety();
-		uxlong getfcolor();
-		uxlong getbcolor();
-		uxlong getrcolor();
+		xlong getwidth() const;
+		xlong getheight() const;
+		xlong getx() const;
+		xlong gety() const;
+		uxlong getfcolor() const;
+		uxlong getbcolor() const;
+		uxlong getrcolor() const;
 };
 
 CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
@@ -68,75 +68,33 @@ void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxl
 
 void CLguibase::draw() { } //virtual!
 
-void CLguibase::setwidth(xlong w)
-{
-	width = w;
-}
+void CLguibase::setwidth(xlong w) { width = w; }
 
-void CLguibase::setheight(xlong h)
-{
-	height = h;
-}
+void CLguibase::setheight(xlong h) { height = h; }
 
-void CLguibase::setx(xlong x)
-{
-	posx = x;
-}
+void CLguibase::setx(xlong x) { posx = x; }
 
-void CLguibase::sety(xlong y)
-{
-	posy = y;
-}
+void CLguibase::sety(xlong y) { posy = y; }
 
-void CLguibase::setfcolor(uxlong fc)
-{
-	fcolor = fc;
-}
+void CLguibase::setfcolor(uxlong fc) { fcolor = fc; }
 
-void CLguibase::setbcolor(uxlong bc)
-{
-	bcolor = bc;
-}
+void CLguibase::setbcolor(uxlong bc) { bcolor = bc; }
 
-void CLguibase::setrcolor(uxlong rc)
-{
-	rcolor = rc;
-}
+void CLguibase::setrcolor(uxlong rc) { rcolor = rc; }
 
-xlong CLguibase::getwidth()
-{
-	return width;
-}
+xlong CLguibase::getwidth() const { return width; }
 
-xlong CLguibase::getheight()
-{
-	return height;
-}
+xlong CLguibase::getheight() const { return height; }
 
-xlong CLguibase::getx()
-{
-	return posx;
-}
+xlong CLguibase::getx() const { return posx; }
 
-xlong CLguibase::gety()
-{
-	return posy;
-}
+xlong CLguibase::gety() const { return posy; }
 
-uxlong CLguibase::getfcolor()
-{
-	return fcolor;
-}
+uxlong CLguibase::getfcolor() const { return fcolor; }
 
-uxlong CLguibase::getbcolor()
-{
-	return bcolor;
-}
+uxlong CLguibase::getbcolor() const { return bcolor; }
 
-uxlong CLguibase::getrcolor()
-{
-	return rcolor;
-}
+uxlong CLguibase::getrcolor() const { return rcolor; }
 
 #endif
 
