@@ -14,9 +14,7 @@ class CLmatrix : public virtual CLcl
 {
 	private:
 		float m[4][4];
-		
 		void multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44);
-
 	public:
 		CLmatrix(bool i=1);
 		~CLmatrix();
@@ -26,7 +24,7 @@ class CLmatrix : public virtual CLcl
 		void aspectscale(float x);
 		void superscale(float x);
 		void reflect();
-		template<class clvector>clvector transform(const clvector& t);
+		template<class clvector>clvector transform(const clvector& t) const;
 		void clear(xlong i);
 		void zero();
 		void unit();
@@ -34,9 +32,8 @@ class CLmatrix : public virtual CLcl
 		template<class clvector>void dyadic(const clvector& a,const clvector& b);
 		template<class clvector>void shadow(const clvector& l,const clvector& p);
 		void project();
-		float trace();
-		float determinate();
-
+		float trace() const;
+		float determinate() const;
 		void print() const;
 };
 
@@ -134,7 +131,7 @@ void CLmatrix::superscale(float x)
 }
 
 template<class clvector>
-clvector CLmatrix::transform(const clvector& t)
+clvector CLmatrix::transform(const clvector& t) const
 {
 	clvector r;
 	r.x = (m[0][0] * float(t.x) + m[0][1] * float(t.y) + m[0][2] * float(t.z) + m[0][3]);
@@ -251,7 +248,7 @@ void CLmatrix::dyadic(const clvector& a,const clvector& b)
 	//*
 }
 
-float CLmatrix::trace()
+float CLmatrix::trace() const 
 {
 	//sum of all main diagonal elements
 	return (m[0][0] + m[1][1] + m[2][2] + m[3][3]);

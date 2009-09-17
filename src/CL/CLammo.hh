@@ -10,15 +10,15 @@
 #include "CLgame.hh"
 #include "CLmath.hh"
 
-/* class name:
+/* class name:	CLammo
  * 
- * author:
+ * description:	This class manages all ammo fired by entities.
  * 
- * description:
+ * author:	atcl
  * 
- * notes:
+ * notes:	some issues with twin ammo fired, one is slower.
  * 
- * version:
+ * version: 0.1
  */
 
 template<int I> class CLentity; //forward declaration
@@ -165,7 +165,7 @@ void CLammomanager::display() const
 {
 	CLammo* currammo = 0;
 	
-	//draw all ammo n the ammolist
+	//draw all ammo in the ammolist
 	for(xlong i=ammolist->setfirst(); i<ammolist->getlength();i+=ammolist->setnext())
 	{
 		currammo = ammolist->getcurrentdata();

@@ -224,7 +224,7 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 	}
 	//*
 	
-	//x86 MMX assembly copy (very fast)
+	//x86 MMX assembly copy (fast)
 	else if(size>65536 && havemmx)
 	{
 		i>>=4;

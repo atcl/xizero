@@ -29,7 +29,6 @@ class CLbench : public virtual CLcl
 		void print();
 };
 
-
 CLbench::CLbench(xlong i,xchar f)
 {
 	interval = i*1000;

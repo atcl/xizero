@@ -10,19 +10,26 @@
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
 
-namespace CLtransitions
+class CLtransitions : CLsingle<CLtransitions>
 {
-	CLutils* utils = CLutils::instance();
+	friend class CLsingle<CLtransitions>;
 	
-	xchar fade_const;
-	xlong diss_const;
-	xlong circ_const;
-	
-	void circleblend(xlong x,xlong y,xlong r,xlong t);
-	void dissolve();
-	void fadetoblack();
+	private:
+		CLutils* utils;
+		xchar fade_const;
+		xlong diss_const;
+		xlong circ_const;
+		CLtransitions();
+		~CLtransitions();
+	public:
+		void circleblend(xlong x,xlong y,xlong r,xlong t);
+		void dissolve();
+		void fadetoblack();
 };
 
+CLtransitions::CLtransitions() { utils = CLutils::instance(); }
+
+CLtransitions::~CLtransitions() { }
 
 void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t)
 {

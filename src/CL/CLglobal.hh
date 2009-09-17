@@ -13,6 +13,9 @@
 
 class CLglobal : public CLsingle<CLglobal>
 {
+	private:
+		CLglobal();
+		~CLglobal();	
 	public:
 		uxlong CLscreenbytewidth;
 		uxlong CLscreenbyteheight;
@@ -30,9 +33,8 @@ class CLglobal : public CLsingle<CLglobal>
 		CLbench*  bench;
 		
 		CLfvector light;
+		CLfvector slight;
 		CLfvector plane;
-		
-		CLglobal();		
 };
 
 //variables

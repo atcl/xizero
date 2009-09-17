@@ -36,15 +36,9 @@ void CLlabel::draw()
 	//CLgfx2::drawfontstring(
 }
 
-void CLlabel::settext(const xchar* t)
-{
-	text = (xchar*)t;
-}
+void CLlabel::settext(const xchar* t) { text = (xchar*)t; }
 
-xchar* CLlabel::gettext()
-{
-	return text;
-}
+xchar* CLlabel::gettext() { return text; }
 
 #endif
 

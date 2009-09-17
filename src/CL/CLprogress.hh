@@ -16,18 +16,15 @@ class CLprogress : public CLguibase
 		float progress;
 		xlong start;
 		xlong end;
-		uxlong pcolor;
-		bool  horver;
-		
 		xlong pprogress;
 		float punit;
-		
+		uxlong pcolor;
+		bool  horver;
 	public:
 		CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc);
 		CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv);
 		CLprogress();
 		~CLprogress();
-
 		void reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc);
 		void draw();
 		void setstart(xlong s);
