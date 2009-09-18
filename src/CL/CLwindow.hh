@@ -13,13 +13,24 @@
 #include "CLresource.hh"
 #include "CLpixmap.hh"
 
+/* class name:	CLwindow
+ * 
+ * description:	The fltk interface class handles the main window
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 void timeout(void*)
 {
 	Fl::redraw();
 	Fl::repeat_timeout(0.02,timeout); //change time interval?
 }
 
-class CLwindow : public Fl_Single_Window, public CLsingle<CLwindow>
+class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<CLwindow>
 {
 	friend class CLsingle<CLwindow>;
 	
@@ -40,7 +51,7 @@ class CLwindow : public Fl_Single_Window, public CLsingle<CLwindow>
 		CLwindow();
 		~CLwindow() { };
 	public:
-		void init(xlong w,xlong h,const xchar* t,xlong* b);
+		void init(xlong w,xlong h,const xchar* t);
 		void redraw();
 		static xlong run();
 		xlong getkey();
@@ -81,14 +92,14 @@ int CLwindow::handle(int event)
 
 CLwindow::CLwindow() : Fl_Single_Window(0,0,"") { }
 
-void CLwindow::init(xlong w,xlong h,const xchar* t,xlong* b)
+void CLwindow::init(xlong w,xlong h,const xchar* t)
 {
 	this->label(t);
 	this->size(w,h);
 	
 	width = w;
 	height = h;
-	buffer = b;
+	buffer = cldoublebuffer.getbuffer();
 	
 	box(FL_NO_BOX);
 	hdelta = 4* width;

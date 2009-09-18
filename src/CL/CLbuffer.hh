@@ -11,7 +11,17 @@
 #include "CLcl.hh"
 #include "CLdetect.hh"
 
-//only one copy with defualt mode=0
+/* class name:	CLbuffer
+ * 
+ * description:	This class handles memory buffers.
+ * 
+ * author:	atcl
+ * 
+ * notes:	merge copy methods, complete assembly routines.
+ * 
+ * version: 0.1
+ */
+
 template <typename T>class CLbuffer : public virtual CLcl
 {
 	private:
@@ -23,7 +33,7 @@ template <typename T>class CLbuffer : public virtual CLcl
 		bool   havemmx;
 		bool   havesse;	
 	public:
-		CLbuffer(uxlong s);
+		CLbuffer(uxlong s,T ival=0);
 		~CLbuffer();
 		void clear(T v);
 		void fastclear(T v);
@@ -40,7 +50,7 @@ template <typename T>class CLbuffer : public virtual CLcl
 		T& operator[](uxlong i);
 };
 
-template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
+template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
 {
 	//adjust size and allocate buffer
 	size = (s+1) + (s%4); // make sure is amultiple of 16byte
@@ -52,13 +62,13 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	havemmx = 1;
 	havesse = 0; 
 	
-	xlong cpucaps = CLdetect::instance()->cpu();
+	xlong cpucaps = cldetect->cpu();
 	//if( (cpucaps & MMX) != 0 ) havemmx = 1; else havemmx = 0;
 	//if( (cpucaps & SSE) != 0 ) havesse = 1; else havesse = 0;
 	//*
 }
 
-template <typename T>CLbuffer<T>::~CLbuffer() { delete[] buffer; }
+template <typename T>CLbuffer<T>::~CLbuffer() { } //how to delete buffer?
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {

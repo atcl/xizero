@@ -13,6 +13,17 @@
 #include "CLmacros.hh"
 #include "CLsystem.hh"
 
+/* class name:	CLformat
+ * 
+ * description:	This class processes all kinds of file formats.
+ * 
+ * author:	atcl
+ * 
+ * notes:	fix loadcsv.
+ * 
+ * version: 0.1
+ */
+
 struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; } };
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;

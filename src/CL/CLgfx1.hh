@@ -12,7 +12,16 @@
 #include "CLfifo.hh"
 #include "CLmath.hh"
 
-//add clipping
+/* class name:	CLgfx1
+ * 
+ * description:	standard 2d graphics routines.
+ * 
+ * author:	atcl
+ * 
+ * notes:	add clipping and complete implementing.
+ * 
+ * version: 0.1
+ */
 
 inline bool isoff(xlong x,xlong y)
 {
@@ -81,14 +90,14 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 	//*
 	
 	//draw the eight pixels for each (1/8) section of the circle
- 	(*CLdoublebuffer)[b1+a1+x] = c;
- 	(*CLdoublebuffer)[b1-a1+x] = c;
- 	(*CLdoublebuffer)[b1+a1-x] = c;
- 	(*CLdoublebuffer)[b1-a1-x] = c;
- 	(*CLdoublebuffer)[b1+a2+y] = c;
- 	(*CLdoublebuffer)[b1-a2+y] = c;
- 	(*CLdoublebuffer)[b1+a2-y] = c;
- 	(*CLdoublebuffer)[b1-a2-y] = c;
+ 	cldoublebuffer[b1+a1+x] = c;
+ 	cldoublebuffer[b1-a1+x] = c;
+ 	cldoublebuffer[b1+a1-x] = c;
+ 	cldoublebuffer[b1-a1-x] = c;
+ 	cldoublebuffer[b1+a2+y] = c;
+ 	cldoublebuffer[b1-a2+y] = c;
+ 	cldoublebuffer[b1+a2-y] = c;
+ 	cldoublebuffer[b1-a2-y] = c;
 	//*
 }
 
@@ -100,10 +109,10 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 	//*
 
 	//draw the four pixels for each (1/4) section of the ellipse
-	(*CLdoublebuffer)[a+x+b] = c;
-	(*CLdoublebuffer)[a-x+b] = c;
-	(*CLdoublebuffer)[a-x-b] = c;
-	(*CLdoublebuffer)[a+x-b] = c;
+	cldoublebuffer[a+x+b] = c;
+	cldoublebuffer[a-x+b] = c;
+	cldoublebuffer[a-x-b] = c;
+	cldoublebuffer[a+x-b] = c;
 	//*
 }
 
@@ -116,7 +125,7 @@ uxlong CLgfx1::readpixel(xlong x,xlong y)
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)
 {
 	clip(x,y);
-	(*CLdoublebuffer)[(y*xres)+x] = c;
+	cldoublebuffer[(y*xres)+x] = c;
 }
 
 void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
@@ -128,15 +137,15 @@ void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c)
 void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2)
 {
 	if(isoff(x1,x2)||isoff(x2,y2)) return;
-	(*CLdoublebuffer)[(y1*xres)+x1] = (*CLdoublebuffer)[(y2*xres)+x2];
+	cldoublebuffer[(y1*xres)+x1] = cldoublebuffer[(y2*xres)+x2];
 }
 
 void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c)
 {
-	(*CLdoublebuffer)[(y*xres)+x] = c;
-	(*CLdoublebuffer)[(y*xres)+x+1] = c;
-	(*CLdoublebuffer)[((y+1)*xres)+x] = c;
-	(*CLdoublebuffer)[((y+1)*xres)+(x+1)] = c;
+	cldoublebuffer[(y*xres)+x] = c;
+	cldoublebuffer[(y*xres)+x+1] = c;
+	cldoublebuffer[((y+1)*xres)+x] = c;
+	cldoublebuffer[((y+1)*xres)+(x+1)] = c;
 }
 
 void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
@@ -146,19 +155,19 @@ void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m)
 	switch(m)
 	{
 		case 1: //AND
-			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] && c;
+			cldoublebuffer[(y*xres)+x] = cldoublebuffer[(y*xres)+x] && c;
 		break;
 		
 		case 2: //OR:
-			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] || c;
+			cldoublebuffer[(y*xres)+x] = cldoublebuffer[(y*xres)+x] || c;
 		break;
 		
 		case 3: //XOR:
-			(*CLdoublebuffer)[(y*xres)+x] = (*CLdoublebuffer)[(y*xres)+x] ^ c;
+			cldoublebuffer[(y*xres)+x] = cldoublebuffer[(y*xres)+x] ^ c;
 		break;
 		
 		default:
-			(*CLdoublebuffer)[(y*xres)+x] = c;
+			cldoublebuffer[(y*xres)+x] = c;
 		break;
 	}
 
@@ -182,7 +191,7 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 	for(uxlong i=a; i<=b; i++)
 	{
 		
-		(*CLdoublebuffer)[offsetbase+i] = c;
+		cldoublebuffer[offsetbase+i] = c;
 	}
 }
 
@@ -198,7 +207,7 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 
 	for(uxlong i=a; i<=b; i++)
 	{
-		(*CLdoublebuffer)[offsetbase] = c;
+		cldoublebuffer[offsetbase] = c;
 		offsetbase+=xres;
 	}
 }
@@ -248,7 +257,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	//draw loop
 	for(uxlong i=0; i<len; i++)
 	{
-		(*CLdoublebuffer)[off] = c;
+		cldoublebuffer[off] = c;
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -306,16 +315,16 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	//draw loop
 	for(uxlong i=0; i<len; i++)
 	{
-		(*CLdoublebuffer)[off] = c;
+		cldoublebuffer[off] = c;
 
-		(*CLdoublebuffer)[off-1]      = c; //adjust colors 
-		(*CLdoublebuffer)[off+1]      = c;
-		(*CLdoublebuffer)[off-xres-1] = c;
-		(*CLdoublebuffer)[off-xres]   = c;
-		(*CLdoublebuffer)[off-xres+1] = c;
-		(*CLdoublebuffer)[off+xres-1] = c;
-		(*CLdoublebuffer)[off+xres]   = c;
-		(*CLdoublebuffer)[off+xres+1] = c; //*
+		cldoublebuffer[off-1]      = c; //adjust colors 
+		cldoublebuffer[off+1]      = c;
+		cldoublebuffer[off-xres-1] = c;
+		cldoublebuffer[off-xres]   = c;
+		cldoublebuffer[off-xres+1] = c;
+		cldoublebuffer[off+xres-1] = c;
+		cldoublebuffer[off+xres]   = c;
+		cldoublebuffer[off+xres+1] = c; //*
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -501,7 +510,7 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc)
 		if( temp->x>=0 && temp->x<xres && temp->y>=0 && temp->y<yres && readpixel(temp->x,temp->y)==oc )
 		{
 			//fill the pixel with the new color
-			(*CLdoublebuffer)[((temp->y)*xres)+(temp->x)] = nc;
+			cldoublebuffer[((temp->y)*xres)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -554,7 +563,7 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc)
 		if( temp->x>=0 && temp->x<xres && temp->y>=0 && temp->y<yres && readpixel(temp->x,temp->y)!=fc )
 		{
 			//fill the pixel with the new color
-			(*CLdoublebuffer)[((temp->y)*xres)+(temp->x)] = nc;
+			cldoublebuffer[((temp->y)*xres)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -615,7 +624,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s)
 		{
 			if( (s->data[linearc] & 0xFF000000) != 0xFF)
 			{
-				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
+				cldoublebuffer[xoffset+j] = s->data[linearc];
 			}
 			linearc++;
 		}
@@ -666,7 +675,7 @@ void CLgfx1::drawscreen(sprite* s)
 		//draw loop
 		for(uxlong i=0; i<s->size; i++)
 		{
-			(*CLdoublebuffer)[i] = s->data[i];
+			cldoublebuffer[i] = s->data[i];
 		}
 		//*
 	}
@@ -712,7 +721,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti)
 		{
 			if( (s->data[linearc] & 0xFF000000) != 0xFF000000)
 			{
-				(*CLdoublebuffer)[xoffset+j] = s->data[linearc];
+				cldoublebuffer[xoffset+j] = s->data[linearc];
 			}
 			linearc++;
 		}

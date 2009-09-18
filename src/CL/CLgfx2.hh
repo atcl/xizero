@@ -10,6 +10,17 @@
 #include "CLbuffer.hh"
 #include "CLformat.hh"
 
+/* class name:	CLgfx2
+ * 
+ * description:	gui 2d graphics routines
+ * 
+ * author:	atcl
+ * 
+ * notes:	improve font handling.
+ * 
+ * version: 0.1
+ */
+
 #define teletype 0;
 #define monotype 1;
 #define linetype 2;
@@ -54,21 +65,21 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 
 	for(int i=y1; i<=y2; i++)
 	{
-		(*CLdoublebuffer)[offset1] = c2;
+		cldoublebuffer[offset1] = c2;
 		offset1++;
 		for(int j=x1+1; j<x2; j++)
 		{
-			(*CLdoublebuffer)[offset1] = c1;
+			cldoublebuffer[offset1] = c1;
 			offset1++;
 		}
-		(*CLdoublebuffer)[offset1] = c3;
+		cldoublebuffer[offset1] = c3;
 		offset1 += xres - diff;
 	}
 
 	for(int k=x1; k<x2; k++)
 	{
-		(*CLdoublebuffer)[offset2] = c2;
-		(*CLdoublebuffer)[offset2+doffset] = c3;
+		cldoublebuffer[offset2] = c2;
+		cldoublebuffer[offset2+doffset] = c3;
 		offset2++;
 	}
 }
@@ -101,8 +112,8 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxl
 	{
 		for(uxlong j=0; j<drawwidth; j++)
 		{
-			if(f->data[srcoff] == 0xFFFF0000) (*CLdoublebuffer)[curroff] = fc;
-			if(bc!=0 && f->data[srcoff] == 0xFFFFFFFF) (*CLdoublebuffer)[curroff] = bc;
+			if(f->data[srcoff] == 0xFFFF0000) cldoublebuffer[curroff] = fc;
+			if(bc!=0 && f->data[srcoff] == 0xFFFFFFFF) cldoublebuffer[curroff] = bc;
 			if(f->data[srcoff] != 0xFF000000)
 			{
 				if(i==0) rx++;

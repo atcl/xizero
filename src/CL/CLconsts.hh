@@ -4,6 +4,17 @@
 #define HH_CLCONSTS
 #pragma message "warning " __FILE__ " ! TODO: more"
 
+/* class name:	CLconsts
+ * 
+ * description:	All constants used by multiple classes
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 //basic colors
 #define CLsyscol 0x00C0C0C0
 #define CLtrans  0xFF000000

@@ -13,26 +13,29 @@
 #include "CLmatrix.hh"
 
 //prototypes:
-void CLsetup();
+CLglobal* CLsetup();
 void CLgarbage();
 //*
 
-
-void CLsetup()
+CLglobal* CLsetup()
 {
+	CLglobal* clglobal = CLglobal::getinstance(); 
+	
+	clglobal->clwindow->init(xres,yres,CLTITLE);
+	
 	//init core buffers
-	CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
-	CLstencilbuffer = new CLbuffer<xlong>(xres*yres);
-	CLzbuffer       = new CLbuffer<float>(xres*yres);
+	//~ CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
+	//~ CLstencilbuffer = new CLbuffer<xlong>(xres*yres);
+	//~ CLzbuffer       = new CLbuffer<float>(xres*yres);
 	//*
 	
 	//open window
-	win = CLwindow::instance();
-	win->init(xres,yres,CLTITLE,CLdoublebuffer->getbuffer());
+	//~ win = CLwindow::instance();
+	//~ win->init(xres,yres,CLTITLE);
 	//*
 
 	//init benchmarking
-	CLbench::instance()->init(3,COUT_FPS);
+	clglobal->clbench->init(3,COUT_FPS);
 	//*
 
 	//init matrices
@@ -43,14 +46,16 @@ void CLsetup()
 	
 	leftside = new screenside[yres];
 	rightside = new screenside[yres];
+	
+	return clglobal;
 }
 
 void CLgarbage()
 {
 	//free globals
-	delete CLdoublebuffer;
-	delete CLstencilbuffer;
-	delete CLzbuffer;
+	//~ delete CLdoublebuffer;
+	//~ delete CLstencilbuffer;
+	//~ delete CLzbuffer;
 	delete linearM;
 	delete shadowM;
 	delete leftside;

@@ -9,6 +9,17 @@
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
 
+/* class name:	CLlabel
+ * 
+ * description:	A standard gui element label
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish implementing.
+ * 
+ * version: 0.1
+ */
+
 class CLlabel : public CLguibase
 {
 	private:

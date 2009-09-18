@@ -8,6 +8,17 @@
 #include "CLsystem.hh"
 #include "CLtree.hh"
 
+/* class name:	CLxml
+ * 
+ * description:	
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 struct xmlelement
 {
 	xchar*  value;

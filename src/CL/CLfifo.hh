@@ -7,6 +7,17 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
+/* class name:	CLfifo
+ * 
+ * description:	A first-in-first-out type
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 template<class member>
 struct fifomember
 {

@@ -13,6 +13,17 @@
 #include "CLentity.hh"
 #include "CLenemy.hh"
 
+/* class name:	CLplayer
+ * 
+ * description:	The player (entity) class.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 typedef CLlist<CLenemy> CLenemylist;
 
 class CLplayer : public CLentity<2>

@@ -17,7 +17,7 @@
  * 
  * author:	atcl
  * 
- * notes:	some issues with twin ammo fired, one is slower.
+ * notes:	some issues when twin ammo fired, one being slower.
  * 
  * version: 0.1
  */

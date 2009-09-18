@@ -12,6 +12,17 @@
 #include "CLbutton.hh"
 #include "CLprogress.hh"
 
+/* class name:	CLxmlgui
+ * 
+ * description:	
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLxmlgui : public virtual CLcl
 {
 	protected:

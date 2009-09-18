@@ -9,6 +9,17 @@
 #include "CLstruct.hh"
 #include "CLmisc3d.hh"
 
+/* class name:	CLgame
+ * 
+ * description: collision,boundary and terrain detection (and transformation).
+ * 
+ * author:	atcl
+ * 
+ * notes:	fix terrain dependent transformation.
+ * 
+ * version: 0.1
+ */
+
 class CLgame : public virtual CLcl, public CLsingle<CLgame>
 {
 	friend class CLsingle<CLgame>;

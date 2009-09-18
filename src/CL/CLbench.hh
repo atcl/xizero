@@ -8,7 +8,17 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
-//rename file to CLbench.hh
+/* class name:	CLbench
+ * 
+ * description:	This class calculates fps, memory and cpu usage.
+ * 
+ * author:	atcl
+ * 
+ * notes:	memory and cpu usage need implementing.
+ * 
+ * version: 0.1
+ */
+
 class CLbench : public virtual CLcl, public CLsingle<CLbench>
 {
 	friend class CLsingle<CLbench>;

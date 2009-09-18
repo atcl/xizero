@@ -8,6 +8,17 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
+/* class name:	CLlist
+ * 
+ * description:	A double-linked-list type
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 template<class member>
 struct listmember
 {

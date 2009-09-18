@@ -14,6 +14,17 @@
 #include "CLglobal.hh"
 #include "CLpolyinc.hh"
 
+/* class name:	CLpolygon
+ * 
+ * description:	Handles four sided polygons.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLpolygon : public virtual CLcl
 {
 	private:
@@ -99,7 +110,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 
 	for(uxlong i=0; i<len; i++)
 	{
-		(*CLdoublebuffer)[off] = c;
+		cldoublebuffer[off] = c;
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -506,10 +517,10 @@ void CLpolygon::rasterize(xlong shadow)
 			case 0:
 				while(length > 0)
 				{
-					if(actz < (*CLzbuffer)[offset] || (actz==(*CLzbuffer)[offset] &&normal.z<0) )
+					if(actz < clzbuffer[offset] || (actz==clzbuffer[offset] &&normal.z<0) )
 					{
-						(*CLdoublebuffer)[offset] = shade;
-						(*CLzbuffer)[offset] = actz;
+						cldoublebuffer[offset] = shade;
+						clzbuffer[offset] = actz;
 					}
 					
 					offset++;
@@ -523,7 +534,7 @@ void CLpolygon::rasterize(xlong shadow)
 			case 1:
 				while(length > 0)
 				{
-					(*CLstencilbuffer)[offset] = scolor;
+					clstencilbuffer[offset] = scolor;
 					
 					offset++;
 					length--;
@@ -535,9 +546,9 @@ void CLpolygon::rasterize(xlong shadow)
 			case 2:
 				while(length > 0)
 				{
-					if(actz < (*CLzbuffer)[offset])
+					if(actz < clzbuffer[offset])
 					{
-						(*CLzbuffer)[offset] = actz;
+						clzbuffer[offset] = actz;
 					}
 					
 					offset++;
@@ -636,12 +647,12 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 {
 	screenside* backup_left = leftside;
 	screenside* backup_right = rightside;
-	CLfbuffer* backup_zbuffer = CLzbuffer;
+	CLfbuffer backup_zbuffer = clzbuffer;
 	xlong backup_ymax = ymax;
 
 	leftside = l;
 	rightside = r;
-	CLzbuffer = b;
+	clzbuffer = *b;
 	ymax = h-1;
 	
 	//
@@ -682,7 +693,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 
 	leftside = backup_left;
 	rightside = backup_right;
-	CLzbuffer = backup_zbuffer;
+	clzbuffer = backup_zbuffer;
 	ymax = backup_ymax;
 }
 

@@ -11,13 +11,6 @@
 #include "CLbench.hh"
 
 //variables
-
-CLlbuffer* CLdoublebuffer;
-CLlbuffer* CLstencilbuffer;
-CLfbuffer* CLzbuffer;
-
-CLwindow* win;
-
 CLfvector cllight(1,1,1);
 CLfvector clplane(0,0.1,1);
 CLfvector clslight(0,0.4,1.1);

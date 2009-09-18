@@ -9,6 +9,17 @@
 #include "CLsystem.hh"
 #include "CLsingle.hh"
 
+/* class name:	CLdetect
+ * 
+ * description:	This class determines the system hardware capabilities.
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish implementing.
+ * 
+ * version: 0.1
+ */
+
 //CPUID flags
 #define MMXFLAG 0b00000000100000000000000000000000
 #define SSEFLAG 0b00000010000000000000000000000000

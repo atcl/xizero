@@ -9,6 +9,17 @@
 #include "CLcl.hh"
 #include "CLsingle.hh"
 
+/* class name:	CLutils
+ * 
+ * description:	A rainbow of useful routines
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 #define SEED 22695477
 
 class CLutils : public virtual CLcl, public CLsingle<CLutils>

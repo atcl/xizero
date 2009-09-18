@@ -8,6 +8,17 @@
 #include "CLcl.hh"
 #include "CLguibase.hh"
 
+/* class name:	CLprogress
+ * 
+ * description:	A standard gui element progress bar
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLprogress : public CLguibase
 {
 	private:

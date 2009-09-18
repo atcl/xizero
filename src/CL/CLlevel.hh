@@ -19,6 +19,17 @@
 #include "CLmacros.hh"
 #include "CLgamepad.hh"
 
+/* class name:	CLlevel
+ * 
+ * description:	This class manages the complete game inside a level
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 typedef CLlist<CLenemy> CLenemylist;
 
 class CLlevel : public virtual CLcl
@@ -418,7 +429,7 @@ void CLlevel::display()
 		currentenemy = enemies->getcurrentdata();
 		currentenemy->display(1);
 	}
-	CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+	clstencilbuffer.blendcopy(cldoublebuffer.getbuffer(),4);
 	//*
 
 	//display player:

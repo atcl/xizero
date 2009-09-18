@@ -10,6 +10,17 @@
 #include "CLvector.hh"
 #include "CLglobal.hh"
 
+/* class name:	CLmisc3d
+ * 
+ * description:	Miscellaneous 3d routines
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 {
 	friend class CLsingle<CLmisc3d>;
@@ -71,7 +82,7 @@ void CLmisc3d::draw3dpixel(clvector& p,uxlong c)
 		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
 		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
 
-		(*CLdoublebuffer)[(ny*xres)+nx] = c;
+		cldoublebuffer[(ny*xres)+nx] = c;
 	}
 	//*
 }
@@ -86,8 +97,8 @@ void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa)
 		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
 		xlong ox = xlong( ( 80 * q.x) / q.z) + (xres>>1);
 		xlong oy = xlong( (-95 * q.y) / q.z) + (yres>>1);
-		if(aa) CLgfx1::drawantiline(nx,ny,ox,oy,c);
-		else   CLgfx1::drawanyline(nx,ny,ox,oy,c);
+		if(aa) clgfx1->drawantiline(nx,ny,ox,oy,c);
+		else   clgfx1->drawanyline(nx,ny,ox,oy,c);
 	}
 	//*
 }
@@ -101,8 +112,8 @@ void CLmisc3d::drawlight(clvector& p,xlong i,uxlong c)
 void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 {
 	xlong z = 0;
-	
-	if(zb==0) zb = CLzbuffer;
+
+	if(zb==0) zb = &clzbuffer;
 
 	xlong ii = 0;
 	xlong tt = 0;
@@ -113,7 +124,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 		{
 			tt = ii + j;
 			z = xlong((*zb)[tt+srcdis])<<2 ;
-			(*CLdoublebuffer)[tt] = z;
+			cldoublebuffer[tt] = z;
 		}
 		
 		ii +=xres;

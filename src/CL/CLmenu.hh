@@ -9,6 +9,17 @@
 #include "CLbuffer.hh"
 #include "CLgfx2.hh"
 
+/* class name:	CLmenu
+ * 
+ * description:	Ingame menu bar
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLmenu : public virtual CLcl
 {
 	private:

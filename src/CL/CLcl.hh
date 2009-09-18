@@ -11,8 +11,16 @@
 #include "CLversion.hh"
 #include "CLglobals.hh"
 
-template<class T>
-T* CLinit(T* singleton);
+/* class name:	CLcl
+ * 
+ * description:	The base class of all other classes
+ * 
+ * author:	atcl
+ * 
+ * notes:	set derived type name in name.
+ * 
+ * version: 0.1
+ */
 
 class CLutils;
 
@@ -35,8 +43,6 @@ xlong CLcl::id = 0;
 
 CLcl::CLcl()
 {
-	//utils2 = CLinit(utils2);
-	//~ type_info t = typeid(T);
 	name = typeid(*this).name();
 	id++;
 }

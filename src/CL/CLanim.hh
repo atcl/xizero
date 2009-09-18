@@ -10,6 +10,17 @@
 #include "CLformat.hh"
 #include "CLsystem.hh"
 
+/* class name:	CLanim
+ * 
+ * description:	This class handles 3d animations.
+ * 
+ * author:	atcl
+ * 
+ * notes:	test.
+ * 
+ * version: 0.1
+ */
+
 struct CLframe
 {
 	float duration;
@@ -274,9 +285,9 @@ xlong CLanim::run()
 	//in example intro animations
 	
 	//clear buffers
-	CLdoublebuffer->clear(0);
-	CLzbuffer->clear(zres);
-	CLstencilbuffer->clear(0);
+	cldoublebuffer.clear(0);
+	clzbuffer.clear(zres);
+	clstencilbuffer.clear(0);
 	//*
 	
 	//update animation

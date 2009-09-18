@@ -8,6 +8,17 @@
 #include "CLmath.hh"
 #include "CLsystem.hh"
 
+/* class name:	CLvector
+ * 
+ * description:	A comprehensive vector class 
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 //curios base class
 template<typename T,class clvector>
 struct CLvectorbase

@@ -10,10 +10,20 @@
 #include "CLvector.hh"
 #include "CLmath.hh"
 
+/* class name:	CLmatrix
+ * 
+ * description:	A 4x4 matrix for 3d transformations
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish projection.
+ * 
+ * version: 0.1
+ */
+
 class CLmatrix : public virtual CLcl
 {
 	private:
-		CLmath* math;
 		float m[4][4];
 		void multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44);
 	public:
@@ -70,7 +80,6 @@ void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,fl
 
 CLmatrix::CLmatrix(bool i)
 {
-	math = CLmath::instance();
 	if(i==false) clear(0);
 	if(i==true) unit();
 }
@@ -81,22 +90,22 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z)
 {
 	if(x!=0) 
 	{
-		float sinx = math->sin(x);
-		float cosx = math->cos(x);
+		float sinx = clmath->sin(x);
+		float cosx = clmath->cos(x);
 		multiplicate(1,0,0,0,0,cosx,-sinx,0,0,sinx,cosx,0,0,0,0,1);
 	}	
 
 	if(y!=0)
 	{
-		float siny = math->sin(y);
-		float cosy = math->cos(y);
+		float siny = clmath->sin(y);
+		float cosy = clmath->cos(y);
 		multiplicate(cosy,0,siny,0,0,1,0,0,-siny,0,cosy,0,0,0,0,1);
 	}
 
 	if(z!=0)
 	{
-		float sinz = math->sin(z);
-		float cosz = math->cos(z);
+		float sinz = clmath->sin(z);
+		float cosz = clmath->cos(z);
 		multiplicate(cosz,-sinz,0,0,sinz,cosz,0,0,0,0,1,0,0,0,0,1);
 	}
 }

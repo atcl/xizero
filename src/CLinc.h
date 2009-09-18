@@ -99,10 +99,6 @@
 #include "CL/CLwindow.hh"
 //*
 
-//singleton initializer
-#include "CL/CLinit.hh"
-//*
-
 //global maker
 #include "CL/CLglobals.cc"
 //*

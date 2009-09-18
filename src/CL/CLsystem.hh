@@ -17,6 +17,17 @@
 #include "CLresource.hh"
 #include "CLutils.hh"
 
+/* class name:	CLsystem
+ * 
+ * description:	Takes care of all kinds of os dependent functionality
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 {
 	friend class CLsingle<CLsystem>;

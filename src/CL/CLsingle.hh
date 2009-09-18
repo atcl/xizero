@@ -6,6 +6,17 @@
 
 #include "CLtypes.hh"
 
+/* class name:	CLsingle
+ * 
+ * description:	Singleton base class
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 template<class T>
 class CLsingle
 {
@@ -13,20 +24,14 @@ class CLsingle
 		static T* single;
 		CLsingle(const CLsingle&);
 	protected:
-		 virtual ~CLsingle();
-		 CLsingle();
+		 virtual ~CLsingle() { };
+		 CLsingle() { };
 	public:
    		static T* instance();
 };
 
 template<class T>
 T* CLsingle<T>::single = 0;
-
-template<class T>
-CLsingle<T>::~CLsingle() { }
-
-template<class T>
-CLsingle<T>::CLsingle() { }
 
 template<class T>
 T* CLsingle<T>::instance()

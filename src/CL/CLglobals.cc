@@ -53,6 +53,17 @@ CLgfx1*   CLglobal::clgfx1   = CLgfx1::instance();
 CLgfx2*   CLglobal::clgfx2   = CLgfx2::instance();
 CLtransitions* CLglobal::cltransitions = CLtransitions::instance();
 CLsound*  CLglobal::clsound  = CLsound::instance();
+CLsprites* CLglobal::clsprites = CLsprites::instance();
+CLintro*  CLglobal::clintro  = CLintro::instance();
 
+CLglobal* CLglobal::global = 0;
+
+CLglobal* CLglobal::getinstance()
+{
+	//check if existing, if not create
+	if(global==0) global = new CLglobal();
+	return global;
+	//*
+}
 
 #endif

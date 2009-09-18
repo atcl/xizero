@@ -7,6 +7,17 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
+/* class name:	CLtexmap
+ * 
+ * description:	handles, maps and draws textures
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish implementing.
+ * 
+ * version: 0.1
+ */
+
 namespace CLtexmap
 {
 		linear();

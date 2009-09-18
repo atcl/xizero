@@ -18,6 +18,17 @@
 #include "CLmisc3d.hh"
 #include "CLcl.hh"
 
+/* class name:	CLentity
+ * 
+ * description:	base class for enemies and player.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 template<int I>
 class CLentity : public virtual CLcl
 {

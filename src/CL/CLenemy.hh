@@ -12,6 +12,17 @@
 #include "CLammo.hh"
 #include "CLentity.hh"
 
+/* class name:	CLenemy
+ * 
+ * description:	The enemy (entity) class.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 #define ENEMYZLEVEL 55
 
 class CLenemy : public CLentity<1>

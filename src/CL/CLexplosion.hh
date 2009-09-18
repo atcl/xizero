@@ -11,6 +11,17 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
+/* class name:	CLexplosion
+ * 
+ * description:	This class manages explosions of 3d objects.
+ * 
+ * author:	atcl
+ * 
+ * notes:	.
+ * 
+ * version: 0.1
+ */
+
 //combine "translate along normals" + "dyadic product"
 //use dyadic product to crumple object
 //reorder cyclic / or reset

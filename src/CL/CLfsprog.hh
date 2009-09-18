@@ -7,6 +7,17 @@
 #include "CLtypes.hh"
 #include "CLglobal.hh"
 
+/* class name:	CLfsprogress
+ * 
+ * description:	A full screen half transparent progress bar.
+ * 
+ * author:	atcl
+ * 
+ * notes:	test more.
+ * 
+ * version: 0.1
+ */
+
 class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 {
 	friend class CLsingle<CLfsprogress>;
@@ -39,7 +50,7 @@ void CLfsprogress::draw()
 		{
 			for(uxlong j=0; j<rprogress; j++,offset++)
 			{
-				(*CLdoublebuffer)[offset] = (*CLdoublebuffer)[offset] & pcolor;
+				cldoublebuffer[offset] = cldoublebuffer[offset] & pcolor;
 			}
 			offset += diff;
 		}

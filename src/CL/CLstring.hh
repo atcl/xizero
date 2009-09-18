@@ -7,6 +7,17 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
+/* class name:	CLstring
+ * 
+ * description:	Handles (c-)strings
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish implementing.
+ * 
+ * version: 0.1
+ */
+
 class CLstring : public virtual CLcl
 {
 	private:

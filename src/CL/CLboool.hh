@@ -8,6 +8,17 @@
 #include "CLmath.hh"
 #include "CLmacros.hh"
 
+/* class name:	CLboool
+ * 
+ * description:	A tri-state bool type
+ * 
+ * author:	atcl
+ * 
+ * notes:	test.
+ * 
+ * version: 0.1
+ */
+
 #define CLtrue   1
 #define CLfalse -1
 #define CLnull   0

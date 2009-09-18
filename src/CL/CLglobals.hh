@@ -5,6 +5,18 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
+#include "CLsingle.hh"
+
+/* class name:	CLglobal
+ * 
+ * description:	base class containing all singletons and global variables.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
 
 template<typename t> class CLbuffer; typedef CLbuffer<float> CLfbuffer; typedef CLbuffer<xlong> CLlbuffer;
 template<typename t> class CLvector; typedef CLvector<float> CLfvector; typedef CLvector<xlong> CLlvector;
@@ -25,14 +37,17 @@ class CLgfx1;
 class CLgfx2;
 class CLtransitions;
 class CLsound;
+class CLintro;
+class CLsprites;
 
 class CLglobal
 {
 	private:
-		
+		static CLglobal* global;
 	protected:
 		CLglobal() { };
 		~CLglobal() { };
+	public:
 		static uxlong screenbytewidth;
 		static uxlong screenbyteheight;
 		static uxlong screenbytedepth;
@@ -65,6 +80,10 @@ class CLglobal
 		static CLgfx2*   clgfx2;
 		static CLtransitions* cltransitions;
 		static CLsound*  clsound;
+		static CLsprites* clsprites;
+		static CLintro*  clintro;
+		
+		static CLglobal* getinstance();
 }; 
 
 #endif

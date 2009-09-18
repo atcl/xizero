@@ -10,6 +10,17 @@
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
 
+/* class name:	CLtranstions
+ * 
+ * description:	some screen transitions
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish implementing.
+ * 
+ * version: 0.1
+ */
+
 class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
 {
 	friend class CLsingle<CLtransitions>;
@@ -34,7 +45,7 @@ void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t)
 {
 	bool secondtime = 0;
 	
-	while(win->run())
+	while(clwindow->run())
 	{
 		if(secondtime) { clsystem->wait(t); break; }
 		clgfx1->drawcircle(x,y,r,0x00FFFFFF);
@@ -50,7 +61,7 @@ void CLtransitions::dissolve()
 	uxlong c = 0;
 	uxlong i = 0;
 	
-	while(win->run() && i<200)
+	while(clwindow->run() && i<200)
 	{
 		for(uxlong j=0; j<1000; j++)
 		{
@@ -69,16 +80,16 @@ void CLtransitions::fadetoblack()
 	uxchar comp[4] = { 0,0,0,0 };
 	uxlong i = 0;
 	
-	while(win->run() && i<256)
+	while(clwindow->run() && i<256)
 	{		
 		for(uxlong j=0; j<scrs; j++)
 		{
-			clutils->long2char((*CLdoublebuffer)[j],comp[0],comp[1],comp[2],comp[3]);
+			clutils->long2char(cldoublebuffer[j],comp[0],comp[1],comp[2],comp[3]);
 			if(comp[0] > 0) comp[0]--;
 			if(comp[1] > 0) comp[1]--;
 			if(comp[2] > 0) comp[2]--;
 			if(comp[3] > 0) comp[3]--;
-			(*CLdoublebuffer)[j] = clutils->chars2long(comp[0],comp[1],comp[2],comp[3]);
+			cldoublebuffer[j] = clutils->chars2long(comp[0],comp[1],comp[2],comp[3]);
 		}
 		i++;
 		clsystem->wait(5);

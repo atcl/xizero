@@ -11,6 +11,17 @@
 #include "CLmacros.hh"
 #include "CLsingle.hh"
 
+/* class name:	CLmath
+ * 
+ * description:	A math library with assembly support
+ * 
+ * author:	atcl
+ * 
+ * notes:	implement own arccos,arcsin
+ * 
+ * version: 0.1
+ */
+
 //BIT flags
 #define SIGNBIT "$0b10000000000000000000000000000000"
 
@@ -29,7 +40,7 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		xlong* arcsinarray;
 		xlong* arccosarray;
 		CLmath();
-		~CLmath() { };
+		~CLmath();
 	public:
 		template<typename T> T sign(T x);
 		template<typename T> T heaviside(T x);
@@ -81,6 +92,12 @@ CLmath::CLmath()
 		//~ arccosarray[i] = 0;
 	//~ }
 	//*
+}
+
+CLmath::~CLmath() 
+{
+	delete[] sinarray;
+	delete[] cosarray;	
 }
 
 template<typename T>

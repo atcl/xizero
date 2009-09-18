@@ -15,6 +15,17 @@
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 
+/* class name:	CLgamepad
+ * 
+ * description:	This class handles joysticks and gamepads.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 {
 	friend class CLsingle<CLgamepad>;

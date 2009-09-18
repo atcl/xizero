@@ -16,6 +16,17 @@
 #include "CLpolygon.hh"
 #include "CLmatrix.hh"
 
+/* class name:	CLobject
+ * 
+ * description:	Loads and handles 3d objects
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 struct CLbox
 {
 	CLfvector c[8]; //c[0-3] bottom, c[4-7] top

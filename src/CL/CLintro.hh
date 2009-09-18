@@ -12,17 +12,29 @@
 #include "CLmatrix.hh"
 #include "CLformat.hh"
 
-//to singleton?
-namespace CLintro
+/* class name:	CLintro
+ * 
+ * description:	Holds atcrosslevel and izero intro animations
+ * 
+ * author:	atcl
+ * 
+ * notes:	rewrite with CLanim.
+ * 
+ * version: 0.1
+ */
+
+class CLintro : public virtual CLcl, public CLsingle<CLintro> 
 {
-	CLmatrix* linear;
-	CLsystem* system = CLsystem::instance();
-	CLformat* format = CLformat::instance();
-	CLmath* math = CLmath::instance();
+	friend class CLsingle<CLintro>;
 	
-	void atcrosslevel();
-	void xizero();
-}
+	private:
+		CLmatrix* linear;
+		CLintro() { };
+		~CLintro() { };
+	public:
+		void atcrosslevel();
+		void xizero();
+};
 
 void CLintro::atcrosslevel()
 {
@@ -31,13 +43,13 @@ void CLintro::atcrosslevel()
 	//*
 	
 	//load atcrosslevel model
-	CLfile *cf = system->getfile("../dat/other/atcl.y3d");
+	CLfile *cf = clsystem->getfile("../dat/other/atcl.y3d");
 	CLobject* atcl = new CLobject(cf,0);
 	//*
 	
 	//load animation file
-	CLfile* aniraw = system->getfile("../dat/other/atcl.ani");
-	xlong*  anicsv = format->loadcsv(aniraw,',');
+	CLfile* aniraw = clsystem->getfile("../dat/other/atcl.ani");
+	xlong*  anicsv = clformat->loadcsv(aniraw,',');
 	//*
 
 	//set animation attributes
@@ -72,7 +84,7 @@ void CLintro::atcrosslevel()
 			anim_div_temp = 1/anim_step_dur;
 			
 			//make transformation unit steps
-			anim_start_time = system->getmilliseconds();
+			anim_start_time = clsystem->getmilliseconds();
 			anim_last_time = anim_start_time;
 			anim_stop_time = anim_start_time + anim_step_dur;
 			anim_pointer++;
@@ -90,16 +102,16 @@ void CLintro::atcrosslevel()
 			anim_units[12] = anim_div_temp * float(anicsv[anim_pointer]); anim_pointer++;
 			//*
 			
-			while(win->run())
+			while(clwindow->run())
 			{	
 				//clear buffers
-				CLdoublebuffer->clear(0);
-				CLzbuffer->clear(zres);
-				CLstencilbuffer->clear(0);
+				cldoublebuffer.clear(0);
+				clzbuffer.clear(zres);
+				clstencilbuffer.clear(0);
 				//*
 
 				//determine time
-				anim_curr_time = system->getmilliseconds();
+				anim_curr_time = clsystem->getmilliseconds();
 				anim_time_diff = float(anim_curr_time - anim_last_time);
 				if(anim_curr_time >= anim_stop_time) breaker = 1;
 				//*
@@ -127,7 +139,7 @@ void CLintro::atcrosslevel()
 				
 				//translate
 				if(!( anim_curr_trans[4]==0 && anim_curr_trans[5]==0 && anim_curr_trans[6]==0 ))
-					linear->translate(anim_curr_trans[4],math->round(anim_curr_trans[5]),anim_curr_trans[6]);
+					linear->translate(anim_curr_trans[4],clmath->round(anim_curr_trans[5]),anim_curr_trans[6]);
 				//*
 				
 				//rotate around x
@@ -135,9 +147,9 @@ void CLintro::atcrosslevel()
 				{
 					if( anim_curr_trans[7] < 0.5 && anim_curr_trans[7] != 0) anim_commulative[7] += anim_curr_trans[7];
 					
-					if( math->round(anim_commulative[7]) != 0)
+					if( clmath->round(anim_commulative[7]) != 0)
 					{
-						linear->rotate(math->round(anim_commulative[7]),0,0);
+						linear->rotate(clmath->round(anim_commulative[7]),0,0);
 						anim_commulative[7] = 0;
 					}
 				}
@@ -148,9 +160,9 @@ void CLintro::atcrosslevel()
 				{
 					if( anim_curr_trans[8] < 0.5 && anim_curr_trans[8] != 0) anim_commulative[8] += anim_curr_trans[8];
 					
-					if( math->round(anim_commulative[8]) != 0)
+					if( clmath->round(anim_commulative[8]) != 0)
 					{
-						linear->rotate(0,math->round(anim_commulative[8]),0);
+						linear->rotate(0,clmath->round(anim_commulative[8]),0);
 						anim_commulative[8] = 0;
 					}
 				}
@@ -161,9 +173,9 @@ void CLintro::atcrosslevel()
 				{
 					if( anim_curr_trans[9] < 0.5 && anim_curr_trans[9] != 0) anim_commulative[9] += anim_curr_trans[9];
 					
-					if( math->round(anim_commulative[9]) != 0)
+					if( clmath->round(anim_commulative[9]) != 0)
 					{
-						linear->rotate(0,0,math->round(anim_commulative[9]));
+						linear->rotate(0,0,clmath->round(anim_commulative[9]));
 						anim_commulative[9] = 0;
 					}
 				}
@@ -193,9 +205,9 @@ void CLintro::atcrosslevel()
 		else
 		{
 			//clear buffers
-			CLdoublebuffer->clear(0);
-			CLzbuffer->clear(zres);
-			CLstencilbuffer->clear(0);
+			cldoublebuffer.clear(0);
+			clzbuffer.clear(zres);
+			clstencilbuffer.clear(0);
 			//*
 			
 			//update object

@@ -8,6 +8,17 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 
+/* class name:	CLtree
+ * 
+ * description:	A tree type
+ * 
+ * author:	atcl
+ * 
+ * notes:	test.
+ * 
+ * version: 0.1
+ */
+
 template<class member>
 struct node
 {
@@ -154,8 +165,8 @@ bool CLtree<member>::isroot()
 template<class member>
 void CLtree<member>::print()
 {
-	if(current->name!=0) CLsystem::print(current->name);
-	else CLsystem::print(0);
+	if(current->name!=0) clsystem->print(current->name);
+	else clsystem->print(0);
 	for(uxlong i=0; i<current->childcount; i++)
 	{
 		current = current->child[i];

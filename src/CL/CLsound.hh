@@ -19,6 +19,17 @@
 #include "CLcl.hh"
 #include "CLsystem.hh"
 
+/* class name:	CLsound
+ * 
+ * description:	Plays wave files
+ * 
+ * author:	atcl
+ * 
+ * notes:	make more flexible.
+ * 
+ * version: 0.1
+ */
+
 struct CLwav
 {
 	CLfile* file;

@@ -6,6 +6,17 @@
 
 #include "CLtypes.hh"
 
+/* class name:	xfixed
+ * 
+ * description:	fixed point type
+ * 
+ * author:	atcl
+ * 
+ * notes:	test.
+ * 
+ * version: 0.1
+ */
+
 //numerator and fraction container
 struct xshush
 {

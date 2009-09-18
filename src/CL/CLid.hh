@@ -7,6 +7,17 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 
+/* class name:	CLid
+ * 
+ * description:	This class checks ids and crcs.
+ * 
+ * author:	atcl
+ * 
+ * notes:	test.
+ * 
+ * version: 0.1
+ */
+
 //test cases:
 //string: atcrosslevel ; crc: 1734979481
 //string: xizero ; crc: 1208686013

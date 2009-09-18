@@ -9,6 +9,17 @@
 #include "CLgfx1.hh"
 #include "CLgfx2.hh"
 
+/* class name:	CLguibase
+ * 
+ * description:	base class for all gui elements.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLguibase : public virtual CLcl
 {
 	protected:

@@ -22,17 +22,17 @@ int main(int argc, char** argv)
 	}
 
 	//init sequence
-	CLsetup();
-	//***
+	CLglobal* clglobal = CLsetup();
+	//*
 
 	//test section:
-		CLdoublebuffer->clear(0);
+		clglobal->cldoublebuffer.clear(0);
 	//
 
 		//test tga loading:
 			
-			CLfile* fonttga = CLsystem::instance()->getfile("../dat/other/CLteletype.fnt");
-			CLfont* font = CLformat::instance()->loadfont(fonttga);
+			CLfile* fonttga =clglobal->clsystem->getfile("../dat/other/CLteletype.fnt");
+			CLfont* font = clglobal->clformat->loadfont(fonttga);
 
 		//test tree:
 			CLtree<xlong>* testtree = new CLtree<xlong>();
@@ -51,20 +51,20 @@ int main(int argc, char** argv)
 	//*
 	
 	//audio test:
-	CLsound::instance()->play("../../toxic.wav",1);
+	clglobal->clsound->play("../../toxic.wav",1);
 	//*
 
 	CLfile* cube;
 	
 	if(argfileindex!=-1)
 	{
-		CLfile* arch = CLsystem::instance()->getfile(argfile.c_str());
-		arfile* arar = CLformat::instance()->loadar(arch);
+		CLfile* arch = clglobal->clsystem->getfile(argfile.c_str());
+		arfile* arar = clglobal->clformat->loadar(arch);
 		cube = arar->members[argfileindex];
 	}
 	else
 	{
-		CLfile* cubef = CLsystem::instance()->getfile(argfile.c_str());
+		CLfile* cubef = clglobal->clsystem->getfile(argfile.c_str());
 		cube = cubef;
 	}
 
@@ -79,9 +79,9 @@ int main(int argc, char** argv)
 	short ac = 0;
 	bool exp = 0;
 
-	while(win->run())
+	while(clglobal->clwindow->run())
 	{
-		switch(win->getturbo())
+		switch(clglobal->clwindow->getturbo())
 		{
 			case 0:
 			break;
@@ -211,23 +211,23 @@ int main(int argc, char** argv)
 				else ac = 0;
 			break;
 			case ' ':
-				CLsound::instance()->stop();
+				clglobal->clsound->stop();
 			break;
 			case 'r':
-				CLsound::instance()->play("../../cannon.wav",0);
+				clglobal->clsound->play("../../cannon.wav",0);
 			break;
 			case 'k':
-				CLintro::atcrosslevel();
+				clglobal->clintro->atcrosslevel();
 			break;
 			
 			//System:
 			case '0':
-				xlong rval = CLsystem::instance()->msgbox("bye");
-				CLsystem::instance()->exit(rval,0,"user","exit");
+				xlong rval = clglobal->clsystem->msgbox("bye");
+				clglobal->clsystem->exit(rval,0,"user","exit");
 			break;
 		}
 		
-		switch(win->getkey())
+		switch(clglobal->clwindow->getkey())
 		{
 			
 		}
@@ -238,9 +238,9 @@ int main(int argc, char** argv)
 		//3. blend stencil to double
 		//4. all shadow casting objects
 
-		CLdoublebuffer->fastclear(0);
-		CLzbuffer->fastclear(zres-1);
-		CLstencilbuffer->fastclear(0);
+		clglobal->cldoublebuffer.fastclear(0);
+		clglobal->clzbuffer.fastclear(zres-1);
+		clglobal->clstencilbuffer.fastclear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
 		//clgfx1->putpixel(xlong x,xlong y,uxlong c,xlong m);
@@ -248,22 +248,22 @@ int main(int argc, char** argv)
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		
-		CLgfx2::instance()->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF,0x00FF0000);
-		CLgfx2::instance()->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,50,"Use x,y for aspect-scaling",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,90,"Use + for reseting",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,110,"Use # for exploding",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,130,"Use ^ for toggling between shading",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,150,"Use - for toggling between shadowing",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,170,"Use . and  , to translate along normals",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
-		CLgfx2::instance()->drawfontstring(100,210,"Use 0 to exit",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF,0x00FF0000);
+		clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,50,"Use x,y for aspect-scaling",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,90,"Use + for reseting",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,110,"Use # for exploding",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,130,"Use ^ for toggling between shading",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,150,"Use - for toggling between shadowing",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,170,"Use . and  , to translate along normals",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",font,0x00FFFFFF);
 
 		if(shadows==1)
 		{
 			cubus->display(p,CENTER + SHADOW);
-			CLstencilbuffer->blendcopy(CLdoublebuffer->getbuffer(),4);
+			clglobal->clstencilbuffer.blendcopy(clglobal->cldoublebuffer.getbuffer(),4);
 		}
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + FLAT + DEBUG + ac);
@@ -271,7 +271,7 @@ int main(int argc, char** argv)
 
 		linearM->unit();
 
-		CLbench::instance()->inc();
+		clglobal->clbench->inc();
 	}
 
 	//exit sequence

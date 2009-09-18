@@ -9,10 +9,10 @@
 int main()
 {
 	//init sequence
-	CLsetup();
+	CLglobal* clglobal = CLsetup();
 
 	CLlevel* testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemy/enemies.a","../dat/player/player.a","../dat/level/level0.a");
-	CLfloor::instance()->init(100,670,0x0000b0b0,1);
+	clglobal->clfloor->init(100,670,0x0000b0b0,1);
 
 	xchar input = 0;
 	xchar turbo = 0;
@@ -21,20 +21,20 @@ int main()
 	bool running  = 1;
 	bool pause = 0;
 	
-	CLfsprogress::instance()->set(20);
+	//CLfsprogress::instance()->set(20);
 	
-	while(running && win->run()) 
+	while(running && clglobal->clwindow->run()) 
 	{
-		turbo = win->getturbo();
-		input = win->getkey();
-		CLgamepad::instance()->handle();
+		turbo = clglobal->clwindow->getturbo();
+		input = clglobal->clwindow->getkey();
+		clglobal->clgamepad->handle();
 
 		switch(turbo)
 		{
 			case '0':
 				running = 0;
 				delete testlevel;
-				CLsystem::instance()->exit(0,0,__func__,"xizero says: bye");
+				clglobal->clsystem->exit(0,0,__func__,"xizero says: bye");
 			break;
 			
 			case '1':
@@ -60,38 +60,38 @@ int main()
 			break;
 		}
 		
-		if(!pause) testlevel->update(input,turbo,CLgamepad::instance()->getstate());
+		if(!pause) testlevel->update(input,turbo,clglobal->clgamepad->getstate());
 
-		CLdoublebuffer->ultraclear(0);
-		CLzbuffer->ultraclear(zres);
-		CLstencilbuffer->ultraclear(0);
+		clglobal->cldoublebuffer.ultraclear(0);
+		clglobal->clzbuffer.clear(zres);
+		clglobal->clstencilbuffer.ultraclear(0);
 
 		switch(mode)
 		{
 			case 1: 
-				CLfloor::instance()->draw();
+				clglobal->clfloor->draw();
 				testlevel->display();
 				break;
 
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
-				CLmisc3d::instance()->drawzbuffer(testlevel->getlandscape(),dis);
+				clglobal->clmisc3d->drawzbuffer(testlevel->getlandscape(),dis);
 				testlevel->getplayer()->showbox();
 				break;
 
 			case 3:
-				CLfloor::instance()->draw();
+				clglobal->clfloor->draw();
 				testlevel->display();
-				CLmisc3d::instance()->drawzbuffer();
+				clglobal->clmisc3d->drawzbuffer();
 				break;
 		}
 		
-		CLbench::instance()->inc();		
+		clglobal->clbench->inc();		
 	}
 
 	//exit sequence
 	delete testlevel;
-	CLsound::instance()->exit();
+	clglobal->clsound->exit();
 	return 0;
 	//*
 }

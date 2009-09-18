@@ -9,6 +9,17 @@
 #include "CLglobal.hh"
 #include "CLmath.hh"
 
+/* class name:	CLfloor
+ * 
+ * description:	This class handles the level floor.
+ * 
+ * author:	atcl
+ * 
+ * notes:	make faster.
+ * 
+ * version: 0.1
+ */
+
 class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 {
 	friend class CLsingle<CLfloor>;
@@ -74,8 +85,8 @@ void CLfloor::draw()
 	{
 		for(j=runningfloorxstart; j<runningfloorxend; j++)
 		{
-			(*CLdoublebuffer)[j] = shade;
-			(*CLzbuffer)[j] = zlevel;
+			cldoublebuffer[j] = shade;
+			clzbuffer[j] = zlevel;
 		}
 		runningfloorxstart += xres;
 		runningfloorxend += xres;

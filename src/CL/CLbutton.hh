@@ -10,6 +10,17 @@
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
 
+/* class name:	CLbutton
+ * 
+ * description:	A standard gui element button
+ * 
+ * author:	atcl
+ * 
+ * notes:	finish implementing.
+ * 
+ * version: 0.1
+ */
+
 class CLbutton : public CLguibase
 {
 	private:
