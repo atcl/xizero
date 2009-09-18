@@ -14,6 +14,7 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 	friend class CLsingle<CLfloor>;
 	
 	private:
+		CLmath* math;
 		uxlong shade;
 		xlong  zlevel;
 		uxlong xstart;
@@ -26,7 +27,7 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 		void draw();
 };
 
-CLfloor::CLfloor() { zlevel = zres; xstart = 0; xend = xres-1; width = xres; shade = 0; }
+CLfloor::CLfloor() { math = CLmath::instance(); zlevel = zres; xstart = 0; xend = xres-1; width = xres; shade = 0; }
 
 CLfloor::~CLfloor() { }
 
@@ -47,7 +48,7 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 	{
 		//shade floor
 		doubleword argb = { 0 };
-		float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
+		float t = math->absolute((clplane * cllight) / ( !clplane * !cllight ));
 		//if(t > 1) t = 1;
 		//if(t < 0.2) s = nolight;
 		uxchar zlevellighting = 128 - (z * (128/100));

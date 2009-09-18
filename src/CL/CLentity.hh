@@ -27,6 +27,7 @@ class CLentity : public virtual CLcl
 		CLutils* utils;
 		CLgame* game;
 		CLmisc3d* misc3d;
+		CLmath* math;
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -113,6 +114,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	utils = CLutils::instance();
 	game = CLgame::instance();
 	misc3d = CLmisc3d::instance();
+	math = CLmath::instance();
 	//*
 	
 	//create transformation matrix
@@ -217,6 +219,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	utils = CLutils::instance();
 	game = CLgame::instance();
 	misc3d = CLmisc3d::instance();
+	math = CLmath::instance();
 	//*
 	
 	//create transformation matrix

@@ -13,6 +13,7 @@
 class CLmatrix : public virtual CLcl
 {
 	private:
+		CLmath* math;
 		float m[4][4];
 		void multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44);
 	public:
@@ -69,6 +70,7 @@ void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,fl
 
 CLmatrix::CLmatrix(bool i)
 {
+	math = CLmath::instance();
 	if(i==false) clear(0);
 	if(i==true) unit();
 }
@@ -79,22 +81,22 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z)
 {
 	if(x!=0) 
 	{
-		float sinx = CLmath::sin(x);
-		float cosx = CLmath::cos(x);
+		float sinx = math->sin(x);
+		float cosx = math->cos(x);
 		multiplicate(1,0,0,0,0,cosx,-sinx,0,0,sinx,cosx,0,0,0,0,1);
 	}	
 
 	if(y!=0)
 	{
-		float siny = CLmath::sin(y);
-		float cosy = CLmath::cos(y);
+		float siny = math->sin(y);
+		float cosy = math->cos(y);
 		multiplicate(cosy,0,siny,0,0,1,0,0,-siny,0,cosy,0,0,0,0,1);
 	}
 
 	if(z!=0)
 	{
-		float sinz = CLmath::sin(z);
-		float cosz = CLmath::cos(z);
+		float sinz = math->sin(z);
+		float cosz = math->cos(z);
 		multiplicate(cosz,-sinz,0,0,sinz,cosz,0,0,0,0,1,0,0,0,0,1);
 	}
 }

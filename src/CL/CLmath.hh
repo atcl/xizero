@@ -9,6 +9,7 @@
 #include "CLtypes.hh"
 #include "CLsystem.hh"
 #include "CLmacros.hh"
+#include "CLsingle.hh"
 
 //BIT flags
 #define SIGNBIT "$0b10000000000000000000000000000000"
@@ -17,41 +18,45 @@
 #define DEGTORAD M_PI/180
 #define RADTODEG 180/M_PI
 
-//to curious singleton!
-namespace CLmath
+class CLmath : public virtual CLcl, public CLsingle<CLmath>
 {
-	float  fxpi;
-	float* sinarray;
-	float* cosarray;
-	xlong* arcsinarray;
-	xlong* arccosarray;
-
-	void init();
-	template<typename T> T sign(T x);
-	template<typename T> T heaviside(T x);
-	template<typename T> T absolute(T x);
-	template<>       float absolute<float>(float x);
-	template<typename T> T delta(T x);
-	template<typename T> T min(T a,T b);
-	template<typename T> T max(T a,T b);
-	template<typename T> T round(T x);
-	template<typename T> T roundup(T x);
-	template<typename T> T rounddown(T x);
-	template<typename T> T sqrt(T x);
-	template<>       float sqrt<float>(float x);
-	template<typename T> T deg2rad(xlong d);
-	xlong faculty(xlong f);
-	xlong power(xlong b,xlong e);
-	float pi();
-	float sin(xlong x);
-	float cos(xlong x);
-	float arcsin(float x);
-	float arccos(float x);
-	float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
+	friend class CLsingle<CLmath>;
+	
+	private:
+		float  fxpi;
+		float* sinarray;
+		float* cosarray;
+		xlong* arcsinarray;
+		xlong* arccosarray;
+		CLmath();
+		~CLmath();
+	public:
+		template<typename T> T sign(T x);
+		template<typename T> T heaviside(T x);
+		template<typename T> T absolute(T x);
+		//template<>       float absolute<float>(float x);
+		template<typename T> T delta(T x);
+		template<typename T> T min(T a,T b);
+		template<typename T> T max(T a,T b);
+		template<typename T> T round(T x);
+		template<typename T> T roundup(T x);
+		template<typename T> T rounddown(T x);
+		template<typename T> T sqrt(T x);
+		//template<>       float sqrt<float>(float x);
+		template<typename T> T deg2rad(T d);
+		xlong faculty(xlong f);
+		xlong power(xlong b,xlong e);
+		float pi();
+		float sin(xlong x);
+		float cos(xlong x);
+		float arcsin(float x);
+		float arccos(float x);
+		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
 };
 
+CLmath::~CLmath() { }
 
-void CLmath::init()
+CLmath::CLmath()
 {
 	//precalucalte pi approximation
 	fxpi = 355/113;
@@ -69,14 +74,14 @@ void CLmath::init()
 	//*
 	
 	//fill look up tables for arcsine and arccosine
-	arcsinarray = new xlong[360];
-	arccosarray = new xlong[360];
-	
-	for(xlong i=0; i<360; i++)
-	{
-		arcsinarray[i] = 0;
-		arccosarray[i] = 0;
-	}
+	//~ arcsinarray = new xlong[360];
+	//~ arccosarray = new xlong[360];
+	//~ 
+	//~ for(xlong i=0; i<360; i++)
+	//~ {
+		//~ arcsinarray[i] = 0;
+		//~ arccosarray[i] = 0;
+	//~ }
 	//*
 }
 
@@ -251,6 +256,10 @@ float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 
 	return xk;
 }
+
+//temp
+namespace { CLmath* clmath = CLmath::instance(); };
+//*
 
 #endif
 

@@ -23,6 +23,7 @@ class CLanim : public virtual CLcl
 	private:
 		CLsystem* system;
 		CLformat* format;
+		CLmath* math;
 		CLmatrix* linear;
 		CLobject* object;
 		xlong*   anicsv;
@@ -42,8 +43,11 @@ class CLanim : public virtual CLcl
 
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 {
+	//associate singletons
 	system = CLsystem::instance();
 	format = CLformat::instance();
+	math = CLmath::instance();
+	//*
 	
 	//create linear transformation matrix
 	linear = new CLmatrix(1);
@@ -194,7 +198,7 @@ xlong CLanim::update()
 				
 		//translate
 		if(!(frame[currframe]->curr[3]==0 && frame[currframe]->curr[4]==0 && frame[currframe]->curr[5]==0 ))
-			linear->translate(CLmath::round(frame[currframe]->curr[3]),CLmath::round(frame[currframe]->curr[4]),CLmath::round(frame[currframe]->curr[5]));
+			linear->translate(math->round(frame[currframe]->curr[3]),math->round(frame[currframe]->curr[4]),math->round(frame[currframe]->curr[5]));
 		//*
 				
 		//rotate around x
@@ -202,9 +206,9 @@ xlong CLanim::update()
 		{
 			if(frame[currframe]->curr[6]< 0.5) frame[currframe]->comm[6] += frame[currframe]->curr[6];
 			
-			if( CLmath::round(frame[currframe]->comm[6])!= 0)
+			if( math->round(frame[currframe]->comm[6])!= 0)
 			{
-				linear->rotate(CLmath::round(frame[currframe]->comm[6]),0,0);
+				linear->rotate(math->round(frame[currframe]->comm[6]),0,0);
 				frame[currframe]->comm[6] = 0;
 			}
 		}
@@ -215,9 +219,9 @@ xlong CLanim::update()
 		{
 			if(frame[currframe]->curr[7]< 0.5) frame[currframe]->comm[7] += frame[currframe]->curr[7];
 			
-			if( CLmath::round(frame[currframe]->comm[7]) != 0)
+			if( math->round(frame[currframe]->comm[7]) != 0)
 			{
-				linear->rotate(0,CLmath::round(frame[currframe]->comm[7]),0);
+				linear->rotate(0,math->round(frame[currframe]->comm[7]),0);
 				frame[currframe]->comm[7] = 0;
 			}
 		}
@@ -228,9 +232,9 @@ xlong CLanim::update()
 		{
 			if(frame[currframe]->curr[8]< 0.5) frame[currframe]->comm[8] += frame[currframe]->curr[8];
 			
-			if( CLmath::round(frame[currframe]->comm[8])!=0)
+			if( math->round(frame[currframe]->comm[8])!=0)
 			{
-				linear->rotate(0,0,CLmath::round(frame[currframe]->comm[8]));
+				linear->rotate(0,0,math->round(frame[currframe]->comm[8]));
 				frame[currframe]->comm[8] = 0;
 			}
 		}

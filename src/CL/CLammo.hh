@@ -38,6 +38,7 @@ class CLammomanager : public virtual CLcl
 	private:
 		CLsystem* system;
 		CLgame* game;
+		CLmath* math;
 		CLammolist* ammolist;
 		CLammo** ammotype;
 		xlong ammotypecount;
@@ -57,6 +58,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 	//associate singletons
 	system = CLsystem::instance();
 	game = CLgame::instance();
+	math = CLmath::instance();
 	//*
 	
 	//set up attributes
@@ -154,7 +156,7 @@ void CLammomanager::collision(CLentity<I>* e)
 		//*
 		
 		//test the current ammo for collision with any opposite entity
-		if(e->isvisible() && game->collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
+		if(e->isvisible() && game->collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,math->delta(i))==0)
 		{
 			r++;
 			ammolist->delcurrent(0);

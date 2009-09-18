@@ -35,10 +35,6 @@ void CLsetup()
 	CLbench::instance()->init(3,COUT_FPS);
 	//*
 
-	//init math library
-	CLmath::init();
-	//*
-
 	//init matrices
 	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);

@@ -113,12 +113,12 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	//*
 	
 	//adjust z position
-	if(CLmath::absolute(zdiff)>1) tposition.z = zdiff-12;
+	if(math->absolute(zdiff)>1) tposition.z = zdiff-12;
 	//*	
 	
 	//adjust rotation around x andy axis
 		//rotate x about xangle,y about yangle
-		if(CLmath::absolute(xangle)>=1) linear->rotate(xangle,yangle,0);
+		if(math->absolute(xangle)>=1) linear->rotate(xangle,yangle,0);
 		//~ if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
 		//~ if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
@@ -283,7 +283,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			case 'w':
 			if( (angles[1].z - angles[0].z) >  180) angles[1].z -= 360; 
 			if( (angles[1].z - angles[0].z) < -180) angles[1].z += 360;
-			tempangle = CLmath::sign(angles[0].z-angles[1].z) * 5;
+			tempangle = math->sign(angles[0].z-angles[1].z) * 5;
 			linear->rotate(0,0,tempangle);
 			pretransform(1);
 			what=1;

@@ -17,6 +17,7 @@ namespace CLintro
 	CLmatrix* linear;
 	CLsystem* system = CLsystem::instance();
 	CLformat* format = CLformat::instance();
+	CLmath* math = CLmath::instance();
 	
 	void atcrosslevel();
 	void xizero();
@@ -125,7 +126,7 @@ void CLintro::atcrosslevel()
 				
 				//translate
 				if(!( anim_curr_trans[4]==0 && anim_curr_trans[5]==0 && anim_curr_trans[6]==0 ))
-					linear->translate(anim_curr_trans[4],CLmath::round(anim_curr_trans[5]),anim_curr_trans[6]);
+					linear->translate(anim_curr_trans[4],math->round(anim_curr_trans[5]),anim_curr_trans[6]);
 				//*
 				
 				//rotate around x
@@ -133,9 +134,9 @@ void CLintro::atcrosslevel()
 				{
 					if( anim_curr_trans[7] < 0.5 && anim_curr_trans[7] != 0) anim_commulative[7] += anim_curr_trans[7];
 					
-					if( CLmath::round(anim_commulative[7]) != 0)
+					if( math->round(anim_commulative[7]) != 0)
 					{
-						linear->rotate(CLmath::round(anim_commulative[7]),0,0);
+						linear->rotate(math->round(anim_commulative[7]),0,0);
 						anim_commulative[7] = 0;
 					}
 				}
@@ -146,9 +147,9 @@ void CLintro::atcrosslevel()
 				{
 					if( anim_curr_trans[8] < 0.5 && anim_curr_trans[8] != 0) anim_commulative[8] += anim_curr_trans[8];
 					
-					if( CLmath::round(anim_commulative[8]) != 0)
+					if( math->round(anim_commulative[8]) != 0)
 					{
-						linear->rotate(0,CLmath::round(anim_commulative[8]),0);
+						linear->rotate(0,math->round(anim_commulative[8]),0);
 						anim_commulative[8] = 0;
 					}
 				}
@@ -159,9 +160,9 @@ void CLintro::atcrosslevel()
 				{
 					if( anim_curr_trans[9] < 0.5 && anim_curr_trans[9] != 0) anim_commulative[9] += anim_curr_trans[9];
 					
-					if( CLmath::round(anim_commulative[9]) != 0)
+					if( math->round(anim_commulative[9]) != 0)
 					{
-						linear->rotate(0,0,CLmath::round(anim_commulative[9]));
+						linear->rotate(0,0,math->round(anim_commulative[9]));
 						anim_commulative[9] = 0;
 					}
 				}

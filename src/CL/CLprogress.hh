@@ -44,7 +44,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	float temp = CLmath::absolute(end-start);
+	float temp = math->absolute(end-start);
 	float temp2 = (width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -61,7 +61,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	xlong temp = float(CLmath::absolute(end-start));
+	xlong temp = float(math->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -86,7 +86,7 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	xlong temp = float(CLmath::absolute(end-start));
+	xlong temp = float(math->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -117,7 +117,7 @@ void CLprogress::draw()
 void CLprogress::setstart(xlong s)
 {
 	start = s;
-	xlong temp = float(CLmath::absolute(end-start));
+	xlong temp = float(math->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -126,7 +126,7 @@ void CLprogress::setstart(xlong s)
 void CLprogress::setend(xlong e)
 {
 	end = e;
-	xlong temp = float(CLmath::absolute(end-start));
+	xlong temp = float(math->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;

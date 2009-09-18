@@ -99,5 +99,9 @@
 #include "CL/CLwindow.hh"
 //*
 
+//singleton initializer
+#include "CL/CLinit.hh"
+//*
+
 #endif
 

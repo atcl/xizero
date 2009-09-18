@@ -33,7 +33,7 @@ CLsingle<T>::CLsingle() { }
 template<class T>
 T* CLsingle<T>::instance()
 {
-	//check if existing, if not create, anyhow return
+	//check if existing, if not create
 	if (single==0) single = new T();
 	return single;
 	//*

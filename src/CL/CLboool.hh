@@ -112,7 +112,7 @@ boool::boool(bool a)
 //xlong assigning construcotr
 boool::boool(xlong a)
 {
-	this->b=CLmath::sign(a);
+	this->b=clmath->sign(a);
 }
 //*
 
@@ -138,7 +138,7 @@ boool& boool::operator=(bool a)
 //assign xlong
 boool& boool::operator=(xlong a)
 {
-	this->b = CLmath::sign(a);
+	this->b = clmath->sign(a);
 	return *this;
 }
 //*
@@ -178,7 +178,7 @@ boool& boool::operator--()
 //assignment addition with boool
 boool& boool::operator+=(boool& a)
 {
-	this->b = CLmath::sign(this->b + a.b);
+	this->b = clmath->sign(this->b + a.b);
 	return *this;
 }
 //*
@@ -186,7 +186,7 @@ boool& boool::operator+=(boool& a)
 //assignment subtraction with boool
 boool& boool::operator-=(boool& a)
 {
-	this->b = CLmath::sign(this->b - a.b);
+	this->b = clmath->sign(this->b - a.b);
 	return *this;
 }
 //*
@@ -194,14 +194,14 @@ boool& boool::operator-=(boool& a)
 //assignment multiplication with boool
 boool& boool::operator*=(boool& a)
 {
-	this->b = CLmath::sign(this->b * a.b);
+	this->b = clmath->sign(this->b * a.b);
 	return *this;
 }
 
 //assignment addition with bool
 boool& boool::operator+=(bool a)
 {
-	this->b = CLmath::sign(this->b + xlong(a));
+	this->b = clmath->sign(this->b + xlong(a));
 	return *this;
 }
 //*
@@ -209,7 +209,7 @@ boool& boool::operator+=(bool a)
 //assignment subtraction with bool
 boool& boool::operator-=(bool a)
 {
-	this->b = CLmath::sign(this->b - xlong(a));
+	this->b = clmath->sign(this->b - xlong(a));
 	return *this;
 }
 //*
@@ -217,7 +217,7 @@ boool& boool::operator-=(bool a)
 //assignment multiplication with bool
 boool& boool::operator*=(bool a)
 {
-	this->b = CLmath::sign(this->b * xlong(a));
+	this->b = clmath->sign(this->b * xlong(a));
 	return *this;
 }
 //*
@@ -225,7 +225,7 @@ boool& boool::operator*=(bool a)
 //assignment addition with xlong
 boool& boool::operator+=(xlong a)
 {
-	this->b = CLmath::sign(this->b + a);
+	this->b = clmath->sign(this->b + a);
 	return *this;
 }
 //*
@@ -233,7 +233,7 @@ boool& boool::operator+=(xlong a)
 //assignment subtraction with xlong
 boool& boool::operator-=(xlong a)
 {
-	this->b = CLmath::sign(this->b - a);
+	this->b = clmath->sign(this->b - a);
 	return *this;
 }
 //*
@@ -241,7 +241,7 @@ boool& boool::operator-=(xlong a)
 //assignment multiplication with xlong
 boool& boool::operator*=(xlong a)
 {
-	this->b = CLmath::sign(this->b * a);
+	this->b = clmath->sign(this->b * a);
 	return *this;
 }
 //*
@@ -249,7 +249,7 @@ boool& boool::operator*=(xlong a)
 //add with boool
 boool boool::operator+(boool& a) const
 {
-	boool temp(CLmath::sign(this->b + a.b));
+	boool temp(clmath->sign(this->b + a.b));
 	return temp;
 }
 //*
@@ -257,14 +257,14 @@ boool boool::operator+(boool& a) const
 //subtract with boool
 boool boool::operator-(boool& a) const
 {
-	boool temp(CLmath::sign(this->b - a.b));
+	boool temp(clmath->sign(this->b - a.b));
 	return temp;
 }
 
 //multiplicate with bool
 boool boool::operator*(boool& a) const
 {
-	boool temp(CLmath::sign(this->b * a.b));
+	boool temp(clmath->sign(this->b * a.b));
 	return temp;
 }
 //*
@@ -272,7 +272,7 @@ boool boool::operator*(boool& a) const
 //add with bool
 boool boool::operator+(bool a)  const
 {
-	boool temp(CLmath::sign(this->b + xlong(a)));
+	boool temp(clmath->sign(this->b + xlong(a)));
 	return temp;
 }
 //*
@@ -280,7 +280,7 @@ boool boool::operator+(bool a)  const
 //subtract with bool
 boool boool::operator-(bool a)  const
 {
-	boool temp(CLmath::sign(this->b - xlong(a)));
+	boool temp(clmath->sign(this->b - xlong(a)));
 	return temp;	
 }
 //*
@@ -288,7 +288,7 @@ boool boool::operator-(bool a)  const
 //multiplicate with bool
 boool boool::operator*(bool a)  const
 {
-	boool temp(CLmath::sign(this->b * xlong(a)));
+	boool temp(clmath->sign(this->b * xlong(a)));
 	return temp;	
 }
 //*
@@ -296,7 +296,7 @@ boool boool::operator*(bool a)  const
 //add with xlong
 boool boool::operator+(xlong a) const
 {
-	boool temp(CLmath::sign(this->b + a));
+	boool temp(clmath->sign(this->b + a));
 	return temp;	
 }
 //*
@@ -304,7 +304,7 @@ boool boool::operator+(xlong a) const
 //subtract with xlong
 boool boool::operator-(xlong a) const
 {
-	boool temp(CLmath::sign(this->b - a));
+	boool temp(clmath->sign(this->b - a));
 	return temp;	
 }
 //*
@@ -312,7 +312,7 @@ boool boool::operator-(xlong a) const
 //multiplicate with xlong
 boool boool::operator*(xlong a) const
 {
-	boool temp(CLmath::sign(this->b + a));
+	boool temp(clmath->sign(this->b + a));
 	return temp;
 }
 //*
@@ -441,7 +441,7 @@ boool::operator xlong() const
 inline boool operator+(xlong a,boool& b)
 {
 	boool temp;
-	temp.b = CLmath::sign(a+b.b);
+	temp.b = clmath->sign(a+b.b);
 	return temp;
 }
 //*
@@ -450,7 +450,7 @@ inline boool operator+(xlong a,boool& b)
 inline boool operator-(xlong a,boool& b)
 {
 	boool temp;
-	temp.b = CLmath::sign(a-b.b);
+	temp.b = clmath->sign(a-b.b);
 	return temp;
 }
 //*
@@ -459,7 +459,7 @@ inline boool operator-(xlong a,boool& b)
 inline boool operator*(xlong a,boool& b)
 {
 	boool temp;
-	temp.b = CLmath::sign(a*b.b);
+	temp.b = clmath->sign(a*b.b);
 	return temp;
 }
 //*
@@ -468,7 +468,7 @@ inline boool operator*(xlong a,boool& b)
 inline boool operator+(bool a,boool& b)
 {
 	boool temp;
-	temp.b = CLmath::sign(xlong(a)+b.b);
+	temp.b = clmath->sign(xlong(a)+b.b);
 	return temp;
 }
 //*
@@ -477,7 +477,7 @@ inline boool operator+(bool a,boool& b)
 inline boool operator-(bool a,boool& b)
 {
 	boool temp;
-	temp.b = CLmath::sign(xlong(a)-b.b);
+	temp.b = clmath->sign(xlong(a)-b.b);
 	return temp;
 }
 //*
@@ -486,7 +486,7 @@ inline boool operator-(bool a,boool& b)
 inline boool operator*(bool a,boool& b)
 {
 	boool temp;
-	temp.b = CLmath::sign(xlong(a)*b.b);
+	temp.b = clmath->sign(xlong(a)*b.b);
 	return temp;
 }
 //*

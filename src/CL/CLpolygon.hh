@@ -21,6 +21,7 @@ class CLpolygon : public virtual CLcl
 		static float shadezscale;
 
 		CLsystem* system;
+		CLmath* math;
 
 		uxlong color;
 		uxlong rcolor;
@@ -389,7 +390,7 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight)
 	doubleword argb = { 0 };
 
 	float t = (normal * cllight) / ( !normal * !cllight );
-	t = CLmath::absolute(t);
+	t = math->absolute(t);
 	
 	if(t > 1) t = 1;
 
@@ -554,7 +555,10 @@ void CLpolygon::rasterize(xlong shadow)
 
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
 {
+	//associate singletons
 	system = CLsystem::instance();
+	math = CLmath::instance();
+	//*
 	
 	//set colors and pointcount
 	rcolor = color = co;

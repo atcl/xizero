@@ -14,6 +14,7 @@ class CLguibase : public virtual CLcl
 	protected:
 		CLgfx1* gfx1;
 		CLgfx2* gfx2;
+		CLmath* math;
 		xlong posx;
 		xlong posy;
 		xlong width;
@@ -49,6 +50,7 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	//associate singletons
 	gfx1 = CLgfx1::instance();
 	gfx2 = CLgfx2::instance();
+	math = CLmath::instance();
 	//*
 	
 	//set up attributes
