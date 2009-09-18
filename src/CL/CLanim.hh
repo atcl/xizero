@@ -22,6 +22,7 @@ class CLanim : public virtual CLcl
 {
 	private:
 		CLsystem* system;
+		CLformat* format;
 		CLmatrix* linear;
 		CLobject* object;
 		xlong*   anicsv;
@@ -42,6 +43,7 @@ class CLanim : public virtual CLcl
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 {
 	system = CLsystem::instance();
+	format = CLformat::instance();
 	
 	//create linear transformation matrix
 	linear = new CLmatrix(1);
@@ -49,7 +51,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 	
 	//set up attributes
 	object = obj;
-	anicsv = CLformat::loadcsv(ani,',');
+	anicsv = format->loadcsv(ani,',');
 	loop = l;
 	//*
 	

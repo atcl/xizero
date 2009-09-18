@@ -3,28 +3,73 @@
 #ifndef HH_CLINC
 #define HH_CLINC
 
-
-//project dependent globals
+//project dependent
 #include "CLproject.hh"
 //*
 
-//general
+//basic
 #include "CL/CLtypes.hh"
-#include "CL/CLvector.hh"
-#include "CL/CLfixed.hh"
-#include "CL/CLstruct.hh"
 #include "CL/CLconsts.hh"
-#include "CL/CLboool.hh"
+#include "CL/CLstruct.hh"
+//*
+
+//base classes
 #include "CL/CLcl.hh"
 #include "CL/CLsingle.hh"
 //*
 
-//API dependent
-#include "CL/CLsystem.hh"
+//type classes
+#include "CL/CLfixed.hh"
+#include "CL/CLboool.hh"
+#include "CL/CLvector.hh"
 //*
 
-//utility toolbox
+//singleton classes
+#include "CL/CLsystem.hh"
 #include "CL/CLutils.hh"
+#include "CL/CLfsprog.hh"
+#include "CL/CLscreen.hh"
+#include "CL/CLsound.hh"
+#include "CL/CLgamepad.hh"
+//*
+
+//gui classes
+#include "CL/CLguibase.hh"
+#include "CL/CLlabel.hh"
+#include "CL/CLbutton.hh"
+#include "CL/CLprogress.hh"
+#include "CL/CLmenu.hh"
+//*
+
+//3d engine classes
+#include "CL/CLmatrix.hh"
+#include "CL/CLpolygon.hh"
+#include "CL/CLobject.hh"
+//*
+
+//data type classes
+#include "CL/CLfifo.hh"
+#include "CL/CLlist.hh"
+#include "CL/CLtree.hh"
+//*
+
+//game classes
+#include "CL/CLenemy.hh"
+#include "CL/CLplayer.hh"
+#include "CL/CLlevel.hh"
+#include "CL/CLgame.hh"
+#include "CL/CLexplosion.hh"
+#include "CL/CLanim.hh"
+#include "CL/CLintro.hh"
+//*
+
+//super constructor
+#include "CL/CLsetup.hh"
+//*
+
+//*******************************+
+
+//utility toolbox
 #include "CL/CLsprites.hh"
 //*
 
@@ -35,43 +80,11 @@
 #include "CL/CLgfx1.hh"
 #include "CL/CLgfx2.hh"
 #include "CL/CLdiv3d.hh"
-#include "CL/CLscreen.hh"
+
 //*
 
 //non-static classes I
 #include "CL/CLbuffer.hh"
-//*
-
-//non-static classes II
-#include "CL/CLfifo.hh"
-#include "CL/CLlist.hh"
-#include "CL/CLtree.hh"
-//*
-
-//non-static classes II
-#include "CL/CLmenu.hh"
-//*
-
-//non-static classes III (GUI elements)
-#include "CL/CLguibase.hh"
-#include "CL/CLlabel.hh"
-#include "CL/CLbutton.hh"
-#include "CL/CLprogress.hh"
-//*
-
-//non-static classes IIII (3D engine)
-#include "CL/CLmatrix.hh"
-#include "CL/CLpolygon.hh"
-#include "CL/CLobject.hh"
-//*
-
-//non static classes IIIII (game objects)
-#include "CL/CLenemy.hh"
-#include "CL/CLplayer.hh"
-#include "CL/CLlevel.hh"
-#include "CL/CLgame.hh"
-#include "CL/CLexplosion.hh"
-#include "CL/CLanim.hh"
 //*
 
 //global variables
@@ -84,16 +97,6 @@
 
 //GUI dependent
 #include "CL/CLwindow.hh"
-#include "CL/CLsound.hh"
-#include "CL/CLfsprog.hh"
-//*
-
-//super constructor
-#include "CL/CLsetup.hh"
-//*
-
-//high level
-#include "CL/CLintro.hh"
 //*
 
 #endif

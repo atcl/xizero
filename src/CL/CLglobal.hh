@@ -35,6 +35,10 @@ class CLglobal : public CLsingle<CLglobal>
 		CLfvector light;
 		CLfvector slight;
 		CLfvector plane;
+		
+		//~ CLsystem* system;
+		//~ CLformat* format;
+		//~ CLutils*  utils;
 };
 
 //variables

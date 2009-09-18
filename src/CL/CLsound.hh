@@ -7,6 +7,7 @@
 #ifdef WIN32
 	#include <mmsystem.hh>
 #else //ifdef LINUX
+	#include <fcntl.h>
 	#include <linux/soundcard.h>
 	#include <sys/types.h>
 	#include <sys/ioctl.h>

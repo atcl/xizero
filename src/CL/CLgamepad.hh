@@ -13,13 +13,7 @@
 #endif
 
 #include "CLtypes.hh"
-
-struct CLgamepadstate
-{
-	xlong axis[2];
-	bool  button[10];
-	bool  tbutton[10];
-};
+#include "CLstruct.hh"
 
 class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 {

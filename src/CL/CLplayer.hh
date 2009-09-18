@@ -12,7 +12,6 @@
 #include "CLammo.hh"
 #include "CLentity.hh"
 #include "CLenemy.hh"
-#include "CLgamepad.hh"
 
 typedef CLlist<CLenemy> CLenemylist;
 

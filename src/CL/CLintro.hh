@@ -16,6 +16,7 @@ namespace CLintro
 {
 	CLmatrix* linear;
 	CLsystem* system = CLsystem::instance();
+	CLformat* format = CLformat::instance();
 	
 	void atcrosslevel();
 	void xizero();
@@ -34,7 +35,7 @@ void CLintro::atcrosslevel()
 	
 	//load animation file
 	CLfile* aniraw = system->getfile("../dat/other/atcl.ani");
-	xlong*  anicsv = CLformat::loadcsv(aniraw,',');
+	xlong*  anicsv = format->loadcsv(aniraw,',');
 	//*
 
 	//set animation attributes

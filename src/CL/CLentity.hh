@@ -23,6 +23,7 @@ class CLentity : public virtual CLcl
 {
 	protected:
 		CLsystem* system;
+		CLformat* format;
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -105,6 +106,7 @@ template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 {
 	system = CLsystem::instance();
+	format = CLformat::instance();
 	
 	//associate utils
 	utils = CLutils::instance();
@@ -120,7 +122,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//load entity archive 
-	arfile* entitya = CLformat::loadar(ea);
+	arfile* entitya = format->loadar(ea);
 	//*
 
 	//for each model
@@ -157,7 +159,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//find and load definition (*.ini)
 	xlong ed = utils->findarmember(entitya,".ini");
 	if(ed==-1) system->exit(1,0,__func__,"no entity definition found");
-	def = CLformat::loadini(entitya->members[ed]);
+	def = format->loadini(entitya->members[ed]);
 	//*
 	
 	//load entity attributes
@@ -190,7 +192,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//load csv if present (*.csv)
 	csv=0;
 	xlong ec = utils->findarmember(entitya,".csv");
-	if(ec!=-1) csv = CLformat::loadcsv(entitya->members[ec]);
+	if(ec!=-1) csv = format->loadcsv(entitya->members[ec]);
 	//*
 	
 	//set remaining entity attributes
@@ -207,6 +209,7 @@ template<int I>
 CLentity<I>::CLentity(CLentity* entityptr)
 {
 	system = CLsystem::instance();
+	format = CLformat::instance();
 	
 	//create transformation matrix
 	linear = new CLmatrix(1);

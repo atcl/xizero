@@ -13,28 +13,33 @@
 #include "CLmacros.hh"
 #include "CLsystem.hh"
 
-struct cmpstr
-{
-	bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; }
-};
+struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; } };
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
-namespace CLformat
+class CLformat : public virtual CLcl, public CLsingle<CLformat>
 {
-	CLutils* utils = CLutils::instance();
-	CLsystem* system = CLsystem::instance();
+	friend class CLsingle<CLformat>;
 	
-	xlong*   loadcsv(CLfile* sf,xchar sep=',');
-	arfile*  loadar(CLfile* sf);
-	xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
-	sprite*  loadtga(CLfile* sf);
-	sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
-	sprites* loadfont(CLfile* sf);
-	xlong**  loadlvl();
-	xmap*    loadini(CLfile* bf);
-}
+	private:
+		CLutils* utils;
+		CLsystem* system;
+		CLformat();
+		~CLformat();
+	public:
+		xlong*   loadcsv(CLfile* sf,xchar sep=',');
+		arfile*  loadar(CLfile* sf);
+		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
+		sprite*  loadtga(CLfile* sf);
+		sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
+		sprites* loadfont(CLfile* sf);
+		xlong**  loadlvl();
+		xmap*    loadini(CLfile* bf);
+};
 
+CLformat::CLformat() { utils = CLutils::instance(); system = CLsystem::instance(); }
+
+CLformat::~CLformat() { }
 
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {

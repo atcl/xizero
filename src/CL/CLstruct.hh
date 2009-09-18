@@ -5,7 +5,6 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
-#include "CLvector.hh"
 
 struct CLpoint
 {
@@ -78,6 +77,13 @@ struct xmlelement
 {
 	xchar*  value;
 	xchar** attributes;
+};
+
+struct CLgamepadstate
+{
+	xlong axis[2];
+	bool  button[10];
+	bool  tbutton[10];
 };
 
 struct CLexe

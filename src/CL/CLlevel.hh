@@ -31,6 +31,7 @@ class CLlevel : public virtual CLcl
 		CLfbuffer*   levellandscape;
 		CLutils*     utils;
 		CLsystem*    system;
+		CLformat*    format;
 		static xlong levelwidth;
 		static xlong blockheight;
 		static xlong blockwidth;
@@ -70,7 +71,7 @@ xlong CLlevel::floorheight = 100;
 CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer)
 {
 	system = CLsystem::instance();
-	
+	format = CLformat::instance();
 	//associate utils
 	utils = CLutils::instance();
 	//*
@@ -91,7 +92,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//load terrainlib from .ar to array of xlong* pointing to y3d objects
 	CLfile* terrainraw = system->getfile(terrainlib);
-	arfile* terraina = CLformat::loadar(terrainraw);
+	arfile* terraina = format->loadar(terrainraw);
 	//*
 
 	//use array of y3ds to  create array of CLobjects
@@ -113,13 +114,13 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//load levelmaps from .ar
 	CLfile* levelraw = system->getfile(levelcontainer);
-	arfile* levela = CLformat::loadar(levelraw);
+	arfile* levela = format->loadar(levelraw);
 	//*
 	
 	//terrain map:
 	xlong tf = utils->findarmember(levela,".mapt");
 	if(tf==-1) system->exit(1,0,__func__,"no terrain map found");
-	xchar** terrainmap = CLformat::loadmap(levela->members[tf],33,' ',-1);
+	xchar** terrainmap = format->loadmap(levela->members[tf],33,' ',-1);
 	//**
 
 	//determine level constants
@@ -138,13 +139,13 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//height map:
 	xlong hf = utils->findarmember(levela,".maph");
 	if(hf==-1) system->exit(1,0,__func__,"no height map found");
-	xchar** heightmap = CLformat::loadmap(levela->members[hf],48,' ',0);
+	xchar** heightmap = format->loadmap(levela->members[hf],48,' ',0);
 	//**
 
 	//entity map:
 	xlong ef = utils->findarmember(levela,".mape");
 	if(ef==-1) system->exit(1,0,__func__,"no entity map found");
-	xchar** entitymap = CLformat::loadmap(levela->members[ef],34,'.',-2);
+	xchar** entitymap = format->loadmap(levela->members[ef],34,'.',-2);
 	//**
 
 	//build levellayerscontaining all sub maps
@@ -253,7 +254,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 
 	//load enemy archive
 	CLfile* enemiesraw = system->getfile(enemylib);
-	arfile* enemiesa = CLformat::loadar(enemiesraw);
+	arfile* enemiesa = format->loadar(enemiesraw);
 	//*
 	
 	//load all enemies in archive (base enemies) into array
