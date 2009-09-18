@@ -32,6 +32,7 @@ class CLlevel : public virtual CLcl
 		CLutils*     utils;
 		CLsystem*    system;
 		CLformat*    format;
+		CLgame*      game;
 		static xlong levelwidth;
 		static xlong blockheight;
 		static xlong blockwidth;
@@ -70,10 +71,11 @@ xlong CLlevel::floorheight = 100;
 
 CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* levelcontainer)
 {
+	//associate singletons
+	utils = CLutils::instance();
 	system = CLsystem::instance();
 	format = CLformat::instance();
-	//associate utils
-	utils = CLutils::instance();
+	game = CLgame::instance();
 	//*
 	
 	//matrix for linear transformations of level objects
@@ -81,7 +83,7 @@ CLlevel::CLlevel(xchar* terrainlib, xchar* enemylib, xchar* playerlib, xchar* le
 	//*
 	
 	//set screen boundaries
-	CLgame::init(60,0,740,600);
+	game->init(60,0,740,600);
 	//*
 
 	//game is not paused from beginning

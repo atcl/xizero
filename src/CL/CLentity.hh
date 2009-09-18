@@ -24,11 +24,12 @@ class CLentity : public virtual CLcl
 	protected:
 		CLsystem* system;
 		CLformat* format;
+		CLutils* utils;
+		CLgame* game;
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
 		CLexplosion* expl[I];
-		CLutils* utils;
 		xmap* def;
 		xlong* csv;
 		CLbox* boundingbox[2][I];
@@ -105,11 +106,11 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 {
+	//associate singletons
 	system = CLsystem::instance();
 	format = CLformat::instance();
-	
-	//associate utils
 	utils = CLutils::instance();
+	game = CLgame::instance();
 	//*
 	
 	//create transformation matrix
@@ -208,8 +209,12 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 template<int I>
 CLentity<I>::CLentity(CLentity* entityptr)
 {
+	//associate singletons
 	system = CLsystem::instance();
 	format = CLformat::instance();
+	utils = CLutils::instance();
+	game = CLgame::instance();
+	//*
 	
 	//create transformation matrix
 	linear = new CLmatrix(1);

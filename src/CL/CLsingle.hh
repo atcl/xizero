@@ -6,6 +6,8 @@
 
 #include "CLtypes.hh"
 
+//add static polymorphism?
+
 template<class T>
 class CLsingle
 {

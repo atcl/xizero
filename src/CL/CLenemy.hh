@@ -62,7 +62,7 @@ xlong CLenemy::collision()
 
 	//screen boundary collision test
 	tposition.y -= *mark;
-	xlong bc = CLgame::boundary(tposition,*boundingbox[1][0],1);
+	xlong bc = game->boundary(tposition,*boundingbox[1][0],1);
 	tposition.y += *mark;
 
 	if(bc==0)
@@ -198,7 +198,7 @@ xlong CLenemy::update(CLentity<I>* p)
 		//*
 		
 		//fire at player?
-		xlong fc = CLgame::collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
+		xlong fc = game->collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
 		if( fc != 0 )
 		{
 			if(time >= fireupdate[0] + firerate[0])

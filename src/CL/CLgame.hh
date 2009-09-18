@@ -9,15 +9,20 @@
 #include "CLstruct.hh"
 #include "CLmisc3d.hh"
 
-namespace CLgame
+class CLgame : public virtual CLcl, public CLsingle<CLgame>
 {
+	friend class CLsingle<CLgame>;
+	
+	private:
 		xlong boundaryx1;
 		xlong boundaryx2;
 		xlong boundaryy1;
 		xlong boundaryy2;
 		CLfvector slopes[2];
-		float     intersections[6][2];
-
+		float intersections[6][2];
+		CLgame();
+		~CLgame();
+	public:
 		void init(xlong bx1=0,xlong by1=0,xlong bx2=xres,xlong by2=yres);
 		template<class clvector>bool boundary(const clvector& p,xlong mark=0);
 		template<class clvector>bool boundary(const clvector& p,const CLbox& bb,bool c=0);
@@ -26,6 +31,10 @@ namespace CLgame
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
+
+CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = xres; boundaryy2 = yres; }
+
+CLgame::~CLgame() { }
 
 void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {

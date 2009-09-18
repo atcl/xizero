@@ -37,6 +37,7 @@ class CLammomanager : public virtual CLcl
 {
 	private:
 		CLsystem* system;
+		CLgame* game;
 		CLammolist* ammolist;
 		CLammo** ammotype;
 		xlong ammotypecount;
@@ -53,7 +54,10 @@ class CLammomanager : public virtual CLcl
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 {
+	//associate singletons
 	system = CLsystem::instance();
+	game = CLgame::instance();
+	//*
 	
 	//set up attributes
 	mark = m;
@@ -119,7 +123,7 @@ void CLammomanager::update()
 		//*
 		
 		//check if current ammo left screen
-		if(CLgame::boundary(currammo->p,*mark)!=0)
+		if(game->boundary(currammo->p,*mark)!=0)
 		{
 			ammolist->delcurrent(0);
 			listfix = ammolist->isfirst();
@@ -150,7 +154,7 @@ void CLammomanager::collision(CLentity<I>* e)
 		//*
 		
 		//test the current ammo for collision with any opposite entity
-		if(e->isvisible() && CLgame::collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
+		if(e->isvisible() && game->collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,CLmath::delta(i))==0)
 		{
 			r++;
 			ammolist->delcurrent(0);

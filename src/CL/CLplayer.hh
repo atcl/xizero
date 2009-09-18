@@ -87,7 +87,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 
 	//screen boundary collision test
 	tposition.y -= *mark;
-	xlong bc = CLgame::boundary(tposition,*boundingbox[1][0]);
+	xlong bc = game->boundary(tposition,*boundingbox[1][0]);
 	tposition.y += *mark;
 
 	if(bc!=0)
@@ -102,7 +102,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	float zdiff  = 0;
 	float xangle = 0;
 	float yangle = 0;
-	xlong tc = CLgame::terrain(ll,boundingbox[1][0],boundingbox[0][0],tposition,position,xangle,yangle,zdiff); 
+	xlong tc = game->terrain(ll,boundingbox[1][0],boundingbox[0][0],tposition,position,xangle,yangle,zdiff); 
  
 	if(tc!=0)
 	{
