@@ -27,37 +27,46 @@ inline void clip(xlong& x,xlong& y)
 	if(y>=yres) y=yres-1;
 }
 
-namespace CLgfx1
+class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 {
-	void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
-	void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
-	uxlong readpixel(xlong x,xlong y);
-	void drawpixel(xlong x,xlong y,uxlong c);
-	void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-	void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
-	void drawbigpixel(xlong x,xlong y,uxlong c);
-	void putpixel(xlong x,xlong y,uxlong c,xlong m);
-	void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-	void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
-	void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
-	void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-	void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-	void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c);
-	void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-	void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-	void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
-	void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
-	void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
-	void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
-	void fill(xlong x,xlong y,uxlong oc,uxlong nc);
-	void fillframe(xlong x,xlong y,uxlong fc,uxlong nc);
-	void drawsprite(xlong x,xlong y,sprite* s);
-	void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
-	void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0);
-	void drawscreen(sprite* s);
-	void drawtile(xlong x,xlong y,sprites *s,xlong ti);
+	friend class CLsingle<CLgfx1>;
+	
+	private:
+		CLgfx1();
+		~CLgfx1();
+	public:
+		void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
+		void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
+		uxlong readpixel(xlong x,xlong y);
+		void drawpixel(xlong x,xlong y,uxlong c);
+		void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
+		void copypixel(xlong x1,xlong y1,xlong x2,xlong y2);
+		void drawbigpixel(xlong x,xlong y,uxlong c);
+		void putpixel(xlong x,xlong y,uxlong c,xlong m);
+		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
+		void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c);
+		void drawverline(xlong x1,xlong y1,xlong y2,uxlong c);
+		void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c);
+		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c);
+		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c);
+		void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c);
+		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c);
+		void fill(xlong x,xlong y,uxlong oc,uxlong nc);
+		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc);
+		void drawsprite(xlong x,xlong y,sprite* s);
+		void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i);
+		void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0);
+		void drawscreen(sprite* s);
+		void drawtile(xlong x,xlong y,sprites *s,xlong ti);
 };
 
+CLgfx1::CLgfx1() { }
+
+CLgfx1::~CLgfx1() { }
 
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {

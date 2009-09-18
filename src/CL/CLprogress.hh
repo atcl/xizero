@@ -104,13 +104,13 @@ void CLprogress::draw()
 	{
 		//draw horizontal progress
 		case 0:
-			CLgfx1::drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor);
+			gfx1->drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor);
 		break;
 		//*
 		
 		//draw vertical progress
 		case 1:
-			CLgfx1::drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor);
+			gfx1->drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor);
 		break;
 		//*
 	}

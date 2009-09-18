@@ -10,6 +10,7 @@
 class CLguibase : public virtual CLcl
 {
 	protected:
+		CLgfx1* gfx1;
 		xlong posx;
 		xlong posy;
 		xlong width;
@@ -42,6 +43,7 @@ class CLguibase : public virtual CLcl
 
 CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
 {
+	gfx1 = CLgfx1::instance();
 	posx = px;
 	posy = py;
 	width = w;
