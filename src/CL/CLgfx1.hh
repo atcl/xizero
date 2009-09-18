@@ -23,10 +23,9 @@
  * version: 0.1
  */
 
-inline bool isoff(xlong x,xlong y)
-{
-	return (x<0 || x>=xres || y<0 || y>=yres);
-}
+inline bool isoff(xlong x,xlong y) { return (x<0 || x>=xres || y<0 || y>=yres); }
+
+inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<2) || (x1>=xres&&x2>=xres) || (y1<0&&y2<0) || (y1>=yres&&y2>=yres) ); }
 
 inline void clip(xlong& x,xlong& y)
 {
@@ -180,6 +179,7 @@ void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i)
 
 void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 {
+	if(isoff(x1,y1,x2,y1)) return;
 	clip(x1,y1);
 	clip(x2,y1);
 	
@@ -197,6 +197,7 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c)
 
 void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c)
 {
+	if(isoff(x1,y1,x1,y2)) return;
 	clip(x1,y1);
 	clip(x1,y2);
 	
@@ -373,24 +374,8 @@ void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	//*
 	
 	//decide wether to use horizontal or vertical lines
-	if( (x2-x1)>(y2-y1) )
-	{
-		//longer horizontal runs, so use horizontal lines
-		for(xlong i=y1; i<=y2; i++)
-		{
-			drawhorline(x1,i,x2,c);
-		}
-		//*
-	}
-	else
-	{
-		//longer vertical lines, so use vertical lines
-		for(xlong i=x1; i<=x2; i++)
-		{
-			drawverline(i,y1,y2,c);
-		}
-		//*
-	}
+	if( (x2-x1)>(y2-y1) ) for(xlong i=y1; i<=y2; i++) { drawhorline(x1,i,x2,c); }
+	else for(xlong i=x1; i<=x2; i++) { drawverline(i,y1,y2,c); }
 	//*
 }
 

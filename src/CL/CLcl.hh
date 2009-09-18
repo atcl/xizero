@@ -37,7 +37,7 @@ class CLcl : public CLglobal
 		const xchar* getname() const;
 };
 
-xlong CLcl::version = CLmajor<<24 + CLminor<<16 + CLbuild<<8 + CLextra;
+xlong CLcl::version = (CLmajor<<24) + (CLminor<<16) + (CLbuild<<8) + CLextra;
 
 xlong CLcl::id = 0;
 

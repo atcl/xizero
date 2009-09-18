@@ -1,8 +1,6 @@
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
 
-#include <iostream>
-
 #include "CLinc.h"
 #include "xizero.hh"
 
@@ -26,7 +24,7 @@ int main()
 	while(running && clglobal->clwindow->run()) 
 	{
 		turbo = clglobal->clwindow->getturbo();
-		input = clglobal->clwindow->getkey();
+		input = clglobal->clwindow->getinkey();
 		clglobal->clgamepad->handle();
 
 		switch(turbo)

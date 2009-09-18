@@ -16,7 +16,7 @@
  * 
  * author:	atcl
  * 
- * notes:	test.
+ * notes:	
  * 
  * version: 0.1
  */
@@ -59,6 +59,8 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 	object = obj;
 	anicsv = clformat->loadcsv(ani,',');
 	loop = l;
+	if(p!=0) { position = *p; }
+	else position = 0;
 	//*
 	
 	xlong anipointer = 0;
@@ -73,7 +75,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 		frame[i]->duration = anicsv[anipointer];
 		
 		//multiplication is faster than divisions
-		float inv_dur = frame[i]->duration;
+		float inv_dur = 1/(frame[i]->duration);
 		//*
 		
 		//set units for multi frame animation
@@ -174,24 +176,24 @@ xlong CLanim::update()
 		
 		//is last run in this frame
 		bool lastrun = 0;
-		if(curr_time > curr_time + starttime) lastrun = 1;
+		if(curr_time > starttime + frame[currframe]->duration) lastrun = 1;
 		//*
 				
 		//update object
-		frame[currframe]->curr[0] = time_diff * frame[currframe]->units[1];
-		frame[currframe]->curr[1] = time_diff * frame[currframe]->units[2];
-		frame[currframe]->curr[2] = time_diff * frame[currframe]->units[3];
-		frame[currframe]->curr[3] = time_diff * frame[currframe]->units[4];
-		frame[currframe]->curr[4] = time_diff * frame[currframe]->units[5];
-		frame[currframe]->curr[5] = time_diff * frame[currframe]->units[6];
-		frame[currframe]->curr[6] = time_diff * frame[currframe]->units[7];
-		frame[currframe]->curr[7] = time_diff * frame[currframe]->units[8];
-		frame[currframe]->curr[8] = time_diff * frame[currframe]->units[9];
-		frame[currframe]->curr[9] = time_diff * frame[currframe]->units[10];
-		frame[currframe]->curr[10] = time_diff * frame[currframe]->units[11];
-		frame[currframe]->curr[11] = time_diff * frame[currframe]->units[12];
+		frame[currframe]->curr[0]  = time_diff * frame[currframe]->units[0];
+		frame[currframe]->curr[1]  = time_diff * frame[currframe]->units[1];
+		frame[currframe]->curr[2]  = time_diff * frame[currframe]->units[2];
+		frame[currframe]->curr[3]  = time_diff * frame[currframe]->units[3];
+		frame[currframe]->curr[4]  = time_diff * frame[currframe]->units[4];
+		frame[currframe]->curr[5]  = time_diff * frame[currframe]->units[5];
+		frame[currframe]->curr[6]  = time_diff * frame[currframe]->units[6];
+		frame[currframe]->curr[7]  = time_diff * frame[currframe]->units[7];
+		frame[currframe]->curr[8]  = time_diff * frame[currframe]->units[8];
+		frame[currframe]->curr[9]  = time_diff * frame[currframe]->units[9];
+		frame[currframe]->curr[10] = time_diff * frame[currframe]->units[10];
+		frame[currframe]->curr[11] = time_diff * frame[currframe]->units[11];
 		//*
-				
+		
 		//move
 		position.x += frame[currframe]->curr[0];
 		position.y += frame[currframe]->curr[1];

@@ -110,15 +110,11 @@ void CLprogress::draw()
 	switch(horver)
 	{
 		//draw horizontal progress
-		case 0:
-			clgfx1->drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor);
-		break;
+		case 0: clgfx1->drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor); break;
 		//*
 		
 		//draw vertical progress
-		case 1:
-			clgfx1->drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor);
-		break;
+		case 1: clgfx1->drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor); break;
 		//*
 	}
 }

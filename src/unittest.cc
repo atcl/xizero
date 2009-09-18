@@ -1,25 +1,15 @@
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license 
 
-#include <iostream>
-#include <cstring>
-
 #include "CLinc.h"
-
 
 int main(int argc, char** argv)
 {
 	std::string argfile = "../dat/other/test.y3d";
 	xlong  argfileindex =-1;
 
-	if(argc>2)
-	{
-		argfileindex = atoi(argv[2]);
-	}
-	else if(argc>1)
-	{
-		argfile = argv[1];
-	}
+	if(argc>2) { argfileindex = atoi(argv[2]); }
+	else if(argc>1) { argfile = argv[1]; }
 
 	//init sequence
 	CLglobal* clglobal = CLsetup();
@@ -31,11 +21,11 @@ int main(int argc, char** argv)
 
 		//test tga loading:
 			
-			CLfile* fonttga =clglobal->clsystem->getfile("../dat/other/CLteletype.fnt");
-			CLfont* font = clglobal->clformat->loadfont(fonttga);
+		CLfile* fonttga = clglobal->clsystem->getfile("../dat/other/CLteletype.fnt");
+		CLfont* font = clglobal->clformat->loadfont(fonttga);
 
 		//test tree:
-			CLtree<xlong>* testtree = new CLtree<xlong>();
+		CLtree<xlong>* testtree = new CLtree<xlong>();
 
 		//test button:
 			//CLbutton testbutton = new CLbutton();
@@ -227,7 +217,7 @@ int main(int argc, char** argv)
 			break;
 		}
 		
-		switch(clglobal->clwindow->getkey())
+		switch(clglobal->clwindow->getinkey())
 		{
 			
 		}

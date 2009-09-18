@@ -2,7 +2,7 @@
 //licensed under zlib/libpng license
 #ifndef HH_CLID
 #define HH_CLID
-#pagma message "Compiling " __FILE__ " ! TODO: all"
+#pragma message "Compiling " __FILE__ " ! TODO: all"
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
@@ -22,19 +22,18 @@
 //string: atcrosslevel ; crc: 1734979481
 //string: xizero ; crc: 1208686013
 
-//to singleton?
-class CLid : public virtual CLcl
+class CLid : public virtual CLcl, public CLsingle<CLid>
 {
+	friend class CLsingle<CLid>;
+	
 	private: 
 		xlong  lastid;
 		static uxlong crc32;
-
-	public:
 		CLid();
-		~CLid();
-
+		~CLid() { };
+	public:
 		xlong generateid();
-		xlong generatecrc(xchar* d,xlong l);
+		uxlong generatecrc(xchar* d,xlong l);
 		bool checkcrc(uxlong c);
 		xlong one() const;
 };
@@ -42,8 +41,6 @@ class CLid : public virtual CLcl
 uxlong CLid::crc32 = 0x04C11DB7;
 
 CLid::CLid() { lastid = 0; }
-
-CLid::~CLid() { }
 
 xlong CLid::generateid()
 {

@@ -54,7 +54,7 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		void init(xlong w,xlong h,const xchar* t);
 		void redraw();
 		static xlong run();
-		xlong getkey();
+		xlong getinkey();
 		xlong getturbo() const;
 		xlong getmousex() const;
 		xlong getmousey() const;
@@ -121,7 +121,7 @@ void CLwindow::redraw() { Fl::redraw(); }
 
 xlong CLwindow::run() { return Fl::wait(); }
 
-xlong CLwindow::getkey() { xlong temp = key; key = 0; return temp; }
+xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; }
 
 xlong CLwindow::getturbo() const { return turbo; }
 

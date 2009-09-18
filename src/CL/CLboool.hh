@@ -32,7 +32,7 @@ class boool
 		boool(boool& a);
 		boool(bool a);
 		boool(xlong a);
-		~boool();
+		~boool() { };
 	
 		inline boool& operator=(boool& a);
 		inline boool& operator=(bool a);
@@ -125,10 +125,6 @@ boool::boool(xlong a)
 {
 	this->b=clmath->sign(a);
 }
-//*
-
-//defaut destructor
-boool::~boool() { }
 //*
 
 //assign boool

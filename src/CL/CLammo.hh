@@ -134,7 +134,6 @@ template<int I>
 void CLammomanager::collision(CLentity<I>* e)
 {
 	xlong r = 0;
-	xlong time = clsystem->getmilliseconds();
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
