@@ -40,8 +40,8 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 	friend class CLsingle<CLgfx1>;
 	
 	private:
-		CLgfx1();
-		~CLgfx1();
+		CLgfx1() { };
+		~CLgfx1() { };
 	public:
 		void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
 		void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c);
@@ -71,10 +71,6 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void drawscreen(sprite* s);
 		void drawtile(xlong x,xlong y,sprites *s,xlong ti);
 };
-
-CLgfx1::CLgfx1() { }
-
-CLgfx1::~CLgfx1() { }
 
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 {
@@ -114,7 +110,7 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 uxlong CLgfx1::readpixel(xlong x,xlong y)
 {
 	if(isoff(x,y)) return 0;
-	return (doublebuffer[(y*xres)+x]);
+	return (cldoublebuffer[(y*xres)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)

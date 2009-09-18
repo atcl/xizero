@@ -22,9 +22,8 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 	friend class CLsingle<CLsystem>;
 	
 	private:
-		CLutils* utils;
-		CLsystem();
-		~CLsystem();
+		CLsystem() { };
+		~CLsystem() { };
 	public:
 		uxchar  eol();
 		uxchar  eof();
@@ -47,10 +46,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		void    installsystemkey(xchar scancode,void *action);
 		xlong   msgbox(const xchar* message);
 };
-
-CLsystem::CLsystem() { utils = CLutils::instance(); }
-
-CLsystem::~CLsystem() { }
 
 uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends
 
@@ -306,9 +301,9 @@ xlong CLsystem::msgbox(const xchar* message)
 	//*
 	
 	//determine length of commandline parts
-	xlong env1l = utils->chararraylength(env1);
-	xlong env2l = utils->chararraylength(message);
-	xlong env3l = utils->chararraylength(env3);
+	xlong env1l = clutils->chararraylength(env1);
+	xlong env2l = clutils->chararraylength(message);
+	xlong env3l = clutils->chararraylength(env3);
 	//*
 	
 	//allocate space for complete commandline
@@ -316,9 +311,9 @@ xlong CLsystem::msgbox(const xchar* message)
 	//*
 	
 	//assemble commandline
-	utils->copychararray(&env[0],env1,env1l);
-	utils->copychararray(&env[env1l],message,env2l);
-	utils->copychararray(&env[env1l+env2l],env3,env3l);
+	clutils->copychararray(&env[0],env1,env1l);
+	clutils->copychararray(&env[env1l],message,env2l);
+	clutils->copychararray(&env[env1l+env2l],env3,env3l);
 	env[env1l+env2l+env3l] = 0;
 	//*
 

@@ -14,7 +14,6 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 	friend class CLsingle<CLbench>;
 	
 	private:
-		CLsystem* system;
 		xlong framespersecond;
 		xlong currenttime;
 		xlong elapsedtime;
@@ -23,8 +22,8 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 		xlong lastupdate;
 		xlong interval;
 		xchar flags;
-		CLbench();
-		~CLbench();
+		CLbench() { };
+		~CLbench() { };
 	public:
 		void init(xlong i,xchar flags);
 		void inc();
@@ -32,23 +31,19 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 		void print();
 };
 
-CLbench::CLbench() { system = CLsystem::instance(); }
-
-CLbench::~CLbench() { }
-
 void CLbench::init(xlong i,xchar f)
 {
 	interval = i*1000;
 	flags = f;	
 	frames = 0;
-	lastupdate = system->getmilliseconds();
+	lastupdate = clsystem->getmilliseconds();
 	elapsedtime = 0;
 }
 
 void CLbench::inc()
 {
 	frames++;
-	currenttime = system->getmilliseconds();
+	currenttime = clsystem->getmilliseconds();
 	elapsedtime += (currenttime - lastupdate);
 	temptime = elapsedtime;
 //nicht durch temptime teilen, da altes zu neuem und durch 2
@@ -63,17 +58,14 @@ void CLbench::inc()
 	lastupdate = currenttime;
 }
 
-float CLbench::getfps()
-{
-	return framespersecond;
-}
+float CLbench::getfps() { return framespersecond; }
 
 void CLbench::print()
 {
 		if(flags & COUT_FPS)
 		{
-			system->print("fps: ",0);
-			system->print(framespersecond);
+			clsystem->print("fps: ",0);
+			clsystem->print(framespersecond);
 		}
 		
 		//~ if(flags & COUT_RAM)

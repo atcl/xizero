@@ -22,12 +22,6 @@ template<int I>
 class CLentity : public virtual CLcl
 {
 	protected:
-		CLsystem* system;
-		CLformat* format;
-		CLutils* utils;
-		CLgame* game;
-		CLmisc3d* misc3d;
-		CLmath* math;
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -101,22 +95,13 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 	startposition.x = ammodocking->x;
 	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
-	misc3d->project(startposition,position);
+	clmisc3d->project(startposition,position);
 	ammoman->fire(at,startposition,targetdirection);
 }
 
 template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 {
-	//associate singletons
-	system = CLsystem::instance();
-	format = CLformat::instance();
-	utils = CLutils::instance();
-	game = CLgame::instance();
-	misc3d = CLmisc3d::instance();
-	math = CLmath::instance();
-	//*
-	
 	//create transformation matrix
 	linear = new CLmatrix(1);
 	//*
@@ -127,7 +112,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//load entity archive 
-	arfile* entitya = format->loadar(ea);
+	arfile* entitya = clformat->loadar(ea);
 	//*
 
 	//for each model
@@ -136,8 +121,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
-		xlong em = utils->findarmember(entitya,testext[i]);
-		if(em==-1) system->exit(1,0,__func__,"no entity model file found");
+		xlong em = clutils->findarmember(entitya,testext[i]);
+		if(em==-1) clsystem->exit(1,0,__func__,"no entity model file found");
 		model[i] = new CLobject(entitya->members[em],0);
 		//*
 		
@@ -162,17 +147,17 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//find and load definition (*.ini)
-	xlong ed = utils->findarmember(entitya,".ini");
-	if(ed==-1) system->exit(1,0,__func__,"no entity definition found");
-	def = format->loadini(entitya->members[ed]);
+	xlong ed = clutils->findarmember(entitya,".ini");
+	if(ed==-1) clsystem->exit(1,0,__func__,"no entity definition found");
+	def = clformat->loadini(entitya->members[ed]);
 	//*
 	
 	//load entity attributes
-	healthmax = health = system->ato((*def)["health"]);
-	shieldmax = shield = system->ato((*def)["shield"]);
-	shieldrate	= system->ato((*def)["shieldrate"]);
-	armor		= system->ato((*def)["armor"]);
-	ammomounts	= system->ato((*def)["ammomounts"]);
+	healthmax = health = clsystem->ato((*def)["health"]);
+	shieldmax = shield = clsystem->ato((*def)["shield"]);
+	shieldrate	= clsystem->ato((*def)["shieldrate"]);
+	armor		= clsystem->ato((*def)["armor"]);
+	ammomounts	= clsystem->ato((*def)["ammomounts"]);
 	points		= 10; //system->ato((*def)["points"]);
 	//*
 	
@@ -184,9 +169,9 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	fireupdate = new xlong[ammomounts];
 	for(uxlong j=0; j<ammomounts; j++)
 	{
-		ammotype[j] = system->ato((*def)[ammoext[j]]);
-		firerate[j] = system->ato((*def)[fireext[j]]);
-		fireupdate[j] = system->getmilliseconds();
+		ammotype[j] = clsystem->ato((*def)[ammoext[j]]);
+		firerate[j] = clsystem->ato((*def)[fireext[j]]);
+		fireupdate[j] = clsystem->getmilliseconds();
 	}
 	//*
 	
@@ -196,8 +181,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	
 	//load csv if present (*.csv)
 	csv=0;
-	xlong ec = utils->findarmember(entitya,".csv");
-	if(ec!=-1) csv = format->loadcsv(entitya->members[ec]);
+	xlong ec = clutils->findarmember(entitya,".csv");
+	if(ec!=-1) csv = clformat->loadcsv(entitya->members[ec]);
 	//*
 	
 	//set remaining entity attributes
@@ -206,22 +191,13 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	gear = 0;
 	visible = 0;
 	active = 0;
-	shieldupdate = lastupdate = system->getmilliseconds();
+	shieldupdate = lastupdate = clsystem->getmilliseconds();
 	//*
 }
 
 template<int I>
 CLentity<I>::CLentity(CLentity* entityptr)
 {
-	//associate singletons
-	system = CLsystem::instance();
-	format = CLformat::instance();
-	utils = CLutils::instance();
-	game = CLgame::instance();
-	misc3d = CLmisc3d::instance();
-	math = CLmath::instance();
-	//*
-	
 	//create transformation matrix
 	linear = new CLmatrix(1);
 	//*
@@ -277,7 +253,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	fireupdate = new xlong[ammomounts];
 	for(uxlong j=0; j<ammomounts; j++)
 	{
-		fireupdate[j] = system->getmilliseconds();
+		fireupdate[j] = clsystem->getmilliseconds();
 	}
 	//*
 	
@@ -295,7 +271,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	gear = 0;
 	visible = 0;
 	active = 0;
-	shieldupdate = lastupdate = system->getmilliseconds();
+	shieldupdate = lastupdate = clsystem->getmilliseconds();
 	//*
 }
 

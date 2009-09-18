@@ -10,14 +10,11 @@
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
 
-class CLtransitions : CLsingle<CLtransitions>
+class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
 {
 	friend class CLsingle<CLtransitions>;
 	
 	private:
-		CLutils* utils;
-		CLsystem* system;
-		CLgfx1* gfx1;
 		xchar fade_const;
 		xlong diss_const;
 		xlong circ_const;
@@ -29,7 +26,7 @@ class CLtransitions : CLsingle<CLtransitions>
 		void fadetoblack();
 };
 
-CLtransitions::CLtransitions() { utils = CLutils::instance(); system = CLsystem::instance(); gfx1 = CLgfx1::instance(); }
+CLtransitions::CLtransitions() { }
 
 CLtransitions::~CLtransitions() { }
 
@@ -39,9 +36,9 @@ void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t)
 	
 	while(win->run())
 	{
-		if(secondtime) { system->wait(t); break; }
-		gfx1->drawcircle(x,y,r,0x00FFFFFF);
-		gfx1->fill(5,30,0,0x00FFFFFF);
+		if(secondtime) { clsystem->wait(t); break; }
+		clgfx1->drawcircle(x,y,r,0x00FFFFFF);
+		clgfx1->fill(5,30,0,0x00FFFFFF);
 		secondtime = 1;
 	}
 }
@@ -57,13 +54,13 @@ void CLtransitions::dissolve()
 	{
 		for(uxlong j=0; j<1000; j++)
 		{
-			rx = utils->getrandom(800);
-			ry = utils->getrandom(600);
-			c = utils->getrandom(-1);
-			gfx1->drawbigpixel(rx,ry,c);
+			rx = clutils->getrandom(800);
+			ry = clutils->getrandom(600);
+			c = clutils->getrandom(-1);
+			clgfx1->drawbigpixel(rx,ry,c);
 		}
 		i++;
-		system->wait(10);
+		clsystem->wait(10);
 	}
 }
 
@@ -76,15 +73,15 @@ void CLtransitions::fadetoblack()
 	{		
 		for(uxlong j=0; j<scrs; j++)
 		{
-			utils->long2char((*CLdoublebuffer)[j],comp[0],comp[1],comp[2],comp[3]);
+			clutils->long2char((*CLdoublebuffer)[j],comp[0],comp[1],comp[2],comp[3]);
 			if(comp[0] > 0) comp[0]--;
 			if(comp[1] > 0) comp[1]--;
 			if(comp[2] > 0) comp[2]--;
 			if(comp[3] > 0) comp[3]--;
-			(*CLdoublebuffer)[j] = utils->chars2long(comp[0],comp[1],comp[2],comp[3]);
+			(*CLdoublebuffer)[j] = clutils->chars2long(comp[0],comp[1],comp[2],comp[3]);
 		}
 		i++;
-		system->wait(5);
+		clsystem->wait(5);
 	}
 }
 

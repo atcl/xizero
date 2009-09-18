@@ -11,6 +11,7 @@
 //string: atcrosslevel ; crc: 1734979481
 //string: xizero ; crc: 1208686013
 
+//to singleton?
 class CLid : public virtual CLcl
 {
 	private: 

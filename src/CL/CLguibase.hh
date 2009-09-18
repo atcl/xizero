@@ -12,9 +12,6 @@
 class CLguibase : public virtual CLcl
 {
 	protected:
-		CLgfx1* gfx1;
-		CLgfx2* gfx2;
-		CLmath* math;
 		xlong posx;
 		xlong posy;
 		xlong width;
@@ -27,7 +24,7 @@ class CLguibase : public virtual CLcl
 		void basereset(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 	public:
 		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
-		virtual ~CLguibase();
+		virtual ~CLguibase() { };
 		virtual void draw();
 		void setwidth(xlong w);
 		void setheight(xlong h);
@@ -47,12 +44,6 @@ class CLguibase : public virtual CLcl
 
 CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
 {
-	//associate singletons
-	gfx1 = CLgfx1::instance();
-	gfx2 = CLgfx2::instance();
-	math = CLmath::instance();
-	//*
-	
 	//set up attributes
 	posx = px;
 	posy = py;
@@ -64,8 +55,6 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	flat = f;
 	//*
 }
-
-CLguibase::~CLguibase() { } //virtual!
 
 void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
 {

@@ -12,6 +12,7 @@
 #include "CLmatrix.hh"
 #include "CLformat.hh"
 
+//to singleton?
 namespace CLintro
 {
 	CLmatrix* linear;

@@ -18,7 +18,6 @@
 class CLexplosion : public virtual CLcl
 {
 	private:
-		CLsystem* system;
 		CLobject* object;
 		CLmatrix* linear;
 		CLfvector a;
@@ -38,8 +37,6 @@ class CLexplosion : public virtual CLcl
 
 CLexplosion::CLexplosion(CLobject* o)
 {
-	system = CLsystem::instance();
-	
 	//set up attributes
 	linear = new CLmatrix(1);
 	object = o;
@@ -55,21 +52,18 @@ CLexplosion::CLexplosion(CLobject* o)
 	//*
 }
 
-CLexplosion::~CLexplosion()
-{ 
-	delete linear;	
-}
+CLexplosion::~CLexplosion() { delete linear; }
 
 void CLexplosion::first(bool t)
 {
 	type = t;
 	if(type) object->partupdate(linear);
-	starttime = lastupdate = system->getmilliseconds(); 
+	starttime = lastupdate = clsystem->getmilliseconds(); 
 }
 
 xlong CLexplosion::next()
 {
-	xlong temp = system->getmilliseconds();
+	xlong temp = clsystem->getmilliseconds();
 
 	switch(type)
 	{

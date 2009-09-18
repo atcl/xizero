@@ -36,9 +36,6 @@ typedef CLlist<CLammo> CLammolist;
 class CLammomanager : public virtual CLcl
 {
 	private:
-		CLsystem* system;
-		CLgame* game;
-		CLmath* math;
 		CLammolist* ammolist;
 		CLammo** ammotype;
 		xlong ammotypecount;
@@ -54,13 +51,7 @@ class CLammomanager : public virtual CLcl
 };
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
-{
-	//associate singletons
-	system = CLsystem::instance();
-	game = CLgame::instance();
-	math = CLmath::instance();
-	//*
-	
+{	
 	//set up attributes
 	mark = m;
 	ammotypecount = atc;
@@ -105,7 +96,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 
 void CLammomanager::update()
 {
-	xlong time = system->getmilliseconds();
+	xlong time = clsystem->getmilliseconds();
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
@@ -125,7 +116,7 @@ void CLammomanager::update()
 		//*
 		
 		//check if current ammo left screen
-		if(game->boundary(currammo->p,*mark)!=0)
+		if(clgame->boundary(currammo->p,*mark)!=0)
 		{
 			ammolist->delcurrent(0);
 			listfix = ammolist->isfirst();
@@ -143,7 +134,7 @@ template<int I>
 void CLammomanager::collision(CLentity<I>* e)
 {
 	xlong r = 0;
-	xlong time = system->getmilliseconds();
+	xlong time = clsystem->getmilliseconds();
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
@@ -156,7 +147,7 @@ void CLammomanager::collision(CLentity<I>* e)
 		//*
 		
 		//test the current ammo for collision with any opposite entity
-		if(e->isvisible() && game->collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,math->delta(i))==0)
+		if(e->isvisible() && clgame->collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,clmath->delta(i))==0)
 		{
 			r++;
 			ammolist->delcurrent(0);

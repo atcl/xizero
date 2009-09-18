@@ -29,7 +29,7 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		xlong* arcsinarray;
 		xlong* arccosarray;
 		CLmath();
-		~CLmath();
+		~CLmath() { };
 	public:
 		template<typename T> T sign(T x);
 		template<typename T> T heaviside(T x);
@@ -53,8 +53,6 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		float arccos(float x);
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
 };
-
-CLmath::~CLmath() { }
 
 CLmath::CLmath()
 {

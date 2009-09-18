@@ -20,10 +20,9 @@ class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 	friend class CLsingle<CLgamepad>;
 	
 	private:
-		CLsystem* system;
 		xlong device;
 		CLgamepad();
-		~CLgamepad();
+		~CLgamepad() { };
 		
 		#ifdef WIN32
 			struct JOYINFO gp;
@@ -41,18 +40,14 @@ class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 		CLgamepadstate* getstate();
 };
 
-CLgamepad::~CLgamepad() { }
-
 #ifdef WIN32
 
 CLgamepad::CLgamepad()
 {
-	system = CLsystem::instance();
-	
 	//check if gamepad driver is installed
 	if(joyGetNumDevs() == -1)
 	{
-		system->print("No Gamepad driver found");
+		clsystem->print("No Gamepad driver found");
 		device = -1;
 		return;
 	}
@@ -61,7 +56,7 @@ CLgamepad::CLgamepad()
 	//check if gamepad is connected
 	if(joygetPos(0,&gp)==JOYERR_UNPLUGGED)
 	{
-		system->print("No Gamepad found");
+		clsystem->print("No Gamepad found");
 		device = -1;
 		return;
 	}
@@ -105,13 +100,11 @@ void CLgamepad::exit() { }
 #else //ifdef LINUX
 
 CLgamepad::CLgamepad()
-{
-	system = CLsystem::instance();
-	
+{	
 	//check if gamepad device exists and so a gamepad is connected
 	if( (device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
-		system->print("No Gamepad found");
+		clsystem->print("No Gamepad found");
 		return;
 	}
 	//*

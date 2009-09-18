@@ -8,14 +8,9 @@
 #include "CLbuffer.hh"
 #include "CLwindow.hh"
 #include "CLmatrix.hh"
-#include "CLfps.hh"
+#include "CLbench.hh"
 
 //variables
-uxlong CLscreenwidth = xres;
-uxlong CLscreenheight = yres;
-uxlong CLscreendepth = 4;
-uxlong CLscreenpixsize = xres * yres;
-uxlong CLscreenmemsize = xres * yres * 4;
 
 CLlbuffer* CLdoublebuffer;
 CLlbuffer* CLstencilbuffer;

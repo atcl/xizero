@@ -38,7 +38,7 @@ class CLwindow : public Fl_Single_Window, public CLsingle<CLwindow>
 		void draw();
 		virtual int handle(int event);
 		CLwindow();
-		~CLwindow();
+		~CLwindow() { };
 	public:
 		void init(xlong w,xlong h,const xchar* t,xlong* b);
 		void redraw();
@@ -79,9 +79,7 @@ int CLwindow::handle(int event)
 	return Fl_Window::handle(event);
 }
 
-CLwindow::CLwindow() : Fl_Single_Window(0,0,""){ }
-
-CLwindow::~CLwindow() { }
+CLwindow::CLwindow() : Fl_Single_Window(0,0,"") { }
 
 void CLwindow::init(xlong w,xlong h,const xchar* t,xlong* b)
 {

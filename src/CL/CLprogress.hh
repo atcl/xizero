@@ -22,7 +22,7 @@ class CLprogress : public CLguibase
 		CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc);
 		CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv);
 		CLprogress();
-		~CLprogress();
+		~CLprogress() { };
 		void reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc);
 		void draw();
 		void setstart(xlong s);
@@ -44,7 +44,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	float temp = math->absolute(end-start);
+	float temp = clmath->absolute(end-start);
 	float temp2 = (width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -61,7 +61,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	xlong temp = float(math->absolute(end-start));
+	xlong temp = float(clmath->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -72,8 +72,6 @@ CLprogress::CLprogress() : CLguibase(0,0,0,0)
 {
 	start = end = progress = pcolor = horver = pprogress = punit = 0;
 }
-
-CLprogress::~CLprogress() { }
 
 void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc)
 {
@@ -86,7 +84,7 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	xlong temp = float(math->absolute(end-start));
+	xlong temp = float(clmath->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -95,20 +93,20 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 void CLprogress::draw()
 {
 	//draw enclosing frame
-	gfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
+	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
 	//*
 
 	switch(horver)
 	{
 		//draw horizontal progress
 		case 0:
-			gfx1->drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor);
+			clgfx1->drawfilledrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor);
 		break;
 		//*
 		
 		//draw vertical progress
 		case 1:
-			gfx1->drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor);
+			clgfx1->drawfilledrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor);
 		break;
 		//*
 	}
@@ -117,7 +115,7 @@ void CLprogress::draw()
 void CLprogress::setstart(xlong s)
 {
 	start = s;
-	xlong temp = float(math->absolute(end-start));
+	xlong temp = float(clmath->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -126,7 +124,7 @@ void CLprogress::setstart(xlong s)
 void CLprogress::setend(xlong e)
 {
 	end = e;
-	xlong temp = float(math->absolute(end-start));
+	xlong temp = float(clmath->absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;

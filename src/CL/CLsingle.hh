@@ -5,10 +5,9 @@
 #pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
-#include "CLglobals.hh"
 
 template<class T>
-class CLsingle : public CLglobal
+class CLsingle
 {
 	private:
 		static T* single;

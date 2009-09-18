@@ -18,7 +18,7 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 	private:
 		xlong seed;
 		CLutils();
-		~CLutils();
+		~CLutils() { };
 	public:
 		void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
 		xchar  long2char(xlong l,xlong i);
@@ -34,8 +34,6 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 };
 
 CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; }
-
-CLutils::~CLutils() { }
 
 void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3)
 {

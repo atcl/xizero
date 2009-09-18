@@ -24,7 +24,6 @@ struct CLbox
 class CLobject : public virtual CLcl
 {
 	private:
-		CLsystem* system;
 		CLpolygon** polyptr;
 		CLfvector** dockptr;
 		CLbox* boundingbox;
@@ -51,8 +50,6 @@ class CLobject : public virtual CLcl
 
 CLobject::CLobject(CLfile* fileptr,bool zs)
 {
-	system = CLsystem::instance();
-	
 	//init bounding box
 	rboundingbox = new CLbox;
 	boundingbox = new CLbox;
@@ -95,7 +92,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	//*
 
 	//check if first 4 bytes of file have y3d id
-	if(dataptr[0] != '<CLY') system->exit(1,0,__func__,"wrong y3d format, may be endianess?");
+	if(dataptr[0] != '<CLY') clsystem->exit(1,0,__func__,"wrong y3d format, may be endianess?");
 	//*
 
 	//check if second 4 bytes of file have binary id
@@ -109,7 +106,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		//dataptr[3] is empty
 		
 		//read OBJT tag ( 'OBJT' , object_name , subobject_count , dockingpoint_count )
-		if(dataptr[4] != 'OBJT' ) system->exit(1,0,__func__,"No OBJT tag");
+		if(dataptr[4] != 'OBJT' ) clsystem->exit(1,0,__func__,"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
@@ -128,7 +125,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		for(uxlong i=0;i<sobjcount;i++)
 		{
 			//read SOBJ tag ( 'SOBJ' , subobject_name , subobject_polygon_count , subobject_dockingpoint_count )
-			if(dataptr[d] != 'SOBJ' ) system->exit(1,0,__func__,"No SOBJ tag");
+			if(dataptr[d] != 'SOBJ' ) clsystem->exit(1,0,__func__,"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
@@ -136,7 +133,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 			//*
 
 			//read CONN tag ( 'CONN' , x_reference , y_reference , z_reference )
-			if(dataptr[d] != 'CONN' ) system->exit(1,0,__func__,"No CONN tag");
+			if(dataptr[d] != 'CONN' ) clsystem->exit(1,0,__func__,"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
@@ -147,7 +144,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 			for(uxlong j=0;j<localpolycount;j++,polycounter++)
 			{
 				//read POLY tag ( 'POLY' , polygon_name , polygon_color , 0 )
-				if(dataptr[d] != 'POLY' ) system->exit(1,0,__func__,"No POLY tag");
+				if(dataptr[d] != 'POLY' ) clsystem->exit(1,0,__func__,"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				localcolor = dataptr[d]; d++; //color
@@ -155,7 +152,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 
 				//read 1st VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) system->exit(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) clsystem->exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[0].x = dataptr[d] + xoff; d++; //x1
 				t[0].y = dataptr[d] + yoff; d++; //y1
@@ -172,7 +169,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 
 				//read 2nd VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) system->exit(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) clsystem->exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[1].x = dataptr[d] + xoff; d++; //x2
 				t[1].y = dataptr[d] + yoff; d++; //y2
@@ -189,7 +186,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 
 				//read 3rd VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) system->exit(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) clsystem->exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[2].x = dataptr[d] + xoff; d++; //x3
 				t[2].y = dataptr[d] + yoff; d++; //y3
@@ -206,7 +203,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 
 				//read 4th VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) system->exit(1,0,__func__,"No VECT tag");
+				if(dataptr[d] != 'VECT' ) clsystem->exit(1,0,__func__,"No VECT tag");
 				d++; //"VECT"
 				t[3].x = dataptr[d] + xoff; d++; //x4
 				t[3].y = dataptr[d] + yoff; d++; //y4
@@ -299,8 +296,6 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 
 CLobject::CLobject(CLobject* obj)
 {
-	system = CLsystem::instance();
-
 	polycount = obj->polycount;
 	polyptr = new CLpolygon*[polycount];
 	dockcount = obj->dockcount;

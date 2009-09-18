@@ -22,10 +22,8 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 	friend class CLsingle<CLformat>;
 	
 	private:
-		CLutils* utils;
-		CLsystem* system;
-		CLformat();
-		~CLformat();
+		CLformat() { };
+		~CLformat() { };
 	public:
 		xlong*   loadcsv(CLfile* sf,xchar sep=',');
 		arfile*  loadar(CLfile* sf);
@@ -36,10 +34,6 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		xlong**  loadlvl();
 		xmap*    loadini(CLfile* bf);
 };
-
-CLformat::CLformat() { utils = CLutils::instance(); system = CLsystem::instance(); }
-
-CLformat::~CLformat() { }
 
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {
@@ -54,7 +48,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = utils->getlinecount(sf);
+	xlong  lc = clutils->getlinecount(sf);
 	//*
 
 	//get comma count per line
@@ -65,7 +59,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	while(tlc<lc)
 	{
 		if(bf[tfc]==sep) tcc++;
-		else if(bf[tfc]==system->eol())
+		else if(bf[tfc]==clsystem->eol())
 		{
 			cc[tlc] = tcc;
 			tcc = 0;
@@ -92,9 +86,9 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 
 	while(tvc<=vc)
 	{
-		r[tvc] = system->ato(&bf[tfc]);
+		r[tvc] = clsystem->ato(&bf[tfc]);
 		tvc++;
-		while(bf[tfc]!=sep && bf[tfc]!=system->eol())
+		while(bf[tfc]!=sep && bf[tfc]!=clsystem->eol())
 		{
 			tfc++;
 		}
@@ -118,7 +112,7 @@ arfile* CLformat::loadar(CLfile* sf)
 	//*
 
 	//check for "magic-string"
-	if( system->cmpcstr(bf,"!<arch>",6) == 0 )
+	if( clsystem->cmpcstr(bf,"!<arch>",6) == 0 )
 	{
 		//init variables
 		xlong bc = 8;
@@ -132,12 +126,12 @@ arfile* CLformat::loadar(CLfile* sf)
 		do
 		{
 			//read member header
-			utils->copychararray(&fn[0],&bf[bc],16);	//member filename
+			clutils->copychararray(&fn[0],&bf[bc],16);	//member filename
 			bc += 48;					//no necessary information here, so skip
 			//*
 			
 			//decode filesize of current ar member
-			fs = system->ato(&bf[bc]);
+			fs = clsystem->ato(&bf[bc]);
 			bc+=12; //goto end of header
 			//*
 
@@ -161,7 +155,7 @@ arfile* CLformat::loadar(CLfile* sf)
 			tindex[fc] = new armember;
 			tindex[fc]->size = fs;
 			tindex[fc]->lsize = fs2;
-			tindex[fc]->name = new xchar[16]; utils->copychararray(tindex[fc]->name,&fn[0],16);
+			tindex[fc]->name = new xchar[16]; clutils->copychararray(tindex[fc]->name,&fn[0],16);
 			tindex[fc]->data = tb;
 			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
@@ -200,7 +194,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 	
 	xchar* bf = sf->text;
 	//xlong bs = sf->size;
-	xlong lc = utils->getlinecount(sf);
+	xlong lc = clutils->getlinecount(sf);
 
 	//determine line length
 	xlong lw = 0;
@@ -232,7 +226,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 				if(bf[li]==rc) rev[j][k] = rv;
 				else rev[j][k] = bf[li] - subconst;
 			}
-			else system->exit(1,0,__func__,"Map not conform with given width");
+			else clsystem->exit(1,0,__func__,"Map not conform with given width");
 			
 			li++;
 		}
@@ -327,7 +321,7 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 	
-	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) system->exit(1,0,__func__,"tile dimensions do not match image dimensions");
+	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) clsystem->exit(1,0,__func__,"tile dimensions do not match image dimensions");
 	r->tilecount = (r->width/r->tilewidth) * (r->height*r->tileheight);
 
 	return r;
@@ -364,7 +358,7 @@ sprites* CLformat::loadfont(CLfile* sf)
 
 	//xshort imageoffset = imageid + colormaplength;
 
-	if( (imagewidth%256)!=0 ) system->exit(1,0,__func__,"Not 256 font tiles in one row!");
+	if( (imagewidth%256)!=0 ) clsystem->exit(1,0,__func__,"Not 256 font tiles in one row!");
 
 	//fill CLfont struct
 	CLfont* r = new CLfont;
@@ -393,7 +387,7 @@ xmap* CLformat::loadini(CLfile* sf)
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = utils->getlinecount(sf);
+	xlong  lc = clutils->getlinecount(sf);
 	//*
 	
 	xlong cc=0;
@@ -407,7 +401,7 @@ xmap* CLformat::loadini(CLfile* sf)
 	{
 		while(bf[cc]==' ') cc++;
 		
-		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!=system->eol())
+		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!=clsystem->eol())
 		{
 			//pre equal sign
 			tc0 = cc;
@@ -417,7 +411,7 @@ xmap* CLformat::loadini(CLfile* sf)
 			while(bf[cc]!='=')
 			{
 				if(bf[cc]!=' ') noinfo = 1;
-				if(bf[cc]==system->eol() && noinfo==1) noequal = 1;
+				if(bf[cc]==clsystem->eol() && noinfo==1) noequal = 1;
 				if(bf[cc]!=' ') tc1++;
 				cc++;
 			}
@@ -441,7 +435,7 @@ xmap* CLformat::loadini(CLfile* sf)
 
 				tc0 = cc;
 				tc1=0;
-				while(bf[cc] != system->eol())
+				while(bf[cc] != clsystem->eol())
 				{
 						 if( (bf[cc]=='"' || bf[cc]=='\'') && apos==0) { apos=1; cc++; aps=cc; }
 					else if( (bf[cc]=='"' || bf[cc]=='\'') && apos==1) { apos=0; break; }
@@ -480,7 +474,7 @@ xmap* CLformat::loadini(CLfile* sf)
 		}
 			
 		//reset fopr next line
-		while(bf[cc] != system->eol()) cc++;
+		while(bf[cc] != clsystem->eol()) cc++;
 		cc++;
 		aps=0;
 		//*

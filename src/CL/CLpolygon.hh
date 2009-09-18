@@ -20,9 +20,6 @@ class CLpolygon : public virtual CLcl
 		static xlong pointcount;
 		static float shadezscale;
 
-		CLsystem* system;
-		CLmath* math;
-
 		uxlong color;
 		uxlong rcolor;
 		uxlong scolor;
@@ -390,7 +387,7 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight)
 	doubleword argb = { 0 };
 
 	float t = (normal * cllight) / ( !normal * !cllight );
-	t = math->absolute(t);
+	t = clmath->absolute(t);
 	
 	if(t > 1) t = 1;
 
@@ -554,12 +551,7 @@ void CLpolygon::rasterize(xlong shadow)
 }
 
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
-{
-	//associate singletons
-	system = CLsystem::instance();
-	math = CLmath::instance();
-	//*
-	
+{	
 	//set colors and pointcount
 	rcolor = color = co;
 	scolor = sc;
@@ -675,7 +667,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 		}
 		else
 		{
-			system->exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
+			clsystem->exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
 		}
 	}
 	

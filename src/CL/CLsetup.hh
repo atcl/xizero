@@ -9,7 +9,7 @@
 #include "CLmath.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
-#include "CLfps.hh"
+#include "CLbench.hh"
 #include "CLmatrix.hh"
 
 //prototypes:

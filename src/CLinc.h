@@ -74,7 +74,7 @@
 //*
 
 //pseudo static classes
-#include "CL/CLfps.hh"
+#include "CL/CLbench.hh"
 #include "CL/CLformat.hh"
 #include "CL/CLmath.hh"
 #include "CL/CLgfx1.hh"

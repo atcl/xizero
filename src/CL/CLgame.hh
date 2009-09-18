@@ -14,7 +14,6 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 	friend class CLsingle<CLgame>;
 	
 	private:
-		CLmath* math;
 		xlong boundaryx1;
 		xlong boundaryx2;
 		xlong boundaryy1;
@@ -22,7 +21,7 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		CLfvector slopes[2];
 		float intersections[6][2];
 		CLgame();
-		~CLgame();
+		~CLgame() { };
 	public:
 		void init(xlong bx1=0,xlong by1=0,xlong bx2=xres,xlong by2=yres);
 		template<class clvector>bool boundary(const clvector& p,xlong mark=0);
@@ -33,9 +32,7 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
 
-CLgame::CLgame() { math = CLmath::instance(); boundaryx1 = boundaryy1 = 0; boundaryx2 = xres; boundaryy2 = yres; }
-
-CLgame::~CLgame() { }
+CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = xres; boundaryy2 = yres; }
 
 void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {
@@ -138,12 +135,12 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 	//~ if(intersections2[4]<intersections[4][0] && intersections2[0]<intersections[4][1]) r++;
 	//~ if(intersections2[5]<intersections[5][0] && intersections2[0]<intersections[5][1]) r++;
 	
-	if(intersections2[0]>math->min(intersections[0][0],intersections[0][1]) && intersections2[0]<math->max(intersections[0][0],intersections[0][1])) r++;
-	if(intersections2[1]>math->min(intersections[1][0],intersections[1][1]) && intersections2[0]<math->max(intersections[1][0],intersections[1][1])) r++;
-	if(intersections2[2]>math->min(intersections[2][0],intersections[2][1]) && intersections2[0]<math->max(intersections[2][0],intersections[2][1])) r++;
-	if(intersections2[3]>math->min(intersections[3][0],intersections[3][1]) && intersections2[0]<math->max(intersections[3][0],intersections[3][1])) r++;
-	if(intersections2[4]>math->min(intersections[4][0],intersections[4][1]) && intersections2[0]<math->max(intersections[4][0],intersections[4][1])) r++;
-	if(intersections2[5]>math->min(intersections[5][0],intersections[5][1]) && intersections2[0]<math->max(intersections[5][0],intersections[5][1])) r++;
+	if(intersections2[0]>clmath->min(intersections[0][0],intersections[0][1]) && intersections2[0]<clmath->max(intersections[0][0],intersections[0][1])) r++;
+	if(intersections2[1]>clmath->min(intersections[1][0],intersections[1][1]) && intersections2[0]<clmath->max(intersections[1][0],intersections[1][1])) r++;
+	if(intersections2[2]>clmath->min(intersections[2][0],intersections[2][1]) && intersections2[0]<clmath->max(intersections[2][0],intersections[2][1])) r++;
+	if(intersections2[3]>clmath->min(intersections[3][0],intersections[3][1]) && intersections2[0]<clmath->max(intersections[3][0],intersections[3][1])) r++;
+	if(intersections2[4]>clmath->min(intersections[4][0],intersections[4][1]) && intersections2[0]<clmath->max(intersections[4][0],intersections[4][1])) r++;
+	if(intersections2[5]>clmath->min(intersections[5][0],intersections[5][1]) && intersections2[0]<clmath->max(intersections[5][0],intersections[5][1])) r++;
 	//*
 
 	return r;
@@ -189,10 +186,10 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
 	
 	//check if intersections overlap
 	xlong r = -4;
-	if(intersections2[0]>=math->min(intersections[0][0],intersections[0][1]) && intersections2[0]<=math->max(intersections[0][0],intersections[0][1])) r++; //player ammo does not work here
-	if(intersections2[1]>=math->min(intersections[1][0],intersections[1][1]) && intersections2[1]<=math->max(intersections[1][0],intersections[1][1])) r++;
-	if(intersections2[2]>=math->min(intersections[2][0],intersections[2][1]) && intersections2[2]<=math->max(intersections[2][0],intersections[2][1])) r++;
-	if(intersections2[3]>=math->min(intersections[3][0],intersections[3][1]) && intersections2[3]<=math->max(intersections[3][0],intersections[3][1])) r++; //player ammo does not work here
+	if(intersections2[0]>=clmath->min(intersections[0][0],intersections[0][1]) && intersections2[0]<=clmath->max(intersections[0][0],intersections[0][1])) r++; //player ammo does not work here
+	if(intersections2[1]>=clmath->min(intersections[1][0],intersections[1][1]) && intersections2[1]<=clmath->max(intersections[1][0],intersections[1][1])) r++;
+	if(intersections2[2]>=clmath->min(intersections[2][0],intersections[2][1]) && intersections2[2]<=clmath->max(intersections[2][0],intersections[2][1])) r++;
+	if(intersections2[3]>=clmath->min(intersections[3][0],intersections[3][1]) && intersections2[3]<=clmath->max(intersections[3][0],intersections[3][1])) r++; //player ammo does not work here
 	//*
 //~ say(r);
 	return r;

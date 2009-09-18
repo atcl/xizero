@@ -62,7 +62,7 @@ xlong CLenemy::collision()
 
 	//screen boundary collision test
 	tposition.y -= *mark;
-	xlong bc = game->boundary(tposition,*boundingbox[1][0],1);
+	xlong bc = clgame->boundary(tposition,*boundingbox[1][0],1);
 	tposition.y += *mark;
 
 	if(bc==0)
@@ -91,8 +91,8 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 	//*
 	
 	//set enemy specific attributes
-	points = system->ato((*def)["points"]);
-	speeddir.y  = system->ato((*def)["speed"]);
+	points = clsystem->ato((*def)["points"]);
+	speeddir.y  = clsystem->ato((*def)["speed"]);
 	speeddir.y /= 20;
 	direction[0].y = -1;
 	//*
@@ -186,7 +186,7 @@ xlong CLenemy::update(CLentity<I>* p)
 	
 	if(active==1)
 	{
-		xlong time = system->getmilliseconds();
+		xlong time = clsystem->getmilliseconds();
 
 		linear->unit();
 		
@@ -198,7 +198,7 @@ xlong CLenemy::update(CLentity<I>* p)
 		//*
 		
 		//fire at player?
-		xlong fc = game->collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
+		xlong fc = clgame->collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
 		if( fc != 0 )
 		{
 			if(time >= fireupdate[0] + firerate[0])
@@ -236,7 +236,7 @@ xlong CLenemy::update(CLentity<I>* p)
 	{
 		if(expl[0]->next()==1) return points;
 	}
-	else lastupdate = system->getmilliseconds();
+	else lastupdate = clsystem->getmilliseconds();
 	
 	return -1;
 }

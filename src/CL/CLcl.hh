@@ -9,22 +9,22 @@
 
 #include "CLtypes.hh"
 #include "CLversion.hh"
+#include "CLglobals.hh"
 
 template<class T>
 T* CLinit(T* singleton);
 
 class CLutils;
 
-class CLcl
+class CLcl : public CLglobal
 {
 	protected:
-		CLutils* utils2;
 		static xlong version;
 		static xlong id;
 		const xchar* name;
 	public:
 		CLcl();
-		 virtual ~CLcl();
+		 virtual ~CLcl() { };
 		xlong getversion() const;
 		const xchar* getname() const;
 };
@@ -40,8 +40,6 @@ CLcl::CLcl()
 	name = typeid(*this).name();
 	id++;
 }
-
-CLcl::~CLcl() { }
 
 xlong CLcl::getversion() const { return version; }
 

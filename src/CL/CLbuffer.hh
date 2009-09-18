@@ -58,10 +58,7 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s)
 	//*
 }
 
-template <typename T>CLbuffer<T>::~CLbuffer()
-{
-	delete[] buffer;
-}
+template <typename T>CLbuffer<T>::~CLbuffer() { delete[] buffer; }
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {

@@ -15,8 +15,8 @@ class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 	friend class CLsingle<CLmisc3d>;
 	
 	private:
-		CLmisc3d();
-		~CLmisc3d();
+		CLmisc3d() { };
+		~CLmisc3d() { };
 	public:
 		template<class clvector>void project(clvector& v,const clvector& p);
 		template<class clvector>void project2(clvector& o);
@@ -25,10 +25,6 @@ class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 		template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
-
-CLmisc3d::CLmisc3d() { }
-
-CLmisc3d::~CLmisc3d() { }
 
 template<class clvector>
 void CLmisc3d::project(clvector& v,const clvector& p)

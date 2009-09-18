@@ -380,12 +380,12 @@ void CLlist<member>::print() const
 	//print all list members names
 	setfirst();
 
-	CLsystem::print("|");
+	clsystem->print("|");
 
 	while(!islast())
 	{
-		CLsystem::print("+",0);
-		CLsystem::print(getcurrentname());
+		clsystem->print("+",0);
+		clsystem->print(getcurrentname());
 		setnext();
 	}
 	//*

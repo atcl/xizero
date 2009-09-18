@@ -16,7 +16,7 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		xlong rprogress;
 		uxlong pcolor;
 		CLfsprogress();
-		~CLfsprogress();
+		~CLfsprogress() { };
 	public:
 		void draw();
 		void set(xlong p);
@@ -25,9 +25,7 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		xlong get();
 };
 
-CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x000000FF;}
-
-CLfsprogress::~CLfsprogress() { } 
+CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x000000FF;} 
 
 void CLfsprogress::draw()
 {

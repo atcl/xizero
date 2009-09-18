@@ -87,7 +87,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 
 	//screen boundary collision test
 	tposition.y -= *mark;
-	xlong bc = game->boundary(tposition,*boundingbox[1][0]);
+	xlong bc = clgame->boundary(tposition,*boundingbox[1][0]);
 	tposition.y += *mark;
 
 	if(bc!=0)
@@ -102,7 +102,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	float zdiff  = 0;
 	float xangle = 0;
 	float yangle = 0;
-	xlong tc = game->terrain(ll,boundingbox[1][0],boundingbox[0][0],tposition,position,xangle,yangle,zdiff); 
+	xlong tc = clgame->terrain(ll,boundingbox[1][0],boundingbox[0][0],tposition,position,xangle,yangle,zdiff); 
  
 	if(tc!=0)
 	{
@@ -113,12 +113,12 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	//*
 	
 	//adjust z position
-	if(math->absolute(zdiff)>1) tposition.z = zdiff-12;
+	if(clmath->absolute(zdiff)>1) tposition.z = zdiff-12;
 	//*	
 	
 	//adjust rotation around x andy axis
 		//rotate x about xangle,y about yangle
-		if(math->absolute(xangle)>=1) linear->rotate(xangle,yangle,0);
+		if(clmath->absolute(xangle)>=1) linear->rotate(xangle,yangle,0);
 		//~ if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
 		//~ if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
@@ -139,7 +139,7 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pt
 	//*
 	
 	//set player specific attributes
-	speeddir.y  = -system->ato((*def)["speed"]);
+	speeddir.y  = -clsystem->ato((*def)["speed"]);
 	speeddir.y /= 20;
 	direction[0].y = direction[1].y = 1;
 	active = 1;
@@ -189,7 +189,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 		
 		//init variables
-		xlong time = system->getmilliseconds();
+		xlong time = clsystem->getmilliseconds();
 		linear->unit();
 		bool what = 0;
 		xlong tempangle = 0;
@@ -283,7 +283,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			case 'w':
 			if( (angles[1].z - angles[0].z) >  180) angles[1].z -= 360; 
 			if( (angles[1].z - angles[0].z) < -180) angles[1].z += 360;
-			tempangle = math->sign(angles[0].z-angles[1].z) * 5;
+			tempangle = clmath->sign(angles[0].z-angles[1].z) * 5;
 			linear->rotate(0,0,tempangle);
 			pretransform(1);
 			what=1;
