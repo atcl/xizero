@@ -103,5 +103,9 @@
 #include "CL/CLinit.hh"
 //*
 
+//global maker
+#include "CL/CLglobals.cc"
+//*
+
 #endif
 

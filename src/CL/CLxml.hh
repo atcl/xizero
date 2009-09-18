@@ -5,9 +5,14 @@
 #pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
-#include "CLstructs.hh"
 #include "CLsystem.hh"
 #include "CLtree.hh"
+
+struct xmlelement
+{
+	xchar*  value;
+	xchar** attributes;
+};
 
 class CLxml : public virtual CLcl
 {

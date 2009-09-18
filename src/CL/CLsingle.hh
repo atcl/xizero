@@ -5,11 +5,10 @@
 #pragma message "Compiling " __FILE__ " ! TODO: "
 
 #include "CLtypes.hh"
-
-//add static polymorphism?
+#include "CLglobals.hh"
 
 template<class T>
-class CLsingle
+class CLsingle : public CLglobal
 {
 	private:
 		static T* single;

@@ -26,6 +26,7 @@ class CLcl
 		CLcl();
 		 virtual ~CLcl();
 		xlong getversion() const;
+		const xchar* getname() const;
 };
 
 xlong CLcl::version = CLmajor<<24 + CLminor<<16 + CLbuild<<8 + CLextra;
@@ -34,15 +35,17 @@ xlong CLcl::id = 0;
 
 CLcl::CLcl()
 {
-	//~ utils2 = CLinit(utils2);
+	//utils2 = CLinit(utils2);
 	//~ type_info t = typeid(T);
-	//~ name = t.name();
+	name = typeid(*this).name();
 	id++;
 }
 
 CLcl::~CLcl() { }
 
 xlong CLcl::getversion() const { return version; }
+
+const xchar* CLcl::getname() const { return name; }
 
 #endif
 

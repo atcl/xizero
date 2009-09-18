@@ -27,6 +27,14 @@ inline void clip(xlong& x,xlong& y)
 	if(y>=yres) y=yres-1;
 }
 
+struct CLpoint
+{
+	xlong x;
+	xlong y;
+	
+	CLpoint(xlong px,xlong py) { x=px; y=py; }
+};
+
 class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 {
 	friend class CLsingle<CLgfx1>;
@@ -106,7 +114,7 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c)
 uxlong CLgfx1::readpixel(xlong x,xlong y)
 {
 	if(isoff(x,y)) return 0;
-	return ((*CLdoublebuffer)[(y*xres)+x]);
+	return (doublebuffer[(y*xres)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c)

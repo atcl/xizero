@@ -6,14 +6,6 @@
 
 #include "CLtypes.hh"
 
-struct CLpoint
-{
-	xlong x;
-	xlong y;
-	
-	CLpoint(xlong px,xlong py) { x=px; y=py; }
-};
-
 union doubleword
 {
 	xlong  dd;
@@ -72,12 +64,6 @@ struct sprites
 };
 
 typedef sprites CLfont;
-
-struct xmlelement
-{
-	xchar*  value;
-	xchar** attributes;
-};
 
 struct CLgamepadstate
 {

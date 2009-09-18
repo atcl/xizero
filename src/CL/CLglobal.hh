@@ -9,37 +9,6 @@
 #include "CLwindow.hh"
 #include "CLmatrix.hh"
 #include "CLfps.hh"
-#include "CLsingle.hh"
-
-class CLglobal : public CLsingle<CLglobal>
-{
-	private:
-		CLglobal();
-		~CLglobal();	
-	public:
-		uxlong CLscreenbytewidth;
-		uxlong CLscreenbyteheight;
-		uxlong CLscreenbytedepth;
-		uxlong CLscreenbytesize;
-		uxlong CLscreenpixelwidth;
-		uxlong CLscreenpixelheight;
-		uxlong CLscreenpixelsize;
-		
-		CLlbuffer* CLdoublebuffer;
-		CLlbuffer* CLstencilbuffer;
-		CLfbuffer* CLzbuffer;
-		
-		CLwindow* window;
-		CLbench*  bench;
-		
-		CLfvector light;
-		CLfvector slight;
-		CLfvector plane;
-		
-		//~ CLsystem* system;
-		//~ CLformat* format;
-		//~ CLutils*  utils;
-};
 
 //variables
 uxlong CLscreenwidth = xres;

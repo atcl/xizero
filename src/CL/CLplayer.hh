@@ -245,8 +245,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		{
 			//arrow left -> turn left
 			case LEFT: 
-				tempangle = 5;
-				linear->rotate(0,0,5);
+				tempangle = 3;
+				linear->rotate(0,0,3);
 				pretransform(0);	
 				setspeed();
 			break;
@@ -254,8 +254,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 
 			//arrow right -> turn right
 			case RIGHT: 
-				tempangle = -5;
-				linear->rotate(0,0,-5);
+				tempangle = -3;
+				linear->rotate(0,0,-3);
 				pretransform(0);
 				setspeed();
 			break;
