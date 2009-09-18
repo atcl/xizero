@@ -27,7 +27,8 @@ void CLsetup()
 	//*
 	
 	//open window
-	win = new CLwindow(xres,yres,CLTITLE,CLdoublebuffer->getbuffer());
+	win = CLwindow::instance();
+	win->init(xres,yres,CLTITLE,CLdoublebuffer->getbuffer());
 	//*
 
 	//init benchmarking

@@ -19,8 +19,10 @@ void timeout(void*)
 	Fl::repeat_timeout(0.02,timeout); //change time interval?
 }
 
-class CLwindow : public Fl_Single_Window
+class CLwindow : public Fl_Single_Window, public CLsingle<CLwindow>
 {
+	friend class CLsingle<CLwindow>;
+	
 	private:
 		xlong width;
 		xlong height;
@@ -35,9 +37,10 @@ class CLwindow : public Fl_Single_Window
 		xlong keyup;
 		void draw();
 		virtual int handle(int event);
-	public:
-		CLwindow(xlong w,xlong h,const xchar* t,xlong* b);
+		CLwindow();
 		~CLwindow();
+	public:
+		void init(xlong w,xlong h,const xchar* t,xlong* b);
 		void redraw();
 		static xlong run();
 		xlong getkey();
@@ -76,8 +79,15 @@ int CLwindow::handle(int event)
 	return Fl_Window::handle(event);
 }
 
-CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w,h,t)
+CLwindow::CLwindow() : Fl_Single_Window(0,0,""){ }
+
+CLwindow::~CLwindow() { }
+
+void CLwindow::init(xlong w,xlong h,const xchar* t,xlong* b)
 {
+	this->label(t);
+	this->size(w,h);
+	
 	width = w;
 	height = h;
 	buffer = b;
@@ -97,8 +107,6 @@ CLwindow::CLwindow(xlong w,xlong h,const xchar* t,xlong* b) : Fl_Single_Window(w
 	this->end();
 	this->show();
 }
-
-CLwindow::~CLwindow() {}
 
 void CLwindow::redraw() { Fl::redraw(); }
 
