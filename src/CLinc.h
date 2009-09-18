@@ -79,8 +79,8 @@
 #include "CL/CLmath.hh"
 #include "CL/CLgfx1.hh"
 #include "CL/CLgfx2.hh"
-#include "CL/CLdiv3d.hh"
-
+#include "CL/CLmisc3d.hh"
+#include "CL/CLfloor.hh"
 //*
 
 //non-static classes I

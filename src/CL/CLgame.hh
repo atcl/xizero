@@ -7,7 +7,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
-#include "CLdiv3d.hh"
+#include "CLmisc3d.hh"
 
 namespace CLgame
 {

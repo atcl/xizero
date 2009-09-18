@@ -15,7 +15,7 @@
 #include "CLsystem.hh"
 #include "CLformat.hh"
 #include "CLgame.hh"
-#include "CLdiv3d.hh"
+#include "CLmisc3d.hh"
 #include "CLcl.hh"
 
 template<int I>

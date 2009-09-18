@@ -1,7 +1,7 @@
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
-#ifndef HH_CLDIV3D
-#define HH_CLDIV3D
+#ifndef HH_CLMISC3D
+#define HH_CLMISC3D
 #pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
 
 #include "CLtypes.hh"
@@ -113,75 +113,6 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 		
 		ii +=xres;
 	}
-}
-
-//********
-
-namespace CLfloor
-{
-	uxlong floorshade;
-	xlong  floorz;
-	uxlong floorxstart;
-	uxlong floorxend;
-	uxlong floorwidth;
-	
-	void init(xlong z,xlong w,uxlong c,bool s);
-	void draw();
-};
-
-void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
-{
-	//set floor z and width
-	floorz = z;
-	floorwidth = w;
-	//*
-	
-	//set floor start and end
-	floorxstart = (xres-w)>>1;
-	floorxend   = xres-((xres-w)>>1);
-	//*
-	
-	//draw floor with shaded floor color
-	if(s)
-	{
-		//shade floor
-		doubleword argb = { 0 };
-		float t = CLmath::absolute((clplane * cllight) / ( !clplane * !cllight ));
-		//if(t > 1) t = 1;
-		//if(t < 0.2) s = nolight;
-		uxchar zlevellighting = 128 - (z * (128/100));
-		argb.dd = c;
-		argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting;
-		argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting;
-		argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting;
-		floorshade = argb.dd;
-		//*
-	}
-	//*
-	
-	//draw floor with unshaded color
-	else floorshade = c;
-	//*
-}
-
-void CLfloor::draw()
-{
-	//fast floor drawing
-	uxlong runningfloorxstart = floorxstart;
-	uxlong runningfloorxend = floorxend;
-	uxlong i=0;
-	uxlong j=0;
-	for(i=0; i<yres; i++)
-	{
-		for(j=runningfloorxstart; j<runningfloorxend; j++)
-		{
-			(*CLdoublebuffer)[j] = floorshade;
-			(*CLzbuffer)[j] = floorz;
-		}
-		runningfloorxstart += xres;
-		runningfloorxend += xres;
-	}
-	//*
 }
 
 #endif

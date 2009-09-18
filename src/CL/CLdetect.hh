@@ -20,9 +20,9 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 	friend class CLsingle<CLdetect>;
 	
 	private:
+		CLsystem* system;
 		xlong cores;
 		xlong l2;
-		CLsystem* system;
 		CLdetect();
 		~CLdetect();
 	public:
