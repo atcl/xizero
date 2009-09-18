@@ -6,11 +6,14 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLgfx1.hh"
+#include "CLgfx2.hh"
 
 class CLguibase : public virtual CLcl
 {
 	protected:
 		CLgfx1* gfx1;
+		CLgfx2* gfx2;
 		xlong posx;
 		xlong posy;
 		xlong width;
@@ -43,7 +46,12 @@ class CLguibase : public virtual CLcl
 
 CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
 {
+	//associate singletons
 	gfx1 = CLgfx1::instance();
+	gfx2 = CLgfx2::instance();
+	//*
+	
+	//set up attributes
 	posx = px;
 	posy = py;
 	width = w;
@@ -52,6 +60,7 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	bcolor = bc;
 	rcolor = rc;
 	flat = f;
+	//*
 }
 
 CLguibase::~CLguibase() { } //virtual!

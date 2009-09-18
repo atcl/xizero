@@ -32,7 +32,7 @@ CLlabel::~CLlabel() { }
 
 void CLlabel::draw()
 {
-	CLgfx2::drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
+	gfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	//CLgfx2::drawfontstring(
 }
 

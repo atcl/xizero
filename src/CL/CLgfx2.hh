@@ -15,24 +15,32 @@
 #define linetype 2;
 #define segmtype 3;
 
-namespace CLgfx2
+class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2> 
 {
-	CLutils* utils = CLutils::instance();
+	friend class CLsingle<CLgfx2>;
 	
-	CLfont* tele;
-	CLfont* mono;
-	CLfont* line;
-	CLfont* segm;
-	
-	void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
-	xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxlong bc=0);
-	void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,uxlong bc=0);
-	uxlong getEGAcolor(xchar c);
-	bool comparecolors(uxlong c1,uxlong c2);
-	uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
-	uxlong getgradient(uxlong s,uxlong e,xchar i);
-	void savescreenshot(const xchar*);
+	private:
+		CLutils* utils;
+		CLfont* tele;
+		CLfont* mono;
+		CLfont* line;
+		CLfont* segm;
+		CLgfx2();
+		~CLgfx2();
+	public:
+		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
+		xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxlong bc=0);
+		void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,uxlong bc=0);
+		uxlong getEGAcolor(xchar c);
+		bool comparecolors(uxlong c1,uxlong c2);
+		uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
+		uxlong getgradient(uxlong s,uxlong e,xchar i);
+		void savescreenshot(const xchar*);
 };
+
+CLgfx2::CLgfx2() { utils = CLutils::instance(); }
+
+CLgfx2::~CLgfx2() { }
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
 {

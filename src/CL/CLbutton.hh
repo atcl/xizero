@@ -44,7 +44,7 @@ CLbutton::~CLbutton()
 
 void CLbutton::draw()
 {
-	CLgfx2::drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
+	gfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	
 	//drawtext
 }

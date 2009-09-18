@@ -248,17 +248,17 @@ int main(int argc, char** argv)
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		
-		CLgfx2::drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF,0x00FF0000);
-		CLgfx2::drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,50,"Use x,y for aspect-scaling",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,90,"Use + for reseting",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,110,"Use # for exploding",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,130,"Use ^ for toggling between shading",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,150,"Use - for toggling between shadowing",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,170,"Use . and  , to translate along normals",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
-		CLgfx2::drawfontstring(100,210,"Use 0 to exit",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",font,0x00FFFFFF,0x00FF0000);
+		CLgfx2::instance()->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,50,"Use x,y for aspect-scaling",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,90,"Use + for reseting",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,110,"Use # for exploding",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,130,"Use ^ for toggling between shading",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,150,"Use - for toggling between shadowing",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,170,"Use . and  , to translate along normals",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",font,0x00FFFFFF);
+		CLgfx2::instance()->drawfontstring(100,210,"Use 0 to exit",font,0x00FFFFFF);
 
 		if(shadows==1)
 		{

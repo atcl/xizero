@@ -7,8 +7,6 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLguibase.hh"
-#include "CLgfx1.hh"
-#include "CLgfx2.hh"
 
 class CLprogress : public CLguibase
 {
@@ -97,7 +95,7 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 void CLprogress::draw()
 {
 	//draw enclosing frame
-	CLgfx2::drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
+	gfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
 	//*
 
 	switch(horver)
