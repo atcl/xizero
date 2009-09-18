@@ -75,14 +75,14 @@ int main()
 
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
-				CLmisc3d::drawzbuffer(testlevel->getlandscape(),dis);
+				CLmisc3d::instance()->drawzbuffer(testlevel->getlandscape(),dis);
 				testlevel->getplayer()->showbox();
 				break;
 
 			case 3:
 				CLfloor::instance()->draw();
 				testlevel->display();
-				CLmisc3d::drawzbuffer();
+				CLmisc3d::instance()->drawzbuffer();
 				break;
 		}
 		

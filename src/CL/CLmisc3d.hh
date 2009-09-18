@@ -9,17 +9,26 @@
 #include "CLbuffer.hh"
 #include "CLvector.hh"
 #include "CLglobal.hh"
-#include "CLgfx1.hh"
 
-namespace CLmisc3d
+class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 {
-	template<class clvector>void project(clvector& v,const clvector& p);
-	template<class clvector>void project2(clvector& o);
-	template<class clvector>void draw3dpixel(clvector& p,uxlong c);
-	template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
-	template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
-	void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
+	friend class CLsingle<CLmisc3d>;
+	
+	private:
+		CLmisc3d();
+		~CLmisc3d();
+	public:
+		template<class clvector>void project(clvector& v,const clvector& p);
+		template<class clvector>void project2(clvector& o);
+		template<class clvector>void draw3dpixel(clvector& p,uxlong c);
+		template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
+		template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
+		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
+
+CLmisc3d::CLmisc3d() { }
+
+CLmisc3d::~CLmisc3d() { }
 
 template<class clvector>
 void CLmisc3d::project(clvector& v,const clvector& p)
@@ -58,7 +67,7 @@ void CLmisc3d::project2(clvector& o)
 }
 
 template<class clvector>
-void CLmisc3d::draw3dpixel(clvector p,uxlong c)
+void CLmisc3d::draw3dpixel(clvector& p,uxlong c)
 {
 	//if on screen project and draw a pixel 
 	if(p.x>0 && p.x<xres && p.y>0 && p.y<yres && p.z>0 && p.z<zres)
@@ -72,7 +81,7 @@ void CLmisc3d::draw3dpixel(clvector p,uxlong c)
 }
 
 template<class clvector>
-void CLmisc3d::draw3dline(clvector p,clvector q,uxlong c,bool aa)
+void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa)
 {
 	//if on screen project and draw a line  
 	if(p.z>0 && p.z<zres && q.z >0 && q.z<zres)

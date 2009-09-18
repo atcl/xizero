@@ -26,6 +26,7 @@ class CLentity : public virtual CLcl
 		CLformat* format;
 		CLutils* utils;
 		CLgame* game;
+		CLmisc3d* misc3d;
 		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -99,7 +100,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 	startposition.x = ammodocking->x;
 	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
-	CLmisc3d::project(startposition,position);
+	misc3d->project(startposition,position);
 	ammoman->fire(at,startposition,targetdirection);
 }
 
@@ -111,6 +112,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	format = CLformat::instance();
 	utils = CLutils::instance();
 	game = CLgame::instance();
+	misc3d = CLmisc3d::instance();
 	//*
 	
 	//create transformation matrix
@@ -214,6 +216,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	format = CLformat::instance();
 	utils = CLutils::instance();
 	game = CLgame::instance();
+	misc3d = CLmisc3d::instance();
 	//*
 	
 	//create transformation matrix

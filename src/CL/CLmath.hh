@@ -17,6 +17,7 @@
 #define DEGTORAD M_PI/180
 #define RADTODEG 180/M_PI
 
+//to curious singleton!
 namespace CLmath
 {
 	float  fxpi;
