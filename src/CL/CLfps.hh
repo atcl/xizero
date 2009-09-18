@@ -9,9 +9,12 @@
 #include "CLsystem.hh"
 
 //rename file to CLbench.hh
-class CLbench : public virtual CLcl
+class CLbench : public virtual CLcl, public CLsingle<CLbench>
 {
+	friend class CLsingle<CLbench>;
+	
 	private:
+		CLsystem* system;
 		xlong framespersecond;
 		xlong currenttime;
 		xlong elapsedtime;
@@ -20,27 +23,23 @@ class CLbench : public virtual CLcl
 		xlong lastupdate;
 		xlong interval;
 		xchar flags;
-		CLsystem* system;
-	public:
-		CLbench(xlong i,xchar flags);
+		CLbench();
 		~CLbench();
-		void init();
+	public:
+		void init(xlong i,xchar flags);
 		void inc();
 		float getfps();
 		void print();
 };
 
-CLbench::CLbench(xlong i,xchar f)
-{
-	system = CLsystem::instance();
-	interval = i*1000;
-	flags = f;	
-}
+CLbench::CLbench() { system = CLsystem::instance(); }
 
 CLbench::~CLbench() { }
 
-void CLbench::init()
+void CLbench::init(xlong i,xchar f)
 {
+	interval = i*1000;
+	flags = f;	
 	frames = 0;
 	lastupdate = system->getmilliseconds();
 	elapsedtime = 0;

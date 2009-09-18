@@ -14,8 +14,6 @@ int main()
 	CLlevel* testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemy/enemies.a","../dat/player/player.a","../dat/level/level0.a");
 	CLfloor::instance()->init(100,670,0x0000b0b0,1);
 
-	clbench->init();
-
 	xchar input = 0;
 	xchar turbo = 0;
 	xlong mode  = 1;
@@ -88,7 +86,7 @@ int main()
 				break;
 		}
 		
-		clbench->inc();		
+		CLbench::instance()->inc();		
 	}
 
 	//exit sequence

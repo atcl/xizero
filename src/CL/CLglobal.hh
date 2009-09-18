@@ -61,8 +61,6 @@ CLfvector clslight(0,0.4,1.1);
 CLmatrix* linearM;
 CLmatrix* shadowM;
 
-CLbench*  clbench;
-
 //temp:
 xlong xmark;
 CLlvector tv(0,0,0);

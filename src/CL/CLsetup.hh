@@ -27,11 +27,11 @@ void CLsetup()
 	//*
 	
 	//open window
-	win = new CLwindow(xres,yres,"atCROSSLEVEL",CLdoublebuffer->getbuffer());
+	win = new CLwindow(xres,yres,CLTITLE,CLdoublebuffer->getbuffer());
 	//*
 
 	//init benchmarking
-	clbench = new CLbench(3,COUT_FPS);
+	CLbench::instance()->init(3,COUT_FPS);
 	//*
 
 	//init math library
@@ -54,7 +54,6 @@ void CLgarbage()
 	delete CLdoublebuffer;
 	delete CLstencilbuffer;
 	delete CLzbuffer;
-	delete clbench;
 	delete linearM;
 	delete shadowM;
 	delete leftside;

@@ -72,8 +72,6 @@ int main(int argc, char** argv)
 
 	CLexplosion* ex = new CLexplosion(cubus);
 
-	clbench->init();
-
 	CLlvector p(400,300,100);
 
 	bool mode = 1;
@@ -273,7 +271,7 @@ int main(int argc, char** argv)
 
 		linearM->unit();
 
-		clbench->inc();
+		CLbench::instance()->inc();
 	}
 
 	//exit sequence

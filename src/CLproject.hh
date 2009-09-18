@@ -18,6 +18,6 @@
 #define zres 400
 #define scrs xres*yres
 
-#define CLtitle "atCROSSLEVEL's XiZero"
+#define CLTITLE "atCROSSLEVEL's XiZero"
 
 #endif
