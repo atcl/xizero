@@ -7,7 +7,7 @@
 #include "CLtypes.hh"
 #include "CLsystem.hh"
 
-uxlong CLhatoi(uxchar c)
+inline uxlong CLhatoi(uxchar c)
 {
 	switch(c)
 	{

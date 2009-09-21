@@ -35,14 +35,14 @@ class CLprogress : public CLguibase
 		CLprogress();
 		~CLprogress() { };
 		void reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc);
-		void draw();
+		void draw() const;
 		void setstart(xlong s);
 		void setend(xlong e);
 		void setprogress(xlong p);
 		void addprogress(xlong a);
-		xlong getstart();
-		xlong getend();
-		xlong getprogress();
+		xlong getstart() const;
+		xlong getend() const;
+		xlong getprogress() const;
 };
 
 CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) : CLguibase(px,py,w,h,f,fc,bc,rc)
@@ -101,7 +101,7 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	pprogress = punit * progress;
 }
 
-void CLprogress::draw()
+void CLprogress::draw() const
 {
 	//draw enclosing frame
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
@@ -153,11 +153,11 @@ void CLprogress::addprogress(xlong a)
 	pprogress = punit * progress;
 }
 
-xlong CLprogress::getstart() { return start; }
+xlong CLprogress::getstart() const { return start; }
 
-xlong CLprogress::getend() { return end; }
+xlong CLprogress::getend() const { return end; }
 
-xlong CLprogress::getprogress() { return progress; }
+xlong CLprogress::getprogress() const { return progress; }
 
 #endif
 

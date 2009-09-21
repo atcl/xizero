@@ -29,16 +29,16 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		CLfsprogress();
 		~CLfsprogress() { };
 	public:
-		void draw();
+		void draw() const;
 		void set(xlong p);
 		void add(xlong a);
 		void reset();
-		xlong get();
+		xlong get() const;
 };
 
 CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x000000FF;} 
 
-void CLfsprogress::draw()
+void CLfsprogress::draw() const
 {
 	//draw full screen progress bar
 	if(pprogress!=0)
@@ -78,6 +78,6 @@ void CLfsprogress::add(xlong a)
 
 void CLfsprogress::reset() { pprogress = rprogress = 0; }
 
-xlong CLfsprogress::get() { return pprogress; }
+xlong CLfsprogress::get() const { return pprogress; }
 
 #endif

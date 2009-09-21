@@ -28,9 +28,9 @@ class CLlabel : public CLguibase
 	public:
 		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,xchar* t,bool f);
 		~CLlabel() { };
-		void draw();
+		void draw() const;
 		void settext(const xchar* t);
-		xchar* gettext();
+		xchar* gettext() const;
 };
 
 CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,xchar* t,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
@@ -39,7 +39,7 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	frame = f;
 }
 
-void CLlabel::draw()
+void CLlabel::draw() const
 {
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	//CLgfx2::drawfontstring(
@@ -47,7 +47,7 @@ void CLlabel::draw()
 
 void CLlabel::settext(const xchar* t) { text = (xchar*)t; }
 
-xchar* CLlabel::gettext() { return text; }
+xchar* CLlabel::gettext() const { return text; }
 
 #endif
 

@@ -48,12 +48,12 @@ class CLtree : public virtual CLcl
 		xlong childcount();
 		void parent();
 		void next();	//next sibling
-		member* data();
+		member* data() const;
 		void adddata(member* d);
 		void addchild();
 		void delchild(xlong i);
-		bool isroot();
-		void print();
+		bool isroot() const;
+		void print() const;
 };
 
 template<class member>
@@ -67,16 +67,10 @@ CLtree<member>::CLtree()
 }
 
 template<class member>
-CLtree<member>::~CLtree()
-{
-	delete rootnode;
-}
+CLtree<member>::~CLtree() { delete rootnode; }
 
 template<class member>
-void CLtree<member>::root()
-{
-	current = rootnode;
-}
+void CLtree<member>::root() { current = rootnode; }
 
 template<class member>
 void CLtree<member>::child(xlong i)
@@ -88,16 +82,10 @@ void CLtree<member>::child(xlong i)
 }
 
 template<class member>
-xlong CLtree<member>::childcount()
-{
-	return current->childcount;
-}
+xlong CLtree<member>::childcount() { return current->childcount; }
 
 template<class member>
-void CLtree<member>::parent()
-{
-	current = current->parent;
-}
+void CLtree<member>::parent() { current = current->parent; }
 
 template<class member>
 void CLtree<member>::next()
@@ -109,16 +97,10 @@ void CLtree<member>::next()
 }
 
 template<class member>
-member* CLtree<member>::data()
-{
-	return current->data;
-}
+member* CLtree<member>::data() const { return current->data; }
 
 template<class member>
-void CLtree<member>::adddata(member* d)
-{
-	current->data = d;
-}
+void CLtree<member>::adddata(member* d) { current->data = d; }
 
 template<class member>
 void CLtree<member>::addchild()
@@ -156,14 +138,10 @@ void CLtree<member>::delchild(xlong i)
 }
 
 template<class member>
-bool CLtree<member>::isroot()
-{
-	if(current==rootnode) return true;
-	else return false;
-}
+bool CLtree<member>::isroot() const { return (current==rootnode); }
 
 template<class member>
-void CLtree<member>::print()
+void CLtree<member>::print() const
 {
 	if(current->name!=0) clsystem->print(current->name);
 	else clsystem->print(0);

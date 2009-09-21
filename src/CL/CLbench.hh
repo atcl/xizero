@@ -38,7 +38,7 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 		void init(xlong i,xchar flags);
 		void inc();
 		float getfps();
-		void print();
+		void print() const;
 };
 
 void CLbench::init(xlong i,xchar f)
@@ -70,7 +70,7 @@ void CLbench::inc()
 
 float CLbench::getfps() { return framespersecond; }
 
-void CLbench::print()
+void CLbench::print() const
 {
 		if(flags & COUT_FPS)
 		{

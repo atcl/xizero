@@ -30,35 +30,30 @@ class CLbutton : public CLguibase
 	public:
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f);
 		~CLbutton();
-		void draw();
+		void draw() const;
 		void setaction(void(*a)());
 		void setcaption(xchar* t);
-		void setflat(bool f);
-		xchar* getcaption();
+		xchar* getcaption() const;
 };
 
 CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
 {
 	//set up attributes
 	action = a;
-	caption = c;
-	flat = f;
+	setcaption(c);
 	//*
 }
 
 CLbutton::~CLbutton() { delete[] caption; }
 
-void CLbutton::draw()
+void CLbutton::draw() const
 {
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	
 	//drawtext
 }
 
-void CLbutton::setaction(void(*a)())
-{
-	action = a;
-}
+void CLbutton::setaction(void(*a)()) { action = a; }
 
 void CLbutton::setcaption(xchar* t)
 {
@@ -71,9 +66,7 @@ void CLbutton::setcaption(xchar* t)
 	}
 }
 
-void CLbutton::setflat(bool f) { flat = f; }
-
-xchar* CLbutton::getcaption() { return caption; }
+xchar* CLbutton::getcaption() const { return caption; }
 
 #endif
 

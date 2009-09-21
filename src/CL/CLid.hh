@@ -50,8 +50,8 @@ xlong CLid::generateid()
 
 uxlong CLid::generatecrc(xchar* d,xlong l)
 {
-	uxlong r;
-	uxchar o;
+	uxlong r = 0;
+	uxchar o = 0;
 
 	if(l<4) return 0;
 

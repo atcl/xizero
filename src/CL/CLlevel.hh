@@ -64,10 +64,10 @@ class CLlevel : public virtual CLcl
 		void display();
 		void subsmark(xlong m);
 		void setmark(xlong m);
-		xlong getmark();
-		CLfbuffer* getlandscape();
-		CLplayer* getplayer();
 		void pause();
+		xlong getmark() const;
+		CLfbuffer* getlandscape() const;
+		CLplayer* getplayer() const;
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -471,25 +471,13 @@ void CLlevel::setmark(xlong m)
 	blockmark = smoothmark / blockheight;
 }
 
-xlong CLlevel::getmark()
-{
-	return smoothmark;
-}
+void CLlevel::pause() { paused = !paused; }
 
-CLfbuffer* CLlevel::getlandscape()
-{
-	return levellandscape;	
-}
+xlong CLlevel::getmark() const { return smoothmark; }
 
-CLplayer* CLlevel::getplayer()
-{
-	return player;
-}
+CLfbuffer* CLlevel::getlandscape() const { return levellandscape; }
 
-void CLlevel::pause()
-{
-	paused = !paused;
-}
+CLplayer* CLlevel::getplayer() const { return player; }
 
 #endif
 

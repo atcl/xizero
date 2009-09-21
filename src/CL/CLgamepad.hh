@@ -41,20 +41,22 @@ class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 			struct js_event gp;	
 		#endif
 
-		CLgamepadstate pad;
+		CLgamepadstate* pad;
 
 	public:
 		void mask();
 		void handle();
 		void exit();
-		bool isavail();
-		CLgamepadstate* getstate();
+		bool isavail() const;
+		CLgamepadstate* getstate() const;
 };
 
 #ifdef WIN32
 
 CLgamepad::CLgamepad()
 {
+	pad = new CLgamepadstate;
+	
 	//check if gamepad driver is installed
 	if(joyGetNumDevs() == -1)
 	{
@@ -88,21 +90,21 @@ void CLgamepad::handle()
 	//*
 	
 	//copy axis state
-	pad.axis[0] = gp.wXpos;
-	pad.axis[1] = gp.wYpos;
+	pad->axis[0] = gp.wXpos;
+	pad->axis[1] = gp.wYpos;
 	//*
 	
 	//copy button state
-	pad.button[0] = (gp.wButtons & JOY_BUTTON1) > 0;
-	pad.button[1] = (gp.wButtons & JOY_BUTTON2) > 0;
-	pad.button[2] = (gp.wButtons & JOY_BUTTON3) > 0;
-	pad.button[3] = (gp.wButtons & JOY_BUTTON4) > 0;
-	pad.button[4] = (gp.wButtons & JOY_BUTTON5) > 0;
-	pad.button[5] = (gp.wButtons & JOY_BUTTON6) > 0;
-	pad.button[6] = (gp.wButtons & JOY_BUTTON7) > 0;
-	pad.button[7] = (gp.wButtons & JOY_BUTTON8) > 0;
-	pad.button[8] = (gp.wButtons & JOY_BUTTON9) > 0;
-	pad.button[9] = (gp.wButtons & JOY_BUTTON10) > 0;
+	pad->button[0] = (gp.wButtons & JOY_BUTTON1) > 0;
+	pad->button[1] = (gp.wButtons & JOY_BUTTON2) > 0;
+	pad->button[2] = (gp.wButtons & JOY_BUTTON3) > 0;
+	pad->button[3] = (gp.wButtons & JOY_BUTTON4) > 0;
+	pad->button[4] = (gp.wButtons & JOY_BUTTON5) > 0;
+	pad->button[5] = (gp.wButtons & JOY_BUTTON6) > 0;
+	pad->button[6] = (gp.wButtons & JOY_BUTTON7) > 0;
+	pad->button[7] = (gp.wButtons & JOY_BUTTON8) > 0;
+	pad->button[8] = (gp.wButtons & JOY_BUTTON9) > 0;
+	pad->button[9] = (gp.wButtons & JOY_BUTTON10) > 0;
 	//*
 }
 
@@ -112,6 +114,8 @@ void CLgamepad::exit() { }
 
 CLgamepad::CLgamepad()
 {	
+	pad = new CLgamepadstate;
+	
 	//check if gamepad device exists and so a gamepad is connected
 	if( (device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
@@ -139,15 +143,15 @@ void CLgamepad::handle()
 		//copy axis state
 		case JS_EVENT_AXIS:
 			if(gp.number>1) break;
-			pad.axis[gp.number] = gp.value;
+			pad->axis[gp.number] = gp.value;
 		break;
 		//*
 		
 		//copy button state
 		case JS_EVENT_BUTTON:
 			if(gp.number>9) break;
-			pad.button[gp.number] = gp.value;
-			pad.tbutton[gp.number] = gp.value;
+			pad->button[gp.number] = gp.value;
+			pad->tbutton[gp.number] = gp.value;
 		break;
 		//*
     }
@@ -157,9 +161,9 @@ void CLgamepad::exit() { close(device); }
 
 #endif
 
-bool CLgamepad::isavail() { return (device!=-1); }
+bool CLgamepad::isavail() const { return (device!=-1); }
 
-CLgamepadstate* CLgamepad::getstate() { return &pad; }
+CLgamepadstate* CLgamepad::getstate() const { return pad; }
 
 #endif
 
