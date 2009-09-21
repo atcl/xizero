@@ -24,9 +24,9 @@ class CLsingle
 		static T* single;
 		CLsingle(const CLsingle&);
 	protected:
-		 virtual ~CLsingle() { };
 		 CLsingle() { };
 	public:
+		virtual ~CLsingle() { };
    		static T* instance();
 };
 

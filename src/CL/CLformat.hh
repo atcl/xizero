@@ -284,7 +284,7 @@ sprite* CLformat::loadtga(CLfile* sf)
 	r->size = imagewidth * imageheight;
 	r->width = imagewidth;
 	r->height = imageheight;
-	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
+	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 
 	return r;
@@ -329,7 +329,7 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 	r->tilesize = tw * th;
 	r->tilewidth = tw;
 	r->tileheight = th;
-	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
+	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 	
 	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) clsystem->exit(1,0,__func__,"tile dimensions do not match image dimensions");
@@ -379,7 +379,7 @@ sprites* CLformat::loadfont(CLfile* sf)
 	r->tilewidth = imagewidth / 256;
 	r->tileheight = imageheight;
 	r->tilesize = (imagewidth / 256) * imageheight;
-	r->data = static_cast<xlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
+	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	r->tilecount = 256;
 	//*
 

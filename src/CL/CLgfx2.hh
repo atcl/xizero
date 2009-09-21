@@ -45,7 +45,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		bool comparecolors(uxlong c1,uxlong c2);
 		uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
 		uxlong getgradient(uxlong s,uxlong e,xchar i);
-		void savescreenshot(const xchar*);
+		sprite* savescreen();
 };
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
@@ -258,9 +258,20 @@ uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i)
 	//((s.r-e.r)/255)*i, ((s.g - e.g)/255)*i, ((s.b - e.b)/255)*i
 }
 
-void CLgfx2::savescreenshot(const xchar*)
+sprite* CLgfx2::savescreen()
 {
-
+	sprite* r = new sprite;
+	r->width = xres;
+	r->height = yres;
+	r->size = (xres*yres);
+	r->data = new uxlong(r->size);
+	
+	for(uxlong i=0; i<r->size; i++)
+	{
+		r->data[i] = cldoublebuffer[i];
+	}
+	
+	return r;
 }
 
 #endif

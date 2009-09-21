@@ -42,25 +42,25 @@ struct screenside
 
 struct sprite
 {
-	xlong  size;
-	xlong  width;
-	xlong  height;
+	uxlong  size;
+	uxlong  width;
+	uxlong  height;
 
-	xlong* data;
+	uxlong* data;
 };
 
 struct sprites
 {
-	xlong  size;
-	xlong  width;
-	xlong  height;
+	uxlong  size;
+	uxlong  width;
+	uxlong  height;
 
-	xlong  tilesize;
-	xlong  tilewidth;
-	xlong  tileheight;
+	uxlong  tilesize;
+	uxlong  tilewidth;
+	uxlong  tileheight;
 
-	xlong  tilecount;
-	xlong* data;
+	uxlong  tilecount;
+	uxlong* data;
 };
 
 typedef sprites CLfont;
