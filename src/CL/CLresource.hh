@@ -5,7 +5,7 @@
 #pragma message "Compiling " __FILE__
 
 //xpm atcrosslevel icon
-static xchar* CLicon[] = {
+const static xchar* CLicon[] = {
 
 "16 16 3 1",
 "# c #000000",

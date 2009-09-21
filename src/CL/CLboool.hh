@@ -131,6 +131,7 @@ boool::boool(xlong a)
 boool& boool::operator=(boool& a)
 {
 	this->b = a.b;
+	return *this;
 }
 //*
 

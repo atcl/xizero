@@ -37,7 +37,7 @@ inline uxlong CLhatoi(uxchar c)
 	}
 }
 
-uxchar* xpm2ico(xchar* xpm[])
+uxchar* xpm2ico(const xchar* xpm[])
 {
 	#define ICO_HEADER_LENGTH 6
 	#define ICO_DIRECTORY_LENGTH 16
