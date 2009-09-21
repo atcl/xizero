@@ -109,9 +109,14 @@ void CLwindow::init(xlong w,xlong h,const xchar* t)
 	
 	fl_open_display();
 	
-	uxchar* temp = xpm2ico(CLicon);
-	
-	this->icon(temp);
+	#ifdef WIN32
+		uxchar* temp = xpm2ico(CLicon);
+		this->icon((xchar*)LoadIcon(fl_display,temp));
+	#else //ifdef LINUX
+		Pixmap p = XCreatePixmap(fl_display,DefaultRootWindow(fl_display),16,16,32);
+		//set pixmap p to CLicon
+		this->icon((xchar*)p);
+	#endif
 	
 	this->end();
 	this->show();
