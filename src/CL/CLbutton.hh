@@ -27,6 +27,7 @@ class CLbutton : public CLguibase
 		void (*action)();
 		xchar* caption;
 		bool flat;
+		static CLlist<CLbutton>* buttonlist;
 	public:
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f);
 		~CLbutton();
@@ -34,14 +35,23 @@ class CLbutton : public CLguibase
 		void setaction(void(*a)());
 		void setcaption(xchar* t);
 		xchar* getcaption() const;
+		void click();
+		static void checkclick();
 };
+
+CLlist<CLbutton>* CLbutton::buttonlist = new CLlist<CLbutton>;
 
 CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),xchar *c,bool f) : CLguibase(px,py,w,h,fc,bc,rc)
 {
-	//set up attributes
 	action = a;
-	setcaption(c);
-	//*
+	
+	caption = clutils->clonechararray(c);
+	xlong nw = clgfx2->getfontstringwidth(caption,0) + 4;
+	xlong nh = clgfx2->getfontstringheight(caption,0) + 4;
+	if(w==-1 || w<nw) width = nw;
+	if(h==-1 || h<nh) height = nh;
+
+	buttonlist->append(this);
 }
 
 CLbutton::~CLbutton() { delete[] caption; }
@@ -49,8 +59,7 @@ CLbutton::~CLbutton() { delete[] caption; }
 void CLbutton::draw() const
 {
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
-	
-	//drawtext
+	clgfx2->drawfontstring(posx+2,posy+2,caption,0,fcolor,bcolor);
 }
 
 void CLbutton::setaction(void(*a)()) { action = a; }
@@ -58,15 +67,28 @@ void CLbutton::setaction(void(*a)()) { action = a; }
 void CLbutton::setcaption(xchar* t)
 {
 	delete caption;
-	xlong s = clutils->chararraylength(t);
-	caption = new xchar[s];
-	for(uxlong i=0; i<s ;i++)
-	{
-		caption[i] = t[i];
-	}
+	caption = clutils->clonechararray(t);
+	xlong nw = clgfx2->getfontstringwidth(t,0) + 4;
+	xlong nh = clgfx2->getfontstringheight(t,0) + 4;
+	if(width<nw) width = nw;
+	if(height<nh) height = nh;
 }
 
 xchar* CLbutton::getcaption() const { return caption; }
+
+void CLbutton::click() { action(); }
+
+void CLbutton::checkclick()
+{
+	xlong mx = clwindow->getmousex();
+	xlong my = clwindow->getmousey();
+	
+	for(xlong i=buttonlist->setfirst(); i<buttonlist->getlength(); i+=buttonlist->setnext())
+	{
+		CLbutton* curr = buttonlist->getcurrentdata();
+		if(mx>curr->getx() && mx<curr->getx()+curr->getwidth() && my>curr->gety() && my<curr->gety()+curr->getheight()) curr->click();  
+	}
+}
 
 #endif
 

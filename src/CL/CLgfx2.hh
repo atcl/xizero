@@ -21,10 +21,11 @@
  * version: 0.1
  */
 
-#define teletype 0;
-#define monotype 1;
-#define linetype 2;
-#define segmtype 3;
+#define TELEFONT 0;
+#define MONOFONT 1;
+#define LINEFONT 2;
+#define TERMFONT 3;
+#define SEGMFONT 4;
 
 class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2> 
 {
@@ -34,18 +35,27 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		CLfont* tele;
 		CLfont* mono;
 		CLfont* line;
+		CLfont* term;
 		CLfont* segm;
-		CLgfx2() { };
+		CLgfx2();
 		~CLgfx2() { };
 	public:
 		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
-		xlong drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxlong bc=0);
-		void drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,uxlong bc=0);
+		xlong drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc=0);
+		void drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc=0);
+		xlong getfontstringwidth(const char* a,xlong ft);
+		xlong getfontstringheight(const char* a,xlong ft);
 		uxlong getEGAcolor(xchar c);
 		bool comparecolors(uxlong c1,uxlong c2);
 		uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
 		uxlong getgradient(uxlong s,uxlong e,xchar i);
 		sprite* savescreen();
+};
+
+CLgfx2::CLgfx2()
+{
+	CLfile* temp = clsystem->getfile("../dat/other/CLteletype.fnt");
+	tele = clformat->loadfont(temp);
 };
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
@@ -84,10 +94,22 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	}
 }
 
-xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxlong bc)
+xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc)
 {
 	//is on screen
 	if( x<0 || y<0 || x>xres || y>yres) return -1;
+	//*
+	
+	//select font
+	CLfont* f = 0;
+	switch(ft)
+	{
+		case 0: f = tele; break;
+		case 1: f = mono; break;
+		case 2: f = line; break;
+		case 3: f = term; break;
+		case 4: f = segm; break;
+	}
 	//*
 	
 	//find (font) tile
@@ -129,7 +151,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,CLfont* f,uxlong fc,uxl
 	return rx;
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,uxlong bc)
+void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc)
 {
 	xlong l = clutils->chararraylength(a);
 	xlong t = x;
@@ -137,8 +159,63 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,CLfont* f,uxlong fc,u
 	for(uxlong i=0; i<l; i++)
 	{
 		if(a[i]=='\n') { t = x; y += 16; }
-		else t = drawfontchar(t,y,a[i],f,fc,bc);
+		else t = drawfontchar(t,y,a[i],ft,fc,bc);
 	}
+}
+
+xlong CLgfx2::getfontstringwidth(const char* a,xlong ft)
+{
+	//select font
+	CLfont* f = 0;
+	switch(ft)
+	{
+		case 0: f = tele; break;
+		case 1: f = mono; break;
+		case 2: f = line; break;
+		case 3: f = term; break;
+		case 4: f = segm; break;
+	}
+	//*
+	
+	xlong l = clutils->chararraylength(a);
+	xlong r = 0;
+	
+	uxlong srcoff = 0;
+	
+	for(uxlong i=0; i<l; i++)
+	{
+		srcoff = (a[i] * f->tilewidth)-1; 
+
+		for(uxlong j=0; j<f->tilewidth; j++)
+		{
+			if(f->data[srcoff] != 0xFF000000) r++;
+			srcoff++; 
+		}
+	}
+	
+	return r;
+}
+
+xlong CLgfx2::getfontstringheight(const char* a,xlong ft)
+{
+	//select font
+	CLfont* f = 0;
+	switch(ft)
+	{
+		case 0: f = tele; break;
+		case 1: f = mono; break;
+		case 2: f = line; break;
+		case 3: f = term; break;
+		case 4: f = segm; break;
+	}
+	//*
+	
+	xlong l = clutils->chararraylength(a);
+	xlong r = f->tileheight;
+	
+	for(uxlong i=0; i<l; i++) { if(a[i]=='\n') r += f->tileheight; }
+	
+	return r;
 }
 
 uxlong CLgfx2::getEGAcolor(xchar c)

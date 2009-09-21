@@ -36,6 +36,7 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4);
 		xlong  chararraylength(const xchar* c);
 		void   copychararray(xchar* dst,const xchar* src,xlong length); //for char arrays below 256byte
+		xchar* clonechararray(const xchar* src);
 		xlong  getlinecount(CLfile* sf);
 		bool   checkextension(xchar* fn,xlong nl,const xchar* fe);
 		xlong  getrandom(uxlong range);
@@ -91,19 +92,23 @@ xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3)
 xlong CLutils::chararraylength(const xchar* c)
 {
 	xlong s = 0;
-	while (c[s])
-	{
-		s++;
-	}
+	while (c[s]) { s++; }
 	return s;
 }
 
 void CLutils::copychararray(xchar* dst,const xchar* src,xlong length)
 {
-	for(uxlong i=0; i<length; i++)
-	{
-		dst[i] = src[i];
-	}
+	for(uxlong i=0; i<length; i++) { dst[i] = src[i]; }
+}
+
+xchar* CLutils::clonechararray(const xchar* src)
+{
+	xlong l = 0;
+	while (src[l]) { l++; }
+	xchar* r = new xchar[l+1];
+	for(uxlong i=0; i<l; i++) { r[i] = src[i]; }
+	r[l] = 0;
+	return r;
 }
 
 xlong CLutils::getlinecount(CLfile* sf)
