@@ -49,7 +49,7 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		void    print(const xlong l,bool i=1);
 		void    print(const float l,bool i=1);
 		void    waitforkey();
-		void    wait(xlong milliseconds);
+		xlong   wait(xlong milliseconds);
 		xlong   getmilliseconds(); //since midnight
 		xlong   system(const xchar* c);
 		xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
@@ -265,7 +265,7 @@ void CLsystem::waitforkey()
 	std::cin.get(); //change to any key, now only enter
 }
 
-void CLsystem::wait(xlong milliseconds)
+xlong CLsystem::wait(xlong milliseconds)
 {
 	//get current time and calc stop time
 	xlong starttime = xlong(1000 * clock() / CLOCKS_PER_SEC);
@@ -276,6 +276,8 @@ void CLsystem::wait(xlong milliseconds)
 	xlong nowtime = 0;
 	while(nowtime < stoptime) nowtime = xlong(1000 * clock() / CLOCKS_PER_SEC);
 	//*
+	
+	return 0;
 }
 
 xlong CLsystem::getmilliseconds() //since midnight

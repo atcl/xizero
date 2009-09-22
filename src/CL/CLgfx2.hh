@@ -341,12 +341,9 @@ sprite* CLgfx2::savescreen()
 	r->width = xres;
 	r->height = yres;
 	r->size = (xres*yres);
-	r->data = new uxlong(r->size);
+	r->data = new uxlong[r->size];
 	
-	for(uxlong i=0; i<r->size; i++)
-	{
-		r->data[i] = cldoublebuffer[i];
-	}
+	for(uxlong i=0; i<r->size; i++) { r->data[i] = cldoublebuffer[i]; }
 	
 	return r;
 }

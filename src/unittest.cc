@@ -63,6 +63,9 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
+	
+	sprite* back = 0;
+	bool drawback = 0;
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -209,8 +212,12 @@ int main(int argc, char** argv)
 			case 'k':
 				//clglobal->clintro->atcrosslevel();
 				clglobal->clintro->xizero();
+				back = clglobal->clgfx2->savescreen();
 			break;
-			
+			case 'l':
+				if(back!=0) drawback = !drawback;
+			break;
+				
 			//System:
 			case '0':
 				xlong rval = clglobal->clsystem->msgbox("bye");
@@ -259,6 +266,8 @@ int main(int argc, char** argv)
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
+
+		if(drawback) clglobal->clgfx1->drawscreen(back);
 
 		linearM->unit();
 
