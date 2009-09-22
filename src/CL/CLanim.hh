@@ -47,6 +47,8 @@ class CLanim : public virtual CLcl
 		~CLanim();
 		xlong update();
 		xlong run();
+		void setposition(CLfvector& p);
+		CLfvector& getposition();
 };
 
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
@@ -304,5 +306,9 @@ xlong CLanim::run()
 	return r;
 	//*
 }
+
+void CLanim::setposition(CLfvector& p) { position = p; }
+
+CLfvector& CLanim::getposition() { return position; }
 
 #endif

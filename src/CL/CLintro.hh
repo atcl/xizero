@@ -6,10 +6,10 @@
 
 #include "CLtypes.hh"
 #include "CLglobal.hh"
+#include "CLconsts.hh"
 #include "CLsystem.hh"
 #include "CLbuffer.hh"
 #include "CLobject.hh"
-#include "CLmatrix.hh"
 #include "CLformat.hh"
 
 /* class name:	CLintro
@@ -62,7 +62,49 @@ void CLintro::atcrosslevel()
 
 void CLintro::xizero()
 {
-
+	//load atcrosslevel model
+	CLfile* fxi = clsystem->getfile("../dat/other/xi.y3d");
+	CLobject* oxi = new CLobject(fxi,0);
+	CLfile* fzero = clsystem->getfile("../dat/other/zero.y3d");
+	CLobject* ozero = new CLobject(fzero,0);
+	//*
+	
+	//load animation file
+	CLfile* axi = clsystem->getfile("../dat/other/xi.ani");
+	CLfile* azero = clsystem->getfile("../dat/other/zero.ani");
+	//*
+	
+	//create animation
+	CLanim* ixi = new CLanim(oxi,axi,0);
+	CLanim* izero = new CLanim(ozero,azero,0);
+	//*
+	
+	//run animation
+	xlong r = 0;
+	CLlvector position;
+	position = 0;
+	while(clwindow->run())
+	{
+		if(clwindow->getinkey()==ESC) break;
+	
+		//clear buffers
+		cldoublebuffer.clear(0);
+		clzbuffer.clear(zres);
+		clstencilbuffer.clear(0);
+		//*
+		
+		//update animation
+		r  = ixi->update() + izero->update();
+		//*
+		
+		//display object
+		oxi->display(ixi->getposition(),SHAPE + AMBIENT + ZLIGHT);
+		ozero->display(izero->getposition(),SHAPE + AMBIENT + ZLIGHT);
+		//*
+		
+		if(r==0) break;
+	}
+	//*
 }
 
 #endif

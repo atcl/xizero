@@ -207,7 +207,8 @@ int main(int argc, char** argv)
 				clglobal->clsound->play("../../cannon.wav",0);
 			break;
 			case 'k':
-				clglobal->clintro->atcrosslevel();
+				//clglobal->clintro->atcrosslevel();
+				clglobal->clintro->xizero();
 			break;
 			
 			//System:
@@ -256,7 +257,7 @@ int main(int argc, char** argv)
 			clglobal->clstencilbuffer.blendcopy(clglobal->cldoublebuffer.getbuffer(),4);
 		}
 
-		if(mode==false) cubus->display(p,CENTER + AMBIENT + FLAT + DEBUG + ac);
+		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
 		linearM->unit();
