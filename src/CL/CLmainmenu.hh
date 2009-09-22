@@ -30,15 +30,17 @@ class CLmainmenu : public virtual CLcl
 		CLlabel* header;
 		CLlabel* footer;
 		CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc);
+		CLmainmenu(sprite* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 	public:
 		draw();
 };
 
 CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc)
+{ CLmainmenu(clformat->loadtga(bg),bc,bt,a,hl,fl,fc); }
+
+CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc)
 {
-	background = clformat->loadtga(bg);
-	
 	xlong tempx = 0;
 	xlong tempy = 0;
 	xlong tempw = 0;
