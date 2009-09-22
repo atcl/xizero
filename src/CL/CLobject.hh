@@ -43,6 +43,7 @@ class CLobject : public virtual CLcl
 		xlong dockcount;
 		xlong name;
 	public:
+		CLobject(const xchar* fileptr,bool zs);
 		CLobject(CLfile* fileptr,bool zs);
 		CLobject(CLobject* obj);
 		~CLobject();
@@ -58,6 +59,8 @@ class CLobject : public virtual CLcl
 		void setcolor(uxlong co);
 		void resetcolor();
 };
+
+CLobject::CLobject(const xchar* fileptr,bool zs) { CLobject(clsystem->getfile(fileptr),zs); }
 
 CLobject::CLobject(CLfile* fileptr,bool zs)
 {

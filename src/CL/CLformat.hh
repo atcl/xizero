@@ -36,16 +36,26 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		CLformat() { };
 		~CLformat() { };
 	public:
+		xlong*   loadcsv(const xchar* sf,xchar sep=',');
 		xlong*   loadcsv(CLfile* sf,xchar sep=',');
+		arfile*  loadar(const xchar* sf);
 		arfile*  loadar(CLfile* sf);
+		xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv);
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
+		sprite*  loadtga(const xchar* sf);
 		sprite*  loadtga(CLfile* sf);
 		sprite*  loadxpm(const xchar** xpm);
+		sprite*  loadxpm(CLfile* xpm);
+		sprites* loadtileset(const xchar* sf,xlong tw,xlong th);
 		sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
+		sprites* loadfont(const xchar* sf);
 		sprites* loadfont(CLfile* sf);
 		xlong**  loadlvl();
+		xmap*    loadini(const xchar* bf);
 		xmap*    loadini(CLfile* bf);
 };
+
+xlong* CLformat::loadcsv(const xchar* sf,xchar sep) { return loadcsv(clsystem->getfile(sf),sep); }
 
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 {
@@ -112,6 +122,8 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	return r;
 	//*
 }
+
+arfile* CLformat::loadar(const xchar* sf) { return loadar(clsystem->getfile(sf)); }
 
 arfile* CLformat::loadar(CLfile* sf)
 {
@@ -200,6 +212,8 @@ arfile* CLformat::loadar(CLfile* sf)
 	return 0;
 }
 
+xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) { return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
+
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 {
 	//calc subconst yourself by rc and rv
@@ -248,6 +262,8 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 
 	return rev;
 }
+
+sprite* CLformat::loadtga(const xchar* sf) { return loadtga(clsystem->getfile(sf)); }
 
 sprite* CLformat::loadtga(CLfile* sf)
 {
@@ -358,6 +374,10 @@ sprite* CLformat::loadxpm(const xchar** xpm)
 	return r;
 }
 
+sprite* CLformat::loadxpm(CLfile* xpm) { /*return loadxpm(clsystem->getfile(xpm)->text);*/ }
+
+sprites* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) { return loadtileset(clsystem->getfile(sf),tw,th); }
+
 sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
@@ -405,6 +425,8 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 
 	return r;
 }
+
+sprites* CLformat::loadfont(const xchar* sf) { return loadfont(clsystem->getfile(sf)); }
 
 sprites* CLformat::loadfont(CLfile* sf)
 {
@@ -458,6 +480,8 @@ xlong** CLformat::loadlvl()
 {
 	return 0;
 }
+
+xmap* CLformat::loadini(const xchar* sf) { return loadini(clsystem->getfile(sf)); }
 
 xmap* CLformat::loadini(CLfile* sf)
 {
