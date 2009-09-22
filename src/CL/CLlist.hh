@@ -47,6 +47,7 @@ class CLlist : public virtual CLcl
 		xchar* getcurrentname() const;
 		void delcurrent(bool smash=0); //test smash option
 		xlong getlength() const;
+		bool seekdata(member* s);
 		void setindex(xlong i);
 		xlong getindex();
 		void clear();
@@ -223,6 +224,20 @@ void CLlist<member>::delcurrent(bool smash)
 
 template<class member>
 xlong CLlist<member>::getlength() const { return length; }
+
+template<class member>
+bool CLlist<member>::seekdata(member* s)
+{
+	setfirst();
+
+	for(uxlong j=0;j<length;j++)
+	{
+		if(current->data == s) return 1;
+		setnext();
+	}
+	
+	return 0;
+}
 
 template<class member>
 void CLlist<member>::setindex(xlong i)

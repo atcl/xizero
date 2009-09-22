@@ -40,6 +40,7 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		arfile*  loadar(CLfile* sf);
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
 		sprite*  loadtga(CLfile* sf);
+		sprite*  loadxpm(const xchar** xpm);
 		sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 		sprites* loadfont(CLfile* sf);
 		xlong**  loadlvl();
@@ -287,6 +288,73 @@ sprite* CLformat::loadtga(CLfile* sf)
 	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 
+	return r;
+}
+
+sprite* CLformat::loadxpm(const xchar** xpm)
+{
+	uxlong xpm_ptr = 0;
+	
+	//read width,height,colors and chars per pixel
+	uxlong width = CLsystem::instance()->ato(&xpm[0][xpm_ptr]);
+	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
+	uxlong height = CLsystem::instance()->ato(&xpm[0][xpm_ptr]);
+	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
+	uxlong colors = CLsystem::instance()->ato(&xpm[0][xpm_ptr]);
+	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
+	uxlong charpp = CLsystem::instance()->ato(&xpm[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
+	if(charpp!=1) return 0;
+	uxlong bytesize = (width*height)<<2;
+	//*
+	
+	//allocate
+	sprite* r = new sprite;
+	r->width = width;
+	r->height = height;
+	r->size = width*height;
+	uxlong* data = new uxlong[r->size];
+	r->data = data;
+	//*
+	
+	//read color table and set image buffers colors
+	colors++;
+	uxlong ctable[256];
+	uxchar cindex = 0;
+	uxlong currcol = 0; 
+	for(uxlong i=1; i<colors; i++)
+	{
+		xpm_ptr = 0;
+		cindex = xpm[i][0];
+		xpm_ptr++; while( (xpm[i][xpm_ptr]) !=' ') xpm_ptr++;
+		xpm_ptr++;
+		if(xpm[i][xpm_ptr]!='c' && xpm[i][xpm_ptr]!='C') return 0;
+		xpm_ptr++; while( (xpm[i][xpm_ptr]) !=' ') xpm_ptr++;
+		xpm_ptr++;
+		if(xpm[i][xpm_ptr]!='#') return 0;
+		xpm_ptr++;
+		currcol  = CLhatoi(xpm[i][xpm_ptr])<<20; xpm_ptr++; 
+		currcol += CLhatoi(xpm[i][xpm_ptr])<<16; xpm_ptr++;
+		currcol += CLhatoi(xpm[i][xpm_ptr])<<12; xpm_ptr++;
+		currcol += CLhatoi(xpm[i][xpm_ptr])<<8;  xpm_ptr++;
+		currcol += CLhatoi(xpm[i][xpm_ptr])<<4;  xpm_ptr++;
+		currcol += CLhatoi(xpm[i][xpm_ptr]);
+		ctable[cindex] = currcol;
+	}
+	//*
+
+	//fill data
+	uxlong data_ptr = 0; 
+	height += colors;
+	for(uxlong j=colors; j<height; j++)
+	{
+		for(uxlong k=0; k<width; k++)
+		{
+			r->data[data_ptr] = ctable[xpm[j][k]];
+			data_ptr++;
+		}
+	}
+	//*
+	
 	return r;
 }
 

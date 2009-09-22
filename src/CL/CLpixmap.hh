@@ -83,7 +83,7 @@ uxchar* xpm2ico(const xchar* xpm[])
 	
 	//read color table and set image buffers colors
 	colors++;
-	uxchar ctable[256];
+	uxlong ctable[256];
 	uxchar cindex = 0;
 	uxlong currcol = 0; 
 	for(uxlong i=1; i<colors; i++)

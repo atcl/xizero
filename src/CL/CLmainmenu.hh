@@ -29,18 +29,22 @@ class CLmainmenu : public virtual CLcl
 		xlong buttoncount;
 		CLlabel* header;
 		CLlabel* footer;
-		CLmainmenu(CLfile* bg, xlong bc, const xchar** bt, const xchar* hl, const xchar* fl);
+		CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 	public:
 		draw();
-		update();
 };
 
-CLmainmenu::CLmainmenu(CLfile* bg, xlong bc, const xchar** bt, const xchar* hl, const xchar* fl)
+CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc)
 {
 	background = clformat->loadtga(bg);
 	
-	button = new CLbutton*[bc];
+	xlong tempx = 0;
+	xlong tempy = 0;
+	xlong tempw = 0;
+	xlong temph = 0; 
+	
+	button = new CLbutton*[bc]; 
 	for(uxlong i=0; i<bc; i++)
 	{
 		//button[i] = new CLbutton( ... );
@@ -53,19 +57,17 @@ CLmainmenu::CLmainmenu(CLfile* bg, xlong bc, const xchar** bt, const xchar* hl, 
 CLmainmenu::~CLmainmenu()
 {
 	delete background;
-	for(uxlong i=0; i<bc; i++) { delete button[i]; }
+	for(uxlong i=0; i<buttoncount; i++) { delete button[i]; }
 	delete header;
 	delete footer;
 }
 
 CLmainmenu::draw()
 {
-	
-}
-
-CLmainmenu::update()
-{
-	
+	clgfx1->drawscreen(background);
+	header->draw();
+	for(uxlong i=0; i<buttoncount; i++) { button[i]->draw(); }
+	footer->draw();
 }
  
  #endif

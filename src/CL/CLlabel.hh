@@ -47,6 +47,7 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 
 void CLlabel::draw() const
 {
+	if(visible==0) return;
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	clgfx2->drawfontstring(posx+2,posy+2,text,0,fcolor,bcolor);
 }

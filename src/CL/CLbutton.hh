@@ -34,6 +34,7 @@ class CLbutton : public CLguibase
 		void draw() const;
 		void setaction(void(*a)());
 		void setcaption(xchar* t);
+		void setvisible(bool v);
 		xchar* getcaption() const;
 		void click();
 		static void checkclick();
@@ -58,6 +59,7 @@ CLbutton::~CLbutton() { delete[] caption; }
 
 void CLbutton::draw() const
 {
+	if(visible==0) return;
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	clgfx2->drawfontstring(posx+2,posy+2,caption,0,fcolor,bcolor);
 }
@@ -72,6 +74,21 @@ void CLbutton::setcaption(xchar* t)
 	xlong nh = clgfx2->getfontstringheight(t,0) + 4;
 	if(width<nw) width = nw;
 	if(height<nh) height = nh;
+}
+
+void CLbutton::setvisible(bool v)
+{
+	if(visible==0 && v==1)
+	{
+		visible = 1;
+		buttonlist->append(this);
+	}
+	else if(visible==1 && v==0)
+	{
+		visible = 0;
+		buttonlist->seekdata(this);
+		buttonlist->delcurrent();
+	}
 }
 
 xchar* CLbutton::getcaption() const { return caption; }

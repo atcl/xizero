@@ -44,6 +44,7 @@ class CLguibase : public virtual CLcl
 		void setfcolor(uxlong fc);
 		void setbcolor(uxlong bc);
 		void setrcolor(uxlong rc);
+		void setvisible(bool v);
 		xlong getwidth() const;
 		xlong getheight() const;
 		xlong getx() const;
@@ -64,6 +65,7 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	bcolor = bc;
 	rcolor = rc;
 	flat = f;
+	visible = 1;
 	//*
 }
 
@@ -94,6 +96,8 @@ void CLguibase::setfcolor(uxlong fc) { fcolor = fc; }
 void CLguibase::setbcolor(uxlong bc) { bcolor = bc; }
 
 void CLguibase::setrcolor(uxlong rc) { rcolor = rc; }
+
+void CLguibase::setvisible(bool v) { visible = v; }
 
 xlong CLguibase::getwidth() const { return width; }
 

@@ -103,6 +103,8 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 
 void CLprogress::draw() const
 {
+	if(visible==0) return;
+	
 	//draw enclosing frame
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
 	//*
