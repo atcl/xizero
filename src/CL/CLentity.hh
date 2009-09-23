@@ -47,6 +47,7 @@ class CLentity : public virtual CLcl
 		CLfvector speed;
 		CLfvector speeddir;
 		CLlvector angles[I];
+		xlong type;
 		xlong* mark;
 		xlong markmax;
 		xlong gear;
@@ -82,6 +83,7 @@ class CLentity : public virtual CLcl
 		CLfvector* getposition();
 		CLbox* getboundingbox() const;
 		bool isvisible() const;
+		xlong gettype() const;
 };
 
 template<int I>
@@ -363,6 +365,9 @@ CLbox* CLentity<I>::getboundingbox() const { return boundingbox[0][0]; }
 
 template<int I>
 bool CLentity<I>::isvisible() const { return visible; } 
+
+template<int I>
+xlong CLentity<I>::gettype() const { return type; } 
 
 #endif
 

@@ -12,6 +12,7 @@
 #include "CLammo.hh"
 #include "CLentity.hh"
 #include "CLenemy.hh"
+#include "CLboss.hh"
 
 /* class name:	CLplayer
  * 
@@ -41,7 +42,7 @@ class CLplayer : public CLentity<2>
 		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pts=0);
 		~CLplayer();
 
-		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLgamepadstate* p);
+		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p);
 		void addpoints(xlong p);
 		void showbox();
 		void displayhud();
@@ -139,6 +140,10 @@ xlong CLplayer::collision(CLfbuffer* ll)
 
 CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pts) : CLentity<2>(playera,m,mm)
 {
+	//set entity type
+	type = 0;
+	//*	
+	
 	//set and adjust (start) position to floor
 	position = playerp;
 	position.z = 100 - position.z - 12;
@@ -170,7 +175,7 @@ CLplayer::~CLplayer()
 	delete sprog;
 }
 
-xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLgamepadstate* p)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p)
 {
 	//update ammo
 	CLenemy* currenemy = 0;
@@ -180,6 +185,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		currenemy = enemies->getcurrentdata();
 		ammoman->collision(currenemy);
 	}
+	ammoman->collision(boss);
 	//*
 	
 	//check if destroyed

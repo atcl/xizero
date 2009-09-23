@@ -15,6 +15,7 @@
 #include "CLmatrix.hh"
 #include "CLplayer.hh"
 #include "CLenemy.hh"
+#include "CLboss.hh"
 #include "CLgame.hh"
 #include "CLmacros.hh"
 #include "CLgamepad.hh"
@@ -38,6 +39,7 @@ class CLlevel : public virtual CLcl
 		CLmatrix*    linear;
 		CLplayer*    player;
 		CLenemylist* enemies;
+		CLboss*      boss;
 		CLobject**   terrain;
 		CLfbuffer*   levellandscape;
 		static xlong levelwidth;
@@ -60,7 +62,7 @@ class CLlevel : public virtual CLcl
 	public:
 		CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bosslib,xchar* levelcontainer);
 		~CLlevel();
-		void update(xchar input,xchar turbo,CLgamepadstate* p);
+		xlong update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
 		void subsmark(xlong m);
 		void setmark(xlong m);
@@ -267,10 +269,45 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	}
 	//*
 	
+//***
+	
+//boss
+
+	//load enemy archive
+	arfile* bossa = clformat->loadar(bosslib);
+	//*
+
+	//search player start pos and set player pos to it
+	bool bossposfound = false;
+	CLlvector playerp;
+	for(uxlong h=0; h<levelheight; h++)
+	{
+		for(uxlong i=0; i<levelwidth; i++)
+		{
+			if(levellayers[2][h][i] == -1)
+			{
+				bossposfound = true;
+				playerp.x = i * blockwidth;
+				playerp.y = h * blockheight;
+				playerp.z = levellayers[1][h][i] * blockdepth;
+				break;
+			}
+		}
+	}
+	if(startposfound==false) clsystem->exit(1,0,__func__,"no boss position found in entity map");
+	//*
+
+	//load boss
+	boss = new CLboss(bossa->members[0],&smoothmark,smoothlevelheight+10);
+	//*
+
+//***
+	
 	//release loaded files
 	delete terraina;
 	delete levela;
 	delete enemiesa;
+	delete bossa;
 	delete[] templevelrside;
 	delete[] templevellside;
 	//*
@@ -283,19 +320,20 @@ CLlevel::~CLlevel()
 	delete player;
 	delete linear;
 	delete enemies;
+	delete boss;
 	delete levellandscape;
 	delete[] terrain;
 }
 
-void CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
+xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 {
-	if(paused) return;
+	if(paused) return 0;
 	
 	xlong isdead;
 	
 	//update player
-	isdead = player->update(input,turbo,levellandscape,enemies,p);
-	if(isdead != -1) { clsystem->exit(0,0,"Game Over! ","points:",isdead); }
+	isdead = player->update(input,turbo,levellandscape,enemies,boss,p);
+	if(isdead != -1) { return -1; }
 	//*
 
 	//update enemies
@@ -315,6 +353,15 @@ void CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 		}
 	}
 	//*
+	
+	//update boss
+	isdead = boss->update(player);
+	if(isdead!=-1)
+	{
+		player->addpoints(isdead);
+		return 1;
+	}
+	//*
 
 	//adjust section of level to be displayed by ("new") player position
 	xlong py = player->getposition()->y;
@@ -322,6 +369,8 @@ void CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 	else if(py>(smoothmarkmax+playerscreenylevel)) setmark(smoothmarkmax);
 	else setmark(py - playerscreenylevel);
 	//*
+	
+	return 0;
 }
 
 void CLlevel::display()

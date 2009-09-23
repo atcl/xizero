@@ -1,0 +1,20 @@
+Package: xizero
+Version: 0.1.0
+Section: web 
+Priority: optional
+Architecture: all
+Essential: no
+Depends: libfltk1.1, gtkdialog
+Pre-Depends: 
+Recommends: alsa-oss
+Suggests: 
+Installed-Size: 1024
+Maintainer: atcrosslevel studios [atcl@atcrosslevel.de]
+Conflicts: 
+Replaces: 
+Provides: acme
+Description: The description can contain free-form text
+             describing the function of the program, what
+             kind of features it has, and so on.
+.
+More descriptive text. 

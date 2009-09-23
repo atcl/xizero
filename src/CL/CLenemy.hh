@@ -50,7 +50,32 @@ void CLenemy::cruise()
 	//update enemy through ai array
 	switch(aitype)
 	{
-		case 0: gear=1; setspeed(); break;
+		case 0: 
+			gear=1;
+			setspeed(); 
+		break;
+		
+		case 1:
+		
+		break;
+		
+		case 2:
+		
+		break;
+		
+		case 3:
+		
+		break;
+		
+		case 4:
+			gear=0;
+			setspeed();
+			
+		break;
+		
+		case 5:
+		
+		break;
 	}		
 	//*
 }
@@ -98,6 +123,10 @@ xlong CLenemy::collision()
 
 CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 {
+	//set entity type
+	type = 1;
+	//*
+	
 	//load enemy ai
 	aitype = csv[1];
 	aggrolevel = csv[2];
@@ -120,7 +149,7 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 	//*
 	
 	//create progress bar
-	hprog = new CLprogress(0,0,0,0,health+shield,0,health+shield,0x00FF0000,1,1,0,0,0);
+	hprog = new CLprogress(0,0,40,10,health+shield,0,health+shield,0x00FF0000,1,1,0,0,0);
 	//*
 }
 
@@ -130,6 +159,10 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
 	position = enemyp;
 	position.z = ENEMYZLEVEL;
 	tposition = position;
+	//*
+	
+	//set entity type
+	type = enemyptr->type;
 	//*
 	
 	//load enemy ai

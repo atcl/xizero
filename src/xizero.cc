@@ -9,7 +9,7 @@ int main()
 	//init sequence
 	CLglobal* clglobal = CLsetup();
 
-	xchar** lfn = clglobal->clformat->loadlvl("../dat/other/level0.lvl");
+	xchar** lfn = clglobal->clformat->loadlvl("../dat/levels/level0.lvl");
 	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
 	clglobal->clfloor->init(100,670,0x0000b0b0,1);
 
@@ -19,6 +19,7 @@ int main()
 	xlong dis   = 0;
 	bool running  = 1;
 	bool pause = 0;
+	bool gamewon = 0;
 	
 	//CLfsprogress::instance()->set(20);
 	
@@ -59,7 +60,14 @@ int main()
 			break;
 		}
 		
-		if(!pause) testlevel->update(input,turbo,clglobal->clgamepad->getstate());
+		if(!pause) 
+		{
+			switch(testlevel->update(input,turbo,clglobal->clgamepad->getstate()))
+			{
+				case 1: gamewon = 1; break;
+				case -1: break;
+			}
+		}
 
 		clglobal->cldoublebuffer.ultraclear(0);
 		clglobal->clzbuffer.clear(zres);
@@ -70,23 +78,31 @@ int main()
 			case 1: 
 				clglobal->clfloor->draw();
 				testlevel->display();
-				break;
+			break;
 
 			case 2:
 				dis = ( testlevel->getmark() ) * xres;
 				clglobal->clmisc3d->drawzbuffer(testlevel->getlandscape(),dis);
 				testlevel->getplayer()->showbox();
-				break;
+			break;
 
 			case 3:
 				clglobal->clfloor->draw();
 				testlevel->display();
 				clglobal->clmisc3d->drawzbuffer();
-				break;
+			break;
 		}
 		
 		clglobal->clbench->inc();		
 	}
+
+	//game done:
+	 sprite* overscreen = 0;
+	if(gamewon) overscreen = clglobal->clformat->loadtga(clglobal->clsystem->getfile("../dat/other/gamewon.tga"));
+	else overscreen = clglobal->clformat->loadtga(clglobal->clsystem->getfile("../dat/other/gameover.tga"));
+	clglobal->clgfx1->drawscreen(overscreen);
+	clglobal->clsystem->wait(2500);
+	//*
 
 	//exit sequence
 	delete testlevel;

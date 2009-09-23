@@ -89,6 +89,12 @@
 #define PREF  0b00000000000000000000000000000000
 //*
 
+//enitiy types
+#define PLAYER 0
+#define ENEMY  1
+#define BOSS   2
+//*
+
 //3d engine consts
 #define prjx 80
 #define prjy 95

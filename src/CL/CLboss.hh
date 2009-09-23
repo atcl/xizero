@@ -23,14 +23,18 @@ class CLboss : public CLenemy
 	public:
 		CLboss(CLfile* bossptr,xlong* m,xlong mm);
 		~CLboss() { };
-		void displayhud();
 };
 
-CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm) : CLenemy(bossptr,m,mm) { }
-
-void CLboss::displayhud()
-{
+CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm) : CLenemy(bossptr,m,mm)
+{ 
+	//set entity type
+	type = 2;
+	//*
 	
+	//set health bar width and height
+	hprog->setwidth(80);
+	hprog->setheight(20);
+	//*	
 }
 
 #endif
