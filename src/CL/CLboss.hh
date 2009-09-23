@@ -7,13 +7,30 @@
 #include "CLcl.hh"
 #include "CLentity.hh"
 
-class CLboss : public CLentity<1>
+/* class name:	CLboss
+ * 
+ * description:	The boss (enemy) class.
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
+class CLboss : public CLenemy
 {
-	private:
-	
-	
 	public:
-	
+		CLboss(CLfile* bossptr,xlong* m,xlong mm);
+		~CLboss() { };
+		void displayhud();
 };
+
+CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm) : CLenemy(bossptr,m,mm) { }
+
+void CLboss::displayhud()
+{
+	
+}
 
 #endif

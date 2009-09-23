@@ -27,12 +27,13 @@
 
 class CLenemy : public CLentity<1>
 {
-	private:
+	protected:
 		CLprogress* hprog;
 		xlong* aiarray;
-		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk
+		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk, 4=oscillate, 5=oscillate following
 		xlong aggrolevel;
 		CLbox* aggrobox;
+		void cruise();
 		void pretransform();
 		void transform();
 		xlong collision();
@@ -43,6 +44,16 @@ class CLenemy : public CLentity<1>
 		template<int I>xlong update(CLentity<I>* p);
 		void displayhud();
 };
+
+void CLenemy::cruise()
+{
+	//update enemy through ai array
+	switch(aitype)
+	{
+		case 0: gear=1; setspeed(); break;
+	}		
+	//*
+}
 
 void CLenemy::pretransform()
 {
@@ -201,12 +212,7 @@ xlong CLenemy::update(CLentity<I>* p)
 
 		linear->unit();
 		
-		//update enemy through ai array
-		switch(aitype)
-		{
-			case 0: gear=1; setspeed(); break;
-		}		
-		//*
+		cruise();
 		
 		//fire at player?
 		xlong fc = clgame->collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);

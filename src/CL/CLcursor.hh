@@ -10,6 +10,17 @@
 #include "CLformat.hh"
 #include "CLgfx1.hh"
 
+/* class name:	CLcursor
+ * 
+ * description:	This class handles the mouse cursor
+ * 
+ * author:	atcl
+ * 
+ * notes:	
+ * 
+ * version: 0.1
+ */
+
 class CLcursor : public virtual CLcl, public CLsingle<CLcursor>
 {
 	friend class CLsingle<CLcursor>;
