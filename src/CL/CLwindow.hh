@@ -41,11 +41,11 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		xchar* title;
 		xlong* buffer;
 		xlong key;
+		xlong keyup;
 		xlong turbo;
 		xlong mousex;
 		xlong mousey;
-		xlong mouseb;
-		xlong keyup;
+		xlong mouseb;		
 		void draw();
 		virtual int handle(int event);
 		CLwindow();

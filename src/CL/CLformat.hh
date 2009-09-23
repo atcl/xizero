@@ -24,6 +24,8 @@
  * version: 0.1
  */
 
+class CLlevel;
+
 struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; } };
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
@@ -50,7 +52,8 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
 		sprites* loadfont(const xchar* sf);
 		sprites* loadfont(CLfile* sf);
-		xlong**  loadlvl();
+		CLlevel* loadlvl(const xchar* sf);
+		CLlevel* loadlvl(CLfile* sf);
 		xmap*    loadini(const xchar* bf);
 		xmap*    loadini(CLfile* bf);
 };
@@ -476,7 +479,9 @@ sprites* CLformat::loadfont(CLfile* sf)
 	return r;
 }
 
-xlong** CLformat::loadlvl()
+CLlevel* CLformat::loadlvl(const xchar* sf) { return loadlvl(clsystem->getfile(sf)); }
+
+CLlevel* CLformat::loadlvl(CLfile* sf)
 {
 	return 0;
 }
