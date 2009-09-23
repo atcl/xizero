@@ -33,7 +33,7 @@ class CLmainmenu : public virtual CLcl
 		CLmainmenu(sprite* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 	public:
-		draw();
+		draw() const;
 };
 
 CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc)
@@ -64,7 +64,7 @@ CLmainmenu::~CLmainmenu()
 	delete footer;
 }
 
-CLmainmenu::draw()
+CLmainmenu::draw() const
 {
 	clgfx1->drawscreen(background);
 	header->draw();

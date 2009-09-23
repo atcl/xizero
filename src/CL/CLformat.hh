@@ -24,8 +24,6 @@
  * version: 0.1
  */
 
-class CLlevel;
-
 struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; } };
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
@@ -38,29 +36,28 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		CLformat() { };
 		~CLformat() { };
 	public:
-		xlong*   loadcsv(const xchar* sf,xchar sep=',');
-		xlong*   loadcsv(CLfile* sf,xchar sep=',');
-		arfile*  loadar(const xchar* sf);
-		arfile*  loadar(CLfile* sf);
-		xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv);
-		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv);
-		sprite*  loadtga(const xchar* sf);
-		sprite*  loadtga(CLfile* sf);
-		sprite*  loadxpm(const xchar** xpm);
-		sprite*  loadxpm(CLfile* xpm);
-		sprites* loadtileset(const xchar* sf,xlong tw,xlong th);
-		sprites* loadtileset(CLfile* sf,xlong tw,xlong th);
-		sprites* loadfont(const xchar* sf);
-		sprites* loadfont(CLfile* sf);
-		CLlevel* loadlvl(const xchar* sf);
-		CLlevel* loadlvl(CLfile* sf);
-		xmap*    loadini(const xchar* bf);
-		xmap*    loadini(CLfile* bf);
+		xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
+		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
+		arfile*  loadar(const xchar* sf) const;
+		arfile*  loadar(CLfile* sf) const;
+		xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
+		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
+		sprite*  loadtga(const xchar* sf) const;
+		sprite*  loadtga(CLfile* sf) const;
+		sprite*  loadxpm(const xchar** xpm) const;
+		sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
+		sprites* loadtileset(CLfile* sf,xlong tw,xlong th) const;
+		sprites* loadfont(const xchar* sf) const;
+		sprites* loadfont(CLfile* sf) const;
+		xchar**  loadlvl(const xchar* sf) const;
+		xchar**  loadlvl(CLfile* sf) const;
+		xmap*    loadini(const xchar* bf) const;
+		xmap*    loadini(CLfile* bf) const;
 };
 
-xlong* CLformat::loadcsv(const xchar* sf,xchar sep) { return loadcsv(clsystem->getfile(sf),sep); }
+xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); }
 
-xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
+xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
 {
 	//add template parameter to change between xlong*,xchar**,xfixed* and float*
 	//Works only for integers!
@@ -126,9 +123,9 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep)
 	//*
 }
 
-arfile* CLformat::loadar(const xchar* sf) { return loadar(clsystem->getfile(sf)); }
+arfile* CLformat::loadar(const xchar* sf) const { return loadar(clsystem->getfile(sf)); }
 
-arfile* CLformat::loadar(CLfile* sf)
+arfile* CLformat::loadar(CLfile* sf) const
 {
 	xchar* bf = sf->text;
 	xlong cfs = sf->size;
@@ -215,9 +212,10 @@ arfile* CLformat::loadar(CLfile* sf)
 	return 0;
 }
 
-xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) { return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
+xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const
+{ return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
 
-xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
+xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
 {
 	//calc subconst yourself by rc and rv
 	
@@ -266,9 +264,9 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv)
 	return rev;
 }
 
-sprite* CLformat::loadtga(const xchar* sf) { return loadtga(clsystem->getfile(sf)); }
+sprite* CLformat::loadtga(const xchar* sf) const { return loadtga(clsystem->getfile(sf)); }
 
-sprite* CLformat::loadtga(CLfile* sf)
+sprite* CLformat::loadtga(CLfile* sf) const
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 
@@ -310,7 +308,7 @@ sprite* CLformat::loadtga(CLfile* sf)
 	return r;
 }
 
-sprite* CLformat::loadxpm(const xchar** xpm)
+sprite* CLformat::loadxpm(const xchar** xpm) const
 {
 	uxlong xpm_ptr = 0;
 	
@@ -351,12 +349,12 @@ sprite* CLformat::loadxpm(const xchar** xpm)
 		xpm_ptr++;
 		if(xpm[i][xpm_ptr]!='#') return 0;
 		xpm_ptr++;
-		currcol  = CLhatoi(xpm[i][xpm_ptr])<<20; xpm_ptr++; 
-		currcol += CLhatoi(xpm[i][xpm_ptr])<<16; xpm_ptr++;
-		currcol += CLhatoi(xpm[i][xpm_ptr])<<12; xpm_ptr++;
-		currcol += CLhatoi(xpm[i][xpm_ptr])<<8;  xpm_ptr++;
-		currcol += CLhatoi(xpm[i][xpm_ptr])<<4;  xpm_ptr++;
-		currcol += CLhatoi(xpm[i][xpm_ptr]);
+		currcol  = clutils->hatoi(xpm[i][xpm_ptr])<<20; xpm_ptr++; 
+		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<16; xpm_ptr++;
+		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<12; xpm_ptr++;
+		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<8;  xpm_ptr++;
+		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<4;  xpm_ptr++;
+		currcol += clutils->hatoi(xpm[i][xpm_ptr]);
 		ctable[cindex] = currcol;
 	}
 	//*
@@ -377,11 +375,9 @@ sprite* CLformat::loadxpm(const xchar** xpm)
 	return r;
 }
 
-sprite* CLformat::loadxpm(CLfile* xpm) { /*return loadxpm(clsystem->getfile(xpm)->text);*/ }
+sprites* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); }
 
-sprites* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) { return loadtileset(clsystem->getfile(sf),tw,th); }
-
-sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
+sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th) const
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 
@@ -429,9 +425,9 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th)
 	return r;
 }
 
-sprites* CLformat::loadfont(const xchar* sf) { return loadfont(clsystem->getfile(sf)); }
+sprites* CLformat::loadfont(const xchar* sf) const { return loadfont(clsystem->getfile(sf)); }
 
-sprites* CLformat::loadfont(CLfile* sf)
+sprites* CLformat::loadfont(CLfile* sf) const
 {
 //loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
 
@@ -479,16 +475,53 @@ sprites* CLformat::loadfont(CLfile* sf)
 	return r;
 }
 
-CLlevel* CLformat::loadlvl(const xchar* sf) { return loadlvl(clsystem->getfile(sf)); }
+xchar** CLformat::loadlvl(const xchar* sf) const { return loadlvl(clsystem->getfile(sf)); }
 
-CLlevel* CLformat::loadlvl(CLfile* sf)
+xchar** CLformat::loadlvl(CLfile* sf) const
 {
-	return 0;
+	xchar* bf = sf->text;
+	
+	//get startpositions of filenames
+	xchar* fs[5] = { 0,0,0,0,0 };
+	xlong fl[5] = { 0,0,0,0,0 };
+	bool marks = 0;
+	xlong fsc = 0;
+	for(uxlong i=0; i<sf->size; i++)
+	{
+		if(marks==0 && bf[i]=='"')
+		{
+			marks = 1;
+			fs[fsc] = &bf[i+1];
+		}
+		else if(marks==1 && bf[i]=='"')
+		{
+			marks = 0;
+			fsc++;
+			if(fsc>=5) break; 
+		}
+		else if(marks==1)
+		{
+			fl[fsc]++;
+		}
+	}
+	//*
+	
+	//copy filenames to buffer
+	xchar** fn = new xchar*[5];
+	for(uxlong j=0; j<5; j++)
+	{
+		fn[j] = new xchar[fl[j]+1];
+		fn[j][fl[j]] = 0;
+		clutils->copychararray(fn[j],fs[j],fl[j]);
+	}
+	//*
+	
+	return fn;
 }
 
-xmap* CLformat::loadini(const xchar* sf) { return loadini(clsystem->getfile(sf)); }
+xmap* CLformat::loadini(const xchar* sf) const { return loadini(clsystem->getfile(sf)); }
 
-xmap* CLformat::loadini(CLfile* sf)
+xmap* CLformat::loadini(CLfile* sf) const
 {
 	//inis need newline at end of file!!
 	xmap* r = new xmap;

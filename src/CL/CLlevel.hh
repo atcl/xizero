@@ -58,7 +58,7 @@ class CLlevel : public virtual CLcl
 		xlong playerscreenylevel;
 		bool  paused;
 	public:
-		CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* levelcontainer);
+		CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bosslib,xchar* levelcontainer);
 		~CLlevel();
 		void update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
@@ -76,7 +76,7 @@ xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
 
-CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* levelcontainer)
+CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bosslib,xchar* levelcontainer)
 {
 	//matrix for linear transformations of level objects
 	linear = new CLmatrix(1);

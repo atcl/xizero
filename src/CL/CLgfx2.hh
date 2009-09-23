@@ -40,16 +40,16 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		CLgfx2();
 		~CLgfx2() { };
 	public:
-		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f);
-		xlong drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc=0);
-		void drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc=0);
-		xlong getfontstringwidth(const char* a,xlong ft);
-		xlong getfontstringheight(const char* a,xlong ft);
-		uxlong getEGAcolor(xchar c);
-		bool comparecolors(uxlong c1,uxlong c2);
-		uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000);
-		uxlong getgradient(uxlong s,uxlong e,xchar i);
-		sprite* savescreen();
+		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const;
+		xlong drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc=0) const;
+		void drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc=0) const;
+		xlong getfontstringwidth(const char* a,xlong ft) const;
+		xlong getfontstringheight(const char* a,xlong ft) const;
+		uxlong getEGAcolor(xchar c) const;
+		bool comparecolors(uxlong c1,uxlong c2) const;
+		uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000) const;
+		uxlong getgradient(uxlong s,uxlong e,xchar i) const;
+		sprite* savescreen() const;
 };
 
 CLgfx2::CLgfx2()
@@ -58,7 +58,7 @@ CLgfx2::CLgfx2()
 	tele = clformat->loadfont(temp);
 };
 
-void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f)
+void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const
 {
 	//draw to top level of zbuffer!
 	
@@ -94,7 +94,7 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	}
 }
 
-xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc)
+xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc) const
 {
 	//is on screen
 	if( x<0 || y<0 || x>xres || y>yres) return -1;
@@ -151,7 +151,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlo
 	return rx;
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc)
+void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc) const
 {
 	xlong l = clutils->chararraylength(a);
 	xlong t = x;
@@ -163,7 +163,7 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,ux
 	}
 }
 
-xlong CLgfx2::getfontstringwidth(const char* a,xlong ft)
+xlong CLgfx2::getfontstringwidth(const char* a,xlong ft) const
 {
 	//select font
 	CLfont* f = 0;
@@ -196,7 +196,7 @@ xlong CLgfx2::getfontstringwidth(const char* a,xlong ft)
 	return r;
 }
 
-xlong CLgfx2::getfontstringheight(const char* a,xlong ft)
+xlong CLgfx2::getfontstringheight(const char* a,xlong ft) const
 {
 	//select font
 	CLfont* f = 0;
@@ -218,7 +218,7 @@ xlong CLgfx2::getfontstringheight(const char* a,xlong ft)
 	return r;
 }
 
-uxlong CLgfx2::getEGAcolor(xchar c)
+uxlong CLgfx2::getEGAcolor(xchar c) const
 {
 	//return the 16 EGA colors
 	switch(c)
@@ -244,12 +244,12 @@ uxlong CLgfx2::getEGAcolor(xchar c)
 	//*
 }
 
-bool CLgfx2::comparecolors(uxlong c1,uxlong c2)
+bool CLgfx2::comparecolors(uxlong c1,uxlong c2) const
 {
 	return 0;
 }
 
-uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2)
+uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2) const
 {
 	xchar a1 = 0;
 	xchar a2 = 0;
@@ -330,12 +330,12 @@ uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2)
 	return 0;
 }
 
-uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i)
+uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i) const
 {
 	//((s.r-e.r)/255)*i, ((s.g - e.g)/255)*i, ((s.b - e.b)/255)*i
 }
 
-sprite* CLgfx2::savescreen()
+sprite* CLgfx2::savescreen() const
 {
 	sprite* r = new sprite;
 	r->width = xres;

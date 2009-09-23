@@ -28,15 +28,14 @@ class CLintro : public virtual CLcl, public CLsingle<CLintro>
 	friend class CLsingle<CLintro>;
 	
 	private:
-		CLmatrix* linear;
 		CLintro() { };
 		~CLintro() { };
 	public:
-		void atcrosslevel();
-		void xizero();
+		void atcrosslevel() const;
+		void xizero() const;
 };
 
-void CLintro::atcrosslevel()
+void CLintro::atcrosslevel() const
 {
 	//load atcrosslevel model
 	CLfile *cf = clsystem->getfile("../dat/other/atcl.y3d");
@@ -60,7 +59,7 @@ void CLintro::atcrosslevel()
 	//*
 }
 
-void CLintro::xizero()
+void CLintro::xizero() const
 {
 	//load atcrosslevel model
 	CLfile* fxi = clsystem->getfile("../dat/other/xi.y3d");

@@ -31,23 +31,24 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		CLutils();
 		~CLutils() { };
 	public:
-		void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3);
-		xchar  long2char(xlong l,xlong i);
-		xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4);
-		xlong  chararraylength(const xchar* c);
-		void   copychararray(xchar* dst,const xchar* src,xlong length); //for char arrays below 256byte
-		xchar* clonechararray(const xchar* src);
-		xlong  getlinecount(CLfile* sf);
-		bool   checkextension(xchar* fn,xlong nl,const xchar* fe);
+		void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) const;
+		xchar  long2char(xlong l,xlong i) const;
+		xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4) const;
+		xlong  chararraylength(const xchar* c) const;
+		void   copychararray(xchar* dst,const xchar* src,xlong length) const; //for char arrays below 256byte
+		xchar* clonechararray(const xchar* src) const;
+		xlong  getlinecount(CLfile* sf) const;
+		bool   checkextension(xchar* fn,xlong nl,const xchar* fe) const;
 		xlong  getrandom(uxlong range);
-		xchar* color2string(uxlong c);
-		xlong  endian(xlong l);
-		xlong  findarmember(arfile* a,const xchar* e);
+		xchar* color2string(uxlong c) const;
+		xlong  endian(xlong l) const;
+		xlong  findarmember(arfile* a,const xchar* e) const;
+		xlong  hatoi(uxchar c) const;
 };
 
 CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; }
 
-void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3)
+void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) const
 {
 	r0 = (l & 0xFF);
 	r1 = (l & 0xFF00) >> 8;
@@ -55,7 +56,7 @@ void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3)
 	r3 = (l & 0xFF000000) >> 24;
 }
 
-xchar CLutils::long2char(xlong l,xlong i)
+xchar CLutils::long2char(xlong l,xlong i) const
 {
 	xchar ch = -1;
 
@@ -77,7 +78,7 @@ xchar CLutils::long2char(xlong l,xlong i)
 	return ch;
 }
 
-xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3)
+xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3) const
 {
 	xlong l;
 
@@ -89,19 +90,19 @@ xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3)
 	return l;
 }
 
-xlong CLutils::chararraylength(const xchar* c)
+xlong CLutils::chararraylength(const xchar* c) const
 {
 	xlong s = 0;
 	while (c[s]) { s++; }
 	return s;
 }
 
-void CLutils::copychararray(xchar* dst,const xchar* src,xlong length)
+void CLutils::copychararray(xchar* dst,const xchar* src,xlong length) const
 {
 	for(uxlong i=0; i<length; i++) { dst[i] = src[i]; }
 }
 
-xchar* CLutils::clonechararray(const xchar* src)
+xchar* CLutils::clonechararray(const xchar* src) const
 {
 	xlong l = 0;
 	while (src[l]) { l++; }
@@ -111,7 +112,7 @@ xchar* CLutils::clonechararray(const xchar* src)
 	return r;
 }
 
-xlong CLutils::getlinecount(CLfile* sf)
+xlong CLutils::getlinecount(CLfile* sf) const
 {
 	xlong lc = 0;	//line count
 
@@ -124,7 +125,7 @@ xlong CLutils::getlinecount(CLfile* sf)
 	return lc;
 }
 
-bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe)
+bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe) const
 {
 	xlong el = chararraylength(fe);
 	xlong es = 0;
@@ -155,7 +156,7 @@ xlong CLutils::getrandom(uxlong range)
 	//*
 }
 
-xchar* CLutils::color2string(uxlong c)
+xchar* CLutils::color2string(uxlong c) const
 {
 	doubleword tc;
 	tc.dd = c;
@@ -178,7 +179,7 @@ xchar* CLutils::color2string(uxlong c)
 	return rc;
 }
 
-xlong CLutils::endian(xlong l)
+xlong CLutils::endian(xlong l) const
 {
 	//converts/toggles endianess of l
 
@@ -197,7 +198,7 @@ xlong CLutils::endian(xlong l)
 	return tl.dd;
 }
 
-xlong CLutils::findarmember(arfile* a,const xchar* e)
+xlong CLutils::findarmember(arfile* a,const xchar* e) const
 {
 		xlong r = -1;
 		
@@ -211,6 +212,36 @@ xlong CLutils::findarmember(arfile* a,const xchar* e)
 		}
 		
 		return r;
+}
+
+xlong CLutils::hatoi(uxchar c) const
+{
+	switch(c)
+	{
+		case '0': return 0;
+		case '1': return 1;
+		case '2': return 2;
+		case '3': return 3;
+		case '4': return 4;
+		case '5': return 5;
+		case '6': return 6;
+		case '7': return 7;
+		case '8': return 8;
+		case '9': return 9;
+		case 'A': return 10;
+		case 'B': return 11;
+		case 'C': return 12;
+		case 'D': return 13;
+		case 'E': return 14;
+		case 'F': return 15;
+		case 'a': return 10;
+		case 'b': return 11;
+		case 'c': return 12;
+		case 'd': return 13;
+		case 'e': return 14;
+		case 'f': return 15;
+		default:  return 0;
+	}
 }
 
 #endif

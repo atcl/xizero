@@ -11,7 +11,6 @@
 
 #include "CLtypes.hh"
 #include "CLresource.hh"
-#include "CLpixmap.hh"
 
 /* class name:	CLwindow
  * 
@@ -110,7 +109,7 @@ void CLwindow::init(xlong w,xlong h,const xchar* t)
 	fl_open_display();
 	
 	#ifdef WIN32
-		uxchar* temp = xpm2ico(CLicon);
+		uxchar* temp = clformat->loadxpm(CLicon);
 		this->icon((xchar*)LoadIcon(fl_display,temp));
 	#else //ifdef LINUX
 		Pixmap p = XCreatePixmap(fl_display,DefaultRootWindow(fl_display),16,16,32);

@@ -9,7 +9,8 @@ int main()
 	//init sequence
 	CLglobal* clglobal = CLsetup();
 
-	CLlevel* testlevel = new CLlevel("../dat/terrain/terrain.a","../dat/enemy/enemies.a","../dat/player/player.a","../dat/level/level0.a");
+	xchar** lfn = clglobal->clformat->loadlvl("../dat/other/level0.lvl");
+	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
 	clglobal->clfloor->init(100,670,0x0000b0b0,1);
 
 	xchar input = 0;

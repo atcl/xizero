@@ -34,7 +34,7 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 		~CLfloor() { };
 	public:
 		void init(xlong z,xlong w,uxlong c,bool s);
-		void draw();
+		void draw() const;
 };
 
 CLfloor::CLfloor() { zlevel = zres; xstart = 0; xend = xres-1; width = xres; shade = 0; }
@@ -74,7 +74,7 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 	//*
 }
 
-void CLfloor::draw()
+void CLfloor::draw() const
 {
 	//fast floor drawing
 	uxlong runningfloorxstart = xstart;

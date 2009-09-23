@@ -42,27 +42,25 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		CLmath();
 		~CLmath();
 	public:
-		template<typename T> T sign(T x);
-		template<typename T> T heaviside(T x);
-		template<typename T> T absolute(T x);
-		//template<>       float absolute<float>(float x);
-		template<typename T> T delta(T x);
-		template<typename T> T min(T a,T b);
-		template<typename T> T max(T a,T b);
-		template<typename T> T round(T x);
-		template<typename T> T roundup(T x);
-		template<typename T> T rounddown(T x);
-		template<typename T> T sqrt(T x);
-		//template<>       float sqrt<float>(float x);
-		template<typename T> T deg2rad(T d);
-		xlong faculty(xlong f);
-		xlong power(xlong b,xlong e);
-		float pi();
-		float sin(xlong x);
-		float cos(xlong x);
-		float arcsin(float x);
-		float arccos(float x);
-		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k);
+		template<typename T> T sign(T x) const;
+		template<typename T> T heaviside(T x) const;
+		template<typename T> T absolute(T x) const;
+		template<typename T> T delta(T x) const;
+		template<typename T> T min(T a,T b) const;
+		template<typename T> T max(T a,T b) const;
+		template<typename T> T round(T x) const;
+		template<typename T> T roundup(T x) const;
+		template<typename T> T rounddown(T x) const;
+		template<typename T> T sqrt(T x) const;
+		template<typename T> T deg2rad(T d) const;
+		xlong faculty(xlong f) const;
+		xlong power(xlong b,xlong e) const;
+		float pi() const;
+		float sin(xlong x) const;
+		float cos(xlong x) const;
+		float arcsin(float x) const;
+		float arccos(float x) const;
+		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const;
 };
 
 CLmath::CLmath()
@@ -101,7 +99,7 @@ CLmath::~CLmath()
 }
 
 template<typename T>
-T CLmath::sign(T x)
+T CLmath::sign(T x) const
 {
 	//only xlong!
 	__asm__ __volatile__ ("cdq; cmpl $0,%%eax; seta %%al; orb %%al,%%dl" : "=d"(x) : "a"(x) );
@@ -109,7 +107,7 @@ T CLmath::sign(T x)
 }
 
 template<typename T>
-T CLmath::heaviside(T x)
+T CLmath::heaviside(T x) const
 {
 	//only xlong!
 	__asm__ __volatile__ ("cdq; incl %%edx;" : "=d"(x) : "a"(x) );
@@ -117,21 +115,21 @@ T CLmath::heaviside(T x)
 }
 
 template<typename T>
-T CLmath::absolute(T x)
+T CLmath::absolute(T x) const
 {
 	__asm__ __volatile__ ("cdq; xorl %%edx,%%eax; btl $31,%%ebx; adcl $0,%%eax;" : "=a"(x) : "a"(x),"b"(x) );
 	return x;
 }
 
 template<>
-float CLmath::absolute<float>(float x)
+float CLmath::absolute<float>(float x) const
 {
 	__asm__ __volatile__ ("btrl $31,%%eax;" : "=a"(x) : "a"(x) );
 	return x;
 }
 
 template<typename T>
-T CLmath::delta(T x)
+T CLmath::delta(T x) const
 {
 	//only xlong
 	__asm__ __volatile__ ("xorl %%ebx,%%ebx; orl $0,%%eax; setz %%bl ;" : "=b"(x) : "a"(x) );
@@ -139,37 +137,37 @@ T CLmath::delta(T x)
 }
 
 template<typename T>
-T CLmath::min(T a,T b)
+T CLmath::min(T a,T b) const
 {
 	return (a<b) ? a : b;
 }
 
 template<typename T>
-T CLmath::max(T a,T b)
+T CLmath::max(T a,T b) const
 {
 	return (a>b) ? a : b;
 }
 
 template<typename T>
-T CLmath::round(T x)
+T CLmath::round(T x) const
 {
 	return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x);
 }
 
 template<typename T>
-T CLmath::roundup(T x)
+T CLmath::roundup(T x) const
 {
 	return T(ceil(x));
 }
 
 template<typename T>
-T CLmath::rounddown(T x)
+T CLmath::rounddown(T x) const
 {
 	return T(floor(x));
 }
 
 template<typename T>
-T CLmath::sqrt(T x)
+T CLmath::sqrt(T x) const
 {
 	if(x<=0) return 0;
 
@@ -185,7 +183,7 @@ T CLmath::sqrt(T x)
 }
 
 template<>
-float CLmath::sqrt<float>(float x)
+float CLmath::sqrt<float>(float x) const
 {
 	if(x<=0) return 0;
 
@@ -201,12 +199,12 @@ float CLmath::sqrt<float>(float x)
 }
 
 template<typename T>
-T CLmath::deg2rad(T d)
+T CLmath::deg2rad(T d) const
 {
 	return float(fxpi*d);
 }
 
-xlong CLmath::faculty(xlong f)
+xlong CLmath::faculty(xlong f) const
 {
 	xlong r = 1;
 
@@ -218,7 +216,7 @@ xlong CLmath::faculty(xlong f)
 	return r;
 }
 
-xlong CLmath::power(xlong b,xlong e)
+xlong CLmath::power(xlong b,xlong e) const
 {
 	xlong r = 1;
 
@@ -230,12 +228,12 @@ xlong CLmath::power(xlong b,xlong e)
 	return r;
 }
 
-float CLmath::pi()
+float CLmath::pi() const
 {
 	return fxpi;
 }
 
-float CLmath::sin(xlong x)
+float CLmath::sin(xlong x) const
 {
 	if(x < 0) x -= 180;
 	x = absolute(x);
@@ -243,23 +241,23 @@ float CLmath::sin(xlong x)
 	return sinarray[x];
 }
 
-float CLmath::cos(xlong x)
+float CLmath::cos(xlong x) const
 {
 	x = absolute(x)%360;
 	return cosarray[x];
 }
 
-float CLmath::arcsin(float x)
+float CLmath::arcsin(float x) const
 { 
 	return std::asin(x) * RADTODEG; //!change to lookup table!
 }
 
-float CLmath::arccos(float x)
+float CLmath::arccos(float x) const
 {
 	return std::acos(x) * RADTODEG; //!change to lookup table!
 }
 
-float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
+float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const
 {
 	float tk = t0;
 	float xk = x0;
