@@ -336,4 +336,8 @@ xlong CLsystem::msgbox(const xchar* message)
 	//*
 }
 
+//temp
+namespace { CLsystem* clsystem = CLsystem::instance(); };
+//*
+
 #endif

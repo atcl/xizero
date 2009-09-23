@@ -21,20 +21,26 @@
 class CLboss : public CLenemy
 {
 	public:
-		CLboss(CLfile* bossptr,xlong* m,xlong mm);
-		~CLboss() { };
+		CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp);
+		~CLboss();
 };
 
-CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm) : CLenemy(bossptr,m,mm)
+CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp) : CLenemy(bossptr,m,mm,bossp)
 { 
 	//set entity type
 	type = 2;
 	//*
 	
+	//bosses don't troll around
+	gear=0;
+	setspeed();
+	//*
+
 	//set health bar width and height
-	hprog->setwidth(80);
-	hprog->setheight(20);
+	hprog->reset(0,0,80,20,health+shield,0,health+shield,0x00FF0000,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*	
 }
+
+CLboss::~CLboss() { }
 
 #endif

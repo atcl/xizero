@@ -19,7 +19,7 @@ int main()
 	xlong dis   = 0;
 	bool running  = 1;
 	bool pause = 0;
-	bool gamewon = 0;
+	xlong gamestate = 0;
 	
 	//CLfsprogress::instance()->set(20);
 	
@@ -60,18 +60,13 @@ int main()
 			break;
 		}
 		
-		if(!pause) 
-		{
-			switch(testlevel->update(input,turbo,clglobal->clgamepad->getstate()))
-			{
-				case 1: gamewon = 1; break;
-				case -1: break;
-			}
-		}
+		if(!pause) { gamestate = testlevel->update(input,turbo,clglobal->clgamepad->getstate()); }
 
 		clglobal->cldoublebuffer.ultraclear(0);
 		clglobal->clzbuffer.clear(zres);
 		clglobal->clstencilbuffer.ultraclear(0);
+
+		if(gamestate!=0) break; 
 
 		switch(mode)
 		{
@@ -97,11 +92,12 @@ int main()
 	}
 
 	//game done:
-	 sprite* overscreen = 0;
-	if(gamewon) overscreen = clglobal->clformat->loadtga(clglobal->clsystem->getfile("../dat/other/gamewon.tga"));
-	else overscreen = clglobal->clformat->loadtga(clglobal->clsystem->getfile("../dat/other/gameover.tga"));
+	sprite* overscreen = 0;
+	if(gamestate==1) overscreen = clglobal->clformat->loadtga("../dat/other/gamewon.tga");
+	else             overscreen = clglobal->clformat->loadtga("../dat/other/gameover.tga"); 
 	clglobal->clgfx1->drawscreen(overscreen);
-	clglobal->clsystem->wait(2500);
+	clglobal->clwindow->draw();
+	clglobal->clsystem->wait(9000);
 	//*
 
 	//exit sequence

@@ -72,6 +72,9 @@ int main(int argc, char** argv)
 	short ac = 0;
 	bool exp = 0;
 
+	sprite* temp = clglobal->clformat->loadtga("../dat/other/gamewon.tga");
+	clglobal->clgfx1->drawscreen(temp);
+
 	while(clglobal->clwindow->run())
 	{
 		switch(clglobal->clwindow->getturbo())

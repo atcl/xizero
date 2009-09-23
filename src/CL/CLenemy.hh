@@ -38,8 +38,8 @@ class CLenemy : public CLentity<1>
 		void transform();
 		xlong collision();
 	public:
-		CLenemy(CLfile* enemya,xlong* m,xlong mm);
-		CLenemy(CLenemy* enemyptr,CLlvector& enemyp);
+		CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp=0);
+		CLenemy(CLenemy* enemyptr,CLlvector* enemyp);
 		~CLenemy();
 		template<int I>xlong update(CLentity<I>* p);
 		void displayhud();
@@ -68,13 +68,15 @@ void CLenemy::cruise()
 		break;
 		
 		case 4:
-			gear=0;
-			setspeed();
-			
+			if(speed.x==0) speed.x = -maxspeed/20;
+			if(position.x<=200 && speed.x==maxspeed/20) speed.x = -maxspeed/20;
+			if(position.x>=600 && speed.x==-maxspeed/20) speed.x = maxspeed/20;
 		break;
 		
 		case 5:
-		
+			if(speed.x==0) speed.x = -maxspeed/20;
+			if(position.x<=200 && speed.x==maxspeed/20) speed.x = -maxspeed/20;
+			if(position.x>=600 && speed.x==-maxspeed/20) speed.x = maxspeed/20;
 		break;
 	}		
 	//*
@@ -121,10 +123,20 @@ xlong CLenemy::collision()
 	return r;
 }
 
-CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
+CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<1>(enemya,m,mm)
 {
 	//set entity type
 	type = 1;
+	//*
+	
+	//set and adjust (start) position to floating X pixel above ground
+	if(enemyp!=0)
+	{
+		position.x = enemyp->x;
+		position.y = enemyp->y;
+		position.z = ENEMYZLEVEL;
+		tposition = position;
+	}
 	//*
 	
 	//load enemy ai
@@ -143,8 +155,7 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 	
 	//set enemy specific attributes
 	points = clsystem->ato((*def)["points"]);
-	speeddir.y  = clsystem->ato((*def)["speed"]);
-	speeddir.y /= 20;
+	speeddir.y  = maxspeed/20;
 	direction[0].y = -1;
 	//*
 	
@@ -153,10 +164,11 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm) : CLentity<1>(enemya,m,mm)
 	//*
 }
 
-CLenemy::CLenemy(CLenemy* enemyptr,CLlvector& enemyp) : CLentity<1>(enemyptr)
+CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr)
 {
 	//set and adjust (start) position to floating X pixel above ground
-	position = enemyp;
+	position.x = enemyp->x;
+	position.y = enemyp->y;
 	position.z = ENEMYZLEVEL;
 	tposition = position;
 	//*
@@ -210,17 +222,13 @@ xlong CLenemy::update(CLentity<I>* p)
 	//*
 	
 	//check if to activate
-	if(active==0 && ( (*mark)-100)<position.y)
-	{
-		active = 1;
-	}
+	if(active==0 && ( (*mark)-100)<position.y) active = 1;
 	//*
 
 	//check if screen is left behind player
 	else if(active==1 && position.y>markmax )
 	{
-		active = 0;
-		visible = 0;
+		active = visible = 0;
 		return 0;
 	}
 	//*
@@ -297,8 +305,8 @@ void CLenemy::displayhud()
 	{
 		//draw enemy's healthbar
 		xlong tempx = (boundingbox[0][0]->c[0].x + boundingbox[0][0]->c[1].x) / 2;
-		hprog->setx(tempx + sposition.x - 20);
-		hprog->sety(position.y - *mark - 20);
+		hprog->setx(tempx + sposition.x - (hprog->getwidth()>>1));
+		hprog->sety(position.y - *mark - 25);
 		hprog->draw();
 		//*
 	}

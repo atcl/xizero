@@ -39,7 +39,7 @@ class CLplayer : public CLentity<2>
 		xlong collision(CLfbuffer* ll);
 	
 	public:
-		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pts=0);
+		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts=0);
 		~CLplayer();
 
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p);
@@ -138,15 +138,16 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	return r;
 }
 
-CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pts) : CLentity<2>(playera,m,mm)
+CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts) : CLentity<2>(playera,m,mm)
 {
 	//set entity type
 	type = 0;
 	//*	
 	
 	//set and adjust (start) position to floor
-	position = playerp;
-	position.z = 100 - position.z - 12;
+	position.x = playerp->x;
+	position.y = playerp->y;
+	position.z = 100 - playerp->z - 12;
 	tposition = position;
 	//*
 	
@@ -155,8 +156,7 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector& playerp,xlong pt
 	//*
 	
 	//set player specific attributes
-	speeddir.y  = -clsystem->ato((*def)["speed"]);
-	speeddir.y /= 20;
+	speeddir.y  = -maxspeed/20;
 	direction[0].y = direction[1].y = 1;
 	active = 1;
 	visible = 1;
@@ -339,7 +339,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		}
 
 		//update position
-		float inter = time-lastupdate;
+		float inter = (time-lastupdate);
 		tposition.x = position.x - (inter*speed.x);
 		tposition.y = position.y + (inter*speed.y);
 		tposition.z = position.z - (inter*speed.z);

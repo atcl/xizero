@@ -45,12 +45,12 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		xlong mousex;
 		xlong mousey;
 		xlong mouseb;		
-		void draw();
 		virtual int handle(int event);
 		CLwindow();
 		~CLwindow() { };
 	public:
 		void init(xlong w,xlong h,const xchar* t);
+		void draw();
 		void redraw();
 		static xlong run();
 		xlong getinkey();

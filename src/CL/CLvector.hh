@@ -231,15 +231,15 @@ T CLvector<T>::operator%(const CLvector& a)
 template<typename T>
 void CLvector<T>::print() const
 {
-	CLsystem::print("( ",0);
-	CLsystem::print(x,0);
-	CLsystem::print(" , ",0);
-	CLsystem::print(y,0);
-	CLsystem::print(" , ",0);
-	CLsystem::print(z,0);
+	clsystem->print("( ",0);
+	clsystem->print(x,0);
+	clsystem->print(" , ",0);
+	clsystem->print(y,0);
+	clsystem->print(" , ",0);
+	clsystem->print(z,0);
 	//~ CLsystem::print(" , ",0);
 	//~ CLsystem::print(e,0);
-	CLsystem::print(" )");
+	clsystem->print(" )");
 }
 //*
 

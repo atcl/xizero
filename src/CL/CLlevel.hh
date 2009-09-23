@@ -139,7 +139,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	//entity map:
 	xlong ef = clutils->findarmember(levela,".mape");
 	if(ef==-1) clsystem->exit(1,0,__func__,"no entity map found");
-	xchar** entitymap = clformat->loadmap(levela->members[ef],34,'.',-2);
+	xchar** entitymap = clformat->loadmap(levela->members[ef],35,'.',-3);
 	//*
 
 	//build levellayerscontaining all sub maps
@@ -208,17 +208,17 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 
 	//search player start pos and set player pos to it
 	bool startposfound = false;
-	CLlvector playerp;
+	CLlvector* playerp = new CLlvector();
 	for(uxlong h=0; h<levelheight; h++)
 	{
 		for(uxlong i=0; i<levelwidth; i++)
 		{
-			if(levellayers[2][h][i] == -1)
+			if(levellayers[2][h][i] == -2)
 			{
 				startposfound = true;
-				playerp.x = i * blockwidth;
-				playerp.y = h * blockheight;
-				playerp.z = levellayers[1][h][i] * blockdepth;
+				playerp->x = i * blockwidth;
+				playerp->y = h * blockheight;
+				playerp->z = levellayers[1][h][i] * blockdepth;
 				break;
 			}
 		}
@@ -249,7 +249,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	//find enemy startpos in entity map and associate (copy) from baseenemy in enemy list
 	enemies = new CLenemylist();
 	CLenemy* currentenemy;
-	CLlvector enemyp;
+	CLlvector* enemyp = new CLlvector();
 	for(uxlong l=0; l<differentenemies; l++)
 	{ 
 		for(uxlong m=0; m<levelheight; m++)
@@ -258,9 +258,9 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 			{
 				if(levellayers[2][m][n] == l)
 				{
-					enemyp.x = n * blockwidth;
-					enemyp.y = m * blockheight;
-					enemyp.z = levellayers[1][m][n];
+					enemyp->x = n * blockwidth;
+					enemyp->y = m * blockheight;
+					enemyp->z = levellayers[1][m][n];
 					currentenemy = new CLenemy(baseenemies[l],enemyp);
 					enemies->append(currentenemy);
 				}
@@ -279,7 +279,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 
 	//search player start pos and set player pos to it
 	bool bossposfound = false;
-	CLlvector playerp;
+	CLlvector* bossp = new CLlvector();
 	for(uxlong h=0; h<levelheight; h++)
 	{
 		for(uxlong i=0; i<levelwidth; i++)
@@ -287,23 +287,26 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 			if(levellayers[2][h][i] == -1)
 			{
 				bossposfound = true;
-				playerp.x = i * blockwidth;
-				playerp.y = h * blockheight;
-				playerp.z = levellayers[1][h][i] * blockdepth;
+				bossp->x = i * blockwidth;
+				bossp->y = h * blockheight;
+				bossp->z = levellayers[1][h][i] * blockdepth;
 				break;
 			}
 		}
 	}
-	if(startposfound==false) clsystem->exit(1,0,__func__,"no boss position found in entity map");
+	if(bossposfound==false) clsystem->exit(1,0,__func__,"no boss position found in entity map");
 	//*
 
 	//load boss
-	boss = new CLboss(bossa->members[0],&smoothmark,smoothlevelheight+10);
+	boss = new CLboss(bossa->members[0],&smoothmark,smoothlevelheight+10,bossp);
 	//*
 
 //***
 	
 	//release loaded files
+	delete enemyp;
+	delete bossp;
+	delete playerp;
 	delete terraina;
 	delete levela;
 	delete enemiesa;
@@ -318,11 +321,11 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 CLlevel::~CLlevel()
 {
 	delete player;
-	delete linear;
-	delete enemies;
-	delete boss;
-	delete levellandscape;
-	delete[] terrain;
+	//~ delete linear;
+	//~ delete enemies;
+	//~ delete boss;
+	//~ delete levellandscape;
+	//~ delete terrain;
 }
 
 xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
@@ -453,6 +456,7 @@ void CLlevel::display()
 		currentenemy = enemies->getcurrentdata();
 		currentenemy->display(1);
 	}
+	boss->display(1);
 	clstencilbuffer.blendcopy(cldoublebuffer.getbuffer(),4);
 	//*
 
@@ -468,6 +472,10 @@ void CLlevel::display()
 	}
 	//*
 	
+	//display boss
+	boss->display();
+	//*
+	
 	//display hud
 	player->displayhud();
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
@@ -475,6 +483,7 @@ void CLlevel::display()
 		currentenemy = enemies->getcurrentdata();
 		currentenemy->displayhud();
 	}
+	boss->displayhud();
 	//*
 }
 

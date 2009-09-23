@@ -51,6 +51,7 @@ class CLentity : public virtual CLcl
 		xlong* mark;
 		xlong markmax;
 		xlong gear;
+		float maxspeed;
 		xlong active;
 		xlong visible;
 		xlong lastupdate;
@@ -166,6 +167,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//load entity attributes
+	maxspeed    = clsystem->ato((*def)["speed"]);
 	healthmax = health = clsystem->ato((*def)["health"]);
 	shieldmax = shield = clsystem->ato((*def)["shield"]);
 	shieldrate	= clsystem->ato((*def)["shieldrate"]);
@@ -252,6 +254,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 	//*
 	
 	//load entity attributes
+	maxspeed  = entityptr->maxspeed;
 	healthmax = health = entityptr->health;
 	shieldmax = shield = entityptr->shield;
 	shieldrate	= entityptr->shieldrate;
