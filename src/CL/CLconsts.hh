@@ -95,6 +95,14 @@
 #define BOSS   2
 //*
 
+//font types
+#define TELEFONT 0;
+#define MONOFONT 1;
+#define LINEFONT 2;
+#define TERMFONT 3;
+#define SEGMFONT 4;
+//*
+
 //3d engine consts
 #define prjx 80
 #define prjy 95

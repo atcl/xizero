@@ -49,6 +49,7 @@
 #include "CL/CLbutton.hh"
 #include "CL/CLprogress.hh"
 #include "CL/CLmenu.hh"
+#include "CL/CLmainmenu.hh"
 //*
 
 //3d engine classes

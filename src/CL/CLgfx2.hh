@@ -21,12 +21,6 @@
  * version: 0.1
  */
 
-#define TELEFONT 0;
-#define MONOFONT 1;
-#define LINEFONT 2;
-#define TERMFONT 3;
-#define SEGMFONT 4;
-
 class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2> 
 {
 	friend class CLsingle<CLgfx2>;

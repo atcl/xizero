@@ -44,7 +44,8 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		xlong turbo;
 		xlong mousex;
 		xlong mousey;
-		xlong mouseb;		
+		xlong mouselb;	
+		xlong mouserb;	
 		virtual int handle(int event);
 		CLwindow();
 		~CLwindow() { };
@@ -57,7 +58,8 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		xlong getturbo() const;
 		xlong getmousex() const;
 		xlong getmousey() const;
-		xlong getmouseb() const;
+		xlong getmouselb() const;
+		xlong getmouserb() const;
 };
 
 void CLwindow::draw() { fl_draw_image((const uxchar*)&buffer[0],0,0,width,height,4,hdelta); }
@@ -69,21 +71,26 @@ int CLwindow::handle(int event)
 		case FL_KEYDOWN:
 			turbo = Fl::event_key();
 			key = Fl::event_key();
-			break;
+		break;
+		
 		case FL_KEYUP:
 			keyup = Fl::event_key();
 			if(keyup==turbo) turbo=0;
-			break;
+		break;
+		
 		case FL_MOVE:
 			mousex = Fl::event_x();
 			mousey = Fl::event_y();
-			break;
+		break;
+		
 		case FL_RELEASE:
-			mouseb = 0;
-			break;
+			mouselb = mouserb = 0;
+		break;
+		
 		case FL_PUSH:
-			mouseb = Fl::event_button() & 3;
-			break;		
+			mouselb = Fl::event_button() & 1;
+			mouserb = Fl::event_button() & 2;
+		break;		
 	}
 	
 	return Fl_Window::handle(event);
@@ -133,7 +140,9 @@ xlong CLwindow::getmousex() const { return mousex; }
 
 xlong CLwindow::getmousey() const {	return mousey; }
 
-xlong CLwindow::getmouseb() const {	return mouseb; }
+xlong CLwindow::getmouselb() const { return mouselb; }
+
+xlong CLwindow::getmouserb() const { return mouserb; }
 
 #endif
 

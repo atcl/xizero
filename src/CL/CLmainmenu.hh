@@ -6,7 +6,9 @@
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+#include "CLconsts.hh"
 #include "CLgfx1.hh"
+#include "CLgfx2.hh"
 #include "CLlabel.hh"
 #include "CLbutton.hh"
 
@@ -29,47 +31,97 @@ class CLmainmenu : public virtual CLcl
 		xlong buttoncount;
 		CLlabel* header;
 		CLlabel* footer;
-		CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc);
-		CLmainmenu(sprite* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc);
-		~CLmainmenu();
 	public:
-		draw() const;
+		CLmainmenu(const xchar* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
+		CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
+		CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
+		~CLmainmenu();
+		void draw() const;
+		void setback(sprite* s);
 };
 
-CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc)
-{ CLmainmenu(clformat->loadtga(bg),bc,bt,a,hl,fl,fc); }
+//~ CLmainmenu::CLmainmenu(const xchar* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
+//~ { CLmainmenu(clsystem->getfile(bg),bc,bt,a,hl,fl,fc); }
+//~ 
+//~ CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
+//~ { CLmainmenu(clformat->loadtga(bg),bc,bt,a,hl,fl,fc); }
 
-CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar** bt,void*(*a)(),const xchar* hl,const xchar* fl,uxlong fc)
+CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
 {
+	//set attributes
+	background = bg;
+	buttoncount = bc;
+	//*
+	
 	xlong tempx = 0;
 	xlong tempy = 0;
 	xlong tempw = 0;
 	xlong temph = 0; 
 	
-	button = new CLbutton*[bc]; 
-	for(uxlong i=0; i<bc; i++)
+	xlong temp = 0;
+	
+	//determine max button caption length
+	xlong mbl = clutils->chararraylength(bt[0]);
+	xlong mbli = 0;
+	for(uxlong i=1; i<bc; i++)
 	{
-		//button[i] = new CLbutton( ... );
+		temp = clutils->chararraylength(bt[i]);
+		if(temp>mbl) { mbli = i; mbl = temp; }
+	}
+	//*
+	
+	//determine button positions
+	temp = clgfx2->getfontstringwidth(bt[mbli],0);
+	xlong bw = temp + 4;
+	if(bw<xres>>2) bw = xres>>2;
+	xlong bx = (xres>>1) - (bw>>1);
+	xlong* by = new xlong[bc];
+	xlong bh = ((yres - (yres>>2))/bc);
+	for(uxlong j=0; j<bc; j++)
+	{
+		by[j] = (yres>>2) + j*bh;
+	}
+	bh -= 8;
+	//*
+	
+	//determine header position
+	temp = clgfx2->getfontstringwidth(hl,0) + 4;
+	xlong hx = (xres>>1) - (temp>>1);
+	xlong hw = temp;
+	xlong hy = 20;
+	//*
+	
+	//determine footer position
+	temp = clgfx2->getfontstringwidth(fl,0) + 4;
+	xlong fx = xres - temp - 16;
+	xlong fw = temp;
+	xlong fh = clgfx2->getfontstringheight(fl,0) + 4;
+	xlong fy = yres - fh; 
+	//*
+	
+	button = new CLbutton*[bc]; 
+	for(uxlong k=0; k<bc; k++)
+	{
+		button[k] = new CLbutton(bx,by[k],bw,bh,0x00FFFFFF,0x00808080,0x00808080,a[k],bt[k],0);
 	}
 	
-	//header = new CLlabel( ... );
-	//footer = new CLlabel( ... );
+	header = new CLlabel(hx,hy,hw,-1,0x00FF0000,0xFF000000,0xFF000000,hl,0);
+	footer = new CLlabel(fx,fy,fw,fh,0x00FFFFFF,0xFF000000,0xFF000000,fl,0);
 }
 		
 CLmainmenu::~CLmainmenu()
 {
-	delete background;
-	for(uxlong i=0; i<buttoncount; i++) { delete button[i]; }
-	delete header;
-	delete footer;
+	//todo
 }
 
-CLmainmenu::draw() const
+void CLmainmenu::draw() const
 {
 	clgfx1->drawscreen(background);
 	header->draw();
 	for(uxlong i=0; i<buttoncount; i++) { button[i]->draw(); }
 	footer->draw();
 }
+
+void CLmainmenu::setback(sprite* s) { background = s; }
  
  #endif

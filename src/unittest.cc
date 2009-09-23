@@ -3,6 +3,14 @@
 
 #include "CLinc.h"
 
+void test1() { say("1"); }
+void test2() { say("2"); }
+void test3() { say("3"); }
+void test4() { say("4"); }
+
+void (*as[4]) () = { test1,test2,test3,test4 };
+
+
 int main(int argc, char** argv)
 {
 	std::string argfile = "../dat/other/test.y3d";
@@ -71,12 +79,16 @@ int main(int argc, char** argv)
 	bool shadows = 0;
 	short ac = 0;
 	bool exp = 0;
+	bool mm = 0;
 
-	sprite* temp = clglobal->clformat->loadtga("../dat/other/gamewon.tga");
-	clglobal->clgfx1->drawscreen(temp);
+	const xchar* bt[] = { "New Game","Load Game","Options","Exit" };
+	sprite* sx = clglobal->clformat->loadtga("../dat/other/gamewon.tga"); 
+	CLmainmenu* mymain = new CLmainmenu(sx,4,bt,as,"Xi Zero","Version 0.1",0x00FFFFFF);
 
 	while(clglobal->clwindow->run())
 	{
+		if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();
+		
 		switch(clglobal->clwindow->getturbo())
 		{
 			case 0:
@@ -216,9 +228,13 @@ int main(int argc, char** argv)
 				//clglobal->clintro->atcrosslevel();
 				clglobal->clintro->xizero();
 				back = clglobal->clgfx2->savescreen();
+				mymain->setback(back);
 			break;
 			case 'l':
 				if(back!=0) drawback = !drawback;
+			break;
+			case 'm':
+				mm = !mm;
 			break;
 				
 			//System:
@@ -271,6 +287,8 @@ int main(int argc, char** argv)
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
 		if(drawback) clglobal->clgfx1->drawscreen(back);
+
+		if(mm) mymain->draw();
 
 		linearM->unit();
 
