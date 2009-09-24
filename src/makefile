@@ -12,6 +12,8 @@ CLEANUP = rm
 DEBUG   = -g
 LINUX   = -DLINUX
 WIN32   = -DWIN32
+DEVELOP = -DDEV
+RELEASE = -DREL
 
 SOURCE1 = xizero.cc
 TARGET1 = xizero
@@ -36,11 +38,8 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 
 # Compile!
 default:
-	$(CC) $(O2FLAGS) $(MATH) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
+	$(CC) $(O2FLAGS) $(MATH) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
 	$(STRIP) $(TARGET1)
-
-static:
-	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(STATIC) $(WWFLAGS) $(LINUX) 
 
 unit:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)

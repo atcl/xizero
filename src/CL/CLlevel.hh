@@ -112,7 +112,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	//*
 	
 	//terrain map:
-	xlong tf = clutils->findarmember(levela,".mapt");
+	xlong tf = clutils->findarmemberbyextension(levela,".mapt");
 	if(tf==-1) clsystem->exit(1,0,__func__,"no terrain map found");
 	xchar** terrainmap = clformat->loadmap(levela->members[tf],33,' ',-1);
 	//*
@@ -131,13 +131,13 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	//*
 
 	//height map:
-	xlong hf = clutils->findarmember(levela,".maph");
+	xlong hf = clutils->findarmemberbyextension(levela,".maph");
 	if(hf==-1) clsystem->exit(1,0,__func__,"no height map found");
 	xchar** heightmap = clformat->loadmap(levela->members[hf],48,' ',0);
 	//*
 
 	//entity map:
-	xlong ef = clutils->findarmember(levela,".mape");
+	xlong ef = clutils->findarmemberbyextension(levela,".mape");
 	if(ef==-1) clsystem->exit(1,0,__func__,"no entity map found");
 	xchar** entitymap = clformat->loadmap(levela->members[ef],35,'.',-3);
 	//*

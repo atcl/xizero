@@ -42,7 +42,8 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		xlong  getrandom(uxlong range);
 		xchar* color2string(uxlong c) const;
 		xlong  endian(xlong l) const;
-		xlong  findarmember(arfile* a,const xchar* e) const;
+		xlong  findarmemberbyextension(arfile* a,const xchar* e) const;
+		xlong  findarmemberbyname(arfile* a,const xchar* e) const;
 		xlong  hatoi(uxchar c) const;
 };
 
@@ -129,19 +130,8 @@ bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe) const
 {
 	xlong el = chararraylength(fe);
 	xlong es = 0;
-	for(uxlong l=0; l<nl; l++)
-	{
-		if(fn[l]==fe[0])
-		{
-			es = l;
-		}
-	}
-
-	for(uxlong m=0; m<el; m++)
-	{
-		if(fn[es+m]!=fe[m]) return false;
-	}
-
+	for(uxlong l=0; l<nl; l++) { if(fn[l]==fe[0]) { es = l; } }
+	for(uxlong m=0; m<el; m++) { if(fn[es+m]!=fe[m]) return false; }
 	return true;
 }
 
@@ -198,16 +188,33 @@ xlong CLutils::endian(xlong l) const
 	return tl.dd;
 }
 
-xlong CLutils::findarmember(arfile* a,const xchar* e) const
+xlong CLutils::findarmemberbyextension(arfile* a,const xchar* e) const
 {
 		xlong r = -1;
-		
+
 		for(uxlong h=0; h<a->filecount; h++)
 		{
 			if(CLutils::checkextension(a->members[h]->name,16,e)==true)
 			{
 				r=h;
 				break;
+			}
+		}
+		
+		return r;
+}
+
+xlong CLutils::findarmemberbyname(arfile* a,const xchar* e) const
+{
+		xlong r = -1;
+		xlong ti = 0;
+
+		for(uxlong h=0; h<a->filecount; h++)
+		{
+			while(e[ti]!=0)
+			{
+				if(e[ti]==a->members[h]->name[ti]) { r = h; ti++; }
+				else  { r = -1; break; }
 			}
 		}
 		

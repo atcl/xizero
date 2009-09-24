@@ -135,7 +135,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
-		xlong em = clutils->findarmember(entitya,testext[i]);
+		xlong em = clutils->findarmemberbyextension(entitya,testext[i]);
 		if(em==-1) clsystem->exit(1,0,__func__,"no entity model file found");
 		model[i] = new CLobject(entitya->members[em],0);
 		//*
@@ -161,7 +161,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//find and load definition (*.ini)
-	xlong ed = clutils->findarmember(entitya,".ini");
+	xlong ed = clutils->findarmemberbyextension(entitya,".ini");
 	if(ed==-1) clsystem->exit(1,0,__func__,"no entity definition found");
 	def = clformat->loadini(entitya->members[ed]);
 	//*
@@ -196,7 +196,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	
 	//load csv if present (*.csv)
 	csv=0;
-	xlong ec = clutils->findarmember(entitya,".csv");
+	xlong ec = clutils->findarmemberbyextension(entitya,".csv");
 	if(ec!=-1) csv = clformat->loadcsv(entitya->members[ec]);
 	//*
 	
