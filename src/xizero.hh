@@ -8,16 +8,140 @@
 
 void xizero_cleanup() { CLgarbage(); }
 
-xlong gamestate = 0;
+CLglobal* clglobal;
+
+void exitgame()
+{
+	clglobal->clsound->exit();
+	clglobal->clsystem->exit(0,0,"xizero says:","bye");
+}
 
 void newgame()
-{ 
-	say();	
+{
+	//open full screen images archive
+	arfile* screens = clglobal->clformat->loadar(BASEDIR"screens/screens.a");
+	//*
+	
+	//display intro
+	
+	//*
+	
+	//load and init level
+	xchar** lfn = clglobal->clformat->loadlvl(BASEDIR"levels/level0.lvl");
+	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
+	//*
+	
+	//init level floor
+	clglobal->clfloor->init(100,670,0x0000b0b0,1);
+	//*
+	
+	//game loop variables
+	xlong gamestate = 1;
+	xlong mode = 1;
+	xlong displacement = 0;
+	xchar input = 0;
+	xchar turbo = 0;
+	//*
+	
+	//game loop
+	while(gamestate>0 && clglobal->clwindow->run()) 
+	{
+		//check input
+		turbo = clglobal->clwindow->getturbo();
+		input = clglobal->clwindow->getinkey();
+		clglobal->clgamepad->handle();
+		//*
+
+		//grab system keys and update level
+		switch(input)
+		{
+			case 27: exitgame(); break;
+			
+			case '^': gamestate = -2; break;
+			
+			case 'p': testlevel->pause(); break;
+			
+			#ifdef DEV
+			case '1': mode = 1; break;
+			case '2': mode = 2; break;
+			case '3': mode = 3; break;
+			#endif
+			
+			default: gamestate = testlevel->update(input,turbo,clglobal->clgamepad->getstate()); break;
+		}
+		//*
+
+		//clear buffers
+		clglobal->cldoublebuffer.ultraclear(0);
+		clglobal->clzbuffer.clear(ZRES);
+		clglobal->clstencilbuffer.ultraclear(0);
+		//*
+
+		//render level depending on mode (modes just for dev)
+		switch(mode)
+		{
+			//default render path
+			case 1: 
+				clglobal->clfloor->draw();
+				testlevel->display();
+			break;
+			//*
+
+			//render levellandscape
+			case 2:
+				displacement = ( testlevel->getmark() ) * XRES;
+				clglobal->clmisc3d->drawzbuffer(testlevel->getlandscape(),displacement);
+				testlevel->getplayer()->showbox();
+			break;
+			//*
+
+			//render zbuffer
+			case 3:
+				clglobal->clfloor->draw();
+				testlevel->display();
+				clglobal->clmisc3d->drawzbuffer();
+			break;
+			//*
+		}
+		
+		//increment fps count
+		clglobal->clbench->inc();		
+		//*
+	}
+	//*
+	
+	//crush level
+	delete testlevel;
+	//*
+	
+	sprite* overscreen = 0;
+	xlong arindex = 0;
+	switch(gamestate)
+	{
+		//draw winner screen
+		case 0:
+			arindex = clglobal->clutils->findarmember(screens,"gamewon.tga");
+			overscreen = clglobal->clformat->loadtga(screens->members[arindex]);
+			clglobal->clgfx1->drawscreen(overscreen);
+			clglobal->clwindow->draw();
+			clglobal->clsystem->wait(9000);
+		break;
+		//*
+		
+		//draw looser screen
+		case -1:
+			arindex = clglobal->clutils->findarmember(screens,"gameover.tga");
+			overscreen = clglobal->clformat->loadtga(screens->members[arindex]);
+			clglobal->clgfx1->drawscreen(overscreen);
+			clglobal->clwindow->draw();
+			clglobal->clsystem->wait(9000);
+		break;
+		//*
+	}
 }
 
 
-void loadgame() { }
-void options() { }
-void exitgame() { }
+void loadgame() { say("not available yet"); }
+void options() { say("not available yet"); }
 
 #endif

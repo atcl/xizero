@@ -321,18 +321,18 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 CLlevel::~CLlevel()
 {
 	delete player;
-	//~ delete linear;
+	delete linear;
 	//~ delete enemies;
 	//~ delete boss;
 	//~ delete levellandscape;
-	//~ delete terrain;
+	delete terrain;
 }
 
 xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 {
-	if(paused) return 0;
+	if(paused) return 1;
 	
-	xlong isdead;
+	xlong isdead = 0;
 	
 	//update player
 	isdead = player->update(input,turbo,levellandscape,enemies,boss,p);
@@ -362,7 +362,7 @@ xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 	if(isdead!=-1)
 	{
 		player->addpoints(isdead);
-		return 1;
+		return 0;
 	}
 	//*
 
@@ -373,7 +373,7 @@ xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 	else setmark(py - playerscreenylevel);
 	//*
 	
-	return 0;
+	return 1;
 }
 
 void CLlevel::display()

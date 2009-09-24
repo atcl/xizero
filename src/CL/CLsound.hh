@@ -17,6 +17,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLsingle.hh"
 #include "CLsystem.hh"
 
 /* class name:	CLsound
@@ -98,7 +99,7 @@ CLsound::CLsound()
 	//check if sound device is installed
 	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
 	{
-		clsystem->print("No Soundblaster found");
+		say("No Soundblaster found");
 		nosound = 1;
 	}
 	//*

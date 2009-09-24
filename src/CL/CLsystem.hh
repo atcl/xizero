@@ -39,7 +39,8 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		uxchar  eol();
 		uxchar  eof();
 		CLexe*	exe(xchar** a);
-		void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="",xlong d=0);
+		void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
+		void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
 		CLfile* getfile(const xchar* fn,bool s=true); //CLfile  reference as parameter and return bool for if ok?
 		bool    appendfile(const xchar* fn,xlong* b,xlong s);
 		bool    appendfile(const xchar* fn,xchar* b,xlong s);
@@ -80,7 +81,14 @@ void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
 	if(e!=0) e();
 
 	std::cout << f << ": "<< m << " " << d << std::endl;
-	//CLsound::instance()->exit();
+	::exit(r);
+}
+
+void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
+{
+	if(e!=0) e();
+
+	std::cout << f << ": "<< m << " " << std::endl;
 	::exit(r);
 }
 

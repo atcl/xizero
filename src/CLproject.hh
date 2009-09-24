@@ -14,12 +14,10 @@
 #endif 
 
 #ifdef REL
-	#define BASEDIR "/usr/dat/xizero/"
+	#define BASEDIR "/usr/share/xizero/"
 #else //ifded DEV
 	#define BASEDIR "../dat/"
 #endif
-
-
 
 #define XRES 800
 #define YRES 600
