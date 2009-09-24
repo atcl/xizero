@@ -13,10 +13,18 @@
 	#define ATT
 #endif 
 
-#define xres 800
-#define yres 600
-#define zres 400
-#define scrs xres*yres
+#ifdef REL
+	#define BASEDIR "/usr/dat/xizero/"
+#else //ifded DEV
+	#define BASEDIR "../dat/"
+#endif
+
+
+
+#define XRES 800
+#define YRES 600
+#define ZRES 400
+#define SCRS XRES*YRES
 
 #define CLTITLE "atCROSSLEVEL's XiZero"
 

@@ -44,9 +44,9 @@ void CLfsprogress::draw() const
 	if(pprogress!=0)
 	{
 		xlong offset = 0;
-		xlong diff = -rprogress + xres;
+		xlong diff = -rprogress + XRES;
 		
-		for(uxlong i=0; i<yres; i++)
+		for(uxlong i=0; i<YRES; i++)
 		{
 			for(uxlong j=0; j<rprogress; j++,offset++)
 			{
@@ -61,18 +61,18 @@ void CLfsprogress::draw() const
 void CLfsprogress::set(xlong p)
 {
 	//set full screen progress bar to given value
-	if(p>100) { pprogress = 100; rprogress = xres; }
+	if(p>100) { pprogress = 100; rprogress = XRES; }
 	else if(p<=0) { rprogress = 0; pprogress = 0; }
-	else { pprogress = p; rprogress = (xres / 100) * pprogress; }
+	else { pprogress = p; rprogress = (XRES / 100) * pprogress; }
 	//*
 }
 
 void CLfsprogress::add(xlong a)
 {
 	//add given value to progress of full screen progress bar
-	if( (pprogress+a)>100) { pprogress = 100; rprogress = xres; }
+	if( (pprogress+a)>100) { pprogress = 100; rprogress = XRES; }
 	else if( (pprogress+a)<=0) { rprogress = 0; pprogress = 0; }
-	else { pprogress += a; rprogress = (xres / 100) * pprogress; }
+	else { pprogress += a; rprogress = (XRES / 100) * pprogress; }
 	//*
 }
 

@@ -88,7 +88,7 @@ void CLintro::xizero() const
 	
 		//clear buffers
 		cldoublebuffer.clear(0);
-		clzbuffer.clear(zres);
+		clzbuffer.clear(ZRES);
 		clstencilbuffer.clear(0);
 		//*
 		

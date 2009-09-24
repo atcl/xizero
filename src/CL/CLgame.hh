@@ -34,7 +34,7 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		CLgame();
 		~CLgame() { };
 	public:
-		void init(xlong bx1=0,xlong by1=0,xlong bx2=xres,xlong by2=yres);
+		void init(xlong bx1=0,xlong by1=0,xlong bx2=XRES,xlong by2=YRES);
 		template<class clvector>bool boundary(const clvector& p,xlong mark=0);
 		template<class clvector>bool boundary(const clvector& p,const CLbox& bb,bool c=0);
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
@@ -43,7 +43,7 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
 
-CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = xres; boundaryy2 = yres; }
+CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = XRES; boundaryy2 = YRES; }
 
 void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {
@@ -297,17 +297,17 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 	//*
 	
 	//calc zlevel of current bounding box corners in levellandscape
-	float n1 = (*ll)[ (p1.y * xres) + p1.x ];
-	float n2 = (*ll)[ (p2.y * xres) + p2.x ];
-	float n3 = (*ll)[ (p3.y * xres) + p3.x ];
-	float n4 = (*ll)[ (p4.y * xres) + p4.x ];
+	float n1 = (*ll)[ (p1.y * XRES) + p1.x ];
+	float n2 = (*ll)[ (p2.y * XRES) + p2.x ];
+	float n3 = (*ll)[ (p3.y * XRES) + p3.x ];
+	float n4 = (*ll)[ (p4.y * XRES) + p4.x ];
 	//*
 	
 	//calc zlevel of last bounding box corners in levellandscape
-	float o1 = (*ll)[ (l1.y * xres) + l1.x ];
-	float o2 = (*ll)[ (l2.y * xres) + l2.x ];
-	float o3 = (*ll)[ (l3.y * xres) + l3.x ];
-	float o4 = (*ll)[ (l4.y * xres) + l4.x ];
+	float o1 = (*ll)[ (l1.y * XRES) + l1.x ];
+	float o2 = (*ll)[ (l2.y * XRES) + l2.x ];
+	float o3 = (*ll)[ (l3.y * XRES) + l3.x ];
+	float o4 = (*ll)[ (l4.y * XRES) + l4.x ];
 	//*
 
 	//check if zlevel from current bbox corners differ more than 3

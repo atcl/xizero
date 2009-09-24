@@ -21,7 +21,7 @@ CLglobal* CLsetup()
 {
 	CLglobal* clglobal = CLglobal::getinstance(); 
 	
-	clglobal->clwindow->init(xres,yres,CLTITLE);
+	clglobal->clwindow->init(XRES,YRES,CLTITLE);
 	
 	//init core buffers
 	//~ CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
@@ -44,8 +44,8 @@ CLglobal* CLsetup()
 	shadowM->shadow(clslight,clplane);
 	//*
 	
-	leftside = new screenside[yres];
-	rightside = new screenside[yres];
+	leftside = new screenside[YRES];
+	rightside = new screenside[YRES];
 	
 	return clglobal;
 }

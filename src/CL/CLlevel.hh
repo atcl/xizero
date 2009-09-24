@@ -119,8 +119,8 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 
 	//determine level constants
 	levelheight = clutils->getlinecount(levela->members[tf]);
-	blocksperscreeny = yres / blockheight;
-	blocksperscreenx = xres / blockwidth;
+	blocksperscreeny = YRES / blockheight;
+	blocksperscreenx = XRES / blockwidth;
 	blockmark = levelheight - blocksperscreeny;
 	smoothmarkmin = 0;
 	smoothmarkmax = blockmark * blockheight;
@@ -228,7 +228,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 
 	//create player
 	player = new CLplayer(clsystem->getfile(playerlib),&smoothmark,smoothlevelheight+10,playerp);
-	playerscreenylevel = 3*(yres>>2);
+	playerscreenylevel = 3*(YRES>>2);
 	//*
 
 //***
@@ -386,7 +386,7 @@ void CLlevel::display()
 	xlong blockoffsety = blockheight >> 1; 
 	xlong yoffset = smoothmark % blockheight;
 	xlong localfloorheight = floorheight - 5;
-	CLlvector ckeeper( -(xres >> 1) + blockoffsetx , (yres >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
+	CLlvector ckeeper( -(XRES >> 1) + blockoffsetx , (YRES >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
 	CLlvector current( 0 , 0 , localfloorheight );
 	xshort dontrender = 0; 
 	uxlong ii = 0;
@@ -442,7 +442,7 @@ void CLlevel::display()
 		}
 		}
 		}
-		ckeeper.x = -(xres >> 1) + blockoffsetx;
+		ckeeper.x = -(XRES >> 1) + blockoffsetx;
 		ckeeper.y -= blockheight;	
 	}
 	//*

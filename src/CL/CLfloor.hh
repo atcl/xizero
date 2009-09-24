@@ -37,7 +37,7 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 		void draw() const;
 };
 
-CLfloor::CLfloor() { zlevel = zres; xstart = 0; xend = xres-1; width = xres; shade = 0; }
+CLfloor::CLfloor() { zlevel = ZRES; xstart = 0; xend = XRES-1; width = XRES; shade = 0; }
 
 void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 {
@@ -47,8 +47,8 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 	//*
 	
 	//set floor start and end
-	xstart = (xres-w)>>1;
-	xend   = xres-((xres-w)>>1);
+	xstart = (XRES-w)>>1;
+	xend   = XRES-((XRES-w)>>1);
 	//*
 	
 	//draw floor with shaded floor color
@@ -81,15 +81,15 @@ void CLfloor::draw() const
 	uxlong runningfloorxend = xend;
 	uxlong i=0;
 	uxlong j=0;
-	for(i=0; i<yres; i++)
+	for(i=0; i<YRES; i++)
 	{
 		for(j=runningfloorxstart; j<runningfloorxend; j++)
 		{
 			cldoublebuffer[j] = shade;
 			clzbuffer[j] = zlevel;
 		}
-		runningfloorxstart += xres;
-		runningfloorxend += xres;
+		runningfloorxstart += XRES;
+		runningfloorxend += XRES;
 	}
 	//*
 }

@@ -68,30 +68,30 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//determine button positions
 	temp = clgfx2->getfontstringwidth(bt[mbli],0);
 	xlong bw = temp + 4;
-	if(bw<xres>>2) bw = xres>>2;
-	xlong bx = (xres>>1) - (bw>>1);
+	if(bw<XRES>>2) bw = XRES>>2;
+	xlong bx = (XRES>>1) - (bw>>1);
 	xlong* by = new xlong[bc];
-	xlong bh = ((yres - (yres>>2))/bc);
+	xlong bh = ((YRES - (YRES>>2))/bc);
 	for(uxlong j=0; j<bc; j++)
 	{
-		by[j] = (yres>>2) + j*bh;
+		by[j] = (YRES>>2) + j*bh;
 	}
 	bh -= 8;
 	//*
 	
 	//determine header position
 	temp = clgfx2->getfontstringwidth(hl,0) + 4;
-	xlong hx = (xres>>1) - (temp>>1);
+	xlong hx = (XRES>>1) - (temp>>1);
 	xlong hw = temp;
 	xlong hy = 20;
 	//*
 	
 	//determine footer position
 	temp = clgfx2->getfontstringwidth(fl,0) + 4;
-	xlong fx = xres - temp - 16;
+	xlong fx = XRES - temp - 16;
 	xlong fw = temp;
 	xlong fh = clgfx2->getfontstringheight(fl,0) + 4;
-	xlong fy = yres - fh; 
+	xlong fy = YRES - fh; 
 	//*
 	
 	button = new CLbutton*[bc]; 

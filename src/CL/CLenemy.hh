@@ -149,8 +149,8 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<
 	aggrobox = new CLbox;
 	aggrobox->c[0] = aggrobox->c[4] = CLfvector(boundingbox[0][0]->c[0].x,boundingbox[0][0]->c[0].y,0);
 	aggrobox->c[1] = aggrobox->c[5] = CLfvector(boundingbox[0][0]->c[3].x,boundingbox[0][0]->c[0].y,0);
-	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox[0][0]->c[3].x,yres>>1,0);
-	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox[0][0]->c[0].x,yres>>1,0);
+	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox[0][0]->c[3].x,YRES>>1,0);
+	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox[0][0]->c[0].x,YRES>>1,0);
 	//*
 	
 	//set enemy specific attributes
@@ -187,8 +187,8 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr)
 	aggrobox = new CLbox;
 	aggrobox->c[0] = aggrobox->c[4] = CLfvector(boundingbox[0][0]->c[0].x,boundingbox[0][0]->c[0].y,0);
 	aggrobox->c[1] = aggrobox->c[5] = CLfvector(boundingbox[0][0]->c[3].x,boundingbox[0][0]->c[0].y,0);
-	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox[0][0]->c[3].x,yres>>1,0);
-	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox[0][0]->c[0].x,yres>>1,0);
+	aggrobox->c[2] = aggrobox->c[6] = CLfvector(boundingbox[0][0]->c[3].x,YRES>>1,0);
+	aggrobox->c[3] = aggrobox->c[7] = CLfvector(boundingbox[0][0]->c[0].x,YRES>>1,0);
 	//*
 	
 	//set enemy specific attributes

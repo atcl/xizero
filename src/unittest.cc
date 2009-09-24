@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 	bool mm = 0;
 
 	const xchar* bt[] = { "New Game","Load Game","Options","Exit" };
-	sprite* sx = clglobal->clformat->loadtga("../dat/other/gamewon.tga"); 
+	sprite* sx = clglobal->clformat->loadtga("../dat/screens/gamewon.tga"); 
 	CLmainmenu* mymain = new CLmainmenu(sx,4,bt,as,"Xi Zero","Version 0.1",0x00FFFFFF);
 
 	while(clglobal->clwindow->run())
@@ -256,7 +256,7 @@ int main(int argc, char** argv)
 		//4. all shadow casting objects
 
 		clglobal->cldoublebuffer.fastclear(0);
-		clglobal->clzbuffer.fastclear(zres-1);
+		clglobal->clzbuffer.fastclear(ZRES);
 		clglobal->clstencilbuffer.fastclear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);

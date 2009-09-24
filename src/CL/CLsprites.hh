@@ -34,16 +34,16 @@ class CLsprites : public virtual CLcl, public CLsingle<CLsprites>
 void CLsprites::drawantimatter(xlong x,xlong y)
 {
 	//is on screen
-	if( (x-2)<0 || (x+3)>=xres || (y-2)<0 || (y+3)>=yres) return;
+	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) return;
 	//*
 	
 	//calc offsets
-	xlong l1 = ((y-2)*xres)+(x-1);
-	xlong l2 = l1 + xres - 1;
-	xlong l3 = l2 + xres;
-	xlong l4 = l3 + xres;
-	xlong l5 = l4 + xres;
-	xlong l6 = l5 + xres + 1; 
+	xlong l1 = ((y-2)*XRES)+(x-1);
+	xlong l2 = l1 + XRES - 1;
+	xlong l3 = l2 + XRES;
+	xlong l4 = l3 + XRES;
+	xlong l5 = l4 + XRES;
+	xlong l6 = l5 + XRES + 1; 
 	//*
 	
 	//draw frst row
@@ -100,16 +100,16 @@ void CLsprites::drawantimatter(xlong x,xlong y)
 void CLsprites::drawplasma(xlong x,xlong y)
 {
 	//is on screen
-	if( (x-2)<0 || (x+3)>=xres || (y-2)<0 || (y+3)>=yres) return;
+	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) return;
 	//*
 	
 	//calc offsets
-	xlong l1 = ((y-2)*xres)+(x-1);
-	xlong l2 = l1 + xres - 1;
-	xlong l3 = l2 + xres;
-	xlong l4 = l3 + xres;
-	xlong l5 = l4 + xres;
-	xlong l6 = l5 + xres + 1; 
+	xlong l1 = ((y-2)*XRES)+(x-1);
+	xlong l2 = l1 + XRES - 1;
+	xlong l3 = l2 + XRES;
+	xlong l4 = l3 + XRES;
+	xlong l5 = l4 + XRES;
+	xlong l6 = l5 + XRES + 1; 
 	//*
 	
 	//draw first row

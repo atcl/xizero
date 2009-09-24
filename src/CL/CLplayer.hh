@@ -163,8 +163,8 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pt
 	//*
 	
 	//create progress bars
-	hprog = new CLprogress(5,5,20,yres-10,health,0,health,0x00FF0000,1,1,0,0x00C0C0C0,0x00C0C0C0);
-	sprog = new CLprogress(xres-25,5,20,yres-10,shield,0,shield,0x0000FF00,1,1,0,0x00C0C0C0,0x00C0C0C0);
+	hprog = new CLprogress(5,5,20,YRES-10,health,0,health,0x00FF0000,1,1,0,0x00C0C0C0,0x00C0C0C0);
+	sprog = new CLprogress(XRES-25,5,20,YRES-10,shield,0,shield,0x0000FF00,1,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*
 }
 

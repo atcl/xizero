@@ -6,9 +6,18 @@
 
 #include "CLinc.h"
 
-void xizero_cleanup()
-{
-	CLgarbage();
+void xizero_cleanup() { CLgarbage(); }
+
+xlong gamestate = 0;
+
+void newgame()
+{ 
+	say();	
 }
+
+
+void loadgame() { }
+void options() { }
+void exitgame() { }
 
 #endif

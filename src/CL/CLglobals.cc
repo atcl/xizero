@@ -27,17 +27,17 @@
 
 #include "CLglobals.hh"
 
-uxlong CLglobal::screenbytewidth   = xres<<2;
-uxlong CLglobal::screenbyteheight  = xres<<2;
+uxlong CLglobal::screenbytewidth   = XRES<<2;
+uxlong CLglobal::screenbyteheight  = YRES<<2;
 uxlong CLglobal::screenbytedepth   = 4;
-uxlong CLglobal::screenbytesize    = (xres*yres)<<2;
-uxlong CLglobal::screenpixelwidth  = xres;
-uxlong CLglobal::screenpixelheight = yres;
-uxlong CLglobal::screenpixelsize   = xres*yres;
+uxlong CLglobal::screenbytesize    = SCRS<<2;
+uxlong CLglobal::screenpixelwidth  = XRES;
+uxlong CLglobal::screenpixelheight = YRES;
+uxlong CLglobal::screenpixelsize   = SCRS;
 
-CLlbuffer CLglobal::cldoublebuffer  = *(new CLlbuffer(xres*yres));
-CLlbuffer CLglobal::clstencilbuffer = *(new CLlbuffer(xres*yres));
-CLfbuffer CLglobal::clzbuffer       = *(new CLfbuffer(xres*yres));
+CLlbuffer CLglobal::cldoublebuffer  = *(new CLlbuffer(SCRS));
+CLlbuffer CLglobal::clstencilbuffer = *(new CLlbuffer(SCRS));
+CLfbuffer CLglobal::clzbuffer       = *(new CLfbuffer(SCRS));
 
 CLwindow* CLglobal::clwindow = CLwindow::instance();
 CLbench*  CLglobal::clbench  = CLbench::instance();

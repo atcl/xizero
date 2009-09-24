@@ -58,11 +58,11 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	
 	if(x1>x2) x1 ^= x2 ^= x1 ^= x2;
 	if(y1>y2) y1 ^= y2 ^= y1 ^= y2;
-	if(x1<0 || y1<0 || x2>xres || y2>yres || x2<0 || y2<0 || x1>xres || y1>yres) return;
+	if(x1<0 || y1<0 || x2>XRES || y2>YRES || x2<0 || y2<0 || x1>XRES || y1>YRES) return;
 	
-	xlong offset1 = (y1*xres)+x1;
+	xlong offset1 = (y1*XRES)+x1;
 	xlong offset2 = offset1;
-	xlong doffset = ((y2-y1)*xres);
+	xlong doffset = ((y2-y1)*XRES);
 	xlong diff    = x2-x1;
 	uxlong c3     = c2;
 	if(f) c3 = 0x000FFFFFF - c2;
@@ -77,7 +77,7 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 			offset1++;
 		}
 		cldoublebuffer[offset1] = c3;
-		offset1 += xres - diff;
+		offset1 += XRES - diff;
 	}
 
 	for(int k=x1; k<x2; k++)
@@ -91,7 +91,7 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc) const
 {
 	//is on screen
-	if( x<0 || y<0 || x>xres || y>yres) return -1;
+	if( x<0 || y<0 || x>XRES || y>YRES) return -1;
 	//*
 	
 	//select font
@@ -114,12 +114,12 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlo
 	xlong hordiff = (f->width) - (f->tilewidth);
 	xlong drawwidth = f->tilewidth;
 	xlong drawheight = f->tileheight;
-	uxlong dstoff = (y * xres) + x;
+	uxlong dstoff = (y * XRES) + x;
 	xlong rx = x;
 	//*
 	
 	//is completely on screen
-	if(x+drawwidth>xres || y+drawheight>yres) return -1;
+	if(x+drawwidth>XRES || y+drawheight>YRES) return -1;
 	//*
 
 	//drawloop
@@ -137,7 +137,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlo
 			}
 			srcoff++; 
 		}
-		curroff = dstoff += xres;
+		curroff = dstoff += XRES;
 		srcoff += hordiff;
 	}
 	//*
@@ -332,9 +332,9 @@ uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i) const
 sprite* CLgfx2::savescreen() const
 {
 	sprite* r = new sprite;
-	r->width = xres;
-	r->height = yres;
-	r->size = (xres*yres);
+	r->width = XRES;
+	r->height = YRES;
+	r->size = SCRS;
 	r->data = new uxlong[r->size];
 	
 	for(uxlong i=0; i<r->size; i++) { r->data[i] = cldoublebuffer[i]; }

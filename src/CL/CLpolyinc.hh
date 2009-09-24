@@ -5,11 +5,11 @@
 #pragma message "Compiling " __FILE__ " ! TODO: all"
 
 xlong xmin = 1;
-xlong xmax = xres - 1;
+xlong xmax = XRES - 1;
 xlong ymin = 1;
-xlong ymax = yres - 1;
+xlong ymax = YRES - 1;
 xlong zmin = 1;
-xlong zmax = zres - 1;
+xlong zmax = ZRES - 1;
 
 CLfvector ppoint[20];
 CLfvector cpoint[20];

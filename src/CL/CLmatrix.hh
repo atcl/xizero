@@ -214,15 +214,15 @@ void CLmatrix::shadow(const clvector& l,const clvector& p)
 void CLmatrix::project()
 {
 	float zmin = 1;
-	float zmax = zres-1;
+	float zmax = ZRES-1;
 
 	//set matrix to linear projection 
-	m[0][0] = (2 * zmin / xres);
+	m[0][0] = (2 * zmin / XRES);
 	m[0][1] = 0;
 	m[0][2] = 0;
 	m[0][3] = 0;
 	m[1][0] = 0;
-	m[1][1] = (2 * zmin / yres);
+	m[1][1] = (2 * zmin / YRES);
 	m[1][2] = 0;
 	m[1][3] = 0;
 	m[2][0] = 0;

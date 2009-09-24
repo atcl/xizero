@@ -83,9 +83,9 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	xlong dy = y2 - y1;
 	xlong e;
 	xlong xs = 1;
-	xlong ys = xres;
+	xlong ys = XRES;
 	xlong len;
-	xlong off = y1*xres+x1;
+	xlong off = y1*XRES+x1;
 
 	if(dx<0)
 	{
@@ -225,8 +225,8 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 	//use screen center as attached position if wanted
 	if(c)
 	{
-		px = (xres>>1);
-		py = (yres>>1);
+		px = (XRES>>1);
+		py = (YRES>>1);
 	}
 	//*
 
@@ -433,8 +433,8 @@ void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s)
 	xlong length = xlong(e.y - b.y);
 	if(length <= 0) return;
 
-	float b_off = (b.y * xres) + b.x;
-	float e_off = (e.y * xres) + e.x;
+	float b_off = (b.y * XRES) + b.x;
+	float e_off = (e.y * XRES) + e.x;
 	float off_s = ( (e_off - b_off) / length );
 	float z_s   = ( (  e.z - b.z  ) / length );
 	float act_z = b.z;

@@ -57,14 +57,14 @@ void CLmisc3d::project2(clvector& o)
 {
 	CLfvector temp;
 	
-	temp.x = o.x - (xres>>1);
-	temp.y = -o.y - (yres>>1);
+	temp.x = o.x - (XRES>>1);
+	temp.y = -o.y - (YRES>>1);
 	temp.z = o.z;
 	
 	if(o.z > 0)
 	{
-		o.x = xlong( ( prjx * (temp.x / temp.z ) ) + (xres>>1) ); //test: (prjx * (xres>>1) / o.z)
-		o.y = xlong( ( prjy * (temp.y / temp.z ) ) + (yres>>1) ); //test: (prjy * (yres>>1) / o.z)
+		o.x = xlong( ( prjx * (temp.x / temp.z ) ) + (XRES>>1) ); //test: (prjx * (xres>>1) / o.z)
+		o.y = xlong( ( prjy * (temp.y / temp.z ) ) + (YRES>>1) ); //test: (prjy * (yres>>1) / o.z)
 		o.z = o.z;
 	}
 	else
@@ -77,12 +77,12 @@ template<class clvector>
 void CLmisc3d::draw3dpixel(clvector& p,uxlong c)
 {
 	//if on screen project and draw a pixel 
-	if(p.x>0 && p.x<xres && p.y>0 && p.y<yres && p.z>0 && p.z<zres)
+	if(p.x>0 && p.x<XRES && p.y>0 && p.y<YRES && p.z>0 && p.z<ZRES)
 	{
-		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
-		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
+		xlong nx = xlong( ( 80 * p.x) / p.z) + (XRES>>1);
+		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
 
-		cldoublebuffer[(ny*xres)+nx] = c;
+		cldoublebuffer[(ny*XRES)+nx] = c;
 	}
 	//*
 }
@@ -91,12 +91,12 @@ template<class clvector>
 void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa)
 {
 	//if on screen project and draw a line  
-	if(p.z>0 && p.z<zres && q.z >0 && q.z<zres)
+	if(p.z>0 && p.z<ZRES && q.z >0 && q.z<ZRES)
 	{
-		xlong nx = xlong( ( 80 * p.x) / p.z) + (xres>>1);
-		xlong ny = xlong( (-95 * p.y) / p.z) + (yres>>1);
-		xlong ox = xlong( ( 80 * q.x) / q.z) + (xres>>1);
-		xlong oy = xlong( (-95 * q.y) / q.z) + (yres>>1);
+		xlong nx = xlong( ( 80 * p.x) / p.z) + (XRES>>1);
+		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
+		xlong ox = xlong( ( 80 * q.x) / q.z) + (XRES>>1);
+		xlong oy = xlong( (-95 * q.y) / q.z) + (YRES>>1);
 		if(aa) clgfx1->drawantiline(nx,ny,ox,oy,c);
 		else   clgfx1->drawanyline(nx,ny,ox,oy,c);
 	}
@@ -118,16 +118,16 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 	xlong ii = 0;
 	xlong tt = 0;
 
-	for(uxlong i=0; i<yres-1;i++)
+	for(uxlong i=0; i<YRES-1;i++)
 	{
-		for(uxlong j=0; j<xres-1; j++)
+		for(uxlong j=0; j<XRES-1; j++)
 		{
 			tt = ii + j;
 			z = xlong((*zb)[tt+srcdis])<<2 ;
 			cldoublebuffer[tt] = z;
 		}
 		
-		ii +=xres;
+		ii += XRES;
 	}
 }
 

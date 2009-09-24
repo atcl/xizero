@@ -23,16 +23,16 @@
  * version: 0.1
  */
 
-inline bool isoff(xlong x,xlong y) { return (x<0 || x>=xres || y<0 || y>=yres); }
+inline bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); }
 
-inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<2) || (x1>=xres&&x2>=xres) || (y1<0&&y2<0) || (y1>=yres&&y2>=yres) ); }
+inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<2) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); }
 
 inline void clip(xlong& x,xlong& y)
 {
 	if(x<0) x=0;
-	if(x>=xres) x=xres-1;
+	if(x>=XRES) x=XRES-1;
 	if(y<0) y=0;
-	if(y>=yres) y=yres-1;
+	if(y>=YRES) y=YRES-1;
 }
 
 struct CLpoint
@@ -83,9 +83,9 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 {
 	//precalculate linear address components (especially multiplications)
-	xlong b1 = (yc*xres)+xc;
- 	xlong a1 = y*xres;
- 	xlong a2 = x*xres;
+	xlong b1 = (yc*XRES)+xc;
+ 	xlong a1 = y*XRES;
+ 	xlong a2 = x*XRES;
 	//*
 	
 	//draw the eight pixels for each (1/8) section of the circle
@@ -103,8 +103,8 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 {
 	//precalculate linear address components (especially multiplications) 
-	xlong a = (yc*xres)+xc;
-	xlong b = (y*xres);
+	xlong a = (yc*XRES)+xc;
+	xlong b = (y*XRES);
 	//*
 
 	//draw the four pixels for each (1/4) section of the ellipse
@@ -118,33 +118,33 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 uxlong CLgfx1::readpixel(xlong x,xlong y) const
 {
 	if(isoff(x,y)) return 0;
-	return (cldoublebuffer[(y*xres)+x]);
+	return (cldoublebuffer[(y*XRES)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c) const
 {
 	clip(x,y);
-	cldoublebuffer[(y*xres)+x] = c;
+	cldoublebuffer[(y*XRES)+x] = c;
 }
 
 void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c) const
 {
 	clip(x,y);
-	b[(y*xres)+x] = c;
+	b[(y*XRES)+x] = c;
 }
 
 void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const
 {
 	if(isoff(x1,x2)||isoff(x2,y2)) return;
-	cldoublebuffer[(y1*xres)+x1] = cldoublebuffer[(y2*xres)+x2];
+	cldoublebuffer[(y1*XRES)+x1] = cldoublebuffer[(y2*XRES)+x2];
 }
 
 void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c) const
 {
-	cldoublebuffer[(y*xres)+x] = c;
-	cldoublebuffer[(y*xres)+x+1] = c;
-	cldoublebuffer[((y+1)*xres)+x] = c;
-	cldoublebuffer[((y+1)*xres)+(x+1)] = c;
+	cldoublebuffer[(y*XRES)+x] = c;
+	cldoublebuffer[(y*XRES)+x+1] = c;
+	cldoublebuffer[((y+1)*XRES)+x] = c;
+	cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
 }
 
 void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m) const
@@ -154,19 +154,19 @@ void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m) const
 	switch(m)
 	{
 		case 1: //AND
-			cldoublebuffer[(y*xres)+x] = cldoublebuffer[(y*xres)+x] && c;
+			cldoublebuffer[(y*XRES)+x] = cldoublebuffer[(y*XRES)+x] && c;
 		break;
 		
 		case 2: //OR:
-			cldoublebuffer[(y*xres)+x] = cldoublebuffer[(y*xres)+x] || c;
+			cldoublebuffer[(y*XRES)+x] = cldoublebuffer[(y*XRES)+x] || c;
 		break;
 		
 		case 3: //XOR:
-			cldoublebuffer[(y*xres)+x] = cldoublebuffer[(y*xres)+x] ^ c;
+			cldoublebuffer[(y*XRES)+x] = cldoublebuffer[(y*XRES)+x] ^ c;
 		break;
 		
 		default:
-			cldoublebuffer[(y*xres)+x] = c;
+			cldoublebuffer[(y*XRES)+x] = c;
 		break;
 	}
 
@@ -186,7 +186,7 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c) const
 	xlong a = x1;
 	xlong b = x2;
 	if(a>b) a ^= b ^= a ^= b;
-	xlong offsetbase = (y1*xres);
+	xlong offsetbase = (y1*XRES);
 
 	for(uxlong i=a; i<=b; i++)
 	{
@@ -204,12 +204,12 @@ void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c) const
 	xlong a = y1;
 	xlong b = y2;
 	if(a>b) a ^= b ^= a ^= b;
-	xlong offsetbase = (a*xres)+x1;
+	xlong offsetbase = (a*XRES)+x1;
 
 	for(uxlong i=a; i<=b; i++)
 	{
 		cldoublebuffer[offsetbase] = c;
-		offsetbase+=xres;
+		offsetbase+=XRES;
 	}
 }
 
@@ -229,9 +229,9 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 	xlong dy = y2 - y1;
 	xlong e = 0;
 	xlong xs = 1;
-	xlong ys = xres;
+	xlong ys = XRES;
 	xlong len;
-	xlong off = y1*xres+x1;
+	xlong off = y1*XRES+x1;
 	//*
 
 	if(dx<0)
@@ -286,9 +286,9 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 	xlong dy = y2 - y1;
 	xlong e = 0;
 	xlong xs = 1;
-	xlong ys = xres;
+	xlong ys = XRES;
 	xlong len;
-	xlong off = y1*xres+x1;
+	xlong off = y1*XRES+x1;
 	//*
 
 	if(dx<0)
@@ -320,12 +320,12 @@ void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 
 		cldoublebuffer[off-1]      = c; //adjust colors 
 		cldoublebuffer[off+1]      = c;
-		cldoublebuffer[off-xres-1] = c;
-		cldoublebuffer[off-xres]   = c;
-		cldoublebuffer[off-xres+1] = c;
-		cldoublebuffer[off+xres-1] = c;
-		cldoublebuffer[off+xres]   = c;
-		cldoublebuffer[off+xres+1] = c; //*
+		cldoublebuffer[off-XRES-1] = c;
+		cldoublebuffer[off-XRES]   = c;
+		cldoublebuffer[off-XRES+1] = c;
+		cldoublebuffer[off+XRES-1] = c;
+		cldoublebuffer[off+XRES]   = c;
+		cldoublebuffer[off+XRES+1] = c; //*
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -492,10 +492,10 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const
 		temp = fillfifo.out();
 		
 		//test if on screen and color is the to-fill-color
-		if( temp->x>=0 && temp->x<xres && temp->y>=0 && temp->y<yres && readpixel(temp->x,temp->y)==oc )
+		if( temp->x>=0 && temp->x<XRES && temp->y>=0 && temp->y<YRES && readpixel(temp->x,temp->y)==oc )
 		{
 			//fill the pixel with the new color
-			cldoublebuffer[((temp->y)*xres)+(temp->x)] = nc;
+			cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -545,10 +545,10 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
 		temp = fillfifo.out();
 		
 		//test if on screen and color is the to-fill-color
-		if( temp->x>=0 && temp->x<xres && temp->y>=0 && temp->y<yres && readpixel(temp->x,temp->y)!=fc )
+		if( temp->x>=0 && temp->x<XRES && temp->y>=0 && temp->y<YRES && readpixel(temp->x,temp->y)!=fc )
 		{
 			//fill the pixel with the new color
-			cldoublebuffer[((temp->y)*xres)+(temp->x)] = nc;
+			cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -576,7 +576,7 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
 void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 {
 	//init
-	if(x>xres || y>yres) return;
+	if(x>XRES || y>YRES) return;
 	//xlong ssize = s->size;
 	xlong swidth = s->width;
 	xlong sheight = s->height;
@@ -590,15 +590,15 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 
 	//clipping against screen borders
 	if(xs<0) xs = 0;
-	if(xe>xres) xe = xres-1;
+	if(xe>XRES) xe = XRES-1;
 	if(ys<0) ys = 0;
-	if(ye>yres) ye = yres-1;
+	if(ye>YRES) ye = YRES-1;
 	//*
 
 	//set up variables
 	xlong ewidth = xe - xs;
 	xlong eheight = ye - ys;
-	xlong xoffset = (ys * xres) + xs;
+	xlong xoffset = (ys * XRES) + xs;
 	xlong linearc = 0;
 	//*
 
@@ -610,7 +610,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 			if( (s->data[linearc] & 0xFF000000) != 0xFF) cldoublebuffer[xoffset+j] = s->data[linearc];
 			linearc++;
 		}
-		xoffset += xres;
+		xoffset += XRES;
 	}
 	//*	
 }
@@ -652,7 +652,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m,float e) const
 void CLgfx1::drawscreen(sprite* s) const
 {
 	//check if sprite has correct dimensions
-	if(s->width==xres && s->height==yres)
+	if(s->width==XRES && s->height==YRES)
 	{
 		//draw loop
 		for(uxlong i=0; i<s->size; i++)
@@ -667,7 +667,7 @@ void CLgfx1::drawscreen(sprite* s) const
 void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
 {
 	//init
-	if(x>xres || y>yres) return;
+	if(x>XRES || y>YRES) return;
 	//*
 	
 	//find tile
@@ -684,15 +684,15 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
 
 	//clipping against screen borders
 	if(xs<0) xs = 0;
-	if(xe>xres) xe = xres-1;
+	if(xe>XRES) xe = XRES-1;
 	if(ys<0) ys = 0;
-	if(ye>yres) ye = yres-1;
+	if(ye>YRES) ye = YRES-1;
 	//*
 
 	//set up variables
 	xlong ewidth = xe - xs;
 	xlong eheight = ye - ys;
-	xlong xoffset = (ys * xres) + xs;
+	xlong xoffset = (ys * XRES) + xs;
 	xlong linearc = off;
 	//*
 
@@ -704,7 +704,7 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
 			if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
 			linearc++;
 		}
-		xoffset += xres;
+		xoffset += XRES;
 		linearc += hordiff;
 	}
 	//*

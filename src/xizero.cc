@@ -8,6 +8,24 @@ int main()
 {
 	//init sequence
 	CLglobal* clglobal = CLsetup();
+	//*
+
+	//atcrosslevel intro
+	clglobal->clintro->atcrosslevel();
+	//*
+	
+	//xizero intro
+	clglobal->clintro->xizero();
+	//*
+	
+	//mainmenu
+	sprite* xzmenuback = clglobal->clgfx2->savescreen();
+	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
+	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
+	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version 0.1",0x00FFFFFF);
+	//while(clglobal->clwindow->run()) { xzmainmenu->draw(); }
+	//*
+
 
 	xchar** lfn = clglobal->clformat->loadlvl("../dat/levels/level0.lvl");
 	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
@@ -20,8 +38,6 @@ int main()
 	bool running  = 1;
 	bool pause = 0;
 	xlong gamestate = 0;
-	
-	//CLfsprogress::instance()->set(20);
 	
 	while(running && clglobal->clwindow->run()) 
 	{
@@ -63,7 +79,7 @@ int main()
 		if(!pause) { gamestate = testlevel->update(input,turbo,clglobal->clgamepad->getstate()); }
 
 		clglobal->cldoublebuffer.ultraclear(0);
-		clglobal->clzbuffer.clear(zres);
+		clglobal->clzbuffer.clear(ZRES);
 		clglobal->clstencilbuffer.ultraclear(0);
 
 		if(gamestate!=0) break; 
@@ -76,7 +92,7 @@ int main()
 			break;
 
 			case 2:
-				dis = ( testlevel->getmark() ) * xres;
+				dis = ( testlevel->getmark() ) * XRES;
 				clglobal->clmisc3d->drawzbuffer(testlevel->getlandscape(),dis);
 				testlevel->getplayer()->showbox();
 			break;
