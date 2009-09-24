@@ -33,8 +33,8 @@ void newgame()
 	introscreen = clglobal->clformat->loadtga(screens->members[arindex]);
 	clglobal->clgfx1->drawscreen(introscreen);
 	clglobal->clwindow->draw();
-	clglobal->clsystem->wait(2000);
-	clglobal->clfsprogress->set(20);
+	clglobal->clsystem->wait(1000);
+	clglobal->clfsprogress->set(10);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
 	//*
@@ -42,19 +42,13 @@ void newgame()
 	//load and init level
 	xchar** lfn = clglobal->clformat->loadlvl(BASEDIR"levels/level0.lvl");
 	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
-	clglobal->clsystem->wait(8000);
-	clglobal->clfsprogress->set(50);
-	clglobal->clfsprogress->draw();
-	clglobal->clwindow->draw();
-	clglobal->clsystem->wait(8000);
-	clglobal->clfsprogress->set(80);
+	clglobal->clfsprogress->set(90);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
 	//*
 	
 	//init level floor
 	clglobal->clfloor->init(100,670,0x0000b0b0,1);
-	clglobal->clsystem->wait(1000);
 	clglobal->clfsprogress->set(100);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
@@ -78,6 +72,9 @@ void newgame()
 							"w:                Reset Tower\n"
 							"Left Ctrl:        Fire Chassis Weapon\n"
 							"Space:            Fire Tower Weapon\n"
+							"p:                Pause game\n"
+							"^:                Exit to main menu\n"
+							"Esc:              Quit XiZero\n"
 							"After pressing OK the game will start immediately!";
 							
 	if(clglobal->clsystem->msgbox(startmsg)==0) testlevel->start();

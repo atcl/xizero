@@ -48,6 +48,7 @@ class CLammomanager : public virtual CLcl
 		void update();
 		template<int I>void collision(CLentity<I>* e);
 		void display() const;
+		void pause();
 };
 
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
@@ -173,5 +174,7 @@ void CLammomanager::display() const
 	}
 	//*
 }
+
+void CLammomanager::pause() { lastupdate = clsystem->getmilliseconds(); }
 
 #endif

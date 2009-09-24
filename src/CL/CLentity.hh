@@ -377,13 +377,20 @@ xlong CLentity<I>::gettype() const { return type; }
 template<int I>
 void CLentity<I>::start()
 {
-
+	xlong currtime = clsystem->getmilliseconds();
+	lastupdate = currtime;
+	shieldupdate = currtime;
+	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
 } 
 
 template<int I>
 void CLentity<I>::pause()
 {
-	
+	xlong currtime = clsystem->getmilliseconds();
+	lastupdate = currtime;
+	shieldupdate = currtime;
+	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
+	ammoman->pause();
 } 
 
 #endif

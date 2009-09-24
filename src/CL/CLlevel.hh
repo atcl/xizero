@@ -331,7 +331,13 @@ CLlevel::~CLlevel()
 
 xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 {
-	if(paused) return 1;
+	if(paused)
+	{
+		player->pause();
+		for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext()) { enemies->getcurrentdata()->pause(); }
+		boss->pause();
+		return 1;
+	}
 	
 	xlong isdead = 0;
 	
