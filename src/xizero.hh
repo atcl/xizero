@@ -43,6 +43,10 @@ void newgame()
 	xchar** lfn = clglobal->clformat->loadlvl(BASEDIR"levels/level0.lvl");
 	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
 	clglobal->clsystem->wait(8000);
+	clglobal->clfsprogress->set(50);
+	clglobal->clfsprogress->draw();
+	clglobal->clwindow->draw();
+	clglobal->clsystem->wait(8000);
 	clglobal->clfsprogress->set(80);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
@@ -63,6 +67,20 @@ void newgame()
 	xlong displacement = 0;
 	xchar input = 0;
 	xchar turbo = 0;
+	//*
+	
+	//display key bindings and init level
+	
+	const xchar* startmsg = "Use these keys:\n"
+							"Arrow Left/Right: Turn Tank\n"
+							"Arrow Forw/Backw: Drive Forw/Backw\n"
+							"a,d:              Turn Tower\n"
+							"w:                Reset Tower\n"
+							"Left Ctrl:        Fire Chassis Weapon\n"
+							"Space:            Fire Tower Weapon\n"
+							"After pressing OK the game will start immediately!";
+							
+	if(clglobal->clsystem->msgbox(startmsg)==0) testlevel->start();
 	//*
 	
 	//game loop

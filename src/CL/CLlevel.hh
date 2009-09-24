@@ -66,6 +66,7 @@ class CLlevel : public virtual CLcl
 		void display();
 		void subsmark(xlong m);
 		void setmark(xlong m);
+		void start();
 		void pause();
 		xlong getmark() const;
 		CLfbuffer* getlandscape() const;
@@ -505,6 +506,13 @@ void CLlevel::setmark(xlong m)
 }
 
 void CLlevel::pause() { paused = !paused; }
+
+void CLlevel::start()
+{
+	player->start();
+	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext()) { enemies->getcurrentdata()->start(); }
+	boss->start();
+}
 
 xlong CLlevel::getmark() const { return smoothmark; }
 

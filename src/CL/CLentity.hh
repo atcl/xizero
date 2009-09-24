@@ -85,6 +85,8 @@ class CLentity : public virtual CLcl
 		CLbox* getboundingbox() const;
 		bool isvisible() const;
 		xlong gettype() const;
+		void start();
+		void pause();
 };
 
 template<int I>
@@ -371,6 +373,18 @@ bool CLentity<I>::isvisible() const { return visible; }
 
 template<int I>
 xlong CLentity<I>::gettype() const { return type; } 
+
+template<int I>
+void CLentity<I>::start()
+{
+
+} 
+
+template<int I>
+void CLentity<I>::pause()
+{
+	
+} 
 
 #endif
 

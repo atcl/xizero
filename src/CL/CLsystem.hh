@@ -11,6 +11,8 @@
 #include <fstream>
 #include <cstring>
 
+#include <FL/fl_ask.H>
+
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLversion.hh"
@@ -316,32 +318,9 @@ void CLsystem::installsystemkey(xchar scancode,void *action)
 
 xlong CLsystem::msgbox(const xchar* message)
 {
-	//commandline enframing
-	const xchar* env1 = "MAIN_DIALOG=<vbox><text><label>";
-	const xchar* env3 = "</label></text><button><label>[  OK  ]</label></button></vbox>";
-	//*
-	
-	//determine length of commandline parts
-	xlong env1l = clutils->chararraylength(env1);
-	xlong env2l = clutils->chararraylength(message);
-	xlong env3l = clutils->chararraylength(env3);
-	//*
-	
-	//allocate space for complete commandline
-	xchar* env = new xchar[env1l+env2l+env3l+1];
-	//*
-	
-	//assemble commandline
-	clutils->copychararray(&env[0],env1,env1l);
-	clutils->copychararray(&env[env1l],message,env2l);
-	clutils->copychararray(&env[env1l+env2l],env3,env3l);
-	env[env1l+env2l+env3l] = 0;
-	//*
-
-	//call msgbox
-	putenv(env);
-	return ::system("gtkdialog --program=MAIN_DIALOG");
-	//*
+	fl_message_font(FL_SCREEN,14);
+	fl_message(message);
+	return 0;
 }
 
 //temp
