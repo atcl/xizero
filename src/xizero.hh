@@ -19,7 +19,7 @@ void exitgame()
 void newgame()
 {
 	//open full screen images archive
-	arfile* screens = clglobal->clformat->loadar(BASEDIR"screens/screens.a");
+	arfile* screens = clglobal->clformat->loadar(BASEDIR"screens.a");
 	//*
 	
 	//fullscreen loading bar

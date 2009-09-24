@@ -48,7 +48,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 
 CLgfx2::CLgfx2()
 {
-	CLfile* temp = clsystem->getfile("../dat/other/CLteletype.fnt");
+	CLfile* temp = clsystem->getfile(BASEDIR"other/CLteletype.fnt");
 	tele = clformat->loadfont(temp);
 };
 

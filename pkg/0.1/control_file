@@ -1,10 +1,10 @@
 Package: xizero
 Version: 0.1.0
-Section: web 
+Section: games 
 Priority: optional
 Architecture: all
 Essential: no
-Depends: libfltk1.1, gtkdialog
+Depends: libc, libfltk1.1, gtkdialog
 Pre-Depends: 
 Recommends: alsa-oss
 Suggests: 
