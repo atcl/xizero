@@ -38,12 +38,12 @@ class CLintro : public virtual CLcl, public CLsingle<CLintro>
 void CLintro::atcrosslevel() const
 {
 	//load atcrosslevel model
-	CLfile *cf = clsystem->getfile("../dat/other/atcl.y3d");
+	CLfile *cf = clsystem->getfile("../dat/intro/atcl.y3d");
 	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
 	
 	//load animation file
-	CLfile* aniraw = clsystem->getfile("../dat/other/atcl.ani");
+	CLfile* aniraw = clsystem->getfile("../dat/intro/atcl.ani");
 	//*
 	
 	//create animation
@@ -62,15 +62,15 @@ void CLintro::atcrosslevel() const
 void CLintro::xizero() const
 {
 	//load atcrosslevel model
-	CLfile* fxi = clsystem->getfile("../dat/other/xi.y3d");
+	CLfile* fxi = clsystem->getfile("../dat/intro/xi.y3d");
 	CLobject* oxi = new CLobject(fxi,0);
-	CLfile* fzero = clsystem->getfile("../dat/other/zero.y3d");
+	CLfile* fzero = clsystem->getfile("../dat/intro/zero.y3d");
 	CLobject* ozero = new CLobject(fzero,0);
 	//*
 	
 	//load animation file
-	CLfile* axi = clsystem->getfile("../dat/other/xi.ani");
-	CLfile* azero = clsystem->getfile("../dat/other/zero.ani");
+	CLfile* axi = clsystem->getfile("../dat/intro/xi.ani");
+	CLfile* azero = clsystem->getfile("../dat/intro/zero.ani");
 	//*
 	
 	//create animation

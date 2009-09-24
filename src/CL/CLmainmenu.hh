@@ -53,11 +53,6 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	buttoncount = bc;
 	//*
 	
-	xlong tempx = 0;
-	xlong tempy = 0;
-	xlong tempw = 0;
-	xlong temph = 0; 
-	
 	xlong temp = 0;
 	
 	//determine max button caption length

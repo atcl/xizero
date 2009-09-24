@@ -93,8 +93,8 @@ int main()
 
 	//game done:
 	sprite* overscreen = 0;
-	if(gamestate==1) overscreen = clglobal->clformat->loadtga("../dat/other/gamewon.tga");
-	else             overscreen = clglobal->clformat->loadtga("../dat/other/gameover.tga"); 
+	if(gamestate==1) overscreen = clglobal->clformat->loadtga("../dat/screens/gamewon.tga");
+	else             overscreen = clglobal->clformat->loadtga("../dat/screens/gameover.tga"); 
 	clglobal->clgfx1->drawscreen(overscreen);
 	clglobal->clwindow->draw();
 	clglobal->clsystem->wait(9000);
