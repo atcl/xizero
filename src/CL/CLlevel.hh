@@ -60,7 +60,7 @@ class CLlevel : public virtual CLcl
 		xlong playerscreenylevel;
 		bool  paused;
 	public:
-		CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bosslib,xchar* levelcontainer);
+		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer);
 		~CLlevel();
 		xlong update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
@@ -79,7 +79,7 @@ xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
 
-CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bosslib,xchar* levelcontainer)
+CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer)
 {
 	//matrix for linear transformations of level objects
 	linear = new CLmatrix(1);
@@ -95,13 +95,11 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 
 //terrain:
 
-	//load terrainlib from .ar to array of xlong* pointing to y3d objects
-	arfile* terraina = clformat->loadar(terrainlib);
-	//*
-
-	//use array of y3ds to  create array of CLobjects
-	terrain = new CLobject*[terraina->filecount];
-	for(uxlong g=0; g<terraina->filecount; g++) { terrain[g] = new CLobject(terraina->members[g],1); }
+	//load terrainlib from .ar to array of CLobject* pointing to y3d objects
+	CLar* terraina = new CLar(terrainlib);
+	uxlong terraincount = terraina->getfilecount();
+	terrain = new CLobject*[terraincount];
+	for(uxlong g=0; g<terraincount; g++) { terrain[g] = new CLobject(terraina->getmember(g),1); }
 	//*
 
 //***
@@ -109,17 +107,17 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 //level:
 
 	//load levelmaps from .ar
-	arfile* levela = clformat->loadar(levelcontainer);
+	CLar* levela = new CLar(levelcontainer);
 	//*
 	
 	//terrain map:
-	xlong tf = clutils->findarmemberbyextension(levela,".mapt");
-	if(tf==-1) clsystem->exit(1,0,__func__,"no terrain map found");
-	xchar** terrainmap = clformat->loadmap(levela->members[tf],33,' ',-1);
+	CLfile* tf = levela->findbyextension(".mapt");
+	if(tf==0) clsystem->exit(1,0,__func__,"no terrain map found");
+	xchar** terrainmap = clformat->loadmap(tf,33,' ',-1);
 	//*
 
 	//determine level constants
-	levelheight = clutils->getlinecount(levela->members[tf]);
+	levelheight = clutils->getlinecount(tf);
 	blocksperscreeny = YRES / blockheight;
 	blocksperscreenx = XRES / blockwidth;
 	blockmark = levelheight - blocksperscreeny;
@@ -132,15 +130,15 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	//*
 
 	//height map:
-	xlong hf = clutils->findarmemberbyextension(levela,".maph");
-	if(hf==-1) clsystem->exit(1,0,__func__,"no height map found");
-	xchar** heightmap = clformat->loadmap(levela->members[hf],48,' ',0);
+	CLfile* hf = levela->findbyextension(".maph");
+	if(hf==0) clsystem->exit(1,0,__func__,"no height map found");
+	xchar** heightmap = clformat->loadmap(hf,48,' ',0);
 	//*
 
 	//entity map:
-	xlong ef = clutils->findarmemberbyextension(levela,".mape");
-	if(ef==-1) clsystem->exit(1,0,__func__,"no entity map found");
-	xchar** entitymap = clformat->loadmap(levela->members[ef],35,'.',-3);
+	CLfile* ef = levela->findbyextension(".mape");
+	if(ef==0) clsystem->exit(1,0,__func__,"no entity map found");
+	xchar** entitymap = clformat->loadmap(ef,35,'.',-3);
 	//*
 
 	//build levellayerscontaining all sub maps
@@ -228,7 +226,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	//*
 
 	//create player
-	player = new CLplayer(clsystem->getfile(playerlib),&smoothmark,smoothlevelheight+10,playerp);
+	player = new CLplayer(playerlib,&smoothmark,smoothlevelheight+10,playerp);
 	playerscreenylevel = 3*(YRES>>2);
 	//*
 
@@ -237,13 +235,13 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 //enemies:
 
 	//load enemy archive
-	arfile* enemiesa = clformat->loadar(enemylib);
+	CLar* enemiesa = new CLar(enemylib);
 	//*
 	
 	//load all enemies in archive (base enemies) into array
-	xlong differentenemies = enemiesa->filecount;
+	xlong differentenemies = enemiesa->getfilecount();
 	CLenemy** baseenemies = new CLenemy*[differentenemies];
-	for(uxlong k=0; k<enemiesa->filecount; k++) { baseenemies[k] = new CLenemy(enemiesa->members[k],&smoothmark,smoothlevelheight+10); }
+	for(uxlong k=0; k<differentenemies; k++) { baseenemies[k] = new CLenemy(enemiesa->getmember(k),&smoothmark,smoothlevelheight+10); }
 	//*
 
 	//create all enemies in level through copying from base enemies from archive
@@ -275,7 +273,7 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 //boss
 
 	//load enemy archive
-	arfile* bossa = clformat->loadar(bosslib);
+	CLar* bossa = new CLar(bosslib);
 	//*
 
 	//search player start pos and set player pos to it
@@ -298,8 +296,8 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	if(bossposfound==false) clsystem->exit(1,0,__func__,"no boss position found in entity map");
 	//*
 
-	//load boss
-	boss = new CLboss(bossa->members[0],&smoothmark,smoothlevelheight+10,bossp);
+	//load boss *** temp! *** change to pick right boss
+	boss = new CLboss(bossa->getmember(0),&smoothmark,smoothlevelheight+10,bossp);
 	//*
 
 //***
@@ -308,10 +306,6 @@ CLlevel::CLlevel(xchar* terrainlib,xchar* enemylib,xchar* playerlib,xchar* bossl
 	delete enemyp;
 	delete bossp;
 	delete playerp;
-	delete terraina;
-	delete levela;
-	delete enemiesa;
-	delete bossa;
 	delete[] templevelrside;
 	delete[] templevellside;
 	//*

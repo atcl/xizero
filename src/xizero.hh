@@ -8,7 +8,8 @@
 
 void xizero_cleanup() { CLgarbage(); }
 
-CLglobal* clglobal;
+CLglobal* clglobal = 0;
+CLar* cldata = 0;
 
 void exitgame()
 {
@@ -19,7 +20,7 @@ void exitgame()
 void newgame()
 {
 	//open full screen images archive
-	arfile* screens = clglobal->clformat->loadar(BASEDIR"screens.a");
+	CLar* screens = new CLar(cldata->findbyname("screens.a"));
 	//*
 	
 	//fullscreen loading bar
@@ -28,9 +29,7 @@ void newgame()
 	
 	//display intro
 	sprite* introscreen = 0;
-	xlong arindex = 0;
-	arindex = clglobal->clutils->findarmemberbyname(screens,"introtext.tga");
-	introscreen = clglobal->clformat->loadtga(screens->members[arindex]);
+	introscreen = clglobal->clformat->loadtga(screens->findbyname("introtext.tga"));
 	clglobal->clgfx1->drawscreen(introscreen);
 	clglobal->clwindow->draw();
 	clglobal->clsystem->wait(1000);
@@ -40,8 +39,13 @@ void newgame()
 	//*
 	
 	//load and init level
-	xchar** lfn = clglobal->clformat->loadlvl(BASEDIR"levels/level0.lvl");
-	CLlevel* testlevel = new CLlevel(lfn[0],lfn[1],lfn[2],lfn[3],lfn[4]);
+	CLar* lvls = new CLar(cldata->findbyname("levels.a"));
+	xchar** lfn = clglobal->clformat->loadlvl(lvls->getmember(0));
+	say(lfn[0]);
+	say(lfn[1]);
+	say(lfn[2]);
+	say(lfn[3]);
+	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[0]),cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]));
 	clglobal->clfsprogress->set(90);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
@@ -156,8 +160,7 @@ void newgame()
 	{
 		//draw winner screen
 		case 0:
-			arindex = clglobal->clutils->findarmemberbyname(screens,"gamewon.tga");
-			overscreen = clglobal->clformat->loadtga(screens->members[arindex]);
+			overscreen = clglobal->clformat->loadtga(screens->findbyname("gamewon.tga"));
 			clglobal->clgfx1->drawscreen(overscreen);
 			clglobal->clwindow->draw();
 			clglobal->clsystem->wait(11000);
@@ -166,8 +169,7 @@ void newgame()
 		
 		//draw looser screen
 		case -1:
-			arindex = clglobal->clutils->findarmemberbyname(screens,"gameover.tga");
-			overscreen = clglobal->clformat->loadtga(screens->members[arindex]);
+			overscreen = clglobal->clformat->loadtga(screens->findbyname("gameover.tga"));
 			clglobal->clgfx1->drawscreen(overscreen);
 			clglobal->clwindow->draw();
 			clglobal->clsystem->wait(11000);

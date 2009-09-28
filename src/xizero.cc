@@ -8,6 +8,7 @@ int main()
 {
 	//init sequence
 	clglobal = CLsetup();
+	cldata = new CLar(BASEDIR"xizero.dat");
 	//*
 
 	//atcrosslevel intro

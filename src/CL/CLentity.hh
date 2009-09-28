@@ -8,6 +8,7 @@
 #include "CLconsts.hh"
 #include "CLvector.hh"
 #include "CLstruct.hh"
+#include "CLar.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
 #include "CLexplosion.hh"
@@ -128,7 +129,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//load entity archive 
-	arfile* entitya = clformat->loadar(ea);
+	CLar* entitya = new CLar(ea);
 	//*
 
 	//for each model
@@ -137,9 +138,9 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
-		xlong em = clutils->findarmemberbyextension(entitya,testext[i]);
-		if(em==-1) clsystem->exit(1,0,__func__,"no entity model file found");
-		model[i] = new CLobject(entitya->members[em],0);
+		CLfile* entitymodelfile = entitya->findbyextension(testext[i]);
+		if(entitymodelfile==0) clsystem->exit(1,0,__func__,"no entity model file found");
+		model[i] = new CLobject(entitymodelfile,0);
 		//*
 		
 		//set model(s) bounding boxes
@@ -163,9 +164,9 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//find and load definition (*.ini)
-	xlong ed = clutils->findarmemberbyextension(entitya,".ini");
-	if(ed==-1) clsystem->exit(1,0,__func__,"no entity definition found");
-	def = clformat->loadini(entitya->members[ed]);
+	CLfile* entitydefinitionfile = entitya->findbyextension(".ini");
+	if(entitydefinitionfile==0) clsystem->exit(1,0,__func__,"no entity definition found");
+	def = clformat->loadini(entitydefinitionfile);
 	//*
 	
 	//load entity attributes
@@ -197,9 +198,9 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 	
 	//load csv if present (*.csv)
-	csv=0;
-	xlong ec = clutils->findarmemberbyextension(entitya,".csv");
-	if(ec!=-1) csv = clformat->loadcsv(entitya->members[ec]);
+	csv = 0;
+	CLfile* entityaifile = entitya->findbyextension(".csv");
+	if(entityaifile!=0) csv = clformat->loadcsv(entityaifile);
 	//*
 	
 	//set remaining entity attributes

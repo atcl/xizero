@@ -38,8 +38,6 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 	public:
 		xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
-		arfile*  loadar(const xchar* sf) const;
-		arfile*  loadar(CLfile* sf) const;
 		xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
 		sprite*  loadtga(const xchar* sf) const;
@@ -121,95 +119,6 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
 	//r is now array of xlongs, r[0] is coutn of values
 	return r;
 	//*
-}
-
-arfile* CLformat::loadar(const xchar* sf) const { return loadar(clsystem->getfile(sf)); }
-
-arfile* CLformat::loadar(CLfile* sf) const
-{
-	xchar* bf = sf->text;
-	xlong cfs = sf->size;
-
-	//ar can contain max 127 files!!!
-	armember* tindex[128];
-	xlong tsize = cfs - 8;
-	//*
-
-	//check for "magic-string"
-	if( clsystem->cmpcstr(bf,"!<arch>",6) == 0 )
-	{
-		//init variables
-		xlong bc = 8;
-		xlong fc = 0;
-		xchar fn[16];
-		xlong fs = 0;
-		xlong ts[10];
-		//*
-
-		//for each member do
-		do
-		{
-			//read member header
-			clutils->copychararray(&fn[0],&bf[bc],16);	//member filename
-			bc += 48;					//no necessary information here, so skip
-			//*
-			
-			//decode filesize of current ar member
-			fs = clsystem->ato(&bf[bc]);
-			bc+=12; //goto end of header
-			//*
-
-			//create xlong array for current ar member
-			xlong fs2 = fs>>2;
-			if(fs%4!=0) fs2++;
-			fs2++;
-			xlong* tb = new xlong[fs2];
-			xlong* bf2 = static_cast<xlong*>(static_cast<void*>(&bf[bc]));
-			//*
-
-			//fill array
-			for(uxlong i=0; i<fs2; i++)
-			{
-				tb[i] = bf2[i];
-			}
-			bc += fs;
-			//*
-
-			//make new armember
-			tindex[fc] = new armember;
-			tindex[fc]->size = fs;
-			tindex[fc]->lsize = fs2;
-			tindex[fc]->name = new xchar[16]; clutils->copychararray(tindex[fc]->name,&fn[0],16);
-			tindex[fc]->data = tb;
-			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
-			//*
-
-			//adjust global ar variables
-			if(fs%2!=0) { bc++; tsize--; }
-			tsize -= (fs+60); //subtract reading size from global size
-			fc++; //increment filecount
-			//*
-
-		} while( tsize > 0 );
-		//*
-
-		//create arfile
-		arfile* arf = new arfile;
-		arf->filecount = fc;
-		arf->members = new armember*[fc];
-		//*
-
-		//copy armembers to arfile
-		for(uxlong j=0; j<fc; j++)
-		{ 
-			arf->members[j] = tindex[j];
-		}
-		//*
-
-		return arf;
-	}
-
-	return 0;
 }
 
 xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const

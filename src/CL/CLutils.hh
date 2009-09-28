@@ -42,8 +42,6 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		xlong  getrandom(uxlong range);
 		xchar* color2string(uxlong c) const;
 		xlong  endian(xlong l) const;
-		xlong  findarmemberbyextension(arfile* a,const xchar* e) const;
-		xlong  findarmemberbyname(arfile* a,const xchar* e) const;
 		xlong  hatoi(uxchar c) const;
 };
 
@@ -186,39 +184,6 @@ xlong CLutils::endian(xlong l) const
 	tl.db[2] = tc;
 
 	return tl.dd;
-}
-
-xlong CLutils::findarmemberbyextension(arfile* a,const xchar* e) const
-{
-		xlong r = -1;
-
-		for(uxlong h=0; h<a->filecount; h++)
-		{
-			if(CLutils::checkextension(a->members[h]->name,16,e)==true)
-			{
-				r=h;
-				break;
-			}
-		}
-		
-		return r;
-}
-
-xlong CLutils::findarmemberbyname(arfile* a,const xchar* e) const
-{
-		xlong r = -1;
-		xlong ti = 0;
-
-		for(uxlong h=0; h<a->filecount; h++)
-		{
-			while(e[ti]!=0)
-			{
-				if(e[ti]==a->members[h]->name[ti]) { r = h; ti++; }
-				else  { r = -1; break; }
-			}
-		}
-		
-		return r;
 }
 
 xlong CLutils::hatoi(uxchar c) const
