@@ -9,14 +9,16 @@ int main()
 	//init sequence
 	clglobal = CLsetup();
 	cldata = new CLar(BASEDIR"xizero.dat");
+	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
 	//*
 
 	//atcrosslevel intro
-	clglobal->clintro->atcrosslevel();
+	CLintro* clintro = new CLintro(cldata->findbyname("intro.a"));
+	clintro->atcrosslevel();
 	//*
 	
 	//xizero intro
-	clglobal->clintro->xizero();
+	clintro->xizero();
 	//*
 	
 	//mainmenu

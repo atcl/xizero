@@ -23,14 +23,15 @@
  * version: 0.1
  */
 
-class CLintro : public virtual CLcl, public CLsingle<CLintro> 
+class CLintro : public virtual CLcl
 {
 	friend class CLsingle<CLintro>;
 	
 	private:
-		CLintro() { };
-		~CLintro() { };
+		CLar* introar;
 	public:
+		CLintro(CLfile* sf) { introar = new CLar(sf); };
+		~CLintro() { };
 		void atcrosslevel() const;
 		void xizero() const;
 };
@@ -38,12 +39,12 @@ class CLintro : public virtual CLcl, public CLsingle<CLintro>
 void CLintro::atcrosslevel() const
 {
 	//load atcrosslevel model
-	CLfile *cf = clsystem->getfile(BASEDIR"intro/atcl.y3d");
+	CLfile *cf = introar->findbyname("atcl.y3d");
 	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
 	
 	//load animation file
-	CLfile* aniraw = clsystem->getfile(BASEDIR"intro/atcl.ani");
+	CLfile* aniraw = introar->findbyname("atcl.ani");
 	//*
 	
 	//create animation
@@ -53,7 +54,7 @@ void CLintro::atcrosslevel() const
 	//run animation
 	while(clwindow->run())
 	{
-		if(clwindow->getinkey()==ESC) break;
+		if(clwindow->getinkey()==SPACE) break;
 		if(atcl_intro->run()==0) break;
 	}
 	//*
@@ -62,15 +63,15 @@ void CLintro::atcrosslevel() const
 void CLintro::xizero() const
 {
 	//load atcrosslevel model
-	CLfile* fxi = clsystem->getfile(BASEDIR"intro/xi.y3d");
+	CLfile* fxi = introar->findbyname("xi.y3d");
 	CLobject* oxi = new CLobject(fxi,0);
-	CLfile* fzero = clsystem->getfile(BASEDIR"intro/zero.y3d");
+	CLfile* fzero = introar->findbyname("zero.y3d");
 	CLobject* ozero = new CLobject(fzero,0);
 	//*
 	
 	//load animation file
-	CLfile* axi = clsystem->getfile(BASEDIR"intro/xi.ani");
-	CLfile* azero = clsystem->getfile(BASEDIR"intro/zero.ani");
+	CLfile* axi = introar->findbyname("xi.ani");
+	CLfile* azero = introar->findbyname("zero.ani");
 	//*
 	
 	//create animation
@@ -84,8 +85,6 @@ void CLintro::xizero() const
 	position = 0;
 	while(clwindow->run())
 	{
-		if(clwindow->getinkey()==ESC) break;
-	
 		//clear buffers
 		cldoublebuffer.clear(0);
 		clzbuffer.clear(ZRES);

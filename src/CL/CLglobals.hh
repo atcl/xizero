@@ -37,7 +37,6 @@ class CLgfx1;
 class CLgfx2;
 class CLtransitions;
 class CLsound;
-class CLintro;
 class CLsprites;
 class CLid;
 class CLcursor;
@@ -83,7 +82,6 @@ class CLglobal
 		static CLtransitions* cltransitions;
 		static CLsound*  clsound;
 		static CLsprites* clsprites;
-		static CLintro*  clintro;
 		static CLid*     clid;
 		static CLcursor* clcursor;
 		

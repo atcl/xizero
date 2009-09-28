@@ -9,6 +9,7 @@
 #include "CLbuffer.hh"
 #include "CLsystem.hh"
 #include "CLmath.hh"
+#include "CLar.hh"
 #include "CLformat.hh"
 #include "CLutils.hh"
 #include "CLobject.hh"

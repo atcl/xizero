@@ -3,13 +3,7 @@
 
 #include "CLinc.h"
 
-void test1() { say("1"); }
-void test2() { say("2"); }
-void test3() { say("3"); }
-void test4() { say("4"); }
-
-void (*as[4]) () = { test1,test2,test3,test4 };
-
+CLar* cldata = 0;
 
 int main(int argc, char** argv)
 {
@@ -21,26 +15,15 @@ int main(int argc, char** argv)
 
 	//init sequence
 	CLglobal* clglobal = CLsetup();
+	cldata = new CLar(BASEDIR"xizero.dat");
+	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
 	//*
-
-	//test section:
-		clglobal->cldoublebuffer.clear(0);
-	//
-
-		//test tga loading:
-			
-		//~ CLfile* fonttga = clglobal->clsystem->getfile("../dat/other/CLteletype.fnt");
-		//~ CLfont* font = clglobal->clformat->loadfont(fonttga);
 
 		//test tree:
 		CLtree<xlong>* testtree = new CLtree<xlong>();
 
-		//test button:
-			//CLbutton testbutton = new CLbutton();
 		//test label:
 			//CLlabel testlabel = new CLlabel();
-		//test progress:
-			//CLprogress testprogress = new CLprogress();
 		// //test msgbox:
 			//CLmsgbox testmsgbox = new CLmsgbox();
 		// //test menu:
@@ -57,8 +40,8 @@ int main(int argc, char** argv)
 	if(argfileindex!=-1)
 	{
 		CLfile* arch = clglobal->clsystem->getfile(argfile.c_str());
-		arfile* arar = clglobal->clformat->loadar(arch);
-		cube = arar->members[argfileindex];
+		CLar* arar = new CLar(arch);
+		cube = arar->getmember(argfileindex);
 	}
 	else
 	{
@@ -71,19 +54,12 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
-	
-	sprite* back = 0;
-	bool drawback = 0;
 
 	bool mode = 1;
 	bool shadows = 0;
 	short ac = 0;
 	bool exp = 0;
 	bool mm = 0;
-
-	const xchar* bt[] = { "New Game","Load Game","Options","Exit" };
-	sprite* sx = clglobal->clformat->loadtga("../dat/screens/gamewon.tga"); 
-	CLmainmenu* mymain = new CLmainmenu(sx,4,bt,as,"Xi Zero","Version 0.1",0x00FFFFFF);
 
 	while(clglobal->clwindow->run())
 	{
@@ -224,18 +200,6 @@ int main(int argc, char** argv)
 			case 'r':
 				clglobal->clsound->play("../../cannon.wav",0);
 			break;
-			case 'k':
-				//clglobal->clintro->atcrosslevel();
-				clglobal->clintro->xizero();
-				back = clglobal->clgfx2->savescreen();
-				mymain->setback(back);
-			break;
-			case 'l':
-				if(back!=0) drawback = !drawback;
-			break;
-			case 'm':
-				mm = !mm;
-			break;
 				
 			//System:
 			case '0':
@@ -285,10 +249,6 @@ int main(int argc, char** argv)
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
-
-		if(drawback) clglobal->clgfx1->drawscreen(back);
-
-		if(mm) mymain->draw();
 
 		linearM->unit();
 

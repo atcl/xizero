@@ -56,7 +56,6 @@ CLgfx2*   CLglobal::clgfx2   = CLgfx2::instance();
 CLtransitions* CLglobal::cltransitions = CLtransitions::instance();
 CLsound*  CLglobal::clsound  = CLsound::instance();
 CLsprites* CLglobal::clsprites = CLsprites::instance();
-CLintro*  CLglobal::clintro  = CLintro::instance();
 CLid*     CLglobal::clid     = CLid::instance();
 CLcursor* CLglobal::clcursor = CLcursor::instance();
 

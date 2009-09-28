@@ -39,7 +39,7 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 # Compile!
 default:
 	$(CC) $(O2FLAGS) $(MATH) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
-	#$(STRIP) $(TARGET1)
+	$(STRIP) $(TARGET1)
 
 unit:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)

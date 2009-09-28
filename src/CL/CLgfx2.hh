@@ -7,6 +7,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
+#include "CLar.hh"
 #include "CLbuffer.hh"
 #include "CLformat.hh"
 
@@ -34,6 +35,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		CLgfx2();
 		~CLgfx2() { };
 	public:
+		void loadfonts(CLfile* sf);
 		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const;
 		xlong drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc=0) const;
 		void drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc=0) const;
@@ -46,11 +48,13 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		sprite* savescreen() const;
 };
 
-CLgfx2::CLgfx2()
+CLgfx2::CLgfx2() { tele = mono = line = term = segm  = 0; };
+
+void CLgfx2::loadfonts(CLfile* sf)
 {
-	CLfile* temp = clsystem->getfile(BASEDIR"other/CLteletype.fnt");
-	tele = clformat->loadfont(temp);
-};
+	CLar* fontsa = new CLar(sf);
+	tele = clformat->loadfont(fontsa->findbyname("CLteletype.fnt"));
+}
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const
 {

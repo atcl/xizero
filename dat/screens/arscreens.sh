@@ -1,7 +1,6 @@
 #!/bin/sh 
 
-rm screens.a
-
+rm ../screens.a
 ar -q 'screens.a' 'introtext.tga' 'loadscreen.tga' 'gamewon.tga' 'gameover.tga'
 mv screens.a ../
 
