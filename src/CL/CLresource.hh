@@ -33,7 +33,7 @@ const static xchar* CLicon[] = {
 //*
 
 //xpm xizero mouse cursor
-const static char *CLxzcursor[] = 
+const static xchar* CLxzcursor[] = 
 {
 "32 32 5 1",
 "# c None",

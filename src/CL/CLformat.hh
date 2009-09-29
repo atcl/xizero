@@ -42,7 +42,7 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
 		sprite*  loadtga(const xchar* sf) const;
 		sprite*  loadtga(CLfile* sf) const;
-		sprite*  loadxpm(const xchar** xpm) const;
+		sprite*  loadxpm(const xchar* xpm[]) const;
 		sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
 		sprites* loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		sprites* loadfont(const xchar* sf) const;
@@ -217,7 +217,7 @@ sprite* CLformat::loadtga(CLfile* sf) const
 	return r;
 }
 
-sprite* CLformat::loadxpm(const xchar** xpm) const
+sprite* CLformat::loadxpm(const xchar* xpm[]) const
 {
 	uxlong xpm_ptr = 0;
 	
@@ -230,7 +230,7 @@ sprite* CLformat::loadxpm(const xchar** xpm) const
 	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
 	uxlong charpp = CLsystem::instance()->ato(&xpm[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
 	if(charpp!=1) return 0;
-	uxlong bytesize = (width*height)<<2;
+	//uxlong bytesize = (width*height)<<2;
 	//*
 	
 	//allocate
@@ -246,7 +246,7 @@ sprite* CLformat::loadxpm(const xchar** xpm) const
 	colors++;
 	uxlong ctable[256];
 	uxchar cindex = 0;
-	uxlong currcol = 0; 
+	uxlong currcol = 0;
 	for(uxlong i=1; i<colors; i++)
 	{
 		xpm_ptr = 0;
@@ -256,15 +256,22 @@ sprite* CLformat::loadxpm(const xchar** xpm) const
 		if(xpm[i][xpm_ptr]!='c' && xpm[i][xpm_ptr]!='C') return 0;
 		xpm_ptr++; while( (xpm[i][xpm_ptr]) !=' ') xpm_ptr++;
 		xpm_ptr++;
-		if(xpm[i][xpm_ptr]!='#') return 0;
-		xpm_ptr++;
-		currcol  = clutils->hatoi(xpm[i][xpm_ptr])<<20; xpm_ptr++; 
-		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<16; xpm_ptr++;
-		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<12; xpm_ptr++;
-		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<8;  xpm_ptr++;
-		currcol += clutils->hatoi(xpm[i][xpm_ptr])<<4;  xpm_ptr++;
-		currcol += clutils->hatoi(xpm[i][xpm_ptr]);
-		ctable[cindex] = currcol;
+		if(xpm[i][xpm_ptr]=='#')
+		{
+			xpm_ptr++;
+			currcol  = clutils->hatoi(xpm[i][xpm_ptr])<<20; xpm_ptr++; 
+			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<16; xpm_ptr++;
+			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<12; xpm_ptr++;
+			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<8;  xpm_ptr++;
+			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<4;  xpm_ptr++;
+			currcol += clutils->hatoi(xpm[i][xpm_ptr]);
+			ctable[cindex] = currcol;
+		}
+		else if( (xpm[i][xpm_ptr]=='N' || xpm[i][xpm_ptr]=='n') && (xpm[i][xpm_ptr+1]=='o' && xpm[i][xpm_ptr+2]=='n' && xpm[i][xpm_ptr+3]=='e') )
+		{
+			ctable[cindex] = 0xFF000000;
+		}
+		else return 0;
 	}
 	//*
 
@@ -280,7 +287,7 @@ sprite* CLformat::loadxpm(const xchar** xpm) const
 		}
 	}
 	//*
-	
+
 	return r;
 }
 

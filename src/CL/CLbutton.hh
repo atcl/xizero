@@ -106,13 +106,16 @@ void CLbutton::click() { action(); }
 
 void CLbutton::checkclick()
 {
-	xlong mx = clwindow->getmousex();
-	xlong my = clwindow->getmousey();
-	
-	for(xlong i=buttonlist->setfirst(); i<buttonlist->getlength(); i+=buttonlist->setnext())
+	if(clwindow->getmouselb()!=0)
 	{
-		CLbutton* curr = buttonlist->getcurrentdata();
-		if(mx>curr->getx() && mx<curr->getx()+curr->getwidth() && my>curr->gety() && my<curr->gety()+curr->getheight()) curr->click();  
+		xlong mx = clwindow->getmousex();
+		xlong my = clwindow->getmousey();
+		
+		for(xlong i=buttonlist->setfirst(); i<buttonlist->getlength(); i+=buttonlist->setnext())
+		{
+			CLbutton* curr = buttonlist->getcurrentdata();
+			if(mx>curr->getx() && mx<curr->getx()+curr->getwidth() && my>curr->gety() && my<curr->gety()+curr->getheight()) curr->click();  
+		}
 	}
 }
 

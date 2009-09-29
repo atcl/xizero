@@ -607,7 +607,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 	{
 		for(uxlong j=0; j<ewidth ;j++)
 		{
-			if( (s->data[linearc] & 0xFF000000) != 0xFF) cldoublebuffer[xoffset+j] = s->data[linearc];
+			if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
 			linearc++;
 		}
 		xoffset += XRES;

@@ -9,6 +9,7 @@
 #include "CLstruct.hh"
 #include "CLformat.hh"
 #include "CLgfx1.hh"
+#include "CLwindow.hh"
 
 /* class name:	CLcursor
  * 
@@ -35,10 +36,10 @@ class CLcursor : public virtual CLcl, public CLsingle<CLcursor>
 		void hide();
 		void set(sprite* s);
 		void set(const xchar* xpm[]);
-		void draw(xlong x,xlong y) const;
+		void draw() const;
 };
 
-CLcursor::CLcursor() { onoff = 0; }
+CLcursor::CLcursor() { onoff = 0; cursor = 0; }
 
 void CLcursor::show() { onoff = 1; }
 
@@ -48,6 +49,13 @@ void CLcursor::set(sprite* s) { cursor = s; }
 
 void CLcursor::set(const xchar* xpm[]) { cursor = clformat->loadxpm(xpm); }
 
-void CLcursor::draw(xlong x,xlong y) const { clgfx1->drawsprite(x,y,cursor); }
+void CLcursor::draw() const
+{
+	if(onoff==1 && cursor!=0)
+	{
+		clgfx1->drawsprite(clwindow->getmousex(),clwindow->getmousey(),cursor); 
+		//~ clgfx1->drawfilledrectangle(clwindow->getmousex(),clwindow->getmousey(),clwindow->getmousex()+32,clwindow->getmousey()+32,0xFFFFFFFF);
+	}
+}
 
 #endif

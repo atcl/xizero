@@ -90,7 +90,15 @@ int CLwindow::handle(int event)
 		case FL_PUSH:
 			mouselb = Fl::event_button() & 1;
 			mouserb = Fl::event_button() & 2;
-		break;		
+		break;
+		
+		case FL_ENTER:
+			cursor(FL_CURSOR_NONE);
+		break;
+		
+		case FL_LEAVE:
+			cursor(FL_CURSOR_DEFAULT);
+		break;	
 	}
 	
 	return Fl_Window::handle(event);
