@@ -34,10 +34,6 @@ CLglobal* CLsetup()
 	//~ win->init(xres,yres,CLTITLE);
 	//*
 
-	//init benchmarking
-	clglobal->clbench->init(3,COUT_FPS);
-	//*
-
 	//init matrices
 	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);

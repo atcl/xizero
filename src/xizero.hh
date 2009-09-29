@@ -82,6 +82,10 @@ void newgame()
 	if(clglobal->clsystem->msgbox(startmsg)==0) testlevel->start();
 	//*
 	
+	//init benchmarking
+	clglobal->clbench->init(3,COUT_FPS);
+	//*
+	
 	//game loop
 	while(gamestate>0 && clglobal->clwindow->run()) 
 	{

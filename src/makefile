@@ -29,8 +29,8 @@ STRIP   = strip -s -R .comment -R .gnu.version
 
 #options to test:
 OPT     = -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
-ATOM    = -xL
-ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -malign-int
+CPU     = -mmmx
+ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
 #
 
 # Compile!
