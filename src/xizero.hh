@@ -111,9 +111,9 @@ void newgame()
 		//*
 
 		//clear buffers
-		clglobal->cldoublebuffer.ultraclear(0);
+		clglobal->cldoublebuffer.clear(0);
 		clglobal->clzbuffer.clear(ZRES);
-		clglobal->clstencilbuffer.ultraclear(0);
+		clglobal->clstencilbuffer.clear(0);
 		//*
 
 		//render level depending on mode (modes just for dev)

@@ -4,9 +4,6 @@
 #define HH_CLBUFFER
 #pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
 
-#include <stdio.h>
-#include <string.h>
-
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLdetect.hh"
@@ -32,16 +29,13 @@ template <typename T>class CLbuffer : public virtual CLcl
 		uxlong qs;
 		bool   havemmx;
 		bool   havesse;	
+		bool   x86;
 	public:
 		CLbuffer(uxlong s,T ival=0);
 		~CLbuffer();
 		void clear(T v);
-		void fastclear(T v);
-		void ultraclear(T v);
 		void copy(T* dst);
 		void copy(CLbuffer* dst);
-		void fastcopy(xlong* dst);
-		void ultracopy(xlong* dst);
 		void blendcopy(T* dst,xlong o);
 		void blendcopy(CLbuffer<T>* dst,xlong o);
 		uxlong getsize() const;
@@ -59,8 +53,9 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
 	//*
 	
 	//determine cpu type to decide which copy or clear method can be used
-	havemmx = 1;
+	havemmx = 0;
 	havesse = 0; 
+	x86 = 1;
 	
 	xlong cpucaps = cldetect->cpu();
 	//if( (cpucaps & MMX) != 0 ) havemmx = 1; else havemmx = 0;
@@ -72,26 +67,6 @@ template <typename T>CLbuffer<T>::~CLbuffer() { } //how to delete buffer?
 
 template <typename T>void CLbuffer<T>::clear(T v)
 {
-	//default for loop clear (slow)
-	for(xlong i=size-1;i>=0;i--)
-	{
-		buffer[i] = v;
-	}
-	//*
-}
-
-template <typename T>void CLbuffer<T>::fastclear(T v)
-{
-	//default x86 assembly clear (average)
-	xlong* btemp = reinterpret_cast<xlong*>(&buffer[0]);
-	xlong* vtemp = reinterpret_cast<xlong*>(&v);
-
-	__asm__ __volatile__ ( "cld; rep stosl;" : : "a"(*vtemp),"D"(btemp),"c"(size) );
-	//*
-}
-
-template <typename T>void CLbuffer<T>::ultraclear(T v)
-{
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong purev = *(reinterpret_cast<xlong*>(&v));
 	xlong  packed[4];
@@ -99,7 +74,7 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 	uxlong i = size;
 
 	//x86 SSE1 assembly clear (very fast)
-	if(size>262144 && havesse)
+	if(x86 && size>262144 && havesse)
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -129,7 +104,7 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 	//*
 	
 	//86 MMX assembly clear (fast)
-	else if(size>65536 && havemmx)
+	else if(x86 && size>65536 && havemmx)
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -158,49 +133,23 @@ template <typename T>void CLbuffer<T>::ultraclear(T v)
 	}
 	//*
 	
-	//fallback if no SIMD neither MMX or SSE1 is available
-	else
-	{
-		__asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(v),"D"(puredst),"c"(size));
-	}
+	//fallback if no SIMD, neither MMX or SSE1 is available
+	else if(x86) __asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(v),"D"(puredst),"c"(size));
+	//*
+	
+	//default for loop clear (slow)
+	else for(xlong i=size-1;i>=0;i--) { buffer[i] = v; }
 	//*
 }
 
 template <typename T>void CLbuffer<T>::copy(T *dst)
-{
-	//default for loop copy (slow)
-	for(xlong i=size-1;i>=0;i--)
-	{
-		dst[i] = buffer[i];
-	}
-	//*
-}
-
-template <typename T>void CLbuffer<T>::copy(CLbuffer *dst)
-{
-	//default for loop copy (slow)
-	for(xlong i=size-1;i>=0;i--)
-	{
-		dst[i] = buffer[i];
-	}
-	//*
-}
-
-template <typename T>void CLbuffer<T>::fastcopy(xlong *dst)
-{
-	//default x86 assembly copy (average)
-	memcpy(dst,buffer,size<<2); //temp
-	//*
-}
-
-template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	uxlong i = size;
 	
 	//x86 SSE1 assembly copy (very fast)
-	if(size>262144 && havesse)
+	if(x86 && size>262144 && havesse)
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -232,7 +181,7 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 	//*
 	
 	//x86 MMX assembly copy (fast)
-	else if(size>65536 && havemmx)
+	else if(x86 && size>65536 && havemmx)
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -263,12 +212,15 @@ template <typename T>void CLbuffer<T>::ultracopy(xlong *dst)
 	//*
 	
 	//fallback if no SIMD neither MMX or SSE1 is available
-	else
-	{
-		__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
-	}
+	else if(x86)	__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
+	//*
+	
+	//default for loop copy (slow)
+	else for(xlong i=size-1;i>=0;i--) { dst[i] = buffer[i];	}
 	//*
 }
+
+template <typename T>void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer()); }
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
@@ -320,10 +272,7 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	//*
 }
 
-template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o)
-{
-
-}
+template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); }
 
 template <typename T>uxlong CLbuffer<T>::getsize() const { return size; }
 

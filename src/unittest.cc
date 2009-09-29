@@ -219,9 +219,9 @@ int main(int argc, char** argv)
 		//3. blend stencil to double
 		//4. all shadow casting objects
 
-		clglobal->cldoublebuffer.fastclear(0);
-		clglobal->clzbuffer.fastclear(ZRES);
-		clglobal->clstencilbuffer.fastclear(0);
+		clglobal->cldoublebuffer.clear(0);
+		clglobal->clzbuffer.clear(ZRES);
+		clglobal->clstencilbuffer.clear(0);
 
 		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
 		//clgfx1->putpixel(xlong x,xlong y,uxlong c,xlong m);

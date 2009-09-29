@@ -28,17 +28,14 @@ TARGET4 = asciimissile
 STRIP   = strip -s -R .comment -R .gnu.version
 
 #options to test:
-CPUa    = -mcpu pentium-mmx
-CPUb    = -mcpu pentium3
-MATH    = -ffast-math -fomit-frame-pointer
+OPT     = -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
 ATOM    = -xL
-EXP     = -fprefetch-loop-arrays -funit-at-a-time -funroll-loops -floop-optimize
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -malign-int
 #
 
 # Compile!
 default:
-	$(CC) $(O2FLAGS) $(MATH) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
 	$(STRIP) $(TARGET1)
 
 unit:
@@ -50,12 +47,6 @@ debug:
 	
 win:
 	$(CC) $(O0FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WIN32)
-
-all:
-	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX)
-	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX)
-	#$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET3) $(SOURCE3) $(LDFLAGS) $(WWFLAGS) $(LINUX)
-	#$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET4) $(SOURCE4) $(LDFLAGS) $(WWFLAGS) $(LINUX)
 
 clean:
 	$(CLEANUP) $(TARGET1)
