@@ -16,7 +16,7 @@
 #ifdef REL
 	#define BASEDIR "/usr/share/xizero/"
 #else //ifded DEV
-	#define BASEDIR "../dat/"
+	#define BASEDIR 
 #endif
 
 #define XRES 800
