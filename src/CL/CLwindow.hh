@@ -130,7 +130,7 @@ void CLwindow::init(xlong w,xlong h,const xchar* t)
 		this->icon((xchar*)LoadIcon(fl_display,tempicon->data));
 	#else //ifdef LINUX
 		XImage* xiicon = XCreateImage(fl_display,fl_visual->visual,32,ZPixmap,0,(xchar*)tempicon->data,tempicon->width,tempicon->height,0,(tempicon->width)<<2);
-		Pixmap p = XCreatePixmap(fl_display,DefaultRootWindow(fl_display),16,16,32);
+		Pixmap p = XCreatePixmap(fl_display,DefaultRootWindow(fl_display),tempicon->width,tempicon->height,24);
 		//XPutImage(fl_display,p,fl_gc,xiicon,0,0,0,0,tempicon->width,tempicon->height); //crashes here!
 		this->icon((xchar*)p);
 	#endif
