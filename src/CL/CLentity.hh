@@ -140,7 +140,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 		//find and load model(s) (*.y3d)
 		CLfile* entitymodelfile = entitya->findbyextension(testext[i]);
 		if(entitymodelfile==0) clsystem->exit(1,0,__func__,"no entity model file found");
-		model[i] = new CLobject(entitymodelfile,0);
+		model[i] = new CLobject(entitymodelfile,0,0x00A0A0A0);
 		//*
 		
 		//set model(s) bounding boxes

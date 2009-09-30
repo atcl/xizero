@@ -309,11 +309,11 @@ uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2) const
 		break;
 		
 		case 5: //and
-			return (c1 && c2);
+			return (c1 & c2);
 		break;
 		
 		case 6: //or
-			return (c1 || c2);
+			return (c1 | c2);
 		break;
 		
 		case 7: //xor
@@ -321,11 +321,11 @@ uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2) const
 		break;
 		
 		case 8: //nand
-			return !(c1 && c2);
+			return !(c1 & c2);
 		break;
 		
 		case 9: //nor
-			return !(c1 || c2);
+			return !(c1 | c2);
 		break;
 	}
 	

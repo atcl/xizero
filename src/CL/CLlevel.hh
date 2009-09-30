@@ -100,7 +100,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	CLar* terraina = new CLar(terrainlib);
 	uxlong terraincount = terraina->getfilecount();
 	terrain = new CLobject*[terraincount];
-	for(uxlong g=0; g<terraincount; g++) { terrain[g] = new CLobject(terraina->getmember(g),1); }
+	for(uxlong g=0; g<terraincount; g++) { terrain[g] = new CLobject(terraina->getmember(g),1,4); }
 	//*
 
 //***
@@ -459,7 +459,7 @@ void CLlevel::display()
 		currentenemy->display(1);
 	}
 	boss->display(1);
-	clstencilbuffer.blendcopy(cldoublebuffer.getbuffer(),4);
+	clstencilbuffer.blendcopy(cldoublebuffer.getbuffer(),6);
 	//*
 
 	//display player:

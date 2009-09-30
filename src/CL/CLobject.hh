@@ -42,9 +42,10 @@ class CLobject : public virtual CLcl
 		xlong polycount;
 		xlong dockcount;
 		xlong name;
+		uxlong shadowcolor;
 	public:
-		CLobject(const xchar* fileptr,bool zs);
-		CLobject(CLfile* fileptr,bool zs);
+		CLobject(const xchar* fileptr,bool zs,uxlong sc);
+		CLobject(CLfile* fileptr,bool zs,uxlong sc);
 		CLobject(CLobject* obj);
 		~CLobject();
 		void update(CLmatrix* m);
@@ -60,10 +61,12 @@ class CLobject : public virtual CLcl
 		void resetcolor();
 };
 
-CLobject::CLobject(const xchar* fileptr,bool zs) { CLobject(clsystem->getfile(fileptr),zs); }
+CLobject::CLobject(const xchar* fileptr,bool zs,uxlong sc) { CLobject(clsystem->getfile(fileptr),zs,sc); }
 
-CLobject::CLobject(CLfile* fileptr,bool zs)
+CLobject::CLobject(CLfile* fileptr,bool zs,uxlong sc)
 {
+	shadowcolor = sc;
+	
 	//init bounding box
 	rboundingbox = new CLbox;
 	boundingbox = new CLbox;
@@ -238,7 +241,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 				//*
 				
 				//init polygon
-				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,0x0000C000);
+				polyptr[polycounter] = new CLpolygon(t[0],t[1],t[2],t[3],localcolor,shadowcolor);
 				//*
 			}
 			//*

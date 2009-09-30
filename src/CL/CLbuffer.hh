@@ -14,7 +14,7 @@
  * 
  * author:	atcl
  * 
- * notes:	merge copy methods, complete assembly routines.
+ * notes:	complete assembly routines, currently max size for buffers is 2GB.
  * 
  * version: 0.1
  */
@@ -138,7 +138,7 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	//*
 	
 	//default for loop clear (slow)
-	else for(xlong i=size-1;i>=0;i--) { buffer[i] = v; }
+	else for(;i>=0;i--) { buffer[i] = v; }
 	//*
 }
 
@@ -212,11 +212,11 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	//*
 	
 	//fallback if no SIMD neither MMX or SSE1 is available
-	else if(x86)	__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
+	else if(x86) __asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
 	//*
 	
 	//default for loop copy (slow)
-	else for(xlong i=size-1;i>=0;i--) { dst[i] = buffer[i];	}
+	else { i--; for(;i>=0;i--) { dst[i] = buffer[i]; } }
 	//*
 }
 
@@ -224,48 +224,58 @@ template <typename T>void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer
 
 template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 {
+	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
+	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
+	register xlong i = size;
+	
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	switch(o)
 	{
 		case 0:		//NONE //?default
-			for(xlong i=size-1;i>=0;i--)
-			{
-				dst[i] = buffer[i];
-			}
+			i--; for(;i>=0;i--) { dst[i] = buffer[i]; }
 		break;
 		
 		case 1:		//AND
-			for(xlong i=size-1;i>=0;i--)
-			{
-				dst[i] = dst[i] && buffer[i];
-			}
+			i--; for(;i>=0;i--) { dst[i] = dst[i] & buffer[i]; }
 		break;
 		
 		case 2:		//OR
-			for(xlong i=size-1;i>=0;i--)
-			{
-				dst[i] = dst[i] || buffer[i];
-			}
+			i--; for(;i>=0;i--) { dst[i] = dst[i] | buffer[i]; }
 		break;
 		
 		case 3:		//OR
-			for(xlong i=size-1;i>=0;i--)
-			{
-				dst[i] = dst[i] ^ buffer[i];
-			}
+			i--; for(;i>=0;i--) { dst[i] = dst[i] ^ buffer[i]; }
 		break;
 		
 		case 4:		//ADD
-			for(xlong i=size-1;i>=0;i--)
-			{
-				dst[i] = dst[i] + buffer[i];
-			}
+			i--; for(;i>=0;i--) { dst[i] = dst[i] + buffer[i]; }
 		break;
 		
 		case 5:		//AA
-			for(xlong i=size-1;i>=0;i--)
+			i--;
+			for(;i>=0;i--)
 			{
 				//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
+			}
+		break;
+		
+		case 6:		//BYTE ADD
+			register uxlong tx = 0;
+			register uxlong ty = 0;
+			register uxlong t1 = 0;
+			register uxlong t2 = 0;
+			register uxlong t3 = 0;
+			register uxlong t4 = 0;
+			for(;i>=0;i--)
+			{
+				tx = dst[i];
+				ty = buffer[i];
+				t1 =  (tx & 0x000000FF)      +  (ty & 0x000000FF);
+				t2 = ((tx & 0x0000FF00)>>8)  + ((ty & 0x0000FF00)>>8);
+				t3 = ((tx & 0x00FF0000)>>16) + ((ty & 0x00FF0000)>>16);
+				t4 = ((tx & 0xFF000000)>>24) + ((ty & 0xFF000000)>>24);
+				//
+				dst[i] = tx + ty;
 			}
 		break;
 	}
