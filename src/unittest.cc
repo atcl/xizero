@@ -61,6 +61,8 @@ int main(int argc, char** argv)
 	bool exp = 0;
 	bool mm = 0;
 
+	clglobal->clbench->init(3,COUT_FPS);
+
 	while(clglobal->clwindow->run())
 	{
 		if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();

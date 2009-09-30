@@ -25,7 +25,7 @@
 
 inline bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); }
 
-inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<2) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); }
+inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<0) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); }
 
 inline void clip(xlong& x,xlong& y)
 {
@@ -575,8 +575,6 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
 
 void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 {
-	//init
-	if(x>XRES || y>YRES) return;
 	//xlong ssize = s->size;
 	xlong swidth = s->width;
 	xlong sheight = s->height;
@@ -585,14 +583,12 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 	xlong ys = y;
 	xlong xe = x + swidth;
 	xlong ye = y + sheight;
-	if(xe<0 || ye<0) return;
 	//*
 
 	//clipping against screen borders
-	if(xs<0) xs = 0;
-	if(xe>XRES) xe = XRES-1;
-	if(ys<0) ys = 0;
-	if(ye>YRES) ye = YRES-1;
+	if(isoff(xs,ys,xe,ye)) return;
+	clip(xs,ys);
+	clip(xe,ye);
 	//*
 
 	//set up variables
@@ -600,6 +596,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 	xlong eheight = ye - ys;
 	xlong xoffset = (ys * XRES) + xs;
 	xlong linearc = 0;
+	xlong lindiff = swidth - ewidth;
 	//*
 
 	//drawloop
@@ -610,6 +607,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 			if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
 			linearc++;
 		}
+		linearc += lindiff;
 		xoffset += XRES;
 	}
 	//*	
@@ -666,10 +664,6 @@ void CLgfx1::drawscreen(sprite* s) const
 
 void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
 {
-	//init
-	if(x>XRES || y>YRES) return;
-	//*
-	
 	//find tile
 	xlong pr = (s->width / s->tilewidth);
 	xlong off = ((ti % pr) * (s->width*s->tileheight)) + ((ti / pr) * s->tilewidth);
@@ -680,13 +674,11 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
 	xlong ys = y;
 	xlong xe = x + s->tilewidth;
 	xlong ye = y + s->tileheight;
-	if(xe<0 || ye<0) return;
 
 	//clipping against screen borders
-	if(xs<0) xs = 0;
-	if(xe>XRES) xe = XRES-1;
-	if(ys<0) ys = 0;
-	if(ye>YRES) ye = YRES-1;
+	if(isoff(xs,ys,xe,ye)) return;
+	clip(xs,ys);
+	clip(xe,ye);
 	//*
 
 	//set up variables
@@ -694,6 +686,8 @@ void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
 	xlong eheight = ye - ys;
 	xlong xoffset = (ys * XRES) + xs;
 	xlong linearc = off;
+	
+	hordiff += (s->tilewidth - ewidth); //if clipping on xmax. test! 
 	//*
 
 	//drawloop

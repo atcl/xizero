@@ -157,7 +157,11 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,ux
 	for(uxlong i=0; i<l; i++)
 	{
 		if(a[i]=='\n') { t = x; y += 16; }
-		else t = drawfontchar(t,y,a[i],ft,fc,bc);
+		else
+		{
+			t = drawfontchar(t,y,a[i],ft,fc,bc);
+			if(t==-1) return;
+		}
 	}
 }
 

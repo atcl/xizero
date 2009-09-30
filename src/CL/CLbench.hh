@@ -55,11 +55,10 @@ void CLbench::inc()
 	frames++;
 	currenttime = clsystem->getmilliseconds();
 	elapsedtime += (currenttime - lastupdate);
-	temptime = elapsedtime;
-//nicht durch temptime teilen, da altes zu neuem und durch 2
-	if(temptime >= interval)
+
+	if(elapsedtime >= interval)
 	{
-		framespersecond = xlong(frames*1000/temptime);
+		framespersecond = xlong(frames*1000/elapsedtime);
 		print();
 		frames = 0;
 		elapsedtime = 0;
