@@ -46,6 +46,10 @@ struct CLvectorbase
 template<typename T>
 struct CLvector : public CLvectorbase<T,CLvector<T> >
 {
+	private:
+		CLmath* clmath;
+	
+	public:
 	T x;
 	T y;
 	T z;

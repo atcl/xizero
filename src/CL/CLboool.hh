@@ -26,7 +26,9 @@
 class boool
 {
 	private:
+		CLmath* clmath;
 		xlong b;
+		
 	public:
 		boool();
 		boool(boool& a);
@@ -57,12 +59,12 @@ class boool
 		inline boool operator+(boool& a) const;
 		inline boool operator-(boool& a) const;
 		inline boool operator*(boool& a) const;
-		inline boool operator+(bool a)  const;
-		inline boool operator-(bool a)  const;
-		inline boool operator*(bool a)  const;
-		inline boool operator+(xlong a) const;
-		inline boool operator-(xlong a) const;
-		inline boool operator*(xlong a) const;
+		inline boool operator+(bool a)   const;
+		inline boool operator-(bool a)   const;
+		inline boool operator*(bool a)   const;
+		inline boool operator+(xlong a)  const;
+		inline boool operator-(xlong a)  const;
+		inline boool operator*(xlong a)  const;
 		
 		friend boool operator+(bool a,boool& b);
 		friend boool operator-(bool a,boool& b);
@@ -81,12 +83,12 @@ class boool
 		inline bool operator>=(boool& a) const;
 		inline bool operator<(boool& a)  const;
 		inline bool operator>(boool& a)  const;
-		inline bool operator==(bool a)  const;
-		inline bool operator!=(bool a)  const;
-		inline bool operator<=(bool a)  const;
-		inline bool operator>=(bool a)  const;
-		inline bool operator<(bool a)   const;
-		inline bool operator>(bool a)   const;
+		inline bool operator==(bool a)   const;
+		inline bool operator!=(bool a)   const;
+		inline bool operator<=(bool a)   const;
+		inline bool operator>=(bool a)   const;
+		inline bool operator<(bool a)    const;
+		inline bool operator>(bool a)    const;
 		
 		friend bool operator==(bool a,boool& b);
 		friend bool operator!=(bool a,boool& b);
@@ -100,31 +102,19 @@ class boool
 };
 
 //unassigning constructor
-boool::boool()
-{
-	this->b=0;
-}
+boool::boool() { this->b=0; }
 //*
 
 //boool assigning constructor
-boool::boool(boool& a)
-{
-	this->b=a.b;
-}
+boool::boool(boool& a) { this->b=a.b; }
 //*
 
 //bool assigning constructor
-boool::boool(bool a)
-{
-	this->b=a;
-}
+boool::boool(bool a) { this->b=a; }
 //*
 
 //xlong assigning construcotr
-boool::boool(xlong a)
-{
-	this->b=clmath->sign(a);
-}
+boool::boool(xlong a) { this->b=clmath->sign(a); }
 //*
 
 //assign boool
@@ -326,121 +316,70 @@ boool boool::operator*(xlong a) const
 //*
 	
 //logical and with boool	
-bool boool::operator&&(boool& a) const
-{
-	return (this->b && a);
-}
+bool boool::operator&&(boool& a) const { return (this->b && a); }
 //*
 
 //logical or vboool
-bool boool::operator||(boool& a) const
-{
-	return (this->b || a);
-}
+bool boool::operator||(boool& a) const { return (this->b || a); }
 //*
 
 //logical xor with boool
-bool boool::operator^(boool& a)  const
-{
-	return (this->b ^ a);
-}
+bool boool::operator^(boool& a)  const { return (this->b ^ a); }
 //*
 
 //equality with boool		
-bool boool::operator==(boool& a) const
-{
-	return (this->b == a.b);
-}
+bool boool::operator==(boool& a) const { return (this->b == a.b); }
 //*
 
 //inequality with boool
-bool boool::operator!=(boool& a) const
-{
-	return (this->b != a.b);
-}
+bool boool::operator!=(boool& a) const { return (this->b != a.b); }
 //*
 
 //less or equal with boool
-bool boool::operator<=(boool& a) const
-{
-	return (this->b <= a.b);
-}
+bool boool::operator<=(boool& a) const { return (this->b <= a.b); }
 //*
 
 //greater or equal with boool
-bool boool::operator>=(boool& a) const
-{
-	return (this->b >= a.b);
-}
+bool boool::operator>=(boool& a) const { return (this->b >= a.b); }
 //*
 
 //less with boool
-bool boool::operator<(boool& a)  const
-{
-	return (this->b < a.b);
-}
+bool boool::operator<(boool& a)  const { return (this->b < a.b); }
 //*
 
 //greater with boool
-bool boool::operator>(boool& a)  const
-{
-	return (this->b > a.b);
-}
+bool boool::operator>(boool& a)  const { return (this->b > a.b); }
 
 //equality with bool
-bool boool::operator==(bool a)  const
-{
-	return (this->b == a);
-}
+bool boool::operator==(bool a)  const { return (this->b == a); }
 //*
 
 //inequality with bool
-bool boool::operator!=(bool a)  const
-{
-	return (this->b == a);
-}
+bool boool::operator!=(bool a)  const { return (this->b == a); }
 //*
 
 //less or equal with bool
-bool boool::operator<=(bool a)  const
-{
-	return (this->b <= a);
-}
+bool boool::operator<=(bool a)  const { return (this->b <= a); }
 //*
 
 //greater or equal with bool
-bool boool::operator>=(bool a)  const
-{
-	return (this->b >= a);
-}
+bool boool::operator>=(bool a)  const { return (this->b >= a); }
 //*
 
 //less with bool
-bool boool::operator<(bool a)   const
-{
-	return (this->b < a);
-}
+bool boool::operator<(bool a)   const { return (this->b < a); }
 //*
 
 //greater with bool
-bool boool::operator>(bool a)   const
-{
-	return (this->b > a);
-}
+bool boool::operator>(bool a)   const { return (this->b > a); }
 //*
 
 //cast to bool
-boool::operator bool()  const
-{
-	return bool(this->b);
-}
+boool::operator bool()  const { return bool(this->b); }
 //*
 
 //cast to xlong
-boool::operator xlong() const
-{
-	return b;
-}
+boool::operator xlong() const { return b; }
 //*
 
 //friends:
@@ -448,6 +387,7 @@ boool::operator xlong() const
 //add with xlong from left
 inline boool operator+(xlong a,boool& b)
 {
+	CLmath* clmath;
 	boool temp;
 	temp.b = clmath->sign(a+b.b);
 	return temp;
@@ -457,6 +397,7 @@ inline boool operator+(xlong a,boool& b)
 //subtract with xlong from left
 inline boool operator-(xlong a,boool& b)
 {
+	CLmath* clmath;
 	boool temp;
 	temp.b = clmath->sign(a-b.b);
 	return temp;
@@ -466,6 +407,7 @@ inline boool operator-(xlong a,boool& b)
 //multiplicate with xlong from left
 inline boool operator*(xlong a,boool& b)
 {
+	CLmath* clmath;
 	boool temp;
 	temp.b = clmath->sign(a*b.b);
 	return temp;
@@ -475,6 +417,7 @@ inline boool operator*(xlong a,boool& b)
 //add with bool from left
 inline boool operator+(bool a,boool& b)
 {
+	CLmath* clmath;
 	boool temp;
 	temp.b = clmath->sign(xlong(a)+b.b);
 	return temp;
@@ -484,6 +427,7 @@ inline boool operator+(bool a,boool& b)
 //subtract with bool from left
 inline boool operator-(bool a,boool& b)
 {
+	CLmath* clmath;
 	boool temp;
 	temp.b = clmath->sign(xlong(a)-b.b);
 	return temp;
@@ -493,6 +437,7 @@ inline boool operator-(bool a,boool& b)
 //multiplicate with bool from left
 inline boool operator*(bool a,boool& b)
 {
+	CLmath* clmath;
 	boool temp;
 	temp.b = clmath->sign(xlong(a)*b.b);
 	return temp;
@@ -500,45 +445,27 @@ inline boool operator*(bool a,boool& b)
 //*
 
 //equality with bool from left
-inline bool operator==(bool a,boool& b)
-{
-	return (xlong(a) == b.b);
-}
+inline bool operator==(bool a,boool& b) { return (xlong(a) == b.b); }
 //*
 
 //inequality with bool from left
-inline bool operator!=(bool a,boool& b)
-{
-	return (xlong(a) != b.b);
-}
+inline bool operator!=(bool a,boool& b) { return (xlong(a) != b.b); }
 //*
 
 //less or equal with bool from left
-inline bool operator<=(bool a,boool& b)
-{
-	return (xlong(a) <= b.b);
-}
+inline bool operator<=(bool a,boool& b) { return (xlong(a) <= b.b); }
 //*
 
 //greater or equal with bool from left
-inline bool operator>=(bool a,boool& b)
-{
-	return (xlong(a) >= b.b);
-}
+inline bool operator>=(bool a,boool& b) { return (xlong(a) >= b.b); }
 //*
 
 //less with bool from left
-inline bool operator<(bool a,boool& b)
-{
-	return (xlong(a) < b.b);
-}
+inline bool operator<(bool a,boool& b) { return (xlong(a) < b.b); }
 //*
 
 //greater with bool from left
-inline bool operator>(bool a,boool& b)
-{
-	return (xlong(a) > b.b);	
-}
+inline bool operator>(bool a,boool& b) { return (xlong(a) > b.b); }
 //*
 
 #endif

@@ -22,17 +22,6 @@ CLglobal* CLsetup()
 	CLglobal* clglobal = CLglobal::getinstance(); 
 	
 	clglobal->clwindow->init(XRES,YRES,CLTITLE);
-	
-	//init core buffers
-	//~ CLdoublebuffer  = new CLbuffer<xlong>(xres*yres);
-	//~ CLstencilbuffer = new CLbuffer<xlong>(xres*yres);
-	//~ CLzbuffer       = new CLbuffer<float>(xres*yres);
-	//*
-	
-	//open window
-	//~ win = CLwindow::instance();
-	//~ win->init(xres,yres,CLTITLE);
-	//*
 
 	//init matrices
 	linearM  = new CLmatrix(1);
@@ -49,9 +38,6 @@ CLglobal* CLsetup()
 void CLgarbage()
 {
 	//free globals
-	//~ delete CLdoublebuffer;
-	//~ delete CLstencilbuffer;
-	//~ delete CLzbuffer;
 	delete linearM;
 	delete shadowM;
 	delete leftside;

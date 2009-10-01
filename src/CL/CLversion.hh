@@ -9,5 +9,7 @@
 #define CLbuild 0
 #define CLextra 0
 
+#define CLversion "0.1"
+
 #endif
 

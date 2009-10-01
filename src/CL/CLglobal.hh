@@ -5,10 +5,7 @@
 #pragma message "Compiling " __FILE__ " ! TODO: ..."
 
 #include "CLtypes.hh"
-#include "CLbuffer.hh"
-#include "CLwindow.hh"
 #include "CLmatrix.hh"
-#include "CLbench.hh"
 
 //variables
 CLfvector cllight(1,1,1);

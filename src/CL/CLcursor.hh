@@ -49,13 +49,6 @@ void CLcursor::set(sprite* s) { cursor = s; }
 
 void CLcursor::set(const xchar* xpm[]) { cursor = clformat->loadxpm(xpm); }
 
-void CLcursor::draw() const
-{
-	if(onoff==1 && cursor!=0)
-	{
-		clgfx1->drawsprite(clwindow->getmousex(),clwindow->getmousey(),cursor); 
-		//~ clgfx1->drawfilledrectangle(clwindow->getmousex(),clwindow->getmousey(),clwindow->getmousex()+32,clwindow->getmousey()+32,0xFFFFFFFF);
-	}
-}
+void CLcursor::draw() const { if(onoff==1 && cursor!=0) clgfx1->drawsprite(clwindow->getmousex(),clwindow->getmousey(),cursor); }
 
 #endif

@@ -139,7 +139,7 @@ int main()
 	cout << endl;
 
 	//SHADOWCOLOR
-	uxlong scolor = 0;
+	long scolor = 0;
 	cout << "Enter color of Shadows [in hex, 4 byte ie: 00ff0000 for red]: ";
 	cin >> hex >> scolor;
 
@@ -260,7 +260,7 @@ int main()
 		cin >> filename;
 		cout << "saving to: " << filename << endl;
 	
-		if( filename[9]!='.' && (filename[10]!='y' || filename[10]!='Y') && filename[11]!='3' && (filename!='d' || filename[10]!='D') )
+		if( filename[9]!='.' && (filename[10]!='y' || filename[10]!='Y') && filename[11]!='3' && (filename[10]!='d' || filename[10]!='D') )
 		{
 			filename[9]  = '.';
 			filename[10] = 'y';

@@ -26,7 +26,7 @@ int main()
 	sprite* xzmenuback = clglobal->clgfx2->savescreen();
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
-	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version 0.1",0x00FFFFFF);
+	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "CLversion,0x00FFFFFF);
 	clglobal->clcursor->show();
 	while(clglobal->clwindow->run())
 	{

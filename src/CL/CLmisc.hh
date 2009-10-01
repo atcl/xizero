@@ -10,7 +10,6 @@ void crosslevel()
 }
 
 //guifx
-void drawmousegfx() { }
 void drawmouseorbitter() { }
 
 //extrak 10k buffer
@@ -28,7 +27,6 @@ xlong* getbufferptr() { }
 //~ void ejectcd() { }
 
 //basic
-bool eof() { }
 xchar inkey() { }
 void int() { }
 

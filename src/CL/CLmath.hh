@@ -137,34 +137,19 @@ T CLmath::delta(T x) const
 }
 
 template<typename T>
-T CLmath::min(T a,T b) const
-{
-	return (a<b) ? a : b;
-}
+T CLmath::min(T a,T b) const { return (a<b) ? a : b; }
 
 template<typename T>
-T CLmath::max(T a,T b) const
-{
-	return (a>b) ? a : b;
-}
+T CLmath::max(T a,T b) const { return (a>b) ? a : b; }
 
 template<typename T>
-T CLmath::round(T x) const
-{
-	return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x);
-}
+T CLmath::round(T x) const { return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x); }
 
 template<typename T>
-T CLmath::roundup(T x) const
-{
-	return T(ceil(x));
-}
+T CLmath::roundup(T x) const { return T(ceil(x)); }
 
 template<typename T>
-T CLmath::rounddown(T x) const
-{
-	return T(floor(x));
-}
+T CLmath::rounddown(T x) const { return T(floor(x)); }
 
 template<typename T>
 T CLmath::sqrt(T x) const
@@ -199,10 +184,7 @@ float CLmath::sqrt<float>(float x) const
 }
 
 template<typename T>
-T CLmath::deg2rad(T d) const
-{
-	return float(fxpi*d);
-}
+T CLmath::deg2rad(T d) const { return float(fxpi*d); }
 
 xlong CLmath::faculty(xlong f) const
 {
@@ -228,10 +210,7 @@ xlong CLmath::power(xlong b,xlong e) const
 	return r;
 }
 
-float CLmath::pi() const
-{
-	return fxpi;
-}
+float CLmath::pi() const { return fxpi; }
 
 float CLmath::sin(xlong x) const
 {
@@ -269,10 +248,6 @@ float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 
 	return xk;
 }
-
-//temp
-namespace { CLmath* clmath = CLmath::instance(); };
-//*
 
 #endif
 

@@ -1,6 +1,6 @@
 @echo OFF
 
-TITLE atCROSSLEVEL XiZeroDOS32
+TITLE atCROSSLEVEL XiZero
 
 SET CLenvvar = 'TEST'
 
