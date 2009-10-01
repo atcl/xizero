@@ -18,7 +18,7 @@
  * version: 0.1
  */
 
-template<typename t> class CLbuffer; typedef CLbuffer<float> CLfbuffer; typedef CLbuffer<xlong> CLlbuffer;
+template<typename t> class CLbuffer; typedef CLbuffer<float> CLfbuffer; typedef CLbuffer<xlong> CLlbuffer; typedef CLbuffer<uxlong> CLubuffer;
 template<typename t> class CLvector; typedef CLvector<float> CLfvector; typedef CLvector<xlong> CLlvector;
 
 class CLwindow;
@@ -57,8 +57,8 @@ class CLglobal
 		static uxlong screenpixelheight;
 		static uxlong screenpixelsize;
 		
-		static CLlbuffer cldoublebuffer;
-		static CLlbuffer clstencilbuffer;
+		static CLubuffer cldoublebuffer;
+		static CLubuffer clstencilbuffer;
 		static CLfbuffer clzbuffer;
 		
 		static CLfvector light;

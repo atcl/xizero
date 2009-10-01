@@ -35,8 +35,8 @@ uxlong CLglobal::screenpixelwidth  = XRES;
 uxlong CLglobal::screenpixelheight = YRES;
 uxlong CLglobal::screenpixelsize   = SCRS;
 
-CLlbuffer CLglobal::cldoublebuffer  = *(new CLlbuffer(SCRS));
-CLlbuffer CLglobal::clstencilbuffer = *(new CLlbuffer(SCRS));
+CLubuffer CLglobal::cldoublebuffer  = *(new CLubuffer(SCRS));
+CLubuffer CLglobal::clstencilbuffer = *(new CLubuffer(SCRS));
 CLfbuffer CLglobal::clzbuffer       = *(new CLfbuffer(SCRS));
 
 CLwindow* CLglobal::clwindow = CLwindow::instance();

@@ -291,7 +291,6 @@ xlong CLanim::run()
 	//clear buffers
 	cldoublebuffer.clear(0);
 	clzbuffer.clear(ZRES);
-	clstencilbuffer.clear(0);
 	//*
 	
 	//update animation

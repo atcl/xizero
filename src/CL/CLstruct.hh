@@ -13,6 +13,22 @@ union doubleword
 	xchar  db[4];
 };
 
+struct packedbytes
+{
+	uxchar hh;
+	uxchar hl;
+	uxchar lh;
+	uxchar ll;
+	
+	operator uxlong() const { return ( ((uxlong(hh))<<24)+((uxlong(hl))<<16)+((uxlong(lh))<<8)+(uxlong(ll)) ); }
+};
+
+union quadbytes
+{
+	uxlong      ul;
+	packedbytes qb;
+};
+
 struct CLfile
 {
 	xchar* name;

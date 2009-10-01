@@ -39,7 +39,7 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		xlong height;
 		xlong hdelta;
 		xchar* title;
-		xlong* buffer;
+		uxlong* buffer;
 		xlong key;
 		xlong keyup;
 		xlong turbo;

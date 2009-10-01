@@ -16,11 +16,8 @@ CLfvector cpoint[20];
 CLfvector dpoint[20];
 CLfvector spoint[20];
 
-xlong cleartrans = 0;
-xlong maxcleartrans = 0;
 xlong zdistance = 1000; //=zmax?
 uxlong nolight = 0x00303030;
-uxlong shadowcolor = 0x00C0C0C0;
 
 screenside *leftside;
 screenside *rightside;

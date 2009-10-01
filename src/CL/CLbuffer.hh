@@ -6,6 +6,7 @@
 
 #include "CLtypes.hh"
 #include "CLcl.hh"
+#include "CLstruct.hh"
 #include "CLdetect.hh"
 
 /* class name:	CLbuffer
@@ -71,7 +72,7 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	xlong purev = *(reinterpret_cast<xlong*>(&v));
 	xlong  packed[4];
 	packed[0] = packed[1] = packed[2] = packed[3] = purev;
-	uxlong i = size;
+	register xlong i = size;
 
 	//x86 SSE1 assembly clear (very fast)
 	if(x86 && size>262144 && havesse)
@@ -146,7 +147,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
-	uxlong i = size;
+	register xlong i = size;
 	
 	//x86 SSE1 assembly copy (very fast)
 	if(x86 && size>262144 && havesse)
@@ -227,6 +228,9 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	register xlong i = size;
+	quadbytes tx = { 0 };
+	quadbytes ty = { 0 };
+	quadbytes tz = { 0 };
 	
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	switch(o)
@@ -243,39 +247,61 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 			i--; for(;i>=0;i--) { dst[i] = dst[i] | buffer[i]; }
 		break;
 		
-		case 3:		//OR
+		case 3:		//NAND
+			i--; for(;i>=0;i--) { dst[i] = !(dst[i] & buffer[i]); }
+		break;
+		
+		case 4:		//NOR
+			i--; for(;i>=0;i--) { dst[i] = !(dst[i] | buffer[i]); }
+		break;
+		
+		case 5:		//XOR
 			i--; for(;i>=0;i--) { dst[i] = dst[i] ^ buffer[i]; }
 		break;
 		
-		case 4:		//ADD
+		case 6:		//ADD
 			i--; for(;i>=0;i--) { dst[i] = dst[i] + buffer[i]; }
 		break;
 		
-		case 5:		//AA
+		case 7:		//SUB
+			i--; for(;i>=0;i--) { dst[i] = dst[i] - buffer[i]; }
+		break;
+		
+		case 8:		//BYTE ADD
+			for(;i>=0;i--)
+			{
+				tx.ul = dst[i];
+				ty.ul = buffer[i];
+
+				tz.qb.ll = tx.qb.ll + ty.qb.ll; if(tz.qb.ll<tx.qb.ll) tz.qb.ll = 0xFF;
+				tz.qb.lh = tx.qb.lh + ty.qb.lh; if(tz.qb.lh<tx.qb.lh) tz.qb.lh = 0xFF;
+				tz.qb.hl = tx.qb.hl + ty.qb.hl; if(tz.qb.hl<tx.qb.hl) tz.qb.hl = 0xFF;
+				tz.qb.hh = tx.qb.hh + ty.qb.hh; if(tz.qb.hh<tx.qb.hh) tz.qb.hh = 0xFF;
+				//
+				dst[i] = tz.ul;
+			}
+		break;
+		
+		case 9:		//BYTE SUB
+			for(;i>=0;i--)
+			{
+				tx.ul = dst[i];
+				ty.ul = buffer[i];
+				
+				tz.qb.ll = tx.qb.ll - ty.qb.ll; if(tz.qb.ll>tx.qb.ll) tz.qb.ll = 0;
+				tz.qb.lh = tx.qb.lh - ty.qb.lh; if(tz.qb.lh>tx.qb.lh) tz.qb.lh = 0;
+				tz.qb.hl = tx.qb.hl - ty.qb.hl; if(tz.qb.hl>tx.qb.hl) tz.qb.hl = 0;
+				tz.qb.hh = tx.qb.hh - ty.qb.hh; if(tz.qb.hh>tx.qb.hh) tz.qb.hh = 0;
+				//
+				dst[i] = tz.ul;
+			}
+		break;
+		
+		case 10:	//2xAA
 			i--;
 			for(;i>=0;i--)
 			{
 				//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
-			}
-		break;
-		
-		case 6:		//BYTE ADD
-			register uxlong tx = 0;
-			register uxlong ty = 0;
-			register uxlong t1 = 0;
-			register uxlong t2 = 0;
-			register uxlong t3 = 0;
-			register uxlong t4 = 0;
-			for(;i>=0;i--)
-			{
-				tx = dst[i];
-				ty = buffer[i];
-				t1 =  (tx & 0x000000FF)      +  (ty & 0x000000FF);
-				t2 = ((tx & 0x0000FF00)>>8)  + ((ty & 0x0000FF00)>>8);
-				t3 = ((tx & 0x00FF0000)>>16) + ((ty & 0x00FF0000)>>16);
-				t4 = ((tx & 0xFF000000)>>24) + ((ty & 0xFF000000)>>24);
-				//
-				dst[i] = tx + ty;
 			}
 		break;
 	}
@@ -299,6 +325,7 @@ template <typename T>T& CLbuffer<T>::operator[](uxlong i)
 //typedefs:
 typedef CLbuffer<float> CLfbuffer;
 typedef CLbuffer<xlong> CLlbuffer;
+typedef CLbuffer<uxlong> CLubuffer;
 //*
 
 #endif
