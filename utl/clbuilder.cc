@@ -138,6 +138,11 @@ int main()
 
 	cout << endl;
 
+	//SHADOWCOLOR
+	uxlong scolor = 0;
+	cout << "Enter color of Shadows [in hex, 4 byte ie: 00ff0000 for red]: ";
+	cin >> hex >> scolor;
+
 	//SOBJ's
 	for(int i=0; i<sobjcount; i++)
 	{
@@ -234,6 +239,7 @@ int main()
 	}
 
 	proto[0].c.dd = globalpolycount;
+	proto[0].d.dd = scolor;
 	proto[1].d.dd = globaldockcount;
 	
 	//ENDO

@@ -40,7 +40,7 @@ void CLintro::atcrosslevel() const
 {
 	//load atcrosslevel model
 	CLfile *cf = introar->findbyname("atcl.y3d");
-	CLobject* atcl_obj = new CLobject(cf,0,0);
+	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
 	
 	//load animation file
@@ -64,9 +64,9 @@ void CLintro::xizero() const
 {
 	//load atcrosslevel model
 	CLfile* fxi = introar->findbyname("xi.y3d");
-	CLobject* oxi = new CLobject(fxi,0,0);
+	CLobject* oxi = new CLobject(fxi,0);
 	CLfile* fzero = introar->findbyname("zero.y3d");
-	CLobject* ozero = new CLobject(fzero,0,0);
+	CLobject* ozero = new CLobject(fzero,0);
 	//*
 	
 	//load animation file

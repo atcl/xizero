@@ -44,8 +44,8 @@ class CLobject : public virtual CLcl
 		xlong name;
 		uxlong shadowcolor;
 	public:
-		CLobject(const xchar* fileptr,bool zs,uxlong sc);
-		CLobject(CLfile* fileptr,bool zs,uxlong sc);
+		CLobject(const xchar* fileptr,bool zs);
+		CLobject(CLfile* fileptr,bool zs);
 		CLobject(CLobject* obj);
 		~CLobject();
 		void update(CLmatrix* m);
@@ -61,12 +61,10 @@ class CLobject : public virtual CLcl
 		void resetcolor();
 };
 
-CLobject::CLobject(const xchar* fileptr,bool zs,uxlong sc) { CLobject(clsystem->getfile(fileptr),zs,sc); }
+CLobject::CLobject(const xchar* fileptr,bool zs) { CLobject(clsystem->getfile(fileptr),zs); }
 
-CLobject::CLobject(CLfile* fileptr,bool zs,uxlong sc)
-{
-	shadowcolor = sc;
-	
+CLobject::CLobject(CLfile* fileptr,bool zs)
+{	
 	//init bounding box
 	rboundingbox = new CLbox;
 	boundingbox = new CLbox;
@@ -120,7 +118,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs,uxlong sc)
 		polyptr = new CLpolygon*[polycount];
 		//*
 		
-		//dataptr[3] is empty
+		shadowcolor = dataptr[3];
 		
 		//read OBJT tag ( 'OBJT' , object_name , subobject_count , dockingpoint_count )
 		if(dataptr[4] != 'OBJT' ) clsystem->exit(1,0,__func__,"No OBJT tag");
