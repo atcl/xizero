@@ -1,53 +1,62 @@
 # Makefile
 
+# Compile Flags
 CC      = g++
 WWFLAGS = -Wno-multichar -Wno-write-strings -Wno-pragmas
 WAFLAGS = -Wall
 O0FLAGS = -O0
 O2FLAGS = -O2
-O3FLAGS = -O3
+OPT     = -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
 LDFLAGS = -lfltk
 OUTPARA = -o 
-CLEANUP = rm
 DEBUG   = -g
 LINUX   = -DLINUX
 WIN32   = -DWIN32
 DEVELOP = -DDEV
 RELEASE = -DREL
+
+# Data Assembler
 XZDAT   = dat/makexizerodat.sh
 
+# Sources
 SOURCE1 = src/xizero.cc
-TARGET1 = xizero
-
 SOURCE2 = src/unittest.cc
+
+# Targets
+TARGET1 = xizero
 TARGET2 = unittest
-
 TARGET3 = utl/clbuilder
-
 TARGET4 = utl/asciimissile
-
-STRIP   = strip -s -R .comment -R .gnu.version
-
 GAMEDAT = xizero.dat
 
-COPY    = cp
-BINDST  = /usr/games/
-DATDST  = /usr/share/xizero/
+# Strip
+STRIP   = strip -s -R .comment -R .gnu.version
 
-#options to test:
-OPT     = -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
+# File Operations
+RM      = rm
+MK      = mkdir
+CP      = cp
+
+# Targetfolders
+BINDST  = /usr/games
+DATDST  = /usr/share/xizero
+DOCDST  = /usr/doc/xizero   #remove for deb?
+
+# Options to test:
 CPU     = -mmmx
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
 #
 
-# Compile!
+# Compile:
 default:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
-	#$(STRIP) $(TARGET1)
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) #change to RELEASE
+	$(STRIP) $(TARGET1)
 	#$(XZDAT) #activate
 
 install:
+	$(MK) $(BINDST)
 	$(CP) $(TARGET1) $(BINDST)
+	$(MK) $(DATDST)
 	$(CP) $(GAMEDAT) $(DATDST)
 
 local:
@@ -68,5 +77,5 @@ win32:
 	$(CC) $(O0FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(WIN32)
 
 clean:
-	$(CLEANUP) $(TARGET1)
-	$(CLEANUP) $(GAMEDAT)
+	$(RM) $(TARGET1)
+	$(RM) $(GAMEDAT)
