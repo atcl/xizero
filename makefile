@@ -34,7 +34,7 @@ STRIP   = strip -s -R .comment -R .gnu.version
 
 # File Operations
 RM      = rm
-MK      = mkdir
+MK      = mkdir -p
 CP      = cp
 
 # Targetfolders

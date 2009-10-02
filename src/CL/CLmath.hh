@@ -42,10 +42,10 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		CLmath();
 		~CLmath();
 	public:
-		template<typename T> T sign(T x) const;
-		template<typename T> T heaviside(T x) const;
+		xlong sign(xlong x) const;
+		xlong heaviside(xlong x) const;
+		xlong delta(xlong x) const;
 		template<typename T> T absolute(T x) const;
-		template<typename T> T delta(T x) const;
 		template<typename T> T min(T a,T b) const;
 		template<typename T> T max(T a,T b) const;
 		template<typename T> T round(T x) const;
@@ -98,18 +98,15 @@ CLmath::~CLmath()
 	delete[] cosarray;	
 }
 
-template<typename T>
-T CLmath::sign(T x) const
+xlong CLmath::sign(xlong x) const
 {
-	//only xlong!
 	__asm__ __volatile__ ("cdq; cmpl $0,%%eax; seta %%al; orb %%al,%%dl" : "=d"(x) : "a"(x) );
 	return x; 
 }
 
-template<typename T>
-T CLmath::heaviside(T x) const
+
+xlong CLmath::heaviside(xlong x) const
 {
-	//only xlong!
 	__asm__ __volatile__ ("cdq; incl %%edx;" : "=d"(x) : "a"(x) );
 	return x;
 }
@@ -128,10 +125,8 @@ float CLmath::absolute<float>(float x) const
 	return x;
 }
 
-template<typename T>
-T CLmath::delta(T x) const
+xlong CLmath::delta(xlong x) const
 {
-	//only xlong
 	__asm__ __volatile__ ("xorl %%ebx,%%ebx; orl $0,%%eax; setz %%bl ;" : "=b"(x) : "a"(x) );
 	return x;
 }
