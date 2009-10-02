@@ -228,9 +228,9 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	register xlong i = size;
-	quadbytes tx = { 0 };
-	quadbytes ty = { 0 };
-	quadbytes tz = { 0 };
+	doubleword tx = { 0 };
+	doubleword ty = { 0 };
+	doubleword tz = { 0 };
 	
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	switch(o)
@@ -270,30 +270,30 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 		case 8:		//BYTE ADD
 			for(;i>=0;i--)
 			{
-				tx.ul = dst[i];
-				ty.ul = buffer[i];
+				tx.dd = dst[i];
+				ty.dd = buffer[i];
 
-				tz.qb.ll = tx.qb.ll + ty.qb.ll; if(tz.qb.ll<tx.qb.ll) tz.qb.ll = 0xFF;
-				tz.qb.lh = tx.qb.lh + ty.qb.lh; if(tz.qb.lh<tx.qb.lh) tz.qb.lh = 0xFF;
-				tz.qb.hl = tx.qb.hl + ty.qb.hl; if(tz.qb.hl<tx.qb.hl) tz.qb.hl = 0xFF;
-				tz.qb.hh = tx.qb.hh + ty.qb.hh; if(tz.qb.hh<tx.qb.hh) tz.qb.hh = 0xFF;
+				tz.db[0] = tx.db[0] + ty.db[0]; if(tz.db[0]<tx.db[0]) tz.db[0] = 0xFF;
+				tz.db[1] = tx.db[1] + ty.db[1]; if(tz.db[1]<tx.db[1]) tz.db[1] = 0xFF;
+				tz.db[2] = tx.db[2] + ty.db[2]; if(tz.db[2]<tx.db[2]) tz.db[2] = 0xFF;
+				tz.db[3] = tx.db[3] + ty.db[3]; if(tz.db[3]<tx.db[3]) tz.db[3] = 0xFF;
 				//
-				dst[i] = tz.ul;
+				dst[i] = tz.dd;
 			}
 		break;
 		
 		case 9:		//BYTE SUB
 			for(;i>=0;i--)
 			{
-				tx.ul = dst[i];
-				ty.ul = buffer[i];
+				tx.dd = dst[i];
+				ty.dd = buffer[i];
 				
-				tz.qb.ll = tx.qb.ll - ty.qb.ll; if(tz.qb.ll>tx.qb.ll) tz.qb.ll = 0;
-				tz.qb.lh = tx.qb.lh - ty.qb.lh; if(tz.qb.lh>tx.qb.lh) tz.qb.lh = 0;
-				tz.qb.hl = tx.qb.hl - ty.qb.hl; if(tz.qb.hl>tx.qb.hl) tz.qb.hl = 0;
-				tz.qb.hh = tx.qb.hh - ty.qb.hh; if(tz.qb.hh>tx.qb.hh) tz.qb.hh = 0;
+				tz.db[0] = tx.db[0] - ty.db[0]; if(tz.db[0]>tx.db[0]) tz.db[0] = 0;
+				tz.db[1] = tx.db[1] - ty.db[1]; if(tz.db[1]>tx.db[1]) tz.db[1] = 0;
+				tz.db[2] = tx.db[2] - ty.db[2]; if(tz.db[2]>tx.db[2]) tz.db[2] = 0;
+				tz.db[3] = tx.db[3] - ty.db[3]; if(tz.db[3]>tx.db[3]) tz.db[3] = 0;
 				//
-				dst[i] = tz.ul;
+				dst[i] = tz.dd;
 			}
 		break;
 		

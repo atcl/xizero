@@ -8,25 +8,17 @@
 
 union doubleword
 {
-	xlong  dd;
-	xshort dw[2];
-	xchar  db[4];
+	uxlong  dd;
+	uxshort dw[2];
+	uxchar  db[4];
 };
 
-struct packedbytes
+union quadword
 {
-	uxchar hh;
-	uxchar hl;
-	uxchar lh;
-	uxchar ll;
-	
-	operator uxlong() const { return ( ((uxlong(hh))<<24)+((uxlong(hl))<<16)+((uxlong(lh))<<8)+(uxlong(ll)) ); }
-};
-
-union quadbytes
-{
-	uxlong      ul;
-	packedbytes qb;
+	uxhyper dq;
+	uxlong  dd[2];
+	uxshort dw[4];
+	uxchar  db[8];
 };
 
 struct CLfile
