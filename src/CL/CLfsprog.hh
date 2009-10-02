@@ -48,10 +48,7 @@ void CLfsprogress::draw() const
 		
 		for(uxlong i=0; i<YRES; i++)
 		{
-			for(uxlong j=0; j<rprogress; j++,offset++)
-			{
-				cldoublebuffer[offset] = cldoublebuffer[offset] & pcolor;
-			}
+			for(uxlong j=0; j<rprogress; j++,offset++) { cldoublebuffer[offset] = cldoublebuffer[offset] & pcolor; }
 			offset += diff;
 		}
 	}

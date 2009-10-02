@@ -154,10 +154,7 @@ T CLmath::sqrt(T x) const
 	T num = x;
 	T tmp = (x + 1) >> 1;
 
-	for(int i=15;i>0;i--)
-	{
-		tmp = ((num/tmp) + tmp) >> 1;
-	}
+	for(int i=15;i>0;i--) { tmp = ((num/tmp) + tmp) >> 1; }
 
 	return tmp;
 }
@@ -170,10 +167,7 @@ float CLmath::sqrt<float>(float x) const
 	float num = x;
 	float tmp = (x + 1)/2;
 
-	for(int i=15;i>0;i--)
-	{
-		tmp = ((num/tmp) + tmp)/2;
-	}
+	for(int i=15;i>0;i--) { tmp = ((num/tmp) + tmp)/2; }
 
 	return tmp;
 }
@@ -184,24 +178,14 @@ T CLmath::deg2rad(T d) const { return float(fxpi*d); }
 xlong CLmath::faculty(xlong f) const
 {
 	xlong r = 1;
-
-	for(uxlong i=2;i<=f;i++)
-	{
-		r *= i;
-	}
-
+	for(uxlong i=2;i<=f;i++) { r *= i; }
 	return r;
 }
 
 xlong CLmath::power(xlong b,xlong e) const
 {
 	xlong r = 1;
-
-	for(uxlong i=1;i<=e;i++)
-	{
-		r *= b;
-	}
-
+	for(uxlong i=1;i<=e;i++) { r *= b; }
 	return r;
 }
 

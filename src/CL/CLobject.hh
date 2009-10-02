@@ -286,7 +286,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	}
 	//*
 	
-	//! causes parts of player to be rendered wrong
+	//! doesn't seem to have effect on fps
 	//~ //sort polygons by polygons normal.z
 	//~ CLpolygon* temp;
 	//~ CLfvector normi;

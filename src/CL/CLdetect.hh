@@ -49,6 +49,8 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		xlong pcpu;
 		xlong pcores;
 		xlong l2;
+		bool havemmx;
+		bool havesse;
 		CLdetect();
 		~CLdetect() { };
 	public:
@@ -59,6 +61,9 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		xlong vram() const;
 		xchar* sb() const;
 		xlong ps() const;
+		
+		bool mmx() const;
+		bool sse() const;
 };
 
 CLdetect::CLdetect()
@@ -99,65 +104,18 @@ xlong CLdetect::cpu() const { return pcpu; }
 
 xlong CLdetect::cores() const { return pcores; }
 
-#ifdef WIN32
+xlong CLdetect::ram() const { }
 
-xlong CLdetect::ram() const 
-{
-	
-}
+xchar* CLdetect::gpu() const { }
 
-xchar* CLdetect::gpu() const 
-{
-	
-}
+xlong CLdetect::vram() const { }
 
-xlong CLdetect::vram() const 
-{
-	
-}
+xchar* CLdetect::sb() const { }
 
-xchar* CLdetect::sb() const 
-{
-	
-}
+xlong CLdetect::ps() const { }
 
-xlong CLdetect::ps() const 
-{
-	
-}
+bool CLdetect::mmx() const { return havemmx; }
 
-#else //ifdef LINUX
-
-xlong CLdetect::ram() const
-{
-	CLfile* mem = clsystem->getfile("/proc/meminfo");
-	
-	//seek line beginning with "MemTotal:"
-	//seek end of line " kB"
-	//number before is the total physical memory
-}
-
-xchar* CLdetect::gpu() const 
-{
-	
-}
-
-xlong CLdetect::vram() const 
-{
-	
-}
-
-xchar* CLdetect::sb() const 
-{
-	
-}
-
-xlong CLdetect::ps() const
-{
-	
-}
-
-#endif 
-
+bool CLdetect::sse() const { return havesse; }
 
 #endif
