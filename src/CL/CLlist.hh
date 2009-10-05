@@ -45,7 +45,7 @@ class CLlist : public virtual CLcl
 		void append(member* e,const xchar* n=" ",xlong h=0);
 		member* getcurrentdata() const;
 		xchar* getcurrentname() const;
-		void delcurrent(bool smash=0); //test smash option
+		xlong delcurrent(bool smash=0); //test smash option
 		xlong getlength() const;
 		bool seekdata(member* s);
 		void setindex(xlong i);
@@ -161,10 +161,10 @@ xchar* CLlist<member>::getcurrentname() const
 }
 
 template<class member>
-void CLlist<member>::delcurrent(bool smash)
+xlong CLlist<member>::delcurrent(bool smash)
 {
 	//return if list is empty
-	if(length==0) return;
+	if(length==0) return 0;
 	//*
 
 	//if smash delete current members data pointer
@@ -219,7 +219,7 @@ void CLlist<member>::delcurrent(bool smash)
 	length--;
 	//*
 	
-	return;
+	return 1;
 }
 
 template<class member>

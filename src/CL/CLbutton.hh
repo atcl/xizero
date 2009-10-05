@@ -67,7 +67,6 @@ void CLbutton::draw() const
 {
 	if(visible==0) return;
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
-	
 	clgfx2->drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
 }
 

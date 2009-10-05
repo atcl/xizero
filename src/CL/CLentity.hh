@@ -133,12 +133,13 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 	//*
 
 	//for each model
+	CLfile* entitymodelfile = 0;
 	xchar* testext[2] = { "0.y3d","1.y3d" };
 	if(I==1) testext[0] = ".y3d";
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
-		CLfile* entitymodelfile = entitya->findbyextension(testext[i]);
+		entitymodelfile = entitya->findbyextension(testext[i]);
 		if(entitymodelfile==0) clsystem->exit(1,0,__func__,"no entity model file found");
 		model[i] = new CLobject(entitymodelfile,0);
 		//*
@@ -351,10 +352,7 @@ void CLentity<I>::hit(xlong h)
 	if(shield>0) shield -=h;
 	else health -= h; 
 	
-	if(shield<0)
-	{
-		health -= -shield; 
-	}
+	if(shield<0) health -= -shield; 
 }
 
 template<int I>

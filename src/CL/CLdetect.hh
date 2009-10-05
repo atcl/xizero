@@ -51,6 +51,7 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		xlong l2;
 		bool havemmx;
 		bool havesse;
+		bool havex86;
 		CLdetect();
 		~CLdetect() { };
 	public:
@@ -62,12 +63,19 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		xchar* sb() const;
 		xlong ps() const;
 		
-		bool mmx() const;
-		bool sse() const;
+		inline bool mmx() const;
+		inline bool sse() const;
+		inline bool x86() const;
 };
 
 CLdetect::CLdetect()
 {
+	#ifdef X86 
+		havex86 = 1;
+		havemmx = 0;
+		havesse = 0;
+	#endif
+	
 	//cpu
 	xlong aa = 0;
 	xlong cc = 0;
@@ -117,5 +125,7 @@ xlong CLdetect::ps() const { }
 bool CLdetect::mmx() const { return havemmx; }
 
 bool CLdetect::sse() const { return havesse; }
+
+bool CLdetect::x86() const { return havex86; }
 
 #endif

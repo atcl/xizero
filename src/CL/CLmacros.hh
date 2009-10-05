@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+//todo: write prefetch macro and place at end of loops if useful
+
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 
@@ -119,6 +121,11 @@ void inline CLlodsd(xlong* src,xlong& var)
 	//read value from src to val
 	__asm__ __volatile__("lodsd":"=a"(var):"S"(src):"%eax","%esi");
 	//*
+}
+
+void inline CLprefetch(void* hint)
+{
+	__asm__ __volatile__ ("prefetch %%0": :"r"(hint) );
 }
 
 #endif

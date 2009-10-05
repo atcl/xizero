@@ -4,7 +4,7 @@
 #define HH_CLAPI
 #pragma message "Compiling " __FILE__ " ! TODO: "
 
-#include <stdio.h>
+#include <iostream>
 #include <iomanip>
 #include <stdlib.h>
 #include <time.h>

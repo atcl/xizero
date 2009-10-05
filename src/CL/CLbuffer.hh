@@ -28,9 +28,6 @@ template <typename T>class CLbuffer : public virtual CLcl
 		uxlong bsize;
 		uxlong ds;
 		uxlong qs;
-		bool   havemmx;
-		bool   havesse;	
-		bool   x86;
 	public:
 		CLbuffer(uxlong s,T ival=0);
 		~CLbuffer();
@@ -52,16 +49,6 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
 	bsize = size<<2;
 	buffer = new T[size];
 	//*
-	
-	//determine cpu type to decide which copy or clear method can be used
-	havemmx = 0;
-	havesse = 0; 
-	x86 = 1;
-	
-	xlong cpucaps = cldetect->cpu();
-	//if( (cpucaps & MMX) != 0 ) havemmx = 1; else havemmx = 0;
-	//if( (cpucaps & SSE) != 0 ) havesse = 1; else havesse = 0;
-	//*
 }
 
 template <typename T>CLbuffer<T>::~CLbuffer() { } //how to delete buffer?
@@ -69,73 +56,59 @@ template <typename T>CLbuffer<T>::~CLbuffer() { } //how to delete buffer?
 template <typename T>void CLbuffer<T>::clear(T v)
 {
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
-	xlong purev = *(reinterpret_cast<xlong*>(&v));
-	xlong  packed[4];
-	packed[0] = packed[1] = packed[2] = packed[3] = purev;
+	xlong purev = (reinterpret_cast<xlong*>(&v))[0];
+	xlong* pack = new xlong[4];
+	pack[0] = pack[1] = pack[2] = pack[3] = purev;
 	register xlong i = size;
 
 	//x86 SSE1 assembly clear (very fast)
-	if(x86 && size>262144 && havesse)
+	if(size>262144 && cldetect->sse() )
 	{
 		i>>=5;
 		for(;i>0;i--)
 		{
 			//blast with all 8 xmm regs, and movaps instead of movups (?)
 			__asm__ __volatile__ (
-			"movups (%0),%%xmm0;"
-			"movups %%xmm0,%%xmm1;"
-			"movups %%xmm0,%%xmm2;"
-			"movups %%xmm0,%%xmm3;"
-			"movups %%xmm0,%%xmm4;"
-			"movups %%xmm0,%%xmm5;"
-			"movups %%xmm0,%%xmm6;"
-			"movups %%xmm0,%%xmm7;"
+			"movups (%0),  %%xmm0;"
 			"movups %%xmm0,(%1);"
-			"movups %%xmm1,16(%1);"
-			"movups %%xmm2,32(%1);"
-			"movups %%xmm3,48(%1);"
-			"movups %%xmm4,64(%1);"
-			"movups %%xmm5,80(%1);"
-			"movups %%xmm6,96(%1);"
-			"movups %%xmm7,112(%1);"
-			: : "r"(&packed[0]),"r"(puredst) );
+			"movups %%xmm0,16(%1);"
+			"movups %%xmm0,32(%1);"
+			"movups %%xmm0,48(%1);"
+			"movups %%xmm0,64(%1);"
+			"movups %%xmm0,80(%1);"
+			"movups %%xmm0,96(%1);"
+			"movups %%xmm0,112(%1);"
+			: : "r"(pack),"r"(puredst) );
 			puredst+=32;
 		}
 	}
 	//*
 	
 	//86 MMX assembly clear (fast)
-	else if(x86 && size>65536 && havemmx)
+	else if(size>65536 && cldetect->mmx() )
 	{
 		i>>=4;
 		for(;i>0;i--)
 		{
 			//blast with all 8 mm regs
 			__asm__ __volatile__ (
-			"movq (%0),%%mm0;"
-			"movq %%mm0,%%mm1;"
-			"movq %%mm0,%%mm2;"
-			"movq %%mm0,%%mm3;"
-			"movq %%mm0,%%mm4;"
-			"movq %%mm0,%%mm5;"
-			"movq %%mm0,%%mm6;"
-			"movq %%mm0,%%mm7;"
+			"movq (%0), %%mm0;"
 			"movq %%mm0,(%1);"
-			"movq %%mm1,8(%1);"
-			"movq %%mm2,16(%1);"
-			"movq %%mm3,24(%1);"
-			"movq %%mm4,32(%1);"
-			"movq %%mm5,40(%1);"
-			"movq %%mm6,48(%1);"
-			"movq %%mm7,56(%1);"		
-			: : "r"(&packed[0]),"r"(puredst) );
+			"movq %%mm0,8(%1);"
+			"movq %%mm0,16(%1);"
+			"movq %%mm0,24(%1);"
+			"movq %%mm0,32(%1);"
+			"movq %%mm0,40(%1);"
+			"movq %%mm0,48(%1);"
+			"movq %%mm0,56(%1);"		
+			: : "r"(pack),"r"(puredst) );
 			puredst+=16;
 		}
 	}
 	//*
 	
 	//fallback if no SIMD, neither MMX or SSE1 is available
-	else if(x86) __asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(v),"D"(puredst),"c"(size));
+	else if(cldetect->x86()) __asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(purev),"D"(puredst),"c"(size));
 	//*
 	
 	//default for loop clear (slow)
@@ -150,14 +123,14 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	register xlong i = size;
 	
 	//x86 SSE1 assembly copy (very fast)
-	if(x86 && size>262144 && havesse)
+	if(size>262144 && cldetect->sse())
 	{
 		i>>=5;
 		for(;i>0;i--)
 		{
 			//blast wth all 8 xmm regs, and movaps instead of movups (?)
 			__asm__ __volatile__ (
-			"prefetch 320(%0);"
+			"prefetch 128(%0);"
 			"movups (%0),   %%xmm0;"
 			"movups 16(%0), %%xmm1;"
 			"movups 32(%0), %%xmm2;"
@@ -166,14 +139,14 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 			"movups 80(%0), %%xmm5;"
 			"movups 96(%0), %%xmm6;"
 			"movups 112(%0),%%xmm7;"
-			"movntps %%xmm0,(%1);"
-			"movntps %%xmm1,16(%1);"
-			"movntps %%xmm2,32(%1);"
-			"movntps %%xmm3,48(%1);"
-			"movntps %%xmm4,64(%1);"
-			"movntps %%xmm5,80(%1);"
-			"movntps %%xmm6,96(%1);"
-			"movntps %%xmm7,112(%1);"	
+			"movups %%xmm0,(%1);"
+			"movups %%xmm1,16(%1);"
+			"movups %%xmm2,32(%1);"
+			"movups %%xmm3,48(%1);"
+			"movups %%xmm4,64(%1);"
+			"movups %%xmm5,80(%1);"
+			"movups %%xmm6,96(%1);"
+			"movups %%xmm7,112(%1);"	
 			: : "r"(puresrc),"r"(puredst) );
 			puresrc+=32;
 			puredst+=32;
@@ -182,7 +155,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	//*
 	
 	//x86 MMX assembly copy (fast)
-	else if(x86 && size>65536 && havemmx)
+	else if(size>65536 && cldetect->mmx())
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -213,7 +186,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	//*
 	
 	//fallback if no SIMD neither MMX or SSE1 is available
-	else if(x86) __asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
+	else if(cldetect->x86()) __asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
 	//*
 	
 	//default for loop copy (slow)

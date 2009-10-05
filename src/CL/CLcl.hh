@@ -4,9 +4,6 @@
 #define HH_CLCL
 #pragma message "Compiling " __FILE__ " ! TODO: ..." 
 
-#include <typeinfo>
-#include <iostream>
-
 #include "CLtypes.hh"
 #include "CLversion.hh"
 #include "CLglobals.hh"
@@ -29,7 +26,6 @@ class CLcl : public CLglobal
 	protected:
 		static xlong version;
 		static xlong id;
-		const xchar* name;
 	public:
 		CLcl();
 		 virtual ~CLcl() { };
@@ -41,15 +37,9 @@ xlong CLcl::version = (CLmajor<<24) + (CLminor<<16) + (CLbuild<<8) + CLextra;
 
 xlong CLcl::id = 0;
 
-CLcl::CLcl()
-{
-	name = typeid(*this).name();
-	id++;
-}
+CLcl::CLcl() { id++; }
 
 xlong CLcl::getversion() const { return version; }
-
-const xchar* CLcl::getname() const { return name; }
 
 #endif
 

@@ -81,10 +81,7 @@ xlong CLexplosion::next()
 		//normal explosion (just translate along normals)
 		case 0:
 			//phase 1:
-			if(temp < starttime + 800)
-			{	
-				object->translatealongnormals( 1 + ( (temp-lastupdate)/1000 ) );
-			}
+			if(temp < starttime + 800) object->translatealongnormals( 1 + ( (temp-lastupdate)/1000 ) );
 			//*
 			
 			//done:
@@ -96,10 +93,7 @@ xlong CLexplosion::next()
 		//other dimension explosion (crumple object, then grow, then shring to zero)
 		case 1:
 			//phase 1:
-			if(temp < starttime + 200)
-			{	
-				object->translatealongnormals( 1 + ( (temp-lastupdate)/2000 ) );
-			}
+			if(temp < starttime + 200) object->translatealongnormals( 1 + ( (temp-lastupdate)/2000 ) );
 			//*
 			
 			//phase 2:

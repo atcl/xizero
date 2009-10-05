@@ -14,6 +14,7 @@ LINUX   = -DLINUX
 WIN32   = -DWIN32
 DEVELOP = -DDEV
 RELEASE = -DREL
+X86     = -DX86
 
 # Data Assembler
 XZDAT   = dat/makexizerodat.sh
@@ -49,7 +50,7 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 
 # Compile:
 default:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) #change to RELEASE
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(X86) #change to RELEASE
 	$(STRIP) $(TARGET1)
 	#$(XZDAT) #activate
 

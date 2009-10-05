@@ -41,7 +41,6 @@ class CLplayer : public CLentity<2>
 	public:
 		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts=0);
 		~CLplayer();
-
 		xlong update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p);
 		void addpoints(xlong p);
 		void showbox();
