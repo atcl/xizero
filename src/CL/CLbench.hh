@@ -37,7 +37,7 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 	public:
 		void init(xlong i,xchar flags);
 		void inc();
-		float getfps();
+		inline float getfps();
 		void print() const;
 };
 

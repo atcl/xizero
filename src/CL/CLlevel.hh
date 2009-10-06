@@ -69,9 +69,9 @@ class CLlevel : public virtual CLcl
 		void setmark(xlong m);
 		void start();
 		void pause();
-		xlong getmark() const;
-		CLfbuffer* getlandscape() const;
-		CLplayer* getplayer() const;
+		inline xlong getmark() const;
+		inline CLfbuffer* getlandscape() const;
+		inline CLplayer* getplayer() const;
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -87,7 +87,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//*
 	
 	//set screen boundaries
-	clgame->init(60,0,740,600);
+	clgame->setboundaries(60,0,740,600);
 	//*
 
 	//game is not paused from beginning

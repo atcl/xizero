@@ -37,7 +37,6 @@ class CLlist : public virtual CLcl
 		listmember<member>* first;
 		listmember<member>* last;
 		xlong length;
-
 	public:
 		CLlist();
 		~CLlist();
@@ -82,10 +81,7 @@ CLlist<member>::~CLlist()
 	
 	//delete list members iteratively
 	current = last;
-	while(length!=0)
-	{
-		delcurrent();
-	}
+	while(length!=0) { delcurrent(); }
 	delete current;
 	delete first;
 	delete last;
@@ -246,11 +242,7 @@ void CLlist<member>::setindex(xlong i)
 	if(i<=length)
 	{
 		setfirst();
-
-		for(uxlong j=0;j<i;j++)
-		{
-			setnext();
-		}
+		for(uxlong j=0;j<i;j++) { setnext(); }
 	}
 	//*
 }
@@ -320,7 +312,8 @@ template<class member>
 xlong CLlist<member>::setnext()
 {
 	//set next member from current
-	if(length!=0) current = current->next;
+	if(length==0) return 0;
+	current = current->next;
 	return 1;
 	//*
 }
@@ -329,7 +322,8 @@ template<class member>
 xlong CLlist<member>::setprev()
 {
 	//set previous member from current
-	if(length!=0) current = current->prev;
+	if(length==0) return 0;
+	current = current->prev;
 	return -1;
 	//*
 }

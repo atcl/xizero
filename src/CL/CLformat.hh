@@ -36,20 +36,20 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		CLformat() { };
 		~CLformat() { };
 	public:
-		xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
+		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
-		xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
+		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
-		sprite*  loadtga(const xchar* sf) const;
+		inline sprite*  loadtga(const xchar* sf) const;
 		sprite*  loadtga(CLfile* sf) const;
 		sprite*  loadxpm(const xchar* xpm[]) const;
-		sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
+		inline sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
 		sprites* loadtileset(CLfile* sf,xlong tw,xlong th) const;
-		sprites* loadfont(const xchar* sf) const;
+		inline sprites* loadfont(const xchar* sf) const;
 		sprites* loadfont(CLfile* sf) const;
-		xchar**  loadlvl(const xchar* sf) const;
+		inline xchar**  loadlvl(const xchar* sf) const;
 		xchar**  loadlvl(CLfile* sf) const;
-		xmap*    loadini(const xchar* bf) const;
+		inline xmap*    loadini(const xchar* bf) const;
 		xmap*    loadini(CLfile* bf) const;
 };
 

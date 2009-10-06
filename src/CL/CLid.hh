@@ -35,7 +35,7 @@ class CLid : public virtual CLcl, public CLsingle<CLid>
 		xlong generateid();
 		uxlong generatecrc(xchar* d,xlong l);
 		bool checkcrc(uxlong c);
-		xlong one() const;
+		inline xlong one() const;
 };
 
 uxlong CLid::crc32 = 0x04C11DB7;

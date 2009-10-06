@@ -31,8 +31,8 @@ class CLar : public virtual CLcl
 		void loadar(CLfile* sf);
 		CLfile* findbyname(const xchar* e) const;
 		CLfile* findbyextension(const xchar* e) const;
-		CLfile* getmember(uxlong index) const;
-		uxlong  getfilecount() const;
+		inline CLfile* getmember(uxlong index) const;
+		inline uxlong  getfilecount() const;
 };
 
 CLar::CLar(CLfile* sf) { loadar(sf); }
@@ -158,8 +158,8 @@ CLfile* CLar::findbyname(const xchar* e) const
 
 CLfile* CLar::getmember(uxlong index) const
 {
-	if(index<filecount) return members[index];
-	else return 0;
+	if(index>=filecount) return 0;
+	return members[index];
 }
 
 uxlong CLar::getfilecount() const { return filecount; }

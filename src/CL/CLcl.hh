@@ -29,8 +29,7 @@ class CLcl : public CLglobal
 	public:
 		CLcl();
 		 virtual ~CLcl() { };
-		xlong getversion() const;
-		const xchar* getname() const;
+		inline xlong getversion() const;
 };
 
 xlong CLcl::version = (CLmajor<<24) + (CLminor<<16) + (CLbuild<<8) + CLextra;

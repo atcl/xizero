@@ -40,9 +40,9 @@ class CLprogress : public CLguibase
 		void setend(xlong e);
 		void setprogress(xlong p);
 		void addprogress(xlong a);
-		xlong getstart() const;
-		xlong getend() const;
-		xlong getprogress() const;
+		inline xlong getstart() const;
+		inline xlong getend() const;
+		inline xlong getprogress() const;
 };
 
 CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) : CLguibase(px,py,w,h,f,fc,bc,rc)

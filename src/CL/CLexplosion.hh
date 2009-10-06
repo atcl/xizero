@@ -110,6 +110,27 @@ xlong CLexplosion::next()
 			//*
 		break;
 		//*
+		
+		//other boss dimension explosion (crumple object, then grow big, then shring to zero)
+		case 2:
+			//phase 1:
+			if(temp < starttime + 400) object->translatealongnormals( 1 + ( (temp-lastupdate)/2000 ) );
+			//*
+			
+			//phase 2:
+			else if(temp < starttime + 400)
+			{
+				linear->unit();
+				linear->aspectscale( 1 - ( float(temp-lastupdate)/50.0 ) );
+				object->update(linear);
+			}	
+			//*
+			
+			//done:
+			else return 1;
+			//*
+		break;
+		//*
 	}
 	
 	lastupdate = temp;

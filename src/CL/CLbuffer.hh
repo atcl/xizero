@@ -36,10 +36,10 @@ template <typename T>class CLbuffer : public virtual CLcl
 		void copy(CLbuffer* dst);
 		void blendcopy(T* dst,xlong o);
 		void blendcopy(CLbuffer<T>* dst,xlong o);
-		uxlong getsize() const;
-		uxlong getbytesize() const;
-		T* getbuffer() const;
-		T& operator[](uxlong i);
+		inline uxlong getsize() const;
+		inline uxlong getbytesize() const;
+		inline T* getbuffer() const;
+		inline T& operator[](uxlong i);
 };
 
 template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)

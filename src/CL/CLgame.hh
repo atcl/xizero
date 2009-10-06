@@ -34,7 +34,7 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		CLgame();
 		~CLgame() { };
 	public:
-		void init(xlong bx1=0,xlong by1=0,xlong bx2=XRES,xlong by2=YRES);
+		void setboundaries(xlong bx1=0,xlong by1=0,xlong bx2=XRES,xlong by2=YRES);
 		template<class clvector>bool boundary(const clvector& p,xlong mark=0);
 		template<class clvector>bool boundary(const clvector& p,const CLbox& bb,bool c=0);
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
@@ -45,7 +45,7 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 
 CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = XRES; boundaryy2 = YRES; }
 
-void CLgame::init(xlong bx1,xlong by1,xlong bx2,xlong by2)
+void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2)
 {
 	//set screen boundaries
 	boundaryx1 = bx1;

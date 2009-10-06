@@ -55,12 +55,12 @@ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<C
 		void draw();
 		void redraw();
 		static xlong run();
-		xlong getinkey();
-		xlong getturbo() const;
-		xlong getmousex() const;
-		xlong getmousey() const;
-		xlong getmouselb() const;
-		xlong getmouserb() const;
+		inline xlong getinkey();
+		inline xlong getturbo() const;
+		inline xlong getmousex() const;
+		inline xlong getmousey() const;
+		inline xlong getmouselb() const;
+		inline xlong getmouserb() const;
 };
 
 void CLwindow::draw() { fl_draw_image((const uxchar*)&buffer[0],0,0,width,height,4,hdelta); }
