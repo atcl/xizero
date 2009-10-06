@@ -80,12 +80,12 @@ class CLentity : public virtual CLcl
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
 		void hit(xlong h);
-		inline xlong gethealth() const;
-		inline xlong getshield() const;
-		inline CLfvector* getposition();
-		inline CLbox* getboundingbox() const;
-		inline bool isvisible() const;
-		inline xlong gettype() const;
+		xlong gethealth() const;
+		xlong getshield() const;
+		CLfvector* getposition();
+		CLbox* getboundingbox() const;
+		bool isvisible() const;
+		xlong gettype() const;
 		void start();
 		void pause();
 };

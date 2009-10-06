@@ -33,7 +33,7 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		void set(xlong p);
 		void add(xlong a);
 		void reset();
-		inline xlong get() const;
+		xlong get() const;
 };
 
 CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x000000FF;} 

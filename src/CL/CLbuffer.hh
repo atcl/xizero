@@ -28,18 +28,19 @@ template <typename T>class CLbuffer : public virtual CLcl
 		uxlong bsize;
 		uxlong ds;
 		uxlong qs;
+		xlong ttype;
 	public:
 		CLbuffer(uxlong s,T ival=0);
 		~CLbuffer();
 		void clear(T v);
 		void copy(T* dst);
 		void copy(CLbuffer* dst);
-		void blendcopy(T* dst,xlong o);
+		void blendcopy(T* dst,xlong o); //too slow!!!
 		void blendcopy(CLbuffer<T>* dst,xlong o);
-		inline uxlong getsize() const;
-		inline uxlong getbytesize() const;
-		inline T* getbuffer() const;
-		inline T& operator[](uxlong i);
+		uxlong getsize() const;
+		uxlong getbytesize() const;
+		T* getbuffer() const;
+		T& operator[](uxlong i);
 };
 
 template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
@@ -48,6 +49,8 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
 	size = (s+1) + (s%4); // make sure is amultiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
+	ttype = 1; // 0 + cldetect->x86() + cldetect->mmx() + cldetect->sse(); //crashes when calling cldetect members here
+	clear(ival);
 	//*
 }
 
@@ -62,7 +65,7 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	register xlong i = size;
 
 	//x86 SSE1 assembly clear (very fast)
-	if(size>262144 && cldetect->sse() )
+	if(size>262144 && ttype==3 )
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -84,8 +87,8 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	}
 	//*
 	
-	//86 MMX assembly clear (fast)
-	else if(size>65536 && cldetect->mmx() )
+	//x86 MMX assembly clear (fast)
+	else if(size>65536 && ttype==2 )
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -108,7 +111,7 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	//*
 	
 	//fallback if no SIMD, neither MMX or SSE1 is available
-	else if(cldetect->x86()) __asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(purev),"D"(puredst),"c"(size));
+	else if(ttype==1) __asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(purev),"D"(puredst),"c"(size));
 	//*
 	
 	//default for loop clear (slow)
@@ -123,7 +126,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	register xlong i = size;
 	
 	//x86 SSE1 assembly copy (very fast)
-	if(size>262144 && cldetect->sse())
+	if(size>262144 && ttype==3 )
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -155,7 +158,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	//*
 	
 	//x86 MMX assembly copy (fast)
-	else if(size>65536 && cldetect->mmx())
+	else if(size>65536 && ttype==2 )
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -186,7 +189,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	//*
 	
 	//fallback if no SIMD neither MMX or SSE1 is available
-	else if(cldetect->x86()) __asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
+	else if(ttype==1) __asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
 	//*
 	
 	//default for loop copy (slow)

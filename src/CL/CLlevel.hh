@@ -69,9 +69,9 @@ class CLlevel : public virtual CLcl
 		void setmark(xlong m);
 		void start();
 		void pause();
-		inline xlong getmark() const;
-		inline CLfbuffer* getlandscape() const;
-		inline CLplayer* getplayer() const;
+		xlong getmark() const;
+		CLfbuffer* getlandscape() const;
+		CLplayer* getplayer() const;
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks

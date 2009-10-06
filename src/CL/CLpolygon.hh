@@ -53,7 +53,7 @@ class CLpolygon : public virtual CLcl
 		void shape();
 		void flatshade(float pz,bool ambient,bool zlight);
 		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
-		void rasterize(xlong shadow);
+		void rasterize(xlong shadow); //too slow!!!
 		xlong circleinc(xlong x,xlong pc);
 		xlong circledec(xlong x,xlong pc);
 
@@ -474,18 +474,12 @@ void CLpolygon::rasterize(xlong shadow)
 
 	//set left side rasterizing start postion(s)
 	x=y=top;
-	for(y=circledec(y,cpointcount); x!=bot; x=y, y=circledec(y,cpointcount))
-	{
-		setside(spoint[x],spoint[y],leftside);
-	}
+	for(y=circledec(y,cpointcount); x!=bot; x=y, y=circledec(y,cpointcount)) { setside(spoint[x],spoint[y],leftside); }
 	//*
 	
 	//set right side rasterizing start position(s)
 	x=y=top;
-	for(y=circleinc(y,cpointcount); x!=bot; x=y, y=circleinc(y,cpointcount))
-	{
-		setside(spoint[x],spoint[y],rightside);
-	}
+	for(y=circleinc(y,cpointcount); x!=bot; x=y, y=circleinc(y,cpointcount)) { setside(spoint[x],spoint[y],rightside); }
 	//*
 
 	xlong m = xlong(spoint[bot].y + spoint[top].y) >> 1;

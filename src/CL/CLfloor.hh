@@ -8,6 +8,7 @@
 #include "CLstruct.hh"
 #include "CLglobal.hh"
 #include "CLmath.hh"
+#include "CLbuffer.hh"
 
 /* class name:	CLfloor
  * 
@@ -25,7 +26,9 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 	friend class CLsingle<CLfloor>;
 	
 	private:
-		uxlong shade;
+		CLubuffer* cmask;
+		CLfbuffer* zmask;
+ 		uxlong shade;
 		xlong  zlevel;
 		uxlong xstart;
 		uxlong xend;
@@ -34,7 +37,7 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 		~CLfloor() { };
 	public:
 		void init(xlong z,xlong w,uxlong c,bool s);
-		void draw() const;
+		void draw() const; //too slow!!!
 };
 
 CLfloor::CLfloor() { zlevel = ZRES; xstart = 0; xend = XRES-1; width = XRES; shade = 0; }
@@ -72,26 +75,31 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 	//draw floor with unshaded color
 	else shade = c;
 	//*
-}
-
-void CLfloor::draw() const
-{
-	//fast floor drawing
-	uxlong runningfloorxstart = xstart;
-	uxlong runningfloorxend = xend;
+	
+	cmask = new CLubuffer(SCRS,0);
+	zmask = new CLfbuffer(SCRS,ZRES);
+	
+	//draw floor mask
 	uxlong i=0;
 	uxlong j=0;
 	for(i=0; i<YRES; i++)
 	{
-		for(j=runningfloorxstart; j<runningfloorxend; j++)
+		for(j=xstart; j<xend; j++)
 		{
-			cldoublebuffer[j] = shade;
-			clzbuffer[j] = zlevel;
+			(*cmask)[j] = shade;
+			(*zmask)[j] = zlevel;
 		}
-		runningfloorxstart += XRES;
-		runningfloorxend += XRES;
+		xstart += XRES;
+		xend += XRES;
 	}
 	//*
+}
+
+void CLfloor::draw() const
+{
+	clstencilbuffer.clear(0);
+	cmask->copy(cldoublebuffer.getbuffer());
+	zmask->copy(clzbuffer.getbuffer());
 }
 
 

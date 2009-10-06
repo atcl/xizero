@@ -37,21 +37,21 @@ class CLguibase : public virtual CLcl
 		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 		virtual ~CLguibase() { };
 		virtual void draw();
-		inline void setwidth(xlong w);
-		inline void setheight(xlong h);
-		inline void setx(xlong x);
-		inline void sety(xlong y);
-		inline void setfcolor(uxlong fc);
-		inline void setbcolor(uxlong bc);
-		inline void setrcolor(uxlong rc);
-		inline void setvisible(bool v);
-		inline xlong getwidth() const;
-		inline xlong getheight() const;
-		inline xlong getx() const;
-		inline xlong gety() const;
-		inline uxlong getfcolor() const;
-		inline uxlong getbcolor() const;
-		inline uxlong getrcolor() const;
+		void setwidth(xlong w);
+		void setheight(xlong h);
+		void setx(xlong x);
+		void sety(xlong y);
+		void setfcolor(uxlong fc);
+		void setbcolor(uxlong bc);
+		void setrcolor(uxlong rc);
+		void setvisible(bool v);
+		xlong getwidth() const;
+		xlong getheight() const;
+		xlong getx() const;
+		xlong gety() const;
+		uxlong getfcolor() const;
+		uxlong getbcolor() const;
+		uxlong getrcolor() const;
 };
 
 CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)

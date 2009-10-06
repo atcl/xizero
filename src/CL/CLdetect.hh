@@ -40,7 +40,6 @@
 #define PREFFLAG  0b00000000000000000000000010000000
 //*
 
-//move all detection in ctor and all methods just get's and is's
 class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 {
 	friend class CLsingle<CLdetect>;
@@ -63,15 +62,19 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		xchar* sb() const;
 		xlong ps() const;
 		
-		inline bool mmx() const;
-		inline bool sse() const;
-		inline bool x86() const;
+		bool mmx() const;
+		bool sse() const;
+		bool x86() const;
 };
 
 CLdetect::CLdetect()
 {
 	#ifdef X86 
 		havex86 = 1;
+		havemmx = 0;
+		havesse = 0;
+	#else
+		havex86 = 0;
 		havemmx = 0;
 		havesse = 0;
 	#endif

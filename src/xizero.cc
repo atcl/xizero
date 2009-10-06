@@ -31,7 +31,6 @@ int main()
 	while(clglobal->clwindow->run())
 	{
 		CLbutton::checkclick();
-		//clear buffers?
 		xzmainmenu->draw();
 		clglobal->clcursor->draw();
 	}

@@ -34,7 +34,7 @@ class CLlabel : public CLguibase
 		~CLlabel() { };
 		void draw() const;
 		void settext(const xchar* t);
-		inline xchar* gettext() const;
+		xchar* gettext() const;
 };
 
 CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) : CLguibase(px,py,w,h,0,fc,bc,rc)

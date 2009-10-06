@@ -104,48 +104,35 @@ void newgame()
 			
 			case 'p': testlevel->pause(); break;
 			
-			#ifdef DEV
-			case '1': mode = 1; break;
-			case '2': mode = 2; break;
-			case '3': mode = 3; break;
-			#endif
-			
 			default: gamestate = testlevel->update(input,turbo,clglobal->clgamepad->getstate()); break;
 		}
 		//*
 
-		//clear buffers
-		clglobal->cldoublebuffer.clear(0);
-		clglobal->clzbuffer.clear(ZRES);
-		clglobal->clstencilbuffer.clear(0);
-		//*
+		clglobal->clfloor->draw();
+		testlevel->display();
 
-		//render level depending on mode (modes just for dev)
-		switch(mode)
-		{
-			//default render path
-			case 1: 
-				clglobal->clfloor->draw();
-				testlevel->display();
-			break;
-			//*
-
-			//render levellandscape
-			case 2:
-				displacement = ( testlevel->getmark() ) * XRES;
-				clglobal->clmisc3d->drawzbuffer(testlevel->getlandscape(),displacement);
-				testlevel->getplayer()->showbox();
-			break;
-			//*
-
-			//render zbuffer
-			case 3:
-				clglobal->clfloor->draw();
-				testlevel->display();
-				clglobal->clmisc3d->drawzbuffer();
-			break;
-			//*
-		}
+		//~ //render level depending on mode (modes just for dev)
+		//~ switch(mode)
+		//~ {
+			//~ //render levellandscape
+			//~ case 2:
+				//~ clglobal->cldoublebuffer.clear(0);
+				//~ clglobal->clzbuffer.clear(ZRES);
+				//~ clglobal->clstencilbuffer.clear(0);
+				//~ displacement = ( testlevel->getmark() ) * XRES;
+				//~ clglobal->clmisc3d->drawzbuffer(testlevel->getlandscape(),displacement);
+				//~ testlevel->getplayer()->showbox();
+			//~ break;
+			//~ //*
+//~ 
+			//~ //render zbuffer
+			//~ case 3:
+				//~ clglobal->clfloor->draw();
+				//~ testlevel->display();
+				//~ clglobal->clmisc3d->drawzbuffer();
+			//~ break;
+			//~ //*
+		//~ }
 		
 		//increment fps count
 		clglobal->clbench->inc();		

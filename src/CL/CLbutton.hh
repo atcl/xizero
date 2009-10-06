@@ -36,7 +36,7 @@ class CLbutton : public CLguibase
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f);
 		~CLbutton();
 		void draw() const;
-		inline void setaction(void(*a)());
+		void setaction(void(*a)());
 		void setcaption(xchar* t);
 		void setvisible(bool v);
 		xchar* getcaption() const;

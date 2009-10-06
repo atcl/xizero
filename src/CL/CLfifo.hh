@@ -38,9 +38,9 @@ class CLfifo : public virtual CLcl
 		~CLfifo();
 		void in(member* f);
 		member* out();
-		inline xlong getlength() const;
+		xlong getlength() const;
 		void clear();
-		inline bool isempty() const;
+		bool isempty() const;
 };
 
 template<class member>
