@@ -209,77 +209,267 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	doubleword tz = { 0 };
 	
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
-	switch(o)
+	if(ttype==4) //set back to 1 if byte add and sub solved!
 	{
-		case 0:		//NONE //?default
-			i--; for(;i>=0;i--) { dst[i] = buffer[i]; }
-		break;
-		
-		case 1:		//AND
-			i--; for(;i>=0;i--) { dst[i] = dst[i] & buffer[i]; }
-		break;
-		
-		case 2:		//OR
-			i--; for(;i>=0;i--) { dst[i] = dst[i] | buffer[i]; }
-		break;
-		
-		case 3:		//NAND
-			i--; for(;i>=0;i--) { dst[i] = !(dst[i] & buffer[i]); }
-		break;
-		
-		case 4:		//NOR
-			i--; for(;i>=0;i--) { dst[i] = !(dst[i] | buffer[i]); }
-		break;
-		
-		case 5:		//XOR
-			i--; for(;i>=0;i--) { dst[i] = dst[i] ^ buffer[i]; }
-		break;
-		
-		case 6:		//ADD
-			i--; for(;i>=0;i--) { dst[i] = dst[i] + buffer[i]; }
-		break;
-		
-		case 7:		//SUB
-			i--; for(;i>=0;i--) { dst[i] = dst[i] - buffer[i]; }
-		break;
-		
-		case 8:		//BYTE ADD
-			for(;i>=0;i--)
-			{
-				tx.dd = dst[i];
-				ty.dd = buffer[i];
+		switch(o)
+		{
+			case 0:		//NONE //?default
+				__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
+			break;
+			
+			case 1:		//AND
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"andl %%ebx,%%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 2:		//OR
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"orl %%ebx,%%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 3:		//NAND
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"andl %%ebx,%%eax;"
+											"notl %%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 4:		//NOR
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"orl %%ebx,%%eax;"
+											"notl %%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 5:		//XOR
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"xorl %%ebx,%%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 6:		//ADD
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"addl %%ebx,%%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 7:		//SUB
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"xchg %%esi,%%edi;"
+											"subl %%ebx,%%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 8:		//BYTE ADD
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"movl %%ebx,%%ecx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"movl %%eax,%%edx;"
+											"xchg %%esi,%%edi;"
+											"addb %%bl,%%al;"
+											//~ "cmovob $255,%%al;"
+											"addb %%bh,%%ah;"
+											//~ "cmovob $255,%%ah;"
+											"bswap %%eax;"
+											"bswap %%ebx;"
+											"addb %%bl,%%al;"
+											//~ "cmovob $255,%%al;"
+											"addb %%bh,%%ah;"
+											//~ "cmovob $255,%%ah;"
+											"bswap %%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 9:		//BYTE SUB
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"movl %%eax,%%ebx;"
+											"movl %%ebx,%%ecx;"
+											"xchg %%esi,%%edi;"
+											"lodsl;"
+											"movl %%eax,%%edx;"
+											"xchg %%esi,%%edi;"
+											"subb %%bl,%%al;"
+											//~ "cmovob $255,%%al;"
+											"subb %%bh,%%ah;"
+											//~ "cmovob $255,%%ah;"
+											"bswap %%eax;"
+											"bswap %%ebx;"
+											"subb %%bl,%%al;"
+											//~ "cmovob $255,%%al;"
+											"subb %%bh,%%ah;"
+											//~ "cmovob $255,%%ah;"
+											"bswap %%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 10:	//2xAA
+				i--;
+				for(;i>=0;i--)
+				{
+					//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
+				}
+			break;
+		}
+	}
+	else
+	{
+		switch(o)
+		{
+			case 0:		//NONE //?default
+				i--; for(;i>=0;i--) { dst[i] = buffer[i]; }
+			break;
+			
+			case 1:		//AND
+				i--; for(;i>=0;i--) { dst[i] = dst[i] & buffer[i]; }
+			break;
+			
+			case 2:		//OR
+				i--; for(;i>=0;i--) { dst[i] = dst[i] | buffer[i]; }
+			break;
+			
+			case 3:		//NAND
+				i--; for(;i>=0;i--) { dst[i] = !(dst[i] & buffer[i]); }
+			break;
+			
+			case 4:		//NOR
+				i--; for(;i>=0;i--) { dst[i] = !(dst[i] | buffer[i]); }
+			break;
+			
+			case 5:		//XOR
+				i--; for(;i>=0;i--) { dst[i] = dst[i] ^ buffer[i]; }
+			break;
+			
+			case 6:		//ADD
+				i--; for(;i>=0;i--) { dst[i] = dst[i] + buffer[i]; }
+			break;
+			
+			case 7:		//SUB
+				i--; for(;i>=0;i--) { dst[i] = dst[i] - buffer[i]; }
+			break;
+			
+			case 8:		//BYTE ADD
+				for(;i>=0;i--)
+				{
+					tx.dd = dst[i];
+					ty.dd = buffer[i];
 
-				tz.db[0] = tx.db[0] + ty.db[0]; if(tz.db[0]<tx.db[0]) tz.db[0] = 0xFF;
-				tz.db[1] = tx.db[1] + ty.db[1]; if(tz.db[1]<tx.db[1]) tz.db[1] = 0xFF;
-				tz.db[2] = tx.db[2] + ty.db[2]; if(tz.db[2]<tx.db[2]) tz.db[2] = 0xFF;
-				tz.db[3] = tx.db[3] + ty.db[3]; if(tz.db[3]<tx.db[3]) tz.db[3] = 0xFF;
-				//
-				dst[i] = tz.dd;
-			}
-		break;
-		
-		case 9:		//BYTE SUB
-			for(;i>=0;i--)
-			{
-				tx.dd = dst[i];
-				ty.dd = buffer[i];
-				
-				tz.db[0] = tx.db[0] - ty.db[0]; if(tz.db[0]>tx.db[0]) tz.db[0] = 0;
-				tz.db[1] = tx.db[1] - ty.db[1]; if(tz.db[1]>tx.db[1]) tz.db[1] = 0;
-				tz.db[2] = tx.db[2] - ty.db[2]; if(tz.db[2]>tx.db[2]) tz.db[2] = 0;
-				tz.db[3] = tx.db[3] - ty.db[3]; if(tz.db[3]>tx.db[3]) tz.db[3] = 0;
-				//
-				dst[i] = tz.dd;
-			}
-		break;
-		
-		case 10:	//2xAA
-			i--;
-			for(;i>=0;i--)
-			{
-				//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
-			}
-		break;
+					tz.db[0] = tx.db[0] + ty.db[0]; if(tz.db[0]<tx.db[0]) tz.db[0] = 0xFF;
+					tz.db[1] = tx.db[1] + ty.db[1]; if(tz.db[1]<tx.db[1]) tz.db[1] = 0xFF;
+					tz.db[2] = tx.db[2] + ty.db[2]; if(tz.db[2]<tx.db[2]) tz.db[2] = 0xFF;
+					tz.db[3] = tx.db[3] + ty.db[3]; if(tz.db[3]<tx.db[3]) tz.db[3] = 0xFF;
+					//
+					dst[i] = tz.dd;
+				}
+			break;
+			
+			case 9:		//BYTE SUB
+				for(;i>=0;i--)
+				{
+					tx.dd = dst[i];
+					ty.dd = buffer[i];
+					
+					tz.db[0] = tx.db[0] - ty.db[0]; if(tz.db[0]>tx.db[0]) tz.db[0] = 0;
+					tz.db[1] = tx.db[1] - ty.db[1]; if(tz.db[1]>tx.db[1]) tz.db[1] = 0;
+					tz.db[2] = tx.db[2] - ty.db[2]; if(tz.db[2]>tx.db[2]) tz.db[2] = 0;
+					tz.db[3] = tx.db[3] - ty.db[3]; if(tz.db[3]>tx.db[3]) tz.db[3] = 0;
+					//
+					dst[i] = tz.dd;
+				}
+			break;
+			
+			case 10:	//2xAA
+				i--;
+				for(;i>=0;i--)
+				{
+					//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
+				}
+			break;
+		}
 	}
 	//*
 }
