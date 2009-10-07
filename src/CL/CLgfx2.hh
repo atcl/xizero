@@ -43,7 +43,6 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		xlong getfontstringheight(const char* a,xlong ft) const;
 		uxlong getEGAcolor(xchar c) const;
 		bool comparecolors(uxlong c1,uxlong c2) const;
-		uxlong blendcolors(xlong mode,uxlong c1,uxlong c2=0xFF000000) const;
 		uxlong getgradient(uxlong s,uxlong e,xchar i) const;
 		sprite* savescreen() const;
 };
@@ -248,87 +247,6 @@ uxlong CLgfx2::getEGAcolor(xchar c) const
 
 bool CLgfx2::comparecolors(uxlong c1,uxlong c2) const
 {
-	return 0;
-}
-
-uxlong CLgfx2::blendcolors(xlong mode,uxlong c1,uxlong c2) const
-{
-	xchar a1 = 0;
-	xchar a2 = 0;
-	xchar a3 = 0;
-	xchar a4 = 0;
-	xchar b1 = 0;
-	xchar b2 = 0;
-	xchar b3 = 0;
-	xchar b4 = 0;
-	
-	switch(mode)
-	{
-		case 0: //not
-			return (!c1);
-		break;
-		
-		case 1: //add
-			a1 = xchar(c1);
-			a2 = xchar(c1>>8);
-			a3 = xchar(c1>>16);
-			a4 = xchar(c1>>24);
-			b1 = xchar(c2);
-			b2 = xchar(c2>>8);
-			b3 = xchar(c2>>16);
-			b4 = xchar(c2>>24);
-			return ( (xlong(a4+b4)<<24) + (xlong(a3+b3)<<16) + (xlong(a2+b2)<<8) + xlong(a1+b1) );
-		break;
-		
-		case 2: //sub
-			a1 = xchar(c1);
-			a2 = xchar(c1>>8);
-			a3 = xchar(c1>>16);
-			a4 = xchar(c1>>24);
-			b1 = xchar(c2);
-			b2 = xchar(c2>>8);
-			b3 = xchar(c2>>16);
-			b4 = xchar(c2>>24);
-			return ( (xlong(a4-b4)<<24) + (xlong(a3-b3)<<16) + (xlong(a2-b2)<<8) + xlong(a1-b1) );
-		break;
-		
-		case 3: //mul
-			a1 = xchar(c1);
-			a2 = xchar(c1>>8);
-			a3 = xchar(c1>>16);
-			a4 = xchar(c1>>24);
-			b1 = xchar(c2);
-			b2 = xchar(c2>>8);
-			b3 = xchar(c2>>16);
-			b4 = xchar(c2>>24);
-			return ( (xlong(a4*b4)<<24) + (xlong(a3*b3)<<16) + (xlong(a2*b2)<<8) + xlong(a1*b1) );
-		break;
-		
-		case 4: //alpha
-		
-		break;
-		
-		case 5: //and
-			return (c1 & c2);
-		break;
-		
-		case 6: //or
-			return (c1 | c2);
-		break;
-		
-		case 7: //xor
-			return (c1 ^ c2);
-		break;
-		
-		case 8: //nand
-			return !(c1 & c2);
-		break;
-		
-		case 9: //nor
-			return !(c1 | c2);
-		break;
-	}
-	
 	return 0;
 }
 

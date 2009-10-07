@@ -210,7 +210,7 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	if(ttype==4) //set back to 1 if byte add and sub solved!
-	{
+	{		
 		switch(o)
 		{
 			case 0:		//NONE //?default
@@ -372,15 +372,15 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 											"movl %%eax,%%edx;"
 											"xchg %%esi,%%edi;"
 											"subb %%bl,%%al;"
-											//~ "cmovob $255,%%al;"
+											//~ "cmovob $0,%%al;"
 											"subb %%bh,%%ah;"
-											//~ "cmovob $255,%%ah;"
+											//~ "cmovob $0,%%ah;"
 											"bswap %%eax;"
 											"bswap %%ebx;"
 											"subb %%bl,%%al;"
-											//~ "cmovob $255,%%al;"
+											//~ "cmovob $0,%%al;"
 											"subb %%bh,%%ah;"
-											//~ "cmovob $255,%%ah;"
+											//~ "cmovob $0,%%ah;"
 											"bswap %%eax;"
 											"stosl;" 
 											: :"S"(puresrc),"D"(puredst));
@@ -393,6 +393,26 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 				{
 					//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
 				}
+			break;
+			
+			case 11:	//ALPHA
+			
+			break;
+			
+			case 12:	//NOT
+				i--;
+				for(;i>=0;i--)
+				{
+					__asm__ __volatile__ (	"cld;" 
+											"lodsl;"
+											"notl %%eax;"
+											"stosl;" 
+											: :"S"(puresrc),"D"(puredst));
+				}
+			break;
+			
+			case 13:	//BYTE MUL
+			
 			break;
 		}
 	}
@@ -468,6 +488,18 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 				{
 					//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
 				}
+			break;
+			
+			case 11:	//ALPHA
+			
+			break;
+			
+			case 12:	//NOT
+				i--; for(;i>=0;i--) { dst[i] = !buffer[i]; }
+			break;
+			
+			case 13:	//BYTE MUL
+			
 			break;
 		}
 	}

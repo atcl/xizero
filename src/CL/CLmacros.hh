@@ -125,7 +125,7 @@ void inline CLlodsd(xlong* src,xlong& var)
 
 void inline CLprefetch(void* hint)
 {
-	__asm__ __volatile__ ("prefetch %%0": :"r"(hint) );
+	__asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); //use prefetcht1???
 }
 
 #endif

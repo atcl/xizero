@@ -653,10 +653,7 @@ void CLgfx1::drawscreen(sprite* s) const
 	if(s->width==XRES && s->height==YRES)
 	{
 		//draw loop
-		for(uxlong i=0; i<s->size; i++)
-		{
-			if( (s->data[i] & 0xFF000000) != 0xFF) cldoublebuffer[i] = s->data[i];
-		}
+		for(uxlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) cldoublebuffer[i] = s->data[i]; }
 		//*
 	}
 	//*
