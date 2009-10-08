@@ -13,12 +13,9 @@ int main()
 	clglobal->clcursor->set(CLxzcursor);
 	//*
 
-	//atcrosslevel intro
+	//intros
 	CLintro* clintro = new CLintro(cldata->findbyname("intro.a"));
 	clintro->atcrosslevel();
-	//*
-	
-	//xizero intro
 	clintro->xizero();
 	//*
 	

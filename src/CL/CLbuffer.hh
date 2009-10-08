@@ -207,7 +207,6 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	doubleword tx = { 0 };
 	doubleword ty = { 0 };
 	doubleword tz = { 0 };
-	doubleword tt = { 0 };
 		
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	if(ttype==4) //set back to 1 if byte add and sub solved!
@@ -463,10 +462,10 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 					tz.db[1] = tx.db[1] + ty.db[1]; if(tz.db[1]<tx.db[1]) tz.db[1] = 0xFF;
 					tz.db[2] = tx.db[2] + ty.db[2]; if(tz.db[2]<tx.db[2]) tz.db[2] = 0xFF;
 					tz.db[3] = tx.db[3] + ty.db[3]; if(tz.db[3]<tx.db[3]) tz.db[3] = 0xFF;
-					//~ tz.db[0] = tx.db[0] + ty.db[0]; tz.db[0] = ((!(uxchar(tz.db[0]<tx.db[0])))++)|tz.db[0];
-					//~ tz.db[1] = tx.db[1] + ty.db[1]; tz.db[1] = ((!(uxchar(tz.db[1]<tx.db[1])))++)|tz.db[1];
-					//~ tz.db[2] = tx.db[2] + ty.db[2]; tz.db[2] = ((!(uxchar(tz.db[2]<tx.db[2])))++)|tz.db[2];
-					//~ tz.db[3] = tx.db[3] + ty.db[3]; tz.db[3] = ((!(uxchar(tz.db[3]<tx.db[3])))++)|tz.db[3];
+					//~ tz.db[0] = tx.db[0] + ty.db[0]; tz.db[0] = ~(uxchar(tz.db[0]>=tx.db[0])) | tz.db[0];
+					//~ tz.db[1] = tx.db[1] + ty.db[1]; tz.db[1] = ~(uxchar(tz.db[1]>=tx.db[1])) | tz.db[1];
+					//~ tz.db[2] = tx.db[2] + ty.db[2]; tz.db[2] = ~(uxchar(tz.db[2]>=tx.db[2])) | tz.db[2];
+					//~ tz.db[3] = tx.db[3] + ty.db[3]; tz.db[3] = ~(uxchar(tz.db[3]>=tx.db[3])) | tz.db[3];
 					//
 					dst[i] = tz.dd;
 				}
@@ -478,14 +477,14 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 					tx.dd = dst[i];
 					ty.dd = buffer[i];
 					
-					tz.db[0] = tx.db[0] - ty.db[0]; if(tz.db[0]>tx.db[0]) tz.db[0] = 0;
-					tz.db[1] = tx.db[1] - ty.db[1]; if(tz.db[1]>tx.db[1]) tz.db[1] = 0;
-					tz.db[2] = tx.db[2] - ty.db[2]; if(tz.db[2]>tx.db[2]) tz.db[2] = 0;
-					tz.db[3] = tx.db[3] - ty.db[3]; if(tz.db[3]>tx.db[3]) tz.db[3] = 0;
-					//~ tz.db[0] = tx.db[0] - ty.db[0]; tz.db[0] = (!(uxchar(tz.db[0]>tx.db[0]))) & tz.db[0];
-					//~ tz.db[1] = tx.db[1] - ty.db[1]; tz.db[1] = (!(uxchar(tz.db[1]>tx.db[1]))) & tz.db[1];
-					//~ tz.db[2] = tx.db[2] - ty.db[2]; tz.db[2] = (!(uxchar(tz.db[2]>tx.db[2]))) & tz.db[2];
-					//~ tz.db[3] = tx.db[3] - ty.db[3]; tz.db[3] = (!(uxchar(tz.db[3]>tx.db[3]))) & tz.db[3];
+					//~ tz.db[0] = tx.db[0] - ty.db[0]; if(tz.db[0]>tx.db[0]) tz.db[0] = 0;
+					//~ tz.db[1] = tx.db[1] - ty.db[1]; if(tz.db[1]>tx.db[1]) tz.db[1] = 0;
+					//~ tz.db[2] = tx.db[2] - ty.db[2]; if(tz.db[2]>tx.db[2]) tz.db[2] = 0;
+					//~ tz.db[3] = tx.db[3] - ty.db[3]; if(tz.db[3]>tx.db[3]) tz.db[3] = 0;
+					tz.db[0] = tx.db[0] - ty.db[0]; tz.db[0] = ~(uxchar(tz.db[0]>tx.db[0])) & tz.db[0];
+					tz.db[1] = tx.db[1] - ty.db[1]; tz.db[1] = ~(uxchar(tz.db[1]>tx.db[1])) & tz.db[1];
+					tz.db[2] = tx.db[2] - ty.db[2]; tz.db[2] = ~(uxchar(tz.db[2]>tx.db[2])) & tz.db[2];
+					tz.db[3] = tx.db[3] - ty.db[3]; tz.db[3] = ~(uxchar(tz.db[3]>tx.db[3])) & tz.db[3];
 					//
 					dst[i] = tz.dd;
 				}

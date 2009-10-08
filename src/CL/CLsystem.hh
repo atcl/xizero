@@ -11,7 +11,7 @@
 #include <fstream>
 #include <cstring>
 
-#include <FL/fl_ask.H>
+//~ #include <FL/fl_ask.H>
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
@@ -318,8 +318,8 @@ void CLsystem::installsystemkey(xchar scancode,void *action)
 
 xlong CLsystem::msgbox(const xchar* message)
 {
-	fl_message_font(FL_SCREEN,14);
-	fl_message(message);
+	//~ fl_message_font(FL_SCREEN,14);
+	//~ fl_message(message);
 	return 0;
 }
 
