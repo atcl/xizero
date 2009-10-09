@@ -4,11 +4,6 @@
 #define HH_CLWINDOW
 #pragma message "Compiling " __FILE__ 
 
-//~ #include <FL/Fl.H>
-//~ #include <FL/Fl_Single_Window.H>
-//~ #include <FL/fl_draw.H>
-//~ #include <FL/x.H>
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
@@ -28,140 +23,6 @@
  * version: 0.1
  */
 
-//~ void timeout(void*)
-//~ {
-	//~ Fl::redraw();
-	//~ Fl::repeat_timeout(0.02,timeout); //change time interval?
-//~ }
-//~ 
-//~ class CLwindow : public Fl_Single_Window, public virtual CLcl, public CLsingle<CLwindow>
-//~ {
-	//~ friend class CLsingle<CLwindow>;
-	//~ 
-	//~ private:
-		//~ xlong width;
-		//~ xlong height;
-		//~ xlong hdelta;
-		//~ xchar* title;
-		//~ uxlong* buffer;
-		//~ xlong key;
-		//~ xlong keyup;
-		//~ xlong turbo;
-		//~ xlong mousex;
-		//~ xlong mousey;
-		//~ xlong mouselb;	
-		//~ xlong mouserb;	
-		//~ virtual int handle(int event);
-		//~ CLwindow();
-		//~ ~CLwindow() { };
-	//~ public:
-		//~ void init(xlong w,xlong h,const xchar* t);
-		//~ void draw();
-		//~ void redraw();
-		//~ static xlong run();
-		//~ xlong getinkey();
-		//~ xlong getturbo() const;
-		//~ xlong getmousex() const;
-		//~ xlong getmousey() const;
-		//~ xlong getmouselb() const;
-		//~ xlong getmouserb() const;
-//~ };
-//~ 
-//~ void CLwindow::draw() { fl_draw_image((const uxchar*)&buffer[0],0,0,width,height,4,hdelta); }
-//~ 
-//~ int CLwindow::handle(int event)
-//~ {
-	//~ switch(event)
-	//~ {
-		//~ case FL_KEYDOWN:
-			//~ turbo = Fl::event_key();
-			//~ key = Fl::event_key();
-		//~ break;
-		//~ 
-		//~ case FL_KEYUP:
-			//~ keyup = Fl::event_key();
-			//~ if(keyup==turbo) turbo=0;
-		//~ break;
-		//~ 
-		//~ case FL_MOVE:
-			//~ mousex = Fl::event_x();
-			//~ mousey = Fl::event_y();
-		//~ break;
-		//~ 
-		//~ case FL_RELEASE:
-			//~ mouselb = mouserb = 0;
-		//~ break;
-		//~ 
-		//~ case FL_PUSH:
-			//~ mouselb = Fl::event_button() & 1;
-			//~ mouserb = Fl::event_button() & 2;
-		//~ break;
-		//~ 
-		//~ case FL_ENTER:
-			//~ cursor(FL_CURSOR_NONE);
-		//~ break;
-		//~ 
-		//~ case FL_LEAVE:
-			//~ cursor(FL_CURSOR_DEFAULT);
-		//~ break;	
-	//~ }
-	//~ 
-	//~ return Fl_Window::handle(event);
-//~ }
-//~ 
-//~ CLwindow::CLwindow() : Fl_Single_Window(0,0,"") { }
-//~ 
-//~ void CLwindow::init(xlong w,xlong h,const xchar* t)
-//~ {
-	//~ this->label(t);
-	//~ this->size(w,h);
-	//~ 
-	//~ width = w;
-	//~ height = h;
-	//~ buffer = cldoublebuffer.getbuffer();
-	//~ 
-	//~ box(FL_NO_BOX);
-	//~ hdelta = 4* width;
-	//~ 
-	//~ Fl::visual(FL_RGB);
-	//~ Fl::add_timeout(0.02,timeout);
-	//~ 
-	//~ fl_open_display();
-	//~ 
-	//~ sprite* tempicon = clformat->loadxpm(CLicon);
-	//~ 
-	//~ #ifdef WIN32
-		//~ this->icon((xchar*)LoadIcon(fl_display,tempicon->data));
-	//~ #else //ifdef LINUX
-		//~ XImage* xiicon = XCreateImage(fl_display,fl_visual->visual,32,ZPixmap,0,(xchar*)tempicon->data,tempicon->width,tempicon->height,0,(tempicon->width)<<2);
-		//~ Pixmap p = XCreatePixmap(fl_display,DefaultRootWindow(fl_display),tempicon->width,tempicon->height,24);
-		//~ //XPutImage(fl_display,p,fl_gc,xiicon,0,0,0,0,tempicon->width,tempicon->height); //crashes here!
-		//~ this->icon((xchar*)p);
-	//~ #endif
-	//~ 
-	//~ this->end();
-	//~ this->show();
-//~ }
-//~ 
-//~ void CLwindow::redraw() { Fl::redraw(); }
-//~ 
-//~ xlong CLwindow::run() { return Fl::wait(); }
-//~ 
-//~ xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; }
-//~ 
-//~ xlong CLwindow::getturbo() const { return turbo; }
-//~ 
-//~ xlong CLwindow::getmousex() const { return mousex; }
-//~ 
-//~ xlong CLwindow::getmousey() const {	return mousey; }
-//~ 
-//~ xlong CLwindow::getmouselb() const { return mouselb; }
-//~ 
-//~ xlong CLwindow::getmouserb() const { return mouserb; }
-
-
-//************************************************************
-
 class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 {
 	friend class CLsingle<CLwindow>;
@@ -172,10 +33,12 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		Visual* Xvisual;
 		Window Xwindow;
 		GC Xgc;
+		Atom Xatom;
 		XImage* Ximage;
 		XEvent Xevent;
 		XImage* Xicon;
 		Pixmap Xpixmap;
+		Cursor Xcursor;
 	
 		uxlong width;
 		uxlong height;
@@ -215,28 +78,45 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	width = w;
 	height = h;
 	title = t;
-	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
-	//~ xchar* dbuffer = reinterpret_cast<xchar*>(cldoublebuffer.getbuffer());
 	
+	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
+	
+	//init window
 	Xdisplay = XOpenDisplay(0);
 	Xscreen = DefaultScreenOfDisplay(Xdisplay);
 	Xvisual = DefaultVisualOfScreen(Xscreen);
 	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
 	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,blackcolor,blackcolor);
-	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
 	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
+	//init events
+	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
+	//init window title
 	XStoreName(Xdisplay,Xwindow,title);
-	//~ sprite* Ticon = clformat->loadxpm(CLicon);
-	//~ Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,0,(Ticon->width)<<2);
-	//~ Xpixmap = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
-	//~ XPutImage(Xdisplay,Xpixmap,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
-	//~ XWMHints* Xhints;
-	//~ Xhints->flags = IconPixmapHint;
-	//~ Xhints->icon_pixmap = Xpixmap;
-	//~ XSetWMHints(Xdisplay,Xwindow,Xhints);
-	//~ XFree(Xhints);
+	//init icon
+	sprite* Ticon = clformat->loadxpm(CLicon);
+	Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
+	Xpixmap = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
+	XPutImage(Xdisplay,Xpixmap,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
+	XWMHints* Xhints;
+	Xhints = XAllocWMHints();
+	Xhints->flags = IconPixmapHint;
+	Xhints->icon_pixmap = Xpixmap;
+	XSetWMHints(Xdisplay,Xwindow,Xhints);
+	XFree(Xhints);
+	//init close button
+	Xatom = XInternAtom(Xdisplay,"WM_DELETE_WINDOW",True);
+	XSetWMProtocols(Xdisplay,Xwindow,&Xatom,1);
+	//show window
 	XMapRaised(Xdisplay,Xwindow);
+	//init doublebuffer
 	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
+	//init cursor
+	XColor dummy;
+	xchar data[1] = {0};
+	Pixmap blank = XCreateBitmapFromData (Xdisplay,Xwindow,data,1,1);
+	Xcursor = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
+	XFreePixmap(Xdisplay,blank);
+	XDefineCursor(Xdisplay,Xwindow,Xcursor);
 }
 
 void CLwindow::draw()
@@ -303,14 +183,23 @@ void CLwindow::handle()
 				case MotionNotify:
 					mousex = Xevent.xmotion.x;
 					mousey = Xevent.xmotion.y;
+					while(XCheckWindowEvent(Xdisplay,Xwindow,PointerMotionMask,&Xevent))
+					{
+						mousex = Xevent.xmotion.x;
+						mousey = Xevent.xmotion.y;
+					}
 				break;
 				
 				case EnterNotify:
-					XDefineCursor(Xdisplay,Xwindow,None);
+					XDefineCursor(Xdisplay,Xwindow,Xcursor);
 				break;
 				
 				case LeaveNotify:
 					XUndefineCursor(Xdisplay,Xwindow);
+				break;
+				
+				case ClientMessage:
+					clsystem->exit(0,0,"xizero exits","bye");
 				break;
 			}
 		}
