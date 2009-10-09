@@ -73,6 +73,8 @@
 #define SPACE   32
 #define LCTRL   -29
 #define ENTER   13
+#define PGUP    73
+#define PGDOWN  80
 //*
 
 //enitiy types

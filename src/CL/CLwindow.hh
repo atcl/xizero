@@ -215,15 +215,17 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	width = w;
 	height = h;
 	title = t;
+	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
+	//~ xchar* dbuffer = reinterpret_cast<xchar*>(cldoublebuffer.getbuffer());
 	
 	Xdisplay = XOpenDisplay(0);
 	Xscreen = DefaultScreenOfDisplay(Xdisplay);
 	Xvisual = DefaultVisualOfScreen(Xscreen);
 	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
 	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,blackcolor,blackcolor);
+	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
 	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
 	XStoreName(Xdisplay,Xwindow,title);
-	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)(cldoublebuffer.getbuffer()),width,height,32,width<<2);
 	//~ sprite* Ticon = clformat->loadxpm(CLicon);
 	//~ Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,0,(Ticon->width)<<2);
 	//~ Xpixmap = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
@@ -234,79 +236,83 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	//~ XSetWMHints(Xdisplay,Xwindow,Xhints);
 	//~ XFree(Xhints);
 	XMapRaised(Xdisplay,Xwindow);
+	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
 }
 
 void CLwindow::draw()
 {
 	XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height);
-	XFlush(Xdisplay); //necessary?
+	//XFlush(Xdisplay); //necessary?
 }
 
 void CLwindow::handle()
 {
-		XNextEvent(Xdisplay,&Xevent);
-		switch(Xevent.type)
+		if(XPending(Xdisplay)!=0)
 		{
-			case Expose:
-				draw();
-			break;
-			
-			case KeyPress:
-				turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
-// 				ClearKBuf(xw);
-			break;
-			
-			case KeyRelease:
-				keyup = XLookupKeysym((XKeyEvent *)&Xevent,0);
-				if(keyup==turbo) turbo=0;
-			break;
-			
-			case ButtonPress:
-				switch(Xevent.xbutton.button)
-				{
-					case Button1:
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouselb = 1;
-					break;
-					
-					case Button2: 
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouserb = 1;
-					break;
-				}
-			break;
-			
-			case ButtonRelease:
-				switch(Xevent.xbutton.button)
-				{
-					case Button1:
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouselb = 1;
-					break;
-					
-					case Button2: 
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouserb = 1;
-					break;
-				}
-			break;
-			
-			case MotionNotify:
-				mousex = Xevent.xmotion.x;
-				mousey = Xevent.xmotion.y;
-			break;
-			
-			case EnterNotify:
-				XDefineCursor(Xdisplay,Xwindow,None);
-			break;
-			
-			case LeaveNotify:
-				XUndefineCursor(Xdisplay,Xwindow);
-			break;
+			XNextEvent(Xdisplay,&Xevent);
+			switch(Xevent.type)
+			{
+				case Expose:
+					draw();
+				break;
+				
+				case KeyPress:
+					turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
+					while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
+				break;
+				
+				case KeyRelease:
+					keyup = XLookupKeysym((XKeyEvent *)&Xevent,0);
+					if(keyup==turbo) turbo=0;
+				break;
+				
+				case ButtonPress:
+					switch(Xevent.xbutton.button)
+					{
+						case Button1:
+							mousex = Xevent.xbutton.x;
+							mousey = Xevent.xbutton.y;
+							mouselb = 1;
+						break;
+						
+						case Button2: 
+							mousex = Xevent.xbutton.x;
+							mousey = Xevent.xbutton.y;
+							mouserb = 1;
+						break;
+					}
+				break;
+				
+				case ButtonRelease:
+					switch(Xevent.xbutton.button)
+					{
+						case Button1:
+							mousex = Xevent.xbutton.x;
+							mousey = Xevent.xbutton.y;
+							mouselb = 1;
+						break;
+						
+						case Button2: 
+							mousex = Xevent.xbutton.x;
+							mousey = Xevent.xbutton.y;
+							mouserb = 1;
+						break;
+					}
+				break;
+				
+				case MotionNotify:
+					mousex = Xevent.xmotion.x;
+					mousey = Xevent.xmotion.y;
+				break;
+				
+				case EnterNotify:
+					XDefineCursor(Xdisplay,Xwindow,None);
+				break;
+				
+				case LeaveNotify:
+					XUndefineCursor(Xdisplay,Xwindow);
+				break;
+			}
 		}
 }
 

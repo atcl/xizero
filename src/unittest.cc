@@ -73,27 +73,27 @@ int main(int argc, char** argv)
 			break;
 
 			//Translate:
-			case FL_Right:
+			case RIGHT:
 				linearM->translate(2,0,0);
 				cubus->update(linearM);
 			break;
-			case FL_Left:
+			case LEFT:
 				linearM->translate(-2,0,0);
 				cubus->update(linearM);
 			break;
-			case FL_Up:
+			case UP:
 				linearM->translate(0,2,0);
 				cubus->update(linearM);
 			break;
-			case FL_Down:
+			case DOWN:
 				linearM->translate(0,-2,0);
 				cubus->update(linearM);
 			break;
-			case FL_Page_Up:
+			case PGUP:
 				linearM->translate(0,0,2);
 				cubus->update(linearM);
 			break;
-			case FL_Page_Down:
+			case PGDOWN:
 				linearM->translate(0,0,-2);
 				cubus->update(linearM);
 			break;

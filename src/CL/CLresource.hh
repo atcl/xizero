@@ -4,6 +4,8 @@
 #define HH_CLRESOURCE
 #pragma message "Compiling " __FILE__
 
+//include data-ar?
+
 //xpm atcrosslevel icon
 const static xchar* CLicon[] = {
 
