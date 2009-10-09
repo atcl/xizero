@@ -36,8 +36,7 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		Atom Xatom;
 		XImage* Ximage;
 		XEvent Xevent;
-		XImage* Xicon;
-		Pixmap Xpixmap;
+		Cursor Xblank;
 		Cursor Xcursor;
 	
 		uxlong width;
@@ -57,6 +56,8 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		void init(uxlong w,uxlong h,const xchar* t);
 		void draw();
 		xlong run();
+		void showcursor();
+		void hidecursor();
 		xlong getinkey();
 		xlong getturbo() const;
 		xlong getmousex() const;
@@ -94,13 +95,13 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	XStoreName(Xdisplay,Xwindow,title);
 	//init icon
 	sprite* Ticon = clformat->loadxpm(CLicon);
-	Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
-	Xpixmap = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
-	XPutImage(Xdisplay,Xpixmap,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
+	XImage* Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
+	Pixmap icon = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
+	XPutImage(Xdisplay,icon,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
 	XWMHints* Xhints;
 	Xhints = XAllocWMHints();
 	Xhints->flags = IconPixmapHint;
-	Xhints->icon_pixmap = Xpixmap;
+	Xhints->icon_pixmap = icon;
 	XSetWMHints(Xdisplay,Xwindow,Xhints);
 	XFree(Xhints);
 	//init close button
@@ -110,20 +111,23 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	XMapRaised(Xdisplay,Xwindow);
 	//init doublebuffer
 	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
-	//init cursor
+	//init cursors
 	XColor dummy;
 	xchar data[1] = {0};
-	Pixmap blank = XCreateBitmapFromData (Xdisplay,Xwindow,data,1,1);
-	Xcursor = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
+	Pixmap blank = XCreateBitmapFromData(Xdisplay,Xwindow,data,1,1);
+	Xblank = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
 	XFreePixmap(Xdisplay,blank);
-	XDefineCursor(Xdisplay,Xwindow,Xcursor);
+	//complete:
+	sprite* Tcursor = clformat->loadxpm(CLxzcursor);
+	XImage* Icursor = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Tcursor->data,Tcursor->width,Tcursor->height,32,(Tcursor->width)<<2);
+	Pixmap cursor = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Tcursor->width,Tcursor->height,24);
+	XPutImage(Xdisplay,cursor,Xgc,Icursor,0,0,0,0,Ticon->width,Ticon->height);
+	//Xcursor = XCreatePixmapCursor(Xdisplay,cursor,cursor,&dummy,&dummy,0,0);
+	//*
+	XDefineCursor(Xdisplay,Xwindow,Xblank);
 }
 
-void CLwindow::draw()
-{
-	XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height);
-	//XFlush(Xdisplay); //necessary?
-}
+void CLwindow::draw() { XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height); }
 
 void CLwindow::handle()
 {
@@ -191,7 +195,7 @@ void CLwindow::handle()
 				break;
 				
 				case EnterNotify:
-					XDefineCursor(Xdisplay,Xwindow,Xcursor);
+					XDefineCursor(Xdisplay,Xwindow,Xblank);
 				break;
 				
 				case LeaveNotify:
@@ -206,6 +210,10 @@ void CLwindow::handle()
 }
 
 xlong CLwindow::run() { handle(); draw(); return 1; }
+
+void CLwindow::showcursor() { XDefineCursor(Xdisplay,Xwindow,Xcursor); }
+
+void CLwindow::hidecursor() { XDefineCursor(Xdisplay,Xwindow,Xblank); }
 
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; }
 
