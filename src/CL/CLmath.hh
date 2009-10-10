@@ -35,6 +35,7 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 	
 	private:
 		float  fxpi;
+		float  xpi;
 		float* xsin;
 		float* xcos;
 		xlong* arcsinarray;
@@ -71,6 +72,24 @@ CLmath::CLmath()
 	fxpi = 355/113;
 	//*
 	
+	//calc pi
+	xpi = 1
+	float h = 3;
+	float altsign = -1.0;
+	for(uxlong i=0; i<10; i++)
+	{
+		xpi += altsign * (1/h);
+		h += 2;
+	}
+	xpi *= 4;
+	//*
+	
+	//calc arcsin/arccos
+	
+	
+	
+	//*
+	
 	//fill look up tables for arcsine and arccosine
 	//~ arcsinarray = new xlong[360];
 	//~ arccosarray = new xlong[360];
@@ -82,13 +101,13 @@ CLmath::CLmath()
 	//~ }
 	//*
 	
-	//new sin/cos
+	//calc sin/cos arrays
 	xsin = new float[360];
 	xcos = new float[360];
 	float ii = 0;
 	xlong k = 0;
 	xlong l = 0;
-	float altsign = -1.0;
+	altsign = -1.0;
 	for(uxlong i=0; i<360; i++)
 	{
 		ii = i * DEG2RAD;
