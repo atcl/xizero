@@ -56,6 +56,7 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		template<typename T> T deg2rad(T d) const;
 		template<typename T> T power(T b,xlong e) const;
 		xlong faculty(xlong f) const;
+		float faculty(float f) const;
 		float pi() const;
 		float sin(xlong x) const;
 		float cos(xlong x) const;
@@ -118,8 +119,8 @@ CLmath::CLmath()
 		l = 3;
 		for(uxlong j=0; j<6; j++)
 		{
-			xsin[i] += altsign * float(power(ii,l)) / float(faculty(l));
-			xcos[i] += altsign * float(power(ii,k)) / float(faculty(k));
+			xsin[i] += altsign * power(ii,l) / faculty(float(l));
+			xcos[i] += altsign * power(ii,k) / faculty(float(k));
 			altsign *= -1.0;
 			k+=2;
 			l+=2;
@@ -222,6 +223,13 @@ T CLmath::power(T b,xlong e) const
 xlong CLmath::faculty(xlong f) const
 {
 	xlong r = 1;
+	for(xlong i=2;i<=f;i++) { r *= i; }
+	return r;
+}
+
+float CLmath::faculty(float f) const
+{
+	float r = 1;
 	for(xlong i=2;i<=f;i++) { r *= i; }
 	return r;
 }
