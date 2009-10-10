@@ -34,8 +34,8 @@ int main(int argc, char** argv)
 	CLfile* rasf = clglobal->clsystem->getfile("dat/screens/introtext.ras");
 	//sprite* rastest = clglobal->clformat->loadras(rasf);
 	
-	std::cout << std::setw(20) << clglobal->clmath->sin(45) << std::endl;
-	std::cout << std::setw(20) << clglobal->clmath->xxsin(45) << std::endl;
+	std::cout << std::setprecision(20) << clglobal->clmath->cos(45) << std::endl;
+	std::cout << std::setprecision(20) << clglobal->clmath->xxcos(45) << std::endl;
 	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);

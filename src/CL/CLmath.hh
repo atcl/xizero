@@ -35,8 +35,6 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 	
 	private:
 		float  fxpi;
-		float* sinarray;
-		float* cosarray;
 		float* xsin;
 		float* xcos;
 		xlong* arcsinarray;
@@ -60,8 +58,6 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		float pi() const;
 		float sin(xlong x) const;
 		float cos(xlong x) const;
-		float xxsin(xlong x) const;
-		float xxcos(xlong x) const;
 		float arcsin(float x) const;
 		float arccos(float x) const;
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const;
@@ -71,17 +67,6 @@ CLmath::CLmath()
 {
 	//precalucalte pi approximation
 	fxpi = 355/113;
-	//*
-
-	//fill look up tables for sine and cosine
-	sinarray = new float[360];
-	cosarray = new float[360];
-
-	for(xlong i=0; i<360; i++)
-	{
-		sinarray[i] = std::sin(i*DEG2RAD);
-		cosarray[i] = std::cos(i*DEG2RAD);
-	}
 	//*
 	
 	//fill look up tables for arcsine and arccosine
@@ -95,7 +80,7 @@ CLmath::CLmath()
 	//~ }
 	//*
 	
-	//experimental sin/cos: working quite fine test for accuracy
+	//new sin/cos
 	xsin = new float[360];
 	xcos = new float[360];
 	float ii = 0;
@@ -109,7 +94,7 @@ CLmath::CLmath()
 		xcos[i] = 1;
 		k = 2;
 		l = 3;
-		for(uxlong j=0; j<4; j++)
+		for(uxlong j=0; j<5; j++)
 		{
 			xsin[i] += altsign * float(power(ii,l)) / float(faculty(l));
 			xcos[i] += altsign * float(power(ii,k)) / float(faculty(k));
@@ -120,12 +105,23 @@ CLmath::CLmath()
 		altsign = -1.0;		
 	}
 	//*
+	
+	//~ //old sin/cos
+	//~ sinarray = new float[360];
+	//~ cosarray = new float[360];
+	//~ 
+	//~ for(xlong i=0; i<360; i++)
+	//~ {
+		//~ xsin[i] = std::sin(i*DEG2RAD);
+		//~ xcos[i] = std::cos(i*DEG2RAD);
+	//~ }
+	//~ //*
 }
 
 CLmath::~CLmath() 
 {
-	delete[] sinarray;
-	delete[] cosarray;	
+	delete[] xsin;
+	delete[] xcos;	
 }
 
 xlong CLmath::sign(xlong x) const
@@ -227,24 +223,10 @@ float CLmath::sin(xlong x) const
 	if(x < 0) x -= 180;
 	x = absolute(x);
 	x %= 360;
-	return sinarray[x];
-}
-
-float CLmath::cos(xlong x) const
-{
-	x = absolute(x)%360;
-	return cosarray[x];
-}
-
-float CLmath::xxsin(xlong x) const
-{
-	if(x < 0) x -= 180;
-	x = absolute(x);
-	x %= 360;
 	return xsin[x];
 }
 
-float CLmath::xxcos(xlong x) const
+float CLmath::cos(xlong x) const
 {
 	x = absolute(x)%360;
 	return xcos[x];
