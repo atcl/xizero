@@ -36,7 +36,7 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		xlong get() const;
 };
 
-CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x000000FF;} 
+CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x00FF0000;} 
 
 void CLfsprogress::draw() const
 {

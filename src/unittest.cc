@@ -257,7 +257,7 @@ int main(int argc, char** argv)
 
 		linearM->unit();
 		
-		//clglobal->clgfx1->drawscreen(rastest);
+		clglobal->clgfx1->drawscreen(rastest);
 
 		clglobal->clbench->inc();
 	}

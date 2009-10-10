@@ -7,7 +7,7 @@ echo 'packing intros'
 ar -q 'intro.a' 'dat/intro/atcl.ani' 'dat/intro/atcl.y3d' 'dat/intro/xi.ani' 'dat/intro/xi.y3d' 'dat/intro/zero.ani' 'dat/intro/zero.y3d' >> /dev/null 2>&1
 
 echo 'packing screens'
-ar -q 'screens.a' 'dat/screens/introtext.tga' 'dat/screens/loadscreen.tga' 'dat/screens/gamewon.tga' 'dat/screens/gameover.tga' >> /dev/null 2>&1
+ar -q 'screens.a' 'dat/screens/intro000.ras' 'dat/screens/gamewon.ras' 'dat/screens/gameover.ras' >> /dev/null 2>&1
 
 echo 'packing player'
 ar -q 'player.a' 'dat/player/player0.y3d' 'dat/player/player1.y3d' 'dat/player/player.ini' >> /dev/null 2>&1
