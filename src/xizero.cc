@@ -10,7 +10,6 @@ int main()
 	clglobal = CLsetup();
 	cldata = new CLar(BASEDIR"xizero.dat");
 	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
-	clglobal->clcursor->set(CLxzcursor);
 	//*
 
 	//intros
@@ -24,12 +23,11 @@ int main()
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "CLversion,0x00FFFFFF);
-	clglobal->clcursor->show();
+	clglobal->clwindow->showcursor();
 	while(clglobal->clwindow->run())
 	{
 		CLbutton::checkclick();
 		xzmainmenu->draw();
-		clglobal->clcursor->draw();
 	}
 	//*
 

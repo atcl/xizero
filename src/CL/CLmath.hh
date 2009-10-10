@@ -26,8 +26,8 @@
 #define SIGNBIT "$0b10000000000000000000000000000000"
 
 //degree to radian and vice versa
-#define DEGTORAD M_PI/180
-#define RADTODEG 180/M_PI
+#define DEG2RAD M_PI/180
+#define RAD2DEG 180/M_PI
 
 class CLmath : public virtual CLcl, public CLsingle<CLmath>
 {
@@ -37,6 +37,8 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		float  fxpi;
 		float* sinarray;
 		float* cosarray;
+		float* xsin;
+		float* xcos;
 		xlong* arcsinarray;
 		xlong* arccosarray;
 		CLmath();
@@ -53,11 +55,13 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		template<typename T> T rounddown(T x) const;
 		template<typename T> T sqrt(T x) const;
 		template<typename T> T deg2rad(T d) const;
+		template<typename T> T power(T b,xlong e) const;
 		xlong faculty(xlong f) const;
-		xlong power(xlong b,xlong e) const;
 		float pi() const;
 		float sin(xlong x) const;
 		float cos(xlong x) const;
+		float xxsin(xlong x) const;
+		float xxcos(xlong x) const;
 		float arcsin(float x) const;
 		float arccos(float x) const;
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const;
@@ -75,8 +79,8 @@ CLmath::CLmath()
 
 	for(xlong i=0; i<360; i++)
 	{
-		sinarray[i] = std::sin(i*DEGTORAD);
-		cosarray[i] = std::cos(i*DEGTORAD);
+		sinarray[i] = std::sin(i*DEG2RAD);
+		cosarray[i] = std::cos(i*DEG2RAD);
 	}
 	//*
 	
@@ -91,22 +95,29 @@ CLmath::CLmath()
 	//~ }
 	//*
 	
-	//experimental sin/cos:
-	float currsin = 0;
-	float currcos = 0;
+	//experimental sin/cos: working quite fine test for accuracy
+	xsin = new float[360];
+	xcos = new float[360];
+	float ii = 0;
+	xlong k = 0;
+	xlong l = 0;
+	float altsign = -1.0;
 	for(uxlong i=0; i<360; i++)
 	{
-		currsin = i;
-		currcos = 1;
-		
-		uxlong k = 2;
-		uxlong l = 3;
-		for(uxlong j=0; j<3; j++,k+2,l+2)
+		ii = i * DEG2RAD;
+		xsin[i] = ii;
+		xcos[i] = 1;
+		k = 2;
+		l = 3;
+		for(uxlong j=0; j<4; j++)
 		{
-			currsin += power(-1,j+1) * power(i,l) / faculty(l);
-			currcos += power(-1,j+1) * power(i,k) / faculty(k);
+			xsin[i] += altsign * float(power(ii,l)) / float(faculty(l));
+			xcos[i] += altsign * float(power(ii,k)) / float(faculty(k));
+			altsign *= -1.0;
+			k+=2;
+			l+=2;
 		}
-		
+		altsign = -1.0;		
 	}
 	//*
 }
@@ -194,17 +205,18 @@ float CLmath::sqrt<float>(float x) const
 template<typename T>
 T CLmath::deg2rad(T d) const { return float(fxpi*d); }
 
-xlong CLmath::faculty(xlong f) const
+template<typename T>
+T CLmath::power(T b,xlong e) const
 {
-	xlong r = 1;
-	for(uxlong i=2;i<=f;i++) { r *= i; }
+	T r = 1;
+	for(xlong i=0;i<e;i++) { r *= b; }
 	return r;
 }
 
-xlong CLmath::power(xlong b,xlong e) const
+xlong CLmath::faculty(xlong f) const
 {
 	xlong r = 1;
-	for(uxlong i=1;i<=e;i++) { r *= b; }
+	for(xlong i=2;i<=f;i++) { r *= i; }
 	return r;
 }
 
@@ -224,14 +236,28 @@ float CLmath::cos(xlong x) const
 	return cosarray[x];
 }
 
+float CLmath::xxsin(xlong x) const
+{
+	if(x < 0) x -= 180;
+	x = absolute(x);
+	x %= 360;
+	return xsin[x];
+}
+
+float CLmath::xxcos(xlong x) const
+{
+	x = absolute(x)%360;
+	return xcos[x];
+}
+
 float CLmath::arcsin(float x) const
 { 
-	return std::asin(x) * RADTODEG; //!change to lookup table!
+	return std::asin(x) * RAD2DEG; //!change to lookup table!
 }
 
 float CLmath::arccos(float x) const
 {
-	return std::acos(x) * RADTODEG; //!change to lookup table!
+	return std::acos(x) * RAD2DEG; //!change to lookup table!
 }
 
 float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const

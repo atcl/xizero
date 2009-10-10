@@ -70,7 +70,7 @@ CLexe* CLsystem::exe(xchar** a)
 	//fill CLexe struct
 	CLexe* r = new CLexe;
 	r->name = a[0];
-	r->title = CLTITLE;
+	r->title = TITLE;
 	r->size = 0;
 	r->version = (CLmajor<<24)+(CLminor<<16)+(CLbuild<<8)+CLextra;
 	//r->icon = &CLicon[0];

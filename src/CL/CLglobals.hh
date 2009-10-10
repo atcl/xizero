@@ -39,7 +39,6 @@ class CLtransitions;
 class CLsound;
 class CLsprites;
 class CLid;
-class CLcursor;
 
 class CLglobal
 {
@@ -83,7 +82,6 @@ class CLglobal
 		static CLsound*  clsound;
 		static CLsprites* clsprites;
 		static CLid*     clid;
-		static CLcursor* clcursor;
 		
 		static CLglobal* getinstance();
 }; 

@@ -48,16 +48,18 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong mousex;
 		xlong mousey;
 		xlong mouselb;	
-		xlong mouserb;	;
-		CLwindow() { };
+		xlong mouserb;
+		bool  displaycursor;
+		sprite* cursor;
+		CLwindow();
 		~CLwindow();
 		void handle();
 	public:
-		void init(uxlong w,uxlong h,const xchar* t);
 		void draw();
 		xlong run();
 		void showcursor();
 		void hidecursor();
+		void setcursor(sprite* s);
 		xlong getinkey();
 		xlong getturbo() const;
 		xlong getmousex() const;
@@ -66,19 +68,12 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmouserb() const;
 };
 
-CLwindow::~CLwindow()
+CLwindow::CLwindow()
 {
-	XDestroyImage(Ximage);
-	XFreeGC(Xdisplay,Xgc);
-	XDestroyWindow(Xdisplay,Xwindow);
-	XCloseDisplay(Xdisplay);	
-}
-
-void CLwindow::init(uxlong w,uxlong h,const xchar* t)
-{
-	width = w;
-	height = h;
-	title = t;
+	cursor = 0;
+	width = XRES;
+	height = YRES;
+	title = TITLE;
 	
 	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
 	
@@ -112,13 +107,23 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	XMapRaised(Xdisplay,Xwindow);
 	//init doublebuffer
 	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
-	//init cursors
+	//init x-cursor
 	XColor dummy;
 	xchar data[1] = {0};
 	Pixmap blank = XCreateBitmapFromData(Xdisplay,Xwindow,data,1,1);
 	Xblank = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
 	XFreePixmap(Xdisplay,blank);
 	XDefineCursor(Xdisplay,Xwindow,Xblank);
+	//init cursor
+	cursor = clformat->loadxpm(CLxzcursor);
+}
+
+CLwindow::~CLwindow()
+{
+	XDestroyImage(Ximage);
+	XFreeGC(Xdisplay,Xgc);
+	XDestroyWindow(Xdisplay,Xwindow);
+	XCloseDisplay(Xdisplay);	
 }
 
 void CLwindow::draw() { XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height); }
@@ -203,11 +208,13 @@ void CLwindow::handle()
 		}
 }
 
-xlong CLwindow::run() { handle(); draw(); return 1; }
+xlong CLwindow::run() { if(displaycursor) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; }
 
-void CLwindow::showcursor() { XDefineCursor(Xdisplay,Xwindow,Xcursor); }
+void CLwindow::showcursor() { displaycursor = 1; }
 
-void CLwindow::hidecursor() { XDefineCursor(Xdisplay,Xwindow,Xblank); }
+void CLwindow::hidecursor() { displaycursor = 0; }
+
+void CLwindow::setcursor(sprite* s) { cursor = s; }
 
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; }
 

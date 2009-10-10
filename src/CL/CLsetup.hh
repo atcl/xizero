@@ -20,8 +20,6 @@ void CLgarbage();
 CLglobal* CLsetup()
 {
 	CLglobal* clglobal = CLglobal::getinstance(); 
-	
-	clglobal->clwindow->init(XRES,YRES,CLTITLE);
 
 	//init matrices
 	linearM  = new CLmatrix(1);

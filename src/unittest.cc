@@ -32,8 +32,10 @@ int main(int argc, char** argv)
 	//*
 	
 	CLfile* rasf = clglobal->clsystem->getfile("dat/screens/introtext.ras");
-	sprite* rastest = clglobal->clformat->loadras(rasf);
+	//sprite* rastest = clglobal->clformat->loadras(rasf);
 	
+	say(clglobal->clmath->sin(45));
+	say(clglobal->clmath->xxsin(45));
 	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
@@ -258,7 +260,7 @@ int main(int argc, char** argv)
 
 		linearM->unit();
 		
-		clglobal->clgfx1->drawscreen(rastest);
+		//clglobal->clgfx1->drawscreen(rastest);
 
 		clglobal->clbench->inc();
 	}

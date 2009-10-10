@@ -19,7 +19,7 @@ void exitgame()
 
 void newgame()
 {
-	clglobal->clcursor->hide();
+	clglobal->clwindow->hidecursor();
 	
 	//open full screen images archive
 	CLar* screens = new CLar(cldata->findbyname("screens.a"));
@@ -166,7 +166,7 @@ void newgame()
 		//*
 	}
 	
-	clglobal->clcursor->show();
+	clglobal->clwindow->showcursor();
 }
 
 

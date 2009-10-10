@@ -24,6 +24,6 @@
 #define ZRES 400
 #define SCRS XRES*YRES
 
-#define CLTITLE "atCROSSLEVEL's XiZero"
+#define TITLE "atCROSSLEVEL's XiZero"
 
 #endif
