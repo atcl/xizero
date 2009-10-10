@@ -71,11 +71,10 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 CLwindow::CLwindow()
 {
 	cursor = 0;
+	displaycursor = 0;
 	width = XRES;
 	height = YRES;
 	title = TITLE;
-	
-	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
 	
 	//init window
 	Xdisplay = XOpenDisplay(0);
@@ -106,6 +105,7 @@ CLwindow::CLwindow()
 	//show window
 	XMapRaised(Xdisplay,Xwindow);
 	//init doublebuffer
+	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
 	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
 	//init x-cursor
 	XColor dummy;
@@ -114,8 +114,6 @@ CLwindow::CLwindow()
 	Xblank = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
 	XFreePixmap(Xdisplay,blank);
 	XDefineCursor(Xdisplay,Xwindow,Xblank);
-	//init cursor
-	cursor = clformat->loadxpm(CLxzcursor);
 }
 
 CLwindow::~CLwindow()
@@ -130,85 +128,85 @@ void CLwindow::draw() { XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,heig
 
 void CLwindow::handle()
 {
-		if(XPending(Xdisplay)!=0)
+	if(XPending(Xdisplay)!=0)
+	{
+		XNextEvent(Xdisplay,&Xevent);
+		switch(Xevent.type)
 		{
-			XNextEvent(Xdisplay,&Xevent);
-			switch(Xevent.type)
-			{
-				case Expose:
-					draw();
-				break;
-				
-				case KeyPress:
-					turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
-					while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
-				break;
-				
-				case KeyRelease:
-					keyup = XLookupKeysym((XKeyEvent *)&Xevent,0);
-					if(keyup==turbo) turbo=0;
-				break;
-				
-				case ButtonPress:
-					switch(Xevent.xbutton.button)
-					{
-						case Button1:
-							mousex = Xevent.xbutton.x;
-							mousey = Xevent.xbutton.y;
-							mouselb = 1;
-						break;
-						
-						case Button2: 
-							mousex = Xevent.xbutton.x;
-							mousey = Xevent.xbutton.y;
-							mouserb = 1;
-						break;
-					}
-				break;
-				
-				case ButtonRelease:
-					switch(Xevent.xbutton.button)
-					{
-						case Button1:
-							mousex = Xevent.xbutton.x;
-							mousey = Xevent.xbutton.y;
-							mouselb = 1;
-						break;
-						
-						case Button2: 
-							mousex = Xevent.xbutton.x;
-							mousey = Xevent.xbutton.y;
-							mouserb = 1;
-						break;
-					}
-				break;
-				
-				case MotionNotify:
+			case Expose:
+				draw();
+			break;
+			
+			case KeyPress:
+				turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
+				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
+			break;
+			
+			case KeyRelease:
+				keyup = XLookupKeysym((XKeyEvent *)&Xevent,0);
+				if(keyup==turbo) turbo=0;
+			break;
+			
+			case ButtonPress:
+				switch(Xevent.xbutton.button)
+				{
+					case Button1:
+						mousex = Xevent.xbutton.x;
+						mousey = Xevent.xbutton.y;
+						mouselb = 1;
+					break;
+					
+					case Button2: 
+						mousex = Xevent.xbutton.x;
+						mousey = Xevent.xbutton.y;
+						mouserb = 1;
+					break;
+				}
+			break;
+			
+			case ButtonRelease:
+				switch(Xevent.xbutton.button)
+				{
+					case Button1:
+						mousex = Xevent.xbutton.x;
+						mousey = Xevent.xbutton.y;
+						mouselb = 1;
+					break;
+					
+					case Button2: 
+						mousex = Xevent.xbutton.x;
+						mousey = Xevent.xbutton.y;
+						mouserb = 1;
+					break;
+				}
+			break;
+			
+			case MotionNotify:
+				mousex = Xevent.xmotion.x;
+				mousey = Xevent.xmotion.y;
+				while(XCheckWindowEvent(Xdisplay,Xwindow,PointerMotionMask,&Xevent))
+				{
 					mousex = Xevent.xmotion.x;
 					mousey = Xevent.xmotion.y;
-					while(XCheckWindowEvent(Xdisplay,Xwindow,PointerMotionMask,&Xevent))
-					{
-						mousex = Xevent.xmotion.x;
-						mousey = Xevent.xmotion.y;
-					}
-				break;
-				
-				case EnterNotify:
-					XDefineCursor(Xdisplay,Xwindow,Xblank);
-				break;
-				
-				case LeaveNotify:
-					XUndefineCursor(Xdisplay,Xwindow);
-				break;
-				
-				case ClientMessage:
-					clsystem->exit(0,0,"xizero exits","bye");
-				break;
-			}
+				}
+			break;
+			
+			case EnterNotify:
+				XDefineCursor(Xdisplay,Xwindow,Xblank);
+			break;
+			
+			case LeaveNotify:
+				XUndefineCursor(Xdisplay,Xwindow);
+			break;
+			
+			case ClientMessage:
+				clsystem->exit(0,0,"xizero exits","bye");
+			break;
 		}
+	}
 }
 
-xlong CLwindow::run() { if(displaycursor) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; }
+xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; }
 
 void CLwindow::showcursor() { displaycursor = 1; }
 

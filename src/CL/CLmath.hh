@@ -58,8 +58,10 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		float pi() const;
 		float sin(xlong x) const;
 		float cos(xlong x) const;
+		float tan(xlong x) const;
 		float arcsin(float x) const;
 		float arccos(float x) const;
+		float arctan(float x) const;
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const;
 };
 

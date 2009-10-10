@@ -21,6 +21,9 @@ CLglobal* CLsetup()
 {
 	CLglobal* clglobal = CLglobal::getinstance(); 
 
+	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
+	clglobal->clwindow->setcursor(cursor);
+
 	//init matrices
 	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);
