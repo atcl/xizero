@@ -31,6 +31,10 @@ int main(int argc, char** argv)
 			
 	//*
 	
+	CLfile* rasf = clglobal->clsystem->getfile("dat/screens/introtext.ras");
+	sprite* rastest = clglobal->clformat->loadras(rasf);
+	
+	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*
@@ -253,6 +257,8 @@ int main(int argc, char** argv)
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
 		linearM->unit();
+		
+		clglobal->clgfx1->drawscreen(rastest);
 
 		clglobal->clbench->inc();
 	}

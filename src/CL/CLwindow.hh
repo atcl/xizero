@@ -87,6 +87,7 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	Xscreen = DefaultScreenOfDisplay(Xdisplay);
 	Xvisual = DefaultVisualOfScreen(Xscreen);
 	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
+	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
 	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,blackcolor,blackcolor);
 	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
 	//init events
@@ -117,13 +118,6 @@ void CLwindow::init(uxlong w,uxlong h,const xchar* t)
 	Pixmap blank = XCreateBitmapFromData(Xdisplay,Xwindow,data,1,1);
 	Xblank = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
 	XFreePixmap(Xdisplay,blank);
-	//complete:
-	sprite* Tcursor = clformat->loadxpm(CLxzcursor);
-	XImage* Icursor = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Tcursor->data,Tcursor->width,Tcursor->height,32,(Tcursor->width)<<2);
-	Pixmap cursor = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Tcursor->width,Tcursor->height,24);
-	XPutImage(Xdisplay,cursor,Xgc,Icursor,0,0,0,0,Ticon->width,Ticon->height);
-	//Xcursor = XCreatePixmapCursor(Xdisplay,cursor,cursor,&dummy,&dummy,0,0);
-	//*
 	XDefineCursor(Xdisplay,Xwindow,Xblank);
 }
 

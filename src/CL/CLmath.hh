@@ -90,6 +90,25 @@ CLmath::CLmath()
 		//~ arccosarray[i] = 0;
 	//~ }
 	//*
+	
+	//experimental sin/cos:
+	float currsin = 0;
+	float currcos = 0;
+	for(uxlong i=0; i<360; i++)
+	{
+		currsin = i;
+		currcos = 1;
+		
+		uxlong k = 2;
+		uxlong l = 3;
+		for(uxlong j=0; j<3; j++,k+2,l+2)
+		{
+			currsin += power(-1,j+1) * power(i,l) / faculty(l);
+			currcos += power(-1,j+1) * power(i,k) / faculty(k);
+		}
+		
+	}
+	//*
 }
 
 CLmath::~CLmath() 

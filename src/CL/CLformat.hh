@@ -36,21 +36,24 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		CLformat() { };
 		~CLformat() { };
 	public:
-		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
-		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
-		inline sprite*  loadtga(const xchar* sf) const;
 		sprite*  loadtga(CLfile* sf) const;
+		sprite*  loadras(CLfile* sf) const;
 		sprite*  loadxpm(const xchar* xpm[]) const;
-		inline sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
 		sprites* loadtileset(CLfile* sf,xlong tw,xlong th) const;
-		inline sprites* loadfont(const xchar* sf) const;
 		sprites* loadfont(CLfile* sf) const;
-		inline xchar**  loadlvl(const xchar* sf) const;
 		xchar**  loadlvl(CLfile* sf) const;
-		inline xmap*    loadini(const xchar* bf) const;
 		xmap*    loadini(CLfile* bf) const;
+		
+		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
+		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
+		inline sprite*  loadtga(const xchar* sf) const;
+		inline sprite*  loadras(const xchar* sf) const;
+		inline sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
+		inline sprites* loadfont(const xchar* sf) const;
+		inline xchar**  loadlvl(const xchar* sf) const;
+		inline xmap*    loadini(const xchar* bf) const;
 };
 
 xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); }
@@ -214,6 +217,120 @@ sprite* CLformat::loadtga(CLfile* sf) const
 	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
 	//*
 
+	return r;
+}
+
+sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); }
+
+sprite* CLformat::loadras(CLfile* sf) const
+{
+	xlong* lf = sf->data;
+
+	if(clutils->endian(lf[0])!=0x59A66A95) return 0; //test for magic number
+	xlong width = clutils->endian(lf[1]);
+	xlong height = clutils->endian(lf[2]);
+	xlong depth = clutils->endian(lf[3]);
+	if(depth!=32 && depth!=24) return 0; //only 24bpp and 32bpp!
+	xlong length = clutils->endian(lf[4]);
+	xlong type = clutils->endian(lf[5]);
+	if(type!=0 && type!=1 && type!=2) return 0; //only types: old, standard and rle are supported
+	if(clutils->endian(lf[6])!=0) return 0; //color maps are not supported
+	if(clutils->endian(lf[7])!=0) return 0; //color maps are not supported
+	
+	xchar* bf = &(sf->text)[32];
+	xlong pixelindex = 0;
+	xlong dataindex = 0;
+	xlong size = width * height;
+	xlong fullsize = size * 4;
+	uxchar temp = 0;
+	
+	sprite* r = new sprite;
+	r->size = size;
+	r->width = width;
+	r->height = height;
+	uxchar* data = new uxchar[fullsize];
+	r->data = static_cast<uxlong*>(static_cast<void*>(&data[0]));
+	
+	if(type==2)
+	{
+		if(depth==24)
+		{
+			data[pixelindex] = 0;
+			pixelindex++;
+		}
+		
+		while(pixelindex<fullsize) //crashes inside this loop!
+		{
+			if(bf[dataindex]==0x80)
+			{				
+				dataindex++;
+				temp = uxchar(bf[dataindex]);
+				
+				if(temp!=0)
+				{
+					dataindex++;	
+					for(uxchar i=0; i<=temp; i++)
+					{						
+						if(depth==24 && pixelindex%4==0)
+						{
+							data[pixelindex] = 0;
+							pixelindex++;
+						}
+						
+						data[pixelindex] = bf[dataindex];
+						pixelindex++;
+					}
+					dataindex++;
+				}
+				else
+				{
+					if(depth==24 && pixelindex%4==0)
+					{
+						data[pixelindex] = 0;
+						pixelindex++;
+					}
+					
+					data[pixelindex] = 0x80;
+					pixelindex++;
+					dataindex++;
+				}
+			}
+			else
+			{
+				if(depth==24 && pixelindex%4==0)
+				{
+					data[pixelindex] = 0;
+					pixelindex++;
+				}		
+						
+				data[pixelindex] = bf[dataindex];
+				dataindex++;
+				pixelindex++;
+			}
+		}
+	}
+	else
+	{
+		if(depth==24)
+		{
+			data[pixelindex] = 0;
+			pixelindex++;
+		}
+		
+		for(uxlong i=0; i<fullsize; i++)
+		{
+			if(depth==24 && (pixelindex+1)%4==0)
+			{
+				data[pixelindex] = 0;
+				pixelindex++;
+			}
+			
+			data[pixelindex] = bf[dataindex];
+			dataindex++;
+			pixelindex++;
+		}
+	}
+	
 	return r;
 }
 
