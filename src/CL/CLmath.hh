@@ -72,14 +72,15 @@ CLmath::CLmath()
 	fxpi = 355/113;
 	//*
 	
-	//calc pi
-	xpi = 1
+	//calc pi //very bad convergence!!!
+	xpi = 1;
 	float h = 3;
 	float altsign = -1.0;
-	for(uxlong i=0; i<10; i++)
+	for(uxlong i=0; i<10000; i++)
 	{
-		xpi += altsign * (1/h);
+		xpi += altsign / h;
 		h += 2;
+		altsign *= -1;
 	}
 	xpi *= 4;
 	//*
@@ -115,7 +116,7 @@ CLmath::CLmath()
 		xcos[i] = 1;
 		k = 2;
 		l = 3;
-		for(uxlong j=0; j<5; j++)
+		for(uxlong j=0; j<6; j++)
 		{
 			xsin[i] += altsign * float(power(ii,l)) / float(faculty(l));
 			xcos[i] += altsign * float(power(ii,k)) / float(faculty(k));
@@ -145,25 +146,13 @@ CLmath::~CLmath()
 	delete[] xcos;	
 }
 
-xlong CLmath::sign(xlong x) const
-{
-	__asm__ __volatile__ ("cdq; cmpl $0,%%eax; seta %%al; orb %%al,%%dl" : "=d"(x) : "a"(x) );
-	return x; 
-}
+xlong CLmath::sign(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  }
 
 
-xlong CLmath::heaviside(xlong x) const
-{
-	__asm__ __volatile__ ("cdq; incl %%edx;" : "=d"(x) : "a"(x) );
-	return x;
-}
+xlong CLmath::heaviside(xlong x) const { return xlong(x>0); }
 
-template<typename T>
-T CLmath::absolute(T x) const
-{
-	__asm__ __volatile__ ("cdq; xorl %%edx,%%eax; btl $31,%%ebx; adcl $0,%%eax;" : "=a"(x) : "a"(x),"b"(x) );
-	return x;
-}
+template<>
+xlong CLmath::absolute<xlong>(xlong x) const { return (xlong(x>0)-1 ^ x) + xlong(x<0); }
 
 template<>
 float CLmath::absolute<float>(float x) const

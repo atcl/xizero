@@ -388,7 +388,7 @@ void CLpolygon::shape()
 	xlong y = 0;
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
-		polyline(xlong(spoint[x].x),xlong(spoint[x].y),xlong(spoint[y].x),xlong(spoint[y].y),0x000000FF);
+		polyline(xlong(spoint[x].x),xlong(spoint[x].y),xlong(spoint[y].x),xlong(spoint[y].y),0x00FF0000);
 	}
 	//*
 }
