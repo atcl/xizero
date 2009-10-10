@@ -85,6 +85,7 @@ CLwindow::CLwindow()
 	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,blackcolor,blackcolor);
 	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
 	//init events
+	XAutoRepeatOn(Xdisplay);
 	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
 	//init window title
 	XStoreName(Xdisplay,Xwindow,title);
@@ -138,13 +139,13 @@ void CLwindow::handle()
 			break;
 			
 			case KeyPress:
-				turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
-				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) turbo = key = XLookupKeysym((XKeyEvent *)&Xevent,0);
+				key = turbo = XLookupKeysym((XKeyEvent*)&Xevent,0);
+				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) ;
 			break;
 			
 			case KeyRelease:
-				keyup = XLookupKeysym((XKeyEvent *)&Xevent,0);
-				if(keyup==turbo) turbo=0;
+				keyup = XLookupKeysym((XKeyEvent*)&Xevent,0);
+				if(keyup==turbo) turbo = 0;
 			break;
 			
 			case ButtonPress:

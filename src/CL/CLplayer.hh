@@ -240,7 +240,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		}
 		//*
 
-		switch(input)
+		switch(turbo)
 		{
 			//stop backward driving and drive forward
 			case UP:
@@ -257,7 +257,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//*
 		}
 		
-		switch(turbo)
+		switch(input)
 		{
 			//arrow left -> turn left
 			case LEFT: 
