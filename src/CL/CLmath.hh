@@ -46,8 +46,8 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		~CLmath();
 	public:
 		xlong sign(xlong x) const;
-		xlong heaviside(xlong x) const;
-		xlong delta(xlong x) const;
+		template<typename T> T heaviside(T x) const;
+		template<typename T> T delta(T x) const;
 		template<typename T> T absolute(T x) const;
 		template<typename T> T min(T a,T b) const;
 		template<typename T> T max(T a,T b) const;
@@ -144,8 +144,8 @@ CLmath::~CLmath()
 
 xlong CLmath::sign(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  }
 
-
-xlong CLmath::heaviside(xlong x) const { return xlong(x>0); }
+template<typename T>
+T CLmath::heaviside(T x) const { return T(x>0); }
 
 template<>
 xlong CLmath::absolute<xlong>(xlong x) const { return (xlong(x>0)-1 ^ x) + xlong(x<0); }
@@ -157,11 +157,8 @@ float CLmath::absolute<float>(float x) const
 	return x;
 }
 
-xlong CLmath::delta(xlong x) const
-{
-	__asm__ __volatile__ ("xorl %%ebx,%%ebx; orl $0,%%eax; setz %%bl ;" : "=b"(x) : "a"(x) );
-	return x;
-}
+template<typename T>
+T CLmath::delta(T x) const { return (x==0); }
 
 template<typename T>
 T CLmath::min(T a,T b) const { return (a<b) ? a : b; }
