@@ -31,6 +31,14 @@ int main(int argc, char** argv)
 			
 	//*
 	
+	say(float(clglobal->clmath->round(0)));
+	say(float(clglobal->clmath->round(2.5)));
+	say(float(clglobal->clmath->round(-2.5)));
+	say(float(clglobal->clmath->round(2.1)));
+	say(float(clglobal->clmath->round(-2.1)));
+	say(float(clglobal->clmath->round(2.7)));
+	say(float(clglobal->clmath->round(-2.7)));
+	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*

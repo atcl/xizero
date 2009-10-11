@@ -74,7 +74,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 	for(uxlong i=0; i<frames; i++)
 	{
 		frame[i] = new CLframe;
-		frame[i]->duration = anicsv[anipointer];
+		frame[i]->duration = float(anicsv[anipointer]);
 		
 		//multiplication is faster than divisions
 		float inv_dur = 1/(frame[i]->duration);
@@ -83,36 +83,36 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 		//set units for multi frame animation
 		if(frame[i]->duration!=0)
 		{
-			frame[i]->units[0] = anicsv[anipointer+1] * inv_dur;
-			frame[i]->units[1] = anicsv[anipointer+2] * inv_dur;
-			frame[i]->units[2] = anicsv[anipointer+3] * inv_dur;
-			frame[i]->units[3] = anicsv[anipointer+4] * inv_dur;
-			frame[i]->units[4] = anicsv[anipointer+5] * inv_dur;
-			frame[i]->units[5] = anicsv[anipointer+6] * inv_dur;
-			frame[i]->units[6] = anicsv[anipointer+7] * inv_dur;
-			frame[i]->units[7] = anicsv[anipointer+8] * inv_dur;
-			frame[i]->units[8] = anicsv[anipointer+9] * inv_dur;
-			frame[i]->units[9] = anicsv[anipointer+10] * inv_dur;
-			frame[i]->units[10] = anicsv[anipointer+11] * inv_dur;
-			frame[i]->units[11] = anicsv[anipointer+12] * inv_dur;
+			frame[i]->units[0] = float(anicsv[anipointer+1]) * inv_dur;
+			frame[i]->units[1] = float(anicsv[anipointer+2]) * inv_dur;
+			frame[i]->units[2] = float(anicsv[anipointer+3]) * inv_dur;
+			frame[i]->units[3] = float(anicsv[anipointer+4]) * inv_dur;
+			frame[i]->units[4] = float(anicsv[anipointer+5]) * inv_dur;
+			frame[i]->units[5] = float(anicsv[anipointer+6]) * inv_dur;
+			frame[i]->units[6] = float(anicsv[anipointer+7]) * inv_dur;
+			frame[i]->units[7] = float(anicsv[anipointer+8]) * inv_dur;
+			frame[i]->units[8] = float(anicsv[anipointer+9]) * inv_dur;
+			frame[i]->units[9] = float(anicsv[anipointer+10]) * inv_dur;
+			frame[i]->units[10] = float(anicsv[anipointer+11]) * inv_dur;
+			frame[i]->units[11] = float(anicsv[anipointer+12]) * inv_dur;
 		}
 		//*
 		
 		//set units for single frame animation
 		else
 		{
-			frame[i]->units[0] = anicsv[anipointer+1];
-			frame[i]->units[1] = anicsv[anipointer+2];
-			frame[i]->units[2] = anicsv[anipointer+3];
-			frame[i]->units[3] = anicsv[anipointer+4];
-			frame[i]->units[4] = anicsv[anipointer+5];
-			frame[i]->units[5] = anicsv[anipointer+6];
-			frame[i]->units[6] = anicsv[anipointer+7];
-			frame[i]->units[7] = anicsv[anipointer+8];
-			frame[i]->units[8] = anicsv[anipointer+9];
-			frame[i]->units[9] = anicsv[anipointer+10];
-			frame[i]->units[10] = anicsv[anipointer+11];
-			frame[i]->units[11] = anicsv[anipointer+12];
+			frame[i]->units[0] = float(anicsv[anipointer+1]);
+			frame[i]->units[1] = float(anicsv[anipointer+2]);
+			frame[i]->units[2] = float(anicsv[anipointer+3]);
+			frame[i]->units[3] = float(anicsv[anipointer+4]);
+			frame[i]->units[4] = float(anicsv[anipointer+5]);
+			frame[i]->units[5] = float(anicsv[anipointer+6]);
+			frame[i]->units[6] = float(anicsv[anipointer+7]);
+			frame[i]->units[7] = float(anicsv[anipointer+8]);
+			frame[i]->units[8] = float(anicsv[anipointer+9]);
+			frame[i]->units[9] = float(anicsv[anipointer+10]);
+			frame[i]->units[10] = float(anicsv[anipointer+11]);
+			frame[i]->units[11] = float(anicsv[anipointer+12]);
 		}
 		//*
 		
@@ -172,13 +172,13 @@ xlong CLanim::update()
 		//*
 		
 		//determine time
-		xlong curr_time = clsystem->getmilliseconds();
-		xlong time_diff = float(curr_time - lastupdate);
+		float curr_time = float(clsystem->getmilliseconds());
+		float time_diff = float(curr_time - lastupdate);
 		//*
 		
 		//is last run in this frame
 		bool lastrun = 0;
-		if(curr_time > starttime + frame[currframe]->duration) lastrun = 1;
+		if(curr_time > float(starttime) + frame[currframe]->duration) lastrun = 1;
 		//*
 				
 		//update object
@@ -210,12 +210,13 @@ xlong CLanim::update()
 		//rotate around x
 		if(frame[currframe]->curr[6]!=0)
 		{
-			if(frame[currframe]->curr[6]< 0.5) frame[currframe]->comm[6] += frame[currframe]->curr[6];
+			if(frame[currframe]->curr[6] < 1) frame[currframe]->comm[6] += frame[currframe]->curr[6];
+			else frame[currframe]->comm[6] = frame[currframe]->curr[6];
 			
-			if( clmath->round(frame[currframe]->comm[6])!= 0)
+			if( clmath->round(frame[currframe]->comm[6]) != 0)
 			{
-				linear->rotate(clmath->round(frame[currframe]->comm[6]),0,0);
-				frame[currframe]->comm[6] = 0;
+				linear->rotate(xlong(frame[currframe]->comm[6]),0,0);
+				frame[currframe]->comm[6] -= xlong(frame[currframe]->comm[6]);
 			}
 		}
 		//*
@@ -223,12 +224,13 @@ xlong CLanim::update()
 		//rotate around y
 		if(frame[currframe]->curr[7]!= 0)
 		{
-			if(frame[currframe]->curr[7]< 0.5) frame[currframe]->comm[7] += frame[currframe]->curr[7];
+			if(frame[currframe]->curr[7] < 1) frame[currframe]->comm[7] += frame[currframe]->curr[7];
+			else frame[currframe]->comm[7] = frame[currframe]->curr[7];
 			
 			if( clmath->round(frame[currframe]->comm[7]) != 0)
 			{
-				linear->rotate(0,clmath->round(frame[currframe]->comm[7]),0);
-				frame[currframe]->comm[7] = 0;
+				linear->rotate(0,xlong(frame[currframe]->comm[7]),0);
+				frame[currframe]->comm[7] -= xlong(frame[currframe]->comm[7]);
 			}
 		}
 		//*
@@ -236,12 +238,13 @@ xlong CLanim::update()
 		//rotate around z
 		if(frame[currframe]->curr[8]!= 0)
 		{
-			if(frame[currframe]->curr[8]< 0.5) frame[currframe]->comm[8] += frame[currframe]->curr[8];
+			if(frame[currframe]->curr[8] < 1) frame[currframe]->comm[8] += frame[currframe]->curr[8];
+			else frame[currframe]->comm[8] = frame[currframe]->curr[8];
 			
-			if( clmath->round(frame[currframe]->comm[8])!=0)
+			if( clmath->round(frame[currframe]->comm[8]) != 0)
 			{
-				linear->rotate(0,0,clmath->round(frame[currframe]->comm[8]));
-				frame[currframe]->comm[8] = 0;
+				linear->rotate(0,0,xlong(frame[currframe]->comm[8]));
+				frame[currframe]->comm[8] -= xlong(frame[currframe]->comm[8]);
 			}
 		}
 		//*

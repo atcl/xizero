@@ -22,9 +22,6 @@
  * version: 0.1
  */
 
-//BIT flags
-#define SIGNBIT "$0b10000000000000000000000000000000"
-
 //degree to radian and vice versa
 #define DEG2RAD M_PI/180
 #define RAD2DEG 180/M_PI
@@ -97,16 +94,16 @@ CLmath::CLmath()
 	float m = 0;
 	for(uxlong i=0; i<200; i++)
 	{
-		//~ ii = (i-100) / 100;
-		//~ k = 2;
-		//~ m = ii;
-		//~ for(uxlong j=0; j<6; j++)
-		//~ {
-			//~ m += doublefactorial(k-1) / doublefactorial(k) * power(ii,k+1) / (k+1);
-			//~ k+=2;
-		//~ }
-		//~ clarcsin[i] = xlong(m);
-		//~ clarccos[i] = xlong(l - m);
+		ii = (i-100) / 100;
+		k = 2;
+		m = ii;
+		for(uxlong j=0; j<6; j++)
+		{
+			m += doublefactorial(k-1) / doublefactorial(k) * power(ii,k+1) / (k+1);
+			k+=2;
+		}
+		clarcsin[i] = xlong(m);
+		clarccos[i] = xlong(l - m);
 	}	
 	//*
 	
@@ -170,16 +167,17 @@ template<typename T>
 T CLmath::max(T a,T b) const { return (a>b) ? a : b; }
 
 template<typename T>
-T CLmath::round(T x) const { return ( (x-floor(x) ) >= 0.5 ) ? ceil(x) : floor(x); }
-//alt: return (x - T(xlong(x))) >= 0.5) ? T(xlong(x)) : T(xlong(x)+1);
+T CLmath::round(T x) const 
+//{ return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x); }
+{ return ( (x - T(xlong(x))) > 0.5) ? T(xlong(x)+xlong(x>0)) : T(xlong(x)-xlong(x<0)); }
 
 template<typename T>
 T CLmath::roundup(T x) const { return T(ceil(x)); }
-//alt: return T(xlong(x));
+//alt: return T(xlong(x)+1);
 
 template<typename T>
 T CLmath::rounddown(T x) const { return T(floor(x)); }
-//alt: return T(xlong(x)+1);
+//alt: return T(xlong(x));
 
 template<typename T>
 T CLmath::sqrt(T x) const
