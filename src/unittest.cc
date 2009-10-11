@@ -31,8 +31,6 @@ int main(int argc, char** argv)
 			
 	//*
 	
-	say(clglobal->clmath->absolute(float(-123.567)));
-	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*
