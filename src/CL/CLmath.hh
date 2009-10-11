@@ -63,9 +63,9 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		float sin(xlong x) const;
 		float cos(xlong x) const;
 		float tan(xlong x) const;
-		float arcsin(float x) const;
-		float arccos(float x) const;
-		float arctan(float x) const;
+		xlong arcsin(float x) const;
+		xlong arccos(float x) const;
+		xlong arctan(float x) const;
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const;
 };
 
@@ -94,21 +94,19 @@ CLmath::CLmath()
 	float ii = 0;
 	float k = 0;
 	float l = M_PI / 2;
-	for(uxlong i=0; i<360; i++)
+	float m = 0;
+	for(uxlong i=0; i<200; i++)
 	{
-		altsign = -1.0;
-		ii = i * DEG2RAD;
-		clarcsin[i] = ii;
-		k = 2;
-		for(uxlong j=0; j<6; j++)
-		{
-			clarcsin[i] += altsign * power(ii,l) / l;
-			clarccos[i] = l - clarcsin[i];
-			altsign *= -1.0;
-			k+=2;
-			l+=2;
-		}
-		altsign = -1.0;	
+		//~ ii = (i-100) / 100;
+		//~ k = 2;
+		//~ m = ii;
+		//~ for(uxlong j=0; j<6; j++)
+		//~ {
+			//~ m += doublefactorial(k-1) / doublefactorial(k) * power(ii,k+1) / (k+1);
+			//~ k+=2;
+		//~ }
+		//~ clarcsin[i] = xlong(m);
+		//~ clarccos[i] = xlong(l - m);
 	}	
 	//*
 	
@@ -116,48 +114,34 @@ CLmath::CLmath()
 	clsin = new float[360];
 	clcos = new float[360];
 	cltan = new float[360];
-	ii = 0;
-	k = 0;
-	l = 0;
 	for(uxlong i=0; i<360; i++)
 	{
 		altsign = -1.0;
 		ii = i * DEG2RAD;
 		clsin[i] = ii;
 		clcos[i] = 1;
-		cltan[i] = ii;
 		k = 2;
 		l = 3;
 		for(uxlong j=0; j<6; j++)
 		{
-			clsin[i] += altsign * power(ii,l) / factorial(l);
 			clcos[i] += altsign * power(ii,k) / factorial(k);
-			//cltan[i] = ...
+			clsin[i] += altsign * power(ii,l) / factorial(l);
 			altsign *= -1.0;
 			k+=2;
 			l+=2;
 		}
-		altsign = -1.0;		
+		cltan[i] = clsin[i] / clcos[i];
 	}
 	//*
-	
-	//~ //old sin/cos
-	//~ sinarray = new float[360];
-	//~ cosarray = new float[360];
-	//~ 
-	//~ for(xlong i=0; i<360; i++)
-	//~ {
-		//~ xsin[i] = std::sin(i*DEG2RAD);
-		//~ xcos[i] = std::cos(i*DEG2RAD);
-	//~ }
-	//~ //*
 }
 
 CLmath::~CLmath() 
 {
 	delete[] clsin;
 	delete[] clcos;
-	delete[] cltan;	
+	delete[] cltan;
+	delete[] clarcsin;
+	delete[] clarccos;
 }
 
 xlong CLmath::sign(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  }
@@ -174,6 +158,7 @@ float CLmath::absolute<float>(float x) const
 	__asm__ __volatile__ ("btrl $31,%%eax;" : "=a"(x) : "a"(x) );
 	return x;
 }
+//alt: return float(reinterpret_cast<xlong>(x) & 0x80000000); 
 
 template<typename T>
 T CLmath::delta(T x) const { return (x==0); }
@@ -185,13 +170,16 @@ template<typename T>
 T CLmath::max(T a,T b) const { return (a>b) ? a : b; }
 
 template<typename T>
-T CLmath::round(T x) const { return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x); }
+T CLmath::round(T x) const { return ( (x-floor(x) ) >= 0.5 ) ? ceil(x) : floor(x); }
+//alt: return (x - T(xlong(x))) >= 0.5) ? T(xlong(x)) : T(xlong(x)+1);
 
 template<typename T>
 T CLmath::roundup(T x) const { return T(ceil(x)); }
+//alt: return T(xlong(x));
 
 template<typename T>
 T CLmath::rounddown(T x) const { return T(floor(x)); }
+//alt: return T(xlong(x)+1);
 
 template<typename T>
 T CLmath::sqrt(T x) const
@@ -241,20 +229,21 @@ T CLmath::factorial(T f) const
 template<typename T>
 T CLmath::doublefactorial(T f) const
 {
+	xlong ff = xlong(f);
 	T k = 0;
 	T r = 0;
 	T r1 = 1;
 	T r2 = 1;
 	T r3 = 1;
 	
-	k = f / 2;
+	k = ff / 2;
 	for(xlong i=0;i<k;i++) { r1 *= 2; }
 	for(xlong i=2;i<=k;i++) { r2 *= i; }
 	r = r1 * r2;
 	
-	if(f%2!=0)
+	if(ff%2!=0)
 	{
-		k = f + 1;
+		k = ff + 1;
 		for(xlong i=2;i<=k;i++) { r3 *= i; }
 		r = r3 / r;
 	}
@@ -280,22 +269,34 @@ float CLmath::cos(xlong x) const
 
 float CLmath::tan(xlong x) const
 {
-
+	if(x < 0) x -= 180;
+	x = absolute(x);
+	x %= 360;
+	return cltan[x];
 }
 
-float CLmath::arcsin(float x) const
+xlong CLmath::arcsin(float x) const
 { 
-	return std::asin(x) * RAD2DEG; //!change to lookup table!
+	
 }
 
-float CLmath::arccos(float x) const
+xlong CLmath::arccos(float x) const
 {
-	return std::acos(x) * RAD2DEG; //!change to lookup table!
+	
 }
 
-float CLmath::arctan(float x) const
+xlong CLmath::arctan(float x) const
 {
-
+	float r = x;
+	float l = 3;
+	float altsign = -1.0;
+	for(uxlong j=0; j<6; j++)
+	{
+		r += altsign * power(x,l) / factorial(l);
+		altsign *= -1.0;
+		l+=2;
+	}
+	return xlong(r);
 }
 
 float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const

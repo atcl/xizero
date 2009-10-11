@@ -24,6 +24,8 @@ CLglobal* CLsetup()
 	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
 	clglobal->clwindow->setcursor(cursor);
 
+	clglobal->clmath->pi();
+
 	//init matrices
 	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);

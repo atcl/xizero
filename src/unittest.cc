@@ -31,13 +31,6 @@ int main(int argc, char** argv)
 			
 	//*
 	
-	xlong a = -181;
-	(clglobal->clmath->heaviside(a));
-	xlong b = 181;
-	(clglobal->clmath->heaviside(b));
-	xlong c = 0;
-	(clglobal->clmath->heaviside(c));
-	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*
