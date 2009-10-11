@@ -35,11 +35,13 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 	
 	private:
 		float  fxpi;
-		float  xpi;
-		float* xsin;
-		float* xcos;
-		xlong* arcsinarray;
-		xlong* arccosarray;
+		float  clpi;
+		float* clsin;
+		float* clcos;
+		float* cltan;
+		xlong* clarcsin;
+		xlong* clarccos;
+		xlong* clarctan; 
 		CLmath();
 		~CLmath();
 	public:
@@ -55,8 +57,8 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		template<typename T> T sqrt(T x) const;
 		template<typename T> T deg2rad(T d) const;
 		template<typename T> T power(T b,xlong e) const;
-		xlong faculty(xlong f) const;
-		float faculty(float f) const;
+		template<typename T> T factorial(T f) const;
+		template<typename T> T doublefactorial(T f) const;
 		float pi() const;
 		float sin(xlong x) const;
 		float cos(xlong x) const;
@@ -74,53 +76,45 @@ CLmath::CLmath()
 	//*
 	
 	//calc pi //very bad convergence!!!
-	xpi = 1;
+	clpi = 1;
 	float h = 3;
 	float altsign = -1.0;
 	for(uxlong i=0; i<10000; i++)
 	{
-		xpi += altsign / h;
+		clpi += altsign / h;
 		h += 2;
 		altsign *= -1;
 	}
-	xpi *= 4;
+	clpi *= 4;
 	//*
 	
-	//calc arcsin/arccos
+	//calc arcsin/arccos/asrctan
 	
 	
 	
 	//*
 	
-	//fill look up tables for arcsine and arccosine
-	//~ arcsinarray = new xlong[360];
-	//~ arccosarray = new xlong[360];
-	//~ 
-	//~ for(xlong i=0; i<360; i++)
-	//~ {
-		//~ arcsinarray[i] = 0;
-		//~ arccosarray[i] = 0;
-	//~ }
-	//*
-	
-	//calc sin/cos arrays
-	xsin = new float[360];
-	xcos = new float[360];
+	//calc sin/cos/tan arrays
+	clsin = new float[360];
+	clcos = new float[360];
+	cltan = new float[360];
 	float ii = 0;
-	xlong k = 0;
-	xlong l = 0;
+	float k = 0;
+	float l = 0;
 	altsign = -1.0;
 	for(uxlong i=0; i<360; i++)
 	{
 		ii = i * DEG2RAD;
-		xsin[i] = ii;
-		xcos[i] = 1;
+		clsin[i] = ii;
+		clcos[i] = 1;
+		//cltan[i] = ...
 		k = 2;
 		l = 3;
 		for(uxlong j=0; j<6; j++)
 		{
-			xsin[i] += altsign * power(ii,l) / faculty(float(l));
-			xcos[i] += altsign * power(ii,k) / faculty(float(k));
+			clsin[i] += altsign * power(ii,l) / factorial(l);
+			clcos[i] += altsign * power(ii,k) / factorial(k);
+			//cltan[i] = ...
 			altsign *= -1.0;
 			k+=2;
 			l+=2;
@@ -143,8 +137,9 @@ CLmath::CLmath()
 
 CLmath::~CLmath() 
 {
-	delete[] xsin;
-	delete[] xcos;	
+	delete[] clsin;
+	delete[] clcos;
+	delete[] cltan;	
 }
 
 xlong CLmath::sign(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  }
@@ -220,17 +215,35 @@ T CLmath::power(T b,xlong e) const
 	return r;
 }
 
-xlong CLmath::faculty(xlong f) const
+template<typename T>
+T CLmath::factorial(T f) const
 {
-	xlong r = 1;
+	T r = 1;
 	for(xlong i=2;i<=f;i++) { r *= i; }
 	return r;
 }
 
-float CLmath::faculty(float f) const
+template<typename T>
+T CLmath::doublefactorial(T f) const
 {
-	float r = 1;
-	for(xlong i=2;i<=f;i++) { r *= i; }
+	T k = 0;
+	T r = 0;
+	T r1 = 1;
+	T r2 = 1;
+	T r3 = 1;
+	
+	k = f / 2;
+	for(xlong i=0;i<k;i++) { r1 *= 2; }
+	for(xlong i=2;i<=k;i++) { r2 *= i; }
+	r = r1 * r2;
+	
+	if(f%2!=0)
+	{
+		k = f + 1;
+		for(xlong i=2;i<=k;i++) { r3 *= i; }
+		r = r3 / r;
+	}
+
 	return r;
 }
 
@@ -241,13 +254,18 @@ float CLmath::sin(xlong x) const
 	if(x < 0) x -= 180;
 	x = absolute(x);
 	x %= 360;
-	return xsin[x];
+	return clsin[x];
 }
 
 float CLmath::cos(xlong x) const
 {
 	x = absolute(x)%360;
-	return xcos[x];
+	return clcos[x];
+}
+
+float CLmath::tan(xlong x) const
+{
+
 }
 
 float CLmath::arcsin(float x) const
@@ -258,6 +276,11 @@ float CLmath::arcsin(float x) const
 float CLmath::arccos(float x) const
 {
 	return std::acos(x) * RAD2DEG; //!change to lookup table!
+}
+
+float CLmath::arctan(float x) const
+{
+
 }
 
 float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const
