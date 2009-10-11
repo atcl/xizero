@@ -88,26 +88,44 @@ CLmath::CLmath()
 	clpi *= 4;
 	//*
 	
-	//calc arcsin/arccos/asrctan
-	
-	
-	
+	//calc arcsin/arccos
+	clarcsin = new xlong[200];
+	clarccos = new xlong[200];
+	float ii = 0;
+	float k = 0;
+	float l = M_PI / 2;
+	for(uxlong i=0; i<360; i++)
+	{
+		altsign = -1.0;
+		ii = i * DEG2RAD;
+		clarcsin[i] = ii;
+		k = 2;
+		for(uxlong j=0; j<6; j++)
+		{
+			clarcsin[i] += altsign * power(ii,l) / l;
+			clarccos[i] = l - clarcsin[i];
+			altsign *= -1.0;
+			k+=2;
+			l+=2;
+		}
+		altsign = -1.0;	
+	}	
 	//*
 	
 	//calc sin/cos/tan arrays
 	clsin = new float[360];
 	clcos = new float[360];
 	cltan = new float[360];
-	float ii = 0;
-	float k = 0;
-	float l = 0;
-	altsign = -1.0;
+	ii = 0;
+	k = 0;
+	l = 0;
 	for(uxlong i=0; i<360; i++)
 	{
+		altsign = -1.0;
 		ii = i * DEG2RAD;
 		clsin[i] = ii;
 		clcos[i] = 1;
-		//cltan[i] = ...
+		cltan[i] = ii;
 		k = 2;
 		l = 3;
 		for(uxlong j=0; j<6; j++)
