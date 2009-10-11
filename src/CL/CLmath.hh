@@ -153,9 +153,8 @@ template<>
 float CLmath::absolute<float>(float x) const
 {
 	__asm__ __volatile__ ("btrl $31,%%eax;" : "=a"(x) : "a"(x) );
-	return x;
+	return x; 
 }
-//alt: return float(reinterpret_cast<xlong>(x) & 0x80000000); 
 
 template<typename T>
 T CLmath::delta(T x) const { return (x==0); }
@@ -167,17 +166,13 @@ template<typename T>
 T CLmath::max(T a,T b) const { return (a>b) ? a : b; }
 
 template<typename T>
-T CLmath::round(T x) const 
-//{ return ( (x-floor(x) ) > 0.5 ) ? ceil(x) : floor(x); }
-{ return ( (x - T(xlong(x))) > 0.5) ? T(xlong(x)+xlong(x>0)) : T(xlong(x)-xlong(x<0)); }
+T CLmath::round(T x) const { return ( (x - T(xlong(x))) > 0.5) ? T(xlong(x)+xlong(x>0)) : T(xlong(x)-xlong(x<0)); }
 
 template<typename T>
-T CLmath::roundup(T x) const { return T(ceil(x)); }
-//alt: return T(xlong(x)+1);
+T CLmath::roundup(T x) const { return T(xlong(x)+xlong(x>0 && (x - T(xlong(x))!=0))-xlong(x<0 && (x - T(xlong(x))!=0))); }
 
 template<typename T>
-T CLmath::rounddown(T x) const { return T(floor(x)); }
-//alt: return T(xlong(x));
+T CLmath::rounddown(T x) const { return T(xlong(x)); }
 
 template<typename T>
 T CLmath::sqrt(T x) const
