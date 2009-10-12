@@ -4,8 +4,6 @@
 #define HH_CLMATH
 #pragma message "Compiling " __FILE__ " ! TODO: "
 
-#include <cmath>
-
 #include "CLtypes.hh"
 #include "CLsystem.hh"
 #include "CLmacros.hh"
@@ -23,8 +21,9 @@
  */
 
 //degree to radian and vice versa
-#define DEG2RAD M_PI/180
-#define RAD2DEG 180/M_PI
+#define PI 3.14159265358979
+#define DEG2RAD PI/180
+#define RAD2DEG 180/PI
 
 class CLmath : public virtual CLcl, public CLsingle<CLmath>
 {
@@ -90,7 +89,7 @@ CLmath::CLmath()
 	clarccos = new xlong[200];
 	float ii = 0;
 	float k = 0;
-	float l = M_PI / 2;
+	float l = PI / 2;
 	float m = 0;
 	for(uxlong i=0; i<200; i++)
 	{
