@@ -61,7 +61,7 @@ class CLlevel : public virtual CLcl
 		xlong playerscreenylevel;
 		bool  paused;
 	public:
-		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer);
+		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype);
 		~CLlevel();
 		xlong update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
@@ -80,7 +80,7 @@ xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
 
-CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer)
+CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype)
 {
 	//matrix for linear transformations of level objects
 	linear = new CLmatrix(1);
@@ -297,8 +297,8 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	if(bossposfound==false) clsystem->exit(1,0,__func__,"no boss position found in entity map");
 	//*
 
-	//load boss *** temp! *** change to pick right boss
-	boss = new CLboss(bossa->getmember(0),&smoothmark,smoothlevelheight+10,bossp);
+	//load boss
+	boss = new CLboss(bossa->getmember(bosstype),&smoothmark,smoothlevelheight+10,bossp);
 	//*
 
 //***

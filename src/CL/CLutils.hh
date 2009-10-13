@@ -43,6 +43,7 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		xchar* color2string(uxlong c) const;
 		xlong  endian(xlong l) const;
 		xlong  hatoi(uxchar c) const;
+		xlong  hatoi(const xchar* c) const;
 };
 
 CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; }
@@ -214,6 +215,49 @@ xlong CLutils::hatoi(uxchar c) const
 		case 'f': return 15;
 		default:  return 0;
 	}
+}
+
+xlong CLutils::hatoi(const xchar* c) const
+{
+	xchar currchar = 0;
+	xlong charcount = 0;
+	xlong currvalue = 0;
+	xlong r = 0;
+	while(charcount<8)
+	{
+		currchar = c[charcount];
+		switch(currchar)
+		{
+			case '0': currvalue = 0; break;
+			case '1': currvalue = 1; break;
+			case '2': currvalue = 2; break;
+			case '3': currvalue = 3; break;
+			case '4': currvalue = 4; break;
+			case '5': currvalue = 5; break;
+			case '6': currvalue = 6; break;
+			case '7': currvalue = 7; break;
+			case '8': currvalue = 8; break;
+			case '9': currvalue = 9; break;
+			case 'A': currvalue = 10; break;
+			case 'B': currvalue = 11; break;
+			case 'C': currvalue = 12; break;
+			case 'D': currvalue = 13; break;
+			case 'E': currvalue = 14; break;
+			case 'F': currvalue = 15; break;
+			case 'a': currvalue = 10; break;
+			case 'b': currvalue = 11; break;
+			case 'c': currvalue = 12; break;
+			case 'd': currvalue = 13; break;
+			case 'e': currvalue = 14; break;
+			case 'f': currvalue = 15; break;
+			default:  currvalue = -1;
+		}
+		if(currvalue!=-1) r += currvalue << (charcount << 2);
+		else break;
+		charcount++;
+	}
+	
+	return r;
 }
 
 #endif

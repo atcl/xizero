@@ -179,11 +179,11 @@ int main()
 			cin >> temp.b.db;
 			cout << "Enter color of Polygon [in hex, 4 byte ie: 00ff0000 for red]: ";
 			cin >> hex >> temp.c.dd;
-			tempc1 = temp.c.db[0];
+			//tempc1 = temp.c.db[0];
 			//tempc2 = temp.c.db[1];
-			temp.c.db[0] = temp.c.db[2];
+			//temp.c.db[0] = temp.c.db[2];
 			//temp.c.db[1] = temp.c.db[3];
-			temp.c.db[2] = tempc1;
+			//temp.c.db[2] = tempc1;
 			temp.d.dd = 0;
 			proto.push_back(temp);
 			lineout(temp,'POLY');

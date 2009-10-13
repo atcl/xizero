@@ -10,6 +10,7 @@ void xizero_cleanup() { CLgarbage(); }
 
 CLglobal* clglobal = 0;
 CLar* cldata = 0;
+xlong currlevel = 0;
 
 void exitgame()
 {
@@ -42,14 +43,16 @@ void newgame()
 	
 	//load and init level
 	CLar* lvls = new CLar(cldata->findbyname("levels.a"));
-	xchar** lfn = clglobal->clformat->loadlvl(lvls->getmember(0));
-	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[0]),cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]));
+	xchar** lfn = clglobal->clformat->loadlvl(lvls->getmember(currlevel));
+	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),cldata->findbyname(lfn[5]),currlevel);
 	clglobal->clfsprogress->set(90);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
 	//*
 	
 	//init level floor
+	uxlong floorcolor = clglobal->clutils->hatoi(lfn[0]);
+	say(floorcolor);
 	clglobal->clfloor->init(100,670,0x00b0b000,1);
 	clglobal->clfsprogress->set(100);
 	clglobal->clfsprogress->draw();
