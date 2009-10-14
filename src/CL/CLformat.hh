@@ -253,13 +253,7 @@ sprite* CLformat::loadras(CLfile* sf) const
 	
 	if(type==2)
 	{
-		//~ if(depth==24)
-		//~ {
-			//~ data[pixelindex] = 0;
-			//~ pixelindex++;
-		//~ }
-
-		while(pixelindex<fullsize) //crashes inside this loop!
+		while(pixelindex<fullsize)
 		{
 			if(uxchar(bf[dataindex])==0x80)
 			{			
@@ -311,12 +305,6 @@ sprite* CLformat::loadras(CLfile* sf) const
 	}
 	else
 	{
-		//~ if(depth==24)
-		//~ {
-			//~ data[pixelindex] = 0;
-			//~ pixelindex++;
-		//~ }
-		
 		for(uxlong i=0; i<fullsize; i++)
 		{
 			if(depth==24 && (pixelindex+1)%4==0)
