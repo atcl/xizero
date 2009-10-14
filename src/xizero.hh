@@ -52,8 +52,7 @@ void newgame()
 	
 	//init level floor
 	uxlong floorcolor = clglobal->clutils->hatoi(lfn[0]);
-	say(floorcolor);
-	clglobal->clfloor->init(100,670,0x00b0b000,1);
+	clglobal->clfloor->init(100,670,floorcolor,1);
 	clglobal->clfsprogress->set(100);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();

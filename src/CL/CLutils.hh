@@ -222,6 +222,7 @@ xlong CLutils::hatoi(const xchar* c) const
 	xchar currchar = 0;
 	xlong charcount = 0;
 	xlong currvalue = 0;
+	bool  hasval = 0;
 	xlong r = 0;
 	while(charcount<8)
 	{
@@ -252,11 +253,16 @@ xlong CLutils::hatoi(const xchar* c) const
 			case 'f': currvalue = 15; break;
 			default:  currvalue = -1;
 		}
-		if(currvalue!=-1) r += currvalue << (charcount << 2);
-		else break;
+		if(currvalue==-1) break;
+		if(hasval==0 && currvalue!=0) hasval = 1;
+		if(hasval==1)
+		{
+			r += currvalue;
+			r <<= 4;
+		}
 		charcount++;
 	}
-	
+	r >>= 4;
 	return r;
 }
 
