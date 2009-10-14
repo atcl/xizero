@@ -253,11 +253,11 @@ sprite* CLformat::loadras(CLfile* sf) const
 	
 	if(type==2)
 	{
-		if(depth==24)
-		{
-			data[pixelindex] = 0;
-			pixelindex++;
-		}
+		//~ if(depth==24)
+		//~ {
+			//~ data[pixelindex] = 0;
+			//~ pixelindex++;
+		//~ }
 
 		while(pixelindex<fullsize) //crashes inside this loop!
 		{
@@ -271,7 +271,7 @@ sprite* CLformat::loadras(CLfile* sf) const
 					dataindex++;	
 					for(xlong i=0; i<=temp; i++)
 					{			
-						if(depth==24 && (pixelindex)%4==0)
+						if(depth==24 && (pixelindex+1)%4==0)
 						{
 							data[pixelindex] = 0;
 							pixelindex++;
@@ -284,7 +284,7 @@ sprite* CLformat::loadras(CLfile* sf) const
 				}
 				else
 				{
-					if(depth==24 && (pixelindex)%4==0)
+					if(depth==24 && (pixelindex+1)%4==0)
 					{
 						data[pixelindex] = 0;
 						pixelindex++;
@@ -297,7 +297,7 @@ sprite* CLformat::loadras(CLfile* sf) const
 			}
 			else
 			{
-				if(depth==24 && (pixelindex)%4==0)
+				if(depth==24 && (pixelindex+1)%4==0)
 				{
 					data[pixelindex] = 0;
 					pixelindex++;
@@ -311,15 +311,15 @@ sprite* CLformat::loadras(CLfile* sf) const
 	}
 	else
 	{
-		if(depth==24)
-		{
-			data[pixelindex] = 0;
-			pixelindex++;
-		}
+		//~ if(depth==24)
+		//~ {
+			//~ data[pixelindex] = 0;
+			//~ pixelindex++;
+		//~ }
 		
 		for(uxlong i=0; i<fullsize; i++)
 		{
-			if(depth==24 && (pixelindex)%4==0)
+			if(depth==24 && (pixelindex+1)%4==0)
 			{
 				data[pixelindex] = 0;
 				pixelindex++;
