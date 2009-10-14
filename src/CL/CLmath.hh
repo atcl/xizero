@@ -151,7 +151,7 @@ xlong CLmath::absolute<xlong>(xlong x) const { return (xlong(x>0)-1 ^ x) + xlong
 template<>
 float CLmath::absolute<float>(float x) const
 {
-	__asm__ __volatile__ ("btrl $31,%%eax;" : "=a"(x) : "a"(x) );
+	__asm__ __volatile__ ("andl $0x7FFFFFFF,%%eax;" : "=a"(x) : "a"(x) );
 	return x; 
 }
 

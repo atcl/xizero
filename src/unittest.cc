@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
-	//*	
+	//*
 
 	CLfile* cube;
 	
