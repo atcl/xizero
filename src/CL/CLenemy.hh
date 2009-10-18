@@ -199,7 +199,7 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr)
 	
 	//create progress bar
 	hprog = new CLprogress(*(enemyptr->hprog));
-	hprog->reset(0,0,40,10,health+shield,0,health+shield,0x00FF0000,0,1,0,0x00C0C0C0,0x00C0C0C0);
+	hprog->reset(0,0,40,10,health+shield,0,health+shield,0x0000FF00,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*
 }
 
