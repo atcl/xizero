@@ -234,23 +234,11 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 	xlong off = y1*XRES+x1;
 	//*
 
-	if(dx<0)
-	{
-		dx = -dx;
-		xs = -xs;
-	}
+	if(dx<0) { dx = -dx; xs = -xs; }
 
-	if(dy<0)
-	{
-		dy = -dy;
-		ys = -ys;
-	}
+	if(dy<0) { dy = -dy; ys = -ys; }
  
-	if(dy > dx)
-	{
-		dx ^= dy ^= dx ^= dy;
-		xs ^= ys ^= xs ^= ys;
-	}
+	if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
 
 	len = dx+1;
 	e = dy;
@@ -272,69 +260,7 @@ void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 
 void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 {
-	//check if necessary to draw at all
-	if(x1==x2 && y1==y2) return;
-	//*
-	
-	//clip line against screen borders
-	clip(x1,y1);
-	clip(x2,y2);
-	//*
 
-	//set up variables
-	xlong dx = x2 - x1;
-	xlong dy = y2 - y1;
-	xlong e = 0;
-	xlong xs = 1;
-	xlong ys = XRES;
-	xlong len;
-	xlong off = y1*XRES+x1;
-	//*
-
-	if(dx<0)
-	{
-		dx = -dx;
-		xs = -xs;
-	}
-
-
-	if(dy<0)
-	{
-		dy = -dy;
-		ys = -ys;
-	}
-
-	if(dy > dx)
-	{
-		dx ^= dy ^= dx ^= dy;
-		xs ^= ys ^= xs ^= ys;
-	}
-
-	len = dx+1;
-	e = dy;
-
-	//draw loop
-	for(uxlong i=0; i<len; i++)
-	{
-		cldoublebuffer[off] = c;
-
-		cldoublebuffer[off-1]      = c; //adjust colors 
-		cldoublebuffer[off+1]      = c;
-		cldoublebuffer[off-XRES-1] = c;
-		cldoublebuffer[off-XRES]   = c;
-		cldoublebuffer[off-XRES+1] = c;
-		cldoublebuffer[off+XRES-1] = c;
-		cldoublebuffer[off+XRES]   = c;
-		cldoublebuffer[off+XRES+1] = c; //*
-		off += xs;
-		e += dy;
-		if(e >= dx)
-		{
-			e -= dx;
-			off += ys;
-		}
-	}
-	//*
 }
 
 void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const
@@ -643,7 +569,25 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m,float e) const
 		
 		case 9: //scaled about e
 		
-		case 10: ; //rotated about e
+		case 10:  //rotated about e
+		
+		case 11: //and
+		
+		case 12: //or
+		
+		case 13: //xor
+		
+		case 14: //nand
+		
+		case 15: //nor
+		
+		case 16: //not
+		
+		case 17: //byte add
+		
+		case 18: //byte sub
+		
+		case 19: ;//byte mul
 	}
 }
 

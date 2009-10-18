@@ -87,23 +87,11 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 	xlong len;
 	xlong off = y1*XRES+x1;
 
-	if(dx<0)
-	{
-		dx = -dx;
-		xs = -xs;
-	}
+	if(dx<0) { dx = -dx; xs = -xs; }
 
-	if(dy<0)
-	{
-		dy = -dy;
-		ys = -ys;
-	}
+	if(dy<0) { dy = -dy; ys = -ys; }
 
-	if(dy > dx)
-	{
-		dx ^= dy ^= dx ^= dy;
-		xs ^= ys ^= xs ^= ys;
-	}
+	if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
 
 	len = dx+1;
 	e = dy;
