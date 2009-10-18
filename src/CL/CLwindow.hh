@@ -61,7 +61,7 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		void hidecursor();
 		void setcursor(sprite* s);
 		xlong getinkey();
-		xlong getturbo() const;
+		xlong getturbo();
 		xlong getmousex() const;
 		xlong getmousey() const;
 		xlong getmouselb() const;
@@ -86,7 +86,7 @@ CLwindow::CLwindow()
 	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
 	//init events
 	XAutoRepeatOn(Xdisplay);
-	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
+	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
 	//init window title
 	XStoreName(Xdisplay,Xwindow,title);
 	//init icon
@@ -143,11 +143,6 @@ void CLwindow::handle()
 				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) ;
 			break;
 			
-			case KeyRelease:
-				keyup = XLookupKeysym((XKeyEvent*)&Xevent,0);
-				if(keyup==turbo) turbo = 0;
-			break;
-			
 			case ButtonPress:
 				switch(Xevent.xbutton.button)
 				{
@@ -171,13 +166,13 @@ void CLwindow::handle()
 					case Button1:
 						mousex = Xevent.xbutton.x;
 						mousey = Xevent.xbutton.y;
-						mouselb = 1;
+						mouselb = 0;
 					break;
 					
 					case Button2: 
 						mousex = Xevent.xbutton.x;
 						mousey = Xevent.xbutton.y;
-						mouserb = 1;
+						mouserb = 0;
 					break;
 				}
 			break;
@@ -217,7 +212,7 @@ void CLwindow::setcursor(sprite* s) { cursor = s; }
 
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; }
 
-xlong CLwindow::getturbo() const { return turbo; }
+xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; }
 
 xlong CLwindow::getmousex() const { return mousex; }
 

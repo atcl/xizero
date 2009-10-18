@@ -37,7 +37,7 @@ CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp) : CLenemy(bos
 	//*
 
 	//set health bar width and height
-	hprog->reset(0,0,80,20,health+shield,0,health+shield,0x00FF0000,0,1,0,0x00C0C0C0,0x00C0C0C0);
+	hprog->reset(0,0,80,20,health+shield,0,health+shield,0x000000FF,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*	
 }
 
