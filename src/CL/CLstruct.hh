@@ -38,25 +38,6 @@ struct screenside
 	float z;
 };
 
-struct rawpoly
-{
-	xlong ax;
-	xlong ay;
-	xlong az;
-	
-	xlong bx;
-	xlong by;
-	xlong bz;
-	
-	xlong cx;
-	xlong cy;
-	xlong cz;
-	
-	xlong dx;
-	xlong dy;
-	xlong dz; 
-};
-
 struct sprite
 {
 	uxlong  size;
