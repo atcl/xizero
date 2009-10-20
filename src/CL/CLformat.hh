@@ -55,7 +55,7 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		inline xchar**  loadlvl(const xchar* sf) const;
 		inline xmap*    loadini(const xchar* bf) const;
 		
-		sprites* loadtileset(sprite* sp,xlong tw,xlong th);
+		sprites2* loadtileset(sprite* sp,xlong tw,xlong th);
 };
 
 xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); }
@@ -448,10 +448,33 @@ sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th) const
 	return r;
 }
 
-sprites* CLformat::loadtileset(sprite* sp,xlong tw,xlong th)
+sprites2* CLformat::loadtileset(sprite* sp,xlong tw,xlong th)
 {
+	sprites2* r = new sprites2;
+	r->tilewidth = tw;
+	r->tileheight = th;
+	r->tilesize = tw * th;
+	r->tilecount = (sp->width / tw) * (sp->height / th);
+	r->tdata = new uxlong*[tilecount];
 	
+	xlong tilesperrow = sp->width / tw;
+	xlong globalindex = 0;
+	xlong localindex = 0;
 	
+	for(xlong i=0; i<tilecount; i++)
+	{
+		r->tdata[i] = new uxlong[r->tilesize];
+		
+		for(xlong j=0; j<th; j++)
+		{
+			for(xlong k=0; k<tw; k++)
+			{
+				//...go on here
+			}
+		}
+	}
+	
+	return r;
 }
 
 sprites* CLformat::loadfont(const xchar* sf) const { return loadfont(clsystem->getfile(sf)); }

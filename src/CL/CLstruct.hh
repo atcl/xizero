@@ -60,6 +60,15 @@ struct sprites
 	uxlong** tiledata;
 };
 
+struct sprites2
+{
+	uxlong  tilesize;
+	uxlong  tilewidth;
+	uxlong  tileheight;
+	uxlong  tilecount;
+	uxlong** tiledata;
+};
+
 typedef sprites CLfont;
 
 struct CLgamepadstate
