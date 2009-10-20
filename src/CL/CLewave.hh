@@ -15,10 +15,14 @@
  * version: 0.1
  */
  
-class CLewave : public virtual CLcl
+class CLewave : public virtual CLcl //derive from CLentity?
 {
+	private:
 	
-	
+	public:
+		CLewave();
+		~CLewave();
+		
 };
  
  

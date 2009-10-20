@@ -74,6 +74,7 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const;
 		void drawsprite(xlong x,xlong y,sprite* s) const;
+		void drawsprite(xlong x,xlong y,sprites2* t,xlong a) const;
 		void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0) const;
 		void drawscreen(sprite* s) const;
@@ -531,6 +532,47 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 		for(uxlong j=0; j<ewidth ;j++)
 		{
 			if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+			linearc++;
+		}
+		linearc += lindiff;
+		xoffset += XRES;
+	}
+	//*	
+}
+
+void CLgfx1::drawsprite(xlong x,xlong y,sprites2* t,xlong a) const
+{
+	//xlong ssize = s->size;
+	xlong swidth = t->tilewidth;
+	xlong sheight = t->tileheight;
+	//xlong hordiff = xres - s->width;
+	xlong xs = x;
+	xlong ys = y;
+	xlong xe = x + swidth;
+	xlong ye = y + sheight;
+	//*
+
+	//clipping against screen borders
+	if(isoff(xs,ys,xe,ye)) return;
+	clip(xs,ys);
+	clip(xe,ye);
+	//*
+
+	//set up variables
+	xlong ewidth = xe - xs;
+	xlong eheight = ye - ys;
+	xlong xoffset = (ys * XRES) + xs;
+	xlong linearc = 0;
+	xlong lindiff = swidth - ewidth;
+	//*
+
+	//drawloop
+	for(uxlong i=0; i<eheight ;i++)
+	{
+		for(uxlong j=0; j<ewidth ;j++)
+		{
+			//if( (t->tiledata[a][linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = t->tiledata[a][linearc];
+			cldoublebuffer[xoffset+j] = t->tiledata[a][linearc]; 
 			linearc++;
 		}
 		linearc += lindiff;
