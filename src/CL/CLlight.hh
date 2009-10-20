@@ -22,14 +22,14 @@ class CLlight : public virtual CLcl
 		xlong intensity;
 		uxlong color;
 		sprite* mask;
-		inline uxlong computepixel(xlong x,xlong y);
+		inline uxlong lambertslaw(xlong x,xlong y);
 	public:
 		CLlight(xlong r,xlong i,uxlong c);
 		~CLlight();
 		void draw(xlong x,xlong y); 
 };
 
-uxlong CLlight::computepixel(xlong x,xlong y)
+uxlong CLlight::lambertslaw(xlong x,xlong y)
 {
 	//precalc intensity square
 	float i = float(intensity*intensity);
@@ -39,17 +39,26 @@ uxlong CLlight::computepixel(xlong x,xlong y)
 	float d = (x*x) + (y*y);
 	//*
 	
-	//split color
+	//split color components
 	doubleword tempcolor = { color };
 	float r = float(tempcolor.db[1]);
 	float g = float(tempcolor.db[2]);
 	float b = float(tempcolor.db[3]);
 	//*
 	
+	//apply lamberts law on color components
+	r = (r/(1-i) ) * ( (-i/d) + 1.0 ); //it is not d*d because the squareroot at init of d is omitted;
+	if(r<0.0) r = 0.0;                 //replace through multiplication with heaviside?
+	g = (g/(1-i) ) * ( (-i/d) + 1.0 ); //it is not d*d because the squareroot at init of d is omitted;
+	if(g<0.0) g = 0.0;                 //replace through multiplication with heaviside?
+	b = (b/(1-i) ) * ( (-i/d) + 1.0 ); //it is not d*d because the squareroot at init of d is omitted;
+	if(b<0.0) b = 0.0;                 //replace through multiplication with heaviside?
+	//*
+	
 	//recombine
-	tempcolor.db[1] = uxchar( (r/(1-i) ) * ( (-i/d) + 1.0 ) ); //it is not d*d because the squareroot at init of d is omitted;
-	tempcolor.db[2] = uxchar( (g/(1-i) ) * ( (-i/d) + 1.0 ) ); //it is not d*d because the squareroot at init of d is omitted;
-	tempcolor.db[3] = uxchar( (b/(1-i) ) * ( (-i/d) + 1.0 ) ); //it is not d*d because the squareroot at init of d is omitted;
+	tempcolor.db[1] = uxchar(r);
+	tempcolor.db[2] = uxchar(g);
+	tempcolor.db[3] = uxchar(b);
 	//*
 	
 	return tempcolor.dd;
@@ -66,9 +75,41 @@ CLlight::CLlight(xlong r,xlong i,uxlong c)
 	mask->height = (r<<1)+1;
 	mask->data = new uxlong[mask->size];
 	
-	uxlong ver = mask->height;
-	uxlong hor = mask->width;
-	for(uxlong i=0; i<hor; i++) { for(uxlong j=0; j<ver; j++) { mask->data[i*hor+j] = computepixel(j,i); } }
+	uxlong ver = ((mask->height-1)>>1)+1;
+	uxlong hor = ((mask->width-1)>>1)+1;
+	uxlong temp = 0;
+	uxlong base = ver*mask->width+hor; 
+	for(uxlong i=0; i<ver; i++)
+	{
+		for(uxlong j=0; j<hor; j++)
+		{
+			if(i==0 && j==0)
+			{
+				mask->data[base] = lambertslaw(j,i);
+			}
+			else if(i==0)
+			{
+				temp = lambertslaw(j,i);
+				mask->data[base+j] = temp;
+				mask->data[base-j] = temp;
+			}
+			else if(j==0)
+			{
+				temp = lambertslaw(j,i);
+				mask->data[base+(i*mask->width)] = temp;
+				mask->data[base-(i*mask->width)] = temp;
+			}
+			else
+			{
+				temp = lambertslaw(j,i);
+				mask->data[base+(i*mask->width)+j] = temp;
+				mask->data[base+(i*mask->width)-j] = temp;
+				mask->data[base-(i*mask->width)+j] = temp;
+				mask->data[base-(i*mask->width)-j] = temp;
+			}
+			
+		}
+	}
 }
 
 CLlight::~CLlight() { delete mask; }
