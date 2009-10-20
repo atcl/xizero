@@ -31,7 +31,9 @@ class CLlight : public virtual CLcl
 
 uxlong CLlight::computepixel(xlong x,xlong y)
 {
+	//precalc intensity square
 	float i = float(intensity*intensity);
+	//*
 	
 	//calc dist
 	float d = (x*x) + (y*y);
@@ -44,22 +46,10 @@ uxlong CLlight::computepixel(xlong x,xlong y)
 	float b = float(tempcolor.db[3]);
 	//*
 	
-	//calc r
-	uxchar rr = uxchar( (r/(1-i) ) * ( (-i/d) + 1 ) ); //it is not d*d because the squareroot at init of d is omitted
-	//*
-	
-	//calc g
-	uxchar rg = uxchar( (g/(1-i) ) * ( (-i/d) + 1 ) ); //it is not d*d because the squareroot at init of d is omitted
-	//*
-	
-	//calc b
-	uxchar rb = uxchar( (b/(1-i) ) * ( (-i/d) + 1 ) ); //it is not d*d because the squareroot at init of d is omitted
-	//*
-	
 	//recombine
-	tempcolor.db[1] = rr;
-	tempcolor.db[2] = rg;
-	tempcolor.db[3] = rb;
+	tempcolor.db[1] = uxchar( (r/(1-i) ) * ( (-i/d) + 1.0 ) ); //it is not d*d because the squareroot at init of d is omitted;
+	tempcolor.db[2] = uxchar( (g/(1-i) ) * ( (-i/d) + 1.0 ) ); //it is not d*d because the squareroot at init of d is omitted;
+	tempcolor.db[3] = uxchar( (b/(1-i) ) * ( (-i/d) + 1.0 ) ); //it is not d*d because the squareroot at init of d is omitted;
 	//*
 	
 	return tempcolor.dd;
