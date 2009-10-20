@@ -58,6 +58,7 @@
 #include "CL/CLpolygon.hh"
 #include "CL/CLobject.hh"
 #include "CL/CLmisc3d.hh"
+#include "CL/CLlight.hh"
 //*
 
 //game classes
