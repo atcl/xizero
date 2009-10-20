@@ -46,6 +46,7 @@ class CLobject : public virtual CLcl
 	public:
 		CLobject(const xchar* fileptr,bool zs);
 		CLobject(CLfile* fileptr,bool zs);
+		CLobject(rawpoly* p,xlong c,xlong bw);
 		CLobject(CLobject* obj);
 		~CLobject();
 		void update(CLmatrix* m);
@@ -307,6 +308,12 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 		//~ }
 	//~ }
 	//~ //*
+}
+
+CLobject::CLobject(rawpoly* p,xlong c,xlong bw)
+{
+	
+	
 }
 
 CLobject::CLobject(CLobject* obj)

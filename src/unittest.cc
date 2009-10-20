@@ -34,6 +34,42 @@ int main(int argc, char** argv)
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*
+	
+	//test heightmap constructor:
+	CLfile* testfile = clglobal->clsystem->getfile("dat/maps/test.im24");
+	sprite* testmap = clglobal->clformat->loadras(testfile);
+	say(testmap->width);
+	say(testmap->height);
+	
+	rawpoly* row[3];
+	xlong polycount[3] = { 0,0,0 };
+	
+	row[0] = new rawpoly[60];
+	row[1] = new rawpoly[60];
+	row[2] = new rawpoly[60];
+	
+	//decode 1st row
+	for(xlong i=0; i<(testmap->width/3); i++)
+	{
+		
+	}
+	//*
+	
+	//decode 2nd row
+	for(xlong i=0; i<(testmap->width/3); i++)
+	{
+		
+	}
+	//*
+	
+	//decode con row
+	for(xlong i=0; i<(testmap->width/3); i++)
+	{
+		
+	}
+	//*
+	
+	//*
 
 	CLfile* cube;
 	

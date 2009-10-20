@@ -38,12 +38,30 @@ struct screenside
 	float z;
 };
 
+struct rawpoly
+{
+	xlong ax;
+	xlong ay;
+	xlong az;
+	
+	xlong bx;
+	xlong by;
+	xlong bz;
+	
+	xlong cx;
+	xlong cy;
+	xlong cz;
+	
+	xlong dx;
+	xlong dy;
+	xlong dz; 
+};
+
 struct sprite
 {
 	uxlong  size;
 	uxlong  width;
 	uxlong  height;
-
 	uxlong* data;
 };
 
@@ -52,13 +70,13 @@ struct sprites
 	uxlong  size;
 	uxlong  width;
 	uxlong  height;
+	uxlong* data;
 
 	uxlong  tilesize;
 	uxlong  tilewidth;
 	uxlong  tileheight;
-
 	uxlong  tilecount;
-	uxlong* data;
+	uxlong** tiledata;
 };
 
 typedef sprites CLfont;
@@ -76,7 +94,6 @@ struct CLexe
 	xchar* title;
 	xlong  size;
 	xlong  version;
-	xchar* icon;
 };
 
 #endif
