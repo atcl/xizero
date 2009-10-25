@@ -71,12 +71,10 @@ int main(int argc, char** argv)
 	
 	//*
 	
-	
 	//test sprites2
 	sprite* fontfile = clglobal->clformat->loadtga("dat/fonts/CLlinetype.fnt");
 	sprites2* testfont = clglobal->clformat->loadtileset(fontfile,16,16);
 	//*
-	
 
 	CLfile* cube;
 	

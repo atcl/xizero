@@ -106,8 +106,7 @@ CLlight::CLlight(xlong r,xlong i,uxlong c)
 				mask->data[base+(i*mask->width)-j] = temp;
 				mask->data[base-(i*mask->width)+j] = temp;
 				mask->data[base-(i*mask->width)-j] = temp;
-			}
-			
+			}	
 		}
 	}
 }
