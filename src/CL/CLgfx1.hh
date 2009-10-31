@@ -55,10 +55,9 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 	public:
 		uxlong readpixel(xlong x,xlong y) const;
 		void drawpixel(xlong x,xlong y,uxlong c) const;
-		void drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c) const;
+		void drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const;
 		void copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const;
 		void drawbigpixel(xlong x,xlong y,uxlong c) const;
-		void putpixel(xlong x,xlong y,uxlong c,xlong m) const;
 		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const;
 		void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c) const;
 		void drawverline(xlong x1,xlong y1,xlong y2,uxlong c) const;
@@ -118,19 +117,19 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 
 uxlong CLgfx1::readpixel(xlong x,xlong y) const
 {
-	if(isoff(x,y)) return 0;
+	if(isoff(x,y)) return -1;
 	return (cldoublebuffer[(y*XRES)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c) const
 {
-	clip(x,y);
+	if(isoff(x,y)) return;
 	cldoublebuffer[(y*XRES)+x] = c;
 }
 
-void CLgfx1::drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c) const
+void CLgfx1::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const
 {
-	clip(x,y);
+	if(isoff(x,y)) return;
 	b[(y*XRES)+x] = c;
 }
 
@@ -142,35 +141,11 @@ void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const
 
 void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c) const
 {
+	if(isoff(x,y)) return;
 	cldoublebuffer[(y*XRES)+x] = c;
 	cldoublebuffer[(y*XRES)+x+1] = c;
 	cldoublebuffer[((y+1)*XRES)+x] = c;
 	cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
-}
-
-void CLgfx1::putpixel(xlong x,xlong y,uxlong c,xlong m) const
-{
-	clip(x,y);
-	
-	switch(m)
-	{
-		case 1: //AND
-			cldoublebuffer[(y*XRES)+x] = cldoublebuffer[(y*XRES)+x] && c;
-		break;
-		
-		case 2: //OR:
-			cldoublebuffer[(y*XRES)+x] = cldoublebuffer[(y*XRES)+x] || c;
-		break;
-		
-		case 3: //XOR:
-			cldoublebuffer[(y*XRES)+x] = cldoublebuffer[(y*XRES)+x] ^ c;
-		break;
-		
-		default:
-			cldoublebuffer[(y*XRES)+x] = c;
-		break;
-	}
-
 }
 
 void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const
@@ -189,11 +164,7 @@ void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c) const
 	if(a>b) a ^= b ^= a ^= b;
 	xlong offsetbase = (y1*XRES);
 
-	for(uxlong i=a; i<=b; i++)
-	{
-		
-		cldoublebuffer[offsetbase+i] = c;
-	}
+	for(uxlong i=a; i<=b; i++) { cldoublebuffer[offsetbase+i] = c; }
 }
 
 void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c) const

@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 	//*
 	
 	//msgbox
-	clglobal->clwindow->msgbox("test test test test!!!","howdi");
+	//clglobal->clwindow->msgbox("test test test test!!!","howdi");
 	//
 	
 	//test sprites2
