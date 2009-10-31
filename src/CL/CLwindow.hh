@@ -66,6 +66,7 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmousey() const;
 		xlong getmouselb() const;
 		xlong getmouserb() const;
+		xlong msgbox(const xchar* title,const xchar* message);
 };
 
 CLwindow::CLwindow()
@@ -221,6 +222,50 @@ xlong CLwindow::getmousey() const {	return mousey; }
 xlong CLwindow::getmouselb() const { return mouselb; }
 
 xlong CLwindow::getmouserb() const { return mouserb; }
+
+xlong CLwindow::msgbox(const xchar* title,const xchar* message)
+{	
+	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
+	
+	//prepare message
+	xlong msglength = clutils->chararraylength(message);
+	xlong msglines = (msglength >> 8)+1; 
+	//create window
+	Window msgbox = XCreateSimpleWindow(Xdisplay,Xwindow,0,0,100,80,0,blackcolor,blackcolor);
+	//set title
+	XStoreName(Xdisplay,msgbox,title);
+	//draw message
+	XDrawImageString(Xdisplay,msgbox,Xgc,10,10,message,msglength);
+	
+	//draw OK button
+	//XDrawLine(Xdisplay,msgbox,Xgc,x1,y1,x2,y2);
+	//XDrawImageString(Xdisplay,msgbox,Xgc,x,y,"OK",2);
+	
+	//wait till press
+	//~ bool wait=0;
+	//~ while(wait==0)
+	//~ {
+		//~ if(XPending(Xdisplay)!=0)
+		//~ {
+			//~ XNextEvent(Xdisplay,&Xevent);
+			//~ switch(Xevent.type)
+			//~ {
+				//~ case Expose:
+					//~ draw();
+				//~ break;
+				//~ 
+				//~ case KeyPress:
+					//~ if(XLookupKeysym((XKeyEvent*)&Xevent,0)==27) wait = 1;
+				//~ break;
+			//~ }				
+		//~ }
+	//~ }
+	
+	//destroy window
+	XDestroyWindow (Xdisplay,msgbox);
+	
+	return 1;
+}
 	
 #endif
 
