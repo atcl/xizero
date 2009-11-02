@@ -39,6 +39,29 @@ int main(int argc, char** argv)
 	//clglobal->clwindow->msgbox("test test test test!!!","howdi");
 	//
 	
+	//load height
+	CLfile* testim24 = clglobal->clsystem->getfile("dat/mas/test.im24");
+	sprite* testlevel = clglobal->clformat->loadras(testim24);
+	
+	xlong rows = testlevel->height / 2;
+	xlong cols = testlevel->width;
+	xlong mapptr = 0;
+	doubleword currpx = { 0 };
+	rawpoly* polys = 0;  
+	
+	for(xlong i=0; i<rows; i++)
+	{
+		
+		for(xlong j=0; j<cols; j++)
+		{
+				
+			
+		}
+		
+	}
+	
+	//*
+	
 	//test sprites2
 	sprite* fontfile = clglobal->clformat->loadtga("dat/fonts/CLlinetype.fnt");
 	sprites2* testfont = clglobal->clformat->loadtileset(fontfile,16,16);
