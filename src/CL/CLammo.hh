@@ -1,16 +1,23 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license 
+///*
+
+///guard
 #ifndef HH_CLAMMO
 #define HH_CLAMMO
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLsystem.hh"
 #include "CLlist.hh"
 #include "CLsprites.hh"
 #include "CLgame.hh"
 #include "CLmath.hh"
+///*
 
+///header
 /* class name:	CLammo
  * 
  * description:	This class manages all ammo fired by entities.
@@ -21,17 +28,21 @@
  * 
  * version: 0.1
  */
+///*
 
-template<int I> class CLentity; //forward declaration
+///declarations
+template<int I> class CLentity; 
 
+typedef CLlist<CLammo> CLammolist;
+///*
+
+///definitions
 struct CLammo
 {
 	void(*comsprite)(xlong x,xlong y);
 	CLfvector p;
 	CLfvector s;
 };
-
-typedef CLlist<CLammo> CLammolist;
 
 class CLammomanager : public virtual CLcl
 {
@@ -50,8 +61,11 @@ class CLammomanager : public virtual CLcl
 		void display() const;
 		void pause();
 };
+///*
 
-CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
+///implementation
+
+CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
 {	
 	//set up attributes
 	mark = m;
@@ -75,13 +89,13 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m)
 	//*
 }
 
-CLammomanager::~CLammomanager()
+CLammomanager::~CLammomanager() //! noncritical
 {
 	delete ammolist;
 	delete[] ammotype;
 }
 
-void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction)
+void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction) //! critical
 {
 	//append ammolist if ammotype exists
 	if(at<ammotypecount)
@@ -95,7 +109,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 	//*
 }
 
-void CLammomanager::update()
+void CLammomanager::update() //! critical
 {
 	xlong time = clsystem->getmilliseconds();
 	bool listfix=0;
@@ -132,7 +146,7 @@ void CLammomanager::update()
 }
 
 template<int I>
-void CLammomanager::collision(CLentity<I>* e)
+void CLammomanager::collision(CLentity<I>* e) //! critical
 {
 	xlong r = 0;
 	bool listfix=0;
@@ -162,7 +176,7 @@ void CLammomanager::collision(CLentity<I>* e)
 	//*
 }
 
-void CLammomanager::display() const
+void CLammomanager::display() const //! critical
 {
 	CLammo* currammo = 0;
 	
@@ -175,6 +189,11 @@ void CLammomanager::display() const
 	//*
 }
 
-void CLammomanager::pause() { lastupdate = clsystem->getmilliseconds(); }
+void CLammomanager::pause() //! noncritical
+{
+	lastupdate = clsystem->getmilliseconds();
+}
+
+///*
 
 #endif

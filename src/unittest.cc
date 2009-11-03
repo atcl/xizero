@@ -47,17 +47,25 @@ int main(int argc, char** argv)
 	xlong cols = testlevel->width;
 	xlong mapptr = 0;
 	doubleword currpx = { 0 };
-	rawpoly* polys = 0;  
+	rawpoly** polys = 0;  
+	rawpoly* currpoly = new rawpoly;
+	xlong currvert = 0;
+	CLobject** terrrows = new CLobject*[rows];
 	
 	for(xlong i=0; i<rows; i++)
 	{
+		currpx.dd = testlevel->data[mapptr]; mapptr++;
 		
-		for(xlong j=0; j<cols; j++)
+		for(xlong j=1; j<cols; j++)
 		{
-				
 			
+			
+			mapptr++;
 		}
 		
+		
+		
+		mapptr+=cols;
 	}
 	
 	//*
