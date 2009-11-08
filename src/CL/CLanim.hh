@@ -1,15 +1,22 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license 
+///*
+
+///guard
 #ifndef HH_CLANIM
 #define HH_CLANIM
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
 #include "CLformat.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLanim
  * 
  * description:	This class handles 3d animations.
@@ -20,7 +27,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 struct CLframe
 {
 	float duration;
@@ -50,8 +59,10 @@ class CLanim : public virtual CLcl
 		void setposition(CLfvector& p);
 		CLfvector& getposition();
 };
+///*
 
-CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
+///implementation
+CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 {	
 	//create linear transformation matrix
 	linear = new CLmatrix(1);
@@ -135,13 +146,13 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p)
 	starttime = 0;
 }
 
-CLanim::~CLanim()
+CLanim::~CLanim() //! noncritical
 {
 	delete linear;
 	delete[] frame;
 }
 
-xlong CLanim::update()
+xlong CLanim::update() //! critical
 {
 	if(currframe>=frames) return 0;
 	
@@ -286,7 +297,7 @@ xlong CLanim::update()
 	else return 1;
 }
 
-xlong CLanim::run()
+xlong CLanim::run() //! critical
 {
 	//use this if the instantiated animation is supposed to run autonomus from other program parts
 	//in example intro animations
@@ -309,8 +320,9 @@ xlong CLanim::run()
 	//*
 }
 
-void CLanim::setposition(CLfvector& p) { position = p; }
+void CLanim::setposition(CLfvector& p) { position = p; } //! noncritical
 
-CLfvector& CLanim::getposition() { return position; }
+CLfvector& CLanim::getposition() { return position; } //! noncritical
+///*
 
 #endif

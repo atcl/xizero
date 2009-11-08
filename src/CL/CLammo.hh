@@ -32,8 +32,6 @@
 
 ///declarations
 template<int I> class CLentity; 
-
-typedef CLlist<CLammo> CLammolist;
 ///*
 
 ///definitions
@@ -43,6 +41,8 @@ struct CLammo
 	CLfvector p;
 	CLfvector s;
 };
+
+typedef CLlist<CLammo> CLammolist;
 
 class CLammomanager : public virtual CLcl
 {
@@ -64,7 +64,6 @@ class CLammomanager : public virtual CLcl
 ///*
 
 ///implementation
-
 CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
 {	
 	//set up attributes
@@ -193,7 +192,6 @@ void CLammomanager::pause() //! noncritical
 {
 	lastupdate = clsystem->getmilliseconds();
 }
-
 ///*
 
 #endif

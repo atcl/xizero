@@ -11,122 +11,33 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 
-xlong inline x20(xlong f)
-{
-	//fast multiplication with 20
-	return ( (f<<4) + (f<<2) );
-	//*
-}
+xlong inline x20(xlong f)  { return ( (f<<4) + (f<<2) ); } //fast multiplication with 20
 
-xlong inline x40(xlong f)
-{
-	//fast ultiplication with 40
-	return ( (f<<5) + (f<<3) );
-	//*
-}
+xlong inline x40(xlong f)  { return ( (f<<5) + (f<<3) ); } //fast ultiplication with 40
 
-xlong inline x180(xlong f)
-{
-	//fast multiplication with 180
-	return ( (f<<7) + (f<<5) + (f<<4) + (f<<2) );
-	//*
-}
+xlong inline x180(xlong f) { return ( (f<<7) + (f<<5) + (f<<4) + (f<<2) ); } //fast multiplication with 180
 
-xlong inline x360(xlong f)
-{
-	//fast multilication with 360
-	return ( (f<<8) + (f<<6) + (f<<5) + (f<<3) );
-	//*
-}
+xlong inline x360(xlong f) { return ( (f<<8) + (f<<6) + (f<<5) + (f<<3) ); } //fast multilication with 360
 
-xlong inline x600(xlong f)
-{
-	//fast multiplication with 600
-	return ( (f<<9) + (f<<6) + (f<<4) + (f<<3) );
-	//*
-}
+xlong inline x600(xlong f) { return ( (f<<9) + (f<<6) + (f<<4) + (f<<3) ); } //fast multiplication with 600
 
-xlong inline x800(xlong f)
-{
-	//fast multiplication with 800
-	return ( (f<<9) + (f<<8) + (f<<5) );
-	//*
-}
+xlong inline x800(xlong f) { return ( (f<<9) + (f<<8) + (f<<5) ); } //fast multiplication with 800
 
-void inline tty(const xchar* c="\n")
-{
-	//console output without lineend
-	std::cout << c;
-	//*
-}
+void inline tty(const xchar* c="\n") { std::cout << c; } //console output without lineend
 
-void inline say(const xchar* c="hi")
-{
-	//console output with lineend
-	std::cout << c << std::endl;
-	//*
-}
+void inline say(const xchar* c="hi") { std::cout << c << std::endl; } //console output with lineend (cstring)
 
-void inline say(xlong l)
-{
-	//console output with lineend
-	std::cout << l << std::endl;
-	//*
-}
+void inline say(xlong l) { std::cout << l << std::endl; } //console output with lineend (long)
 
-void inline say(uxlong l)
-{
-	//console output with lineend
-	std::cout << l << std::endl;
-	//*
-}
+void inline say(uxlong l) {	std::cout << l << std::endl; } //console output with lineend (ulong)
 
-void inline say(float f)
-{
-	//console output with lineend
-	std::cout << f << std::endl;
-	//*
-}
+void inline say(float f) { std::cout << f << std::endl; } //console output with lineend (float)
 
-void inline debug(const xchar* c,xlong v)
-{
-	//output name and integer to console
-	std::cout << c << ": " << v << std::endl;
-	//*
-}
+void inline bye() { CLsystem::instance()->exit(0,0,__func__,"bye"); } //force program exit
 
-void inline bye()
-{
-	//force program exit
-	CLsystem::instance()->exit(0,0,__func__,"bye");
-	//*
-}
+xlong inline linearize(xlong x,xlong y,xlong w) { return ((y*w)+x); }
 
-void inline CLneg(xlong& x)
-{
-	//alternative integer negation
-	 __asm__ __volatile__("notl %%eax, inc %%eax;":"=a"(x) :"a"(x):"%eax");
-	//*
-}
-
-void inline CLstosd(xlong* dst,xlong val)
-{
-	//write val to dst
-	 __asm__ __volatile__("stosd": :"a"(val),"D"(dst):"%eax","%edi");
-	//*
-}
-
-void inline CLlodsd(xlong* src,xlong& var)
-{
-	//read value from src to val
-	__asm__ __volatile__("lodsd":"=a"(var):"S"(src):"%eax","%esi");
-	//*
-}
-
-void inline CLprefetch(void* hint)
-{
-	__asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); //use prefetcht1???
-}
+void inline CLprefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); } //use prefetcht1???
 
 #endif
 

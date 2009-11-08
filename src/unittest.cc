@@ -40,33 +40,75 @@ int main(int argc, char** argv)
 	//
 	
 	//load height
-	CLfile* testim24 = clglobal->clsystem->getfile("dat/mas/test.im24");
+	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test.im24");
 	sprite* testlevel = clglobal->clformat->loadras(testim24);
 	
-	xlong rows = testlevel->height / 2;
+	xlong rows = testlevel->height;
 	xlong cols = testlevel->width;
-	xlong mapptr = 0;
-	doubleword currpx = { 0 };
-	rawpoly** polys = 0;  
-	rawpoly* currpoly = new rawpoly;
-	xlong currvert = 0;
-	CLobject** terrrows = new CLobject*[rows];
+	uxlong* map = testlevel->data;
+	doubleword currz = { 0 };
+	doubleword lastz = { 0 };
+	xlong polycount = 0;
+	rawpoly** polys = new rawpoly*[cols*2];
+	rawpoly* currpoly = 0;
 	
-	for(xlong i=0; i<rows; i++)
+	CLobject** terrrows = new CLobject*[(rows-1)/2];
+	
+	//check each row 
+	for(xlong i=0; i<1; i++) //1 -> rows
 	{
-		currpx.dd = testlevel->data[mapptr]; mapptr++;
-		
+		//set first vertex of first polygon in row
+		currpoly = polys[polycount] = new rawpoly;  polycount++;
+		currpoly->v[0].x = 0;  currpoly->v[0].y = i*20;  currpoly->v[0].z = map[i*cols];
+		//*
+
+		//check row for second vertex
 		for(xlong j=1; j<cols; j++)
 		{
+			//check if height level changes
+			if(map[(i*cols)+j] != currpoly->v[1].z)
+			{
+				//set second vertex in current polygon in row
+				currpoly->v[1].x = j*20;  currpoly->v[1].y = i*20;  currpoly->v[1].z = map[(i*cols)+j];
+				//*
+				
+				//seek third vertex in current polygon in next row
+				xlong k = 0;
+				while( (map[((i+1)*cols)+k] != currpoly->v[1].z) ) { k++; if(k>=cols) { break; } }
+				//*
+
+				//no third vertex found, so drop polygon
+				if(k>=cols) { polycount--; }
+				//*
+				
+				//set third and seek and set if exists fourth vertex of current polygon
+				else
+				{
+					//set third vertex
+					currpoly->v[2].x = k*20;  currpoly->v[2].y = (i+1)*20;  currpoly->v[2].z = map[((i+1)*cols)+k];
+					k++;
+					//*
+					
+					//seek and set fourth vertex
+					for( ; k<cols; k++)
+					{
+						if(map[((i+1)*cols)+k] != currpoly->v[2].z)
+						{
+							currpoly->v[3].x = k*20;  currpoly->v[3].y = (i+1)*20;  currpoly->v[3].z = map[((i+1)*cols)+k];
+							break;
+						}
+					}
+					//*
+				}
+				//*					
+			}
+			//*
 			
-			
-			mapptr++;
+			break; //temp
 		}
-		
-		
-		
-		mapptr+=cols;
+		//*
 	}
+	//*
 	
 	//*
 	
