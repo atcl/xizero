@@ -48,77 +48,122 @@ int main(int argc, char** argv)
 	uxlong* map = testlevel->data;
 	doubleword currz = { 0 };
 	doubleword lastz = { 0 };
+	xlong vertcount = 0;
 	xlong polycount = 0;
 	rawpoly** polys = new rawpoly*[cols*2];
-	rawpoly* currpoly = 0;
 	
 	CLobject** terrrows = new CLobject*[(rows-1)/2];
 	
 	//check each row 
 	for(xlong i=0; i<1; i++) //1 -> rows
 	{
-		//set first vertex of first polygon in row
-		currpoly = polys[polycount] = new rawpoly;  polycount++;
-		currpoly->v[0].x = 0;  currpoly->v[0].y = i*20;  currpoly->v[0].z = map[i*cols];
+		//create first polygon in row
+		polys[polycount] = new rawpoly;
+		vertcount = 0;
 		//*
-
-		//check row for second vertex
-		for(xlong j=1; j<cols; j++)
+		
+		//set first vertex in row
+		polys[polycount]->v[0].x = 0;
+		polys[polycount]->v[0].y = i*20;
+		polys[polycount]->v[0].z = map[i*cols];
+		vertcount++;
+		//*
+		
+		//find second vertex in same row
+		xlong j = -1;
+		while(map[(i*cols)+(j+1)]==polys[polycount]->v[0].z)
 		{
-			//check if height level changes
-			if(map[(i*cols)+j] != currpoly->v[1].z)
-			{
-				//set second vertex in current polygon in row
-				currpoly->v[1].x = j*20;  currpoly->v[1].y = i*20;  currpoly->v[1].z = map[(i*cols)+j];
-				//*
-				
-				//seek third vertex in current polygon in next row
-				xlong k = 0;
-				while( (map[((i+1)*cols)+k] != currpoly->v[1].z) ) { k++; if(k>=cols) { break; } }
-				//*
-
-				//no third vertex found, so drop polygon
-				if(k>=cols) { polycount--; }
-				//*
-				
-				//set third and seek and set if exists fourth vertex of current polygon
-				else
-				{
-					//set third vertex
-					currpoly->v[2].x = k*20;  currpoly->v[2].y = (i+1)*20;  currpoly->v[2].z = map[((i+1)*cols)+k];
-					k++;
-					//*
-					
-					//seek and set fourth vertex
-					for( ; k<cols; k++)
-					{
-						if(map[((i+1)*cols)+k] != currpoly->v[2].z)
-						{
-							currpoly->v[3].x = k*20;  currpoly->v[3].y = (i+1)*20;  currpoly->v[3].z = map[((i+1)*cols)+k];
-							break;
-						}
-					}
-					//*
-				}
-				//*					
-			}
-			//*
-			
-			break; //temp
+			if(j>=cols) { j=-1; break; }
+			j++;
 		}
 		//*
+		
+		//set second vertex
+		if(j==-1)
+		{
+			polys[polycount]->v[1].x = polys[polycount]->v[0].x;
+			polys[polycount]->v[1].y = polys[polycount]->v[0].y;
+			polys[polycount]->v[1].z = polys[polycount]->v[0].z;
+			j = polys[polycount]->v[0].x / 20;
+		}
+		else
+		{
+			polys[polycount]->v[1].x = j*20;
+			polys[polycount]->v[1].y = i*20;
+			polys[polycount]->v[1].z =polys[polycount]->v[0].z;
+			vertcount++;
+		}
+		//*
+		
+		//find third vertex in next row
+		xlong k = -1;
+		if(map[((i+1)*cols)]!=polys[polycount]->v[0].z)
+		{
+			while(map[((i+1)*cols)+(k+1)]!=polys[polycount]->v[1].z)
+			{
+				if(k>j) { k=-1; break; }
+				k++;
+			}
+		}
+		//*
+		
+		//set third vertex
+		if(k==-1)
+		{
+			polys[polycount]->v[2].x = polys[polycount]->v[1].x;
+			polys[polycount]->v[2].y = polys[polycount]->v[1].y;
+			polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+		}
+		else
+		{
+			polys[polycount]->v[2].x = k*20;
+			polys[polycount]->v[2].y = (i+1)*20;
+			polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+			vertcount++;
+		}
+		//*
+		
+		//find fourth vertex
+		xlong l = -1;
+		if(k!=-1)
+		{
+			while(map[((i+1)*cols)+k+(l+1)]==polys[polycount]->v[0].z)
+			{
+				if(l>=cols) { l=-1; break; }
+				l++;
+			}
+		}
+		//*
+		
+		//set fourth vertex
+		if(l==-1)
+		{
+			polys[polycount]->v[3].x = polys[polycount]->v[2].x;
+			polys[polycount]->v[3].y = polys[polycount]->v[2].y;
+			polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+		}
+		else
+		{
+			polys[polycount]->v[3].x = l*20;
+			polys[polycount]->v[3].y = (i+1)*20;
+			polys[polycount]->v[3].z =polys[polycount]->v[0].z;
+			vertcount++;
+		}
+		//*
+
+
 	}
 	//*
 	
 	//*
-	
+
 	//test sprites2
-	sprite* fontfile = clglobal->clformat->loadtga("dat/fonts/CLlinetype.fnt");
-	sprites2* testfont = clglobal->clformat->loadtileset(fontfile,16,16);
+	//sprite* fontfile = clglobal->clformat->loadtga("dat/fonts/CLlinetype.fnt");
+	//sprites2* testfont = clglobal->clformat->loadtileset(fontfile,16,16);
 	//*
 
 	CLfile* cube;
-	
+
 	if(argfileindex!=-1)
 	{
 		CLfile* arch = clglobal->clsystem->getfile(argfile.c_str());
@@ -334,7 +379,7 @@ int main(int argc, char** argv)
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 		
-		clglobal->clgfx1->drawsprite(600,500,testfont,'f');
+		//clglobal->clgfx1->drawsprite(600,500,testfont,'f'); //sprite2 test
 
 		linearM->unit();
 

@@ -188,10 +188,7 @@ void CLammomanager::display() const //! critical
 	//*
 }
 
-void CLammomanager::pause() //! noncritical
-{
-	lastupdate = clsystem->getmilliseconds();
-}
+void CLammomanager::pause() { lastupdate = clsystem->getmilliseconds(); } //! noncritical
 ///*
 
 #endif

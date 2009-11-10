@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license 
+///*
+
+///guard
 #ifndef HH_CLAR
 #define HH_CLAR
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+///*
 
+///header
 /* class name:	CLar
  * 
  * description:	This class handles ar archives.
@@ -17,7 +24,9 @@
  * 
  * version: 0.1
  */
- 
+///*
+
+///definitions
 class CLar : public virtual CLcl
 {
 	private:
@@ -34,12 +43,14 @@ class CLar : public virtual CLcl
 		CLfile* getmember(uxlong index) const;
 		uxlong  getfilecount() const;
 };
+///*
 
-CLar::CLar(CLfile* sf) { loadar(sf); }
+///implementation
+CLar::CLar(CLfile* sf) { loadar(sf); } //! noncritical
 
-CLar::CLar(const xchar* sf) { loadar(clsystem->getfile(sf)); }
+CLar::CLar(const xchar* sf) { loadar(clsystem->getfile(sf)); } //! noncritical
 
-void CLar::loadar(CLfile* sf)
+void CLar::loadar(CLfile* sf) //! noncritical
 {
 	xchar* bf = sf->text;
 	xlong cfs = sf->size;
@@ -119,9 +130,9 @@ void CLar::loadar(CLfile* sf)
 	else { clsystem->exit(1,0,__func__,"no \"!<arch>\" identifier found"); }
 }
 
-CLar::~CLar() { for(int i=0; i<filecount; i++) delete members[i]; }
+CLar::~CLar() { for(int i=0; i<filecount; i++) delete members[i]; } //! noncritical
 
-CLfile* CLar::findbyextension(const xchar* e) const
+CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
 
@@ -138,7 +149,7 @@ CLfile* CLar::findbyextension(const xchar* e) const
 		else return members[r];
 }
 
-CLfile* CLar::findbyname(const xchar* e) const
+CLfile* CLar::findbyname(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
 		xlong ti = 0;
@@ -156,12 +167,13 @@ CLfile* CLar::findbyname(const xchar* e) const
 		else return members[r];
 }
 
-CLfile* CLar::getmember(uxlong index) const
+CLfile* CLar::getmember(uxlong index) const //! noncrtical
 {
 	if(index>=filecount) return 0;
 	return members[index];
 }
 
-uxlong CLar::getfilecount() const { return filecount; }
+uxlong CLar::getfilecount() const { return filecount; } //! noncritical
+///*
 
 #endif
