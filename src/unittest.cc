@@ -18,6 +18,13 @@ int main(int argc, char** argv)
 	cldata = new CLar(BASEDIR"xizero.dat");
 	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
 	//*
+	
+	//*
+	//test sprites2
+	CLfile* tgatemp = clglobal->clsystem->getfile("dat/fonts/CLteletype.fnt");
+	sprite* fontfile = clglobal->clformat->loadtga(tgatemp);
+	sprites2* testfont = clglobal->clformat->loadtileset(fontfile,16,16);
+	//*
 
 		//test tree:
 		CLtree<xlong>* testtree = new CLtree<xlong>();
@@ -96,6 +103,7 @@ int main(int argc, char** argv)
 		//*
 		
 		//find third vertex in next row
+		//todo: take care of other than first polys in row aka backward search fpr 3rd vertex
 		xlong k = -1;
 		if(map[((i+1)*cols)]!=polys[polycount]->v[0].z)
 		{
@@ -153,13 +161,6 @@ int main(int argc, char** argv)
 
 
 	}
-	//*
-	
-	//*
-
-	//test sprites2
-	//sprite* fontfile = clglobal->clformat->loadtga("dat/fonts/CLlinetype.fnt");
-	//sprites2* testfont = clglobal->clformat->loadtileset(fontfile,16,16);
 	//*
 
 	CLfile* cube;
@@ -379,7 +380,11 @@ int main(int argc, char** argv)
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 		
-		//clglobal->clgfx1->drawsprite(600,500,testfont,'f'); //sprite2 test
+		clglobal->clgfx1->drawsprite(600,500,testfont,'f'); //sprite2 test
+		clglobal->clgfx1->drawsprite(580,520,testfont,'A');
+		clglobal->clgfx1->drawsprite(560,540,testfont,'f');
+		clglobal->clgfx1->drawsprite(540,560,testfont,'0');
+		clglobal->clgfx1->drawsprite(520,580,testfont,'z');
 
 		linearM->unit();
 

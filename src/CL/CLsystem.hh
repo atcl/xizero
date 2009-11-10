@@ -115,29 +115,31 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 		}
 	}
 	//*
-	
+
 	of = fopen(fn,"rb"); //necessary?
-	
+
 	//get file size
 	fseek (of,0,SEEK_END);
 	re->size = (ftell(of));
 	re->lsize = re->size>>2;
 	//*
-	
+
 	//read file contents
 	fseek (of,0,SEEK_SET );
-	re->text = new xchar[(re->size)+4];
+	
+	try{ re->text = new xchar[((re->size)+4)]; } //unittest crashes here with ltype.tga
+	catch(std::bad_alloc& ba) { print(ba.what()); }
 	re->data = static_cast<xlong*>(static_cast<void*>(&re->text[0]));
 	fread(re->text,1,re->size,of);
 	//*
-	
+
 	//set end of file marker
 	re->text[(re->size)] = 0;
 	re->text[(re->size)+1] = 0;
 	re->text[(re->size)+2] = 0;
 	re->text[(re->size)+3] = 0x1A;
 	//
-	
+
 	//close file
 	fclose(of);
 	//*
