@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	
 	//msgbox
 	//clglobal->clwindow->msgbox("test test test test!!!","howdi");
-	//
+	//*
 	
 	//load height
 	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test.im24");
@@ -201,141 +201,45 @@ int main(int argc, char** argv)
 			break;
 
 			//Translate:
-			case RIGHT:
-				linearM->translate(2,0,0);
-				cubus->update(linearM);
-			break;
-			case LEFT:
-				linearM->translate(-2,0,0);
-				cubus->update(linearM);
-			break;
-			case UP:
-				linearM->translate(0,2,0);
-				cubus->update(linearM);
-			break;
-			case DOWN:
-				linearM->translate(0,-2,0);
-				cubus->update(linearM);
-			break;
-			case PGUP:
-				linearM->translate(0,0,2);
-				cubus->update(linearM);
-			break;
-			case PGDOWN:
-				linearM->translate(0,0,-2);
-				cubus->update(linearM);
-			break;
+			case RIGHT:  linearM->translate(2,0,0);  cubus->update(linearM); break;
+			case LEFT:   linearM->translate(-2,0,0); cubus->update(linearM); break;
+			case UP:     linearM->translate(0,2,0);  cubus->update(linearM); break;
+			case DOWN: 	 linearM->translate(0,-2,0); cubus->update(linearM); break;
+			case PGUP:   linearM->translate(0,0,2);	 cubus->update(linearM); break;
+			case PGDOWN: linearM->translate(0,0,-2); cubus->update(linearM); break;
 
 			//Rotate:
-			case 'a':
-				linearM->rotate(0,5,0);
-				cubus->update(linearM);
-			break;
-			case 'd':
-				linearM->rotate(0,-5,0);
-				cubus->update(linearM);
-			break;
-			case 'w':
-				linearM->rotate(-5,0,0);
-				cubus->update(linearM);
-			break;
-			case 's':
-				linearM->rotate(5,0,0);
-				cubus->update(linearM);
-			break;
-			case 'q':
-				linearM->rotate(0,0,-5);
-				cubus->update(linearM);
-			break;
-			case 'e':
-				linearM->rotate(0,0,5);
-				cubus->update(linearM);
-			break;
+			case 'a':    linearM->rotate(0,5,0);     cubus->update(linearM); break;
+			case 'd':    linearM->rotate(0,-5,0);    cubus->update(linearM); break;
+			case 'w':    linearM->rotate(-5,0,0);    cubus->update(linearM); break;
+			case 's':    linearM->rotate(5,0,0);     cubus->update(linearM); break;
+			case 'q':    linearM->rotate(0,0,-5);    cubus->update(linearM); break;
+			case 'e':    linearM->rotate(0,0,5);     cubus->update(linearM); break;
 
 			//Aspectscale:
-			case '7':
-				linearM->aspectscale(1.1);
-				cubus->update(linearM);
-			break;
-			case '8':
-				linearM->aspectscale(0.9);
-				cubus->update(linearM);
-			break;
+			case '7':    linearM->aspectscale(1.1);  cubus->update(linearM); break;
+			case '8':    linearM->aspectscale(0.9);  cubus->update(linearM); break;
 
 			//Scale
-			case '1':
-				linearM->scale(1.1,1,1);
-				cubus->update(linearM);
-			break;
-			case '2':
-				linearM->scale(0.9,1,1);
-				cubus->update(linearM);
-			break;
-			case '3':
-				linearM->scale(1,1.1,1);
-				cubus->update(linearM);
-			break;
-			case '4':
-				linearM->scale(1,0.9,1);
-				cubus->update(linearM);
-			break;
-			case '5':
-				linearM->scale(1,1,1.1);
-				cubus->update(linearM);
-			break;
-			case '6':
-				linearM->scale(1,1,0.9);
-				cubus->update(linearM);
-			break;
-			case 'y':
-				linearM->aspectscale(1.1);
-				cubus->update(linearM);
-			break;
-			case 'x':
-				linearM->aspectscale(0.9);
-				cubus->update(linearM);
-			break;
-			case '^':
-				mode = !mode;
-			break;
-			case '+':
-				cubus->reset();
-				ac = 0;
-				exp = 0;				
-			break;
-			case '-':
-				shadows = !shadows;
-			break;
-			case '#':
-				if(exp==0)
-				{
-					exp=1;
-					ex->first(1);
-				}
-				ex->next();
-			break;
-			case '.':
-				cubus->translatealongnormals(1.1);
-			break;
-			case ',':
-				cubus->translatealongnormals(-1.1);
-			break;
-			case '<':
-				if(ac==0) ac = ANTICY;
-				else ac = 0;
-			break;
-			case ' ':
-				clglobal->clsound->stop();
-			break;
-			case 'r':
-				clglobal->clsound->play("../../cannon.wav",0);
-			break;
+			case '1':    linearM->scale(1.1,1,1);    cubus->update(linearM); break;
+			case '2':    linearM->scale(0.9,1,1);    cubus->update(linearM); break;
+			case '3':    linearM->scale(1,1.1,1);    cubus->update(linearM); break;
+			case '4':    linearM->scale(1,0.9,1);    cubus->update(linearM); break;
+			case '5':    linearM->scale(1,1,1.1);    cubus->update(linearM); break;
+			case '6':    linearM->scale(1,1,0.9);    cubus->update(linearM); break;
+
+			case '^':    mode = !mode; break;
+			case '+':    cubus->reset(); ac = exp = 0; break;
+			case '-':    shadows = !shadows; break;
+			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
+			case '.':    cubus->translatealongnormals(1.1); break;
+			case ',':    cubus->translatealongnormals(-1.1); break;
+			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
+			case ' ':    clglobal->clsound->stop(); break;
+			case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
 				
 			//System:
-			case '0':
-				xlong rval = clglobal->clsystem->msgbox("bye");
-				clglobal->clsystem->exit(rval,0,"user","exit");
-			break;
+			case '0':    xlong rval = clglobal->clsystem->msgbox("bye"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
 		}
 		
 		switch(clglobal->clwindow->getinkey())
@@ -361,7 +265,7 @@ int main(int argc, char** argv)
 		
 		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",0,0x00FFFFFF,0x00FF0000);
 		clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",0,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,50,"Use x,y for aspect-scaling",0,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,50,"Use 7,8 for aspect-scaling",0,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",0,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,90,"Use + for reseting",0,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,110,"Use # for exploding",0,0x00FFFFFF);

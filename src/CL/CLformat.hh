@@ -464,7 +464,6 @@ sprites2* CLformat::loadtileset(sprite* sp,xlong tw,xlong th)
 	for(xlong i=0; i<r->tilecount; i++)
 	{
 		r->tiledata[i] = new uxlong[r->tilesize];
-		say();
 		sourceindex = ((i/tilesperrow)*sp->width*th) + ((i%tilesperrow)*tw); 
 		
 		for(xlong j=0; j<th; j++) { for(xlong k=0; k<tw; k++) { r->tiledata[i][j*tw+k] = sp->data[sourceindex+(j*sp->width+k)]; } }

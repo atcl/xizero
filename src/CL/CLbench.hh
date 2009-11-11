@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLBENCH
 #define HH_CLBENCH
-#pragma message "Compiling " __FILE__ " ! TODO: check if timeinterval correct"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLbench
  * 
  * description:	This class calculates fps, memory and cpu usage.
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLbench : public virtual CLcl, public CLsingle<CLbench>
 {
 	friend class CLsingle<CLbench>;
@@ -40,8 +49,10 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 		float getfps();
 		void print() const;
 };
+///*
 
-void CLbench::init(xlong i,xchar f)
+///imlementation
+void CLbench::init(xlong i,xchar f) //! noncritical
 {
 	interval = i*1000;
 	flags = f;	
@@ -50,7 +61,7 @@ void CLbench::init(xlong i,xchar f)
 	elapsedtime = 0;
 }
 
-void CLbench::inc()
+void CLbench::inc() //! critical
 {
 	frames++;
 	currenttime = clsystem->getmilliseconds();
@@ -67,9 +78,9 @@ void CLbench::inc()
 	lastupdate = currenttime;
 }
 
-float CLbench::getfps() { return framespersecond; }
+float CLbench::getfps() { return framespersecond; } //! noncritical
 
-void CLbench::print() const
+void CLbench::print() const //! noncritical
 {
 		if(flags & COUT_FPS)
 		{
@@ -91,6 +102,7 @@ void CLbench::print() const
 			//~ CLsystem::print("MB");
 		//~ }
 }
+///*
 
 #endif
 
