@@ -263,17 +263,17 @@ int main(int argc, char** argv)
 		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
 		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
 		
-		//~ clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",0,0x00FFFFFF,0x00FF0000);
-		//~ clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,50,"Use 7,8 for aspect-scaling",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,90,"Use + for reseting",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,110,"Use # for exploding",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,130,"Use ^ for toggling between shading",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,150,"Use - for toggling between shadowing",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,170,"Use . and  , to translate along normals",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",0,0x00FFFFFF);
-		//~ clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",0,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
+		clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,90,"Use + for reseting",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,110,"Use # for exploding",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,130,"Use ^ for toggling between shading",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,150,"Use - for toggling between shadowing",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,170,"Use . and  , to translate along normals",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
+		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
 
 		if(shadows==1)
 		{
@@ -283,12 +283,6 @@ int main(int argc, char** argv)
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
-		
-		clglobal->clgfx1->drawsprite(600,500,testfont,'f'); //tileset test
-		clglobal->clgfx1->drawsprite(580,520,testfont,'A');
-		clglobal->clgfx1->drawsprite(560,540,testfont,'f');
-		clglobal->clgfx1->drawsprite(540,560,testfont,'!');
-		clglobal->clgfx1->drawsprite(520,580,testfont,'z');
 
 		linearM->unit();
 

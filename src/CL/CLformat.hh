@@ -350,6 +350,8 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const
 	return r;
 }
 
+tileset* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); }
+
 tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const
 {
 	sprite* sp = loadras(fp);

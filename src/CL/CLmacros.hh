@@ -11,6 +11,12 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 
+inline bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); } //check if point is off screen
+
+inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<0) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); } //check if rectangle s off screen
+
+inline void clip(xlong& x,xlong& y) { if(x<0) x=0; if(x>=XRES) x=XRES-1; if(y<0) y=0; if(y>=YRES) y=YRES-1; } //clip point against screen borders
+
 xlong inline x20(xlong f)  { return ( (f<<4) + (f<<2) ); } //fast multiplication with 20
 
 xlong inline x40(xlong f)  { return ( (f<<5) + (f<<3) ); } //fast ultiplication with 40

@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license 
+///*
+
+///guard
 #ifndef HH_CLBOSS
 #define HH_CLBOSS
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLcl.hh"
 #include "CLentity.hh"
+///*
 
+///header
 /* class name:	CLboss
  * 
  * description:	The boss (enemy) class.
@@ -17,15 +24,19 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLboss : public CLenemy
 {
 	public:
 		CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp);
-		~CLboss();
+		~CLboss() { }
 };
+///*
 
-CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp) : CLenemy(bossptr,m,mm,bossp)
+///implementation
+CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp) : CLenemy(bossptr,m,mm,bossp) //! noncritical
 { 
 	//set entity type
 	type = 2;
@@ -40,7 +51,6 @@ CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp) : CLenemy(bos
 	hprog->reset(0,0,80,20,health+shield,0,health+shield,0x0000FF00,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*	
 }
-
-CLboss::~CLboss() { }
+///*
 
 #endif
