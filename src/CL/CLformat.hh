@@ -38,24 +38,18 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 	public:
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
-		sprite*  loadtga(CLfile* sf) const;
 		sprite*  loadras(CLfile* sf) const;
 		sprite*  loadxpm(const xchar* xpm[]) const;
-		sprites* loadtileset(CLfile* sf,xlong tw,xlong th) const;
-		sprites* loadfont(CLfile* sf) const;
+		tileset* loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
 		
 		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
 		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
-		inline sprite*  loadtga(const xchar* sf) const;
 		inline sprite*  loadras(const xchar* sf) const;
-		inline sprites* loadtileset(const xchar* sf,xlong tw,xlong th) const;
-		inline sprites* loadfont(const xchar* sf) const;
+		inline tileset* loadtileset(const xchar* sf,xlong tw,xlong th) const;
 		inline xchar**  loadlvl(const xchar* sf) const;
 		inline xmap*    loadini(const xchar* bf) const;
-		
-		sprites2* loadtileset(sprite* sp,xlong tw,xlong th);
 };
 
 xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); }
@@ -126,8 +120,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
 	//*
 }
 
-xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const
-{ return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
+xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const { return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
 
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
 {
@@ -176,50 +169,6 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
 	//*
 
 	return rev;
-}
-
-sprite* CLformat::loadtga(const xchar* sf) const { return loadtga(clsystem->getfile(sf)); }
-
-sprite* CLformat::loadtga(CLfile* sf) const
-{
-//loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
-
-	xchar* bf = sf->text;
-
-	//xchar	imageid		= bf[0];
-
-	//xchar	colormap	= bf[1];
-	xchar	imagetype	= bf[2];
-
-	if(imagetype > 2) return 0; //no TGA!
-
-	//xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
-	//xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
-	//xchar	colormaprentry	= bf[7];
-
-	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
-	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
-	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<8);
-	xshort	imageheight	= bf[14] + (xshort(bf[15])<<8);
-	//xchar	imagepixelsize	= bf[16];
-
-	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
-
-	//xchar	imagedescriptor	= bf[17];
-
-	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
-
-	//xshort imageoffset = imageid + colormaplength;
-
-	//fill sprite struct
-	sprite* r = new sprite;
-	r->size = imagewidth * imageheight;
-	r->width = imagewidth;
-	r->height = imageheight;
-	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
-	//*
-
-	return r;
 }
 
 sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); }
@@ -398,59 +347,10 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const
 	return r;
 }
 
-sprites* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); }
-
-sprites* CLformat::loadtileset(CLfile* sf,xlong tw,xlong th) const
+tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const
 {
-//loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
-
-	xchar* bf = sf->text;
-
-	//xchar	imageid		= bf[0];
-
-	//xchar	colormap	= bf[1];
-	xchar	imagetype	= bf[2];
-
-	if(imagetype > 2) return 0; //no TGA!
-
-	//xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
-	//xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
-	//xchar	colormaprentry	= bf[7];
-
-	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
-	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
-	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<8);
-	xshort	imageheight	= bf[14] + (xshort(bf[15])<<8);
-	//xchar	imagepixelsize	= bf[16];
-
-	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
-
-	//xchar	imagedescriptor	= bf[17];
-
-	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
-
-	//xshort imageoffset = imageid + colormaplength;
-
-	//fill sprites struct
-	sprites* r = new sprites;
-	r->size = imagewidth * imageheight;
-	r->width = imagewidth;
-	r->height = imageheight;
-	r->tilesize = tw * th;
-	r->tilewidth = tw;
-	r->tileheight = th;
-	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
-	//*
-	
-	if( (r->width%r->tilewidth!=0) || (r->height%r->tileheight!=0) ) clsystem->exit(1,0,__func__,"tile dimensions do not match image dimensions");
-	r->tilecount = (r->width/r->tilewidth) * (r->height*r->tileheight);
-
-	return r;
-}
-
-sprites2* CLformat::loadtileset(sprite* sp,xlong tw,xlong th)
-{
-	sprites2* r = new sprites2;
+	sprite* sp = loadras(fp);
+	tileset* r = new tileset;
 	r->tilewidth = tw;
 	r->tileheight = th;
 	r->tilesize = tw * th;
@@ -469,56 +369,6 @@ sprites2* CLformat::loadtileset(sprite* sp,xlong tw,xlong th)
 		for(xlong j=0; j<th; j++) { for(xlong k=0; k<tw; k++) { r->tiledata[i][j*tw+k] = sp->data[sourceindex+(j*sp->width+k)]; } }
 	}
 	
-	return r;
-}
-
-sprites* CLformat::loadfont(const xchar* sf) const { return loadfont(clsystem->getfile(sf)); }
-
-sprites* CLformat::loadfont(CLfile* sf) const
-{
-//loads only TGA's with datatype=1,2, origin in upper left, and 32bit color depth.
-
-	xchar* bf = sf->text;
-
-	//xchar	imageid		= bf[0];
-
-	//xchar	colormap	= bf[1];
-	xchar	imagetype	= bf[2];
-
-	if(imagetype > 2) return 0; //no TGA!
-
-	//xshort	colormaporigin	= bf[3] + (xshort(bf[4])<<16);
-	//xshort	colormaplength	= bf[5] + (xshort(bf[6])<<16);
-	//xchar	colormaprentry	= bf[7];
-
-	//xshort	imageoriginx	= bf[8] + (xshort(bf[9])<<16);
-	//xshort	imageoriginy	= bf[10] + (xshort(bf[11])<<16);
-	xshort	imagewidth	= bf[12] + (xshort(bf[13])<<8);
-	xshort	imageheight	= bf[14] + (xshort(bf[15])<<8);
-	//xchar	imagepixelsize	= bf[16];
-
-	//if(imagepixelsize != 32 || imagepixelsize != 24) return 0; //nor 32bit or 24bit //fix here!
-
-	//xchar	imagedescriptor	= bf[17];
-
-	//if( (imagedescriptor && 0x00010000) == 0x00010000) return 0; //not upper left = origin //test
-
-	//xshort imageoffset = imageid + colormaplength;
-
-	if( (imagewidth%256)!=0 ) clsystem->exit(1,0,__func__,"Not 256 font tiles in one row!");
-
-	//fill CLfont struct
-	CLfont* r = new CLfont;
-	r->size = imagewidth * imageheight;
-	r->width = imagewidth;
-	r->height = imageheight;
-	r->tilewidth = imagewidth / 256;
-	r->tileheight = imageheight;
-	r->tilesize = (imagewidth / 256) * imageheight;
-	r->data = static_cast<uxlong*>(static_cast<void*>(&bf[18])); // + imageoffset); //!
-	r->tilecount = 256;
-	//*
-
 	return r;
 }
 

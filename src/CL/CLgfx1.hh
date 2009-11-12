@@ -73,11 +73,10 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const;
 		void drawsprite(xlong x,xlong y,sprite* s) const;
-		void drawsprite(xlong x,xlong y,sprites2* t,xlong a) const;
-		void drawspriteanimated(xlong x,xlong y,sprites* s,xlong i) const;
+		void drawsprite(xlong x,xlong y,tileset* t,xlong a) const;
+		void drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0) const;
 		void drawscreen(sprite* s) const;
-		void drawtile(xlong x,xlong y,sprites *s,xlong ti) const;
 };
 
 void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
@@ -511,7 +510,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 	//*	
 }
 
-void CLgfx1::drawsprite(xlong x,xlong y,sprites2* t,xlong a) const
+void CLgfx1::drawsprite(xlong x,xlong y,tileset* t,xlong a) const
 {
 	//xlong ssize = s->size;
 	xlong swidth = t->tilewidth;
@@ -552,7 +551,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprites2* t,xlong a) const
 	//*	
 }
 
-void CLgfx1::drawspriteanimated(xlong x,xlong y,sprites* s,xlong i) const
+void CLgfx1::drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const
 {
 
 }
@@ -612,48 +611,6 @@ void CLgfx1::drawscreen(sprite* s) const
 		//draw loop
 		for(uxlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) cldoublebuffer[i] = s->data[i]; }
 		//*
-	}
-	//*
-}
-
-void CLgfx1::drawtile(xlong x,xlong y,sprites *s,xlong ti) const
-{
-	//find tile
-	xlong pr = (s->width / s->tilewidth);
-	xlong off = ((ti % pr) * (s->width*s->tileheight)) + ((ti / pr) * s->tilewidth);
-	//*
-
-	xlong hordiff = s->width-s->tilewidth;
-	xlong xs = x;
-	xlong ys = y;
-	xlong xe = x + s->tilewidth;
-	xlong ye = y + s->tileheight;
-
-	//clipping against screen borders
-	if(isoff(xs,ys,xe,ye)) return;
-	clip(xs,ys);
-	clip(xe,ye);
-	//*
-
-	//set up variables
-	xlong ewidth = xe - xs;
-	xlong eheight = ye - ys;
-	xlong xoffset = (ys * XRES) + xs;
-	xlong linearc = off;
-	
-	hordiff += (s->tilewidth - ewidth); //if clipping on xmax. test! 
-	//*
-
-	//drawloop
-	for(uxlong i=0; i<eheight ;i++)
-	{
-		for(uxlong j=0; j<ewidth ;j++)
-		{
-			if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
-			linearc++;
-		}
-		xoffset += XRES;
-		linearc += hordiff;
 	}
 	//*
 }

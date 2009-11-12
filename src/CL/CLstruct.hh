@@ -46,21 +46,7 @@ struct sprite
 	uxlong* data;
 };
 
-struct sprites
-{
-	uxlong  size;
-	uxlong  width;
-	uxlong  height;
-	uxlong* data;
-
-	uxlong  tilesize;
-	uxlong  tilewidth;
-	uxlong  tileheight;
-	uxlong  tilecount;
-	uxlong** tiledata;
-};
-
-struct sprites2
+struct tileset
 {
 	uxlong  tilesize;
 	uxlong  tilewidth;
@@ -69,7 +55,7 @@ struct sprites2
 	uxlong** tiledata;
 };
 
-typedef sprites CLfont;
+typedef tileset CLfont;
 
 struct CLgamepadstate
 {

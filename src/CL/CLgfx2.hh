@@ -52,7 +52,7 @@ CLgfx2::CLgfx2() { tele = mono = line = term = segm  = 0; };
 void CLgfx2::loadfonts(CLfile* sf)
 {
 	CLar* fontsa = new CLar(sf);
-	tele = clformat->loadfont(fontsa->findbyname("CLteletype.fnt"));
+	//tele = clformat->loadtileset(fontsa->findbyname("CLteletype.fnt"));
 }
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const
@@ -93,59 +93,59 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 
 xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong ft,uxlong fc,uxlong bc) const
 {
-	//is on screen
-	if( x<0 || y<0 || x>XRES || y>YRES) return -1;
-	//*
+	//~ //is on screen
+	//~ if( x<0 || y<0 || x>XRES || y>YRES) return -1;
+	//~ //*
+	//~ 
+	//~ //select font
+	//~ CLfont* f = 0;
+	//~ switch(ft)
+	//~ {
+		//~ case 0: f = tele; break;
+		//~ case 1: f = mono; break;
+		//~ case 2: f = line; break;
+		//~ case 3: f = term; break;
+		//~ case 4: f = segm; break;
+	//~ }
+	//~ //*
+	//~ 
+	//~ //find (font) tile
+	//~ uxlong srcoff = (a * f->tilewidth)-1; 
+	//~ //*
+//~ 
+	//~ //draw vars
+	//~ xlong hordiff = (f->width) - (f->tilewidth);
+	//~ xlong drawwidth = f->tilewidth;
+	//~ xlong drawheight = f->tileheight;
+	//~ uxlong dstoff = (y * XRES) + x;
+	//~ xlong rx = x;
+	//~ //*
+	//~ 
+	//~ //is completely on screen
+	//~ if(x+drawwidth>XRES || y+drawheight>YRES) return -1;
+	//~ //*
+//~ 
+	//~ //drawloop
+	//~ uxlong curroff = dstoff;
+	//~ for(uxlong i=0; i<drawheight; i++)
+	//~ {
+		//~ for(uxlong j=0; j<drawwidth; j++)
+		//~ {
+			//~ if(f->data[srcoff] == 0xFFFF0000) cldoublebuffer[curroff] = fc;
+			//~ if(bc!=0 && f->data[srcoff] == 0xFFFFFFFF) cldoublebuffer[curroff] = bc;
+			//~ if(f->data[srcoff] != 0xFF000000)
+			//~ {
+				//~ if(i==0) rx++;
+				//~ curroff++;
+			//~ }
+			//~ srcoff++; 
+		//~ }
+		//~ curroff = dstoff += XRES;
+		//~ srcoff += hordiff;
+	//~ }
+	//~ //*
 	
-	//select font
-	CLfont* f = 0;
-	switch(ft)
-	{
-		case 0: f = tele; break;
-		case 1: f = mono; break;
-		case 2: f = line; break;
-		case 3: f = term; break;
-		case 4: f = segm; break;
-	}
-	//*
-	
-	//find (font) tile
-	uxlong srcoff = (a * f->tilewidth)-1; 
-	//*
-
-	//draw vars
-	xlong hordiff = (f->width) - (f->tilewidth);
-	xlong drawwidth = f->tilewidth;
-	xlong drawheight = f->tileheight;
-	uxlong dstoff = (y * XRES) + x;
-	xlong rx = x;
-	//*
-	
-	//is completely on screen
-	if(x+drawwidth>XRES || y+drawheight>YRES) return -1;
-	//*
-
-	//drawloop
-	uxlong curroff = dstoff;
-	for(uxlong i=0; i<drawheight; i++)
-	{
-		for(uxlong j=0; j<drawwidth; j++)
-		{
-			if(f->data[srcoff] == 0xFFFF0000) cldoublebuffer[curroff] = fc;
-			if(bc!=0 && f->data[srcoff] == 0xFFFFFFFF) cldoublebuffer[curroff] = bc;
-			if(f->data[srcoff] != 0xFF000000)
-			{
-				if(i==0) rx++;
-				curroff++;
-			}
-			srcoff++; 
-		}
-		curroff = dstoff += XRES;
-		srcoff += hordiff;
-	}
-	//*
-	
-	return rx;
+	//~ return rx;
 }
 
 void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,uxlong bc) const
@@ -166,35 +166,35 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong ft,uxlong fc,ux
 
 xlong CLgfx2::getfontstringwidth(const char* a,xlong ft) const
 {
-	//select font
-	CLfont* f = 0;
-	switch(ft)
-	{
-		case 0: f = tele; break;
-		case 1: f = mono; break;
-		case 2: f = line; break;
-		case 3: f = term; break;
-		case 4: f = segm; break;
-	}
-	//*
-	
-	xlong l = clutils->chararraylength(a);
-	xlong r = 0;
-	
-	uxlong srcoff = 0;
-	
-	for(uxlong i=0; i<l; i++)
-	{
-		srcoff = (a[i] * f->tilewidth)-1; 
-
-		for(uxlong j=0; j<f->tilewidth; j++)
-		{
-			if(f->data[srcoff] != 0xFF000000) r++;
-			srcoff++; 
-		}
-	}
-	
-	return r;
+	//~ //select font
+	//~ CLfont* f = 0;
+	//~ switch(ft)
+	//~ {
+		//~ case 0: f = tele; break;
+		//~ case 1: f = mono; break;
+		//~ case 2: f = line; break;
+		//~ case 3: f = term; break;
+		//~ case 4: f = segm; break;
+	//~ }
+	//~ //*
+	//~ 
+	//~ xlong l = clutils->chararraylength(a);
+	//~ xlong r = 0;
+	//~ 
+	//~ uxlong srcoff = 0;
+	//~ 
+	//~ for(uxlong i=0; i<l; i++)
+	//~ {
+		//~ srcoff = (a[i] * f->tilewidth)-1; 
+//~ 
+		//~ for(uxlong j=0; j<f->tilewidth; j++)
+		//~ {
+			//~ if(f->data[srcoff] != 0xFF000000) r++;
+			//~ srcoff++; 
+		//~ }
+	//~ }
+	//~ 
+	//~ return r;
 }
 
 xlong CLgfx2::getfontstringheight(const char* a,xlong ft) const
