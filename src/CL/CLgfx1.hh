@@ -48,9 +48,7 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const;
 		void drawbigpixel(xlong x,xlong y,uxlong c) const;
 		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const;
-		void drawhorline(xlong x1,xlong y1,xlong x2,uxlong c) const;
-		void drawverline(xlong x1,xlong y1,xlong y2,uxlong c) const;
-		void drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
+		void drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
 		void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
 		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const;
 		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
@@ -141,81 +139,60 @@ void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const
 
 }
 
-void CLgfx1::drawhorline(xlong x1,xlong y1,xlong x2,uxlong c) const
-{
-	if(isoff(x1,y1,x2,y1)) return;
-	clip(x1,y1);
-	clip(x2,y1);
-	
-	xlong a = x1;
-	xlong b = x2;
-	if(a>b) a ^= b ^= a ^= b;
-	xlong offsetbase = (y1*XRES);
-
-	for(uxlong i=a; i<=b; i++) { cldoublebuffer[offsetbase+i] = c; }
-}
-
-void CLgfx1::drawverline(xlong x1,xlong y1,xlong y2,uxlong c) const
-{
-	if(isoff(x1,y1,x1,y2)) return;
-	clip(x1,y1);
-	clip(x1,y2);
-	
-	xlong a = y1;
-	xlong b = y2;
-	if(a>b) a ^= b ^= a ^= b;
-	xlong offsetbase = (a*XRES)+x1;
-
-	for(uxlong i=a; i<=b; i++)
-	{
-		cldoublebuffer[offsetbase] = c;
-		offsetbase+=XRES;
-	}
-}
-
-void CLgfx1::drawanyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
-{
-	//check if necessary to draw at all
-	if(x1==x2 && y1==y2) return;
-	//*
-
-	//clip line against screen borders
+void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
+{	
+	if( (x1==x2 && y1==y2) || isoff(x1,y1,x2,y2)) return;
 	clip(x1,y1);
 	clip(x2,y2);
-	//*
 
-	//set up variables
-	xlong dx = x2 - x1;
-	xlong dy = y2 - y1;
-	xlong e = 0;
-	xlong xs = 1;
-	xlong ys = XRES;
-	xlong len;
-	xlong off = y1*XRES+x1;
-	//*
-
-	if(dx<0) { dx = -dx; xs = -xs; }
-
-	if(dy<0) { dy = -dy; ys = -ys; }
- 
-	if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
-
-	len = dx+1;
-	e = dy;
-
-	//draw loop
-	for(uxlong i=0; i<len; i++)
+	xlong s = xlong(x1==x2) - xlong(y1==y2);
+	xlong a = 0;
+	xlong b = 0;
+	uxlong offset = 0;
+	
+	switch(s)
 	{
-		cldoublebuffer[off] = c;
-		off += xs;
-		e += dy;
-		if(e >= dx)
-		{
-			e -= dx;
-			off += ys;
-		}
+		case -1:
+			a = y1;
+			b = y2;
+			if(a>b) a ^= b ^= a ^= b;
+			offset = (a*XRES)+x1;
+			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset] = c; offset+=XRES; }
+		break;
+		
+		case 1:
+			a = x1;
+			b = x2;
+			if(a>b) a ^= b ^= a ^= b;
+			offset = (y1*XRES);
+			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset+i] = c; }
+		break;
+		
+		case 0:
+			xlong dx = x2 - x1;
+			xlong dy = y2 - y1;
+			xlong e = 0;
+			xlong xs = 1;
+			xlong ys = XRES;
+			xlong len;
+			offset = y1*XRES+x1;
+
+			if(dx<0) { dx = -dx; xs = -xs; }
+			if(dy<0) { dy = -dy; ys = -ys; }
+			if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
+
+			len = dx+1;
+			e = dy;
+
+			for(uxlong i=0; i<len; i++)
+			{
+				cldoublebuffer[offset] = c;
+				offset += xs;
+				e += dy;
+				if(e >= dx) { e -= dx; offset += ys; }
+			}
+		break;		
 	}
-	//*
 }
 
 void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
@@ -245,10 +222,10 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const
 void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 {
 	//draw outline of rectangle
-	drawhorline(x1,y1,x2,c);
-	drawhorline(x1,y2,x2,c);
-	drawverline(x1,y1,y2,c);
-	drawverline(x2,y1,y2,c);
+	drawline(x1,y1,x2,y1,c);
+	drawline(x1,y2,x2,y2,c);
+	drawline(x1,y1,x1,y2,c);
+	drawline(x2,y1,x2,y2,c);
 	//*
 }
 
@@ -260,18 +237,18 @@ void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) c
 	//*
 	
 	//decide wether to use horizontal or vertical lines
-	if( (x2-x1)>(y2-y1) ) for(xlong i=y1; i<=y2; i++) { drawhorline(x1,i,x2,c); }
-	else for(xlong i=x1; i<=x2; i++) { drawverline(i,y1,y2,c); }
+	if( (x2-x1)>(y2-y1) ) for(xlong i=y1; i<=y2; i++) { drawline(x1,i,x2,i,c); }
+	else for(xlong i=x1; i<=x2; i++) { drawline(i,y1,i,y2,c); }
 	//*
 }
 
 void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const
 {
 	//draw outline of four-sided polygon
-	drawanyline(x1,y1,x2,y2,c);
-	drawanyline(x2,y2,x3,y3,c);
-	drawanyline(x3,y3,x4,y4,c);
-	drawanyline(x4,y4,x1,y1,c);
+	drawline(x1,y1,x2,y2,c);
+	drawline(x2,y2,x3,y3,c);
+	drawline(x3,y3,x4,y4,c);
+	drawline(x4,y4,x1,y1,c);
 	//*
 }
 

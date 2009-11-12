@@ -1,14 +1,21 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLBUFFER
 #define HH_CLBUFFER
-#pragma message "Compiling " __FILE__ " ! TODO: rewrite as dynamic class (w templates?)"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLdetect.hh"
+///*
 
+///header
 /* class name:	CLbuffer
  * 
  * description:	This class handles memory buffers.
@@ -19,7 +26,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 template <typename T>class CLbuffer : public virtual CLcl
 {
 	private:
@@ -33,6 +42,7 @@ template <typename T>class CLbuffer : public virtual CLcl
 		CLbuffer(uxlong s,T ival=0);
 		~CLbuffer();
 		void clear(T v);
+		void zero();
 		void copy(T* dst);
 		void copy(CLbuffer* dst);
 		void blendcopy(T* dst,xlong o); //too slow!!!
@@ -42,8 +52,10 @@ template <typename T>class CLbuffer : public virtual CLcl
 		T* getbuffer() const;
 		T& operator[](uxlong i);
 };
+///*
 
-template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
+///implementation
+template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
 {
 	//adjust size and allocate buffer
 	size = (s+1) + (s%4); // make sure is amultiple of 16byte
@@ -54,9 +66,10 @@ template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival)
 	//*
 }
 
-template <typename T>CLbuffer<T>::~CLbuffer() { } //how to delete buffer?
+//how to delete buffer?
+template <typename T>CLbuffer<T>::~CLbuffer() { } //! noncritical 
 
-template <typename T>void CLbuffer<T>::clear(T v)
+template <typename T>void CLbuffer<T>::clear(T v) //! critical
 {
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong purev = (reinterpret_cast<xlong*>(&v))[0];
@@ -119,7 +132,7 @@ template <typename T>void CLbuffer<T>::clear(T v)
 	//*
 }
 
-template <typename T>void CLbuffer<T>::copy(T *dst)
+template <typename T>void CLbuffer<T>::copy(T *dst) //! critical
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
@@ -197,9 +210,9 @@ template <typename T>void CLbuffer<T>::copy(T *dst)
 	//*
 }
 
-template <typename T>void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer()); }
+template <typename T>void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer()); } //! noncritical
 
-template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
+template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
@@ -514,25 +527,26 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o)
 	//*
 }
 
-template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); }
+template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); } //! noncritical
 
-template <typename T>uxlong CLbuffer<T>::getsize() const { return size; }
+template <typename T>uxlong CLbuffer<T>::getsize() const { return size; } //! noncritical
 
-template <typename T>uxlong CLbuffer<T>::getbytesize() const { return bsize; }
+template <typename T>uxlong CLbuffer<T>::getbytesize() const { return bsize; } //! noncritical
 
-template <typename T>T* CLbuffer<T>::getbuffer() const { return buffer; }
+template <typename T>T* CLbuffer<T>::getbuffer() const { return buffer; } //! noncritical
 
-template <typename T>T& CLbuffer<T>::operator[](uxlong i)
+template <typename T>T& CLbuffer<T>::operator[](uxlong i) //! critical
 {
 	if(i>=size) return buffer[size];
 	return buffer[i];
 }
+///*
 
-//typedefs:
+///declarations
 typedef CLbuffer<float> CLfbuffer;
 typedef CLbuffer<xlong> CLlbuffer;
 typedef CLbuffer<uxlong> CLubuffer;
-//*
+///*
 
 #endif
 
