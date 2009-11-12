@@ -287,7 +287,7 @@ int main(int argc, char** argv)
 		clglobal->clgfx1->drawsprite(600,500,testfont,'f'); //tileset test
 		clglobal->clgfx1->drawsprite(580,520,testfont,'A');
 		clglobal->clgfx1->drawsprite(560,540,testfont,'f');
-		clglobal->clgfx1->drawsprite(540,560,testfont,'0');
+		clglobal->clgfx1->drawsprite(540,560,testfont,'!');
 		clglobal->clgfx1->drawsprite(520,580,testfont,'z');
 
 		linearM->unit();

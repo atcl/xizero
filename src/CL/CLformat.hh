@@ -193,6 +193,9 @@ sprite* CLformat::loadras(CLfile* sf) const
 	xlong dataindex = 0;
 	xlong size = width * height;
 	xlong fullsize = size * 4;
+	xlong sourcesize = size;
+	if(depth==32) sourcesize *= 4;
+	if(depth==24) sourcesize *= 3;
 	uxchar temp = 0;
 	
 	sprite* r = new sprite;
@@ -256,7 +259,7 @@ sprite* CLformat::loadras(CLfile* sf) const
 	}
 	else
 	{
-		for(uxlong i=0; i<fullsize; i++)
+		for(uxlong i=0; i<sourcesize; i++)
 		{
 			if(depth==24 && (pixelindex+1)%4==0)
 			{
