@@ -147,7 +147,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 	
 	switch(s)
 	{
-		case -1:
+		case 1:
 			a = y1;
 			b = y2;
 			if(a>b) a ^= b ^= a ^= b;
@@ -155,7 +155,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset] = c; offset+=XRES; }
 		break;
 		
-		case 1:
+		case -1:
 			a = x1;
 			b = x2;
 			if(a>b) a ^= b ^= a ^= b;

@@ -33,6 +33,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		CLfont* line;
 		CLfont* term;
 		CLfont* segm;
+		CLfont* tall;
 		CLfont** fonts;
 		CLgfx2();
 		~CLgfx2() { };
@@ -53,10 +54,15 @@ CLgfx2::CLgfx2() { tele = mono = line = term = segm  = 0; };
 
 void CLgfx2::loadfonts(CLfile* sf)
 {
-	fonts = new CLfont*[4];
+	fonts = new CLfont*[6];
 	CLar* fontsa = new CLar(sf);
-	//tele = clformat->loadtileset(fontsa->findbyname("CLteletype.fnt"));
-	fonts[2] = line = clformat->loadtileset("dat/fonts/CLlinetype.im24",16,16); //temp
+	mono = fonts[0] = clformat->loadtileset(fontsa->findbyname("CLmonotype.fnt"),16,16);
+	tele = fonts[1] = clformat->loadtileset(fontsa->findbyname("CLteletype.fnt"),16,16);
+	line = fonts[2] = clformat->loadtileset(fontsa->findbyname("CLlinetype.fnt"),16,16);
+	//term = fonts[3] = clformat->loadtileset(fontsa->findbyname("CLtermtype.fnt"),16,16);
+	//segm = fonts[4] = clformat->loadtileset(fontsa->findbyname("CLsegmtype.fnt"),16,16);
+	//tall = fonts[5] = clformat->loadtileset(fontsa->findbyname("CLtalltype.fnt"),16,16);
+	//fonts[2] = line = clformat->loadtileset("dat/fonts/CLlinetype.im24",16,16); //temp
 }
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const

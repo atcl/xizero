@@ -21,8 +21,8 @@ int main(int argc, char** argv)
 	
 	//*
 	//test sprites2
-	CLfile* rastemp = clglobal->clsystem->getfile("dat/fonts/CLlinetype.im24");
-	tileset* testfont = clglobal->clformat->loadtileset(rastemp,16,16);
+	//CLfile* rastemp = clglobal->clsystem->getfile("dat/fonts/CLlinetype.im24");
+	//tileset* testfont = clglobal->clformat->loadtileset(rastemp,16,16);
 	//*
 
 		//test tree:

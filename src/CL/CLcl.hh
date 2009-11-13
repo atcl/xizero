@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLCL
 #define HH_CLCL
-#pragma message "Compiling " __FILE__ " ! TODO: ..." 
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLversion.hh"
 #include "CLglobals.hh"
+///*
 
+///header
 /* class name:	CLcl
  * 
  * description:	The base class of all other classes
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///defintions
 class CLutils;
 
 class CLcl : public CLglobal
@@ -35,10 +44,13 @@ class CLcl : public CLglobal
 xlong CLcl::version = (CLmajor<<24) + (CLminor<<16) + (CLbuild<<8) + CLextra;
 
 xlong CLcl::id = 0;
+///*
 
-CLcl::CLcl() { id++; }
+///implementations
+CLcl::CLcl() { id++; } //! noncritical
 
-xlong CLcl::getversion() const { return version; }
+xlong CLcl::getversion() const { return version; } //! noncritical
+///*
 
 #endif
 
