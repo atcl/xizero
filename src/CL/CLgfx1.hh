@@ -50,7 +50,7 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa=0) const;
 		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f=0) const;
 		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const;
-		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const;
+		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const;
 		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a=0) const;
 		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const;
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
@@ -225,22 +225,36 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 	//*
 }
 
-void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const
+void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 {
-	//find circle center
-	xlong xc = 0;
-	xlong yc = 0;
+	//calc position f third control point
 	
 	//*
 	
-	//find start and end angles
-	
-	
+	//precalc points
+	xlong segs = 20;
+	float pts[segs][2];
+	float t = 0.0;
+	float a = 0.25;
+	float b = 0.5;
+	float c = 0.25;
+	float x = 0.0;
+	float y = 0.0;
+	for(xlong i=0; i<=segs; i++)
+	{
+		t = float(i)/float(segs);
+		x = a * x1 + b * x2 + c * x3;
+		y = a * y1 + b * y2 + c * y3;
+		pts[i][0] = x;
+        pts[i][1] = y;
+	}
 	//*
 	
-	//draw the arc
-	
-	
+	//draw loop
+	for(xlong i=0; i<=20; i++)
+	{
+		cldoublebuffer[(pts[i][1]*XRES)+pts[i][0]] = c;
+	}
 	//*
 }
 

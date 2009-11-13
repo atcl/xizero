@@ -1,20 +1,29 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLDETECT
 #define HH_CLDETECT
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLsystem.hh"
 #include "CLsingle.hh"
+///*
 
+///os-dep
 #ifdef WIN32
 
 #else //ifdef LINUX
 	
 #endif
+///*
 
+///header
 /* class name:	CLdetect
  * 
  * description:	This class determines the system hardware capabilities.
@@ -25,7 +34,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 //CPUID flags
 #define FPUFLAG   0b00000000000000000000000000000001
 #define MMXFLAG   0b00000000100000000000000000000000
@@ -39,7 +50,9 @@
 #define HTTFLAG   0b00001000000000000000000000000000
 #define PREFFLAG  0b00000000000000000000000010000000
 //*
+///*
 
+///definitions
 class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 {
 	friend class CLsingle<CLdetect>;
@@ -66,8 +79,10 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		bool sse() const;
 		bool x86() const;
 };
+///*
 
-CLdetect::CLdetect()
+///implementation
+CLdetect::CLdetect() //! noncritical
 {
 	#ifdef X86 
 		havex86 = 1;
@@ -111,24 +126,25 @@ CLdetect::CLdetect()
 	//...	
 }
 
-xlong CLdetect::cpu() const { return pcpu; }
+xlong CLdetect::cpu() const { return pcpu; } //! noncritical
 
-xlong CLdetect::cores() const { return pcores; }
+xlong CLdetect::cores() const { return pcores; } //! noncritical
 
-xlong CLdetect::ram() const { }
+xlong CLdetect::ram() const { } //! noncritical
 
-xchar* CLdetect::gpu() const { }
+xchar* CLdetect::gpu() const { } //! noncritical
 
-xlong CLdetect::vram() const { }
+xlong CLdetect::vram() const { } //! noncritical
 
-xchar* CLdetect::sb() const { }
+xchar* CLdetect::sb() const { } //! noncritical
 
-xlong CLdetect::ps() const { }
+xlong CLdetect::ps() const { } //! noncritical
 
-bool CLdetect::mmx() const { return havemmx; }
+bool CLdetect::mmx() const { return havemmx; } //! noncritical
 
-bool CLdetect::sse() const { return havesse; }
+bool CLdetect::sse() const { return havesse; } //! noncritical
 
-bool CLdetect::x86() const { return havex86; }
+bool CLdetect::x86() const { return havex86; } //! noncritical
+///*
 
 #endif
