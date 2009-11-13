@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///license
 #ifndef HH_CLCONSTS
 #define HH_CLCONSTS
-#pragma message "warning " __FILE__ " ! TODO: more"
+///*
 
+///header
 /* class name:	CLconsts
  * 
  * description:	All constants used by multiple classes
@@ -14,7 +19,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 //basic colors
 #define CLsyscol 0x00C0C0C0
 #define CLtrans  0xFF000000
@@ -89,12 +96,14 @@
 #define LINEFONT 2;
 #define TERMFONT 3;
 #define SEGMFONT 4;
+#define TALLFONT 5;
 //*
 
 //3d engine consts
 #define prjx 80
 #define prjy 95
 //*
+///*
 
 #endif
 
