@@ -1,15 +1,22 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLBUTTON
 #define HH_CLBUTTON
-#pragma message "Compiling " __FILE__ " ! TODO: constructor,action"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLutils.hh"
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
+///*
 
+///header
 /* class name:	CLbutton
  * 
  * description:	A standard gui element button
@@ -20,7 +27,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLbutton : public CLguibase
 {
 	private:
@@ -45,8 +54,10 @@ class CLbutton : public CLguibase
 };
 
 CLlist<CLbutton>* CLbutton::buttonlist = new CLlist<CLbutton>;
+///*
 
-CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f) : CLguibase(px,py,w,h,f,fc,bc,rc)
+///implementation
+CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f) : CLguibase(px,py,w,h,f,fc,bc,rc) //! noncritical
 {
 	action = a;
 	
@@ -61,18 +72,18 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	buttonlist->append(this);
 }
 
-CLbutton::~CLbutton() { delete[] caption; }
+CLbutton::~CLbutton() { delete[] caption; } //! noncritical
 
-void CLbutton::draw() const
+void CLbutton::draw() const //! critical
 {
 	if(visible==0) return;
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	clgfx2->drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
 }
 
-void CLbutton::setaction(void(*a)()) { action = a; }
+void CLbutton::setaction(void(*a)()) { action = a; } //! noncritical
 
-void CLbutton::setcaption(xchar* t)
+void CLbutton::setcaption(xchar* t) //! noncritical
 {
 	delete caption;
 	caption = clutils->clonechararray(t);
@@ -84,7 +95,7 @@ void CLbutton::setcaption(xchar* t)
 	captiony = (height - captionheight)>>1;
 }
 
-void CLbutton::setvisible(bool v)
+void CLbutton::setvisible(bool v) //! noncritical
 {
 	if(visible==0 && v==1)
 	{
@@ -99,11 +110,11 @@ void CLbutton::setvisible(bool v)
 	}
 }
 
-xchar* CLbutton::getcaption() const { return caption; }
+xchar* CLbutton::getcaption() const { return caption; } //! noncritical
 
-void CLbutton::click() { action(); }
+void CLbutton::click() { action(); } //! critical
 
-void CLbutton::checkclick()
+void CLbutton::checkclick() //! critical
 {
 	if(clwindow->getmouselb()!=0)
 	{
@@ -126,6 +137,7 @@ void CLbutton::checkclick()
 		}
 	}
 }
+///*
 
 #endif
 

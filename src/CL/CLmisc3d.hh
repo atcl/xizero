@@ -97,8 +97,7 @@ void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa)
 		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
 		xlong ox = xlong( ( 80 * q.x) / q.z) + (XRES>>1);
 		xlong oy = xlong( (-95 * q.y) / q.z) + (YRES>>1);
-		if(aa) clgfx1->drawantiline(nx,ny,ox,oy,c);
-		else   clgfx1->drawline(nx,ny,ox,oy,c);
+		clgfx1->drawline(nx,ny,ox,oy,c,aa);
 	}
 	//*
 }

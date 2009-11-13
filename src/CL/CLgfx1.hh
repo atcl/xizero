@@ -37,25 +37,21 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 	friend class CLsingle<CLgfx1>;
 	
 	private:
-		void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
-		void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
+		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
+		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		CLgfx1() { };
 		~CLgfx1() { };
 	public:
 		uxlong readpixel(xlong x,xlong y) const;
-		void drawpixel(xlong x,xlong y,uxlong c) const;
+		void drawpixel(xlong x,xlong y,uxlong c,bool b=0) const;
 		void drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const;
 		void copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const;
-		void drawbigpixel(xlong x,xlong y,uxlong c) const;
 		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const;
-		void drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
-		void drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
-		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const;
-		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
-		void drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
+		void drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa=0) const;
+		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f=0) const;
 		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const;
-		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c) const;
-		void drawanticircle(xlong xc,xlong yc,xlong r,uxlong c) const;
+		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const;
+		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a=0) const;
 		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const;
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const;
@@ -107,10 +103,16 @@ uxlong CLgfx1::readpixel(xlong x,xlong y) const
 	return (cldoublebuffer[(y*XRES)+x]);
 }
 
-void CLgfx1::drawpixel(xlong x,xlong y,uxlong c) const
+void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const
 {
 	if(isoff(x,y)) return;
 	cldoublebuffer[(y*XRES)+x] = c;
+	if(b)
+	{
+		cldoublebuffer[(y*XRES)+x+1] = c;
+		cldoublebuffer[((y+1)*XRES)+x] = c;
+		cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
+	}
 }
 
 void CLgfx1::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const
@@ -125,22 +127,15 @@ void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const
 	cldoublebuffer[(y1*XRES)+x1] = cldoublebuffer[(y2*XRES)+x2];
 }
 
-void CLgfx1::drawbigpixel(xlong x,xlong y,uxlong c) const
-{
-	if(isoff(x,y)) return;
-	cldoublebuffer[(y*XRES)+x] = c;
-	cldoublebuffer[(y*XRES)+x+1] = c;
-	cldoublebuffer[((y+1)*XRES)+x] = c;
-	cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
-}
-
 void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const
 {
 
 }
 
-void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
-{	
+void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
+{
+	//! todo: if(a) then anti-aliased line
+	
 	if( (x1==x2 && y1==y2) || isoff(x1,y1,x2,y2)) return;
 	clip(x1,y1);
 	clip(x2,y2);
@@ -195,9 +190,39 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
 	}
 }
 
-void CLgfx1::drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
+void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const
 {
+	if(f)
+	{
+		//make sure x1<x2 and y1<y2
+		if(x2<x1) x1 ^= x2 ^= x1 ^= x2;
+		if(y2<y1) y1 ^= y2 ^= y1 ^= y2;
+		//*
+		
+		//decide wether to use horizontal or vertical lines
+		if( (x2-x1)>(y2-y1) ) for(xlong i=y1; i<=y2; i++) { drawline(x1,i,x2,i,c); }
+		else for(xlong i=x1; i<=x2; i++) { drawline(i,y1,i,y2,c); }
+		//*
+	}
+	else
+	{
+		//draw outline of rectangle
+		drawline(x1,y1,x2,y1,c);
+		drawline(x1,y2,x2,y2,c);
+		drawline(x1,y1,x1,y2,c);
+		drawline(x2,y1,x2,y2,c);
+		//*
+	}
+}
 
+void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const
+{
+	//draw outline of four-sided polygon
+	drawline(x1,y1,x2,y2,c);
+	drawline(x2,y2,x3,y3,c);
+	drawline(x3,y3,x4,y4,c);
+	drawline(x4,y4,x1,y1,c);
+	//*
 }
 
 void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const
@@ -219,40 +244,7 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong r,uxlong c) const
 	//*
 }
 
-void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
-{
-	//draw outline of rectangle
-	drawline(x1,y1,x2,y1,c);
-	drawline(x1,y2,x2,y2,c);
-	drawline(x1,y1,x1,y2,c);
-	drawline(x2,y1,x2,y2,c);
-	//*
-}
-
-void CLgfx1::drawfilledrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const
-{
-	//make sure x1<x2 and y1<y2
-	if(x2<x1) x1 ^= x2 ^= x1 ^= x2;
-	if(y2<y1) y1 ^= y2 ^= y1 ^= y2;
-	//*
-	
-	//decide wether to use horizontal or vertical lines
-	if( (x2-x1)>(y2-y1) ) for(xlong i=y1; i<=y2; i++) { drawline(x1,i,x2,i,c); }
-	else for(xlong i=x1; i<=x2; i++) { drawline(i,y1,i,y2,c); }
-	//*
-}
-
-void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const
-{
-	//draw outline of four-sided polygon
-	drawline(x1,y1,x2,y2,c);
-	drawline(x2,y2,x3,y3,c);
-	drawline(x3,y3,x4,y4,c);
-	drawline(x4,y4,x1,y1,c);
-	//*
-}
-
-void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c) const
+void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
 {
 	//center and radius clipping
 	// ...
@@ -269,13 +261,12 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c) const
 		else { d += ((cx-cy)<<2)+10; cy--; }
 		cx++; 
 	}
-}
-
-void CLgfx1::drawanticircle(xlong xc,xlong yc,xlong r,uxlong c) const
-{
-	drawcircle(xc,yc,r,c);
-	drawcircle(xc,yc,r+1,c); //adjust color
-	drawcircle(xc,yc,r-1,c); //adjust color
+	
+	if(a)
+	{
+		drawcircle(xc,yc,r+1,c); //adjust color
+		drawcircle(xc,yc,r-1,c); //adjust color
+	}
 }
 
 void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const

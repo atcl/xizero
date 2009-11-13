@@ -68,7 +68,7 @@ void CLtransitions::dissolve()
 			rx = clutils->getrandom(800);
 			ry = clutils->getrandom(600);
 			c = clutils->getrandom(-1);
-			clgfx1->drawbigpixel(rx,ry,c);
+			clgfx1->drawpixel(rx,ry,c,1);
 		}
 		i++;
 		clsystem->wait(10);
