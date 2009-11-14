@@ -36,6 +36,13 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		CLformat() { };
 		~CLformat() { };
 	public:
+		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
+		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
+		inline sprite*  loadras(const xchar* sf) const;
+		inline tileset* loadtileset(const xchar* sf,xlong tw,xlong th) const;
+		inline xchar**  loadlvl(const xchar* sf) const;
+		inline xmap*    loadini(const xchar* bf) const;
+	
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
 		sprite*  loadras(CLfile* sf) const;
@@ -43,16 +50,20 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		tileset* loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
-		
-		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
-		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
-		inline sprite*  loadras(const xchar* sf) const;
-		inline tileset* loadtileset(const xchar* sf,xlong tw,xlong th) const;
-		inline xchar**  loadlvl(const xchar* sf) const;
-		inline xmap*    loadini(const xchar* bf) const;
 };
 
 xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); }
+
+xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const { return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
+
+sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); }
+
+tileset* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); }
+
+xchar** CLformat::loadlvl(const xchar* sf) const { return loadlvl(clsystem->getfile(sf)); }
+
+xmap* CLformat::loadini(const xchar* sf) const { return loadini(clsystem->getfile(sf)); }
+
 
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
 {
@@ -119,9 +130,6 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
 	return r;
 	//*
 }
-
-xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const { return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
-
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
 {
 	//calc subconst yourself by rc and rv
@@ -170,8 +178,6 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
 
 	return rev;
 }
-
-sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); }
 
 sprite* CLformat::loadras(CLfile* sf) const
 {
@@ -350,8 +356,6 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const
 	return r;
 }
 
-tileset* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); }
-
 tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const
 {
 	sprite* sp = loadras(fp);
@@ -376,8 +380,6 @@ tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const
 	
 	return r;
 }
-
-xchar** CLformat::loadlvl(const xchar* sf) const { return loadlvl(clsystem->getfile(sf)); }
 
 xchar** CLformat::loadlvl(CLfile* sf) const
 {
@@ -420,8 +422,6 @@ xchar** CLformat::loadlvl(CLfile* sf) const
 	
 	return fn;
 }
-
-xmap* CLformat::loadini(const xchar* sf) const { return loadini(clsystem->getfile(sf)); }
 
 xmap* CLformat::loadini(CLfile* sf) const
 {

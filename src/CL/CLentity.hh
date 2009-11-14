@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guards 
 #ifndef HH_CLENTITY
 #define HH_CLENTITY
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLvector.hh"
@@ -18,7 +23,9 @@
 #include "CLgame.hh"
 #include "CLmisc3d.hh"
 #include "CLcl.hh"
+///*
 
+///headers
 /* class name:	CLentity
  * 
  * description:	base class for enemies and player.
@@ -29,7 +36,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 template<int I>
 class CLentity : public virtual CLcl
 {
@@ -89,9 +98,11 @@ class CLentity : public virtual CLcl
 		void start();
 		void pause();
 };
+///*
 
+///implementations
 template<int I>
-void CLentity<I>::setspeed()
+void CLentity<I>::setspeed() //! critical
 {
 	switch(gear)
 	{
@@ -102,7 +113,7 @@ void CLentity<I>::setspeed()
 }
 
 template<int I>
-void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
+void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 {
 	if( (d+i)>=ammomounts && m>=I) return;
 	CLfvector startposition = position;
@@ -117,7 +128,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m)
 }
 
 template<int I>
-CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
+CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 {
 	//create transformation matrix
 	linear = new CLmatrix(1);
@@ -215,7 +226,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm)
 }
 
 template<int I>
-CLentity<I>::CLentity(CLentity* entityptr)
+CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 {
 	//create transformation matrix
 	linear = new CLmatrix(1);
@@ -296,7 +307,7 @@ CLentity<I>::CLentity(CLentity* entityptr)
 }
 
 template<int I>
-CLentity<I>::~CLentity<I>()
+CLentity<I>::~CLentity<I>() //! noncritical
 {
 	delete def;
 	delete linear;
@@ -314,7 +325,7 @@ CLentity<I>::~CLentity<I>()
 }
 
 template<int I>
-void CLentity<I>::display(xlong modelorshadow)
+void CLentity<I>::display(xlong modelorshadow) //! critical
 {
 	//set screen position
 	sposition.x = position.x;
@@ -347,7 +358,7 @@ void CLentity<I>::display(xlong modelorshadow)
 }
 
 template<int I>
-void CLentity<I>::hit(xlong h)
+void CLentity<I>::hit(xlong h) //! critical
 {
 	if(shield>0) shield -=h;
 	else health -= h; 
@@ -356,25 +367,25 @@ void CLentity<I>::hit(xlong h)
 }
 
 template<int I>
-xlong CLentity<I>::gethealth() const { return health; }
+xlong CLentity<I>::gethealth() const { return health; } //! noncritical
 
 template<int I>
-xlong CLentity<I>::getshield() const { return shield; }
+xlong CLentity<I>::getshield() const { return shield; } //! noncritical
 
 template<int I>
-CLfvector* CLentity<I>::getposition() { return &position; }
+CLfvector* CLentity<I>::getposition() { return &position; } //! noncritical
 
 template<int I>
-CLbox* CLentity<I>::getboundingbox() const { return boundingbox[0][0]; }
+CLbox* CLentity<I>::getboundingbox() const { return boundingbox[0][0]; } //! noncritical
 
 template<int I>
-bool CLentity<I>::isvisible() const { return visible; } 
+bool CLentity<I>::isvisible() const { return visible; } //! noncritical
 
 template<int I>
-xlong CLentity<I>::gettype() const { return type; } 
+xlong CLentity<I>::gettype() const { return type; } //! noncritical
 
 template<int I>
-void CLentity<I>::start()
+void CLentity<I>::start() //! noncritical
 {
 	xlong currtime = clsystem->getmilliseconds();
 	lastupdate = currtime;
@@ -383,14 +394,15 @@ void CLentity<I>::start()
 } 
 
 template<int I>
-void CLentity<I>::pause()
+void CLentity<I>::pause() //! noncritical
 {
 	xlong currtime = clsystem->getmilliseconds();
 	lastupdate = currtime;
 	shieldupdate = currtime;
 	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
 	ammoman->pause();
-} 
+}
+///*
 
 #endif
 

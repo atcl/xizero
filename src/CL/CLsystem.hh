@@ -11,8 +11,6 @@
 #include <fstream>
 #include <cstring>
 
-//~ #include <FL/fl_ask.H>
-
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLversion.hh"

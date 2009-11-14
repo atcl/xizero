@@ -18,12 +18,6 @@ int main(int argc, char** argv)
 	cldata = new CLar(BASEDIR"xizero.dat");
 	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
 	//*
-	
-	//*
-	//test sprites2
-	//CLfile* rastemp = clglobal->clsystem->getfile("dat/fonts/CLlinetype.im24");
-	//tileset* testfont = clglobal->clformat->loadtileset(rastemp,16,16);
-	//*
 
 		//test tree:
 		CLtree<xlong>* testtree = new CLtree<xlong>();
@@ -275,7 +269,7 @@ int main(int argc, char** argv)
 		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
 		
-		clglobal->clgfx1->drawarc(100,500,300,450,50,0x00FF0000);
+		//clglobal->clgfx1->drawarc(100,500,300,450,50,0x00FF0000);
 
 		if(shadows==1)
 		{
