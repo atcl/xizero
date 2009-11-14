@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLENEMY
 #define HH_CLENEMY
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
@@ -11,7 +16,9 @@
 #include "CLgame.hh"
 #include "CLammo.hh"
 #include "CLentity.hh"
+///*
 
+///header
 /* class name:	CLenemy
  * 
  * description:	The enemy (entity) class.
@@ -22,9 +29,13 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 #define ENEMYZLEVEL 55
+///*
 
+///definitions
 class CLenemy : public CLentity<1>
 {
 	protected:
@@ -44,8 +55,10 @@ class CLenemy : public CLentity<1>
 		template<int I>xlong update(CLentity<I>* p);
 		void displayhud();
 };
+///*
 
-void CLenemy::cruise()
+///implementation
+void CLenemy::cruise() //! critical
 {
 	//update enemy through ai array
 	switch(aitype)
@@ -82,7 +95,7 @@ void CLenemy::cruise()
 	//*
 }
 
-void CLenemy::pretransform()
+void CLenemy::pretransform() //! critical
 {
 	//transform enemy bounding box
 	boundingbox[1][0]->c[0] = linear->transform(boundingbox[1][0]->c[0]);
@@ -96,7 +109,7 @@ void CLenemy::pretransform()
 	//*
 }
 
-void CLenemy::transform()
+void CLenemy::transform() //! critical
 {
 	//transform enemy
 	model[0]->update(linear);
@@ -105,7 +118,7 @@ void CLenemy::transform()
 	//*
 }
 
-xlong CLenemy::collision()
+xlong CLenemy::collision() //! critical
 {
 	xlong r = 0;
 
@@ -123,7 +136,7 @@ xlong CLenemy::collision()
 	return r;
 }
 
-CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<1>(enemya,m,mm)
+CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<1>(enemya,m,mm) //! noncritical
 {
 	//set entity type
 	type = 1;
@@ -164,7 +177,7 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<
 	//*
 }
 
-CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr)
+CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr) //! noncritical
 {
 	//set and adjust (start) position to floating X pixel above ground
 	position.x = enemyp->x;
@@ -203,7 +216,7 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr)
 	//*
 }
 
-CLenemy::~CLenemy()
+CLenemy::~CLenemy() //! noncritical
 {
 	//delete all allocated objects
 	delete def;
@@ -214,7 +227,7 @@ CLenemy::~CLenemy()
 }
 
 template<int I>
-xlong CLenemy::update(CLentity<I>* p)
+xlong CLenemy::update(CLentity<I>* p) //! critical
 {
 	//update ammo
 	ammoman->update();
@@ -299,7 +312,7 @@ xlong CLenemy::update(CLentity<I>* p)
 	return -1;
 }
 
-void CLenemy::displayhud()
+void CLenemy::displayhud() //! critical
 {
 	if(active==1)
 	{
@@ -311,6 +324,7 @@ void CLenemy::displayhud()
 		//*
 	}
 }
+///*
 
 #endif
 

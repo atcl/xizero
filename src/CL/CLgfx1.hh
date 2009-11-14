@@ -227,41 +227,39 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 
 void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 {
-	//calc position f third control point
-	
+	//calc segments
+	xlong segs = (x2-x1)*((x2-x1)>=(y2-y1)) + (y2-y1)*((x2-x1)<(y2-y1));
 	//*
 	
-	//precalc points
-	xlong segs = 20;
-	float pts[segs][2];
+	//calc position f third control point
+	xlong x3 = 0;
+	xlong y3 = 0;
+	//*
+
 	float t = 0.0;
-	float a = 0.25;
-	float b = 0.5;
-	float c = 0.25;
+	float a = 0.0;
+	float b = 0.0;
+	float c = 0.0;
 	float x = 0.0;
 	float y = 0.0;
 	for(xlong i=0; i<=segs; i++)
 	{
 		t = float(i)/float(segs);
+		a = t * 0.25;
+		b = t * 0.5;
+		c = t * 0.25; 
 		x = a * x1 + b * x2 + c * x3;
 		y = a * y1 + b * y2 + c * y3;
-		pts[i][0] = x;
-        pts[i][1] = y;
+		cldoublebuffer[(y*XRES)+x] = c;
 	}
-	//*
 	
-	//draw loop
-	for(xlong i=0; i<=20; i++)
-	{
-		cldoublebuffer[(pts[i][1]*XRES)+pts[i][0]] = c;
-	}
-	//*
+	return;
 }
 
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
 {
 	//center and radius clipping
-	// ...
+	if(isoff(xc-r,yc-r,xc+r,yc+r)) return;
 	//*
 	
 	xlong d = 3 - (r<<1);
@@ -281,6 +279,8 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
 		drawcircle(xc,yc,r+1,c); //adjust color
 		drawcircle(xc,yc,r-1,c); //adjust color
 	}
+	
+	return;
 }
 
 void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const
@@ -333,6 +333,8 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const
 			yd += as;
 		}
 	}
+	
+	return;
 }
 
 void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const
