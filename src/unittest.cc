@@ -270,8 +270,6 @@ int main(int argc, char** argv)
 		clglobal->clgfx2->drawfontstring(100,170,"Use . and  , to translate along normals",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
-		
-		testl->draw(300,400); //point light test
 
 		if(shadows==1)
 		{
