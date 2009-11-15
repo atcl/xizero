@@ -69,44 +69,19 @@ CLlight::CLlight(xlong r,xlong i,uxlong c)
 	radius = r;
 	intensity = i;
 	color = c;
+	xlong length = (r<<1)+1;
 	mask = new sprite;
-	mask->size = ((r<<1)+1)*((r<<1)+1);
-	mask->width = (r<<1)+1;
-	mask->height = (r<<1)+1;
+	mask->height = mask->width = length;
+	mask->size = length*length;
 	mask->data = new uxlong[mask->size];
 	
-	uxlong ver = ((mask->height-1)>>1)+1;
-	uxlong hor = ((mask->width-1)>>1)+1;
 	uxlong temp = 0;
-	uxlong base = ver*mask->width+hor; 
-	for(uxlong i=0; i<ver; i++)
+	xlong diff = r;
+	for(uxlong i=0; i<length; i++)
 	{
-		for(uxlong j=0; j<hor; j++)
+		for(uxlong j=0; j<length; j++)
 		{
-			if(i==0 && j==0)
-			{
-				mask->data[base] = lambertslaw(j,i);
-			}
-			else if(i==0)
-			{
-				temp = lambertslaw(j,i);
-				mask->data[base+j] = temp;
-				mask->data[base-j] = temp;
-			}
-			else if(j==0)
-			{
-				temp = lambertslaw(j,i);
-				mask->data[base+(i*mask->width)] = temp;
-				mask->data[base-(i*mask->width)] = temp;
-			}
-			else
-			{
-				temp = lambertslaw(j,i);
-				mask->data[base+(i*mask->width)+j] = temp;
-				mask->data[base+(i*mask->width)-j] = temp;
-				mask->data[base-(i*mask->width)+j] = temp;
-				mask->data[base-(i*mask->width)-j] = temp;
-			}	
+			mask->data[(i*mask->width)+j] = lambertslaw(j-diff,i-diff);	
 		}
 	}
 }

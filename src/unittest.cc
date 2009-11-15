@@ -184,6 +184,8 @@ int main(int argc, char** argv)
 
 	clglobal->clbench->init(3,COUT_FPS);
 
+	CLlight* testl = new CLlight(10,200,0x00FF0000);
+
 	while(clglobal->clwindow->run())
 	{
 		if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();
@@ -269,7 +271,7 @@ int main(int argc, char** argv)
 		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
 		
-		clglobal->clgfx1->drawarc(100,500,300,450,-120,0x00FF0000);
+		//testl->draw(300,500); //point light test
 
 		if(shadows==1)
 		{

@@ -1,16 +1,23 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLEXPLOSION
 #define HH_CLEXPLOSION
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLvector.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
 #include "CLcl.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLexplosion
  * 
  * description:	This class manages explosions of 3d objects.
@@ -21,7 +28,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 //combine "translate along normals" + "dyadic product"
 //use dyadic product to crumple object
 //reorder cyclic / or reset
@@ -45,8 +54,10 @@ class CLexplosion : public virtual CLcl
 		void first(bool t);
 		xlong next();
 };
+///*
 
-CLexplosion::CLexplosion(CLobject* o)
+///implementation
+CLexplosion::CLexplosion(CLobject* o) //! noncritical
 {
 	//set up attributes
 	linear = new CLmatrix(1);
@@ -63,16 +74,16 @@ CLexplosion::CLexplosion(CLobject* o)
 	//*
 }
 
-CLexplosion::~CLexplosion() { delete linear; }
+CLexplosion::~CLexplosion() { delete linear; } //! noncritical
 
-void CLexplosion::first(bool t)
+void CLexplosion::first(bool t) //! noncritical
 {
 	type = t;
 	if(type) object->partupdate(linear);
 	starttime = lastupdate = clsystem->getmilliseconds(); 
 }
 
-xlong CLexplosion::next()
+xlong CLexplosion::next() //! critical
 {
 	xlong temp = clsystem->getmilliseconds();
 
@@ -136,6 +147,7 @@ xlong CLexplosion::next()
 	lastupdate = temp;
 	return 0;
 }
+///*
 
 #endif
 
