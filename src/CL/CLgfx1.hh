@@ -227,33 +227,45 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 
 void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 {
+	//angle preparations
+	xlong as = clmath->sign(a);
+	a = a%180;
+	//*
+	
 	//calc segments
 	xlong segs = (x2-x1)*((x2-x1)>=(y2-y1)) + (y2-y1)*((x2-x1)<(y2-y1));
 	//*
 	
-	//calc position f third control point
-	xlong x3 = 0;
-	xlong y3 = 0;
+	//calc position of control point
+	float abx = ((-x1 + x2) / 2); 
+	float aby = ((-y1 + y2) / 2);
+	float abx2 = abx * abx; 
+	float aby2 = aby * aby;
+	float tana = clmath->tan(90-(a/2));
+	float hx = clmath->sqrt( (aby2 / abx2) * (tana * tana * (abx2 + aby2) ) );
+	float hy = -(abx / aby) * hx;
+	xlong x3 = xlong(x1 + abx + as*hx);
+	xlong y3 = xlong(y1 + aby + as*hy);
 	//*
 
+	//draw quadratic bezier
 	float t = 0.0;
-	float a = 0.0;
-	float b = 0.0;
-	float c = 0.0;
+	float m = 0.0;
+	float n = 0.0;
+	float o = 0.0;
 	float x = 0.0;
 	float y = 0.0;
 	for(xlong i=0; i<=segs; i++)
 	{
 		t = float(i)/float(segs);
-		a = t * 0.25;
-		b = t * 0.5;
-		c = t * 0.25; 
-		x = a * x1 + b * x2 + c * x3;
-		y = a * y1 + b * y2 + c * y3;
+		m = (1-t)*(1-t);
+		n = 2*(1-t)*t;
+		o = t*t; 
+		x = xlong(m * x1 + n * x3 + o * x2);
+		y = xlong(m * y1 + n * y3 + o * y2);
 		cldoublebuffer[(y*XRES)+x] = c;
 	}
-	
-	return;
+	//*
 }
 
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
@@ -279,8 +291,6 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
 		drawcircle(xc,yc,r+1,c); //adjust color
 		drawcircle(xc,yc,r-1,c); //adjust color
 	}
-	
-	return;
 }
 
 void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const
@@ -333,8 +343,6 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const
 			yd += as;
 		}
 	}
-	
-	return;
 }
 
 void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const
@@ -386,8 +394,6 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const
 		//*
 	}
 	//*
-
-	return;
 }
 
 void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
@@ -439,8 +445,6 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
 		//*
 	}
 	//*
-
-	return;
 }
 
 void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const

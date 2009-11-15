@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLEWAVE
 #define HH_CLEWAVE
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///header
 /* class name:	CLewave
  * 
  * description:	
@@ -14,7 +19,9 @@
  * 
  * version: 0.1
  */
+///*
  
+///definitions
 class CLewave : public virtual CLcl : public CLentity<1>
 {
 	private:
@@ -24,20 +31,23 @@ class CLewave : public virtual CLcl : public CLentity<1>
 		~CLewave();
 		void update();
 };
+///*
 
-CLewave::CLewave()
+///implementation
+CLewave::CLewave() //! noncritical
 {
 	
 }
 
-CLewave::~CLewave()
+CLewave::~CLewave() //! noncritical
 {
 	
 }
 
-void CLewave::update()
+void CLewave::update() //! critical
 {
 	
 }
- 
+///*
+
 #endif
