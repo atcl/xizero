@@ -141,6 +141,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 	clip(x2,y2);
 
 	xlong s = xlong(x1==x2) - xlong(y1==y2);
+	if(aa) s = 2;
 	xlong a = 0;
 	xlong b = 0;
 	uxlong offset = 0;
@@ -169,7 +170,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 			xlong e = 0;
 			xlong xs = 1;
 			xlong ys = XRES;
-			xlong len;
+			xlong len = 0;
 			offset = y1*XRES+x1;
 
 			if(dx<0) { dx = -dx; xs = -xs; }
@@ -186,8 +187,43 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 				e += dy;
 				if(e >= dx) { e -= dx; offset += ys; }
 			}
-		break;		
-	}
+		break;
+		
+		case 2:
+			xlong dx = x2 - x1;
+			xlong dy = y2 - y1;
+			xlong e = 0;
+			xlong xs = 1;
+			xlong ys = XRES;
+			xlong len = 0;
+			offset = y1*XRES+x1;
+
+			if(dx<0) { dx = -dx; xs = -xs; }
+			if(dy<0) { dy = -dy; ys = -ys; }
+			if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
+		
+			float grad = float(dx) / float(dy);
+			len = dx+1;
+			e = dy;
+
+			//split color components
+			doubleword ccolor = { color };
+			doubleword tcolor = { color };
+			float r = float(tcolor.db[1]);
+			float g = float(tcolor.db[2]);
+			float b = float(tcolor.db[3]);
+			//*
+
+			//aa as in xiaolin wu
+
+			for(uxlong i=0; i<len; i++)
+			{
+				cldoublebuffer[offset] = c;
+				offset += xs;
+				e += dy;
+				if(e >= dx) { e -= dx; offset += ys; }
+			}
+		break;
 }
 
 void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const

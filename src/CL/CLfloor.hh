@@ -1,15 +1,22 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLFLOOR
 #define HH_CLFLOOR
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLglobal.hh"
 #include "CLmath.hh"
 #include "CLbuffer.hh"
+///*
 
+///header
 /* class name:	CLfloor
  * 
  * description:	This class handles the level floor.
@@ -20,7 +27,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 {
 	friend class CLsingle<CLfloor>;
@@ -39,10 +48,12 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 		void init(xlong z,xlong w,uxlong c,bool s);
 		void draw() const; //too slow!!!
 };
+///*
 
-CLfloor::CLfloor() { zlevel = ZRES; xstart = 0; xend = XRES-1; width = XRES; shade = 0; }
+///implementations
+CLfloor::CLfloor() { zlevel = ZRES; xstart = 0; xend = XRES-1; width = XRES; shade = 0; } //! noncritical
 
-void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
+void CLfloor::init(xlong z,xlong w,uxlong c,bool s) //! noncritical
 {
 	//set floor z and width
 	zlevel = z;
@@ -95,12 +106,12 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s)
 	//*
 }
 
-void CLfloor::draw() const
+void CLfloor::draw() const //! critical
 {
 	clstencilbuffer.clear(0);
 	cmask->copy(cldoublebuffer.getbuffer());
 	zmask->copy(clzbuffer.getbuffer());
 }
-
+///*
 
 #endif
