@@ -19,20 +19,21 @@ class CLlight : public virtual CLcl
 {
 	private:
 		xlong radius;
-		xlong intensity;
 		uxlong color;
 		sprite* mask;
 		inline uxlong lambertslaw(xlong x,xlong y);
 	public:
-		CLlight(xlong r,xlong i,uxlong c);
+		CLlight(xlong r,uxlong c);
 		~CLlight();
 		void draw(xlong x,xlong y); 
 };
 
 uxlong CLlight::lambertslaw(xlong x,xlong y)
 {
+	if(x==0 && y==0) return color;
+	
 	//precalc intensity square
-	float i = float(intensity*intensity);
+	float i = float(radius*radius);
 	//*
 	
 	//calc dist
@@ -64,10 +65,9 @@ uxlong CLlight::lambertslaw(xlong x,xlong y)
 	return tempcolor.dd;
 }
 
-CLlight::CLlight(xlong r,xlong i,uxlong c)
+CLlight::CLlight(xlong r,uxlong c)
 {
 	radius = r;
-	intensity = i;
 	color = c;
 	xlong length = (r<<1)+1;
 	mask = new sprite;

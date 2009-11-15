@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 
 	clglobal->clbench->init(3,COUT_FPS);
 
-	CLlight* testl = new CLlight(100,200,0x00FF0000);
+	CLlight* testl = new CLlight(50,0x00FF0000);
 
 	while(clglobal->clwindow->run())
 	{

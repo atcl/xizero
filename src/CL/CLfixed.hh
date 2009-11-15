@@ -1,11 +1,18 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLFIXED
 #define HH_CLFIXED
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
+///*
 
+///header
 /* class name:	xfixed
  * 
  * description:	fixed point type
@@ -16,7 +23,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 //numerator and fraction container
 struct xshush
 {
@@ -95,16 +104,15 @@ union xfixed
 	operator xshort() const;
 	operator float() const;
 };
+///*
 
+///implementation
 //unassigning constructor
-xfixed::xfixed()
-{
-	this->i = 0;
-}
+xfixed::xfixed() { this->i = 0; } //! noncritical
 //*
 
 //xlong assigning constructor
-xfixed::xfixed(xlong a)
+xfixed::xfixed(xlong a) //! noncritical
 {
 	this->i = 0;
 	this->p.num = xshort(a);
@@ -112,7 +120,7 @@ xfixed::xfixed(xlong a)
 //*
 
 //xshort assigning construcotr
-xfixed::xfixed(xshort a)
+xfixed::xfixed(xshort a) //! noncritical
 {
 	this->i = 0;
 	this->p.num = a;
@@ -120,7 +128,7 @@ xfixed::xfixed(xshort a)
 //*
 
 //float assigning constructor
-xfixed::xfixed(float a)
+xfixed::xfixed(float a) //! noncritical
 {
 	this->p.num = xshort(a);
 	this->p.frc = xshort((a - float(this->p.num))*65536);
@@ -128,7 +136,7 @@ xfixed::xfixed(float a)
 //*
 
 //assign xfixed
-xfixed& xfixed::operator=(xfixed &a)
+xfixed& xfixed::operator=(xfixed &a) //! noncritical
 {
 	this->i = a.i;
 	return *this;
@@ -136,7 +144,7 @@ xfixed& xfixed::operator=(xfixed &a)
 //*
 
 //assign xshort
-xfixed& xfixed::operator=(xshort &a)
+xfixed& xfixed::operator=(xshort &a) //! noncritical
 {
 	this->p.num = a;
 	this->p.frc = 0;
@@ -145,7 +153,7 @@ xfixed& xfixed::operator=(xshort &a)
 //*
 
 //negate xfixed
-xfixed xfixed::operator-() const
+xfixed xfixed::operator-() const //! critical
 {
 	xfixed r = *this;
 	r.p.num = -this->p.num;
@@ -154,7 +162,7 @@ xfixed xfixed::operator-() const
 //*
 
 //increment xfixed
-xfixed& xfixed::operator++()
+xfixed& xfixed::operator++() //! critical
 {
 	this->p.num++;
 	return *this;
@@ -162,7 +170,7 @@ xfixed& xfixed::operator++()
 //*
 
 //decrement xfixed
-xfixed& xfixed::operator--()
+xfixed& xfixed::operator--() //! critical
 {
 	this->p.num--;
 	return *this;
@@ -170,7 +178,7 @@ xfixed& xfixed::operator--()
 //*
 
 //assignment addition xfixed
-xfixed& xfixed::operator+=(xfixed& a)
+xfixed& xfixed::operator+=(xfixed& a) //! critical
 {
 	this->i += a.i;
 	return *this;
@@ -178,7 +186,7 @@ xfixed& xfixed::operator+=(xfixed& a)
 //*
 
 //assignment addition xshort
-xfixed& xfixed::operator+=(xshort& a)
+xfixed& xfixed::operator+=(xshort& a) //! critical
 {
 	this->p.num += a;
 	return *this;
@@ -186,7 +194,7 @@ xfixed& xfixed::operator+=(xshort& a)
 //*
 
 //assignment subtraction xfixed
-xfixed& xfixed::operator-=(xfixed& a)
+xfixed& xfixed::operator-=(xfixed& a) //! critical
 {
 	this->i -= a.i;
 	return *this;
@@ -194,7 +202,7 @@ xfixed& xfixed::operator-=(xfixed& a)
 //*
 
 //assignment subtraction xshort
-xfixed& xfixed::operator-=(xshort& a)
+xfixed& xfixed::operator-=(xshort& a) //! critical
 {
 	this->p.num -= a;
 	return *this;
@@ -202,7 +210,7 @@ xfixed& xfixed::operator-=(xshort& a)
 //*
 
 //assignment multiplication xfixed
-xfixed& xfixed::operator*=(xfixed& a)
+xfixed& xfixed::operator*=(xfixed& a) //! critical
 {
 	__asm__ __volatile__ ( "imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(this->i) : "a"(this->i),"b"(a.i) ); //swap eax,edx in shrd?
 
@@ -211,7 +219,7 @@ xfixed& xfixed::operator*=(xfixed& a)
 //*
 
 //assignment multiplication xshort
-xfixed& xfixed::operator*=(xshort& a)
+xfixed& xfixed::operator*=(xshort& a) //! critical
 {
 	__asm__ __volatile__ ( "shll $16,%%ebx; imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(this->i) : "a"(this->i),"b"(a) ); //swap eax,edx in shrd?
 
@@ -220,7 +228,7 @@ xfixed& xfixed::operator*=(xshort& a)
 //*
 
 //assignment division xfixed
-xfixed& xfixed::operator/=(xfixed& a)
+xfixed& xfixed::operator/=(xfixed& a) //! critical
 {
 	__asm__ __volatile__ ( "sarl $16,%%edx; shll $16,%%eax; idiv %%ebx;" : "=a"(this->i) : "a"(this->i),"d"(this->i),"b"(a) );
 
@@ -229,7 +237,7 @@ xfixed& xfixed::operator/=(xfixed& a)
 //*
 
 //assignment division xshort
-xfixed& xfixed::operator/=(xshort& a)
+xfixed& xfixed::operator/=(xshort& a) //! critical
 {
 	__asm__ __volatile__ ( "shll $16,%%ebx; sarl $16,%%edx; shll $16,%%eax; idiv %%ebx;" : "=a"(this->i) : "a"(this->i),"d"(this->i),"b"(a) );
 
@@ -238,7 +246,7 @@ xfixed& xfixed::operator/=(xshort& a)
 //*
 
 //add with xfixed
-xfixed xfixed::operator+(xfixed& a) const
+xfixed xfixed::operator+(xfixed& a) const //! critical
 {
 	xfixed r = *this;
 	r.i += a.i;
@@ -247,7 +255,7 @@ xfixed xfixed::operator+(xfixed& a) const
 //*
 
 //add with xshort
-xfixed xfixed::operator+(xshort& a) const
+xfixed xfixed::operator+(xshort& a) const //! critical
 {
 	xfixed r = *this;
 	r.p.num += a;
@@ -256,7 +264,7 @@ xfixed xfixed::operator+(xshort& a) const
 //*
 
 //subtract with xfixed
-xfixed xfixed::operator-(xfixed& a) const
+xfixed xfixed::operator-(xfixed& a) const //! critical
 {
 	xfixed r = *this;
 	r.i -= a.i;
@@ -265,7 +273,7 @@ xfixed xfixed::operator-(xfixed& a) const
 //*
 
 //subtract with xshort
-xfixed xfixed::operator-(xshort& a) const
+xfixed xfixed::operator-(xshort& a) const //! critical
 {
 	xfixed r = *this;
 	r.p.num -= a;
@@ -274,7 +282,7 @@ xfixed xfixed::operator-(xshort& a) const
 //*
 
 //multiplicate with xfixed
-xfixed xfixed::operator*(xfixed& a) const
+xfixed xfixed::operator*(xfixed& a) const //! critical
 {
 	xfixed r = *this;
 	__asm__ __volatile__ ( "imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(r.i) : "a"(r.i),"b"(a.i) ); //swap eax,edx in shrd?
@@ -283,7 +291,7 @@ xfixed xfixed::operator*(xfixed& a) const
 //*
 
 //multiplicate with short
-xfixed xfixed::operator*(xshort& a) const
+xfixed xfixed::operator*(xshort& a) const //! critical
 {
 	xfixed r = *this;
 	__asm__ __volatile__ ( "shll $16,%%ebx; imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(r.i) : "a"(r.i),"b"(a) ); //swap eax,edx in shrd?
@@ -292,7 +300,7 @@ xfixed xfixed::operator*(xshort& a) const
 //*
 
 //divide by xfixed
-xfixed xfixed::operator/(xfixed& a) const
+xfixed xfixed::operator/(xfixed& a) const //! critical
 {
 	xfixed r = *this;
 	__asm__ __volatile__ ( "sarl $16,%%edx; shll $16,%%eax; idiv %%ebx;" : "=a"(r.i) : "a"(r.i),"d"(r.i),"b"(a) );
@@ -301,7 +309,7 @@ xfixed xfixed::operator/(xfixed& a) const
 //*
 
 //divide by xshort
-xfixed xfixed::operator/(xshort& a) const
+xfixed xfixed::operator/(xshort& a) const //! critical
 {
 	xfixed r = *this;
 	__asm__ __volatile__ ( "shll $16,%%ebx; sarl $16,%%edx; shll $16,%%eax; idiv %%ebx;" : "=a"(r.i) : "a"(r.i),"d"(r.i),"b"(a) );
@@ -310,91 +318,55 @@ xfixed xfixed::operator/(xshort& a) const
 //*
 
 //equality with xfixed
-bool xfixed::operator==(xfixed& a) const
-{
-	return !(this->i ^ a.i);
-}
+bool xfixed::operator==(xfixed& a) const { return !(this->i ^ a.i); } //! critical
 //*
 
 //equality with xshort
-bool xfixed::operator==(xshort& a) const
-{
-	return !(this->i ^ (xlong(a)<<16) );
-}
+bool xfixed::operator==(xshort& a) const { return !(this->i ^ (xlong(a)<<16) ); } //! critical
 //*
 
 //inequality with xfixed
-bool xfixed::operator!=(xfixed& a) const
-{
-	return (this->i ^ a.i);
-}
+bool xfixed::operator!=(xfixed& a) const { return (this->i ^ a.i); } //! critical
 //*
 
 //inequality with xshort
-bool xfixed::operator!=(xshort& a) const
-{
-	return (this->i ^ (xlong(a)<<16) );
-}
+bool xfixed::operator!=(xshort& a) const { return (this->i ^ (xlong(a)<<16) ); } //! critical
 //*
 
 //less or equal with xfixed
-bool xfixed::operator<=(xfixed& a) const
-{
-	return (this->i<=a.i);
-}
+bool xfixed::operator<=(xfixed& a) const { return (this->i<=a.i); } //! critical
 //*
 
 //less or equal with xshort
-bool xfixed::operator<=(xshort& a) const
-{
-	return (this->i<=xlong(a)<<16);
-}
+bool xfixed::operator<=(xshort& a) const { return (this->i<=xlong(a)<<16); }  //! critical
 //*
 
 //greater or equal with xfixed
-bool xfixed::operator>=(xfixed& a) const
-{
-	return (this->i>=a.i);
-}
+bool xfixed::operator>=(xfixed& a) const { return (this->i>=a.i); } //! critical
 //*
 
 //greater or equal with xshort
-bool xfixed::operator>=(xshort& a) const
-{
-	return (this->i>=xlong(a)<<16);
-}
+bool xfixed::operator>=(xshort& a) const { return (this->i>=xlong(a)<<16); } //! critical
 //*
 
 //less with xfixed
-bool xfixed::operator<(xfixed& a) const
-{
-	return (this->i<a.i);
-}
+bool xfixed::operator<(xfixed& a) const { return (this->i<a.i); } //! critical
 //*
 
 //less with xshort
-bool xfixed::operator<(xshort& a) const
-{
-	return (this->i<xlong(a)<<16);
-}
+bool xfixed::operator<(xshort& a) const { return (this->i<xlong(a)<<16); } //! critical
 //*
 
 //greater with xfixed
-bool xfixed::operator>(xfixed& a) const
-{
-	return (this->i>a.i);
-}
+bool xfixed::operator>(xfixed& a) const { return (this->i>a.i); } //! critical
 //*
 
 //greater with xshort
-bool xfixed::operator>(xshort& a) const
-{
-	return (this->i>xlong(a)<<16);
-}
+bool xfixed::operator>(xshort& a) const { return (this->i>xlong(a)<<16); } //! critical
 //*
 
 //shift left
-xfixed xfixed::operator<<(xlong a) const
+xfixed xfixed::operator<<(xlong a) const //! critical
 {
 	xfixed temp((this->i)<<a);
 	return temp;
@@ -402,7 +374,7 @@ xfixed xfixed::operator<<(xlong a) const
 //*
 
 //shift right
-xfixed xfixed::operator>>(xlong a) const
+xfixed xfixed::operator>>(xlong a) const //! critical
 {
 	xfixed temp((this->i)>>a);
 	return temp;
@@ -410,7 +382,7 @@ xfixed xfixed::operator>>(xlong a) const
 //*
 
 //cast to xshort
-xfixed::operator xshort() const
+xfixed::operator xshort() const //! noncritical
 {
 	xshort o = this->p.frc >> 15;
 	xshort r = (this->i >> 16) + o;
@@ -419,7 +391,7 @@ xfixed::operator xshort() const
 //*
 
 //cast to float
-xfixed::operator float() const
+xfixed::operator float() const //! noncritical
 {
 	float r = float(this->p.num) + (float(this->p.frc)/65536);
 	return r; 
@@ -429,7 +401,7 @@ xfixed::operator float() const
 //friends:
 
 //add with xshort from left
-inline xfixed operator+(xshort& a,xfixed& b)
+inline xfixed operator+(xshort& a,xfixed& b) //! critical
 {
 	xfixed r = b;
 	r.p.num += a;
@@ -438,7 +410,7 @@ inline xfixed operator+(xshort& a,xfixed& b)
 //*
 
 //subtract with xshort from left
-inline xfixed operator-(xshort& a,xfixed& b)
+inline xfixed operator-(xshort& a,xfixed& b)  //! critical
 {
 	xfixed r;
 	r.i = 0;
@@ -449,7 +421,7 @@ inline xfixed operator-(xshort& a,xfixed& b)
 //*
 
 //multiplicate with xshort from left
-inline xfixed operator*(xshort& a,xfixed& b)
+inline xfixed operator*(xshort& a,xfixed& b)  //! critical
 {
 	xfixed r = b;
 	__asm__ __volatile__ ( "shll $16,%%ebx; imull %%ebx; shrdl $16,%%eax,%%edx;" : "=a"(r.i) : "a"(r.i),"b"(a) ); //swap eax,edx in shrd?
@@ -458,7 +430,7 @@ inline xfixed operator*(xshort& a,xfixed& b)
 //*
 
 //xshort divided by xfixed
-inline xfixed operator/(xshort& a,xfixed& b)
+inline xfixed operator/(xshort& a,xfixed& b)  //! critical
 {
 	xfixed r;
 	r.i = 0;
@@ -469,45 +441,28 @@ inline xfixed operator/(xshort& a,xfixed& b)
 //*
 
 //equality with xshort from left
-inline bool operator==(xshort& a,xfixed& b)
-{
-	return !((xlong(a)<<16) ^ b.i);	
-}
+inline bool operator==(xshort& a,xfixed& b) { return !((xlong(a)<<16) ^ b.i); } //! critical
 //*
 
 //inequality with xshort from left
-inline bool operator!=(xshort& a,xfixed& b)
-{
-	return ((xlong(a)<<16) ^ b.i);
-}
+inline bool operator!=(xshort& a,xfixed& b) { return ((xlong(a)<<16) ^ b.i); } //! critical
 //*
 
 //less or equal with xshort from left
-inline bool operator<=(xshort& a,xfixed& b)
-{
-	return ((xlong(a)<<16)<=b.i);
-}
+inline bool operator<=(xshort& a,xfixed& b) { return ((xlong(a)<<16)<=b.i); } //! critical
 //*
 
 //greater or equal with xshort from left
-inline bool operator>=(xshort& a,xfixed& b)
-{
-	return ((xlong(a)<<16)>=b.i);
-}
+inline bool operator>=(xshort& a,xfixed& b) { return ((xlong(a)<<16)>=b.i); } //! critical
 //*
 
 //less with xshort from left
-inline bool operator<(xshort& a,xfixed& b)
-{
-	return ((xlong(a)<<16)<b.i);
-}
+inline bool operator<(xshort& a,xfixed& b) { return ((xlong(a)<<16)<b.i); } //! critical
 //*
 
 //greater with xshort from left
-inline bool operator>(xshort& a,xfixed& b)
-{
-	return ((xlong(a)<<16)>b.i);
-}
+inline bool operator>(xshort& a,xfixed& b) { return ((xlong(a)<<16)>b.i); } //! critical
 //*
+///*
 
 #endif
