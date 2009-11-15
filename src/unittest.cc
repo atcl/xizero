@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 
 	clglobal->clbench->init(3,COUT_FPS);
 
-	CLlight* testl = new CLlight(10,200,0x00FF0000);
+	CLlight* testl = new CLlight(100,200,0x00FF0000);
 
 	while(clglobal->clwindow->run())
 	{
@@ -271,7 +271,7 @@ int main(int argc, char** argv)
 		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
 		
-		//testl->draw(300,500); //point light test
+		testl->draw(300,400); //point light test
 
 		if(shadows==1)
 		{

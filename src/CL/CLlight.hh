@@ -88,6 +88,6 @@ CLlight::CLlight(xlong r,xlong i,uxlong c)
 
 CLlight::~CLlight() { delete mask; }
 
-void CLlight::draw(xlong x,xlong y) { clgfx1->putsprite(x,y,mask,0); }
+void CLlight::draw(xlong x,xlong y) { clgfx1->putsprite(x,y,mask,0,0); }
 
  #endif

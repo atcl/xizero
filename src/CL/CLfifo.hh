@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLFIFO
 #define HH_CLFIFO
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
+///*
 
+///header
 /* class name:	CLfifo
  * 
  * description:	A first-in-first-out type
@@ -17,7 +24,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 template<class member>
 struct fifomember
 {
@@ -35,16 +44,18 @@ class CLfifo : public virtual CLcl
 		member** que;
 	public:
 		CLfifo();
-		~CLfifo();
+		~CLfifo() { }
 		void in(member* f);
 		member* out();
 		xlong getlength() const;
 		void clear();
 		bool isempty() const;
 };
+///*
 
+///implementation
 template<class member>
-CLfifo<member>::CLfifo()
+CLfifo<member>::CLfifo() //! noncritical
 {
 	//init empty fifo que
 	length = 0;
@@ -52,10 +63,7 @@ CLfifo<member>::CLfifo()
 }
 
 template<class member>
-CLfifo<member>::~CLfifo() { }
-
-template<class member>
-void CLfifo<member>::in(member* f)
+void CLfifo<member>::in(member* f) //! critical
 {
 	//create empty fifo member
 	fifomember<member>* t = new fifomember<member>;
@@ -85,13 +93,10 @@ void CLfifo<member>::in(member* f)
 }
 
 template<class member>
-member* CLfifo<member>::out()
+member* CLfifo<member>::out() //! critical
 {
 	//is fifo empty
-	if(length == 0)
-	{
-		return 0;
-	}
+	if(length == 0) return 0;
 	//*
 	
 	//is fifo almost empty
@@ -114,7 +119,7 @@ member* CLfifo<member>::out()
 }
 
 template<class member>
-void CLfifo<member>::clear()
+void CLfifo<member>::clear() //! critical
 {
 	//clear complete fifo que
 	for(uxlong i=0; i<length; i++)
@@ -128,10 +133,11 @@ void CLfifo<member>::clear()
 }
 
 template<class member>
-xlong CLfifo<member>::getlength() const { return length; }
+xlong CLfifo<member>::getlength() const { return length; } //! noncritical
 
 template<class member>
-bool CLfifo<member>::isempty() const { return (length==0); }
+bool CLfifo<member>::isempty() const { return (length==0); } //! noncritical
+///*
 
 #endif
 

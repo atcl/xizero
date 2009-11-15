@@ -58,7 +58,7 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void drawsprite(xlong x,xlong y,sprite* s) const;
 		void drawtile(xlong x,xlong y,tileset* t,xlong a) const;
 		void drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const;
-		void putsprite(xlong x,xlong y,sprite* s,xlong m,float e=0) const;
+		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m,float e=0) const;
 		void drawscreen(sprite* s) const;
 };
 
@@ -449,10 +449,9 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
 
 void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 {
-	//xlong ssize = s->size;
+	//set up variables
 	xlong swidth = s->width;
 	xlong sheight = s->height;
-	//xlong hordiff = xres - s->width;
 	xlong xs = x;
 	xlong ys = y;
 	xlong xe = x + swidth;
@@ -489,10 +488,9 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 
 void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const
 {
-	//xlong ssize = s->size;
+	//set up variables
 	xlong swidth = t->tilewidth;
 	xlong sheight = t->tileheight;
-	//xlong hordiff = xres - s->width;
 	xlong xs = x;
 	xlong ys = y;
 	xlong xe = x + swidth;
@@ -531,51 +529,289 @@ void CLgfx1::drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const
 
 }
 
-void CLgfx1::putsprite(xlong x,xlong y,sprite* s,xlong m,float e) const
+void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m,float e) const
 {
+	//set up variables
+	xlong swidth = s->width;
+	xlong sheight = s->height;
+	xlong xs = x;
+	xlong ys = y;
+	xlong xe = x + swidth;
+	xlong ye = y + sheight;
+	//*
+
+	//clipping against screen borders
+	if(isoff(xs,ys,xe,ye)) return;
+	clip(xs,ys);
+	clip(xe,ye);
+	//*
+
+	//set up variables
+	xlong ewidth = xe - xs;
+	xlong eheight = ye - ys;
+	xlong xoffset = (ys * XRES) + xs;
+	xlong linearc = 0;
+	xlong lindiff = swidth - ewidth;
+	//*
+
+	//set combinee
+	xlong tdiff = 0;
+	uxlong* tbuffer = 0;
+	if(t=0)
+	{
+		tdiff = XRES;
+		tbuffer = cldoublebuffer.getbuffer();
+	}
+	else
+	{
+		tdiff = t->width;
+		tbuffer = t->data;
+	}
+	//*
 	
+	//! todo: implement cases
+	//draw loop
 	switch(m)
 	{
 		case 0: //normal
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 1: //mirrored horizontal
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 2: //mirrored vertical
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 3: //rotated 90° left
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 4: //rotated 180° left
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 5: //rotated 270° left
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 6: //rotated 90° right
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 7: //rotated 180° right
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 8: //rotated 270° right
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 9: //scaled about e
 		
 		case 10:  //rotated about e
 		
 		case 11: //and
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 12: //or
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 13: //xor
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 14: //nand
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 15: //nor
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 16: //not
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 17: //byte add
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
 		case 18: //byte sub
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 		
-		case 19: ;//byte mul
+		case 19: //byte mul
+			for(uxlong i=0; i<eheight ;i++)
+			{
+				for(uxlong j=0; j<ewidth ;j++)
+				{
+					if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
+					linearc++;
+				}
+				linearc += lindiff;
+				xoffset += XRES;
+			}
+		break;
 	}
+	//*
 }
 
 void CLgfx1::drawscreen(sprite* s) const
