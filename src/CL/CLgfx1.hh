@@ -144,6 +144,12 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 	if(aa) s = 2;
 	xlong a = 0;
 	xlong b = 0;
+	xlong dx = x2 - x1;
+	xlong dy = y2 - y1;
+	xlong e = 0;
+	xlong xs = 1;
+	xlong ys = XRES;
+	xlong len = 0;
 	uxlong offset = 0;
 	
 	switch(s)
@@ -165,12 +171,6 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 		break;
 		
 		case 0:
-			xlong dx = x2 - x1;
-			xlong dy = y2 - y1;
-			xlong e = 0;
-			xlong xs = 1;
-			xlong ys = XRES;
-			xlong len = 0;
 			offset = y1*XRES+x1;
 
 			if(dx<0) { dx = -dx; xs = -xs; }
@@ -190,40 +190,41 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 		break;
 		
 		case 2:
-			xlong dx = x2 - x1;
-			xlong dy = y2 - y1;
-			xlong e = 0;
-			xlong xs = 1;
-			xlong ys = XRES;
-			xlong len = 0;
 			offset = y1*XRES+x1;
 
 			if(dx<0) { dx = -dx; xs = -xs; }
 			if(dy<0) { dy = -dy; ys = -ys; }
 			if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
 		
-			float grad = float(dx) / float(dy);
 			len = dx+1;
 			e = dy;
 
 			//split color components
-			doubleword ccolor = { color };
-			doubleword tcolor = { color };
-			float r = float(tcolor.db[1]);
-			float g = float(tcolor.db[2]);
-			float b = float(tcolor.db[3]);
+			doubleword ccolor = { c };
+			doubleword tcolor = { c };
 			//*
 
 			//aa as in xiaolin wu
 
 			for(uxlong i=0; i<len; i++)
 			{
+				tcolor.dd = cldoublebuffer[offset-xs];
+				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
+				tcolor.db[2] = (tcolor.db[2] + ccolor.db[2])>>1;
+				tcolor.db[3] = (tcolor.db[3] + ccolor.db[3])>>1;	
+				cldoublebuffer[offset-xs] = tcolor.dd;
 				cldoublebuffer[offset] = c;
+				tcolor.dd = cldoublebuffer[offset+xs];
+				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
+				tcolor.db[2] = (tcolor.db[2] + ccolor.db[2])>>1;
+				tcolor.db[3] = (tcolor.db[3] + ccolor.db[3])>>1;	
+				cldoublebuffer[offset+xs] = tcolor.dd;
 				offset += xs;
 				e += dy;
 				if(e >= dx) { e -= dx; offset += ys; }
 			}
 		break;
+	}
 }
 
 void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const

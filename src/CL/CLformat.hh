@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLFORMAT
 #define HH_CLFORMAT
-#pragma message "Compiling " __FILE__ " ! TODO: fix rare loadar crash"
+///*
 
+///includes
 #include <map>
 
 #include "CLtypes.hh"
@@ -12,7 +17,9 @@
 #include "CLutils.hh"
 #include "CLmacros.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLformat
  * 
  * description:	This class processes all kinds of file formats.
@@ -23,7 +30,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; } };
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
@@ -51,21 +60,23 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
 };
+///*
 
-xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); }
+///implementation
+xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); } //! noncritical
 
-xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const { return loadmap(clsystem->getfile(sf),subconst,rc,rv); }
+xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const { return loadmap(clsystem->getfile(sf),subconst,rc,rv); } //! noncritical
 
-sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); }
+sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); } //! noncritical
 
-tileset* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); }
+tileset* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); } //! noncritical
 
-xchar** CLformat::loadlvl(const xchar* sf) const { return loadlvl(clsystem->getfile(sf)); }
+xchar** CLformat::loadlvl(const xchar* sf) const { return loadlvl(clsystem->getfile(sf)); } //! noncritical
 
-xmap* CLformat::loadini(const xchar* sf) const { return loadini(clsystem->getfile(sf)); }
+xmap* CLformat::loadini(const xchar* sf) const { return loadini(clsystem->getfile(sf)); } //! noncritical
 
 
-xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
+xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 {
 	//add template parameter to change between xlong*,xchar**,xfixed* and float*
 	//Works only for integers!
@@ -130,7 +141,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const
 	return r;
 	//*
 }
-xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
+xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //! noncritical
 {
 	//calc subconst yourself by rc and rv
 	
@@ -179,7 +190,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const
 	return rev;
 }
 
-sprite* CLformat::loadras(CLfile* sf) const
+sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 {
 	xlong* lf = sf->data;
 
@@ -282,7 +293,7 @@ sprite* CLformat::loadras(CLfile* sf) const
 	return r;
 }
 
-sprite* CLformat::loadxpm(const xchar* xpm[]) const
+sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 {
 	uxlong xpm_ptr = 0;
 	
@@ -356,7 +367,7 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const
 	return r;
 }
 
-tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const
+tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const //! noncritical
 {
 	sprite* sp = loadras(fp);
 	tileset* r = new tileset;
@@ -381,7 +392,7 @@ tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const
 	return r;
 }
 
-xchar** CLformat::loadlvl(CLfile* sf) const
+xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 {
 	xchar* bf = sf->text;
 	
@@ -423,7 +434,7 @@ xchar** CLformat::loadlvl(CLfile* sf) const
 	return fn;
 }
 
-xmap* CLformat::loadini(CLfile* sf) const
+xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 {
 	//inis need newline at end of file!!
 	xmap* r = new xmap;
@@ -526,6 +537,7 @@ xmap* CLformat::loadini(CLfile* sf) const
 	
 	return r;
 }
+///*
 
 #endif
 
