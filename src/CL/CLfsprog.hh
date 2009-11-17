@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLFSPROG
 #define HH_CLFSPROG
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLglobal.hh"
+///*
 
+///header
 /* class name:	CLfsprogress
  * 
  * description:	A full screen half transparent progress bar.
@@ -17,7 +24,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 {
 	friend class CLsingle<CLfsprogress>;
@@ -35,10 +44,12 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		void reset();
 		xlong get() const;
 };
+///*
 
-CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x00FF0000;} 
+///implementation
+CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x00FF0000;} //! noncritical
 
-void CLfsprogress::draw() const
+void CLfsprogress::draw() const //! critical
 {
 	//draw full screen progress bar
 	if(pprogress!=0)
@@ -55,7 +66,7 @@ void CLfsprogress::draw() const
 	//*
 }
 
-void CLfsprogress::set(xlong p)
+void CLfsprogress::set(xlong p) //! noncritical
 {
 	//set full screen progress bar to given value
 	if(p>100) { pprogress = 100; rprogress = XRES; }
@@ -64,7 +75,7 @@ void CLfsprogress::set(xlong p)
 	//*
 }
 
-void CLfsprogress::add(xlong a)
+void CLfsprogress::add(xlong a) //! noncritical
 {
 	//add given value to progress of full screen progress bar
 	if( (pprogress+a)>100) { pprogress = 100; rprogress = XRES; }
@@ -73,8 +84,9 @@ void CLfsprogress::add(xlong a)
 	//*
 }
 
-void CLfsprogress::reset() { pprogress = rprogress = 0; }
+void CLfsprogress::reset() { pprogress = rprogress = 0; } //! noncritical
 
-xlong CLfsprogress::get() const { return pprogress; }
+xlong CLfsprogress::get() const { return pprogress; } //! noncritical
+///*
 
 #endif

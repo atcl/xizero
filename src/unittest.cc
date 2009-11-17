@@ -233,9 +233,10 @@ int main(int argc, char** argv)
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
 			case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
+			case 'b':    clglobal->clwindow->msgbox("hi","bye"); break;
 				
 			//System:
-			case '0':    xlong rval = clglobal->clsystem->msgbox("bye"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
+			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","bye"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
 		}
 		
 		switch(clglobal->clwindow->getinkey())
@@ -253,12 +254,8 @@ int main(int argc, char** argv)
 		clglobal->clzbuffer.clear(ZRES);
 		clglobal->clstencilbuffer.clear(0);
 
-		//clgfx1->drawpixeldirect(xlong* b,xlong x,xlong y,uxlong c);
-		//clgfx1->putpixel(xlong x,xlong y,uxlong c,xlong m);
 		//clgfx1->drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
-		//clgfx1->drawantiline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		//clgfx1->drawarc(xlong xc,xlong yc,xlong r,xlong l,uxlong c);
-		
+
 		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
 		clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);

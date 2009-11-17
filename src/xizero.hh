@@ -81,7 +81,7 @@ void newgame()
 							"Esc:              Quit XiZero\n"
 							"After pressing OK the game will start immediately!";
 							
-	if(clglobal->clsystem->msgbox(startmsg)==0) testlevel->start();
+	if(clglobal->clwindow->msgbox("Info",startmsg)==0) testlevel->start();
 	//*
 	
 	//init benchmarking

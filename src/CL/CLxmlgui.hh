@@ -41,5 +41,35 @@ class CLxmlgui : public virtual CLcl
 		void show(bool s);
 };
 
+CLxmlgui::CLxmlgui(const xchar* filename)
+{
+	
+}
+
+CLxmlgui::CLxmlgui(CLfile fileptr)
+{
+	
+}
+
+CLxmlgui::~CLxmlgui()
+{
+	
+}
+
+void CLxmlgui::draw()
+{
+	
+}
+
+void CLxmlgui::handle()
+{
+	
+}
+
+void CLxmlgui::show()
+{
+	
+}
+
 #endif
 

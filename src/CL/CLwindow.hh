@@ -224,45 +224,64 @@ xlong CLwindow::getmouselb() const { return mouselb; }
 xlong CLwindow::getmouserb() const { return mouserb; }
 
 xlong CLwindow::msgbox(const xchar* title,const xchar* message)
-{	
+{
+	//!adaptive size
+	//!split lines by words not chars
+	
 	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
+	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
 	
 	//prepare message
 	xlong msglength = clutils->chararraylength(message);
 	xlong msglines = (msglength >> 8)+1; 
 	//create window
-	Window msgbox = XCreateSimpleWindow(Xdisplay,Xwindow,0,0,100,80,0,blackcolor,blackcolor);
+	Window msgbox = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,200,100,0,blackcolor,blackcolor);
+	GC mgc = XCreateGC(Xdisplay,msgbox,0,0);
+	XSelectInput(Xdisplay,msgbox,ExposureMask|KeyPressMask|ButtonPressMask|StructureNotifyMask);
 	//set title
 	XStoreName(Xdisplay,msgbox,title);
-	//draw message
-	XDrawImageString(Xdisplay,msgbox,Xgc,10,10,message,msglength);
-	
-	//draw OK button
-	//XDrawLine(Xdisplay,msgbox,Xgc,x1,y1,x2,y2);
-	//XDrawImageString(Xdisplay,msgbox,Xgc,x,y,"OK",2);
+	//show window
+	XMapRaised(Xdisplay,msgbox);
+	XSetForeground(Xdisplay,mgc, whitecolor);
 	
 	//wait till press
-	//~ bool wait=0;
-	//~ while(wait==0)
-	//~ {
-		//~ if(XPending(Xdisplay)!=0)
-		//~ {
-			//~ XNextEvent(Xdisplay,&Xevent);
-			//~ switch(Xevent.type)
-			//~ {
-				//~ case Expose:
-					//~ draw();
-				//~ break;
-				//~ 
-				//~ case KeyPress:
-					//~ if(XLookupKeysym((XKeyEvent*)&Xevent,0)==27) wait = 1;
-				//~ break;
-			//~ }				
-		//~ }
-	//~ }
+	bool wait = 0;
+	xlong j = 0;
+	while(wait==0)
+	{
+		if(XPending(Xdisplay)!=0)
+		{			
+			XNextEvent(Xdisplay,&Xevent);
+			switch(Xevent.type)
+			{
+				case MapNotify:
+					for(j=0; j<msglines-1; j++) XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,256);
+					XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,msglength);
+					XDrawLine(Xdisplay,msgbox,mgc,50,90,150,90);
+					XDrawLine(Xdisplay,msgbox,mgc,50,70,150,70);
+					XDrawLine(Xdisplay,msgbox,mgc,50,70,50,90);
+					XDrawLine(Xdisplay,msgbox,mgc,150,70,150,90);
+					XDrawImageString(Xdisplay,msgbox,mgc,95,85,"OK",2);
+				break;
+				
+				case Expose:
+					XFlush(Xdisplay);
+				break;
+				
+				case KeyPress:
+					if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1;
+				break;
+				
+				case ButtonPress:
+					if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>50 && Xevent.xbutton.y>70 && Xevent.xbutton.x<150 && Xevent.xbutton.y<90 ) wait = 1;
+				break;
+			}				
+		}
+	}
 	
 	//destroy window
-	XDestroyWindow (Xdisplay,msgbox);
+	XFreeGC(Xdisplay,mgc);
+	XDestroyWindow(Xdisplay,msgbox);
 	
 	return 1;
 }

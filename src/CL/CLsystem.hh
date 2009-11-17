@@ -56,7 +56,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
 		xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
 		void    installsystemkey(xchar scancode,void *action);
-		xlong   msgbox(const xchar* message);
 };
 
 uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends
@@ -317,13 +316,6 @@ xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l)
 void CLsystem::installsystemkey(xchar scancode,void *action)
 {
 
-}
-
-xlong CLsystem::msgbox(const xchar* message)
-{
-	//~ fl_message_font(FL_SCREEN,14);
-	//~ fl_message(message);
-	return 0;
 }
 
 //temp
