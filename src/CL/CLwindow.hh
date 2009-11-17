@@ -231,18 +231,25 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
 	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
 	
+	
 	//prepare message
 	xlong msglength = clutils->chararraylength(message);
 	xlong msglines = (msglength >> 8)+1; 
+	//create grey color
+	Colormap colmap = DefaultColormap(Xdisplay,XDefaultScreen(Xdisplay));
+	XColor dummy;
+	XColor grey;
+	XAllocNamedColor(Xdisplay,colmap,"grey",&grey,&dummy);
 	//create window
-	Window msgbox = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,200,100,0,blackcolor,blackcolor);
+	Window msgbox = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,200,100,0,grey.pixel,grey.pixel);
 	GC mgc = XCreateGC(Xdisplay,msgbox,0,0);
 	XSelectInput(Xdisplay,msgbox,ExposureMask|KeyPressMask|ButtonPressMask|StructureNotifyMask);
 	//set title
 	XStoreName(Xdisplay,msgbox,title);
 	//show window
 	XMapRaised(Xdisplay,msgbox);
-	XSetForeground(Xdisplay,mgc, whitecolor);
+	XSetForeground(Xdisplay,mgc,blackcolor);
+	XSetBackground(Xdisplay,mgc,grey.pixel);
 	
 	//wait till press
 	bool wait = 0;
@@ -258,10 +265,11 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 					for(j=0; j<msglines-1; j++) XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,256);
 					XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,msglength);
 					XDrawLine(Xdisplay,msgbox,mgc,50,90,150,90);
-					XDrawLine(Xdisplay,msgbox,mgc,50,70,150,70);
-					XDrawLine(Xdisplay,msgbox,mgc,50,70,50,90);
-					XDrawLine(Xdisplay,msgbox,mgc,150,70,150,90);
+					XDrawLine(Xdisplay,msgbox,mgc,150,70,150,90);	
 					XDrawImageString(Xdisplay,msgbox,mgc,95,85,"OK",2);
+					XSetForeground(Xdisplay,mgc,whitecolor);
+					XDrawLine(Xdisplay,msgbox,mgc,50,70,50,90);
+					XDrawLine(Xdisplay,msgbox,mgc,50,70,150,70);
 				break;
 				
 				case Expose:

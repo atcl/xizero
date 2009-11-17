@@ -1,14 +1,21 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLGAME
 #define HH_CLGAME
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLmisc3d.hh"
+///*
 
+///header
 /* class name:	CLgame
  * 
  * description: collision,boundary and terrain detection (and transformation).
@@ -19,7 +26,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLgame : public virtual CLcl, public CLsingle<CLgame>
 {
 	friend class CLsingle<CLgame>;
@@ -42,10 +51,12 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
+///*
 
-CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = XRES; boundaryy2 = YRES; }
+///implementation
+CLgame::CLgame() { boundaryx1 = boundaryy1 = 0; boundaryx2 = XRES; boundaryy2 = YRES; } //! noncritical
 
-void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2)
+void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2) //! noncritical
 {
 	//set screen boundaries
 	boundaryx1 = bx1;
@@ -56,7 +67,7 @@ void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2)
 }
 
 template<class clvector>
-bool CLgame::boundary(const clvector& p,xlong mark)
+bool CLgame::boundary(const clvector& p,xlong mark) //! critical
 {
 	//check if p id inside screen boundaries
 	if( (p.x > boundaryx1) && (p.x < boundaryx2) && ( (p.y-mark) > boundaryy1) && ( (p.y-mark) < boundaryy2) ) return 0;
@@ -66,7 +77,7 @@ bool CLgame::boundary(const clvector& p,xlong mark)
 }
 
 template<class clvector>
-bool CLgame::boundary(const clvector& p,const CLbox& bb,bool c)
+bool CLgame::boundary(const clvector& p,const CLbox& bb,bool c) //! critical
 {
 	switch(c)
 	{
@@ -93,7 +104,7 @@ bool CLgame::boundary(const clvector& p,const CLbox& bb,bool c)
 }
 
 template<class clvector>
-xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
+xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n) //! critical
 {
 	//calc levelposition of bounding box
 	CLlvector a1( (p.x + bb.c[0].x), (p.y - bb.c[0].y), (p.z + bb.c[0].z) );
@@ -158,7 +169,7 @@ xlong CLgame::collision(clvector& p,CLbox& bb,clvector& q,bool n)
 }
 
 template<class clvector>
-xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
+xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n) //! critical
 {
 	//calc levelposition of bounding box
 	CLlvector a1( (p.x + bb.c[0].x), (p.y - bb.c[0].y), (p.z + bb.c[0].z) );
@@ -207,7 +218,7 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n)
 }
 
 template<class clvector>
-xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
+xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n) //! critical
 {
 	//calc levelposition of first bounding box bb1 at p1 
 	CLfvector a1( (p1.x + bb1.c[0].x), (p1.y - bb1.c[0].y), (p1.z + bb1.c[0].z) );
@@ -278,7 +289,7 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n)
 }
 
 template<class clvector>
-bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd)
+bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd) //! critical
 {
 	//! this is still a big constrution site! Especially the not working calculation of the x and y angle !
 	
@@ -350,6 +361,7 @@ bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvecto
 
 	return r;
 }
+///*
 
 #endif
 
