@@ -35,12 +35,8 @@ int main(int argc, char** argv)
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*
 	
-	//msgbox
-	//clglobal->clwindow->msgbox("test test test test!!!","howdi");
-	//*
-	
 	//load height
-	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test.im24");
+	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test2.im24");
 	sprite* testlevel = clglobal->clformat->loadras(testim24);
 	
 	xlong rows = testlevel->height;
@@ -52,7 +48,7 @@ int main(int argc, char** argv)
 	xlong polycount = 0;
 	rawpoly** polys = new rawpoly*[cols*2];
 	
-	CLobject** terrrows = new CLobject*[(rows-1)/2];
+	CLobject** terrows = new CLobject*[(rows-1)/2];
 	
 	//check each row 
 	for(xlong i=0; i<1; i++) //1 -> rows
@@ -63,73 +59,81 @@ int main(int argc, char** argv)
 		//*
 		
 		//set first vertex in row
+		currz.dd = map[i*cols];
 		polys[polycount]->v[0].x = 0;
 		polys[polycount]->v[0].y = i*20;
-		polys[polycount]->v[0].z = map[i*cols];
+		polys[polycount]->v[0].z = xlong(currz.db[2]);
 		vertcount++;
 		//*
 		
 		//find second vertex in same row
-		xlong j = -1;
-		while(map[(i*cols)+(j+1)]==polys[polycount]->v[0].z)
+		xlong j = 0;
+		while(true)
 		{
-			if(j>=cols) { j=-1; break; }
+			currz.dd = map[(i*cols)+j];
+			if(currz.db[2]!=polys[polycount]->v[0].z) { j--; break; }
+			if(j>=cols) { j=0; break; }
 			j++;
 		}
 		//*
 		
 		//set second vertex
-		if(j==-1)
-		{
-			polys[polycount]->v[1].x = polys[polycount]->v[0].x;
-			polys[polycount]->v[1].y = polys[polycount]->v[0].y;
-			polys[polycount]->v[1].z = polys[polycount]->v[0].z;
-			j = polys[polycount]->v[0].x / 20;
-		}
-		else
-		{
-			polys[polycount]->v[1].x = j*20;
-			polys[polycount]->v[1].y = i*20;
-			polys[polycount]->v[1].z =polys[polycount]->v[0].z;
-			vertcount++;
-		}
+		polys[polycount]->v[1].x = j*20;
+		polys[polycount]->v[1].y = i*20;
+		polys[polycount]->v[1].z = polys[polycount]->v[0].z;
+		vertcount++;
 		//*
 		
 		//find third vertex in next row
-		//todo: take care of other than first polys in row aka backward search fpr 3rd vertex
-		xlong k = -1;
-		if(map[((i+1)*cols)]!=polys[polycount]->v[0].z)
+		//todo: take care of other than first polys in row aka backward search for 3rd vertex
+		xlong k = polys[polycount]->v[0].x / 20;
+		currz.dd = map[((i+1)*cols)+k];
+		if(currz.db[2]!=polys[polycount]->v[0].z)
 		{
-			while(map[((i+1)*cols)+(k+1)]!=polys[polycount]->v[1].z)
+			while(true)
 			{
-				if(k>j) { k=-1; break; }
+				currz.dd = map[((i+1)*cols)+k];
+				if(currz.db[2]!=polys[polycount]->v[0].z) { k--; break; }
+				if(k>=cols) { k=-1; break; }
 				k++;
 			}
 		}
+		else
+		{
+			while(true)
+			{
+				currz.dd = map[((i+1)*cols)+k];
+				if(currz.db[2]!=polys[polycount]->v[0].z) { k++; break; }
+				if(k<0) { k=-1; break; }
+				k--;
+			}
+		}		
 		//*
-		
+
 		//set third vertex
 		if(k==-1)
 		{
-			polys[polycount]->v[2].x = polys[polycount]->v[1].x;
-			polys[polycount]->v[2].y = polys[polycount]->v[1].y;
-			polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+			polys[polycount]->v[3].x = polys[polycount]->v[0].x;
+			polys[polycount]->v[3].y = polys[polycount]->v[0].y;
+			polys[polycount]->v[3].z = polys[polycount]->v[0].z;
 		}
 		else
 		{
-			polys[polycount]->v[2].x = k*20;
-			polys[polycount]->v[2].y = (i+1)*20;
-			polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+			polys[polycount]->v[3].x = k*20;
+			polys[polycount]->v[3].y = (i+1)*20;
+			polys[polycount]->v[3].z = polys[polycount]->v[0].z;
 			vertcount++;
 		}
 		//*
 		
 		//find fourth vertex
-		xlong l = -1;
+		xlong l = 0;
 		if(k!=-1)
 		{
-			while(map[((i+1)*cols)+k+(l+1)]==polys[polycount]->v[0].z)
+			while(true)
 			{
+				currz.dd = map[((i+1)*cols)+k+l];
+				if(currz.db[2]!=polys[polycount]->v[0].z) { l--; break; }
 				if(l>=cols) { l=-1; break; }
 				l++;
 			}
@@ -139,19 +143,27 @@ int main(int argc, char** argv)
 		//set fourth vertex
 		if(l==-1)
 		{
-			polys[polycount]->v[3].x = polys[polycount]->v[2].x;
-			polys[polycount]->v[3].y = polys[polycount]->v[2].y;
-			polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+			polys[polycount]->v[2].x = polys[polycount]->v[3].x;
+			polys[polycount]->v[2].y = polys[polycount]->v[3].y;
+			polys[polycount]->v[2].z = polys[polycount]->v[0].z;
 		}
 		else
 		{
-			polys[polycount]->v[3].x = l*20;
-			polys[polycount]->v[3].y = (i+1)*20;
-			polys[polycount]->v[3].z =polys[polycount]->v[0].z;
+			polys[polycount]->v[2].x = l*20;
+			polys[polycount]->v[2].y = (i+1)*20;
+			polys[polycount]->v[2].z =polys[polycount]->v[0].z;
 			vertcount++;
 		}
 		//*
 
+		//create object
+		std::cout << "poly nr: " << i << std::endl;
+		std::cout << polys[i]->v[0].x << ' ' << polys[i]->v[0].y << ' ' << polys[i]->v[0].z << std::endl;
+		std::cout << polys[i]->v[1].x << ' ' << polys[i]->v[1].y << ' ' << polys[i]->v[1].z << std::endl;
+		std::cout << polys[i]->v[2].x << ' ' << polys[i]->v[2].y << ' ' << polys[i]->v[2].z << std::endl;
+		std::cout << polys[i]->v[3].x << ' ' << polys[i]->v[3].y << ' ' << polys[i]->v[3].z << std::endl;
+		terrows[i] = new CLobject(polys[i],1,0x00FF0000,0);
+		//*
 
 	}
 	//*
@@ -276,6 +288,10 @@ int main(int argc, char** argv)
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
+
+		clglobal->clgfx1->drawsprite(10,10,testlevel);
+		
+		terrows[0]->display(p,CENTER + AMBIENT + SHAPE + ac);
 
 		linearM->unit();
 

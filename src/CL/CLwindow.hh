@@ -228,14 +228,12 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 	//!adaptive size
 	//!split lines by words not chars
 	
-	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
-	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
-	
-	
 	//prepare message
 	xlong msglength = clutils->chararraylength(message);
 	xlong msglines = (msglength >> 8)+1; 
 	//create grey color
+	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
+	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
 	Colormap colmap = DefaultColormap(Xdisplay,XDefaultScreen(Xdisplay));
 	XColor dummy;
 	XColor grey;
@@ -250,47 +248,35 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 	XMapRaised(Xdisplay,msgbox);
 	XSetForeground(Xdisplay,mgc,blackcolor);
 	XSetBackground(Xdisplay,mgc,grey.pixel);
-	
+	//draw
+	for(;;) { XNextEvent(Xdisplay, &Xevent); if (Xevent.type == MapNotify) break; }
+	xlong j= 0;
+	for(j=0; j<msglines-1; j++) XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,256);
+	XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,msglength);
+	XDrawLine(Xdisplay,msgbox,mgc,50,90,150,90);
+	XDrawLine(Xdisplay,msgbox,mgc,150,70,150,90);	
+	XDrawImageString(Xdisplay,msgbox,mgc,95,85,"OK",2);
+	XSetForeground(Xdisplay,mgc,whitecolor);
+	XDrawLine(Xdisplay,msgbox,mgc,50,70,50,90);
+	XDrawLine(Xdisplay,msgbox,mgc,50,70,150,70);
 	//wait till press
 	bool wait = 0;
-	xlong j = 0;
 	while(wait==0)
 	{
 		if(XPending(Xdisplay)!=0)
 		{			
 			XNextEvent(Xdisplay,&Xevent);
 			switch(Xevent.type)
-			{
-				case MapNotify:
-					for(j=0; j<msglines-1; j++) XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,256);
-					XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,msglength);
-					XDrawLine(Xdisplay,msgbox,mgc,50,90,150,90);
-					XDrawLine(Xdisplay,msgbox,mgc,150,70,150,90);	
-					XDrawImageString(Xdisplay,msgbox,mgc,95,85,"OK",2);
-					XSetForeground(Xdisplay,mgc,whitecolor);
-					XDrawLine(Xdisplay,msgbox,mgc,50,70,50,90);
-					XDrawLine(Xdisplay,msgbox,mgc,50,70,150,70);
-				break;
-				
-				case Expose:
-					XFlush(Xdisplay);
-				break;
-				
-				case KeyPress:
-					if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1;
-				break;
-				
-				case ButtonPress:
-					if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>50 && Xevent.xbutton.y>70 && Xevent.xbutton.x<150 && Xevent.xbutton.y<90 ) wait = 1;
-				break;
+			{				
+				case Expose: XFlush(Xdisplay); break;
+				case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
+				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>50 && Xevent.xbutton.y>70 && Xevent.xbutton.x<150 && Xevent.xbutton.y<90 ) wait = 1; break;
 			}				
 		}
 	}
-	
 	//destroy window
 	XFreeGC(Xdisplay,mgc);
 	XDestroyWindow(Xdisplay,msgbox);
-	
 	return 1;
 }
 	

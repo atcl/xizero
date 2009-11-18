@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license 
+///*
+
+///guard
 #ifndef HH_CLGAMEPAD
 #define HH_CLGAMEPAD
-#pragma message "Compiling " __FILE__
+///*
 
+///os-dep
 #ifdef WIN32
 	#include <mmsystem.h>
 #else //ifdef LINUX
@@ -11,10 +16,14 @@
 	#include <sys/ioctl.h>
 	#include <linux/joystick.h>
 #endif
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+///*
 
+///header
 /* class name:	CLgamepad
  * 
  * description:	This class handles joysticks and gamepads.
@@ -25,7 +34,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 {
 	friend class CLsingle<CLgamepad>;
@@ -50,10 +61,12 @@ class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 		bool isavail() const;
 		CLgamepadstate* getstate() const;
 };
+///*
 
+///implementation
 #ifdef WIN32
 
-CLgamepad::CLgamepad()
+CLgamepad::CLgamepad() //! noncritical
 {
 	pad = new CLgamepadstate;
 	
@@ -78,12 +91,12 @@ CLgamepad::CLgamepad()
 	device = 0;
 }
 
-void CLgamepad::mask()
+void CLgamepad::mask() //! noncritical
 {
 	
 }
 
-void CLgamepad::handle()
+void CLgamepad::handle() //! noncritical
 {
 	//read gamepad state
 	joyGetPos(JOYSTICKID1,&gp);
@@ -108,11 +121,11 @@ void CLgamepad::handle()
 	//*
 }
 
-void CLgamepad::exit() { }
+void CLgamepad::exit() { } //! noncritical
 
 #else //ifdef LINUX
 
-CLgamepad::CLgamepad()
+CLgamepad::CLgamepad() //! noncritical
 {	
 	pad = new CLgamepadstate;
 	
@@ -127,12 +140,12 @@ CLgamepad::CLgamepad()
 	fcntl(device,F_SETFL,O_NONBLOCK);
 }
 
-void CLgamepad::mask()
+void CLgamepad::mask() //! noncritical
 {
 	
 }
 
-void CLgamepad::handle()
+void CLgamepad::handle() //! noncritical
 {
 	//read gamepad state
 	read(device,&gp,sizeof(struct js_event));
@@ -157,13 +170,14 @@ void CLgamepad::handle()
     }
 }
 
-void CLgamepad::exit() { close(device); }
+void CLgamepad::exit() { close(device); } //! noncritical
 
 #endif
 
-bool CLgamepad::isavail() const { return (device!=-1); }
+bool CLgamepad::isavail() const { return (device!=-1); } //! noncritical
 
-CLgamepadstate* CLgamepad::getstate() const { return pad; }
+CLgamepadstate* CLgamepad::getstate() const { return pad; } //! noncritical
+///*
 
 #endif
 

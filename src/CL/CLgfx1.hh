@@ -502,23 +502,20 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 	//*
 
 	//set up variables
-	xlong ewidth = xe - xs;
-	xlong eheight = ye - ys;
-	xlong xoffset = (ys * XRES) + xs;
-	xlong linearc = 0;
-	xlong lindiff = swidth - ewidth;
+	xlong doffset = (ys * XRES) + xs;
+	xlong soffset = 0;
 	//*
 
 	//drawloop
-	for(uxlong i=0; i<eheight ;i++)
+	for(xlong i=0; i<sheight; i++)
 	{
-		for(uxlong j=0; j<ewidth ;j++)
+		for(xlong j=0; j<swidth; j++)
 		{
-			if( (s->data[linearc] & 0xFF000000) != 0xFF000000) cldoublebuffer[xoffset+j] = s->data[linearc];
-			linearc++;
+			//if( (s->data[soffset] & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = s->data[soffset];
+			cldoublebuffer[doffset+j] = s->data[soffset];
+			soffset++;
 		}
-		linearc += lindiff;
-		xoffset += XRES;
+		doffset += XRES;
 	}
 	//*	
 }

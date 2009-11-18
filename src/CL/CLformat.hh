@@ -205,14 +205,12 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 	if(clutils->endian(lf[6])!=0) return 0; //color maps are not supported
 	if(clutils->endian(lf[7])!=0) return 0; //color maps are not supported
 	
-	xchar* bf = &(sf->text)[32];
+	xchar* bf = &((sf->text)[32]);
 	xlong pixelindex = 0;
 	xlong dataindex = 0;
 	xlong size = width * height;
-	xlong fullsize = size * 4;
-	xlong sourcesize = size;
-	if(depth==32) sourcesize *= 4;
-	if(depth==24) sourcesize *= 3;
+	xlong fullsize = size<<2;
+	xlong bytedepth = depth>>3;
 	uxchar temp = 0;
 	
 	sprite* r = new sprite;
@@ -276,17 +274,17 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 	}
 	else
 	{
-		for(uxlong i=0; i<sourcesize; i++)
+		xlong i = 0;
+		xlong j = 0;
+		xlong k = 0;
+		while(i<fullsize)
 		{
-			if(depth==24 && (pixelindex+1)%4==0)
-			{
-				data[pixelindex] = 0;
-				pixelindex++;
-			}
-			
-			data[pixelindex] = bf[dataindex];
-			dataindex++;
-			pixelindex++;
+			data[i] = bf[j]; i++; j++;
+			data[i] = bf[j]; i++; j++;
+			data[i] = bf[j]; i++; j++;
+			data[i] = 0; i++;
+			k++;
+			if(k==width) { j++; k=0; }
 		}
 	}
 	
