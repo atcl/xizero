@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 	//*
 	
 	//load height
-	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test2.im24");
+	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test.im24");
 	sprite* testlevel = clglobal->clformat->loadras(testim24);
 	
 	xlong rows = testlevel->height;

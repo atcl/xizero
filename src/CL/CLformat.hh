@@ -207,6 +207,7 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 	
 	xchar* bf = &((sf->text)[32]);
 	xlong pixelindex = 0;
+	xlong pixelcount = 0;
 	xlong dataindex = 0;
 	xlong size = width * height;
 	xlong fullsize = size<<2;
@@ -223,9 +224,9 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 	if(type==2)
 	{
 		while(pixelindex<fullsize)
-		{
+		{			
 			if(uxchar(bf[dataindex])==0x80)
-			{			
+			{
 				dataindex++;
 				temp = uxchar(bf[dataindex]);
 				
@@ -233,11 +234,14 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 				{
 					dataindex++;	
 					for(xlong i=0; i<=temp; i++)
-					{			
+					{
+						if(width%2==1 && pixelindex%(width*4)==1) temp--;
+						
 						if(depth==24 && (pixelindex+1)%4==0)
 						{
 							data[pixelindex] = 0;
 							pixelindex++;
+							pixelcount++;
 						}
 						
 						data[pixelindex] = bf[dataindex];
@@ -247,15 +251,19 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 				}
 				else
 				{
-					if(depth==24 && (pixelindex+1)%4==0)
+					if(width%2==1 && pixelindex%(width*4)==1) dataindex++;
+					else
 					{
-						data[pixelindex] = 0;
+						if(depth==24 && (pixelindex+1)%4==0)
+						{
+							data[pixelindex] = 0;
+							pixelindex++;
+						}
+						
+						data[pixelindex] = 0x80;
 						pixelindex++;
+						dataindex++;
 					}
-					
-					data[pixelindex] = 0x80;
-					pixelindex++;
-					dataindex++;
 				}
 			}
 			else
@@ -267,8 +275,8 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 				}		
 						
 				data[pixelindex] = bf[dataindex];
-				dataindex++;
 				pixelindex++;
+				dataindex++;
 			}
 		}
 	}

@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLGFX1
 #define HH_CLGFX1
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
@@ -12,7 +17,9 @@
 #include "CLfifo.hh"
 #include "CLmath.hh"
 #include "CLmacros.hh"
+///*
 
+///header
 /* class name:	CLgfx1
  * 
  * description:	standard 2d graphics routines.
@@ -23,7 +30,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 struct CLpoint
 {
 	xlong x;
@@ -61,8 +70,10 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m,float e=0) const;
 		void drawscreen(sprite* s) const;
 };
+///*
 
-void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
+///implementation
+void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
 {
 	//precalculate linear address components (especially multiplications)
 	xlong b1 = (yc*XRES)+xc;
@@ -82,7 +93,7 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 	//*
 }
 
-void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
+void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
 {
 	//precalculate linear address components (especially multiplications) 
 	xlong a = (yc*XRES)+xc;
@@ -97,13 +108,13 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const
 	//*
 }
 
-uxlong CLgfx1::readpixel(xlong x,xlong y) const
+uxlong CLgfx1::readpixel(xlong x,xlong y) const //! critical
 {
 	if(isoff(x,y)) return -1;
 	return (cldoublebuffer[(y*XRES)+x]);
 }
 
-void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const
+void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const //! critical
 {
 	if(isoff(x,y)) return;
 	cldoublebuffer[(y*XRES)+x] = c;
@@ -115,24 +126,24 @@ void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const
 	}
 }
 
-void CLgfx1::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const
+void CLgfx1::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const //! critical
 {
 	if(isoff(x,y)) return;
 	b[(y*XRES)+x] = c;
 }
 
-void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const
+void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
 {
 	if(isoff(x1,x2)||isoff(x2,y2)) return;
 	cldoublebuffer[(y1*XRES)+x1] = cldoublebuffer[(y2*XRES)+x2];
 }
 
-void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const
+void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
 {
 
 }
 
-void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
+void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical
 {
 	//! todo: if(a) then anti-aliased line
 	
@@ -227,7 +238,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 	}
 }
 
-void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const
+void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const //! critical
 {
 	if(f)
 	{
@@ -252,7 +263,7 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) 
 	}
 }
 
-void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const
+void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const //! critical
 {
 	//draw outline of four-sided polygon
 	drawline(x1,y1,x2,y2,c);
@@ -262,7 +273,7 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 	//*
 }
 
-void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
+void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const //! critical
 {
 	//angle preparations
 	xlong as = clmath->sign(a);
@@ -305,7 +316,7 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 	//*
 }
 
-void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
+void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! critical
 {
 	//center and radius clipping
 	if(isoff(xc-r,yc-r,xc+r,yc+r)) return;
@@ -330,7 +341,7 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const
 	}
 }
 
-void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const
+void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const //! critical
 {
 	xlong x = r1;
 	xlong y = 0;
@@ -382,7 +393,7 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const
 	}
 }
 
-void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const
+void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 {
 	//set up fifo
 	CLfifo<CLpoint> fillfifo;
@@ -433,7 +444,7 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const
 	//*
 }
 
-void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
+void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 {
 	//set up fifo
 	CLfifo<CLpoint> fillfifo;
@@ -484,7 +495,7 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const
 	//*
 }
 
-void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
+void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 {
 	//set up variables
 	xlong swidth = s->width;
@@ -520,7 +531,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const
 	//*	
 }
 
-void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const
+void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const //! critical
 {
 	//set up variables
 	xlong swidth = t->tilewidth;
@@ -558,12 +569,12 @@ void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const
 	//*	
 }
 
-void CLgfx1::drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const
+void CLgfx1::drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const //! critical
 {
 
 }
 
-void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m,float e) const
+void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m,float e) const //! critical
 {
 	//set up variables
 	xlong swidth = s->width;
@@ -848,7 +859,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m,float e) cons
 	//*
 }
 
-void CLgfx1::drawscreen(sprite* s) const
+void CLgfx1::drawscreen(sprite* s) const //! critical
 {
 	//check if sprite has correct dimensions
 	if(s->width==XRES && s->height==YRES)
@@ -859,6 +870,7 @@ void CLgfx1::drawscreen(sprite* s) const
 	}
 	//*
 }
+///*
 
 #endif
 
