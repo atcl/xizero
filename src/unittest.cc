@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	doubleword lastz = { 0 };
 	xlong vertcount = 0;
 	xlong polycount = 0;
-	rawpoly** polys = new rawpoly*[cols*2];
+	rawpoly* polys = new rawpoly[cols*2];
 	xlong polyz = 0;
 	
 	CLobject** terrows = new CLobject*[(rows-1)/2];
@@ -58,21 +58,46 @@ int main(int argc, char** argv)
 	xlong l = 0;
 	for(xlong i=0; i<2; i++) //2 -> rows
 	{
-		while(polycount==0 || polys[polycount-1]->v[1].x<400)
-		{
-			//create polygon
-			polys[polycount] = new rawpoly;
-			vertcount = 0;
+		
+		//test
+			//set first vertex
+			
 			//*
+			
+			//set second vertex
+			for(xlong h=1; h<cols; h++)
+			{
+				
+			}
+			//*
+			
+			//set third vertex
+			for(xlong h=0; h<cols; h++)
+			{
+				
+			}
+			//*
+			
+			//set fourth vertex
+			for(xlong h=0; h<cols; h++)
+			{
+				
+			}
+			//*
+		//*
+		
+		while(polycount==0 || polys[polycount-1].v[1].x<400)
+		{
+			vertcount = 0;
 			
 			//set first vertex in row
 			if(polycount==0)
 			{
 				currz.dd = map[i*cols];
 				polyz = xlong(currz.db[2]);
-				polys[polycount]->v[0].x = 0 - 400;
-				polys[polycount]->v[0].y = i*20 -10;
-				polys[polycount]->v[0].z = 100-(polyz/4);
+				polys[polycount].v[0].x = 0 - 400;
+				polys[polycount].v[0].y = 10;
+				polys[polycount].v[0].z = 100-(polyz/4);
 				vertcount++;
 			}
 			else
@@ -80,9 +105,9 @@ int main(int argc, char** argv)
 				j++;
 				currz.dd = map[i*cols+j];
 				polyz = xlong(currz.db[2]);
-				polys[polycount]->v[0].x = polys[polycount-1]->v[1].x;
-				polys[polycount]->v[0].y = i*20 -10;
-				polys[polycount]->v[0].z = 100-(polyz/4);
+				polys[polycount].v[0].x = polys[polycount-1].v[1].x;
+				polys[polycount].v[0].y = 10;
+				polys[polycount].v[0].z = 100-(polyz/4);
 				vertcount++;
 			}
 			//*
@@ -100,9 +125,9 @@ int main(int argc, char** argv)
 			
 			
 			//set second vertex
-			polys[polycount]->v[1].x = j*20 -400;
-			polys[polycount]->v[1].y = i*20 -10;
-			polys[polycount]->v[1].z = polys[polycount]->v[0].z;
+			polys[polycount].v[1].x = j*20 -400;
+			polys[polycount].v[1].y = 10;
+			polys[polycount].v[1].z = polys[polycount].v[0].z;
 			vertcount++;
 			//*
 			
@@ -134,15 +159,15 @@ int main(int argc, char** argv)
 			//set third vertex
 			if(k==-1)
 			{
-				polys[polycount]->v[3].x = polys[polycount]->v[0].x;
-				polys[polycount]->v[3].y = polys[polycount]->v[0].y;
-				polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+				polys[polycount].v[3].x = polys[polycount].v[0].x;
+				polys[polycount].v[3].y = polys[polycount].v[0].y;
+				polys[polycount].v[3].z = polys[polycount].v[0].z;
 			}
 			else
 			{
-				polys[polycount]->v[3].x = k*20 -400;
-				polys[polycount]->v[3].y = (i+1)*20 -10;
-				polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+				polys[polycount].v[3].x = k*20 -400;
+				polys[polycount].v[3].y = -10;
+				polys[polycount].v[3].z = polys[polycount].v[0].z;
 				vertcount++;
 			}
 			//*
@@ -165,25 +190,25 @@ int main(int argc, char** argv)
 			//set fourth vertex
 			if(l==-1)
 			{
-				polys[polycount]->v[2].x = polys[polycount]->v[3].x;
-				polys[polycount]->v[2].y = polys[polycount]->v[3].y;
-				polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+				polys[polycount].v[2].x = polys[polycount].v[3].x;
+				polys[polycount].v[2].y = polys[polycount].v[3].y;
+				polys[polycount].v[2].z = polys[polycount].v[0].z;
 			}
 			else
 			{
-				polys[polycount]->v[2].x = (k+l)*20 -400;
-				polys[polycount]->v[2].y = (i+1)*20 -10;
-				polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+				polys[polycount].v[2].x = (k+l)*20 -400;
+				polys[polycount].v[2].y = -10;
+				polys[polycount].v[2].z = polys[polycount].v[0].z;
 				vertcount++;
 			}
 			//*
 
 			//create object
 			std::cout << "poly nr: " << polycount << std::endl;
-			std::cout << polys[polycount]->v[0].x << ' ' << polys[polycount]->v[0].y << ' ' << polys[polycount]->v[0].z << std::endl;
-			std::cout << polys[polycount]->v[1].x << ' ' << polys[polycount]->v[1].y << ' ' << polys[polycount]->v[1].z << std::endl;
-			std::cout << polys[polycount]->v[2].x << ' ' << polys[polycount]->v[2].y << ' ' << polys[polycount]->v[2].z << std::endl;
-			std::cout << polys[polycount]->v[3].x << ' ' << polys[polycount]->v[3].y << ' ' << polys[polycount]->v[3].z << std::endl;
+			std::cout << polys[polycount].v[0].x << ' ' << polys[polycount].v[0].y << ' ' << polys[polycount].v[0].z << std::endl;
+			std::cout << polys[polycount].v[1].x << ' ' << polys[polycount].v[1].y << ' ' << polys[polycount].v[1].z << std::endl;
+			std::cout << polys[polycount].v[2].x << ' ' << polys[polycount].v[2].y << ' ' << polys[polycount].v[2].z << std::endl;
+			std::cout << polys[polycount].v[3].x << ' ' << polys[polycount].v[3].y << ' ' << polys[polycount].v[3].z << std::endl;
 			//~ std::cout << j << ' ';
 			//*
 			
@@ -217,7 +242,7 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
-	CLlvector q(0,350,0);
+	CLlvector q(400,350,0);
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -321,10 +346,11 @@ int main(int argc, char** argv)
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
 		clglobal->clgfx1->drawsprite(10,10,testlevel);
-		
+		q.y = 350;
 		for(xlong i=0; i<2; i++)
 		{
-			terrows[i]->display(q,CENTER + AMBIENT + SHAPE);
+			terrows[i]->display(q,AMBIENT + SHAPE);
+			q.y += 20;
 		}
 	
 		linearM->unit();
