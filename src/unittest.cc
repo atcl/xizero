@@ -50,121 +50,149 @@ int main(int argc, char** argv)
 	
 	CLobject** terrows = new CLobject*[(rows-1)/2];
 	
-	//check each row 
-	for(xlong i=0; i<1; i++) //1 -> rows
+	//check each row
+	xlong jj = 0; 
+	xlong j = 0;
+	xlong k = 0;
+	xlong l = 0;
+	for(xlong i=0; i<2; i++) //2 -> rows
 	{
-		//create first polygon in row
-		polys[polycount] = new rawpoly;
-		vertcount = 0;
-		//*
-		
-		//set first vertex in row
-		currz.dd = map[i*cols];
-		polys[polycount]->v[0].x = 0;
-		polys[polycount]->v[0].y = i*20;
-		polys[polycount]->v[0].z = xlong(currz.db[2]);
-		vertcount++;
-		//*
-		
-		//find second vertex in same row
-		xlong j = 0;
-		while(true)
+		while(polycount==0 || polys[polycount-1]->v[1].x<800)
 		{
-			currz.dd = map[(i*cols)+j];
-			if(currz.db[2]!=polys[polycount]->v[0].z) { j--; break; }
-			if(j>=cols) { j=0; break; }
-			j++;
-		}
-		//*
-		
-		//set second vertex
-		polys[polycount]->v[1].x = j*20;
-		polys[polycount]->v[1].y = i*20;
-		polys[polycount]->v[1].z = polys[polycount]->v[0].z;
-		vertcount++;
-		//*
-		
-		//find third vertex in next row
-		//todo: take care of other than first polys in row aka backward search for 3rd vertex
-		xlong k = polys[polycount]->v[0].x / 20;
-		currz.dd = map[((i+1)*cols)+k];
-		if(currz.db[2]!=polys[polycount]->v[0].z)
-		{
+			//create polygon
+			polys[polycount] = new rawpoly;
+			vertcount = 0;
+			//*
+			
+			//set first vertex in row
+			if(polycount==0)
+			{
+				currz.dd = map[i*cols];
+				polys[polycount]->v[0].x = 0;
+				polys[polycount]->v[0].y = i*20;
+				polys[polycount]->v[0].z = xlong(currz.db[2]);
+				vertcount++;
+			}
+			else
+			{
+				j++;
+				currz.dd = map[i*cols+j];
+				polys[polycount]->v[0].x = polys[polycount-1]->v[1].x;
+				polys[polycount]->v[0].y = i*20;
+				polys[polycount]->v[0].z = xlong(currz.db[2]);
+				vertcount++;
+			}
+			//*
+			
+			//find second vertex in same row
+			jj = j;
 			while(true)
 			{
-				currz.dd = map[((i+1)*cols)+k];
-				if(currz.db[2]!=polys[polycount]->v[0].z) { k--; break; }
-				if(k>=cols) { k=-1; break; }
-				k++;
+				currz.dd = map[(i*cols)+j];
+				if(currz.db[2]!=polys[polycount]->v[0].z) { j--; break; }
+				if(j>=cols) { j=0; break; }
+				j++;
 			}
-		}
-		else
-		{
-			while(true)
-			{
-				currz.dd = map[((i+1)*cols)+k];
-				if(currz.db[2]!=polys[polycount]->v[0].z) { k++; break; }
-				if(k<0) { k=-1; break; }
-				k--;
-			}
-		}		
-		//*
-
-		//set third vertex
-		if(k==-1)
-		{
-			polys[polycount]->v[3].x = polys[polycount]->v[0].x;
-			polys[polycount]->v[3].y = polys[polycount]->v[0].y;
-			polys[polycount]->v[3].z = polys[polycount]->v[0].z;
-		}
-		else
-		{
-			polys[polycount]->v[3].x = k*20;
-			polys[polycount]->v[3].y = (i+1)*20;
-			polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+			//*
+			
+			
+			//set second vertex
+			polys[polycount]->v[1].x = j*20;
+			polys[polycount]->v[1].y = i*20;
+			polys[polycount]->v[1].z = polys[polycount]->v[0].z;
 			vertcount++;
-		}
-		//*
-		
-		//find fourth vertex
-		xlong l = 0;
-		if(k!=-1)
-		{
-			while(true)
+			//*
+			
+			//find third vertex in next row
+			k = jj;
+			currz.dd = map[((i+1)*cols)+k];
+			if(currz.db[2]!=polys[polycount]->v[0].z)
 			{
-				currz.dd = map[((i+1)*cols)+k+l];
-				if(currz.db[2]!=polys[polycount]->v[0].z) { l--; break; }
-				if(l>=cols) { l=-1; break; }
-				l++;
+				while(true)
+				{
+					currz.dd = map[((i+1)*cols)+k];
+					if(currz.db[2]!=polys[polycount]->v[0].z) { k--; break; }
+					if(k>=cols) { k=-1; break; }
+					k++;
+				}
 			}
-		}
-		//*
-		
-		//set fourth vertex
-		if(l==-1)
-		{
-			polys[polycount]->v[2].x = polys[polycount]->v[3].x;
-			polys[polycount]->v[2].y = polys[polycount]->v[3].y;
-			polys[polycount]->v[2].z = polys[polycount]->v[0].z;
-		}
-		else
-		{
-			polys[polycount]->v[2].x = l*20;
-			polys[polycount]->v[2].y = (i+1)*20;
-			polys[polycount]->v[2].z =polys[polycount]->v[0].z;
-			vertcount++;
-		}
-		//*
+			else
+			{
+				while(true)
+				{
+					currz.dd = map[((i+1)*cols)+k];
+					if(currz.db[2]!=polys[polycount]->v[0].z) { break; }
+					k--;
+					if(k<0) { k=0; break; }
+				}
+			}		
+			//*
 
-		//create object
-		std::cout << "poly nr: " << i << std::endl;
-		std::cout << polys[i]->v[0].x << ' ' << polys[i]->v[0].y << ' ' << polys[i]->v[0].z << std::endl;
-		std::cout << polys[i]->v[1].x << ' ' << polys[i]->v[1].y << ' ' << polys[i]->v[1].z << std::endl;
-		std::cout << polys[i]->v[2].x << ' ' << polys[i]->v[2].y << ' ' << polys[i]->v[2].z << std::endl;
-		std::cout << polys[i]->v[3].x << ' ' << polys[i]->v[3].y << ' ' << polys[i]->v[3].z << std::endl;
-		terrows[i] = new CLobject(polys[i],1,0x00FF0000,0);
-		//*
+			//set third vertex
+			if(k==-1)
+			{
+				polys[polycount]->v[3].x = polys[polycount]->v[0].x;
+				polys[polycount]->v[3].y = polys[polycount]->v[0].y;
+				polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+			}
+			else
+			{
+				polys[polycount]->v[3].x = k*20;
+				polys[polycount]->v[3].y = (i+1)*20;
+				polys[polycount]->v[3].z = polys[polycount]->v[0].z;
+				vertcount++;
+			}
+			//*
+			
+			//find fourth vertex
+			if(k<jj) k = jj;
+			l = 0;
+			if(k!=-1)
+			{
+				while(true)
+				{
+					say(l);
+					currz.dd = map[((i+1)*cols)+k+l];
+					if(currz.db[2]!=polys[polycount]->v[0].z) { l--; break; }
+					l++;
+					if((k+l)>cols) { l-=2; break; }
+				}
+			}
+			//*
+			
+			//set fourth vertex
+			if(l==-1)
+			{
+				polys[polycount]->v[2].x = polys[polycount]->v[3].x;
+				polys[polycount]->v[2].y = polys[polycount]->v[3].y;
+				polys[polycount]->v[2].z = polys[polycount]->v[0].z;
+			}
+			else
+			{
+				polys[polycount]->v[2].x = (k+l)*20;
+				polys[polycount]->v[2].y = (i+1)*20;
+				polys[polycount]->v[2].z =polys[polycount]->v[0].z;
+				vertcount++;
+			}
+			//*
 
+			//create object
+			std::cout << "poly nr: " << polycount << std::endl;
+			std::cout << polys[polycount]->v[0].x << ' ' << polys[polycount]->v[0].y << ' ' << polys[polycount]->v[0].z << std::endl;
+			std::cout << polys[polycount]->v[1].x << ' ' << polys[polycount]->v[1].y << ' ' << polys[polycount]->v[1].z << std::endl;
+			std::cout << polys[polycount]->v[2].x << ' ' << polys[polycount]->v[2].y << ' ' << polys[polycount]->v[2].z << std::endl;
+			std::cout << polys[polycount]->v[3].x << ' ' << polys[polycount]->v[3].y << ' ' << polys[polycount]->v[3].z << std::endl;
+			//~ std::cout << j << ' ';
+			//*
+			
+			polycount++;
+		}
+		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
+		polycount = 0;
+		jj = 0;
+		j = 0;
+		k = 0;
+		l = 0;
 	}
 	//*
 
@@ -187,6 +215,7 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
+	CLlvector q(0,350,100);
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -291,8 +320,11 @@ int main(int argc, char** argv)
 
 		clglobal->clgfx1->drawsprite(10,10,testlevel);
 		
-		terrows[0]->display(p,CENTER + AMBIENT + SHAPE + ac);
-
+		for(xlong i=0; i<2; i++)
+		{
+			terrows[i]->display(q, AMBIENT + SHAPE);
+		}
+	
 		linearM->unit();
 
 		clglobal->clbench->inc();

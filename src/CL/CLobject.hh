@@ -45,7 +45,7 @@ class CLobject : public virtual CLcl
 	public:
 		CLobject(const xchar* fileptr,bool zs);
 		CLobject(CLfile* fileptr,bool zs);
-		CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc);
+		CLobject(rawpoly** p,xlong c,uxlong co,uxlong sc);
 		CLobject(CLobject* obj);
 		~CLobject();
 		void update(CLmatrix* m);
@@ -296,7 +296,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	//~ //*
 }
 
-CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc)
+CLobject::CLobject(rawpoly** p,xlong c,uxlong co,uxlong sc)
 {
 	//init bounding box
 	rboundingbox = new CLbox;
@@ -308,7 +308,7 @@ CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc)
 	dockcount = 0;
 	polyptr = new CLpolygon*[polycount];
 	
-	for(xlong i=0; i<c; i++) { polyptr[i] = new CLpolygon(p->v[0],p->v[1],p->v[2],p->v[3],co,sc); }
+	for(xlong i=0; i<c; i++) { polyptr[i] = new CLpolygon(p[i]->v[0],p[i]->v[1],p[i]->v[2],p[i]->v[3],co,sc); }
 }
 
 CLobject::CLobject(CLobject* obj)
