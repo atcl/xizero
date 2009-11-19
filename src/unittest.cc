@@ -47,6 +47,7 @@ int main(int argc, char** argv)
 	xlong vertcount = 0;
 	xlong polycount = 0;
 	rawpoly** polys = new rawpoly*[cols*2];
+	xlong polyz = 0;
 	
 	CLobject** terrows = new CLobject*[(rows-1)/2];
 	
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
 	xlong l = 0;
 	for(xlong i=0; i<2; i++) //2 -> rows
 	{
-		while(polycount==0 || polys[polycount-1]->v[1].x<800)
+		while(polycount==0 || polys[polycount-1]->v[1].x<400)
 		{
 			//create polygon
 			polys[polycount] = new rawpoly;
@@ -68,18 +69,20 @@ int main(int argc, char** argv)
 			if(polycount==0)
 			{
 				currz.dd = map[i*cols];
-				polys[polycount]->v[0].x = 0;
-				polys[polycount]->v[0].y = i*20;
-				polys[polycount]->v[0].z = xlong(currz.db[2]);
+				polyz = xlong(currz.db[2]);
+				polys[polycount]->v[0].x = 0 - 400;
+				polys[polycount]->v[0].y = i*20 -10;
+				polys[polycount]->v[0].z = 100-(polyz/4);
 				vertcount++;
 			}
 			else
 			{
 				j++;
 				currz.dd = map[i*cols+j];
+				polyz = xlong(currz.db[2]);
 				polys[polycount]->v[0].x = polys[polycount-1]->v[1].x;
-				polys[polycount]->v[0].y = i*20;
-				polys[polycount]->v[0].z = xlong(currz.db[2]);
+				polys[polycount]->v[0].y = i*20 -10;
+				polys[polycount]->v[0].z = 100-(polyz/4);
 				vertcount++;
 			}
 			//*
@@ -89,7 +92,7 @@ int main(int argc, char** argv)
 			while(true)
 			{
 				currz.dd = map[(i*cols)+j];
-				if(currz.db[2]!=polys[polycount]->v[0].z) { j--; break; }
+				if(currz.db[2]!=polyz) { j--; break; }
 				if(j>=cols) { j=0; break; }
 				j++;
 			}
@@ -97,8 +100,8 @@ int main(int argc, char** argv)
 			
 			
 			//set second vertex
-			polys[polycount]->v[1].x = j*20;
-			polys[polycount]->v[1].y = i*20;
+			polys[polycount]->v[1].x = j*20 -400;
+			polys[polycount]->v[1].y = i*20 -10;
 			polys[polycount]->v[1].z = polys[polycount]->v[0].z;
 			vertcount++;
 			//*
@@ -106,12 +109,12 @@ int main(int argc, char** argv)
 			//find third vertex in next row
 			k = jj;
 			currz.dd = map[((i+1)*cols)+k];
-			if(currz.db[2]!=polys[polycount]->v[0].z)
+			if(currz.db[2]!=polyz)
 			{
 				while(true)
 				{
 					currz.dd = map[((i+1)*cols)+k];
-					if(currz.db[2]!=polys[polycount]->v[0].z) { k--; break; }
+					if(currz.db[2]!=polyz) { k--; break; }
 					if(k>=cols) { k=-1; break; }
 					k++;
 				}
@@ -121,7 +124,7 @@ int main(int argc, char** argv)
 				while(true)
 				{
 					currz.dd = map[((i+1)*cols)+k];
-					if(currz.db[2]!=polys[polycount]->v[0].z) { break; }
+					if(currz.db[2]!=polyz) { break; }
 					k--;
 					if(k<0) { k=0; break; }
 				}
@@ -137,8 +140,8 @@ int main(int argc, char** argv)
 			}
 			else
 			{
-				polys[polycount]->v[3].x = k*20;
-				polys[polycount]->v[3].y = (i+1)*20;
+				polys[polycount]->v[3].x = k*20 -400;
+				polys[polycount]->v[3].y = (i+1)*20 -10;
 				polys[polycount]->v[3].z = polys[polycount]->v[0].z;
 				vertcount++;
 			}
@@ -151,9 +154,8 @@ int main(int argc, char** argv)
 			{
 				while(true)
 				{
-					say(l);
 					currz.dd = map[((i+1)*cols)+k+l];
-					if(currz.db[2]!=polys[polycount]->v[0].z) { l--; break; }
+					if(currz.db[2]!=polyz) { l--; break; }
 					l++;
 					if((k+l)>cols) { l-=2; break; }
 				}
@@ -169,9 +171,9 @@ int main(int argc, char** argv)
 			}
 			else
 			{
-				polys[polycount]->v[2].x = (k+l)*20;
-				polys[polycount]->v[2].y = (i+1)*20;
-				polys[polycount]->v[2].z =polys[polycount]->v[0].z;
+				polys[polycount]->v[2].x = (k+l)*20 -400;
+				polys[polycount]->v[2].y = (i+1)*20 -10;
+				polys[polycount]->v[2].z = polys[polycount]->v[0].z;
 				vertcount++;
 			}
 			//*
@@ -215,7 +217,7 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
-	CLlvector q(0,350,100);
+	CLlvector q(0,350,0);
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -322,7 +324,7 @@ int main(int argc, char** argv)
 		
 		for(xlong i=0; i<2; i++)
 		{
-			terrows[i]->display(q, AMBIENT + SHAPE);
+			terrows[i]->display(q,CENTER + AMBIENT + SHAPE);
 		}
 	
 		linearM->unit();
