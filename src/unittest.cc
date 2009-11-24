@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 	xlong j = -1;
 	xlong k = 0;
 	xlong l = 0;
-	for(xlong i=0; i<2; i++) //2 -> rows
+	for(xlong i=0; i<10; i++) //2 -> rows
 	{
 		while(polycount==0 || polys[polycount-1].v[1].x<400)
 		{
@@ -71,13 +71,13 @@ int main(int argc, char** argv)
 			{
 				currz.dd = map[(i*cols)+j];
 				if(currz.db[2]!=polyz) { j--; break; }
-				if(j>=cols) { j=0; break; } //? correct?
+				if(j>=cols) { j=cols; break; } //? correct?
 				j++;
 			}
 			//*
 			
 			//set second vertex
-			polys[polycount].v[1].x = j*20 - 400;
+			polys[polycount].v[1].x = (j*20) - 400;
 			polys[polycount].v[1].y = 10;
 			polys[polycount].v[1].z = polys[polycount].v[0].z;
 			//*
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 				while(true)
 				{
 					currz.dd = map[((i+1)*cols)+k];
-					if(currz.db[2]!=polyz) { k--; break; }
+					if(currz.db[2]==polyz) { k--; break; }
 					if(k>=cols) { k=-1; break; }
 					k++;
 				}
@@ -116,14 +116,14 @@ int main(int argc, char** argv)
 			}
 			else
 			{
-				polys[polycount].v[3].x = k*20 -400;
+				polys[polycount].v[3].x = (k*20) - 400;
 				polys[polycount].v[3].y = -10;
 				polys[polycount].v[3].z = polys[polycount].v[0].z;
 			}
 			//*
 			
 			//find fourth vertex
-			if(k<jj) k = jj;
+			if(k<jj && k!=-1) k = jj;
 			l = 0;
 			if(k!=-1)
 			{
@@ -132,19 +132,28 @@ int main(int argc, char** argv)
 					currz.dd = map[((i+1)*cols)+k+l];
 					if(currz.db[2]!=polyz) { l--; break; }
 					l++;
-					if((k+l)>cols) { l-=2; break; }
+					if((k+l)>=cols) { l=cols-k-1; break; }
 				}
 			}
 			//*
 			
 			//set fourth vertex
-			polys[polycount].v[2].x = (k+l)*20 -400;
-			polys[polycount].v[2].y = -10;
-			polys[polycount].v[2].z = polys[polycount].v[0].z;
+			if(k!=-1)
+			{
+				polys[polycount].v[2].x = ((k+l)*20) - 400;
+				polys[polycount].v[2].y = -10;
+				polys[polycount].v[2].z = polys[polycount].v[0].z;
+			}
+			else
+			{
+				polys[polycount].v[2].x = polys[polycount].v[1].x;
+				polys[polycount].v[2].y = polys[polycount].v[1].y;
+				polys[polycount].v[2].z = polys[polycount].v[0].z;
+			}
 			//*
 
 			//create object
-			std::cout << "poly nr: " << polycount << std::endl;
+			std::cout << "poly nr: " << polycount << " of row: " << i << std::endl;
 			std::cout << polys[polycount].v[0].x << ' ' << polys[polycount].v[0].y << ' ' << polys[polycount].v[0].z << std::endl;
 			std::cout << polys[polycount].v[1].x << ' ' << polys[polycount].v[1].y << ' ' << polys[polycount].v[1].z << std::endl;
 			std::cout << polys[polycount].v[2].x << ' ' << polys[polycount].v[2].y << ' ' << polys[polycount].v[2].z << std::endl;
@@ -240,10 +249,9 @@ int main(int argc, char** argv)
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
 			case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
-			case 'b':    clglobal->clwindow->msgbox("hi","bye"); break;
 				
 			//System:
-			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","This is line 1!!! \n This is line 2!!!!  \n This is 3XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX \n and finally Line 4"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
+			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","bye"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
 		}
 		
 		switch(clglobal->clwindow->getinkey())
@@ -286,7 +294,7 @@ int main(int argc, char** argv)
 
 		clglobal->clgfx1->drawsprite(10,10,testlevel);
 		q.y = 350;
-		for(xlong i=0; i<2; i++)
+		for(xlong i=0; i<10; i++)
 		{
 			terrows[i]->display(q,AMBIENT + SHAPE);
 			q.y += 20;

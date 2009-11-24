@@ -1,14 +1,21 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLGUIBASE
 #define HH_CLGUIBASE
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLgfx1.hh"
 #include "CLgfx2.hh"
+///*
 
+///header
 /* class name:	CLguibase
  * 
  * description:	base class for all gui elements.
@@ -19,7 +26,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLguibase : public virtual CLcl
 {
 	protected:
@@ -53,8 +62,10 @@ class CLguibase : public virtual CLcl
 		uxlong getbcolor() const;
 		uxlong getrcolor() const;
 };
+///*
 
-CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
+///implementation
+CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
 {
 	//set up attributes
 	posx = px;
@@ -69,7 +80,7 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	//*
 }
 
-void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc)
+void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
 {
 	posx = px;
 	posy = py;
@@ -81,37 +92,38 @@ void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxl
 	flat = f;
 }
 
-void CLguibase::draw() { } //virtual!
+void CLguibase::draw() { } //virtual!  //! noncritical
 
-void CLguibase::setwidth(xlong w) { width = w; }
+void CLguibase::setwidth(xlong w) { width = w; } //! noncritical
 
-void CLguibase::setheight(xlong h) { height = h; }
+void CLguibase::setheight(xlong h) { height = h; } //! noncritical
 
-void CLguibase::setx(xlong x) { posx = x; }
+void CLguibase::setx(xlong x) { posx = x; } //! noncritical
 
-void CLguibase::sety(xlong y) { posy = y; }
+void CLguibase::sety(xlong y) { posy = y; } //! noncritical
 
-void CLguibase::setfcolor(uxlong fc) { fcolor = fc; }
+void CLguibase::setfcolor(uxlong fc) { fcolor = fc; } //! noncritical
 
-void CLguibase::setbcolor(uxlong bc) { bcolor = bc; }
+void CLguibase::setbcolor(uxlong bc) { bcolor = bc; } //! noncritical
 
-void CLguibase::setrcolor(uxlong rc) { rcolor = rc; }
+void CLguibase::setrcolor(uxlong rc) { rcolor = rc; } //! noncritical
 
-void CLguibase::setvisible(bool v) { visible = v; }
+void CLguibase::setvisible(bool v) { visible = v; } //! noncritical
 
-xlong CLguibase::getwidth() const { return width; }
+xlong CLguibase::getwidth() const { return width; } //! noncritical
 
-xlong CLguibase::getheight() const { return height; }
+xlong CLguibase::getheight() const { return height; } //! noncritical
 
-xlong CLguibase::getx() const { return posx; }
+xlong CLguibase::getx() const { return posx; } //! noncritical
 
-xlong CLguibase::gety() const { return posy; }
+xlong CLguibase::gety() const { return posy; } //! noncritical
 
-uxlong CLguibase::getfcolor() const { return fcolor; }
+uxlong CLguibase::getfcolor() const { return fcolor; } //! noncritical
 
-uxlong CLguibase::getbcolor() const { return bcolor; }
+uxlong CLguibase::getbcolor() const { return bcolor; } //! noncritical
 
-uxlong CLguibase::getrcolor() const { return rcolor; }
+uxlong CLguibase::getrcolor() const { return rcolor; } //! noncritical
+///*
 
 #endif
 
