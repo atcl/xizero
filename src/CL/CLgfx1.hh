@@ -513,20 +513,24 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 	//*
 
 	//set up variables
+	xlong cwidth = xe - xs;
+	xlong cheight = ye - ys;
+	xlong cdiff = swidth - cwidth;
 	xlong doffset = (ys * XRES) + xs;
 	xlong soffset = 0;
 	//*
 
 	//drawloop
-	for(xlong i=0; i<sheight; i++)
+	for(xlong i=0; i<cheight; i++)
 	{
-		for(xlong j=0; j<swidth; j++)
+		for(xlong j=0; j<cwidth; j++)
 		{
-			//if( (s->data[soffset] & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = s->data[soffset];
-			cldoublebuffer[doffset+j] = s->data[soffset];
+			if( (s->data[soffset] & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = s->data[soffset];
+			//cldoublebuffer[doffset+j] = s->data[soffset];
 			soffset++;
 		}
 		doffset += XRES;
+		soffset += cdiff;
 	}
 	//*	
 }
@@ -549,9 +553,12 @@ void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const //! critical
 	//*
 
 	//set up variables
+	xlong ewidth = xe - xs;
+	xlong eheight = ye - ys;
 	xlong xoffset = (ys * XRES) + xs;
 	xlong linearc = 0;
 	uxlong srcval = 0;
+	xlong lindiff = swidth - ewidth;
 	//*
 
 	//drawloop
@@ -565,6 +572,7 @@ void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const //! critical
 			linearc++;
 		}
 		xoffset += XRES;
+		linearc += lindiff;
 	}
 	//*	
 }

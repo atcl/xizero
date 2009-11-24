@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLGLOBALS
 #define HH_CLGLOBALS
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLsingle.hh"
+///*
 
+///header
 /* class name:	CLglobal
  * 
  * description:	base class containing all singletons and global variables.
@@ -17,7 +24,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 template<typename t> class CLbuffer; typedef CLbuffer<float> CLfbuffer; typedef CLbuffer<xlong> CLlbuffer; typedef CLbuffer<uxlong> CLubuffer;
 template<typename t> class CLvector; typedef CLvector<float> CLfvector; typedef CLvector<xlong> CLlvector;
 
@@ -39,7 +48,9 @@ class CLtransitions;
 class CLsound;
 class CLsprites;
 class CLid;
+///*
 
+///definitions
 class CLglobal
 {
 	private:
@@ -84,6 +95,7 @@ class CLglobal
 		static CLid*     clid;
 		
 		static CLglobal* getinstance();
-}; 
+};
+///*
 
 #endif

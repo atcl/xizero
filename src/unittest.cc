@@ -243,7 +243,7 @@ int main(int argc, char** argv)
 			case 'b':    clglobal->clwindow->msgbox("hi","bye"); break;
 				
 			//System:
-			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","bye"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
+			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","This is line 1!!! \n This is line 2!!!!  \n This is 3XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX \n and finally Line 4"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
 		}
 		
 		switch(clglobal->clwindow->getinkey())
