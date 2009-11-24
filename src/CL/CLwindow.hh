@@ -14,7 +14,7 @@
 
 /* class name:	CLwindow
  * 
- * description:	The fltk interface class handles the main window
+ * description:	very basic Xwindow with doublebuffer and msgbox
  * 
  * author:	atcl
  * 
@@ -146,7 +146,7 @@ void CLwindow::handle()
 			break;
 			
 			case KeyPress:
-				key = turbo = XLookupKeysym((XKeyEvent*)&Xevent,0);
+				key = turbo = xchar(XLookupKeysym((XKeyEvent*)&Xevent,0));
 				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent));
 			break;
 			

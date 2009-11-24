@@ -22,10 +22,6 @@ int main(int argc, char** argv)
 		//test tree:
 		CLtree<xlong>* testtree = new CLtree<xlong>();
 
-		//test label:
-			//CLlabel testlabel = new CLlabel();
-		// //test msgbox:
-			//CLmsgbox testmsgbox = new CLmsgbox();
 		// //test menu:
 			//CLmenu testmenu = new CLmenu();
 			
@@ -53,82 +49,37 @@ int main(int argc, char** argv)
 	
 	//check each row
 	xlong jj = 0; 
-	xlong j = 0;
+	xlong j = -1;
 	xlong k = 0;
 	xlong l = 0;
 	for(xlong i=0; i<2; i++) //2 -> rows
 	{
-		
-		//test
-			//set first vertex
-			
-			//*
-			
-			//set second vertex
-			for(xlong h=1; h<cols; h++)
-			{
-				
-			}
-			//*
-			
-			//set third vertex
-			for(xlong h=0; h<cols; h++)
-			{
-				
-			}
-			//*
-			
-			//set fourth vertex
-			for(xlong h=0; h<cols; h++)
-			{
-				
-			}
-			//*
-		//*
-		
 		while(polycount==0 || polys[polycount-1].v[1].x<400)
 		{
-			vertcount = 0;
-			
-			//set first vertex in row
-			if(polycount==0)
-			{
-				currz.dd = map[i*cols];
-				polyz = xlong(currz.db[2]);
-				polys[polycount].v[0].x = 0 - 400;
-				polys[polycount].v[0].y = 10;
-				polys[polycount].v[0].z = 100-(polyz/4);
-				vertcount++;
-			}
-			else
-			{
-				j++;
-				currz.dd = map[i*cols+j];
-				polyz = xlong(currz.db[2]);
-				polys[polycount].v[0].x = polys[polycount-1].v[1].x;
-				polys[polycount].v[0].y = 10;
-				polys[polycount].v[0].z = 100-(polyz/4);
-				vertcount++;
-			}
+			//set first vertex
+			j++; jj = j;
+			currz.dd = map[i*cols+j];
+			polyz = xlong(currz.db[2]);
+			if(polycount==0) polys[polycount].v[0].x = -400;
+			else             polys[polycount].v[0].x = polys[polycount-1].v[1].x;				
+			polys[polycount].v[0].y = 10;
+			polys[polycount].v[0].z = 100-(polyz/4);
 			//*
 			
 			//find second vertex in same row
-			jj = j;
 			while(true)
 			{
 				currz.dd = map[(i*cols)+j];
 				if(currz.db[2]!=polyz) { j--; break; }
-				if(j>=cols) { j=0; break; }
+				if(j>=cols) { j=0; break; } //? correct?
 				j++;
 			}
 			//*
 			
-			
 			//set second vertex
-			polys[polycount].v[1].x = j*20 -400;
+			polys[polycount].v[1].x = j*20 - 400;
 			polys[polycount].v[1].y = 10;
 			polys[polycount].v[1].z = polys[polycount].v[0].z;
-			vertcount++;
 			//*
 			
 			//find third vertex in next row
@@ -168,7 +119,6 @@ int main(int argc, char** argv)
 				polys[polycount].v[3].x = k*20 -400;
 				polys[polycount].v[3].y = -10;
 				polys[polycount].v[3].z = polys[polycount].v[0].z;
-				vertcount++;
 			}
 			//*
 			
@@ -188,19 +138,9 @@ int main(int argc, char** argv)
 			//*
 			
 			//set fourth vertex
-			if(l==-1)
-			{
-				polys[polycount].v[2].x = polys[polycount].v[3].x;
-				polys[polycount].v[2].y = polys[polycount].v[3].y;
-				polys[polycount].v[2].z = polys[polycount].v[0].z;
-			}
-			else
-			{
-				polys[polycount].v[2].x = (k+l)*20 -400;
-				polys[polycount].v[2].y = -10;
-				polys[polycount].v[2].z = polys[polycount].v[0].z;
-				vertcount++;
-			}
+			polys[polycount].v[2].x = (k+l)*20 -400;
+			polys[polycount].v[2].y = -10;
+			polys[polycount].v[2].z = polys[polycount].v[0].z;
 			//*
 
 			//create object
@@ -209,7 +149,6 @@ int main(int argc, char** argv)
 			std::cout << polys[polycount].v[1].x << ' ' << polys[polycount].v[1].y << ' ' << polys[polycount].v[1].z << std::endl;
 			std::cout << polys[polycount].v[2].x << ' ' << polys[polycount].v[2].y << ' ' << polys[polycount].v[2].z << std::endl;
 			std::cout << polys[polycount].v[3].x << ' ' << polys[polycount].v[3].y << ' ' << polys[polycount].v[3].z << std::endl;
-			//~ std::cout << j << ' ';
 			//*
 			
 			polycount++;
@@ -257,19 +196,19 @@ int main(int argc, char** argv)
 	while(clglobal->clwindow->run())
 	{
 		if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();
-		
+			
 		switch(clglobal->clwindow->getturbo())
 		{
 			case 0:
 			break;
-
+	
 			//Translate:
 			case RIGHT:  linearM->translate(2,0,0);  cubus->update(linearM); break;
 			case LEFT:   linearM->translate(-2,0,0); cubus->update(linearM); break;
 			case UP:     linearM->translate(0,2,0);  cubus->update(linearM); break;
 			case DOWN: 	 linearM->translate(0,-2,0); cubus->update(linearM); break;
 			case PGUP:   linearM->translate(0,0,2);	 cubus->update(linearM); break;
-			case PGDOWN: linearM->translate(0,0,-2); cubus->update(linearM); break;
+			case PGDOWN: linearM->translate(0,0,-2); cubus->update(linearM); break;			
 
 			//Rotate:
 			case 'a':    linearM->rotate(0,5,0);     cubus->update(linearM); break;

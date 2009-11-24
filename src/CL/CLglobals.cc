@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef CC_CLGLOBALS
 #define CC_CLGLOBALS
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
 #include "CLwindow.hh"
@@ -25,7 +30,9 @@
 #include "CLid.hh"
 
 #include "CLglobals.hh"
+///*
 
+///definitions
 uxlong CLglobal::screenbytewidth   = XRES<<2;
 uxlong CLglobal::screenbyteheight  = YRES<<2;
 uxlong CLglobal::screenbytedepth   = 4;
@@ -58,13 +65,16 @@ CLsprites* CLglobal::clsprites = CLsprites::instance();
 CLid*     CLglobal::clid     = CLid::instance();
 
 CLglobal* CLglobal::global = 0;
+///*
 
-CLglobal* CLglobal::getinstance()
+///implementation
+CLglobal* CLglobal::getinstance() //! noncritical
 {
 	//check if existing, if not create
 	if(global==0) global = new CLglobal();
 	return global;
 	//*
 }
+///*
 
 #endif
