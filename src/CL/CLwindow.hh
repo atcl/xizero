@@ -38,6 +38,10 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		XEvent Xevent;
 		Cursor Xblank;
 		Cursor Xcursor;
+		Colormap Xcolormap;
+		XColor Xwhite;
+		XColor Xblack;
+		XColor Xgrey;
 	
 		uxlong width;
 		uxlong height;
@@ -81,10 +85,13 @@ CLwindow::CLwindow()
 	Xdisplay = XOpenDisplay(0);
 	Xscreen = DefaultScreenOfDisplay(Xdisplay);
 	Xvisual = DefaultVisualOfScreen(Xscreen);
-	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
-	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
-	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,blackcolor,blackcolor);
+	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,Xblack.pixel,Xblack.pixel);
 	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
+	Xcolormap = DefaultColormap(Xdisplay,XDefaultScreen(Xdisplay));
+	XColor dummy;
+	XAllocNamedColor(Xdisplay,Xcolormap,"white",&Xwhite,&dummy);
+	XAllocNamedColor(Xdisplay,Xcolormap,"black",&Xblack,&dummy);
+	XAllocNamedColor(Xdisplay,Xcolormap,"grey",&Xgrey,&dummy);
 	//init events
 	XAutoRepeatOn(Xdisplay);
 	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
@@ -110,7 +117,6 @@ CLwindow::CLwindow()
 	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
 	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
 	//init x-cursor
-	XColor dummy;
 	xchar data[1] = {0};
 	Pixmap blank = XCreateBitmapFromData(Xdisplay,Xwindow,data,1,1);
 	Xblank = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
@@ -141,7 +147,7 @@ void CLwindow::handle()
 			
 			case KeyPress:
 				key = turbo = XLookupKeysym((XKeyEvent*)&Xevent,0);
-				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent)) ;
+				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent));
 			break;
 			
 			case ButtonPress:
@@ -231,34 +237,16 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 	//prepare message
 	xlong msglength = clutils->chararraylength(message);
 	xlong msglines = (msglength >> 8)+1; 
-	//create grey color
-	int blackcolor = BlackPixel(Xdisplay,DefaultScreen(Xdisplay));
-	int whitecolor = WhitePixel(Xdisplay,DefaultScreen(Xdisplay));
-	Colormap colmap = DefaultColormap(Xdisplay,XDefaultScreen(Xdisplay));
-	XColor dummy;
-	XColor grey;
-	XAllocNamedColor(Xdisplay,colmap,"grey",&grey,&dummy);
 	//create window
-	Window msgbox = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,200,100,0,grey.pixel,grey.pixel);
-	GC mgc = XCreateGC(Xdisplay,msgbox,0,0);
+	Window msgbox = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,200,100,0,Xgrey.pixel,Xgrey.pixel);
 	XSelectInput(Xdisplay,msgbox,ExposureMask|KeyPressMask|ButtonPressMask|StructureNotifyMask);
 	//set title
 	XStoreName(Xdisplay,msgbox,title);
 	//show window
 	XMapRaised(Xdisplay,msgbox);
-	XSetForeground(Xdisplay,mgc,blackcolor);
-	XSetBackground(Xdisplay,mgc,grey.pixel);
-	//draw
 	for(;;) { XNextEvent(Xdisplay, &Xevent); if (Xevent.type == MapNotify) break; }
 	xlong j= 0;
-	for(j=0; j<msglines-1; j++) XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,256);
-	XDrawImageString(Xdisplay,msgbox,mgc,10,20+16*j,message,msglength);
-	XDrawLine(Xdisplay,msgbox,mgc,50,90,150,90);
-	XDrawLine(Xdisplay,msgbox,mgc,150,70,150,90);	
-	XDrawImageString(Xdisplay,msgbox,mgc,95,85,"OK",2);
-	XSetForeground(Xdisplay,mgc,whitecolor);
-	XDrawLine(Xdisplay,msgbox,mgc,50,70,50,90);
-	XDrawLine(Xdisplay,msgbox,mgc,50,70,150,70);
+	
 	//wait till press
 	bool wait = 0;
 	while(wait==0)
@@ -268,14 +256,24 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 			XNextEvent(Xdisplay,&Xevent);
 			switch(Xevent.type)
 			{				
-				case Expose: XFlush(Xdisplay); break;
+				case Expose:
+					XSetForeground(Xdisplay,Xgc,Xblack.pixel);
+					XSetBackground(Xdisplay,Xgc,Xgrey.pixel);
+					for(j=0; j<msglines-1; j++) XDrawImageString(Xdisplay,msgbox,Xgc,10,20+16*j,message,256);
+					XDrawImageString(Xdisplay,msgbox,Xgc,10,20+16*j,message,msglength);
+					XDrawLine(Xdisplay,msgbox,Xgc,50,90,150,90);
+					XDrawLine(Xdisplay,msgbox,Xgc,150,70,150,90);	
+					XDrawImageString(Xdisplay,msgbox,Xgc,95,85,"OK",2);
+					XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
+					XDrawLine(Xdisplay,msgbox,Xgc,50,70,50,90);
+					XDrawLine(Xdisplay,msgbox,Xgc,50,70,150,70);
+				break;
 				case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
-				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>50 && Xevent.xbutton.y>70 && Xevent.xbutton.x<150 && Xevent.xbutton.y<90 ) wait = 1; break;
+				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>50 && Xevent.xbutton.y>70 && Xevent.xbutton.x<150 && Xevent.xbutton.y<90 ) { wait = 1; } break; 
 			}				
 		}
 	}
 	//destroy window
-	XFreeGC(Xdisplay,mgc);
 	XDestroyWindow(Xdisplay,msgbox);
 	return 1;
 }
