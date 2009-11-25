@@ -31,6 +31,10 @@ xlong inline x800(xlong f) { return ( (f<<9) + (f<<8) + (f<<5) ); } //fast multi
 
 void inline tty(const xchar* c="\n") { std::cout << c; } //console output without lineend
 
+void inline tty(xlong l) { std::cout << l; } //console output without lineend (long)
+
+void inline tty(uxlong l) { std::cout << l; } //console output without lineend (ulong)
+
 void inline say(const xchar* c="hi") { std::cout << c << std::endl; } //console output with lineend (cstring)
 
 void inline say(xlong l) { std::cout << l << std::endl; } //console output with lineend (long)

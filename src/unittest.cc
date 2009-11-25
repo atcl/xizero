@@ -49,15 +49,15 @@ int main(int argc, char** argv)
 	
 	//check each row
 	xlong jj = 0; 
-	xlong j = -1;
+	xlong j = 0;
 	xlong k = 0;
 	xlong l = 0;
-	for(xlong i=0; i<10; i++) //2 -> rows
+	
+	for(xlong i=0; i<20; i++) //2 -> rows
 	{
 		while(polycount==0 || polys[polycount-1].v[1].x<400)
 		{
 			//set first vertex
-			j++; jj = j;
 			currz.dd = map[i*cols+j];
 			polyz = xlong(currz.db[2]);
 			if(polycount==0) polys[polycount].v[0].x = -400;
@@ -67,11 +67,10 @@ int main(int argc, char** argv)
 			//*
 			
 			//find second vertex in same row
-			while(true)
+			while(j<cols-1)
 			{
 				currz.dd = map[(i*cols)+j];
 				if(currz.db[2]!=polyz) { j--; break; }
-				if(j>=cols) { j=cols; break; } //? correct?
 				j++;
 			}
 			//*
@@ -91,18 +90,17 @@ int main(int argc, char** argv)
 				{
 					currz.dd = map[((i+1)*cols)+k];
 					if(currz.db[2]==polyz) { k--; break; }
-					if(k>=cols) { k=-1; break; }
+					if(k>cols) { k=-1; break; }
 					k++;
 				}
 			}
 			else
 			{
-				while(true)
+				while(k>0)
 				{
 					currz.dd = map[((i+1)*cols)+k];
 					if(currz.db[2]!=polyz) { break; }
 					k--;
-					if(k<0) { k=0; break; }
 				}
 			}		
 			//*
@@ -116,31 +114,29 @@ int main(int argc, char** argv)
 			}
 			else
 			{
-				polys[polycount].v[3].x = (k*20) - 400;
+				polys[polycount].v[3].x = (k*20) - 400;				
 				polys[polycount].v[3].y = -10;
 				polys[polycount].v[3].z = polys[polycount].v[0].z;
 			}
 			//*
 			
-			//find fourth vertex
-			if(k<jj && k!=-1) k = jj;
-			l = 0;
+			//find fourth vertex (a)
 			if(k!=-1)
 			{
-				while(true)
+				k++;
+				while(k<cols-1)
 				{
-					currz.dd = map[((i+1)*cols)+k+l];
-					if(currz.db[2]!=polyz) { l--; break; }
-					l++;
-					if((k+l)>=cols) { l=cols-k-1; break; }
+					currz.dd = map[((i+1)*cols)+k];
+					if(currz.db[2]!=polyz) { k--; break; }
+					k++;
 				}
 			}
 			//*
 			
-			//set fourth vertex
+			//set fourth vertex (a)
 			if(k!=-1)
 			{
-				polys[polycount].v[2].x = ((k+l)*20) - 400;
+				polys[polycount].v[2].x = (k*20) - 400;
 				polys[polycount].v[2].y = -10;
 				polys[polycount].v[2].z = polys[polycount].v[0].z;
 			}
@@ -151,23 +147,62 @@ int main(int argc, char** argv)
 				polys[polycount].v[2].z = polys[polycount].v[0].z;
 			}
 			//*
+			
+			
+			//! proto inter gap fix 
+			//find fourth vertex (b)
+			if(k!=-1)
+			{
+				l = j;
+				currz.dd = map[((i+1)*cols)+l];
+				if(currz.db[2]!=polyz)
+				{
+					while(l>0)
+					{
+						currz.dd = map[((i+1)*cols)+l];
+						if(currz.db[2]==polyz) { break; }
+						l--;
+					}
+				}
+				else
+				{
+					while(l<cols-1)
+					{
+						currz.dd = map[((i+1)*cols)+l];
+						if(currz.db[2]!=polyz) { l--; break; }
+						l++;
+					}
+				}
+				
+				if(k!=l)
+				{ 
+					tty(i); tty(" : "); tty(polycount); tty(" : "); tty(k); tty(" "); say(l);
+					
+					//find alternate third vertex (b)
+					
+					//split into 2 polygons
+				}
+			}
+			//!*
+			
 
 			//create object
-			std::cout << "poly nr: " << polycount << " of row: " << i << std::endl;
-			std::cout << polys[polycount].v[0].x << ' ' << polys[polycount].v[0].y << ' ' << polys[polycount].v[0].z << std::endl;
-			std::cout << polys[polycount].v[1].x << ' ' << polys[polycount].v[1].y << ' ' << polys[polycount].v[1].z << std::endl;
-			std::cout << polys[polycount].v[2].x << ' ' << polys[polycount].v[2].y << ' ' << polys[polycount].v[2].z << std::endl;
-			std::cout << polys[polycount].v[3].x << ' ' << polys[polycount].v[3].y << ' ' << polys[polycount].v[3].z << std::endl;
+			//~ std::cout << "poly nr: " << polycount << " of row: " << i << std::endl;
+			//~ std::cout << polys[polycount].v[0].x << ' ' << polys[polycount].v[0].y << ' ' << polys[polycount].v[0].z << std::endl;
+			//~ std::cout << polys[polycount].v[1].x << ' ' << polys[polycount].v[1].y << ' ' << polys[polycount].v[1].z << std::endl;
+			//~ std::cout << polys[polycount].v[2].x << ' ' << polys[polycount].v[2].y << ' ' << polys[polycount].v[2].z << std::endl;
+			//~ std::cout << polys[polycount].v[3].x << ' ' << polys[polycount].v[3].y << ' ' << polys[polycount].v[3].z << std::endl;
 			//*
 			
 			polycount++;
+			j++;
+			jj = j;
 		}
 		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
 		polycount = 0;
 		jj = 0;
 		j = 0;
 		k = 0;
-		l = 0;
 	}
 	//*
 
@@ -190,7 +225,7 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
-	CLlvector q(400,350,0);
+	CLlvector q(400,250,0);
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -271,6 +306,7 @@ int main(int argc, char** argv)
 
 		//clgfx1->drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
 
+		/*
 		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
 		clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
 		clglobal->clgfx2->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);
@@ -292,9 +328,9 @@ int main(int argc, char** argv)
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
-		clglobal->clgfx1->drawsprite(10,10,testlevel);
-		q.y = 350;
-		for(xlong i=0; i<10; i++)
+		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
+		q.y = 150;
+		for(xlong i=0; i<20; i++)
 		{
 			terrows[i]->display(q,AMBIENT + SHAPE);
 			q.y += 20;

@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLID
 #define HH_CLID
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
+///*
 
+///header
 /* class name:	CLid
  * 
  * description:	This class checks ids and crcs.
@@ -17,11 +24,13 @@
  * 
  * version: 0.1
  */
+///*
 
 //test cases:
 //string: atcrosslevel ; crc: 1734979481
 //string: xizero ; crc: 1208686013
 
+///definitions
 class CLid : public virtual CLcl, public CLsingle<CLid>
 {
 	friend class CLsingle<CLid>;
@@ -39,16 +48,18 @@ class CLid : public virtual CLcl, public CLsingle<CLid>
 };
 
 uxlong CLid::crc32 = 0x04C11DB7;
+///*
 
-CLid::CLid() { lastid = 0; }
+///implementation
+CLid::CLid() { lastid = 0; } //! noncritical
 
-xlong CLid::generateid()
+xlong CLid::generateid() //! noncritical
 {
 	lastid++;
 	return lastid;
 }
 
-uxlong CLid::generatecrc(xchar* d,xlong l)
+uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
 {
 	uxlong r = 0;
 	uxchar o = 0;
@@ -80,7 +91,7 @@ uxlong CLid::generatecrc(xchar* d,xlong l)
 
 }
 
-bool CLid::checkcrc(uxlong c)
+bool CLid::checkcrc(uxlong c) //! noncritical
 {
 	uxlong t = c / crc32;
 
@@ -88,7 +99,8 @@ bool CLid::checkcrc(uxlong c)
 	else return false;
 }
 
-xlong CLid::one() const { return 1; }
+xlong CLid::one() const { return 1; } //! noncritical
+///*
 
 #endif
 
