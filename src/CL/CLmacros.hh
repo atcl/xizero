@@ -45,7 +45,29 @@ void inline say(float f) { std::cout << f << std::endl; } //console output with 
 
 void inline bye() { CLsystem::instance()->exit(0,0,__func__,"bye"); } //force program exit
 
-xlong inline linearize(xlong x,xlong y,xlong w) { return ((y*w)+x); }
+xlong inline linear(xlong x,xlong y,xlong w) { return ((y*w)+x); }
+
+uxlong inline byteadd(uxlong a,uxlong b)
+{
+	doubleword xa = { a };
+	doubleword xb = { b };
+	xb.db[0] = xa.db[0] + xb.db[0]; xb.db[0] = (uxchar(xb.db[0]<xa.db[0]))-1 | xb.db[0];
+	xb.db[1] = xa.db[1] + xb.db[1]; xb.db[1] = (uxchar(xb.db[1]<xa.db[1]))-1 | xb.db[1];
+	xb.db[2] = xa.db[2] + xb.db[2]; xb.db[2] = (uxchar(xb.db[2]<xa.db[2]))-1 | xb.db[2];
+	xb.db[3] = xa.db[3] + xb.db[3]; xb.db[3] = (uxchar(xb.db[3]<xa.db[3]))-1 | xb.db[3];
+	return xb.dd;
+}
+
+uxlong inline bytesub(uxlong a,uxlong b)
+{
+	doubleword xa = { a };
+	doubleword xb = { b };
+	xb.db[0] = xa.db[0] - xb.db[0]; xb.db[0] = (uxchar(xb.db[0]>xa.db[0]))-1 & xb.db[0];
+	xb.db[1] = xa.db[1] - xb.db[1]; xb.db[1] = (uxchar(xb.db[1]>xa.db[1]))-1 & xb.db[1];
+	xb.db[2] = xa.db[2] - xb.db[2]; xb.db[2] = (uxchar(xb.db[2]>xa.db[2]))-1 & xb.db[2];
+	xb.db[3] = xa.db[3] - xb.db[3]; xb.db[3] = (uxchar(xb.db[3]>xa.db[3]))-1 & xb.db[3];
+	return xb.dd;
+}
 
 void inline CLprefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); } //use prefetcht1???
 

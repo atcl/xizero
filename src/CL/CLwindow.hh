@@ -231,9 +231,6 @@ xlong CLwindow::getmouserb() const { return mouserb; }
 
 xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 {
-	//!adaptive size
-	//!split lines by words not chars
-	
 	//prepare message
 	xlong msglines = clutils->getlinecount(message);
 	xlong msglength = clutils->chararraylength(message);
@@ -292,6 +289,8 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
 			}				
 		}
+		
+		draw();
 	}
 	//destroy window
 	XDestroyWindow(Xdisplay,msgbox);

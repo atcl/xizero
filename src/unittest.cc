@@ -178,11 +178,16 @@ int main(int argc, char** argv)
 				{ 
 					tty(i); tty(" : "); tty(polycount); tty(" : "); tty(k); tty(" "); say(l);
 					
-					//find alternate third vertex (b)
-					
-					//split into 2 polygons
+					polys[polycount].v[1].x = polys[polycount].v[2].x + 20;
+					j = (polys[polycount].v[1].x + 400) /20;
 				}
 			}
+			//*
+			
+			//find second vertex (b)
+			
+			
+			//*
 			//!*
 			
 
@@ -330,7 +335,7 @@ int main(int argc, char** argv)
 
 		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
 		q.y = 150;
-		for(xlong i=0; i<20; i++)
+		for(xlong i=14; i<20; i++)
 		{
 			terrows[i]->display(q,AMBIENT + SHAPE);
 			q.y += 20;

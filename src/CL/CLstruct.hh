@@ -11,9 +11,12 @@ union doubleword
 	uxlong  dd;
 	uxshort dw[2];
 	uxchar  db[4];
+	
+	//byteadd
+	//bytesub
 };
 
-union quadword
+union quadword //:doubleword 
 {
 	uxhyper dq;
 	uxlong  dd[2];

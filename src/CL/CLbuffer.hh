@@ -468,6 +468,8 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 			case 8:		//BYTE ADD
 				for(;i>=0;i--)
 				{
+					//neu: dst[i] = byteadd(dst[i],buffer[i];
+					
 					tx.dd = dst[i];
 					ty.dd = buffer[i];
 
@@ -487,6 +489,8 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 			case 9:		//BYTE SUB
 				for(;i>=0;i--)
 				{
+					//neu: dst[i] = bytesub(dst[i],buffer[i];
+					
 					tx.dd = dst[i];
 					ty.dd = buffer[i];
 					

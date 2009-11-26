@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLINTRO
 #define HH_CLINTRO
-#pragma message Compiling __FILE__ ! TODO: test on models
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLglobal.hh"
 #include "CLconsts.hh"
@@ -11,7 +16,9 @@
 #include "CLbuffer.hh"
 #include "CLobject.hh"
 #include "CLformat.hh"
+///*
 
+///header
 /* class name:	CLintro
  * 
  * description:	Holds atcrosslevel and xizero intro animations
@@ -22,8 +29,10 @@
  * 
  * version: 0.1
  */
+///*
 
-class CLintro : public virtual CLcl
+///definitions
+class CLintro : public virtual CLcl //! noncritical
 {
 	friend class CLsingle<CLintro>;
 	
@@ -35,8 +44,10 @@ class CLintro : public virtual CLcl
 		void atcrosslevel() const;
 		void xizero() const;
 };
+///*
 
-void CLintro::atcrosslevel() const
+///implementation
+void CLintro::atcrosslevel() const //! noncritical
 {
 	//load atcrosslevel model
 	CLfile *cf = introar->findbyname("atcl.y3d");
@@ -60,7 +71,7 @@ void CLintro::atcrosslevel() const
 	//*
 }
 
-void CLintro::xizero() const
+void CLintro::xizero() const //! noncritical
 {
 	//load atcrosslevel model
 	CLfile* fxi = introar->findbyname("xi.y3d");
@@ -103,5 +114,6 @@ void CLintro::xizero() const
 	}
 	//*
 }
+///*
 
 #endif
