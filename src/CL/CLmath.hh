@@ -159,10 +159,16 @@ template<typename T>
 T CLmath::delta(T x) const { return (x==0); }
 
 template<typename T>
-T CLmath::min(T a,T b) const { return (a<b) ? a : b; }
+T CLmath::min(T a,T b) const { return ((a<b) ? a : b); }
 
 template<typename T>
-T CLmath::max(T a,T b) const { return (a>b) ? a : b; }
+T CLmath::max(T a,T b) const { return ((a<b) ? a : b); }
+
+template<>
+xlong CLmath::min(xlong a,xlong b) const { return (a + ( ((b-a)>>31) & (b-a) )); }
+
+template<>
+xlong CLmath::max(xlong a,xlong b) const { return (a - ( ((a-b)>>31) & (a-b) )); }
 
 template<typename T>
 T CLmath::round(T x) const { return ( (x - T(xlong(x))) > 0.5) ? T(xlong(x)+xlong(x>0)) : T(xlong(x)-xlong(x<0)); }

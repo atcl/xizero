@@ -1,14 +1,21 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLLABEL
 #define HH_CLLABEL
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
+///*
 
+///header
 /* class name:	CLlabel
  * 
  * description:	A standard gui element label
@@ -19,7 +26,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLlabel : public CLguibase
 {
 	private:
@@ -36,8 +45,10 @@ class CLlabel : public CLguibase
 		void settext(const xchar* t);
 		xchar* gettext() const;
 };
+///*
 
-CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) : CLguibase(px,py,w,h,0,fc,bc,rc)
+///implementation
+CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) : CLguibase(px,py,w,h,0,fc,bc,rc) //! noncritical
 {
 	frame = f;
 	if(!f) rcolor = bcolor;
@@ -51,14 +62,14 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	texty = (height - textheight)>>1;
 }
 
-void CLlabel::draw() const
+void CLlabel::draw() const //! noncritical
 {
 	if(visible==0) return;
 	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	clgfx2->drawfontstring(posx+textx,posy+texty,text,0,fcolor,bcolor);
 }
 
-void CLlabel::settext(const xchar* t)
+void CLlabel::settext(const xchar* t) //! noncritical
 {
 	delete text;
 	text = clutils->clonechararray(t);
@@ -70,7 +81,8 @@ void CLlabel::settext(const xchar* t)
 	texty = (height - textheight)>>1;
 }
 
-xchar* CLlabel::gettext() const { return text; }
+xchar* CLlabel::gettext() const { return text; } //! noncritical
+///*
 
 #endif
 

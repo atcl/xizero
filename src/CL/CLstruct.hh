@@ -56,6 +56,8 @@ struct tileset
 	uxlong  tileheight;
 	uxlong  tilecount;
 	uxlong** tiledata;
+	
+	//sprite* getsprite(xlong i);
 };
 
 typedef tileset CLfont;

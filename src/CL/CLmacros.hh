@@ -69,6 +69,13 @@ uxlong inline bytesub(uxlong a,uxlong b)
 	return xb.dd;
 }
 
+uxlong inline bytemul(uxlong a,float s)
+{
+	doubleword xa = { a };
+	
+	return xa.dd;
+}
+
 void inline CLprefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); } //use prefetcht1???
 
 #endif
