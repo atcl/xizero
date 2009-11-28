@@ -14,7 +14,7 @@ description=
 run_cmd=
 
 [files]
-current_page=21
+current_page=0
 FILE_NAME_0=10096;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/unittest.cc;0
 FILE_NAME_1=1179;C;0;16;1;1;0;/home/atcl/devs/xizero/src/CLinc.h;0
 FILE_NAME_2=416;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CLproject.hh;0
@@ -28,7 +28,7 @@ FILE_NAME_9=826;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLfifo.hh;0
 FILE_NAME_10=2570;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLfixed.hh;0
 FILE_NAME_11=4388;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLformat.hh;0
 FILE_NAME_12=1527;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLgame.hh;0
-FILE_NAME_13=19211;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLgfx1.hh;0
+FILE_NAME_13=12074;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLgfx1.hh;0
 FILE_NAME_14=1427;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLgfx2.hh;0
 FILE_NAME_15=418;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLglobal.hh;0
 FILE_NAME_16=1429;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLguibase.hh;0
@@ -36,7 +36,7 @@ FILE_NAME_17=836;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLid.hh;0
 FILE_NAME_18=1299;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLintro.hh;0
 FILE_NAME_19=949;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLlabel.hh;0
 FILE_NAME_20=13637;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLlevel.hh;0
-FILE_NAME_21=5632;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLlist.hh;0
+FILE_NAME_21=1303;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLlist.hh;0
 FILE_NAME_22=3157;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmacros.hh;0
 FILE_NAME_23=3536;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmath.hh;0
 FILE_NAME_24=6830;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmatrix.hh;0

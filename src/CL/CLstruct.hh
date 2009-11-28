@@ -12,6 +12,8 @@ union doubleword
 	uxshort dw[2];
 	uxchar  db[4];
 	
+	inline operator uxlong() const { return this->dd; }
+	
 	//byteadd
 	//bytesub
 };

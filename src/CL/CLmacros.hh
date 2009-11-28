@@ -1,16 +1,23 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLMACROS
 #define HH_CLMACROS
-#pragma message "Compiling " __FILE__ " ! TODO: ..." 
+///*
 
+///includes
 #include <iostream>
-
-//todo: write prefetch macro and place at end of loops if useful
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
+///*
 
+//todo: write prefetch macro and place at end of loops if useful
+
+///implementation
 inline bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); } //check if point is off screen
 
 inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<0) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); } //check if rectangle s off screen
@@ -77,6 +84,7 @@ uxlong inline bytemul(uxlong a,float s)
 }
 
 void inline CLprefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); } //use prefetcht1???
+///*
 
 #endif
 
