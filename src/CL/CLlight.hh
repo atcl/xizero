@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLLIGHT
 #define HH_CLLIGHT
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///header
 /* class name:	CLlight
  * 
  * description:	A class managing point light sources
@@ -14,7 +19,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLlight : public virtual CLcl
 {
 	private:
@@ -27,8 +34,10 @@ class CLlight : public virtual CLcl
 		~CLlight();
 		void draw(xlong x,xlong y); 
 };
+///*
 
-uxlong CLlight::lambertslaw(xlong x,xlong y)
+///implementation
+uxlong CLlight::lambertslaw(xlong x,xlong y) //! noncritical
 {
 	if(x==0 && y==0) return color;
 	
@@ -65,7 +74,7 @@ uxlong CLlight::lambertslaw(xlong x,xlong y)
 	return tempcolor.dd;
 }
 
-CLlight::CLlight(xlong r,uxlong c)
+CLlight::CLlight(xlong r,uxlong c) //! noncritical
 {
 	radius = r;
 	color = c;
@@ -88,6 +97,7 @@ CLlight::CLlight(xlong r,uxlong c)
 
 CLlight::~CLlight() { delete mask; }
 
-void CLlight::draw(xlong x,xlong y) { clgfx1->putsprite(x-radius,y-radius,mask,0,0); }
+void CLlight::draw(xlong x,xlong y) { clgfx1->putsprite(x-radius,y-radius,mask,0,0); } //! noncritical
+///*
 
  #endif

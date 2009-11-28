@@ -176,17 +176,43 @@ int main(int argc, char** argv)
 				
 				if(k!=l)
 				{ 
-					tty(i); tty(" : "); tty(polycount); tty(" : "); tty(k); tty(" "); say(l);
+					//~ tty(i); tty(" : "); tty(polycount); tty(" : "); tty(k); tty(" "); say(l);
 					
 					polys[polycount].v[1].x = polys[polycount].v[2].x + 20;
-					j = (polys[polycount].v[1].x + 400) /20;
+					j = (polys[polycount].v[1].x + 400) / 20;
 				}
 			}
 			//*
 			
 			//find second vertex (b)
+			xlong a = (polys[polycount].v[2].x + 400) / 20;
+			xlong b = (polys[polycount].v[1].x + 400) / 20;
+			currz.dd = map[(i*cols)+a];
+			if(currz.db[2]!=polyz)
+			{
+				while(a>0)
+				{
+					currz.dd = map[(i*cols)+a];
+					if(currz.db[2]==polyz) { break; }
+					a--;
+				}
+			}
+			else
+			{
+				while(a<cols-1)
+				{
+					currz.dd = map[(i*cols)+a];
+					if(currz.db[2]!=polyz) { a--; break; }
+					a++;
+				}
+			}
 			
-			
+			if(a!=b)
+			{
+				tty(i); tty(" : "); tty(polycount); tty(" : "); tty(a); tty(" "); say(b);
+					
+				polys[polycount].v[2].x = polys[polycount].v[1].x + 20;
+			}
 			//*
 			//!*
 			
@@ -335,7 +361,7 @@ int main(int argc, char** argv)
 
 		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
 		q.y = 150;
-		for(xlong i=14; i<20; i++)
+		for(xlong i=0; i<20; i++)
 		{
 			terrows[i]->display(q,AMBIENT + SHAPE);
 			q.y += 20;
