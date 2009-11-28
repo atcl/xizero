@@ -519,6 +519,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 	xlong doffset = (ys * XRES) + xs;
 	xlong soffset = 0;
 	uxlong svalue = 0;
+	xlong istrans = 0;
 	//*
 
 	//drawloop
@@ -527,7 +528,9 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 		for(xlong j=0; j<cwidth; j++)
 		{
 			svalue = s->data[soffset];
-			if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+			istrans = svalue & 0xFF000000;
+			if( istrans != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+			//cldoublebuffer[doffset+j] = ((xlong(istrans!=0xFF000000)--) & svalue) + ((xlong(istrans==0xFF000000)--) & cldoublebuffer[doffset+j])
 			soffset++;
 		}
 		soffset += cdiff;

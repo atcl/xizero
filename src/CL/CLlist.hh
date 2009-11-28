@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLLIST
 #define HH_CLLIST
-#pragma message "Compiling " __FILE__ " ! TODO: all" 
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLlist
  * 
  * description:	A double-linked-list type
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 template<class member>
 struct listmember
 {
@@ -60,9 +69,11 @@ class CLlist : public virtual CLcl
 		void exchangesort(bool updown);
 		void print() const;
 };
+///*
 
+///implementation
 template<class member>
-CLlist<member>::CLlist()
+CLlist<member>::CLlist() //! noncritical
 {
 	//initialize empty list
 	length = 0;
@@ -73,7 +84,7 @@ CLlist<member>::CLlist()
 }
 
 template<class member>
-CLlist<member>::~CLlist()
+CLlist<member>::~CLlist() //! noncritical
 {
 	//delete list members data 
 	//! smash(); //!test
@@ -89,7 +100,7 @@ CLlist<member>::~CLlist()
 }
 
 template<class member>
-void CLlist<member>::append(member* e,const xchar* n,xlong h)
+void CLlist<member>::append(member* e,const xchar* n,xlong h) //! noncritical
 {
 	//move these out of the if's
 	//~ current = new listmember;
@@ -133,7 +144,7 @@ void CLlist<member>::append(member* e,const xchar* n,xlong h)
 }
 
 template<class member>
-member* CLlist<member>::getcurrentdata() const
+member* CLlist<member>::getcurrentdata() const //! noncritical
 {
 	//return current members data
 	if(current!=0) return current->data;
@@ -145,7 +156,7 @@ member* CLlist<member>::getcurrentdata() const
 }
 
 template<class member>
-xchar* CLlist<member>::getcurrentname() const
+xchar* CLlist<member>::getcurrentname() const //! noncritical
 {
 	//return current members name
 	if(current!=0) return current->name;
@@ -157,7 +168,7 @@ xchar* CLlist<member>::getcurrentname() const
 }
 
 template<class member>
-xlong CLlist<member>::delcurrent(bool smash)
+xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 {
 	//return if list is empty
 	if(length==0) return 0;
@@ -219,10 +230,10 @@ xlong CLlist<member>::delcurrent(bool smash)
 }
 
 template<class member>
-xlong CLlist<member>::getlength() const { return length; }
+xlong CLlist<member>::getlength() const { return length; } //! noncritical
 
 template<class member>
-bool CLlist<member>::seekdata(member* s)
+bool CLlist<member>::seekdata(member* s) //! critical
 {
 	setfirst();
 
@@ -236,7 +247,7 @@ bool CLlist<member>::seekdata(member* s)
 }
 
 template<class member>
-void CLlist<member>::setindex(xlong i)
+void CLlist<member>::setindex(xlong i) //! critical
 {
 	//setting current member to index position (SLOW)
 	if(i<=length)
@@ -248,7 +259,7 @@ void CLlist<member>::setindex(xlong i)
 }
 
 template<class member>
-xlong CLlist<member>::getindex()
+xlong CLlist<member>::getindex() //! critical
 {
 	//get index of current member (VERY SLOW)
 	xlong i = 0;
@@ -265,7 +276,7 @@ xlong CLlist<member>::getindex()
 }
 
 template<class member>
-void CLlist<member>::clear()
+void CLlist<member>::clear() //! noncritical
 {
 	//clear list
 	//smash();
@@ -277,7 +288,7 @@ void CLlist<member>::clear()
 }
 
 template<class member>
-void CLlist<member>::smash()
+void CLlist<member>::smash() //! noncritical
 {
 	//delete all list members data
 	current = first;
@@ -291,7 +302,7 @@ void CLlist<member>::smash()
 }
 
 template<class member>
-xlong CLlist<member>::setfirst()
+xlong CLlist<member>::setfirst() //! noncritical
 {
 	//set current to first member
 	current = first;
@@ -300,7 +311,7 @@ xlong CLlist<member>::setfirst()
 }
 
 template<class member>
-xlong CLlist<member>::setlast()
+xlong CLlist<member>::setlast() //! noncritical
 {
 	//set current to last
 	current = last;
@@ -309,7 +320,7 @@ xlong CLlist<member>::setlast()
 }
 
 template<class member>
-xlong CLlist<member>::setnext()
+xlong CLlist<member>::setnext() //! noncritical
 {
 	//set next member from current
 	if(length==0) return 0;
@@ -319,7 +330,7 @@ xlong CLlist<member>::setnext()
 }
 
 template<class member>
-xlong CLlist<member>::setprev()
+xlong CLlist<member>::setprev() //! noncritical
 {
 	//set previous member from current
 	if(length==0) return 0;
@@ -329,7 +340,7 @@ xlong CLlist<member>::setprev()
 }
 
 template<class member>
-bool CLlist<member>::isfirst() const
+bool CLlist<member>::isfirst() const //! noncritical
 {
 	//check if current member is first
 	return (current==first);
@@ -337,7 +348,7 @@ bool CLlist<member>::isfirst() const
 }
 
 template<class member>
-bool CLlist<member>::islast() const
+bool CLlist<member>::islast() const //! noncritical
 {
 	//check if current member is last
 	return (current==last);
@@ -345,7 +356,7 @@ bool CLlist<member>::islast() const
 }
 
 template<class member>
-void CLlist<member>::exchangesort(bool updown)
+void CLlist<member>::exchangesort(bool updown) //! noncritical
 {
 	listmember<member>* temp = 0;
 	
@@ -395,7 +406,7 @@ void CLlist<member>::exchangesort(bool updown)
 }
 
 template<class member>
-void CLlist<member>::print() const
+void CLlist<member>::print() const //! noncritical
 {
 	//print all list members names
 	setfirst();
@@ -410,6 +421,7 @@ void CLlist<member>::print() const
 	}
 	//*
 }
+///*
 
 #endif
 
