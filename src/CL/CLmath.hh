@@ -162,7 +162,7 @@ template<typename T>
 T CLmath::min(T a,T b) const { return ((a<b) ? a : b); }
 
 template<typename T>
-T CLmath::max(T a,T b) const { return ((a<b) ? a : b); }
+T CLmath::max(T a,T b) const { return ((a>b) ? a : b); }
 
 template<>
 xlong CLmath::min(xlong a,xlong b) const { return (a + ( ((b-a)>>31) & (b-a) )); }

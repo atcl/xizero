@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLLEVEL
 #define HH_CLLEVEL
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLbuffer.hh"
@@ -20,7 +25,9 @@
 #include "CLgame.hh"
 #include "CLmacros.hh"
 #include "CLgamepad.hh"
+///*
 
+///header
 /* class name:	CLlevel
  * 
  * description:	This class manages the complete game inside a level
@@ -31,9 +38,13 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 typedef CLlist<CLenemy> CLenemylist;
+///*
 
+///definitions
 class CLlevel : public virtual CLcl
 {
 	private:
@@ -79,8 +90,10 @@ xlong CLlevel::blockheight = 40;
 xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
+///*
 
-CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype)
+///implementation
+CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype) //! noncritical
 {
 	//matrix for linear transformations of level objects
 	linear = new CLmatrix(1);
@@ -314,7 +327,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 //***
 }
 
-CLlevel::~CLlevel()
+CLlevel::~CLlevel() //! noncritical
 {
 	delete player;
 	delete linear;
@@ -324,7 +337,7 @@ CLlevel::~CLlevel()
 	delete terrain;
 }
 
-xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
+xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p) //! critical
 {
 	if(paused)
 	{
@@ -378,7 +391,7 @@ xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p)
 	return 1;
 }
 
-void CLlevel::display()
+void CLlevel::display() //! critical
 {
 	//set variables controlling render loop
 	xlong currentterrain = 0;
@@ -489,7 +502,7 @@ void CLlevel::display()
 	//*
 }
 
-void CLlevel::subsmark(xlong m)
+void CLlevel::subsmark(xlong m) //! noncritical
 {
 	xlong sm = smoothmark - m;
 
@@ -500,26 +513,27 @@ void CLlevel::subsmark(xlong m)
 	}
 }
 
-void CLlevel::setmark(xlong m)
+void CLlevel::setmark(xlong m) //! noncritical
 {
 	smoothmark = m;
 	blockmark = smoothmark / blockheight;
 }
 
-void CLlevel::pause() { paused = !paused; }
+void CLlevel::pause() { paused = !paused; } //! noncritical
 
-void CLlevel::start()
+void CLlevel::start() //! noncritical
 {
 	player->start();
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext()) { enemies->getcurrentdata()->start(); }
 	boss->start();
 }
 
-xlong CLlevel::getmark() const { return smoothmark; }
+xlong CLlevel::getmark() const { return smoothmark; } //! noncritical
 
-CLfbuffer* CLlevel::getlandscape() const { return levellandscape; }
+CLfbuffer* CLlevel::getlandscape() const { return levellandscape; } //! noncritical
 
-CLplayer* CLlevel::getplayer() const { return player; }
+CLplayer* CLlevel::getplayer() const { return player; } //! noncritical
+///*
 
 #endif
 
