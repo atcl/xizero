@@ -62,6 +62,8 @@ int main(int argc, char** argv)
 	xlong o2 = 0;
 	xlong o3 = 0;
 	
+	bool resetx2 = 0;
+	
 	//check each row
 	for(xlong i=0; i<20; i++)
 	{
@@ -77,7 +79,7 @@ int main(int argc, char** argv)
 			//*
 			
 			//find second vertex
-			for(x1=x0; x1<cols; x1++)
+			for(x1=x0; x1<cols; x1++) //->cols-1 
 			{
 				currz.dd = map[i*cols+x1];
 				if(currz.db[2]!=polyz) break;
@@ -107,6 +109,15 @@ int main(int argc, char** argv)
 					currz.dd = map[((i+1)*cols)+x3];
 					if(currz.db[2]==polyz) break;
 				}
+				if(x3>x1)
+				{
+					x3 = x0;
+					currz.dd = map[((i+1)*cols)+x3];
+					polyz = currz.db[2];
+					polys[polycount].v[0].z = 100-(polyz/4);
+					polys[polycount].v[1].z = 100-(polyz/4);
+					resetx2 = 1;
+				}
 			}
 			//*
 			
@@ -117,10 +128,17 @@ int main(int argc, char** argv)
 			//*
 			
 			//find fourth vertex
-			for(x2=x3; x2<cols-1; x2++)
+			if(resetx2==0)
 			{
-				currz.dd = map[((i+1)*cols)+x2];
-				if(currz.db[2]!=polyz) break;
+				for(x2=x3; x2<cols-1; x2++)
+				{
+					currz.dd = map[((i+1)*cols)+x2];
+					if(currz.db[2]!=polyz) break;
+				}
+			}
+			else
+			{
+				x2 = x1;
 			}
 			//*
 			
@@ -136,6 +154,7 @@ int main(int argc, char** argv)
 			o1 = x1;
 			o2 = x2;
 			o3 = x3;
+			resetx2 = 0;
 			//*
 		}
 		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
