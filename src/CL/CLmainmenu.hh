@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLMAINMENU
 #define HH_CLMAINMENU
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLconsts.hh"
@@ -11,7 +16,9 @@
 #include "CLgfx2.hh"
 #include "CLlabel.hh"
 #include "CLbutton.hh"
+///*
 
+///header
 /* class name:	CLmainmenu
  * 
  * description:	This class creates a typical game main menu
@@ -22,7 +29,9 @@
  * 
  * version: 0.1
  */
- 
+///*
+
+///definitions
 class CLmainmenu : public virtual CLcl
 {
 	private:
@@ -39,14 +48,16 @@ class CLmainmenu : public virtual CLcl
 		void draw() const;
 		void setback(sprite* s);
 };
+///*
 
+///implementation
 //~ CLmainmenu::CLmainmenu(const xchar* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
 //~ { CLmainmenu(clsystem->getfile(bg),bc,bt,a,hl,fl,fc); }
 //~ 
 //~ CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
 //~ { CLmainmenu(clformat->loadtga(bg),bc,bt,a,hl,fl,fc); }
 
-CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
+CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc) //! noncritical
 {
 	//set attributes
 	background = bg;
@@ -109,7 +120,7 @@ CLmainmenu::~CLmainmenu()
 	//todo
 }
 
-void CLmainmenu::draw() const
+void CLmainmenu::draw() const //! critical
 {
 	clgfx1->drawscreen(background);
 	header->draw();
@@ -117,6 +128,7 @@ void CLmainmenu::draw() const
 	footer->draw();
 }
 
-void CLmainmenu::setback(sprite* s) { background = s; }
- 
- #endif
+void CLmainmenu::setback(sprite* s) { background = s; } //! noncritical
+///*
+
+#endif

@@ -47,14 +47,12 @@ int main(int argc, char** argv)
 	
 	CLobject** terrows = new CLobject*[(rows-1)/2];
 	
-	//check each row
 	xlong jj = 0;
 	xlong kk = 0;
 	xlong j = 0;
 	xlong k = 0;
 	xlong l = 0;
 	
-	//test
 	xlong x0 = 0;
 	xlong x1 = 0;
 	xlong x2 = 0;
@@ -63,6 +61,8 @@ int main(int argc, char** argv)
 	xlong o1 = 0;
 	xlong o2 = 0;
 	xlong o3 = 0;
+	
+	//check each row
 	for(xlong i=0; i<20; i++)
 	{
 		while(o1<cols && o2<cols)
@@ -141,167 +141,6 @@ int main(int argc, char** argv)
 		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
 		polycount = x0 = x1 = x2 = x3 = o0 = o1 = o2 = o3 = 0;
 	}
-	//*
-	
-	/*
-	for(xlong i=0; i<30; i++) //2 -> rows
-	{
-		while(polycount==0 || polys[polycount-1].v[1].x<400)
-		{
-			//set first vertex
-			currz.dd = map[i*cols+j];
-			polyz = xlong(currz.db[2]);
-			if(polycount==0) polys[polycount].v[0].x = -400;
-			else             polys[polycount].v[0].x = polys[polycount-1].v[1].x;				
-			polys[polycount].v[0].y = 10;
-			polys[polycount].v[0].z = 100-(polyz/4);
-			//*
-			
-			//find second vertex in same row
-			while(j<cols-1)
-			{
-				currz.dd = map[(i*cols)+j];
-				if(currz.db[2]!=polyz) { j--; break; }
-				j++;
-			}
-			//*
-			
-			//set second vertex
-			polys[polycount].v[1].x = (j*20) - 400;
-			polys[polycount].v[1].y = 10;
-			polys[polycount].v[1].z = polys[polycount].v[0].z;
-			//*
-			
-			//find third vertex in next row
-			k = jj;
-			currz.dd = map[((i+1)*cols)+k];
-			if(currz.db[2]!=polyz)
-			{
-				while(true)
-				{
-					currz.dd = map[((i+1)*cols)+k];
-					if(currz.db[2]==polyz) { k--; break; }
-					if(k>j) { k=-1; break; }
-					k++;
-				}
-			}
-			else
-			{
-				while(k>0)
-				{
-					currz.dd = map[((i+1)*cols)+k];
-					if(currz.db[2]!=polyz) { break; }
-					k--;
-				}
-			}		
-			//*
-
-			//set third vertex
-			if(k==-1)
-			{
-				currz.dd = map[((i+1)*cols)+jj];
-				polyz = currz.db[2];
-				polys[polycount].v[0].z = 100-(polyz/4);
-				polys[polycount].v[1].z = 100-(polyz/4);
-				
-				polys[polycount].v[3].x = polys[polycount].v[0].x;
-				polys[polycount].v[3].y = -10;
-				polys[polycount].v[3].z = 100-(polyz/4);
-			}
-			else
-			{
-				
-				polys[polycount].v[3].x = (k*20) - 400;				
-				polys[polycount].v[3].y = -10;
-				polys[polycount].v[3].z = polys[polycount].v[0].z;
-			}
-			//*
-			
-			//find fourth vertex (a)
-			if(k!=-1)
-			{
-				k++;
-				while(k<cols-1)
-				{
-					currz.dd = map[((i+1)*cols)+k];
-					if(currz.db[2]!=polyz) { k--; break; }
-					k++;
-				}
-			}
-			//*
-			
-			//set fourth vertex (a)
-			if(k!=-1)
-			{
-				
-				polys[polycount].v[2].x = (k*20) - 400;
-				polys[polycount].v[2].y = -10;
-				polys[polycount].v[2].z = polys[polycount].v[0].z;
-			}
-			else
-			{
-				polys[polycount].v[2].x = polys[polycount].v[1].x;
-				polys[polycount].v[2].y = -10;
-				polys[polycount].v[2].z = polys[polycount].v[0].z;
-			}
-			//*
-			
-			
-			//! proto inter gap fix 
-			//find fourth vertex (b)
-			if(k!=-1)
-			{
-				l = j;
-				currz.dd = map[((i+1)*cols)+l];
-				if(currz.db[2]!=polyz)
-				{
-					while(l>0)
-					{
-						currz.dd = map[((i+1)*cols)+l];
-						if(currz.db[2]==polyz) { break; }
-						l--;
-					}
-				}
-				else
-				{
-					while(l<cols-1)
-					{
-						currz.dd = map[((i+1)*cols)+l];
-						if(currz.db[2]!=polyz) { l--; break; }
-						l++;
-					}
-				}
-				
-				if(k!=l)
-				{ 
-					polys[polycount].v[1].x = polys[polycount].v[2].x + 20;
-					j = (polys[polycount].v[1].x + 400) / 20;
-				}
-			}
-			//*
-			//!*
-			
-			if(polys[polycount].v[3].x < polys[polycount-1].v[2].x && polycount>0) polys[polycount].v[3].x = polys[polycount-1].v[2].x;
-
-			//create object
-			//~ std::cout << "poly nr: " << polycount << " of row: " << i << std::endl;
-			//~ std::cout << polys[polycount].v[0].x << ' ' << polys[polycount].v[0].y << ' ' << polys[polycount].v[0].z << std::endl;
-			//~ std::cout << polys[polycount].v[1].x << ' ' << polys[polycount].v[1].y << ' ' << polys[polycount].v[1].z << std::endl;
-			//~ std::cout << polys[polycount].v[2].x << ' ' << polys[polycount].v[2].y << ' ' << polys[polycount].v[2].z << std::endl;
-			//~ std::cout << polys[polycount].v[3].x << ' ' << polys[polycount].v[3].y << ' ' << polys[polycount].v[3].z << std::endl;
-			//*
-			
-			polycount++;
-			j++;
-			jj = j;
-		}
-		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
-		polycount = 0;
-		jj = 0;
-		kk = 0;
-		j = 0;
-		k = 0;
-	}*/
 	//*
 
 	CLfile* cube;
