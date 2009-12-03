@@ -63,9 +63,10 @@ int main(int argc, char** argv)
 	xlong o3 = 0;
 	
 	bool resetx2 = 0;
+	xlong y2 = 0;
 	
 	//check each row
-	for(xlong i=0; i<20; i++)
+	for(xlong i=0; i<30; i++)
 	{
 		while(o1<cols && o2<cols)
 		{
@@ -142,6 +143,19 @@ int main(int argc, char** argv)
 					currz.dd = map[((i+1)*cols)+x2];
 					if(currz.db[2]!=polyz) break;
 				}
+				
+				//inter gap
+				for(y2=x2; y2<cols; y2++)
+				{
+					currz.dd = map[((i+1)*cols)+y2];
+					if(currz.db[2]==polyz && y2<x1)
+					{
+						x1 = x2;
+						polys[polycount].v[1].x = (x1*20)-400;
+						break;
+					}
+				}
+				//*
 			}
 			else
 			{
@@ -294,7 +308,7 @@ int main(int argc, char** argv)
 		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
 		
 		q.y = 20;
-		for(xlong i=0; i<20; i++)
+		for(xlong i=0; i<30; i++)
 		{
 			terrows[i]->display(q,AMBIENT + SHAPE);
 			q.y += 20;

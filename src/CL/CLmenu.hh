@@ -1,14 +1,21 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLMENU
 #define HH_CLMENU
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLbuffer.hh"
 #include "CLgfx2.hh"
+///*
 
+///header
 /* class name:	CLmenu
  * 
  * description:	Ingame menu bar
@@ -19,42 +26,48 @@
  * 
  * version: 0.1
  */
+///*
 
+///definition
 class CLmenu : public virtual CLcl
 {
 	private:
-		xlong* doublebuffer;
 		char* title;
 		xlong* icon;
 		void* actionptr;
+		CLbutton* exit;
+		CLbutton* info;
+		CLbutton* about;
 		
 	public:
-		CLmenu(xlong* db,void* a);
+		CLmenu();
 		~CLmenu();
 		void draw();
-		void onclick();
 		void action();
+		static void invoke();
 };
+///*
 
-CLmenu::CLmenu(xlong* db,void* a)
+///implementation
+CLmenu::CLmenu() //! noncritical
 {
-	doublebuffer = db;
-	actionptr = a;
+
 }
 
-CLmenu::~CLmenu() { }
+CLmenu::~CLmenu() { } //! noncritical
 
-void CLmenu::draw()
+void CLmenu::draw() //! noncritical
 {
 	//drawrectangle(0,0,xres,?,grey);	//win
 	//drawrectangle(2,2,xres,?/2,red);	//title
 	//drawrectangle(?,?,?,?,grey);		//close
 }
 
-void CLmenu::action()
+void CLmenu::action() //! critical
 {
 
 }
+///*
 
 #endif
 
