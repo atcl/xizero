@@ -1,15 +1,23 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLMATRIX
 #define HH_CLMATRIX
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include <iostream>
+
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLvector.hh"
 #include "CLmath.hh"
+///*
 
+///header
 /* class name:	CLmatrix
  * 
  * description:	A 4x4 matrix for 3d transformations
@@ -20,11 +28,14 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLmatrix : public virtual CLcl
 {
 	private:
 		float m[4][4];
+		float t[4][4]; //todo: implement
 		void multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44);
 	public:
 		CLmatrix(bool i=1);
@@ -47,9 +58,10 @@ class CLmatrix : public virtual CLcl
 		float determinate() const;
 		void print() const;
 };
+///*
 
-
-void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44)
+///implementation
+void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44) //! critical
 {
 	float tm0; float tm1; float tm2; float tm3;
 
@@ -78,15 +90,15 @@ void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,fl
 	m[3][3] = (tm0*n14 + tm1*n24 + tm2*n34 + tm3*n44);
 }
 
-CLmatrix::CLmatrix(bool i)
+CLmatrix::CLmatrix(bool i) //! noncritical
 {
 	if(i==false) clear(0);
 	if(i==true) unit();
 }
 
-CLmatrix::~CLmatrix() { }
+CLmatrix::~CLmatrix() { } //! noncritical
 
-void CLmatrix::rotate(xlong x,xlong y,xlong z)
+void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
 {
 	if(x!=0) 
 	{
@@ -110,28 +122,28 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z)
 	}
 }
 
-void CLmatrix::translate(float x,float y,float z)
+void CLmatrix::translate(float x,float y,float z) //! noncritical
 {
 	//translate using fourth column of matrix
 	multiplicate(1,0,0,x,0,1,0,y,0,0,1,z,0,0,0,1);
 	//*
 }
 
-void CLmatrix::scale(float x,float y,float z)
+void CLmatrix::scale(float x,float y,float z) //! noncritical
 {
 	//scale x,y,z seperately
 	multiplicate(x,0,0,0,0,y,0,0,0,0,z,0,0,0,0,1);
 	//*
 }
 
-void CLmatrix::aspectscale(float x)
+void CLmatrix::aspectscale(float x) //! noncritical
 {
 	//scale x,y,z alike
 	multiplicate(x,0,0,0,0,x,0,0,0,0,x,0,0,0,0,1);
 	//*
 }
 
-void CLmatrix::superscale(float x)
+void CLmatrix::superscale(float x) //! noncritical
 {
 	//scale all matrix elements
 	m[0][0] *= x; m[0][1] *= x; m[0][2] *= x; m[0][3] *= x;
@@ -142,7 +154,7 @@ void CLmatrix::superscale(float x)
 }
 
 template<class clvector>
-clvector CLmatrix::transform(const clvector& t) const
+clvector CLmatrix::transform(const clvector& t) const //! critical
 {
 	clvector r;
 	r.x = (m[0][0] * float(t.x) + m[0][1] * float(t.y) + m[0][2] * float(t.z) + m[0][3]);
@@ -151,21 +163,21 @@ clvector CLmatrix::transform(const clvector& t) const
 	return r;
 }
 
-void CLmatrix::clear(xlong i)
+void CLmatrix::clear(xlong i) //! noncritical
 {
 	//set matrix to given value
 	m[0][0]=m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][1]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][2]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=m[3][3]=i;
 	//*
 }
 
-void CLmatrix::zero()
+void CLmatrix::zero() //! noncritical
 {
 	//zero out matrix
 	m[0][0]=m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][1]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][2]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=m[3][3]=0;
 	//*
 }
 
-void CLmatrix::unit()
+void CLmatrix::unit() //! noncritical
 {
 	//set to unit matrix
 	m[0][1]=m[0][2]=m[0][3]=m[1][0]=m[1][2]=m[1][3]=m[2][0]=m[2][1]=m[2][3]=m[3][0]=m[3][1]=m[3][2]=0;
@@ -173,7 +185,7 @@ void CLmatrix::unit()
 	//*
 }
 
-void CLmatrix::transpone()
+void CLmatrix::transpone() //! noncritical
 {
 	float temp;
 
@@ -187,7 +199,7 @@ void CLmatrix::transpone()
 }
 
 template<class clvector>
-void CLmatrix::shadow(const clvector& l,const clvector& p)
+void CLmatrix::shadow(const clvector& l,const clvector& p) //! critical
 {
 	float ldotp = l*p;
 
@@ -211,7 +223,7 @@ void CLmatrix::shadow(const clvector& l,const clvector& p)
 	//*
 }
 
-void CLmatrix::project()
+void CLmatrix::project() //! critical
 {
 	float zmin = 1;
 	float zmax = ZRES-1;
@@ -237,7 +249,7 @@ void CLmatrix::project()
 }
 
 template<class clvector>
-void CLmatrix::dyadic(const clvector& a,const clvector& b)
+void CLmatrix::dyadic(const clvector& a,const clvector& b) //! critical
 {
 	//set matrix to 3x3 dyadic product of a and b
 	m[0][0] = float(a.x * b.x);
@@ -259,14 +271,14 @@ void CLmatrix::dyadic(const clvector& a,const clvector& b)
 	//*
 }
 
-float CLmatrix::trace() const 
+float CLmatrix::trace() const //! noncritical 
 {
 	//sum of all main diagonal elements
 	return (m[0][0] + m[1][1] + m[2][2] + m[3][3]);
 	//*
 }
 
-void CLmatrix::print() const
+void CLmatrix::print() const //! noncritical
 {
 	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << std::endl;
 	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << std::endl;
@@ -274,6 +286,7 @@ void CLmatrix::print() const
 	std::cout << std::setw(7) << m[3][0] <<" "<< std::setw(7) << m[3][1] <<" "<< std::setw(7) << m[3][2] <<" "<< std::setw(7) << m[3][3] << std::endl;
 	std::cout << std::endl;
 }
+///*
 
 #endif
 

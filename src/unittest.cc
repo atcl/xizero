@@ -79,10 +79,17 @@ int main(int argc, char** argv)
 			//*
 			
 			//find second vertex
-			for(x1=x0; x1<cols; x1++) //->cols-1 
+			if(x0<cols)
 			{
-				currz.dd = map[i*cols+x1];
-				if(currz.db[2]!=polyz) break;
+				for(x1=x0; x1<cols; x1++) //->cols-1 
+				{
+					currz.dd = map[i*cols+x1];
+					if(currz.db[2]!=polyz) break;
+				}
+			}
+			else
+			{
+				x1 = x0;
 			}
 			//*
 			
@@ -130,7 +137,7 @@ int main(int argc, char** argv)
 			//find fourth vertex
 			if(resetx2==0)
 			{
-				for(x2=x3; x2<cols-1; x2++)
+				for(x2=x3; x2<cols; x2++)
 				{
 					currz.dd = map[((i+1)*cols)+x2];
 					if(currz.db[2]!=polyz) break;
