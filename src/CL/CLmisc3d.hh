@@ -1,15 +1,22 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLMISC3D
 #define HH_CLMISC3D
-#pragma message "Compiling " __FILE__ " ! TODO: draw3dpixel"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLbuffer.hh"
 #include "CLvector.hh"
 #include "CLglobal.hh"
+///*
 
+///header
 /* class name:	CLmisc3d
  * 
  * description:	Miscellaneous 3d routines
@@ -20,7 +27,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 {
 	friend class CLsingle<CLmisc3d>;
@@ -33,12 +42,13 @@ class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 		template<class clvector>void project2(clvector& o);
 		template<class clvector>void draw3dpixel(clvector& p,uxlong c);
 		template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
-		template<class clvector>void drawlight(clvector& p,xlong i,uxlong c);
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
+///*
 
+///implementation
 template<class clvector>
-void CLmisc3d::project(clvector& v,const clvector& p)
+void CLmisc3d::project(clvector& v,const clvector& p) //! critical
 {
 	if(v.z > 0)
 	{
@@ -53,7 +63,7 @@ void CLmisc3d::project(clvector& v,const clvector& p)
 }
 
 template<class clvector>
-void CLmisc3d::project2(clvector& o)
+void CLmisc3d::project2(clvector& o) //! critical
 {
 	CLfvector temp;
 	
@@ -74,7 +84,7 @@ void CLmisc3d::project2(clvector& o)
 }
 
 template<class clvector>
-void CLmisc3d::draw3dpixel(clvector& p,uxlong c)
+void CLmisc3d::draw3dpixel(clvector& p,uxlong c) //! critical
 {
 	//if on screen project and draw a pixel 
 	if(p.x>0 && p.x<XRES && p.y>0 && p.y<YRES && p.z>0 && p.z<ZRES)
@@ -88,7 +98,7 @@ void CLmisc3d::draw3dpixel(clvector& p,uxlong c)
 }
 
 template<class clvector>
-void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa)
+void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa) //! critical
 {
 	//if on screen project and draw a line  
 	if(p.z>0 && p.z<ZRES && q.z >0 && q.z<ZRES)
@@ -102,13 +112,7 @@ void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa)
 	//*
 }
 
-template<class clvector>
-void CLmisc3d::drawlight(clvector& p,xlong i,uxlong c)
-{
-	
-}
-
-void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
+void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis) //! critical
 {
 	xlong z = 0;
 
@@ -129,5 +133,6 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis)
 		ii += XRES;
 	}
 }
+///*
 
 #endif

@@ -63,6 +63,7 @@ int main(int argc, char** argv)
 	xlong o3 = 0;
 	
 	bool resetx2 = 0;
+	bool resetx3 = 0;
 	xlong y2 = 0;
 	
 	//check each row
@@ -128,7 +129,7 @@ int main(int argc, char** argv)
 				}
 			}
 			//*
-			
+
 			//set third vertex
 			polys[polycount].v[3].x = (x3*20)-400;
 			polys[polycount].v[3].y = -10;
@@ -145,6 +146,13 @@ int main(int argc, char** argv)
 				}
 				
 				//inter gap
+				if(resetx3!=0)
+				{
+					x3 = x0;
+					polys[polycount].v[3].x = (x3*20)-400;
+					resetx3 = 0;
+				}
+				
 				for(y2=x2; y2<cols; y2++)
 				{
 					currz.dd = map[((i+1)*cols)+y2];
@@ -152,6 +160,7 @@ int main(int argc, char** argv)
 					{
 						x1 = x2;
 						polys[polycount].v[1].x = (x1*20)-400;
+						resetx3 = 1;
 						break;
 					}
 				}
