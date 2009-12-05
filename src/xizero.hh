@@ -89,6 +89,8 @@ void newgame()
 	//*
 	
 	//game loop
+	bool aa = 0;
+	
 	while(gamestate>0 && clglobal->clwindow->run()) 
 	{
 		//check input
@@ -106,6 +108,8 @@ void newgame()
 			
 			case 'p': testlevel->pause(); break;
 			
+			case '#': aa = !aa;
+			
 			default: gamestate = testlevel->update(input,turbo,clglobal->clgamepad->getstate()); break;
 		}
 		//*
@@ -113,7 +117,7 @@ void newgame()
 		clglobal->clfloor->draw();
 		testlevel->display();
 
-		clglobal->cldoublebuffer.blendcopy(clglobal->cldoublebuffer.getbuffer(),10);
+		if(aa) clglobal->cldoublebuffer.blendcopy(clglobal->cldoublebuffer.getbuffer(),10);
 
 		//~ //render level depending on mode (modes just for dev)
 		//~ switch(mode)

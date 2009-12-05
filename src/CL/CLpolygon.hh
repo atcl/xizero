@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLPOLYGON
 #define HH_CLPOLYGON
-#pragma message "Compiling " __FILE__ " ! TODO: better handling of local globals, orthographic linear projection using matrix"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
@@ -13,7 +18,9 @@
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
 #include "CLpolyinc.hh"
+///*
 
+///header
 /* class name:	CLpolygon
  * 
  * description:	Handles four sided polygons.
@@ -24,7 +31,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLpolygon : public virtual CLcl
 {
 	private:
@@ -74,8 +83,10 @@ class CLpolygon : public virtual CLcl
 
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
+///*
 
-void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
+///implementation
+void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! critical
 {
 	if(x1==x2 && y1==y2) return;
 
@@ -110,7 +121,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c)
 }
 
 template<class clvector>
-clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz) //!change float pz to template arg of clvector!
+clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz)  //! noncritical //!change float pz to template arg of clvector!
 {
 	float m = (pz - b.z) / (a.z - b.z);
 
@@ -122,7 +133,7 @@ clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz
 }
 
 template<class clvector>
-clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px) //!change float pz to template arg of clvector!
+clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px)  //! noncritical //!change float pz to template arg of clvector!
 {
 	float m = (px - b.x) / (a.x - b.x);
 
@@ -134,7 +145,7 @@ clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px
 }
 
 template<class clvector>
-clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py) //!change float pz to template arg of clvector!
+clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py)  //! noncritical //!change float pz to template arg of clvector!
 {
 	float m = (py - b.y) / (a.y - b.y);
 
@@ -145,7 +156,7 @@ clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py
 	return c;
 }
 
-void CLpolygon::zclipping()
+void CLpolygon::zclipping() //! noncritical
 {
 	xlong x = 0;
 	xlong y = 0;
@@ -208,7 +219,7 @@ void CLpolygon::zclipping()
 	//*
 }
 
-void CLpolygon::project(xlong px,xlong py,bool c)
+void CLpolygon::project(xlong px,xlong py,bool c) //! critical
 {
 	//use screen center as attached position if wanted
 	if(c)
@@ -237,7 +248,7 @@ void CLpolygon::project(xlong px,xlong py,bool c)
 
 
 
-void CLpolygon::xyclipping()
+void CLpolygon::xyclipping() //! noncritical
 {
 	xlong x = 0;
 	xlong y = 0;
@@ -358,7 +369,7 @@ void CLpolygon::xyclipping()
 	//*
 }
 
-bool CLpolygon::visible()
+bool CLpolygon::visible() //! noncritical
 {
 	//calc z component of cross product of two edges (with one comon corner)
 	xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
@@ -369,7 +380,7 @@ bool CLpolygon::visible()
 	//*
 }
 
-void CLpolygon::shape()
+void CLpolygon::shape() //! noncritical
 {
 	//draw wireframe of polygon
 	xlong x = 0;
@@ -381,7 +392,7 @@ void CLpolygon::shape()
 	//*
 }
 
-void CLpolygon::flatshade(float pz,bool ambient,bool zlight)
+void CLpolygon::flatshade(float pz,bool ambient,bool zlight) //! critical
 {
 	doubleword argb = { 0 };
 
@@ -416,7 +427,7 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight)
 }
 
 template<class clvector>
-void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s)
+void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s) //! critical
 {
 	xlong length = xlong(e.y - b.y);
 	if(length <= 0) return;
@@ -435,17 +446,17 @@ void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s)
 	}
 }
 
-xlong CLpolygon::circleinc(xlong x,xlong pc)
+xlong CLpolygon::circleinc(xlong x,xlong pc) //! critical
 {
 	return ( (x+1) >= pc ) ? 0 : x+1;
 }
 
-xlong CLpolygon::circledec(xlong x,xlong pc)
+xlong CLpolygon::circledec(xlong x,xlong pc) //! critical
 {
 	return ( (x-1) < 0 ) ? pc-1 : x-1;
 }
 
-void CLpolygon::rasterize(xlong shadow)
+void CLpolygon::rasterize(xlong shadow) //! critical
 {
 	xlong x = 0;
 	xlong y = 0;
@@ -543,7 +554,7 @@ void CLpolygon::rasterize(xlong shadow)
 	}
 }
 
-CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc)
+CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc) //! noncritical
 {	
 	//set colors and pointcount
 	rcolor = color = co;
@@ -565,7 +576,7 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 
 CLpolygon::~CLpolygon() { }
 
-void CLpolygon::display(const CLlvector& p,xshort flags)
+void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 {
 	if(flags&SHADOW)
 	{
@@ -625,7 +636,7 @@ void CLpolygon::display(const CLlvector& p,xshort flags)
 
 }
 
-void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
+void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h) //! critical
 {
 	screenside* backup_left = leftside;
 	screenside* backup_right = rightside;
@@ -679,7 +690,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	ymax = backup_ymax;
 }
 
-void CLpolygon::update(CLmatrix* m,bool i=0)
+void CLpolygon::update(CLmatrix* m,bool i=0) //! noncritical
 {
 	switch(i)
 	{
@@ -704,7 +715,7 @@ void CLpolygon::update(CLmatrix* m,bool i=0)
 	}
 }
 
-void CLpolygon::partupdate(CLmatrix* m)
+void CLpolygon::partupdate(CLmatrix* m) //! noncritical
 {
 			points[0] = m->transform(points[0]);
 			//~ points[1] = m->transform(points[1]);
@@ -714,7 +725,7 @@ void CLpolygon::partupdate(CLmatrix* m)
 }
 
 template<class clvector>
-void CLpolygon::add(const clvector& a)
+void CLpolygon::add(const clvector& a) //! noncritical
 {
 	points[0] += a;
 	points[1] += a;
@@ -722,7 +733,7 @@ void CLpolygon::add(const clvector& a)
 	points[3] += a;
 }
 
-void CLpolygon::reset()
+void CLpolygon::reset() //! noncritical
 {
 	points[0] = pointr[0];
 	points[1] = pointr[1];
@@ -731,11 +742,12 @@ void CLpolygon::reset()
 	normal    = rnormal;
 }
 
-void CLpolygon::setcolor(uxlong co) { color = co; }
+void CLpolygon::setcolor(uxlong co) { color = co; } //! noncritical
 
-void CLpolygon::resetcolor() { color = rcolor; }
+void CLpolygon::resetcolor() { color = rcolor; } //! noncritical
 
-CLfvector CLpolygon::getnormal() const { return normal; }
+CLfvector CLpolygon::getnormal() const { return normal; } //! noncritical
+///*
 
 #endif
 
