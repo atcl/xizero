@@ -81,7 +81,7 @@ void newgame()
 							"Esc:              Quit XiZero\n"
 							"After pressing OK the game will start immediately!";
 							
-	if(clglobal->clwindow->msgbox("Info",startmsg)==0) testlevel->start();
+	if(clglobal->clwindow->msgbox("Info",startmsg)==1) testlevel->start();
 	//*
 	
 	//init benchmarking
@@ -112,6 +112,8 @@ void newgame()
 
 		clglobal->clfloor->draw();
 		testlevel->display();
+
+		clglobal->cldoublebuffer.blendcopy(clglobal->cldoublebuffer.getbuffer(),10);
 
 		//~ //render level depending on mode (modes just for dev)
 		//~ switch(mode)

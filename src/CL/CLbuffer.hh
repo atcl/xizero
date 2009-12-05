@@ -220,6 +220,7 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 	doubleword tx = { 0 };
 	doubleword ty = { 0 };
 	doubleword tz = { 0 };
+	doubleword tw = { 0 };
 		
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	if(ttype==4) //set back to 1 if byte add and sub solved!
@@ -400,11 +401,20 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 				}
 			break;
 			
-			case 10:	//2xAA
-				i--;
-				for(;i>=0;i--)
+			case 10:	//2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
+				i-=(XRES+2); 
+				for(;i>=XRES+1;i--)
 				{
-					//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
+					tx.dd = buffer[i-XRES-1];
+					ty.dd = buffer[i+XRES+1];
+					tz.dd = buffer[i];
+
+					tw.db[0] = uxchar( ( (uxlong(tx.db[0])<<1) + uxlong(ty.db[0]) + uxlong(tz.db[0]) ) >>2 );
+					tw.db[1] = uxchar( ( (uxlong(tx.db[1])<<1) + uxlong(ty.db[1]) + uxlong(tz.db[1]) ) >>2 );  
+					tw.db[2] = uxchar( ( (uxlong(tx.db[2])<<1) + uxlong(ty.db[2]) + uxlong(tz.db[2]) ) >>2 );  
+					tw.db[3] = uxchar( ( (uxlong(tx.db[3])<<1) + uxlong(ty.db[3]) + uxlong(tz.db[3]) ) >>2 );
+					
+					dst[i] = tw.dd;    
 				}
 			break;
 			
@@ -507,11 +517,20 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 				}
 			break;
 			
-			case 10:	//2xAA
-				i--;
-				for(;i>=0;i--)
+			case 10:	//2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
+				i-=(XRES+2); 
+				for(;i>=XRES+1;i--)
 				{
-					//2xRGMS ( (x,y) + ( (x+1,y-1) + (x-1,y+1) / 2 )
+					tx.dd = buffer[i-XRES-1];
+					ty.dd = buffer[i+XRES+1];
+					tz.dd = buffer[i];
+
+					tw.db[0] = uxchar( ( (uxlong(tx.db[0])<<1) + uxlong(ty.db[0]) + uxlong(tz.db[0]) ) >>2 );
+					tw.db[1] = uxchar( ( (uxlong(tx.db[1])<<1) + uxlong(ty.db[1]) + uxlong(tz.db[1]) ) >>2 );  
+					tw.db[2] = uxchar( ( (uxlong(tx.db[2])<<1) + uxlong(ty.db[2]) + uxlong(tz.db[2]) ) >>2 );  
+					tw.db[3] = uxchar( ( (uxlong(tx.db[3])<<1) + uxlong(ty.db[3]) + uxlong(tz.db[3]) ) >>2 ); 
+					
+					dst[i] = tw.dd;  
 				}
 			break;
 			

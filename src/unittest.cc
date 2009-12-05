@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 	bool resetx22 = 0;
 	xlong y1 = 0;
 	xlong y2 = 0;
-	say(rows);
+
 	//check each row
 	for(xlong i=0; i<rows-1; i++)
 	{
@@ -337,9 +337,9 @@ int main(int argc, char** argv)
 		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
 		
 		q.y = 20;
-		for(xlong i=0; i<25; i++)
+		for(xlong i=25; i<50; i++)
 		{
-			terrows[i]->display(q,AMBIENT + FLAT);
+			terrows[i]->display(q,AMBIENT + SHAPE);
 			q.y += 20;
 		}
 	

@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLPLAYER
 #define HH_CLPLAYER
-#pragma message "Compiling " __FILE__ " ! TODO: interaction"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
@@ -13,7 +18,9 @@
 #include "CLentity.hh"
 #include "CLenemy.hh"
 #include "CLboss.hh"
+///*
 
+///header
 /* class name:	CLplayer
  * 
  * description:	The player (entity) class.
@@ -24,9 +31,13 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 typedef CLlist<CLenemy> CLenemylist;
+///*
 
+///definitions
 class CLplayer : public CLentity<2>
 {
 	protected:
@@ -46,8 +57,10 @@ class CLplayer : public CLentity<2>
 		void showbox();
 		void displayhud();
 };
+///*
 
-void CLplayer::pretransform(bool m)
+///implementation
+void CLplayer::pretransform(bool m) //! critical
 {
 	//transform tower bounding box
 	boundingbox[1][1]->c[0] = linear->transform(boundingbox[1][1]->c[0]);
@@ -75,7 +88,7 @@ void CLplayer::pretransform(bool m)
 	//*
 }
 
-void CLplayer::transform(bool m)
+void CLplayer::transform(bool m) //! noncritical
 {
 	//transform tower
 	model[1]->update(linear);
@@ -92,7 +105,7 @@ void CLplayer::transform(bool m)
 	//*
 }
 
-xlong CLplayer::collision(CLfbuffer* ll)
+xlong CLplayer::collision(CLfbuffer* ll) //! critical
 {
 	xlong r = 0;
 
@@ -137,7 +150,7 @@ xlong CLplayer::collision(CLfbuffer* ll)
 	return r;
 }
 
-CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts) : CLentity<2>(playera,m,mm)
+CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts) : CLentity<2>(playera,m,mm) //! noncritical
 {
 	//set entity type
 	type = 0;
@@ -167,14 +180,14 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pt
 	//*
 }
 
-CLplayer::~CLplayer()
+CLplayer::~CLplayer() //! noncritical
 {
 	delete def;
 	delete hprog;
 	delete sprog;
 }
 
-xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p)
+xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p) //! critical
 {
 	//update ammo
 	CLenemy* currenemy = 0;
@@ -370,13 +383,10 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 	return -1;
 }
 
-void CLplayer::addpoints(xlong p)
-{
-	points += p;
-}
+void CLplayer::addpoints(xlong p) {	points += p; }  //! noncritical
 
 //for debug only:
-void CLplayer::showbox()
+void CLplayer::showbox() //! noncritical
 {
 	CLfvector bposition;
 	bposition.x = position.x;
@@ -406,11 +416,12 @@ void CLplayer::showbox()
 }
 //*
 
-void CLplayer::displayhud()
+void CLplayer::displayhud() //! noncritical
 {
 	hprog->draw();
 	sprog->draw();
 }
+///*
 
 #endif
 

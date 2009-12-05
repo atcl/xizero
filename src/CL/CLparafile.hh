@@ -38,17 +38,17 @@ class CLparafile : public virtual CLcl
 ///*
 
 ///implementation
-CLparafile::CLparafile()
+CLparafile::CLparafile() //! noncritical
 {
 	
 }
 
-CLparafile::~CLparafile()
+CLparafile::~CLparafile() //! noncritical
 {
 	
 }
 
-CLparafile::get(const xchar name,xlong value)
+CLparafile::get(const xchar name,xlong value) //! noncritical
 {
 	
 }
