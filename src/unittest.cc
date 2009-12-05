@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 	rawpoly* polys = new rawpoly[cols*2];
 	xchar polyz = 0;
 	
-	CLobject** terrows = new CLobject*[(rows-1)/2];
+	CLobject** terrows = new CLobject*[rows-1];
 	
 	xlong jj = 0;
 	xlong kk = 0;
@@ -64,10 +64,12 @@ int main(int argc, char** argv)
 	
 	bool resetx2 = 0;
 	bool resetx3 = 0;
+	bool resetx22 = 0;
+	xlong y1 = 0;
 	xlong y2 = 0;
-	
+	say(rows);
 	//check each row
-	for(xlong i=0; i<30; i++)
+	for(xlong i=0; i<rows-1; i++)
 	{
 		while(o1<cols && o2<cols)
 		{
@@ -77,7 +79,7 @@ int main(int argc, char** argv)
 			polyz = currz.db[2];
 			polys[polycount].v[0].x = (x0*20)-400;
 			polys[polycount].v[0].y = 10;
-			polys[polycount].v[0].z = 100-(polyz/4);
+			polys[polycount].v[0].z = -(polyz/4);
 			//*
 			
 			//find second vertex
@@ -88,6 +90,18 @@ int main(int argc, char** argv)
 					currz.dd = map[i*cols+x1];
 					if(currz.db[2]!=polyz) break;
 				}
+				
+				//inter gap
+				for(y1=x1; y1<cols; y1++)
+				{
+					currz.dd = map[(i*cols)+y1];
+					if(currz.db[2]==polyz)
+					{
+						resetx22 = 1;
+						break;
+					}
+				}
+				//*
 			}
 			else
 			{
@@ -98,7 +112,7 @@ int main(int argc, char** argv)
 			//set second vertex
 			polys[polycount].v[1].x = (x1*20)-400;
 			polys[polycount].v[1].y = 10;
-			polys[polycount].v[1].z = 100-(polyz/4);
+			polys[polycount].v[1].z = -(polyz/4);
 			//*
 			
 			//find third vertex
@@ -123,8 +137,8 @@ int main(int argc, char** argv)
 					x3 = x0;
 					currz.dd = map[((i+1)*cols)+x3];
 					polyz = currz.db[2];
-					polys[polycount].v[0].z = 100-(polyz/4);
-					polys[polycount].v[1].z = 100-(polyz/4);
+					polys[polycount].v[0].z = -(polyz/4);
+					polys[polycount].v[1].z = -(polyz/4);
 					resetx2 = 1;
 				}
 			}
@@ -133,7 +147,7 @@ int main(int argc, char** argv)
 			//set third vertex
 			polys[polycount].v[3].x = (x3*20)-400;
 			polys[polycount].v[3].y = -10;
-			polys[polycount].v[3].z = 100-(polyz/4);
+			polys[polycount].v[3].z = -(polyz/4);
 			//*
 			
 			//find fourth vertex
@@ -164,6 +178,12 @@ int main(int argc, char** argv)
 						break;
 					}
 				}
+				
+				if(resetx22==1 && y1<x2)
+				{
+					x2 = x1;
+					resetx22 = 0;
+				}
 				//*
 			}
 			else
@@ -175,10 +195,10 @@ int main(int argc, char** argv)
 			//set fourth vertex
 			polys[polycount].v[2].x = (x2*20)-400;
 			polys[polycount].v[2].y = -10;
-			polys[polycount].v[2].z = 100-(polyz/4);
+			polys[polycount].v[2].z = -(polyz/4);
 			//*
 			
-			//prepare for net polygon
+			//prepare for next polygon
 			polycount++;
 			o0 = x0;
 			o1 = x1;
@@ -188,7 +208,7 @@ int main(int argc, char** argv)
 			//*
 		}
 		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
-		polycount = x0 = x1 = x2 = x3 = o0 = o1 = o2 = o3 = 0;
+		polycount = x0 = x1 = x2 = x3 = o0 = o1 = o2 = o3 = y1 = y2 = 0;
 	}
 	//*
 
@@ -211,7 +231,7 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
-	CLlvector q(400,20,0);
+	CLlvector q(400,0,100);
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -317,9 +337,9 @@ int main(int argc, char** argv)
 		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
 		
 		q.y = 20;
-		for(xlong i=0; i<30; i++)
+		for(xlong i=0; i<25; i++)
 		{
-			terrows[i]->display(q,AMBIENT + SHAPE);
+			terrows[i]->display(q,AMBIENT + FLAT);
 			q.y += 20;
 		}
 	

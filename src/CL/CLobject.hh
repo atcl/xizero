@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLOBJECT
 #define HH_CLOBJECT
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
@@ -15,7 +20,9 @@
 #include "CLglobal.hh"
 #include "CLpolygon.hh"
 #include "CLmatrix.hh"
+///*
 
+///header
 /* class name:	CLobject
  * 
  * description:	Loads and handles 3d objects
@@ -26,7 +33,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 struct rawpoly { CLlvector v[4]; };
 
 struct CLbox { CLfvector c[8]; }; //c[0-3] bottom, c[4-7] top
@@ -60,10 +69,12 @@ class CLobject : public virtual CLcl
 		void setcolor(uxlong co);
 		void resetcolor();
 };
+///*
 
-CLobject::CLobject(const xchar* fileptr,bool zs) { CLobject(clsystem->getfile(fileptr),zs); }
+///implementation
+CLobject::CLobject(const xchar* fileptr,bool zs) { CLobject(clsystem->getfile(fileptr),zs); } //! noncritical
 
-CLobject::CLobject(CLfile* fileptr,bool zs)
+CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 {	
 	//init bounding box
 	rboundingbox = new CLbox;
@@ -296,7 +307,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs)
 	//~ //*
 }
 
-CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc)
+CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
 {
 	//init bounding box
 	rboundingbox = new CLbox;
@@ -311,7 +322,7 @@ CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc)
 	for(xlong i=0; i<c; i++) { polyptr[i] = new CLpolygon(p[i].v[0],p[i].v[1],p[i].v[2],p[i].v[3],co,sc); }
 }
 
-CLobject::CLobject(CLobject* obj)
+CLobject::CLobject(CLobject* obj) //! noncritical
 {
 	polycount = obj->polycount;
 	polyptr = new CLpolygon*[polycount];
@@ -326,13 +337,13 @@ CLobject::CLobject(CLobject* obj)
 	for(uxlong j=0; j<dockcount; j++) { dockptr[j] = new CLfvector(*(obj->dockptr[j])); }
 }
 
-CLobject::~CLobject()
+CLobject::~CLobject() //! noncritical
 {
 	delete boundingbox;
 	delete rboundingbox;
 }
 
-void CLobject::update(CLmatrix* m)
+void CLobject::update(CLmatrix* m) //! noncritical
 {
 	//transform each polygon
 	for(uxlong i=0;i<polycount;i++) { polyptr[i]->update(m,0); }
@@ -354,7 +365,7 @@ void CLobject::update(CLmatrix* m)
 	//*
 }
 
-void CLobject::partupdate(CLmatrix* m)
+void CLobject::partupdate(CLmatrix* m) //! noncritical
 {
 	//transform each polygon
 	for(uxlong i=0;i<polycount;i++) { polyptr[i]->partupdate(m); }
@@ -369,7 +380,7 @@ void CLobject::partupdate(CLmatrix* m)
 	//*
 }
 
-void CLobject::display(CLlvector p,xshort flags)
+void CLobject::display(CLlvector p,xshort flags) //! noncritical
 {
 	CLfvector currnormal = CLfvector();
 	
@@ -404,16 +415,17 @@ void CLobject::display(CLlvector p,xshort flags)
 	//*
 }
 
-void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h)
+void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h) //! noncritical
 {
 	//use special display method ONLY for zlevel map construction (see CLlevel Z179-2008)
 	for(uxlong i=0;i<polycount;i++)	{ polyptr[i]->display(p,l,r,b,h); }
 	//*
 }
 
-xlong CLobject::getname() const { return name; }
+xlong CLobject::getname() const { return name; } //! noncritical
 
-CLfvector* CLobject::getdockingpoint(xlong t,xlong i) const //get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
+//get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
+CLfvector* CLobject::getdockingpoint(xlong t,xlong i) const //! noncritical
 {
 	xlong c= -1;
 	xlong d= 0;
@@ -451,7 +463,7 @@ CLfvector* CLobject::getdockingpoint(xlong t,xlong i) const //get i-th docking p
 	//*
 }
 
-void CLobject::translatealongnormals(float speed)
+void CLobject::translatealongnormals(float speed) //! noncritical
 {
 	CLfvector t;
 
@@ -468,27 +480,29 @@ void CLobject::translatealongnormals(float speed)
 	//*
 }
 
-CLbox* CLobject::getboundingbox() const { return boundingbox; }
+CLbox* CLobject::getboundingbox() const { return boundingbox; } //! noncritical
 
-void CLobject::reset()
+void CLobject::reset() //! noncritical
 {
 	for(uxlong i=0;i<polycount;i++) { polyptr[i]->reset(); }
 	
 	*boundingbox = *rboundingbox;
 }
 
-void CLobject::setcolor(uxlong co)
+void CLobject::setcolor(uxlong co) //! noncritical
 {
 	//set colors of all polygons
 	for(uxlong i=0;i<polycount;i++) { polyptr[i]->setcolor(co); }
 	//*
 }
 
-void CLobject::resetcolor()
+void CLobject::resetcolor() //! noncritical
 {
 	//reset colors of all polygons
 	for(uxlong i=0;i<polycount;i++) { polyptr[i]->resetcolor(); }
 	//*
 }
+///*
+
 #endif
 
