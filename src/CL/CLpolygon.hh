@@ -404,25 +404,18 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight) //! critical
 	uxchar ambientlighting = 0;
 	if(t<0.1)
 	{
-		switch(ambient)
-		{
-			case false:
-				shade = nolight;
-			return;
-			
-			case true:
-				ambientlighting = 25;
-			break;
-		}
+		if(ambient) { ambientlighting = 25; }
+		else { shade = nolight; return; }
 	}
 
 	uxchar zlevellighting = 0; 
-	if(zlight && normal.x == 0 && normal.y == 0) zlevellighting = 128 - (pz * shadezscale); //change == to != for "plain shading" (leave &&)
+	if(zlight && normal.x == 0 && normal.y == 0) { zlevellighting = 100 - (pz * shadezscale); }//change == to != for "plain shading" (leave &&)
 	argb.dd = color;
 	//light color!!!
 	argb.db[0] = uxchar((float(uxchar(argb.db[0])))*t) + zlevellighting + ambientlighting;
 	argb.db[1] = uxchar((float(uxchar(argb.db[1])))*t) + zlevellighting + ambientlighting;
 	argb.db[2] = uxchar((float(uxchar(argb.db[2])))*t) + zlevellighting + ambientlighting;
+	argb.db[3] = uxchar((float(uxchar(argb.db[3])))*t) + zlevellighting + ambientlighting;
 	shade = argb.dd;
 }
 
@@ -624,7 +617,7 @@ void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 			}
 			else if( !(flags&SHADOW) )	//default
 			{
-				flatshade(p.z,flags&AMBIENT,flags&ZLIGHT);
+				flatshade(ppoint[0].z,flags&AMBIENT,flags&ZLIGHT);
 				rasterize(0);
 			}
 			else			//shadow

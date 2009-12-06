@@ -117,7 +117,11 @@ void newgame()
 		clglobal->clfloor->draw();
 		testlevel->display();
 
-		if(aa) clglobal->cldoublebuffer.blendcopy(clglobal->cldoublebuffer.getbuffer(),10);
+		if(aa)
+		{
+			clglobal->cldoublebuffer.blendcopy(clglobal->cltriplebuffer.getbuffer(),10);
+			clglobal->cltriplebuffer.copy(clglobal->cldoublebuffer.getbuffer());
+		}
 
 		//~ //render level depending on mode (modes just for dev)
 		//~ switch(mode)

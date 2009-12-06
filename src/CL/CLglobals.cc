@@ -42,6 +42,7 @@ uxlong CLglobal::screenpixelheight = YRES;
 uxlong CLglobal::screenpixelsize   = SCRS;
 
 CLubuffer CLglobal::cldoublebuffer  = *(new CLubuffer(SCRS,0));
+CLubuffer CLglobal::cltriplebuffer  = *(new CLubuffer(SCRS,0));
 CLubuffer CLglobal::clstencilbuffer = *(new CLubuffer(SCRS,0));
 CLfbuffer CLglobal::clzbuffer       = *(new CLfbuffer(SCRS,ZRES));
 

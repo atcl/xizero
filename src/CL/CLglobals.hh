@@ -68,6 +68,7 @@ class CLglobal
 		static uxlong screenpixelsize;
 		
 		static CLubuffer cldoublebuffer;
+		static CLubuffer cltriplebuffer;
 		static CLubuffer clstencilbuffer;
 		static CLfbuffer clzbuffer;
 		

@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLPROGRESS
 #define HH_CLPROGRESS
-#pragma message "Compiling " __FILE__ " ! TODO: constructor"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLguibase.hh"
+///*
 
+///header
 /* class name:	CLprogress
  * 
  * description:	A standard gui element progress bar
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLprogress : public CLguibase
 {
 	private:
@@ -44,8 +53,10 @@ class CLprogress : public CLguibase
 		xlong getend() const;
 		xlong getprogress() const;
 };
+///*
 
-CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) : CLguibase(px,py,w,h,f,fc,bc,rc)
+///implementation
+CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) : CLguibase(px,py,w,h,f,fc,bc,rc) //! noncritical
 {
 	//set up attributes
 	progress = p;
@@ -62,7 +73,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	//*
 }
 
-CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv) : CLguibase(px,py,w,h)
+CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv) : CLguibase(px,py,w,h) //! noncritical
 {
 	//set up attributes
 	progress = p;
@@ -79,12 +90,12 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	//*
 }
 
-CLprogress::CLprogress() : CLguibase(0,0,0,0)
+CLprogress::CLprogress() : CLguibase(0,0,0,0) //! noncritical
 {
 	start = end = progress = pcolor = horver = pprogress = punit = 0;
 }
 
-void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc)
+void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
 {
 	basereset(px,py,w,h,f,fc,bc,rc);
 	
@@ -101,7 +112,7 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	pprogress = xlong(punit * progress);
 }
 
-void CLprogress::draw() const
+void CLprogress::draw() const //! noncritical
 {
 	if(visible==0) return;
 
@@ -121,7 +132,7 @@ void CLprogress::draw() const
 	}
 }
 
-void CLprogress::setstart(xlong s)
+void CLprogress::setstart(xlong s) //! noncritical
 {
 	start = s;
 	xlong temp = float(clmath->absolute(end-start));
@@ -130,7 +141,7 @@ void CLprogress::setstart(xlong s)
 	pprogress = punit * progress;
 }
 
-void CLprogress::setend(xlong e)
+void CLprogress::setend(xlong e) //! noncritical
 {
 	end = e;
 	xlong temp = float(clmath->absolute(end-start));
@@ -139,7 +150,7 @@ void CLprogress::setend(xlong e)
 	pprogress = punit * progress;
 }
 
-void CLprogress::setprogress(xlong p)
+void CLprogress::setprogress(xlong p) //! noncritical
 {
 	if(p>end) progress = end;
 	else if(p<start) progress = start;
@@ -147,7 +158,7 @@ void CLprogress::setprogress(xlong p)
 	pprogress = punit * progress;
 }
 
-void CLprogress::addprogress(xlong a)
+void CLprogress::addprogress(xlong a) //! noncritical
 {
 	if(progress+a>end) progress = end;
 	else if(progress+a<start) progress = start;
@@ -155,11 +166,12 @@ void CLprogress::addprogress(xlong a)
 	pprogress = punit * progress;
 }
 
-xlong CLprogress::getstart() const { return start; }
+xlong CLprogress::getstart() const { return start; } //! noncritical
 
-xlong CLprogress::getend() const { return end; }
+xlong CLprogress::getend() const { return end; } //! noncritical
 
-xlong CLprogress::getprogress() const { return progress; }
+xlong CLprogress::getprogress() const { return progress; } //! noncritical
+///*
 
 #endif
 

@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 	xlong vertcount = 0;
 	xlong polycount = 0;
 	rawpoly* polys = new rawpoly[cols*2];
-	xchar polyz = 0;
+	xlong polyz = 0;
 	
 	CLobject** terrows = new CLobject*[rows-1];
 	
@@ -207,7 +207,7 @@ int main(int argc, char** argv)
 			resetx2 = 0;
 			//*
 		}
-		terrows[i] = new CLobject(polys,polycount,0x00FF0000,0);
+		terrows[i] = new CLobject(polys,polycount,0x00800000,0);
 		polycount = x0 = x1 = x2 = x3 = o0 = o1 = o2 = o3 = y1 = y2 = 0;
 	}
 	//*
@@ -337,9 +337,9 @@ int main(int argc, char** argv)
 		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
 		
 		q.y = 20;
-		for(xlong i=25; i<50; i++)
+		for(xlong i=0; i<25; i++)
 		{
-			terrows[i]->display(q,AMBIENT + SHAPE);
+			terrows[i]->display(q,AMBIENT + FLAT + ZLIGHT);
 			q.y += 20;
 		}
 	
