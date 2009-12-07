@@ -1,11 +1,16 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLRESOURCE
 #define HH_CLRESOURCE
-#pragma message "Compiling " __FILE__
+///*
 
 //include data-ar?
 
+///decarations
 //xpm atcrosslevel icon
 const static xchar* CLicon[] = {
 
@@ -79,6 +84,7 @@ const static xchar* CLxzcursor[] =
 
 };
 //*
+///*
 
 #endif
 

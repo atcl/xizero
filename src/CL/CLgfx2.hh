@@ -55,6 +55,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		xlong getfontstringheight(const char* a,xlong f) const;
 		uxlong getEGAcolor(xchar c) const;
 		bool comparecolors(uxlong c1,uxlong c2) const;
+		uxlong blendcolors(uxlong c1,uxlong c2,xlong m) const;
 		uxlong getgradient(uxlong s,uxlong e,xchar i) const;
 		sprite* savescreen() const;
 };
@@ -247,6 +248,28 @@ bool CLgfx2::comparecolors(uxlong c1,uxlong c2) const //! critical
 uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i) const //! critical
 {
 	//((s.r-e.r)/255)*i, ((s.g - e.g)/255)*i, ((s.b - e.b)/255)*i
+}
+
+uxlong CLgfx2::blendcolors(uxlong c1,uxlong c2,xlong m) const //! critical
+{
+	uxlong r = 0;
+	
+	switch(m)
+	{
+		case 0: r = c1; break; //normal
+		case 1: r = c1 & c2; break; //and
+		case 2: r = c1 | c2; break; //or	
+		case 3: r = c1 ^ c2; break; //xor
+		case 4: r = ~(c1 & c2); break; //nand
+		case 5: r = ~(c1 | c2); break; //nor
+		case 6: r = ~c1; break; //not
+		case 7:  break; //add
+		case 8:  break; //sub
+		case 9:  break; //mul
+		default: r = c1; break;
+	}
+	
+	return r;
 }
 
 sprite* CLgfx2::savescreen() const //! critical
