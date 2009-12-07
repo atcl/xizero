@@ -1,15 +1,22 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLSCREEN
 #define HH_CLSCREEN
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
 #include "CLutils.hh"
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
+///*
 
+///header
 /* class name:	CLtranstions
  * 
  * description:	some screen transitions
@@ -20,7 +27,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
 {
 	friend class CLsingle<CLtransitions>;
@@ -29,19 +38,17 @@ class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
 		xchar fade_const;
 		xlong diss_const;
 		xlong circ_const;
-		CLtransitions();
-		~CLtransitions();
+		CLtransitions() { };
+		~CLtransitions() { };
 	public:
 		void circleblend(xlong x,xlong y,xlong r,xlong t);
 		void dissolve();
 		void fadetoblack();
 };
+///*
 
-CLtransitions::CLtransitions() { }
-
-CLtransitions::~CLtransitions() { }
-
-void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t)
+///implementation
+void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t) //! critical
 {
 	bool secondtime = 0;
 	
@@ -54,7 +61,7 @@ void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t)
 	}
 }
 
-void CLtransitions::dissolve()
+void CLtransitions::dissolve() //! critical
 {
 	xlong rx = 0;
 	xlong ry = 0;
@@ -75,7 +82,7 @@ void CLtransitions::dissolve()
 	}
 }
 
-void CLtransitions::fadetoblack()
+void CLtransitions::fadetoblack() //! critical
 {
 	uxchar comp[4] = { 0,0,0,0 };
 	uxlong i = 0;
@@ -95,5 +102,6 @@ void CLtransitions::fadetoblack()
 		clsystem->wait(5);
 	}
 }
+///*
 
 #endif
