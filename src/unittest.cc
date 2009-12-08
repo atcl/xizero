@@ -222,11 +222,17 @@ int main(int argc, char** argv)
 			//*
 		}
 		
-		//insert vertical connecting polygons
+		polycount--;
 		
+		//insert horizontal connecting polygons
+		xlong oldpolycount = polycount;
+		for(xlong j=1; j<oldpolycount; j++)
+		{
+			
+		}
 		//*
 		
-		//insert lower horizontal connecting polygons
+		//insert lower vertical connecting polygons
 		
 		//*
 		
