@@ -222,8 +222,6 @@ int main(int argc, char** argv)
 			//*
 		}
 		
-		polycount--;
-		
 		//insert horizontal connecting polygons
 		xlong oldpolycount = polycount;
 		for(xlong j=1; j<oldpolycount; j++)
