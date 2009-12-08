@@ -41,6 +41,7 @@
 #include "CL/CLgfx1.hh"
 #include "CL/CLgfx2.hh"
 #include "CL/CLar.hh"
+#include "CL/CLapp.hh"
 //*
 
 //gui classes
