@@ -35,9 +35,8 @@ class CLapp : public virtual CLcl
 		uxlong size;
 		uxlong version;
 		
-		
 	public:
-		CLapp();
+		CLapp(xlong argc,xchar** argv,const xchar* t,const xchar* i,uxlong v);
 		~CLapp();
 		void exit();
 		xlong waitforkey();
@@ -50,50 +49,38 @@ class CLapp : public virtual CLcl
 ///*
 
 ///implementation
-CLapp::CLapp()
+CLapp::CLapp(xlong argc,xchar** argv,const xchar* t,const xchar* i,uxlong v) //! noncritical
+{
+	name = argv[0];
+	//title = t;
+	//icon = i;
+	version = v;
+}
+
+CLapp::~CLapp() //! noncritical
 {
 
 }
 
-CLapp::~CLapp()
-{
-
-}
-
-void CLapp::exit()
-{
-	
-}
-
-xlong CLapp::waitforkey()
+void CLapp::exit() //! noncritical
 {
 	
 }
 
-xchar* CLapp::getname() const //! noncritical
+xlong CLapp::waitforkey() //! noncritical
 {
 	
 }
 
-xchar* CLapp::gettitle() const //! noncritical
-{
-	
-}
+xchar* CLapp::getname() const { return name; } //! noncritical
 
-xchar* CLapp::geticon() const //! noncritical
-{
-	
-}
+xchar* CLapp::gettitle() const { return title; } //! noncritical
 
-uxlong CLapp::getsize() const //! noncritical
-{
-	
-}
+xchar* CLapp::geticon() const { return icon; } //! noncritical
 
-uxlong CLapp::getversion() const //! noncritical
-{
-	
-}
+uxlong CLapp::getsize() const { return size; } //! noncritical
+
+uxlong CLapp::getversion() const { return version; } //! noncritical
 ///*
 
 #endif

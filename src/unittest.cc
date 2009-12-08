@@ -57,10 +57,12 @@ int main(int argc, char** argv)
 	xlong x1 = 0;
 	xlong x2 = 0;
 	xlong x3 = 0;
+	xlong xz = 0;
 	xlong o0 = 0;
 	xlong o1 = 0;
 	xlong o2 = 0;
 	xlong o3 = 0;
+	xlong oz = 0;
 	
 	bool resetx2 = 0;
 	bool resetx3 = 0;
@@ -198,17 +200,38 @@ int main(int argc, char** argv)
 			polys[polycount].v[2].z = -(polyz/4);
 			//*
 			
-			//prepare for next polygon
-			polycount++;
-			o0 = x0;
-			o1 = x1;
-			o2 = x2;
-			o3 = x3;
+			//merge if mergeable with previous polygon and prepare for next polygon
+			if(oz==polyz && o1==x0 && o2==x3)
+			{
+				polys[polycount-1].v[1].x = polys[polycount].v[1].x;
+				polys[polycount-1].v[2].x = polys[polycount].v[2].x;
+				o1 = x1;
+				o2 = x2;
+			}
+			else
+			{
+				polycount++;
+				o0 = x0;
+				o1 = x1;
+				o2 = x2;
+				o3 = x3;
+				oz = polyz;
+			}
+				
 			resetx2 = 0;
 			//*
 		}
-		terrows[i] = new CLobject(polys,polycount,0x00800000,0);
-		polycount = x0 = x1 = x2 = x3 = o0 = o1 = o2 = o3 = y1 = y2 = 0;
+		
+		//insert vertical connecting polygons
+		
+		//*
+		
+		//insert lower horizontal connecting polygons
+		
+		//*
+		
+		terrows[i] = new CLobject(polys,polycount,0x00000080,0);
+		polycount = x0 = x1 = x2 = x3 = xz = o0 = o1 = o2 = o3 = oz = y1 = y2 = 0;
 	}
 	//*
 
@@ -340,6 +363,7 @@ int main(int argc, char** argv)
 		for(xlong i=0; i<25; i++)
 		{
 			terrows[i]->display(q,AMBIENT + FLAT + ZLIGHT);
+			terrows[i]->display(q,SHAPE);
 			q.y += 20;
 		}
 	

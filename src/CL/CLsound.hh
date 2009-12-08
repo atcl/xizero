@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLSOUND
 #define HH_CLSOUND
-#pragma message "Compiling " __FILE__ " ! TODO: ..." 
+///*
 
+///includes
 #ifdef WIN32
 	#include <mmsystem.hh>
 #else //ifdef LINUX
@@ -19,7 +24,9 @@
 #include "CLcl.hh"
 #include "CLsingle.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLsound
  * 
  * description:	Plays wave files
@@ -30,7 +37,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 struct CLwav
 {
 	CLfile* file;
@@ -57,12 +66,14 @@ class CLsound : public virtual CLcl, public CLsingle<CLsound>
 		void stop();
 		void exit();
 };
+///*
 
+///implementation
 #ifdef WIN32
 
-CLsound::CLsound() { isloop = -1; device = 0; }
+CLsound::CLsound() { isloop = -1; device = 0; } //! noncritical
 
-bool CLsound::play(const xchar* f,bool l)
+bool CLsound::play(const xchar* f,bool l) //! noncritical
 {
 	switch(l)
 	{
@@ -81,18 +92,18 @@ bool CLsound::play(const xchar* f,bool l)
 	}
 }
 
-void CLsound::stop()
+void CLsound::stop() //! noncritical
 {
 	//stop async playing loop sound
 	PlaySound(NULL, 0, 0);
 	//*
 }
 
-void CLsound::exit() { }
+void CLsound::exit() { } //! noncritical
 
 #else //ifdef LINUX
 
-CLsound::CLsound()
+CLsound::CLsound() //! noncritical
 {
 	isloop = -1;
 	
@@ -120,7 +131,7 @@ CLsound::CLsound()
 	nosound = 0;
 }
 
-bool CLsound::play(const xchar* f,bool l)
+bool CLsound::play(const xchar* f,bool l) //! noncritical
 {
 	if(device<0 || nosound==1) return 0;
 	
@@ -203,7 +214,7 @@ bool CLsound::play(const xchar* f,bool l)
 	}
 }
 
-void CLsound::stop()
+void CLsound::stop() //! noncritical
 {
 	if(device != -1)
 	{
@@ -213,7 +224,7 @@ void CLsound::stop()
 	}
 }
 
-void CLsound::exit()
+void CLsound::exit() //! noncritical
 {
 	if(device != -1)
 	{
@@ -228,6 +239,7 @@ void CLsound::exit()
 }
 #endif
 //*
+///*
 
 #endif
 
