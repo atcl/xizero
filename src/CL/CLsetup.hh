@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLSETUP
 #define HH_CLSETUP
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLmath.hh"
@@ -11,13 +16,17 @@
 #include "CLglobal.hh"
 #include "CLbench.hh"
 #include "CLmatrix.hh"
+///*
 
+///definitions
 //prototypes:
 CLglobal* CLsetup();
 void CLgarbage();
 //*
+///*
 
-CLglobal* CLsetup()
+///implementation
+CLglobal* CLsetup() //! noncritical
 {
 	CLglobal* clglobal = CLglobal::getinstance(); 
 
@@ -38,7 +47,7 @@ CLglobal* CLsetup()
 	return clglobal;
 }
 
-void CLgarbage()
+void CLgarbage() //! noncritical
 {
 	//free globals
 	delete linearM;
@@ -47,5 +56,6 @@ void CLgarbage()
 	delete rightside;
 	//*
 }
+///*
 
 #endif
