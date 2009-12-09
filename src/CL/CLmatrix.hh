@@ -36,7 +36,7 @@ class CLmatrix : public virtual CLcl
 	private:
 		float m[4][4];
 		float t[4][4]; //todo: implement
-		void multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44);
+		void multiplicate();
 	public:
 		CLmatrix(bool i=1);
 		~CLmatrix();
@@ -61,33 +61,34 @@ class CLmatrix : public virtual CLcl
 ///*
 
 ///implementation
-void CLmatrix::multiplicate(float n11,float n12,float n13,float n14,float n21,float n22,float n23,float n24,float n31,float n32,float n33,float n34,float n41,float n42,float n43,float n44) //! critical
+void CLmatrix::multiplicate() //! supercritical
 {
-	float tm0; float tm1; float tm2; float tm3;
+	float r[4][4];
+	
+	r[0][0] = m[0][0]; r[0][1] = m[0][1]; r[0][2] = m[0][2]; r[0][3] = m[0][3];
+	r[1][0] = m[1][0]; r[1][1] = m[1][1]; r[1][2] = m[1][2]; r[1][3] = m[1][3];
+	r[2][0] = m[2][0]; r[2][1] = m[2][1]; r[2][2] = m[2][2]; r[2][3] = m[2][3];
+	r[3][0] = m[3][0]; r[3][1] = m[3][1]; r[3][2] = m[3][2]; r[3][3] = m[3][3];
 
-	tm0 = m[0][0]; tm1 = m[0][1]; tm2 = m[0][2]; tm3 = m[0][3]; 
-	m[0][0] = (tm0*n11 + tm1*n21 + tm2*n31 + tm3*n41);
-	m[0][1] = (tm0*n12 + tm1*n22 + tm2*n32 + tm3*n42);
-	m[0][2] = (tm0*n13 + tm1*n23 + tm2*n33 + tm3*n43);
-	m[0][3] = (tm0*n14 + tm1*n24 + tm2*n34 + tm3*n44);
+	m[0][0] = (r[0][0]*t[0][0]) + (r[0][1]*t[1][0]) + (r[0][2]*t[2][0]) + (r[0][3]*t[3][0]);
+	m[0][1] = (r[0][0]*t[0][1]) + (r[0][1]*t[1][1]) + (r[0][2]*t[2][1]) + (r[0][3]*t[3][1]);
+	m[0][2] = (r[0][0]*t[0][2]) + (r[0][1]*t[1][2]) + (r[0][2]*t[2][2]) + (r[0][3]*t[3][2]);
+	m[0][3] = (r[0][0]*t[0][3]) + (r[0][1]*t[1][3]) + (r[0][2]*t[2][3]) + (r[0][3]*t[3][3]);
 
-	tm0 = m[1][0]; tm1 = m[1][1]; tm2 = m[1][2]; tm3 = m[1][3];
-	m[1][0] = (tm0*n11 + tm1*n21 + tm2*n31 + tm3*n41);
-	m[1][1] = (tm0*n12 + tm1*n22 + tm2*n32 + tm3*n42);
-	m[1][2] = (tm0*n13 + tm1*n23 + tm2*n33 + tm3*n43);
-	m[1][3] = (tm0*n14 + tm1*n24 + tm2*n34 + tm3*n44);
+	m[1][0] = (r[1][0]*t[0][0]) + (r[1][1]*t[1][0]) + (r[1][2]*t[2][0]) + (r[1][3]*t[3][0]);
+	m[1][1] = (r[1][0]*t[0][1]) + (r[1][1]*t[1][1]) + (r[1][2]*t[2][1]) + (r[1][3]*t[3][1]);
+	m[1][2] = (r[1][0]*t[0][2]) + (r[1][1]*t[1][2]) + (r[1][2]*t[2][2]) + (r[1][3]*t[3][2]);
+	m[1][3] = (r[1][0]*t[0][3]) + (r[1][1]*t[1][3]) + (r[1][2]*t[2][3]) + (r[1][3]*t[3][3]);
+	
+	m[2][0] = (r[2][0]*t[0][0]) + (r[2][1]*t[1][0]) + (r[2][2]*t[2][0]) + (r[2][3]*t[3][0]);
+	m[2][1] = (r[2][0]*t[0][1]) + (r[2][1]*t[1][1]) + (r[2][2]*t[2][1]) + (r[2][3]*t[3][1]);
+	m[2][2] = (r[2][0]*t[0][2]) + (r[2][1]*t[1][2]) + (r[2][2]*t[2][2]) + (r[2][3]*t[3][2]);
+	m[2][3] = (r[2][0]*t[0][3]) + (r[2][1]*t[1][3]) + (r[2][2]*t[2][3]) + (r[2][3]*t[3][3]);
 
-	tm0 = m[2][0]; tm1 = m[2][1]; tm2 = m[2][2]; tm3 = m[2][3];
-	m[2][0] = (tm0*n11 + tm1*n21 + tm2*n31 + tm3*n41);
-	m[2][1] = (tm0*n12 + tm1*n22 + tm2*n32 + tm3*n42);
-	m[2][2] = (tm0*n13 + tm1*n23 + tm2*n33 + tm3*n43);
-	m[2][3] = (tm0*n14 + tm1*n24 + tm2*n34 + tm3*n44);
-
-	tm0 = m[3][0]; tm1 = m[3][1]; tm2 = m[3][2]; tm3 = m[3][3];
-	m[3][0] = (tm0*n11 + tm1*n21 + tm2*n31 + tm3*n41);
-	m[3][1] = (tm0*n12 + tm1*n22 + tm2*n32 + tm3*n42);
-	m[3][2] = (tm0*n13 + tm1*n23 + tm2*n33 + tm3*n43);
-	m[3][3] = (tm0*n14 + tm1*n24 + tm2*n34 + tm3*n44);
+	m[3][0] = (r[3][0]*t[0][0]) + (r[3][1]*t[1][0]) + (r[3][2]*t[2][0]) + (r[3][3]*t[3][0]);
+	m[3][1] = (r[3][0]*t[0][1]) + (r[3][1]*t[1][1]) + (r[3][2]*t[2][1]) + (r[3][3]*t[3][1]);
+	m[3][2] = (r[3][0]*t[0][2]) + (r[3][1]*t[1][2]) + (r[3][2]*t[2][2]) + (r[3][3]*t[3][2]);
+	m[3][3] = (r[3][0]*t[0][3]) + (r[3][1]*t[1][3]) + (r[3][2]*t[2][3]) + (r[3][3]*t[3][3]);
 }
 
 CLmatrix::CLmatrix(bool i) //! noncritical
@@ -104,42 +105,66 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
 	{
 		float sinx = clmath->sin(x);
 		float cosx = clmath->cos(x);
-		multiplicate(1,0,0,0,0,cosx,-sinx,0,0,sinx,cosx,0,0,0,0,1);
+		t[0][0] = 1;	t[0][1] = 0;	t[0][2] = 0;	t[0][3] = 0;
+		t[1][0] = 0;	t[1][1] = cosx;	t[1][2] =-sinx;	t[1][3] = 0;
+		t[2][0] = 0;	t[2][1] = sinx;	t[2][2] = cosx;	t[2][3] = 0;
+		t[3][0] = 0;	t[3][1] = 0;	t[3][2] = 0;	t[3][3] = 1;
+		multiplicate();
 	}	
 
 	if(y!=0)
 	{
 		float siny = clmath->sin(y);
 		float cosy = clmath->cos(y);
-		multiplicate(cosy,0,siny,0,0,1,0,0,-siny,0,cosy,0,0,0,0,1);
+		t[0][0] = cosy;	t[0][1] = 0;	t[0][2] = siny;	t[0][3] = 0;
+		t[1][0] = 0;	t[1][1] = 1;	t[1][2] = 0;	t[1][3] = 0;
+		t[2][0] =-siny;	t[2][1] = 0;	t[2][2] = cosy;	t[2][3] = 0;
+		t[3][0] = 0;	t[3][1] = 0;	t[3][2] = 0;	t[3][3] = 1;
+		multiplicate();
 	}
 
 	if(z!=0)
 	{
 		float sinz = clmath->sin(z);
 		float cosz = clmath->cos(z);
-		multiplicate(cosz,-sinz,0,0,sinz,cosz,0,0,0,0,1,0,0,0,0,1);
+		t[0][0] = cosz;	t[0][1] =-sinz;	t[0][2] = 0;	t[0][3] = 0;
+		t[1][0] = sinz;	t[1][1] = cosz;	t[1][2] = 0;	t[1][3] = 0;
+		t[2][0] = 0;	t[2][1] = 0;	t[2][2] = 1;	t[2][3] = 0;
+		t[3][0] = 0;	t[3][1] = 0;	t[3][2] = 0;	t[3][3] = 1;
+		multiplicate();
 	}
 }
 
 void CLmatrix::translate(float x,float y,float z) //! noncritical
 {
 	//translate using fourth column of matrix
-	multiplicate(1,0,0,x,0,1,0,y,0,0,1,z,0,0,0,1);
+	t[0][0] = 1;	t[0][1] = 0;	t[0][2] = 0;	t[0][3] = x;
+	t[1][0] = 0;	t[1][1] = 1;	t[1][2] = 0;	t[1][3] = y;
+	t[2][0] = 0;	t[2][1] = 0;	t[2][2] = 1;	t[2][3] = z;
+	t[3][0] = 0;	t[3][1] = 0;	t[3][2] = 0;	t[3][3] = 1;
+	multiplicate();
 	//*
 }
 
 void CLmatrix::scale(float x,float y,float z) //! noncritical
 {
 	//scale x,y,z seperately
-	multiplicate(x,0,0,0,0,y,0,0,0,0,z,0,0,0,0,1);
+	t[0][0] = x;	t[0][1] = 0;	t[0][2] = 0;	t[0][3] = 0;
+	t[1][0] = 0;	t[1][1] = y;	t[1][2] = 0;	t[1][3] = 0;
+	t[2][0] = 0;	t[2][1] = 0;	t[2][2] = z;	t[2][3] = 0;
+	t[3][0] = 0;	t[3][1] = 0;	t[3][2] = 0;	t[3][3] = 1;
+	multiplicate();
 	//*
 }
 
 void CLmatrix::aspectscale(float x) //! noncritical
 {
 	//scale x,y,z alike
-	multiplicate(x,0,0,0,0,x,0,0,0,0,x,0,0,0,0,1);
+	t[0][0] = x;	t[0][1] = 0;	t[0][2] = 0;	t[0][3] = 0;
+	t[1][0] = 0;	t[1][1] = x;	t[1][2] = 0;	t[1][3] = 0;
+	t[2][0] = 0;	t[2][1] = 0;	t[2][2] = x;	t[2][3] = 0;
+	t[3][0] = 0;	t[3][1] = 0;	t[3][2] = 0;	t[3][3] = 1;
+	multiplicate();
 	//*
 }
 

@@ -1,11 +1,18 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLSTRUCT
 #define HH_CLSTRUCT
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
+///*
 
+///definitions
 union doubleword
 {
 	uxlong  dd;
@@ -78,5 +85,6 @@ struct CLexe
 	xlong  size;
 	xlong  version;
 };
+///*
 
 #endif
