@@ -28,6 +28,7 @@
 #include "CLscreen.hh"
 #include "CLsound.hh"
 #include "CLid.hh"
+#include "CLstring.hh"
 
 #include "CLglobals.hh"
 ///*
@@ -64,6 +65,7 @@ CLtransitions* CLglobal::cltransitions = CLtransitions::instance();
 CLsound*  CLglobal::clsound  = CLsound::instance();
 CLsprites* CLglobal::clsprites = CLsprites::instance();
 CLid*     CLglobal::clid     = CLid::instance();
+CLstring* CLglobal::clstring = CLstring::instance();
 
 CLglobal* CLglobal::global = 0;
 ///*

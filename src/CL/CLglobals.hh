@@ -48,6 +48,7 @@ class CLtransitions;
 class CLsound;
 class CLsprites;
 class CLid;
+class CLstring;
 ///*
 
 ///definitions
@@ -94,6 +95,7 @@ class CLglobal
 		static CLsound*  clsound;
 		static CLsprites* clsprites;
 		static CLid*     clid;
+		static CLstring* clstring;
 		
 		static CLglobal* getinstance();
 };
