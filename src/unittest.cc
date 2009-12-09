@@ -226,7 +226,22 @@ int main(int argc, char** argv)
 		xlong oldpolycount = polycount;
 		for(xlong j=1; j<oldpolycount; j++)
 		{
+			polys[polycount].v[0].x = polys[j-1].v[1].x;
+			polys[polycount].v[1].x = polys[j].v[0].x;
+			polys[polycount].v[2].x = polys[j].v[3].x;
+			polys[polycount].v[3].x = polys[j-1].v[2].x;
 			
+			polys[polycount].v[0].y = 10;
+			polys[polycount].v[1].y = 10;
+			polys[polycount].v[2].y = -10;
+			polys[polycount].v[3].y = -10;
+			
+			polys[polycount].v[0].z = polys[j-1].v[0].z;
+			polys[polycount].v[1].z = polys[j].v[0].z;
+			polys[polycount].v[2].z = polys[j].v[0].z;
+			polys[polycount].v[3].z = polys[j-1].v[0].z;
+			
+			polycount++;
 		}
 		//*
 		
@@ -234,7 +249,7 @@ int main(int argc, char** argv)
 		
 		//*
 		
-		terrows[i] = new CLobject(polys,polycount,0x00000080,0);
+		terrows[i] = new CLobject(polys,polycount,0x000000FF,0);
 		polycount = x0 = x1 = x2 = x3 = xz = o0 = o1 = o2 = o3 = oz = y1 = y2 = 0;
 	}
 	//*

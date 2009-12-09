@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLSPRITES
 #define HH_CLSPRITES
-#pragma message "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
+///*
 
+///header
 /* class name:	CLsprites
  * 
  * description:	Draws compiled sprites
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLsprites : public virtual CLcl, public CLsingle<CLsprites>
 {
 	friend class CLsingle<CLsprites>;
@@ -30,8 +39,10 @@ class CLsprites : public virtual CLcl, public CLsingle<CLsprites>
 		static void drawantimatter(xlong x,xlong y);
 		static void drawplasma(xlong x,xlong y);
 };
+///*
 
-void CLsprites::drawantimatter(xlong x,xlong y)
+///implementation
+void CLsprites::drawantimatter(xlong x,xlong y) //! critical
 {
 	//is on screen
 	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) return;
@@ -97,7 +108,7 @@ void CLsprites::drawantimatter(xlong x,xlong y)
 	//*
 }
 
-void CLsprites::drawplasma(xlong x,xlong y)
+void CLsprites::drawplasma(xlong x,xlong y) //! critical
 {
 	//is on screen
 	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) return;
@@ -162,6 +173,7 @@ void CLsprites::drawplasma(xlong x,xlong y)
 	cldoublebuffer[l6] = 0x000000FF;
 	//*
 }
+///*
 
 #endif
 
