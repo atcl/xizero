@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLAPI
 #define HH_CLAPI
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include <iostream>
 #include <iomanip>
 #include <stdlib.h>
@@ -16,7 +21,9 @@
 #include "CLversion.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
+///*
 
+///header
 /* class name:	CLsystem
  * 
  * description:	Takes care of all kinds of os dependent functionality
@@ -27,7 +34,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 {
 	friend class CLsingle<CLsystem>;
@@ -57,12 +66,14 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
 		void    installsystemkey(xchar scancode,void *action);
 };
+///*
 
-uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends
+///implementation
+uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends  //! noncritical
 
-uxchar CLsystem::eof() { return 0x1A; }
+uxchar CLsystem::eof() { return 0x1A; } //! noncritical
 
-CLexe* CLsystem::exe(xchar** a)
+CLexe* CLsystem::exe(xchar** a) //! noncritical
 {
 	//fill CLexe struct
 	CLexe* r = new CLexe;
@@ -75,7 +86,7 @@ CLexe* CLsystem::exe(xchar** a)
 	//*
 }
 
-void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
+void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d) //! noncritical
 {
 	if(e!=0) e();
 
@@ -83,7 +94,7 @@ void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d)
 	::exit(r);
 }
 
-void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
+void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m) //! noncritical
 {
 	if(e!=0) e();
 
@@ -91,7 +102,7 @@ void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m)
 	::exit(r);
 }
 
-CLfile* CLsystem::getfile(const xchar* fn,bool s)
+CLfile* CLsystem::getfile(const xchar* fn,bool s) //! noncritical
 {
 	CLfile* re = new CLfile;
 
@@ -144,7 +155,7 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s)
 	return re;
 }
 
-bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s)
+bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s) //! noncritical
 {
 	FILE* of;
 	
@@ -163,7 +174,7 @@ bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s)
 	return 1;
 }
 
-bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s)
+bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s) //! noncritical
 {
 	FILE* of;
 	
@@ -182,7 +193,7 @@ bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s)
 	return 1;
 }
 
-bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow)
+bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) //! noncritical
 {
 	FILE* of;
 	
@@ -209,7 +220,7 @@ bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow)
 	return 1;
 }
 
-bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow)
+bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritical
 {
 	FILE* of;
 	
@@ -236,48 +247,39 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow)
 	return 1;
 }
 
-void CLsystem::print(const xchar* c,bool i)
+void CLsystem::print(const xchar* c,bool i) //! noncritical
 {
 	//print xchar array, i decides if line end is output
 	std::cout << c;
 
-	if(i)
-	{
-		std::cout << std::endl;
-	}
+	if(i) { std::cout << std::endl;	}
 	//*
 }
 
-void CLsystem::print(const xlong l,bool i)
+void CLsystem::print(const xlong l,bool i) //! noncritical
 {
 	//print xlong, i decides if line end is output
 	std::cout << l;
 
-	if(i)
-	{
-		std::cout << std::endl;
-	}
+	if(i) {	std::cout << std::endl;	}
 	//*
 }
 
-void CLsystem::print(const float l,bool i)
+void CLsystem::print(const float l,bool i) //! noncritical
 {
 	//print float, i decides if line end is output
 	std::cout << l;
 
-	if(i)
-	{
-		std::cout << std::endl;
-	}
+	if(i) {	std::cout << std::endl;	}
 	//*
 }
 
-void CLsystem::waitforkey()
+void CLsystem::waitforkey() //! noncritical
 {
 	std::cin.get(); //change to any key, now only enter
 }
 
-xlong CLsystem::wait(xlong milliseconds)
+xlong CLsystem::wait(xlong milliseconds) //! noncritical
 {
 	//get current time and calc stop time
 	xlong starttime = xlong(1000 * clock() / CLOCKS_PER_SEC);
@@ -292,34 +294,28 @@ xlong CLsystem::wait(xlong milliseconds)
 	return 0;
 }
 
-xlong CLsystem::getmilliseconds() //since midnight
-{
-	return xlong(1000 * clock() / CLOCKS_PER_SEC);
-}
+xlong CLsystem::getmilliseconds() { return xlong(1000 * clock() / CLOCKS_PER_SEC); } //since midnight  //! noncritical
 
-xlong CLsystem::system(const xchar* c)
-{
-	return ::system(c);
-}
+xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
 
-xlong CLsystem::ato(const xchar* c)
-{
-	return atoi(c);
-}
+xlong CLsystem::ato(const xchar* c) { return atoi(c); } //! noncritical
 
-xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l)
+xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l) //! noncritical
 {
 	if(l==0) return strcmp(a,b);
 	else return strncmp(a,b,l);
 }
 
-void CLsystem::installsystemkey(xchar scancode,void *action)
+void CLsystem::installsystemkey(xchar scancode,void *action) //! noncritical
 {
 
 }
+///*
 
+///declaration
 //temp
 namespace { CLsystem* clsystem = CLsystem::instance(); };
 //*
+///*
 
 #endif

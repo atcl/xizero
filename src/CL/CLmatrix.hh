@@ -36,7 +36,7 @@ class CLmatrix : public virtual CLcl
 	private:
 		float m[4][4];
 		float t[4][4]; //todo: implement
-		void multiplicate();
+		inline void multiplicate();
 	public:
 		CLmatrix(bool i=1);
 		~CLmatrix();

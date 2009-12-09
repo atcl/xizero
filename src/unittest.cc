@@ -45,7 +45,6 @@ int main(int argc, char** argv)
 	xlong opolycount = 0;
 	rawpoly* polys = new rawpoly[cols*2];
 	rawpoly* opolys = new rawpoly[cols*2];
-	xlong polyz = 0;
 	
 	CLobject** terrows = new CLobject*[rows-1];
 	
@@ -80,10 +79,10 @@ int main(int argc, char** argv)
 			//set first vertex
 			x0 = o1;
 			currz.dd = map[i*cols+x0];
-			polyz = currz.db[2];
+			xz = currz.db[2];
 			polys[polycount].v[0].x = (x0*20)-400;
 			polys[polycount].v[0].y = 10;
-			polys[polycount].v[0].z = -(polyz/4);
+			polys[polycount].v[0].z = -(xz/4);
 			//*
 			
 			//find second vertex
@@ -92,14 +91,14 @@ int main(int argc, char** argv)
 				for(x1=x0; x1<cols; x1++) //->cols-1 
 				{
 					currz.dd = map[i*cols+x1];
-					if(currz.db[2]!=polyz) break;
+					if(currz.db[2]!=xz) break;
 				}
 				
 				//inter gap
 				for(y1=x1; y1<cols; y1++)
 				{
 					currz.dd = map[(i*cols)+y1];
-					if(currz.db[2]==polyz)
+					if(currz.db[2]==xz)
 					{
 						resetx22 = 1;
 						break;
@@ -116,17 +115,17 @@ int main(int argc, char** argv)
 			//set second vertex
 			polys[polycount].v[1].x = (x1*20)-400;
 			polys[polycount].v[1].y = 10;
-			polys[polycount].v[1].z = -(polyz/4);
+			polys[polycount].v[1].z = -(xz/4);
 			//*
 			
 			//find third vertex
 			currz.dd = map[((i+1)*cols)+x0];
-			if(currz.db[2]==polyz)
+			if(currz.db[2]==xz)
 			{
 				for(x3=x0; x3>o2; x3--)
 				{
 					currz.dd = map[((i+1)*cols)+x3];
-					if(currz.db[2]!=polyz) break;
+					if(currz.db[2]!=xz) break;
 				}
 			}
 			else
@@ -134,15 +133,15 @@ int main(int argc, char** argv)
 				for(x3=x0; x3<cols; x3++)
 				{
 					currz.dd = map[((i+1)*cols)+x3];
-					if(currz.db[2]==polyz) break;
+					if(currz.db[2]==xz) break;
 				}
 				if(x3>x1)
 				{
 					x3 = x0;
 					currz.dd = map[((i+1)*cols)+x3];
-					polyz = currz.db[2];
-					polys[polycount].v[0].z = -(polyz/4);
-					polys[polycount].v[1].z = -(polyz/4);
+					xz = currz.db[2];
+					polys[polycount].v[0].z = -(xz/4);
+					polys[polycount].v[1].z = -(xz/4);
 					resetx2 = 1;
 				}
 			}
@@ -151,7 +150,7 @@ int main(int argc, char** argv)
 			//set third vertex
 			polys[polycount].v[3].x = (x3*20)-400;
 			polys[polycount].v[3].y = -10;
-			polys[polycount].v[3].z = -(polyz/4);
+			polys[polycount].v[3].z = -(xz/4);
 			//*
 			
 			//find fourth vertex
@@ -160,7 +159,7 @@ int main(int argc, char** argv)
 				for(x2=x3; x2<cols; x2++)
 				{
 					currz.dd = map[((i+1)*cols)+x2];
-					if(currz.db[2]!=polyz) break;
+					if(currz.db[2]!=xz) break;
 				}
 				
 				//inter gap
@@ -174,7 +173,7 @@ int main(int argc, char** argv)
 				for(y2=x2; y2<cols; y2++)
 				{
 					currz.dd = map[((i+1)*cols)+y2];
-					if(currz.db[2]==polyz && y2<x1)
+					if(currz.db[2]==xz && y2<x1)
 					{
 						x1 = x2;
 						polys[polycount].v[1].x = (x1*20)-400;
@@ -199,7 +198,7 @@ int main(int argc, char** argv)
 			//set fourth vertex
 			polys[polycount].v[2].x = (x2*20)-400;
 			polys[polycount].v[2].y = -10;
-			polys[polycount].v[2].z = -(polyz/4);
+			polys[polycount].v[2].z = -(xz/4);
 			//*
 			
 			//fix start and end of rows
@@ -218,7 +217,7 @@ int main(int argc, char** argv)
 			//*
 			
 			//merge if mergeable with previous polygon and prepare for next polygon
-			if(oz==polyz && o1==x0 && o2==x3)
+			if(oz==xz && o1==x0 && o2==x3)
 			{
 				polys[polycount-1].v[1].x = polys[polycount].v[1].x;
 				polys[polycount-1].v[2].x = polys[polycount].v[2].x;
@@ -232,7 +231,7 @@ int main(int argc, char** argv)
 				o1 = x1;
 				o2 = x2;
 				o3 = x3;
-				oz = polyz;
+				oz = xz;
 			}
 				
 			resetx2 = 0;
