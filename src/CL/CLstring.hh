@@ -1,12 +1,19 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLSTRING
 #define HH_CLSTRING
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
+///*
 
+///header
 /* class name:	CLstring
  * 
  * description:	Handles (c-)strings
@@ -17,7 +24,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLstring : public virtual CLcl
 {
 	private:
@@ -42,25 +51,27 @@ class CLstring : public virtual CLcl
 		//operator +
 		//operator []
 };
+///*
 
-CLstring::CLstring()
+///implementation
+CLstring::CLstring() //! noncritical
 {
 	s = new xchar;
 	*s = 0;
 	l = 0;
 }
 
-CLstring::CLstring(const xchar* c)
+CLstring::CLstring(const xchar* c) //! noncritical
 {
 	
 }
 
-CLstring::~CLstring()
+CLstring::~CLstring() //! noncritical
 {
 
 }
 
-void CLstring::replace(xlong p,xchar c)
+void CLstring::replace(xlong p,xchar c) //! critical
 {
 	if(p<l)
 	{
@@ -68,7 +79,7 @@ void CLstring::replace(xlong p,xchar c)
 	}
 }
 
-void CLstring::left(xlong p)
+void CLstring::left(xlong p) //! critical
 {
 	if(p<l && p>0)
 	{
@@ -76,7 +87,7 @@ void CLstring::left(xlong p)
 	}
 }
 
-void CLstring::right(xlong p)
+void CLstring::right(xlong p) //! critical
 {
 	if(p<l && p>0)
 	{
@@ -84,7 +95,7 @@ void CLstring::right(xlong p)
 	}
 }
 
-void CLstring::mid(xlong a,xlong z)
+void CLstring::mid(xlong a,xlong z) //! critical
 {
 	if(z<l && a>=0)
 	{
@@ -92,7 +103,7 @@ void CLstring::mid(xlong a,xlong z)
 	}
 }
 
-void CLstring::concat(CLstring c)
+void CLstring::concat(CLstring c) //! critical
 {
 
 }
@@ -102,20 +113,21 @@ void CLstring::concat(const xchar* c)
 
 }
 
-xlong CLstring::length()
+xlong CLstring::length() //! critical
 {
 	return l;
 }
 
-void CLstring::compare(CLstring c)
+void CLstring::compare(CLstring c) //! critical
 {
 	
 }
 
-void CLstring::compare(const xchar* c)
+void CLstring::compare(const xchar* c) //! critical
 {
 
 }
+///*
 
 #endif
 

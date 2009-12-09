@@ -42,7 +42,9 @@ int main(int argc, char** argv)
 	doubleword lastz = { 0 };
 	xlong vertcount = 0;
 	xlong polycount = 0;
+	xlong opolycount = 0;
 	rawpoly* polys = new rawpoly[cols*2];
+	rawpoly* opolys = new rawpoly[cols*2];
 	xlong polyz = 0;
 	
 	CLobject** terrows = new CLobject*[rows-1];
@@ -200,6 +202,21 @@ int main(int argc, char** argv)
 			polys[polycount].v[2].z = -(polyz/4);
 			//*
 			
+			//fix start and end of rows
+			if(x0==0)
+			{
+				polys[polycount].v[3].x = -400;
+			}
+			//~ else if(x1==cols-1)
+			//~ {
+				//~ polys[polycount].v[2].x = (x1*20)-400;
+			//~ }
+			//~ else if(x2==cols-1)
+			//~ {
+				//~ polys[polycount].v[1].x = (x2*20)-400;
+			//~ }
+			//*
+			
 			//merge if mergeable with previous polygon and prepare for next polygon
 			if(oz==polyz && o1==x0 && o2==x3)
 			{
@@ -250,6 +267,8 @@ int main(int argc, char** argv)
 		//*
 		
 		terrows[i] = new CLobject(polys,polycount,0x000000FF,0);
+		for(xlong k=0; k<polycount; k++) { opolys[k] = polys[k]; }
+		opolycount = polycount;
 		polycount = x0 = x1 = x2 = x3 = xz = o0 = o1 = o2 = o3 = oz = y1 = y2 = 0;
 	}
 	//*
@@ -380,6 +399,9 @@ int main(int argc, char** argv)
 		
 		q.y = 20;
 		for(xlong i=0; i<25; i++)
+		//for(xlong i=25; i<50; i++)
+		//for(xlong i=50; i<75; i++)
+		//for(xlong i=75; i<90; i++)
 		{
 			terrows[i]->display(q,AMBIENT + FLAT + ZLIGHT);
 			terrows[i]->display(q,SHAPE);

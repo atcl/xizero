@@ -42,7 +42,7 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		XColor Xwhite;
 		XColor Xblack;
 		XColor Xgrey;
-	
+
 		uxlong width;
 		uxlong height;
 		const xchar* title;
@@ -245,12 +245,10 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 		npos++;
 	}
 	xlong maxline = 0;
-	for(xlong i=1; i<msglines; i++)
-	{
-		if(msglen[i]>msglen[maxline]) maxline = i;
-	}
+	for(xlong i=1; i<msglines; i++) { if(msglen[i]>msglen[maxline]) maxline = i; }
 	//create window
-	xlong winwidth = 20+msglen[maxline]*6;
+	XFontStruct *font = XQueryFont(Xdisplay,XGContextFromGC(Xgc));
+	xlong winwidth = 20+XTextWidth(font,&message[msgpos[maxline]],msglen[maxline]);
 	xlong winheight = 40+msglines*16;
 	if(winwidth<200) winwidth = 200;
 	if(winwidth>800) winwidth = 400;
