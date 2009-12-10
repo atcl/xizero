@@ -98,7 +98,7 @@ CLwindow::CLwindow()
 	//init window title
 	XStoreName(Xdisplay,Xwindow,title);
 	//init icon
-	sprite* Ticon = clformat->loadxpm(CLicon);
+	sprite* Ticon = clformat->loadxpm(ICON);
 	XImage* Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
 	Pixmap icon = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
 	XPutImage(Xdisplay,icon,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);

@@ -89,7 +89,7 @@ void CLtransitions::fadetoblack() //! critical
 	
 	while(clwindow->run() && i<256)
 	{		
-		for(uxlong j=0; j<SCRS; j++)
+		for(uxlong j=0; j<(XRES*YRES); j++)
 		{
 			clutils->long2char(cldoublebuffer[j],comp[0],comp[1],comp[2],comp[3]);
 			if(comp[0] > 0) comp[0]--;

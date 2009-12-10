@@ -37,15 +37,15 @@
 uxlong CLglobal::screenbytewidth   = XRES<<2;
 uxlong CLglobal::screenbyteheight  = YRES<<2;
 uxlong CLglobal::screenbytedepth   = 4;
-uxlong CLglobal::screenbytesize    = SCRS<<2;
+uxlong CLglobal::screenbytesize    = (XRES*YRES)<<2;
 uxlong CLglobal::screenpixelwidth  = XRES;
 uxlong CLglobal::screenpixelheight = YRES;
-uxlong CLglobal::screenpixelsize   = SCRS;
+uxlong CLglobal::screenpixelsize   = (XRES*YRES);
 
-CLubuffer CLglobal::cldoublebuffer  = *(new CLubuffer(SCRS,0));
-CLubuffer CLglobal::cltriplebuffer  = *(new CLubuffer(SCRS,0));
-CLubuffer CLglobal::clstencilbuffer = *(new CLubuffer(SCRS,0));
-CLfbuffer CLglobal::clzbuffer       = *(new CLfbuffer(SCRS,ZRES));
+CLubuffer CLglobal::cldoublebuffer  = *(new CLubuffer((XRES*YRES),0));
+CLubuffer CLglobal::cltriplebuffer  = *(new CLubuffer((XRES*YRES),0));
+CLubuffer CLglobal::clstencilbuffer = *(new CLubuffer((XRES*YRES),0));
+CLfbuffer CLglobal::clzbuffer       = *(new CLfbuffer((XRES*YRES),ZRES));
 
 CLwindow* CLglobal::clwindow = CLwindow::instance();
 CLbench*  CLglobal::clbench  = CLbench::instance();

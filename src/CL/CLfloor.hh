@@ -87,8 +87,8 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s) //! noncritical
 	else shade = c;
 	//*
 	
-	cmask = new CLubuffer(SCRS,0);
-	zmask = new CLfbuffer(SCRS,ZRES);
+	cmask = new CLubuffer((XRES*YRES),0);
+	zmask = new CLfbuffer((XRES*YRES),ZRES);
 	
 	//draw floor mask
 	uxlong i=0;

@@ -2,6 +2,7 @@
 //licensed under zlib/libpng license
 
 #include "CLinc.h"
+#include "xizero.h"
 #include "xizero.hh"
 
 int main()

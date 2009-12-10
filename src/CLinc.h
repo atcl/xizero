@@ -5,6 +5,7 @@
 
 //project dependent
 #include "CLproject.hh"
+#include "xizero.h"
 //*
 
 //basic

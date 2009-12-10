@@ -56,6 +56,7 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
 		sprite*  loadras(CLfile* sf) const;
 		sprite*  loadxpm(const xchar* xpm[]) const;
+		sprite*  loadxpm(const xchar* xpm) const;
 		tileset* loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;

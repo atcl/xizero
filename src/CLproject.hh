@@ -1,8 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLPROJECT
 #define HH_CLPROJECT
+///*
 
+///declarations
 #if __GNUC__ <= 4 && __GNUC_MINOR__ < 4
 	#define u8 
 #endif
@@ -18,12 +24,6 @@
 #else //ifded DEV
 	#define BASEDIR 
 #endif
-
-#define XRES 800
-#define YRES 600
-#define ZRES 400
-#define SCRS XRES*YRES
-
-#define TITLE "atCROSSLEVEL's XiZero"
+///*
 
 #endif

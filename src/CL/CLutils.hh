@@ -1,14 +1,21 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLUTILS
 #define HH_CLUTILS
-#pragma message: "Compiling " __FILE__ " ! TODO: ..."
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLcl.hh"
 #include "CLsingle.hh"
+///*
 
+///header
 /* class name:	CLutils
  * 
  * description:	A rainbow of useful routines
@@ -19,9 +26,13 @@
  * 
  * version: 0.1
  */
+///*
 
+///declarations
 #define SEED 22695477
+///*
 
+///definitions
 class CLutils : public virtual CLcl, public CLsingle<CLutils>
 {
 	friend class CLsingle<CLutils>;
@@ -46,10 +57,12 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		xlong  hatoi(uxchar c) const;
 		xlong  hatoi(const xchar* c) const;
 };
+///*
 
-CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; }
+///implementation
+CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; } //! noncritical
 
-void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) const
+void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) const //! noncritical
 {
 	r0 = (l & 0xFF);
 	r1 = (l & 0xFF00) >> 8;
@@ -57,7 +70,7 @@ void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) con
 	r3 = (l & 0xFF000000) >> 24;
 }
 
-xchar CLutils::long2char(xlong l,xlong i) const
+xchar CLutils::long2char(xlong l,xlong i) const //! noncritical
 {
 	xchar ch = -1;
 
@@ -79,7 +92,7 @@ xchar CLutils::long2char(xlong l,xlong i) const
 	return ch;
 }
 
-xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3) const
+xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3) const //! noncritical
 {
 	xlong l;
 
@@ -91,19 +104,19 @@ xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3) const
 	return l;
 }
 
-xlong CLutils::chararraylength(const xchar* c) const
+xlong CLutils::chararraylength(const xchar* c) const //! noncritical
 {
 	xlong s = 0;
 	while (c[s]) { s++; }
 	return s;
 }
 
-void CLutils::copychararray(xchar* dst,const xchar* src,xlong length) const
+void CLutils::copychararray(xchar* dst,const xchar* src,xlong length) const //! noncritical
 {
 	for(uxlong i=0; i<length; i++) { dst[i] = src[i]; }
 }
 
-xchar* CLutils::clonechararray(const xchar* src) const
+xchar* CLutils::clonechararray(const xchar* src) const //! noncritical
 {
 	xlong l = 0;
 	while (src[l]) { l++; }
@@ -113,7 +126,7 @@ xchar* CLutils::clonechararray(const xchar* src) const
 	return r;
 }
 
-xlong CLutils::getlinecount(CLfile* sf) const
+xlong CLutils::getlinecount(CLfile* sf) const //! noncritical
 {
 	xlong lc = 0;	//line count
 
@@ -126,7 +139,7 @@ xlong CLutils::getlinecount(CLfile* sf) const
 	return lc;
 }
 
-xlong CLutils::getlinecount(const xchar* sf) const
+xlong CLutils::getlinecount(const xchar* sf) const //! noncritical
 {
 	xlong lc = 1;	//line count
 	xlong length = chararraylength(sf);
@@ -140,7 +153,7 @@ xlong CLutils::getlinecount(const xchar* sf) const
 	return lc;
 }
 
-bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe) const
+bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe) const //! noncritical
 {
 	xlong el = chararraylength(fe);
 	xlong es = 0;
@@ -149,7 +162,7 @@ bool CLutils::checkextension(xchar* fn,xlong nl,const xchar* fe) const
 	return true;
 }
 
-xlong CLutils::getrandom(uxlong range)
+xlong CLutils::getrandom(uxlong range) //! noncritical
 {
 	//xor-shift random number generator
 	seed++;
@@ -160,7 +173,7 @@ xlong CLutils::getrandom(uxlong range)
 	//*
 }
 
-xchar* CLutils::color2string(uxlong c) const
+xchar* CLutils::color2string(uxlong c) const //! noncritical
 {
 	doubleword tc;
 	tc.dd = c;
@@ -183,7 +196,7 @@ xchar* CLutils::color2string(uxlong c) const
 	return rc;
 }
 
-xlong CLutils::endian(xlong l) const
+xlong CLutils::endian(xlong l) const //! noncritical
 {
 	//converts/toggles endianess of l
 
@@ -202,7 +215,7 @@ xlong CLutils::endian(xlong l) const
 	return tl.dd;
 }
 
-xlong CLutils::hatoi(uxchar c) const
+xlong CLutils::hatoi(uxchar c) const //! noncritical
 {
 	switch(c)
 	{
@@ -232,7 +245,7 @@ xlong CLutils::hatoi(uxchar c) const
 	}
 }
 
-xlong CLutils::hatoi(const xchar* c) const
+xlong CLutils::hatoi(const xchar* c) const //! noncritical
 {
 	xchar currchar = 0;
 	xlong charcount = 0;
@@ -280,6 +293,7 @@ xlong CLutils::hatoi(const xchar* c) const
 	r >>= 4;
 	return r;
 }
+///*
 
 #endif
 

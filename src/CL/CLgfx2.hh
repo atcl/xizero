@@ -277,7 +277,7 @@ sprite* CLgfx2::savescreen() const //! critical
 	sprite* r = new sprite;
 	r->width = XRES;
 	r->height = YRES;
-	r->size = SCRS;
+	r->size = (XRES*YRES);
 	r->data = new uxlong[r->size];
 	
 	for(uxlong i=0; i<r->size; i++) { r->data[i] = cldoublebuffer[i]; }
