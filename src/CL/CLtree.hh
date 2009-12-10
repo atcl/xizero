@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLTREE
 #define HH_CLTREE
-#pragma message "Compiling " __FILE__ " ! TODO: all"
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
+///*
 
+///header
 /* class name:	CLtree
  * 
  * description:	A tree type
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 template<class member>
 struct node
 {
@@ -55,9 +64,11 @@ class CLtree : public virtual CLcl
 		bool isroot() const;
 		void print() const;
 };
+///*
 
+///implementation
 template<class member>
-CLtree<member>::CLtree()
+CLtree<member>::CLtree() //! noncritical
 {
 	rootnode = new node<member>;
 	rootnode->parent = 0;
@@ -67,43 +78,32 @@ CLtree<member>::CLtree()
 }
 
 template<class member>
-CLtree<member>::~CLtree() { delete rootnode; }
+CLtree<member>::~CLtree() { delete rootnode; } //! noncritical
 
 template<class member>
-void CLtree<member>::root() { current = rootnode; }
+void CLtree<member>::root() { current = rootnode; } //! noncritical
 
 template<class member>
-void CLtree<member>::child(xlong i)
-{
-	if(i<current->childcount)
-	{
-		current = current->child[i];
-	}
-}
+void CLtree<member>::child(xlong i) { if(i<current->childcount) { current = current->child[i]; } }  //! noncritical
 
 template<class member>
-xlong CLtree<member>::childcount() { return current->childcount; }
+xlong CLtree<member>::childcount() { return current->childcount; } //! noncritical
 
 template<class member>
-void CLtree<member>::parent() { current = current->parent; }
+void CLtree<member>::parent() { current = current->parent; }  //! noncritical
 
 template<class member>
 void CLtree<member>::next()
-{
-	if(current->next!=0)
-	{
-		current = current->next;
-	}
-}
+{ if(current->next!=0) { current = current->next;	} }  //! noncritical
 
 template<class member>
-member* CLtree<member>::data() const { return current->data; }
+member* CLtree<member>::data() const { return current->data; } //! noncritical
 
 template<class member>
-void CLtree<member>::adddata(member* d) { current->data = d; }
+void CLtree<member>::adddata(member* d) { current->data = d; } //! noncritical
 
 template<class member>
-void CLtree<member>::addchild()
+void CLtree<member>::addchild() //! noncritical
 {
 	node<member>* newnode = new node<member>;
 
@@ -123,12 +123,10 @@ void CLtree<member>::addchild()
 
 	current->childcount++;
 
-	
-
 }
 
 template<class member>
-void CLtree<member>::delchild(xlong i)
+void CLtree<member>::delchild(xlong i) //! noncritical
 {
 	if(i >= current->childcount)
 	{
@@ -138,10 +136,10 @@ void CLtree<member>::delchild(xlong i)
 }
 
 template<class member>
-bool CLtree<member>::isroot() const { return (current==rootnode); }
+bool CLtree<member>::isroot() const { return (current==rootnode); } //! noncritical
 
 template<class member>
-void CLtree<member>::print() const
+void CLtree<member>::print() const //! noncritical
 {
 	if(current->name!=0) clsystem->print(current->name);
 	else clsystem->print(0);
@@ -152,6 +150,7 @@ void CLtree<member>::print() const
 	}
 	current = current->parent;
 }
+///*
 
 #endif
 

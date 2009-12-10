@@ -249,29 +249,17 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 
 void CLsystem::print(const xchar* c,bool i) //! noncritical
 {
-	//print xchar array, i decides if line end is output
-	std::cout << c;
-
-	if(i) { std::cout << std::endl;	}
-	//*
+	std::cout << c; if(i) { std::cout << std::endl;	}
 }
 
 void CLsystem::print(const xlong l,bool i) //! noncritical
 {
-	//print xlong, i decides if line end is output
-	std::cout << l;
-
-	if(i) {	std::cout << std::endl;	}
-	//*
+	std::cout << l; if(i) {	std::cout << std::endl;	}
 }
 
 void CLsystem::print(const float l,bool i) //! noncritical
 {
-	//print float, i decides if line end is output
-	std::cout << l;
-
-	if(i) {	std::cout << std::endl;	}
-	//*
+	std::cout << l; if(i) {	std::cout << std::setw(4) << std::endl;	}
 }
 
 void CLsystem::waitforkey() //! noncritical

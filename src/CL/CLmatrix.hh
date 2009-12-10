@@ -9,12 +9,11 @@
 ///*
 
 ///includes
-#include <iostream>
-
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLvector.hh"
 #include "CLmath.hh"
+#include "CLmacros.hh"
 ///*
 
 ///header
@@ -305,11 +304,11 @@ float CLmatrix::trace() const //! noncritical
 
 void CLmatrix::print() const //! noncritical
 {
-	std::cout << std::setw(7) << m[0][0] <<" "<< std::setw(7) << m[0][1] <<" "<< std::setw(7) << m[0][2] <<" "<< std::setw(7) << m[0][3] << std::endl;
-	std::cout << std::setw(7) << m[1][0] <<" "<< std::setw(7) << m[1][1] <<" "<< std::setw(7) << m[1][2] <<" "<< std::setw(7) << m[1][3] << std::endl;
-	std::cout << std::setw(7) << m[2][0] <<" "<< std::setw(7) << m[2][1] <<" "<< std::setw(7) << m[2][2] <<" "<< std::setw(7) << m[2][3] << std::endl;
-	std::cout << std::setw(7) << m[3][0] <<" "<< std::setw(7) << m[3][1] <<" "<< std::setw(7) << m[3][2] <<" "<< std::setw(7) << m[3][3] << std::endl;
-	std::cout << std::endl;
+	tty(m[0][0]); tty(' '); tty(m[0][1]); tty(' '); tty(m[0][2]); tty(' '); say(m[0][3]);
+	tty(m[1][0]); tty(' '); tty(m[1][1]); tty(' '); tty(m[1][2]); tty(' '); say(m[1][3]);
+	tty(m[2][0]); tty(' '); tty(m[2][1]); tty(' '); tty(m[2][2]); tty(' '); say(m[2][3]);
+	tty(m[3][0]); tty(' '); tty(m[3][1]); tty(' '); tty(m[3][2]); tty(' '); say(m[3][3]);
+	tty();
 }
 ///*
 

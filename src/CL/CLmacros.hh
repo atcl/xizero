@@ -42,13 +42,15 @@ void inline tty(xlong l) { std::cout << l; } //console output without lineend (l
 
 void inline tty(uxlong l) { std::cout << l; } //console output without lineend (ulong)
 
+void inline tty(float f) { std::cout << std::setw(4) << f; } //console output without lineend (float)
+
 void inline say(const xchar* c="hi") { std::cout << c << std::endl; } //console output with lineend (cstring)
 
 void inline say(xlong l) { std::cout << l << std::endl; } //console output with lineend (long)
 
 void inline say(uxlong l) {	std::cout << l << std::endl; } //console output with lineend (ulong)
 
-void inline say(float f) { std::cout << f << std::endl; } //console output with lineend (float)
+void inline say(float f) { std::cout << std::setw(4) << f << std::endl; } //console output with lineend (float)
 
 void inline bye() { CLsystem::instance()->exit(0,0,__func__,"bye"); } //force program exit
 
