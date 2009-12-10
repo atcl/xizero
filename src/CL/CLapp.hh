@@ -10,6 +10,8 @@
 
 ///includes
 #include "CLtypes.hh"
+#include "CLversion.hh"
+#include "CLresource.hh"
 ///*
 
 ///header
@@ -36,10 +38,10 @@ class CLapp : public virtual CLcl
 		uxlong version;
 		
 	public:
-		CLapp(xlong argc,xchar** argv,const xchar* t,const xchar* i,uxlong v);
+		CLapp(xlong argc,xchar** argv);
 		~CLapp();
 		void exit();
-		xlong waitforkey();
+		xchar inkey(bool b);
 		xchar* getname() const;
 		xchar* gettitle() const;
 		xchar* geticon() const;
@@ -49,12 +51,12 @@ class CLapp : public virtual CLcl
 ///*
 
 ///implementation
-CLapp::CLapp(xlong argc,xchar** argv,const xchar* t,const xchar* i,uxlong v) //! noncritical
+CLapp::CLapp(xlong argc,xchar** argv) //! noncritical
 {
 	name = argv[0];
-	//title = t;
-	//icon = i;
-	version = v;
+	title = TITLE;
+	//icon = &CLicon;
+	version = (CLmajor<<24)+(CLminor<<16)+(CLbuild<<8)+CLextra;
 }
 
 CLapp::~CLapp() //! noncritical
@@ -67,9 +69,27 @@ void CLapp::exit() //! noncritical
 	
 }
 
-xlong CLapp::waitforkey() //! noncritical
+xchar inkey(bool b) //! noncritical
 {
+	xchar r = 0;
+	xlong s = 0;
 	
+	if(b)
+	{
+		while(true)
+		{
+			//usleep(20000);
+			s = read(0,&r,1);
+			if(s>0) { break; }
+		}
+	}
+	else
+	{
+		s = read(0,&r,1);
+		if(s<=0) { r=0; }
+	}
+	
+	return r;
 }
 
 xchar* CLapp::getname() const { return name; } //! noncritical

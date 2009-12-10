@@ -1,11 +1,18 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLTYPES
 #define HH_CLTYPES
-#pragma message "Compiling " __FILE__ " ! TODO: platform independent type decs"
+///*
 
+///includes
 #include <inttypes.h>
+///*
 
+///declarations
 //32bit types
 typedef char		 xchar;
 typedef uint8_t		uxchar;
@@ -16,5 +23,6 @@ typedef uint32_t	uxlong;
 typedef int64_t		 xhyper;
 typedef uint64_t	uxhyper;
 //***
+///*
 
 #endif

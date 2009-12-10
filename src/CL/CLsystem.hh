@@ -18,7 +18,6 @@
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
-#include "CLversion.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
 ///*
@@ -47,7 +46,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 	public:
 		uxchar  eol();
 		uxchar  eof();
-		CLexe*	exe(xchar** a);
 		void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
 		void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
 		CLfile* getfile(const xchar* fn,bool s=true); //CLfile  reference as parameter and return bool for if ok?
@@ -58,7 +56,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		void    print(const xchar* c,bool i=1);
 		void    print(const xlong l,bool i=1);
 		void    print(const float l,bool i=1);
-		void    waitforkey();
 		xlong   wait(xlong milliseconds);
 		xlong   getmilliseconds(); //since midnight
 		xlong   system(const xchar* c);
@@ -72,19 +69,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends  //! noncritical
 
 uxchar CLsystem::eof() { return 0x1A; } //! noncritical
-
-CLexe* CLsystem::exe(xchar** a) //! noncritical
-{
-	//fill CLexe struct
-	CLexe* r = new CLexe;
-	r->name = a[0];
-	r->title = TITLE;
-	r->size = 0;
-	r->version = (CLmajor<<24)+(CLminor<<16)+(CLbuild<<8)+CLextra;
-	//r->icon = &CLicon[0];
-	return r;
-	//*
-}
 
 void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d) //! noncritical
 {
@@ -260,11 +244,6 @@ void CLsystem::print(const xlong l,bool i) //! noncritical
 void CLsystem::print(const float l,bool i) //! noncritical
 {
 	std::cout << l; if(i) {	std::cout << std::setw(4) << std::endl;	}
-}
-
-void CLsystem::waitforkey() //! noncritical
-{
-	std::cin.get(); //change to any key, now only enter
 }
 
 xlong CLsystem::wait(xlong milliseconds) //! noncritical
