@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLVECTOR
 #define HH_CLVECTOR
-#pragma message "Compiling " __FILE__  "! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLmath.hh"
 #include "CLsystem.hh"
+///*
 
+///header
 /* class name:	CLvector
  * 
  * description:	A comprehensive vector class 
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 //curios base class
 template<typename T,class clvector>
 struct CLvectorbase
@@ -82,10 +91,12 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 
 				void print() const;							//console output	
 };
+///*
 
+///implementation
 //vector addition:
 template<typename T>
-CLvector<T> CLvector<T>::operator+(const CLvector<T>& a) const
+CLvector<T> CLvector<T>::operator+(const CLvector<T>& a) const //! noncritical
 {
 	return CLvector<T>( (this->x + a.x),(this->y + a.y),(this->z + a.z) );
 }
@@ -93,7 +104,7 @@ CLvector<T> CLvector<T>::operator+(const CLvector<T>& a) const
 
 //vector subtraction:
 template<typename T>
-CLvector<T> CLvector<T>::operator-(const CLvector<T>& a) const
+CLvector<T> CLvector<T>::operator-(const CLvector<T>& a) const //! noncritical
 {
 	return CLvector<T>( (this->x - a.x),(this->y - a.y),(this->z - a.z) );
 }
@@ -101,7 +112,7 @@ CLvector<T> CLvector<T>::operator-(const CLvector<T>& a) const
 
 //dot product:
 template<typename T>
-T CLvector<T>::dot(const CLvector<T>& a) const
+T CLvector<T>::dot(const CLvector<T>& a) const //! noncritical
 {
 	return ( (this->x * a.x) + (this->y * a.y) + (this->z * a.z) );
 }
@@ -109,16 +120,15 @@ T CLvector<T>::dot(const CLvector<T>& a) const
 
 //scalar multiplication:
 template<typename T>
-CLvector<T> CLvector<T>::operator*(T c) const
+CLvector<T> CLvector<T>::operator*(T c) const //! noncritical
 {
- 
 	return CLvector<T>( (this->x * c),(this->y * c),(this->z * c) );
 }
 //*
 
 //cross product:
 template<typename T>
-CLvector<T> CLvector<T>::cross(const CLvector<T>& a) const
+CLvector<T> CLvector<T>::cross(const CLvector<T>& a) const //! critical
 {
 	return CLvector( ( (this->y * a.z) - (this->z * a.y) ),( (this->z * a.x) - (this->x * a.z) ),( (this->x * a.y) - (this->y * a.x) ) );
 }
@@ -126,7 +136,7 @@ CLvector<T> CLvector<T>::cross(const CLvector<T>& a) const
 
 //vector length:
 template<typename T>
-T CLvector<T>::operator!() const
+T CLvector<T>::operator!() const //! critical
 {
 	return clmath->sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) );
 }
@@ -134,7 +144,7 @@ T CLvector<T>::operator!() const
 
 //vector addition:
 template<typename T>
-CLvector<T>& CLvector<T>::operator+=(const CLvector<T>& a)
+CLvector<T>& CLvector<T>::operator+=(const CLvector<T>& a) //! noncritical
 {
 	this->x += a.x;
 	this->y += a.y;
@@ -145,7 +155,7 @@ CLvector<T>& CLvector<T>::operator+=(const CLvector<T>& a)
 
 //vector subtraction:
 template<typename T>
-CLvector<T>& CLvector<T>::operator-=(const CLvector<T>& a)
+CLvector<T>& CLvector<T>::operator-=(const CLvector<T>& a) //! noncritical
 {
 	this->x -= a.x;
 	this->y -= a.y;
@@ -156,7 +166,7 @@ CLvector<T>& CLvector<T>::operator-=(const CLvector<T>& a)
 
 //scalar multiplication:
 template<typename T>
-CLvector<T>& CLvector<T>::operator*=(T c)
+CLvector<T>& CLvector<T>::operator*=(T c) //! noncritical
 {
 	this->x *= c;
 	this->y *= c;
@@ -167,7 +177,7 @@ CLvector<T>& CLvector<T>::operator*=(T c)
 
 //vector additive negation:
 template<typename T>
-CLvector<T> CLvector<T>::operator-()
+CLvector<T> CLvector<T>::operator-() //! noncritical
 {
 	return CLvector<T>( -this->x,-this->y,-this->z );
 }
@@ -175,7 +185,7 @@ CLvector<T> CLvector<T>::operator-()
 
 //vector vector assignment:
 template<typename T>
-CLvector<T>& CLvector<T>::operator=(const CLvector<T>& a)
+CLvector<T>& CLvector<T>::operator=(const CLvector<T>& a) //! noncritical
 {
 	this->x = a.x;
 	this->y = a.y;
@@ -186,7 +196,7 @@ CLvector<T>& CLvector<T>::operator=(const CLvector<T>& a)
 
 //scalar vector assignment
 template<typename T>
-CLvector<T>& CLvector<T>::operator=(T c)
+CLvector<T>& CLvector<T>::operator=(T c) //! noncritical
 {
 	this->x = c;
 	this->y = c;
@@ -197,7 +207,7 @@ CLvector<T>& CLvector<T>::operator=(T c)
 
 //vector cast CLvector<float>:
 template<typename T>
-CLvector<T>::operator CLvector<float>() const
+CLvector<T>::operator CLvector<float>() const //! noncritical
 {
 	return CLvector<float>( float(this->x), float(this->y), float(this->z) );
 }
@@ -205,7 +215,7 @@ CLvector<T>::operator CLvector<float>() const
 
 //vector cast CLvector<xlong>:
 template<typename T>
-CLvector<T>::operator CLvector<xlong>() const
+CLvector<T>::operator CLvector<xlong>() const //! noncritical
 {
 	return CLvector<xlong>( xlong(this->x), xlong(this->y), xlong(this->z) );
 }
@@ -221,7 +231,7 @@ CLvector<T>::operator CLvector<xlong>() const
 
 //angle between vectors:
 template<typename T>
-T CLvector<T>::operator%(const CLvector& a)
+T CLvector<T>::operator%(const CLvector& a) //! critical
 {
 	float c =        ( (this->x * a.x)     + (this->y * a.y)     + (this->z * a.z) ) /
 		(clmath->sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
@@ -233,7 +243,7 @@ T CLvector<T>::operator%(const CLvector& a)
 
 //console output
 template<typename T>
-void CLvector<T>::print() const
+void CLvector<T>::print() const //! noncritical
 {
 	clsystem->print("( ",0);
 	clsystem->print(x,0);
@@ -250,7 +260,7 @@ void CLvector<T>::print() const
 //friend:
 //scalar multiplication from left:
 template<typename T>
-inline CLvector<T> operator*(T c,CLvector<T>& a)
+inline CLvector<T> operator*(T c,CLvector<T>& a) //! critical
 {
 	return ( (a.x * c) + (a.y * c) + (a.z * c) );
 }
@@ -277,17 +287,17 @@ struct _CLvector
 
 //container multiplication operator
 template<typename T>
-_CLvector<T> operator*(const CLvector<T>& l, const CLvector<T>& r)
-{
-    return _CLvector<T>(l,r);
-}
+_CLvector<T> operator*(const CLvector<T>& l, const CLvector<T>& r) { return _CLvector<T>(l,r); } //! noncritical
 //*
+///*
 
+///declarations
 //typedefs:
 typedef CLvector<xlong> CLlvector;
 typedef CLvector<float> CLfvector;
 //typedef CLvector<xfixed> CLxvector;
 //*
+///*
 
 #endif
 

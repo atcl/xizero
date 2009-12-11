@@ -43,8 +43,10 @@ int main(int argc, char** argv)
 	xlong vertcount = 0;
 	xlong polycount = 0;
 	xlong opolycount = 0;
-	rawpoly* polys = new rawpoly[cols*2];
-	rawpoly* opolys = new rawpoly[cols*2];
+	xlong oldpolycount = 0;
+	xlong ooldpolycount = 0;
+	rawpoly* polys = new rawpoly[cols*3];
+	rawpoly* opolys = new rawpoly[cols*3];
 	
 	CLobject** terrows = new CLobject*[rows-1];
 	
@@ -239,7 +241,7 @@ int main(int argc, char** argv)
 		}
 		
 		//insert horizontal connecting polygons
-		xlong oldpolycount = polycount;
+		oldpolycount = polycount;
 		for(xlong j=1; j<oldpolycount; j++)
 		{
 			polys[polycount].v[0].x = polys[j-1].v[1].x;
@@ -262,12 +264,45 @@ int main(int argc, char** argv)
 		//*
 		
 		//insert lower vertical connecting polygons
-		
+		if(i>0 && i<(rows-1))
+		{
+			//set up x and z arrays
+			xlong ux[2*ooldpolycount];
+			xlong lx[2*oldpolycount];
+			xlong uz[2*ooldpolycount];
+			xlong lz[2*oldpolycount];
+			
+			for(xlong k=0; k<ooldpolycount; k++)
+			{
+				ux[2*k]     = opolys[k].v[3].x;
+				ux[(2*k)+1] = opolys[k].v[2].x;
+				uz[2*k]     = opolys[k].v[3].z;
+				uz[(2*k)+1] = opolys[k].v[2].z;
+			}
+			
+			for(xlong k=0; k<oldpolycount; k++)
+			{
+				lx[2*k]     = polys[k].v[3].x;
+				lx[(2*k)+1] = polys[k].v[2].x;
+				lz[2*k]     = polys[k].v[3].z;
+				lz[(2*k)+1] = polys[k].v[2].z;
+			}
+			//*
+			
+			//assemble polygons
+			xlong uc = 0;
+			xlong lc = 0;
+			
+			//...
+			
+			//*
+		}
 		//*
 		
 		terrows[i] = new CLobject(polys,polycount,0x000000FF,0);
-		for(xlong k=0; k<polycount; k++) { opolys[k] = polys[k]; }
+		for(xlong l=0; l<polycount; l++) { opolys[l] = polys[l]; }
 		opolycount = polycount;
+		ooldpolycount = oldpolycount;
 		polycount = x0 = x1 = x2 = x3 = xz = o0 = o1 = o2 = o3 = oz = y1 = y2 = 0;
 	}
 	//*
