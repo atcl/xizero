@@ -266,36 +266,73 @@ int main(int argc, char** argv)
 		//insert lower vertical connecting polygons
 		if(i>0 && i<(rows-1))
 		{
-			//set up x and z arrays
-			xlong ux[2*ooldpolycount];
-			xlong lx[2*oldpolycount];
-			xlong uz[2*ooldpolycount];
-			xlong lz[2*oldpolycount];
+			xlong cp0 = 0;
+			xlong cp1 = ooldpolycount - 1;
+			xlong cp = 0;
 			
 			for(xlong k=0; k<ooldpolycount; k++)
 			{
-				ux[2*k]     = opolys[k].v[3].x;
-				ux[(2*k)+1] = opolys[k].v[2].x;
-				uz[2*k]     = opolys[k].v[3].z;
-				uz[(2*k)+1] = opolys[k].v[2].z;
+				while(cp0 < ooldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
+				while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
+				
+				if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
+				{
+					cp = cp0;
+					if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
+					
+					polys[polycount].v[0].x = opolys[k].v[3].x;
+					polys[polycount].v[1].x = opolys[k].v[2].x;
+					polys[polycount].v[2].x = opolys[k].v[2].x;
+					polys[polycount].v[3].x = opolys[k].v[3].x;
+					
+					polys[polycount].v[0].y = 10;
+					polys[polycount].v[1].y = 10;
+					polys[polycount].v[2].y = 10;
+					polys[polycount].v[3].y = 10;
+					
+					polys[polycount].v[0].z = opolys[k].v[0].z;
+					polys[polycount].v[1].z = opolys[k].v[0].z;
+					polys[polycount].v[2].z = polys[cp].v[0].z;
+					polys[polycount].v[3].z = polys[cp].v[0].z;
+			
+					polycount++;
+				}
+				
+				cp0 = 0;
+				cp1 = ooldpolycount - 1;
 			}
 			
-			for(xlong k=0; k<oldpolycount; k++)
-			{
-				lx[2*k]     = polys[k].v[3].x;
-				lx[(2*k)+1] = polys[k].v[2].x;
-				lz[2*k]     = polys[k].v[3].z;
-				lz[(2*k)+1] = polys[k].v[2].z;
-			}
-			//*
-			
-			//assemble polygons
-			xlong uc = 0;
-			xlong lc = 0;
-			
-			//...
-			
-			//*
+			//~ for(xlong k=0; k<oldpolycount; k++)
+			//~ {
+				//~ while(cp0 < oldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
+				//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
+				//~ 
+				//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
+				//~ {
+					//~ cp = cp0;
+					//~ if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
+					//~ 
+					//~ polys[polycount].v[0].x = opolys[k].v[3].x;
+					//~ polys[polycount].v[1].x = opolys[k].v[2].x;
+					//~ polys[polycount].v[2].x = opolys[k].v[2].x;
+					//~ polys[polycount].v[3].x = opolys[k].v[3].x;
+					//~ 
+					//~ polys[polycount].v[0].y = 10;
+					//~ polys[polycount].v[1].y = 10;
+					//~ polys[polycount].v[2].y = 10;
+					//~ polys[polycount].v[3].y = 10;
+					//~ 
+					//~ polys[polycount].v[0].z = opolys[k].v[0].z;
+					//~ polys[polycount].v[1].z = opolys[k].v[0].z;
+					//~ polys[polycount].v[2].z = polys[cp].v[0].z;
+					//~ polys[polycount].v[3].z = polys[cp].v[0].z;
+			//~ 
+					//~ polycount++;
+				//~ }
+				//~ 
+				//~ cp0 = 0;
+				//~ cp1 = oldpolycount - 1;
+			//~ }
 		}
 		//*
 		
