@@ -20,6 +20,7 @@
 #include "CLstruct.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
+#include "CLmacros.hh"
 ///*
 
 ///header
@@ -44,18 +45,12 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		CLsystem() { };
 		~CLsystem() { };
 	public:
-		uxchar  eol();
 		uxchar  eof();
-		void    exit(xlong r,void(*e)(),const xchar* f,const xchar* m,xlong d);
-		void    exit(xlong r,void(*e)(),const xchar* f="",const xchar* m="");
-		CLfile* getfile(const xchar* fn,bool s=true); //CLfile  reference as parameter and return bool for if ok?
+		CLfile* getfile(const xchar* fn);
 		bool    appendfile(const xchar* fn,xlong* b,xlong s);
 		bool    appendfile(const xchar* fn,xchar* b,xlong s);
 		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
 		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
-		void    print(const xchar* c,bool i=1);
-		void    print(const xlong l,bool i=1);
-		void    print(const float l,bool i=1);
 		xlong   wait(xlong milliseconds);
 		xlong   getmilliseconds(); //since midnight
 		xlong   system(const xchar* c);
@@ -66,27 +61,9 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 ///*
 
 ///implementation
-uxchar CLsystem::eol() { return '\n'; } //ignore WIN32 screwed line ends  //! noncritical
-
 uxchar CLsystem::eof() { return 0x1A; } //! noncritical
 
-void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m,xlong d) //! noncritical
-{
-	if(e!=0) e();
-
-	std::cout << f << ": "<< m << " " << d << std::endl;
-	::exit(r);
-}
-
-void CLsystem::exit(xlong r,void(*e)(),const xchar *f,const xchar *m) //! noncritical
-{
-	if(e!=0) e();
-
-	std::cout << f << ": "<< m << " " << std::endl;
-	::exit(r);
-}
-
-CLfile* CLsystem::getfile(const xchar* fn,bool s) //! noncritical
+CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 {
 	CLfile* re = new CLfile;
 
@@ -95,16 +72,10 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s) //! noncritical
 	//check if file exists
 	if( !( of = fopen(fn,"rb") ) ) 
 	{
-		if(s==0)
-		{
-			delete re;
-			return 0;
-		}
-		else
-		{
-			delete re;
-			exit(1,0,__func__,fn);
-		}
+		delete re;
+		tty(__func__);
+		say(fn);
+		return 0;
 	}
 	//*
 
@@ -120,7 +91,7 @@ CLfile* CLsystem::getfile(const xchar* fn,bool s) //! noncritical
 	fseek (of,0,SEEK_SET );
 	
 	try{ re->text = new xchar[((re->size)+4)]; } //unittest crashes here with ltype.tga
-	catch(std::bad_alloc& ba) { print(ba.what()); }
+	catch(std::bad_alloc& ba) { say(ba.what()); }
 	re->data = static_cast<xlong*>(static_cast<void*>(&re->text[0]));
 	fread(re->text,1,re->size,of);
 	//*
@@ -229,21 +200,6 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	//*
 	
 	return 1;
-}
-
-void CLsystem::print(const xchar* c,bool i) //! noncritical
-{
-	std::cout << c; if(i) { std::cout << std::endl;	}
-}
-
-void CLsystem::print(const xlong l,bool i) //! noncritical
-{
-	std::cout << l; if(i) {	std::cout << std::endl;	}
-}
-
-void CLsystem::print(const float l,bool i) //! noncritical
-{
-	std::cout << l; if(i) {	std::cout << std::setw(4) << std::endl;	}
 }
 
 xlong CLsystem::wait(xlong milliseconds) //! noncritical

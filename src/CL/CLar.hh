@@ -127,7 +127,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 		for(uxlong j=0; j<fc; j++) { members[j] = tindex[j]; }
 		//*
 	}
-	else { clsystem->exit(1,0,__func__,"no \"!<arch>\" identifier found"); }
+	else { tty(__func__); say("no \"!<arch>\" identifier found"); }
 }
 
 CLar::~CLar() { for(int i=0; i<filecount; i++) delete members[i]; } //! noncritical

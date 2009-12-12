@@ -49,6 +49,7 @@ class CLsound;
 class CLsprites;
 class CLid;
 class CLstring;
+class CLapp;
 ///*
 
 ///definitions
@@ -96,6 +97,7 @@ class CLglobal
 		static CLsprites* clsprites;
 		static CLid*     clid;
 		static CLstring* clstring;
+		static CLapp*    clapp;
 		
 		static CLglobal* getinstance();
 };

@@ -84,8 +84,8 @@ void CLbench::print() const //! noncritical
 {
 		if(flags & COUT_FPS)
 		{
-			clsystem->print("fps: ",0);
-			clsystem->print(framespersecond);
+			tty("fps: ");
+			say(framespersecond);
 		}
 		
 		//~ if(flags & COUT_RAM)

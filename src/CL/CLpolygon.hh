@@ -664,7 +664,9 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 		}
 		else
 		{
-			clsystem->exit(1,0,__func__,"Invalid z value: ",ppoint[x].z);
+			tty(__func__);
+			tty("Invalid z value: ");
+			say(ppoint[x].z);
 		}
 	}
 	

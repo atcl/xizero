@@ -41,7 +41,7 @@ class CLcl : public CLglobal
 		xlong getversion() const;
 };
 
-xlong CLcl::version = (CLmajor<<24) + (CLminor<<16) + (CLbuild<<8) + CLextra;
+xlong CLcl::version = 0;
 
 xlong CLcl::id = 0;
 ///*

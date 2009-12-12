@@ -34,4 +34,12 @@ const static char* ICON[] = { //to #define and loadxpm(const xchar*)
 "...##++++++##...",
 ".....######....."
 };
+
+#define MAJOR 0
+#define MINOR 1
+#define BUILD 0
+#define EXTRA 0
+
+#define VERSION "0.1"
+
 ///*

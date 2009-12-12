@@ -141,12 +141,12 @@ bool CLtree<member>::isroot() const { return (current==rootnode); } //! noncriti
 template<class member>
 void CLtree<member>::print() const //! noncritical
 {
-	if(current->name!=0) clsystem->print(current->name);
-	else clsystem->print(0);
+	if(current->name!=0) say(current->name);
+	else say(0);
 	for(uxlong i=0; i<current->childcount; i++)
 	{
 		current = current->child[i];
-		print();
+		say("...");
 	}
 	current = current->parent;
 }

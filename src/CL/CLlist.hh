@@ -411,12 +411,12 @@ void CLlist<member>::print() const //! noncritical
 	//print all list members names
 	setfirst();
 
-	clsystem->print("|");
+	say("|");
 
 	while(!islast())
 	{
-		clsystem->print("+",0);
-		clsystem->print(getcurrentname());
+		tty("+");
+		say(getcurrentname());
 		setnext();
 	}
 	//*

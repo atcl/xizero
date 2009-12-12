@@ -13,6 +13,7 @@
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
+
 ///*
 
 //todo: write prefetch macro and place at end of loops if useful
@@ -36,23 +37,17 @@ xlong inline x600(xlong f) { return ( (f<<9) + (f<<6) + (f<<4) + (f<<3) ); } //f
 
 xlong inline x800(xlong f) { return ( (f<<9) + (f<<8) + (f<<5) ); } //fast multiplication with 800
 
-void inline tty(const xchar* c="\n") { std::cout << c; } //console output without lineend
+template<typename T>
+void inline tty(const T c) { std::cout << std::setprecision(4) << c; } //console output without lineend
 
-void inline tty(xlong l) { std::cout << l; } //console output without lineend (long)
+template<typename T>
+void inline say(const T c) { std::cout << std::setprecision(4) << c << std::endl; } //console output with lineend
 
-void inline tty(uxlong l) { std::cout << l; } //console output without lineend (ulong)
+void inline eol() { std::cout << std::endl; }
 
-void inline tty(float f) { std::cout << std::setw(4) << f; } //console output without lineend (float)
+void inline err(const xchar* f,const xchar* m) { std::cout << f << m << std::endl; }
 
-void inline say(const xchar* c="hi") { std::cout << c << std::endl; } //console output with lineend (cstring)
-
-void inline say(xlong l) { std::cout << l << std::endl; } //console output with lineend (long)
-
-void inline say(uxlong l) {	std::cout << l << std::endl; } //console output with lineend (ulong)
-
-void inline say(float f) { std::cout << std::setw(4) << f << std::endl; } //console output with lineend (float)
-
-void inline bye() { CLsystem::instance()->exit(0,0,__func__,"bye"); } //force program exit
+void inline bye() { std::cout << "bye" << std::endl; ::exit(0); } //force program exit
 
 xlong inline linear(xlong x,xlong y,xlong w) { return ((y*w)+x); }
 

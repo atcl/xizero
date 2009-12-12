@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLWINDOW
 #define HH_CLWINDOW
-#pragma message "Compiling " __FILE__ 
+///*
 
+///includes
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
@@ -11,7 +16,10 @@
 #include "CLtypes.hh"
 #include "CLresource.hh"
 #include "CLformat.hh"
+#include "CLapp.hh"
+///*
 
+///header
 /* class name:	CLwindow
  * 
  * description:	very basic Xwindow with doublebuffer and msgbox
@@ -22,7 +30,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 {
 	friend class CLsingle<CLwindow>;
@@ -72,8 +82,10 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmouserb() const;
 		xlong msgbox(const xchar* title,const xchar* message);
 };
+///*
 
-CLwindow::CLwindow()
+///implementation
+CLwindow::CLwindow() //! noncritical
 {
 	cursor = 0;
 	displaycursor = 0;
@@ -124,7 +136,7 @@ CLwindow::CLwindow()
 	XDefineCursor(Xdisplay,Xwindow,Xblank);
 }
 
-CLwindow::~CLwindow()
+CLwindow::~CLwindow() //! noncritical
 {
 	XDestroyImage(Ximage);
 	XFreeGC(Xdisplay,Xgc);
@@ -132,9 +144,9 @@ CLwindow::~CLwindow()
 	XCloseDisplay(Xdisplay);	
 }
 
-void CLwindow::draw() { XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height); }
+void CLwindow::draw() { XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height); } //! noncritical
 
-void CLwindow::handle()
+void CLwindow::handle() //! critical
 {
 	if(XPending(Xdisplay)!=0)
 	{
@@ -203,33 +215,33 @@ void CLwindow::handle()
 			break;
 			
 			case ClientMessage:
-				clsystem->exit(0,0,"xizero exits","bye");
+				clapp->exit(0,"xizero exits: bye");
 			break;
 		}
 	}
 }
 
-xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; }
+xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; } //! noncritical
 
-void CLwindow::showcursor() { displaycursor = 1; }
+void CLwindow::showcursor() { displaycursor = 1; } //! noncritical
 
-void CLwindow::hidecursor() { displaycursor = 0; }
+void CLwindow::hidecursor() { displaycursor = 0; } //! noncritical
 
-void CLwindow::setcursor(sprite* s) { cursor = s; }
+void CLwindow::setcursor(sprite* s) { cursor = s; } //! noncritical
 
-xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; }
+xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncritical
 
-xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; }
+xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
 
-xlong CLwindow::getmousex() const { return mousex; }
+xlong CLwindow::getmousex() const { return mousex; } //! noncritical
 
-xlong CLwindow::getmousey() const {	return mousey; }
+xlong CLwindow::getmousey() const {	return mousey; } //! noncritical
 
-xlong CLwindow::getmouselb() const { return mouselb; }
+xlong CLwindow::getmouselb() const { return mouselb; } //! noncritical
 
-xlong CLwindow::getmouserb() const { return mouserb; }
+xlong CLwindow::getmouserb() const { return mouserb; } //! noncritical
 
-xlong CLwindow::msgbox(const xchar* title,const xchar* message)
+xlong CLwindow::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
 	//prepare message
 	xlong msglines = clutils->getlinecount(message);
@@ -294,6 +306,7 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message)
 	XDestroyWindow(Xdisplay,msgbox);
 	return 1;
 }
+///*
 	
 #endif
 

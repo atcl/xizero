@@ -1,9 +1,14 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLXMLGUI
 #define HH_CLXMLGUI
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLstructs.hh"
 #include "CLsystem.hh"
@@ -11,7 +16,9 @@
 #include "CLlabel.hh"
 #include "CLbutton.hh"
 #include "CLprogress.hh"
+///*
 
+///header
 /* class name:	CLxmlgui
  * 
  * description:	
@@ -22,7 +29,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definition
 class CLxmlgui : public virtual CLcl
 {
 	protected:
@@ -40,36 +49,39 @@ class CLxmlgui : public virtual CLcl
 		void handle();
 		void show(bool s);
 };
+///*
 
-CLxmlgui::CLxmlgui(const xchar* filename)
+///implementation
+CLxmlgui::CLxmlgui(const xchar* filename) //! noncritical
 {
 	
 }
 
-CLxmlgui::CLxmlgui(CLfile fileptr)
+CLxmlgui::CLxmlgui(CLfile fileptr) //! noncritical
 {
 	
 }
 
-CLxmlgui::~CLxmlgui()
+CLxmlgui::~CLxmlgui() //! noncritical
 {
 	
 }
 
-void CLxmlgui::draw()
+void CLxmlgui::draw() //! noncritical
 {
 	
 }
 
-void CLxmlgui::handle()
+void CLxmlgui::handle() //! noncritical
 {
 	
 }
 
-void CLxmlgui::show()
+void CLxmlgui::show() //! noncritical
 {
 	
 }
+///*
 
 #endif
 

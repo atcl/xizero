@@ -9,9 +9,12 @@
 ///*
 
 ///includes
+#include <stdlib.h>
+
 #include "CLtypes.hh"
 #include "CLversion.hh"
 #include "CLresource.hh"
+#include "CLmacros.hh"
 ///*
 
 ///header
@@ -28,7 +31,7 @@
 ///*
 
 ///definitions
-class CLapp : public virtual CLcl
+class CLapp : public virtual CLcl, public CLsingle<CLapp>
 {
 	private:
 		xchar* name;
@@ -38,9 +41,9 @@ class CLapp : public virtual CLcl
 		uxlong version;
 		
 	public:
-		CLapp(xlong argc,xchar** argv);
-		~CLapp();
-		void exit();
+		CLapp();
+		~CLapp() { };
+		void exit(xlong r=0,const xchar* m="");
 		xchar inkey(bool b);
 		xchar* getname() const;
 		xchar* gettitle() const;
@@ -51,22 +54,19 @@ class CLapp : public virtual CLcl
 ///*
 
 ///implementation
-CLapp::CLapp(xlong argc,xchar** argv) //! noncritical
+CLapp::CLapp() //! noncritical
 {
-	name = argv[0];
+	//name = argv[0];
+	//size = argv[-1];
 	title = TITLE;
-	//icon = &CLicon;
-	version = (CLmajor<<24)+(CLminor<<16)+(CLbuild<<8)+CLextra;
+	//icon = ICON;
+	version = uxchar(MAJOR<<24)+uxchar(MINOR<<16)+uxchar(BUILD<<8)+uxchar(EXTRA);
 }
 
-CLapp::~CLapp() //! noncritical
+void CLapp::exit(xlong r,const xchar* m) //! noncritical
 {
-
-}
-
-void CLapp::exit() //! noncritical
-{
-	
+	say(m);
+	::exit(r);
 }
 
 xchar inkey(bool b) //! noncritical

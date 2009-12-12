@@ -27,6 +27,27 @@ int main(int argc, char** argv)
 			
 	//*
 	
+	//mul test (test mul vs add+shift)
+	//~ xlong sa1 = clglobal->clsystem->getmilliseconds();
+	//~ xlong ta = 1;
+	//~ for(xlong b=0; b<1000000000; b++)
+	//~ {
+		//~ ta = ta * 20;
+		//~ ta/=20;
+	//~ }
+	//~ xlong sa2 = clglobal->clsystem->getmilliseconds();
+	//~ 
+	//~ xlong sb1 = clglobal->clsystem->getmilliseconds();
+	//~ xlong tb = 1;
+	//~ for(xlong a=0; a<1000000000; a++)
+	//~ {
+		//~ tb = (tb<<4) + (tb<<2);
+		//~ tb/=20;
+	//~ }
+	//~ xlong sb2 = clglobal->clsystem->getmilliseconds();
+	//*
+	
+	
 	//audio test:
 	clglobal->clsound->play("../../toxic.wav",1);
 	//*
@@ -272,39 +293,7 @@ int main(int argc, char** argv)
 			
 			for(xlong k=0; k<ooldpolycount; k++)
 			{
-				while(cp0 < ooldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
-				while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
-				
-				if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
-				{
-					cp = cp0;
-					if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
-					
-					polys[polycount].v[0].x = opolys[k].v[3].x;
-					polys[polycount].v[1].x = opolys[k].v[2].x;
-					polys[polycount].v[2].x = opolys[k].v[2].x;
-					polys[polycount].v[3].x = opolys[k].v[3].x;
-					
-					polys[polycount].v[0].y = 10;
-					polys[polycount].v[1].y = 10;
-					polys[polycount].v[2].y = 10;
-					polys[polycount].v[3].y = 10;
-					
-					polys[polycount].v[0].z = opolys[k].v[0].z;
-					polys[polycount].v[1].z = opolys[k].v[0].z;
-					polys[polycount].v[2].z = polys[cp].v[0].z;
-					polys[polycount].v[3].z = polys[cp].v[0].z;
-			
-					polycount++;
-				}
-				
-				cp0 = 0;
-				cp1 = ooldpolycount - 1;
-			}
-			
-			//~ for(xlong k=0; k<oldpolycount; k++)
-			//~ {
-				//~ while(cp0 < oldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
+				//~ while(cp0 < ooldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
 				//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
 				//~ 
 				//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
@@ -326,13 +315,45 @@ int main(int argc, char** argv)
 					//~ polys[polycount].v[1].z = opolys[k].v[0].z;
 					//~ polys[polycount].v[2].z = polys[cp].v[0].z;
 					//~ polys[polycount].v[3].z = polys[cp].v[0].z;
+					//~ 
+					//~ polycount++;
+				//~ }
+				//~ 
+				//~ cp0 = 0;
+				//~ cp1 = ooldpolycount - 1;
+			//~ }
+			
+			//~ for(xlong k=0; k<oldpolycount; k++)
+			//~ {
+				//~ while(cp0 < oldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
+				//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
+				//~ 
+				//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
+				//~ {
+					//~ cp = cp0;
+					//~ if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
+					//~ 
+					//~ polys[polycount].v[0].x = polys[k].v[0].x;
+					//~ polys[polycount].v[1].x = polys[k].v[1].x;
+					//~ polys[polycount].v[2].x = polys[k].v[1].x;
+					//~ polys[polycount].v[3].x = polys[k].v[0].x;
+					//~ 
+					//~ polys[polycount].v[0].y = 10;
+					//~ polys[polycount].v[1].y = 10;
+					//~ polys[polycount].v[2].y = 10;
+					//~ polys[polycount].v[3].y = 10;
+					//~ 
+					//~ polys[polycount].v[0].z = polys[k].v[0].z;
+					//~ polys[polycount].v[1].z = ppolys[k].v[0].z;
+					//~ polys[polycount].v[2].z = opolys[cp].v[0].z;
+					//~ polys[polycount].v[3].z = opolys[cp].v[0].z;
 			//~ 
 					//~ polycount++;
 				//~ }
 				//~ 
 				//~ cp0 = 0;
 				//~ cp1 = oldpolycount - 1;
-			//~ }
+			}
 		}
 		//*
 		
@@ -424,7 +445,7 @@ int main(int argc, char** argv)
 			case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
 				
 			//System:
-			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","bye"); clglobal->clsystem->exit(rval,0,"user","exit"); break;
+			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
 		}
 		
 		switch(clglobal->clwindow->getinkey())

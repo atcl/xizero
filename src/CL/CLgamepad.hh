@@ -73,7 +73,7 @@ CLgamepad::CLgamepad() //! noncritical
 	//check if gamepad driver is installed
 	if(joyGetNumDevs() == -1)
 	{
-		clsystem->print("No Gamepad driver found");
+		say("No Gamepad driver found");
 		device = -1;
 		return;
 	}
@@ -82,7 +82,7 @@ CLgamepad::CLgamepad() //! noncritical
 	//check if gamepad is connected
 	if(joygetPos(0,&gp)==JOYERR_UNPLUGGED)
 	{
-		clsystem->print("No Gamepad found");
+		say("No Gamepad found");
 		device = -1;
 		return;
 	}
@@ -132,7 +132,7 @@ CLgamepad::CLgamepad() //! noncritical
 	//check if gamepad device exists and so a gamepad is connected
 	if( (device = open("/dev/input/js0",O_RDONLY)) == -1)
 	{
-		clsystem->print("No Gamepad found");
+		say("No Gamepad found");
 		return;
 	}
 	//*

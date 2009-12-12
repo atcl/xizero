@@ -29,6 +29,7 @@
 #include "CLsound.hh"
 #include "CLid.hh"
 #include "CLstring.hh"
+#include "CLapp.hh"
 
 #include "CLglobals.hh"
 ///*
@@ -66,6 +67,7 @@ CLsound*  CLglobal::clsound  = CLsound::instance();
 CLsprites* CLglobal::clsprites = CLsprites::instance();
 CLid*     CLglobal::clid     = CLid::instance();
 CLstring* CLglobal::clstring = CLstring::instance();
+CLapp*    CLglobal::clapp    = CLapp::instance();
 
 CLglobal* CLglobal::global = 0;
 ///*

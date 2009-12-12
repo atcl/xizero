@@ -1,13 +1,20 @@
+///license
 //atCROSSLEVEL studios 2009
-//licensed under zlib/libpng license 
+//licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_CLXML
 #define HH_CLXML
-#pragma message "Compiling " __FILE__ " ! TODO: "
+///*
 
+///includes
 #include "CLtypes.hh"
 #include "CLsystem.hh"
 #include "CLtree.hh"
+///*
 
+///header
 /* class name:	CLxml
  * 
  * description:	
@@ -18,7 +25,9 @@
  * 
  * version: 0.1
  */
+///*
 
+///definitions
 struct xmlelement
 {
 	xchar*  value;
@@ -78,7 +87,13 @@ class CLxml : public virtual CLcl
 		//write
 		//header
 };
+///*
 
+///implementation
+
+
+
+///*
 
 #endif
 

@@ -101,7 +101,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 	while(tlc<lc)
 	{
 		if(bf[tfc]==sep) tcc++;
-		else if(bf[tfc]==clsystem->eol())
+		else if(bf[tfc]=='\n')
 		{
 			cc[tlc] = tcc;
 			tcc = 0;
@@ -130,7 +130,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 	{
 		r[tvc] = clsystem->ato(&bf[tfc]);
 		tvc++;
-		while(bf[tfc]!=sep && bf[tfc]!=clsystem->eol())
+		while(bf[tfc]!=sep && bf[tfc]!='\n')
 		{
 			tfc++;
 		}
@@ -180,8 +180,11 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //!
 				if(bf[li]==rc) rev[j][k] = rv;
 				else rev[j][k] = bf[li] - subconst;
 			}
-			else clsystem->exit(1,0,__func__,"Map not conform with given width");
-			
+			else
+			{
+				err(__func__,"Map not conform with given width");
+				return 0;
+			}			
 			li++;
 		}
 		li++;
@@ -462,7 +465,7 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	{
 		while(bf[cc]==' ') cc++;
 		
-		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!=clsystem->eol())
+		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!='\n')
 		{
 			//pre equal sign
 			tc0 = cc;
@@ -472,7 +475,7 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 			while(bf[cc]!='=')
 			{
 				if(bf[cc]!=' ') noinfo = 1;
-				if(bf[cc]==clsystem->eol() && noinfo==1) noequal = 1;
+				if(bf[cc]=='\n' && noinfo==1) noequal = 1;
 				if(bf[cc]!=' ') tc1++;
 				cc++;
 			}
@@ -496,7 +499,7 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 
 				tc0 = cc;
 				tc1=0;
-				while(bf[cc] != clsystem->eol())
+				while(bf[cc] != '\n')
 				{
 						 if( (bf[cc]=='"' || bf[cc]=='\'') && apos==0) { apos=1; cc++; aps=cc; }
 					else if( (bf[cc]=='"' || bf[cc]=='\'') && apos==1) { apos=0; break; }
@@ -535,7 +538,7 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 		}
 			
 		//reset fopr next line
-		while(bf[cc] != clsystem->eol()) cc++;
+		while(bf[cc] != '\n') cc++;
 		cc++;
 		aps=0;
 		//*
