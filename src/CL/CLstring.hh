@@ -43,6 +43,7 @@ class CLstring : public virtual CLcl, public CLsingle<CLstring>
 		xchar* compare(const xchar* s,const xchar* t,bool f) const;
 		xchar* unconst(const xchar* s) const;
 		xchar charat(const xchar* s,xlong p) const;
+		xlong getlinecount(const xchar* s) const;
 
 		//operator =
 		//operator +

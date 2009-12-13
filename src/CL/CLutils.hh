@@ -42,9 +42,6 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		CLutils();
 		~CLutils() { };
 	public:
-		void   long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) const;
-		xchar  long2char(xlong l,xlong i) const;
-		xlong  chars2long(uxchar i1,uxchar i2,uxchar i3,uxchar i4) const;
 		xlong  chararraylength(const xchar* c) const;
 		void   copychararray(xchar* dst,const xchar* src,xlong length) const; //for char arrays below 256byte
 		xchar* clonechararray(const xchar* src) const;
@@ -52,7 +49,6 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 		xlong  getlinecount(const xchar* sf) const;
 		bool   checkextension(xchar* fn,xlong nl,const xchar* fe) const;
 		xlong  getrandom(uxlong range);
-		xchar* color2string(uxlong c) const;
 		xlong  endian(xlong l) const;
 		xlong  hatoi(uxchar c) const;
 		xlong  hatoi(const xchar* c) const;
@@ -62,47 +58,6 @@ class CLutils : public virtual CLcl, public CLsingle<CLutils>
 ///implementation
 CLutils::CLutils() : CLsingle<CLutils>() { seed = SEED; } //! noncritical
 
-void CLutils::long2char(xlong l,uxchar& r0,uxchar& r1,uxchar& r2,uxchar& r3) const //! noncritical
-{
-	r0 = (l & 0xFF);
-	r1 = (l & 0xFF00) >> 8;
-	r2 = (l & 0xFF0000) >> 16;
-	r3 = (l & 0xFF000000) >> 24;
-}
-
-xchar CLutils::long2char(xlong l,xlong i) const //! noncritical
-{
-	xchar ch = -1;
-
-	switch(i)
-	{
-		case 0:
-			ch = (l & 0xFF);
-			break;
-		case 1:
-			ch = (l & 0xFF00) >> 8;
-			break;
-		case 2:
-			ch = (l & 0xFF0000) >> 16;
-			break;
-		case 3:
-			ch = (l & 0xFF000000) >> 24;
-			break;
-	}
-	return ch;
-}
-
-xlong CLutils::chars2long(uxchar i0,uxchar i1,uxchar i2,uxchar i3) const //! noncritical
-{
-	xlong l;
-
-	l = xlong(i0);
-	l += xlong(i1) << 8;
-	l += xlong(i2) << 16;
-	l += xlong(i3) << 24;
-
-	return l;
-}
 
 xlong CLutils::chararraylength(const xchar* c) const //! noncritical
 {
@@ -171,29 +126,6 @@ xlong CLutils::getrandom(uxlong range) //! noncritical
 	seed ^= (seed<<4);
 	return seed % range;
 	//*
-}
-
-xchar* CLutils::color2string(uxlong c) const //! noncritical
-{
-	doubleword tc;
-	tc.dd = c;
-	xchar* rc = new xchar[10];
-
-	const xchar* tmp = "0123456789ABCDEF";
-
-	rc[0] = '0';
-	rc[9] = 'h';
-
-	rc[1] = tmp[tc.db[0] / 16];
-	rc[2] = tmp[tc.db[0] % 16];
-	rc[3] = tmp[tc.db[1] / 16];
-	rc[4] = tmp[tc.db[1] % 16];
-	rc[5] = tmp[tc.db[2] / 16];
-	rc[6] = tmp[tc.db[2] % 16];
-	rc[7] = tmp[tc.db[3] / 16];
-	rc[8] = tmp[tc.db[3] % 16];
-
-	return rc;
 }
 
 xlong CLutils::endian(xlong l) const //! noncritical

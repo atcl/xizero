@@ -80,7 +80,6 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmousey() const { return mousey; };
 		xlong getmouselb() const { return mouselb; };
 		xlong getmouserb() const { return mouserb; };
-		xlong msgbox(const xchar* title,const xchar* message);
 };
 ///*
 
@@ -226,72 +225,6 @@ xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(m
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncritical
 
 xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
-
-xlong CLwindow::msgbox(const xchar* title,const xchar* message) //! noncritical
-{
-	//prepare message
-	xlong msglines = clutils->getlinecount(message);
-	xlong msglength = clutils->chararraylength(message);
-	xlong* msgpos = new xlong[msglines];
-	xlong* msglen = new xlong[msglines];
-	xlong npos = 0;
-	for(xlong i=0; i<msglines; i++)
-	{
-		msgpos[i] = npos;
-		while(npos<msglength) { if(message[npos]=='\n') { break; } npos++; }
-		msglen[i] = npos - msgpos[i];
-		npos++;
-	}
-	xlong maxline = 0;
-	for(xlong i=1; i<msglines; i++) { if(msglen[i]>msglen[maxline]) maxline = i; }
-	//create window
-	XFontStruct *font = XQueryFont(Xdisplay,XGContextFromGC(Xgc));
-	xlong winwidth = 20+XTextWidth(font,&message[msgpos[maxline]],msglen[maxline]);
-	xlong winheight = 40+msglines*16;
-	if(winwidth<200) winwidth = 200;
-	if(winwidth>800) winwidth = 400;
-	if(winheight<100) winheight = 100;
-	if(winheight>600) winheight = 600;
-	Window msgbox = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,winwidth,winheight,0,Xgrey.pixel,Xgrey.pixel);
-	XSelectInput(Xdisplay,msgbox,ExposureMask|KeyPressMask|ButtonPressMask|StructureNotifyMask);
-	//set title
-	XStoreName(Xdisplay,msgbox,title);
-	//show window
-	XMapRaised(Xdisplay,msgbox);
-	for(;;) { XNextEvent(Xdisplay, &Xevent); if (Xevent.type == MapNotify) break; }
-	xlong j= 0;
-	
-	//wait till press
-	bool wait = 0;
-	while(wait==0)
-	{
-		if(XPending(Xdisplay)!=0)
-		{			
-			XNextEvent(Xdisplay,&Xevent);
-			switch(Xevent.type)
-			{				
-				case Expose:
-					XSetForeground(Xdisplay,Xgc,Xblack.pixel);
-					XSetBackground(Xdisplay,Xgc,Xgrey.pixel);
-					for(j=0; j<msglines; j++) { XDrawImageString(Xdisplay,msgbox,Xgc,10,20+16*j,&message[msgpos[j]],msglen[j]); }
-					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)-50,winheight-10,(winwidth/2)+50,winheight-10);
-					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)+50,winheight-30,(winwidth/2)+50,winheight-10);	
-					XDrawImageString(Xdisplay,msgbox,Xgc,(winwidth/2)-5,winheight-15,u8"OK",2);
-					XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
-					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)-50,winheight-10);
-					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)+50,winheight-30);
-				break;
-				case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
-				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
-			}				
-		}
-		
-		draw();
-	}
-	//destroy window
-	XDestroyWindow(Xdisplay,msgbox);
-	return 1;
-}
 ///*
 	
 #endif

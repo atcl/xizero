@@ -445,7 +445,7 @@ int main(int argc, char** argv)
 			case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
 				
 			//System:
-			case '0':    xlong rval = clglobal->clwindow->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
+			case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
 		}
 		
 		switch(clglobal->clwindow->getinkey())

@@ -14,6 +14,7 @@
 #include "CLutils.hh"
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
+#include "CLstruct.hh"
 ///*
 
 ///header
@@ -84,19 +85,19 @@ void CLtransitions::dissolve() //! critical
 
 void CLtransitions::fadetoblack() //! critical
 {
-	uxchar comp[4] = { 0,0,0,0 };
+	doubleword comp = { 0 };
 	uxlong i = 0;
 	
 	while(clwindow->run() && i<256)
 	{		
 		for(uxlong j=0; j<(XRES*YRES); j++)
 		{
-			clutils->long2char(cldoublebuffer[j],comp[0],comp[1],comp[2],comp[3]);
-			if(comp[0] > 0) comp[0]--;
-			if(comp[1] > 0) comp[1]--;
-			if(comp[2] > 0) comp[2]--;
-			if(comp[3] > 0) comp[3]--;
-			cldoublebuffer[j] = clutils->chars2long(comp[0],comp[1],comp[2],comp[3]);
+			comp.dd = cldoublebuffer[j];
+			if(comp.db[0] > 0) comp.db[0]--;
+			if(comp.db[1] > 0) comp.db[1]--;
+			if(comp.db[2] > 0) comp.db[2]--;
+			if(comp.db[3] > 0) comp.db[3]--;
+			cldoublebuffer[j] = comp.dd;
 		}
 		i++;
 		clsystem->wait(5);
