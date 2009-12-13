@@ -72,9 +72,9 @@ class CLxml : public virtual CLcl
 		
 		bool parent(); //if root return 1 else 0
 
-		xchar* getnamespace();
-		xchar* getencoding();
-		xchar* getversion();
+		xchar* getnamespace() const;
+		xchar* getencoding() const;
+		xchar* getversion() const;
 		
 		//output and manipulate:
 		//

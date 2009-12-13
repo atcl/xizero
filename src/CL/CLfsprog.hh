@@ -42,7 +42,7 @@ class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
 		void set(xlong p);
 		void add(xlong a);
 		void reset();
-		xlong get() const;
+		xlong get() const { return pprogress; };
 };
 ///*
 
@@ -85,8 +85,6 @@ void CLfsprogress::add(xlong a) //! noncritical
 }
 
 void CLfsprogress::reset() { pprogress = rprogress = 0; } //! noncritical
-
-xlong CLfsprogress::get() const { return pprogress; } //! noncritical
 ///*
 
 #endif

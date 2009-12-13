@@ -46,7 +46,7 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 	public:
 		void init(xlong i,xchar flags);
 		void inc();
-		float getfps();
+		float getfps() const { return framespersecond; };
 		void print() const;
 };
 ///*
@@ -77,8 +77,6 @@ void CLbench::inc() //! critical
 
 	lastupdate = currenttime;
 }
-
-float CLbench::getfps() { return framespersecond; } //! noncritical
 
 void CLbench::print() const //! noncritical
 {

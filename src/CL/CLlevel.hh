@@ -80,9 +80,9 @@ class CLlevel : public virtual CLcl
 		void setmark(xlong m);
 		void start();
 		void pause();
-		xlong getmark() const;
-		CLfbuffer* getlandscape() const;
-		CLplayer* getplayer() const;
+		xlong getmark() const { return smoothmark; };
+		CLfbuffer* getlandscape() const { return levellandscape; };
+		CLplayer* getplayer() const { return player; };
 };
 
 xlong CLlevel::levelwidth = 20; //in blocks
@@ -527,12 +527,6 @@ void CLlevel::start() //! noncritical
 	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext()) { enemies->getcurrentdata()->start(); }
 	boss->start();
 }
-
-xlong CLlevel::getmark() const { return smoothmark; } //! noncritical
-
-CLfbuffer* CLlevel::getlandscape() const { return levellandscape; } //! noncritical
-
-CLplayer* CLlevel::getplayer() const { return player; } //! noncritical
 ///*
 
 #endif

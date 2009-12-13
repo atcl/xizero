@@ -67,17 +67,17 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		CLdetect();
 		~CLdetect() { };
 	public:
-		xlong cpu() const;
-		xlong cores() const;
+		xlong cpu() const { return pcpu; };
+		xlong cores() const { return pcores; };
 		xlong ram() const;
 		xchar* gpu() const;
 		xlong vram() const;
 		xchar* sb() const;
 		xlong ps() const;
 		
-		bool mmx() const;
-		bool sse() const;
-		bool x86() const;
+		bool mmx() const { return havemmx; };
+		bool sse() const { return havesse; };
+		bool x86() const { return havex86; };
 };
 ///*
 
@@ -126,10 +126,6 @@ CLdetect::CLdetect() //! noncritical
 	//...	
 }
 
-xlong CLdetect::cpu() const { return pcpu; } //! noncritical
-
-xlong CLdetect::cores() const { return pcores; } //! noncritical
-
 xlong CLdetect::ram() const { } //! noncritical
 
 xchar* CLdetect::gpu() const { } //! noncritical
@@ -139,12 +135,6 @@ xlong CLdetect::vram() const { } //! noncritical
 xchar* CLdetect::sb() const { } //! noncritical
 
 xlong CLdetect::ps() const { } //! noncritical
-
-bool CLdetect::mmx() const { return havemmx; } //! noncritical
-
-bool CLdetect::sse() const { return havesse; } //! noncritical
-
-bool CLdetect::x86() const { return havex86; } //! noncritical
 ///*
 
 #endif

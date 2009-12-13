@@ -47,9 +47,9 @@ template <typename T>class CLbuffer : public virtual CLcl
 		void copy(CLbuffer* dst);
 		void blendcopy(T* dst,xlong o); //too slow!!!
 		void blendcopy(CLbuffer<T>* dst,xlong o);
-		uxlong getsize() const;
-		uxlong getbytesize() const;
-		T* getbuffer() const;
+		uxlong getsize() const { return size; };
+		uxlong getbytesize() const { return bsize; };
+		T* getbuffer() const { return buffer; };
 		T& operator[](uxlong i);
 };
 ///*
@@ -551,12 +551,6 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 }
 
 template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); } //! noncritical
-
-template <typename T>uxlong CLbuffer<T>::getsize() const { return size; } //! noncritical
-
-template <typename T>uxlong CLbuffer<T>::getbytesize() const { return bsize; } //! noncritical
-
-template <typename T>T* CLbuffer<T>::getbuffer() const { return buffer; } //! noncritical
 
 template <typename T>T& CLbuffer<T>::operator[](uxlong i) //! critical
 {

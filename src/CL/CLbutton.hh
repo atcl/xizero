@@ -45,10 +45,10 @@ class CLbutton : public CLguibase
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f);
 		~CLbutton();
 		void draw() const;
-		void setaction(void(*a)());
+		void setaction(void(*a)()) { action = a; };
 		void setcaption(xchar* t);
 		void setvisible(bool v);
-		xchar* getcaption() const;
+		xchar* getcaption() const { return caption; };
 		void click();
 		static void checkclick();
 };
@@ -81,8 +81,6 @@ void CLbutton::draw() const //! critical
 	clgfx2->drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
 }
 
-void CLbutton::setaction(void(*a)()) { action = a; } //! noncritical
-
 void CLbutton::setcaption(xchar* t) //! noncritical
 {
 	delete caption;
@@ -109,8 +107,6 @@ void CLbutton::setvisible(bool v) //! noncritical
 		buttonlist->delcurrent();
 	}
 }
-
-xchar* CLbutton::getcaption() const { return caption; } //! noncritical
 
 void CLbutton::click() { action(); } //! critical
 

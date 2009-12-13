@@ -45,11 +45,11 @@ class CLapp : public virtual CLcl, public CLsingle<CLapp>
 		~CLapp() { };
 		void exit(xlong r=0,const xchar* m="");
 		xchar inkey(bool b);
-		xchar* getname() const;
-		xchar* gettitle() const;
-		xchar* geticon() const;
-		uxlong getsize() const;
-		uxlong getversion() const;
+		xchar* getname() const { return name; };
+		xchar* gettitle() const { return title; };
+		xchar* geticon() const { return icon; };
+		uxlong getsize() const { return size; };
+		uxlong getversion() const { return version; };
 };
 ///*
 
@@ -91,16 +91,6 @@ xchar inkey(bool b) //! noncritical
 	
 	return r;
 }
-
-xchar* CLapp::getname() const { return name; } //! noncritical
-
-xchar* CLapp::gettitle() const { return title; } //! noncritical
-
-xchar* CLapp::geticon() const { return icon; } //! noncritical
-
-uxlong CLapp::getsize() const { return size; } //! noncritical
-
-uxlong CLapp::getversion() const { return version; } //! noncritical
 ///*
 
 #endif

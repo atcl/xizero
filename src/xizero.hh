@@ -15,7 +15,7 @@ xlong currlevel = 0;
 void exitgame()
 {
 	clglobal->clsound->exit();
-	clglobal->clsystem->exit(0,0,"xizero says","bye");
+	clglobal->clapp->exit(0,"xizero says: bye");
 }
 
 void newgame()

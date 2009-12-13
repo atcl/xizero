@@ -45,22 +45,22 @@ class CLguibase : public virtual CLcl
 	public:
 		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 		virtual ~CLguibase() { };
-		virtual void draw();
-		void setwidth(xlong w);
-		void setheight(xlong h);
-		void setx(xlong x);
-		void sety(xlong y);
-		void setfcolor(uxlong fc);
-		void setbcolor(uxlong bc);
-		void setrcolor(uxlong rc);
-		void setvisible(bool v);
-		xlong getwidth() const;
-		xlong getheight() const;
-		xlong getx() const;
-		xlong gety() const;
-		uxlong getfcolor() const;
-		uxlong getbcolor() const;
-		uxlong getrcolor() const;
+		virtual void draw() { };
+		void setwidth(xlong w) { width = w; };
+		void setheight(xlong h) { height = h; };
+		void setx(xlong x) { posx = x; };
+		void sety(xlong y) { posy = y; };
+		void setfcolor(uxlong fc) { fcolor = fc; };
+		void setbcolor(uxlong bc) { bcolor = bc; };
+		void setrcolor(uxlong rc) { rcolor = rc; };
+		void setvisible(bool v) { visible = v; };
+		xlong getwidth() const { return width; };
+		xlong getheight() const { return height; };
+		xlong getx() const { return posx; };
+		xlong gety() const { return posy; };
+		uxlong getfcolor() const { return fcolor; };
+		uxlong getbcolor() const { return bcolor; };
+		uxlong getrcolor() const { return rcolor; };
 };
 ///*
 
@@ -91,38 +91,6 @@ void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxl
 	rcolor = rc;
 	flat = f;
 }
-
-void CLguibase::draw() { } //virtual!  //! noncritical
-
-void CLguibase::setwidth(xlong w) { width = w; } //! noncritical
-
-void CLguibase::setheight(xlong h) { height = h; } //! noncritical
-
-void CLguibase::setx(xlong x) { posx = x; } //! noncritical
-
-void CLguibase::sety(xlong y) { posy = y; } //! noncritical
-
-void CLguibase::setfcolor(uxlong fc) { fcolor = fc; } //! noncritical
-
-void CLguibase::setbcolor(uxlong bc) { bcolor = bc; } //! noncritical
-
-void CLguibase::setrcolor(uxlong rc) { rcolor = rc; } //! noncritical
-
-void CLguibase::setvisible(bool v) { visible = v; } //! noncritical
-
-xlong CLguibase::getwidth() const { return width; } //! noncritical
-
-xlong CLguibase::getheight() const { return height; } //! noncritical
-
-xlong CLguibase::getx() const { return posx; } //! noncritical
-
-xlong CLguibase::gety() const { return posy; } //! noncritical
-
-uxlong CLguibase::getfcolor() const { return fcolor; } //! noncritical
-
-uxlong CLguibase::getbcolor() const { return bcolor; } //! noncritical
-
-uxlong CLguibase::getrcolor() const { return rcolor; } //! noncritical
 ///*
 
 #endif

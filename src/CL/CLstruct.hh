@@ -33,6 +33,15 @@ union quadword //:doubleword
 	uxchar  db[8];
 };
 
+union color
+{
+	uxlong rgba;
+	uxchar r;
+	uxchar b;
+	uxchar g;
+	uxchar a;
+};
+
 struct CLfile
 {
 	xchar* name;

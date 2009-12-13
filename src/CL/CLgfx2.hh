@@ -56,7 +56,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		uxlong getEGAcolor(xchar c) const;
 		bool comparecolors(uxlong c1,uxlong c2) const;
 		uxlong blendcolors(uxlong c1,uxlong c2,xlong m) const;
-		uxlong getgradient(uxlong s,uxlong e,xchar i) const;
+		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;
 		sprite* savescreen() const;
 };
 ///*
@@ -245,7 +245,7 @@ bool CLgfx2::comparecolors(uxlong c1,uxlong c2) const //! critical
 	return 0;
 }
 
-uxlong CLgfx2::getgradient(uxlong s,uxlong e,xchar i) const //! critical
+uxlong* CLgfx2::getgradient(uxlong s,uxlong e,xlong i) const //! critical
 {
 	//((s.r-e.r)/255)*i, ((s.g - e.g)/255)*i, ((s.b - e.b)/255)*i
 }

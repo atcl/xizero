@@ -58,8 +58,8 @@ class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 		void mask();
 		void handle();
 		void exit();
-		bool isavail() const;
-		CLgamepadstate* getstate() const;
+		bool isavail() const { return (device!=-1); };
+		CLgamepadstate* getstate() const { return pad; };
 };
 ///*
 
@@ -173,10 +173,6 @@ void CLgamepad::handle() //! noncritical
 void CLgamepad::exit() { close(device); } //! noncritical
 
 #endif
-
-bool CLgamepad::isavail() const { return (device!=-1); } //! noncritical
-
-CLgamepadstate* CLgamepad::getstate() const { return pad; } //! noncritical
 ///*
 
 #endif

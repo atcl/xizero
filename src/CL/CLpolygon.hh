@@ -76,9 +76,9 @@ class CLpolygon : public virtual CLcl
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		template<class clvector>void add(const clvector& a);
 		void reset();
-		void setcolor(uxlong co);
+		void setcolor(uxlong co) { color = co; };
 		void resetcolor();
-		CLfvector getnormal() const;
+		CLfvector getnormal() const { return normal; };
 };
 
 xlong CLpolygon::pointcount = 4;
@@ -737,11 +737,7 @@ void CLpolygon::reset() //! noncritical
 	normal    = rnormal;
 }
 
-void CLpolygon::setcolor(uxlong co) { color = co; } //! noncritical
-
 void CLpolygon::resetcolor() { color = rcolor; } //! noncritical
-
-CLfvector CLpolygon::getnormal() const { return normal; } //! noncritical
 ///*
 
 #endif

@@ -61,10 +61,10 @@ class CLobject : public virtual CLcl
 		void partupdate(CLmatrix* m);
 		void display(CLlvector p,xshort flags);
 		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
-		xlong getname() const;
+		xlong getname() const { return name; };
 		CLfvector* getdockingpoint(xlong t,xlong i) const;
 		void translatealongnormals(float speed);
-		CLbox* getboundingbox() const;
+		CLbox* getboundingbox() const { return boundingbox; };
 		void reset();
 		void setcolor(uxlong co);
 		void resetcolor();
@@ -422,8 +422,6 @@ void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlon
 	//*
 }
 
-xlong CLobject::getname() const { return name; } //! noncritical
-
 //get i-th docking point of type t, return 0 if not found, i= 0 means first of sort
 CLfvector* CLobject::getdockingpoint(xlong t,xlong i) const //! noncritical
 {
@@ -479,8 +477,6 @@ void CLobject::translatealongnormals(float speed) //! noncritical
 	}
 	//*
 }
-
-CLbox* CLobject::getboundingbox() const { return boundingbox; } //! noncritical
 
 void CLobject::reset() //! noncritical
 {

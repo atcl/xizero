@@ -71,15 +71,15 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 	public:
 		void draw();
 		xlong run();
-		void showcursor();
-		void hidecursor();
-		void setcursor(sprite* s);
+		void showcursor() { displaycursor = 1; };
+		void hidecursor() { displaycursor = 0; };
+		void setcursor(sprite* s) { cursor = s; };
 		xlong getinkey();
 		xlong getturbo();
-		xlong getmousex() const;
-		xlong getmousey() const;
-		xlong getmouselb() const;
-		xlong getmouserb() const;
+		xlong getmousex() const { return mousex; };
+		xlong getmousey() const { return mousey; };
+		xlong getmouselb() const { return mouselb; };
+		xlong getmouserb() const { return mouserb; };
 		xlong msgbox(const xchar* title,const xchar* message);
 };
 ///*
@@ -110,7 +110,7 @@ CLwindow::CLwindow() //! noncritical
 	//init window title
 	XStoreName(Xdisplay,Xwindow,title);
 	//init icon
-	sprite* Ticon = clformat->loadxpm(ICON);
+	sprite* Ticon = clformat->loadxpm(icon);
 	XImage* Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
 	Pixmap icon = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
 	XPutImage(Xdisplay,icon,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
@@ -223,23 +223,9 @@ void CLwindow::handle() //! critical
 
 xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; } //! noncritical
 
-void CLwindow::showcursor() { displaycursor = 1; } //! noncritical
-
-void CLwindow::hidecursor() { displaycursor = 0; } //! noncritical
-
-void CLwindow::setcursor(sprite* s) { cursor = s; } //! noncritical
-
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncritical
 
 xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
-
-xlong CLwindow::getmousex() const { return mousex; } //! noncritical
-
-xlong CLwindow::getmousey() const {	return mousey; } //! noncritical
-
-xlong CLwindow::getmouselb() const { return mouselb; } //! noncritical
-
-xlong CLwindow::getmouserb() const { return mouserb; } //! noncritical
 
 xlong CLwindow::msgbox(const xchar* title,const xchar* message) //! noncritical
 {

@@ -56,8 +56,8 @@ class CLanim : public virtual CLcl
 		~CLanim();
 		xlong update();
 		xlong run();
-		void setposition(CLfvector& p);
-		CLfvector& getposition();
+		void setposition(CLfvector& p) { position = p; };
+		CLfvector& getposition() { return position; };
 };
 ///*
 
@@ -319,10 +319,6 @@ xlong CLanim::run() //! critical
 	return r;
 	//*
 }
-
-void CLanim::setposition(CLfvector& p) { position = p; } //! noncritical
-
-CLfvector& CLanim::getposition() { return position; } //! noncritical
 ///*
 
 #endif

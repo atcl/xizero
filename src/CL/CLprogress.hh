@@ -49,9 +49,9 @@ class CLprogress : public CLguibase
 		void setend(xlong e);
 		void setprogress(xlong p);
 		void addprogress(xlong a);
-		xlong getstart() const;
-		xlong getend() const;
-		xlong getprogress() const;
+		xlong getstart() const { return start; };
+		xlong getend() const { return end; };
+		xlong getprogress() const { return progress; };
 };
 ///*
 
@@ -165,12 +165,6 @@ void CLprogress::addprogress(xlong a) //! noncritical
 	else progress += a;
 	pprogress = punit * progress;
 }
-
-xlong CLprogress::getstart() const { return start; } //! noncritical
-
-xlong CLprogress::getend() const { return end; } //! noncritical
-
-xlong CLprogress::getprogress() const { return progress; } //! noncritical
 ///*
 
 #endif

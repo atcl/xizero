@@ -52,16 +52,16 @@ class CLtree : public virtual CLcl
 		CLtree();
 		~CLtree();
 
-		void root();
+		void setroot() { current = rootnode; };
 		void child(xlong i);
-		xlong childcount();
-		void parent();
+		xlong getchildcount() const { return current->childcount; };
+		void setparent() { current = current->parent; };
 		void next();	//next sibling
-		member* data() const;
+		member* getdata() const { return current->data; };
 		void adddata(member* d);
 		void addchild();
 		void delchild(xlong i);
-		bool isroot() const;
+		bool isroot() const { return (current==rootnode); };
 		void print() const;
 };
 ///*
@@ -81,23 +81,10 @@ template<class member>
 CLtree<member>::~CLtree() { delete rootnode; } //! noncritical
 
 template<class member>
-void CLtree<member>::root() { current = rootnode; } //! noncritical
-
-template<class member>
 void CLtree<member>::child(xlong i) { if(i<current->childcount) { current = current->child[i]; } }  //! noncritical
 
 template<class member>
-xlong CLtree<member>::childcount() { return current->childcount; } //! noncritical
-
-template<class member>
-void CLtree<member>::parent() { current = current->parent; }  //! noncritical
-
-template<class member>
-void CLtree<member>::next()
-{ if(current->next!=0) { current = current->next;	} }  //! noncritical
-
-template<class member>
-member* CLtree<member>::data() const { return current->data; } //! noncritical
+void CLtree<member>::next() { if(current->next!=0) { current = current->next; } }  //! noncritical
 
 template<class member>
 void CLtree<member>::adddata(member* d) { current->data = d; } //! noncritical
@@ -134,9 +121,6 @@ void CLtree<member>::delchild(xlong i) //! noncritical
 		current->child[i-1]->next = current->child[i-1];
 	}
 }
-
-template<class member>
-bool CLtree<member>::isroot() const { return (current==rootnode); } //! noncritical
 
 template<class member>
 void CLtree<member>::print() const //! noncritical

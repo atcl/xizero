@@ -27,7 +27,6 @@ xlong* getbufferptr() { }
 //~ void ejectcd() { }
 
 //basic
-xchar inkey() { }
 void int() { }
 
 //kern

@@ -43,7 +43,7 @@ class CLlabel : public CLguibase
 		~CLlabel() { };
 		void draw() const;
 		void settext(const xchar* t);
-		xchar* gettext() const;
+		xchar* gettext() const { return text; };
 };
 ///*
 
@@ -80,8 +80,6 @@ void CLlabel::settext(const xchar* t) //! noncritical
 	textx = (width - textwidth)>>1;
 	texty = (height - textheight)>>1;
 }
-
-xchar* CLlabel::gettext() const { return text; } //! noncritical
 ///*
 
 #endif

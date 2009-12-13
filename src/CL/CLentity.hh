@@ -89,12 +89,12 @@ class CLentity : public virtual CLcl
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
 		void hit(xlong h);
-		xlong gethealth() const;
-		xlong getshield() const;
-		CLfvector* getposition();
-		CLbox* getboundingbox() const;
-		bool isvisible() const;
-		xlong gettype() const;
+		xlong gethealth() const { return health; };
+		xlong getshield() const { return shield; };
+		CLfvector* getposition() { return &position; };
+		CLbox* getboundingbox() const { return boundingbox[0][0]; };
+		bool isvisible() const { return visible; };
+		xlong gettype() const { return type; };
 		void start();
 		void pause();
 };
@@ -365,24 +365,6 @@ void CLentity<I>::hit(xlong h) //! critical
 	
 	if(shield<0) health -= -shield; 
 }
-
-template<int I>
-xlong CLentity<I>::gethealth() const { return health; } //! noncritical
-
-template<int I>
-xlong CLentity<I>::getshield() const { return shield; } //! noncritical
-
-template<int I>
-CLfvector* CLentity<I>::getposition() { return &position; } //! noncritical
-
-template<int I>
-CLbox* CLentity<I>::getboundingbox() const { return boundingbox[0][0]; } //! noncritical
-
-template<int I>
-bool CLentity<I>::isvisible() const { return visible; } //! noncritical
-
-template<int I>
-xlong CLentity<I>::gettype() const { return type; } //! noncritical
 
 template<int I>
 void CLentity<I>::start() //! noncritical
