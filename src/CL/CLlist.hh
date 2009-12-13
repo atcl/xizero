@@ -50,7 +50,7 @@ class CLlist : public virtual CLcl
 		CLlist();
 		~CLlist();
 
-		void append(member* e,const xchar* n=" ",xlong h=0);
+		void append(member* e,const xchar* n=u8" ",xlong h=0);
 		member* getcurrentdata() const;
 		xchar* getcurrentname() const;
 		xlong delcurrent(bool smash=0); //test smash option
@@ -411,11 +411,11 @@ void CLlist<member>::print() const //! noncritical
 	//print all list members names
 	setfirst();
 
-	say("|");
+	say(u8"|");
 
 	while(!islast())
 	{
-		tty("+");
+		tty(u8"+");
 		say(getcurrentname());
 		setnext();
 	}

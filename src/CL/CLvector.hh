@@ -245,7 +245,7 @@ T CLvector<T>::operator%(const CLvector& a) //! critical
 template<typename T>
 void CLvector<T>::print() const //! noncritical
 {
-	tty("( "); tty(x); tty(" , "); tty(y); tty(" , "); tty(z); say(" )");
+	tty(u8"( "); tty(x); tty(u8" , "); tty(y); tty(u8" , "); tty(z); say(u8" )");
 }
 //*
 

@@ -145,13 +145,13 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 
 	//for each model
 	CLfile* entitymodelfile = 0;
-	xchar* testext[2] = { "0.y3d","1.y3d" };
-	if(I==1) testext[0] = ".y3d";
+	xchar* testext[2] = { u8"0.y3d",u8"1.y3d" };
+	if(I==1) testext[0] = u8".y3d";
 	for(uxlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
 		entitymodelfile = entitya->findbyextension(testext[i]);
-		if(entitymodelfile==0) err(__func__,"no entity model file found");
+		if(entitymodelfile==0) err(__func__,u8"no entity model file found");
 		model[i] = new CLobject(entitymodelfile,0);
 		//*
 		
@@ -176,24 +176,24 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	//*
 	
 	//find and load definition (*.ini)
-	CLfile* entitydefinitionfile = entitya->findbyextension(".ini");
-	if(entitydefinitionfile==0) err(__func__,"no entity definition found");
+	CLfile* entitydefinitionfile = entitya->findbyextension(u8".ini");
+	if(entitydefinitionfile==0) err(__func__,u8"no entity definition found");
 	def = clformat->loadini(entitydefinitionfile);
 	//*
 	
 	//load entity attributes
-	maxspeed    = clsystem->ato((*def)["speed"]);
-	healthmax = health = clsystem->ato((*def)["health"]);
-	shieldmax = shield = clsystem->ato((*def)["shield"]);
-	shieldrate	= clsystem->ato((*def)["shieldrate"]);
-	armor		= clsystem->ato((*def)["armor"]);
-	ammomounts	= clsystem->ato((*def)["ammomounts"]);
+	maxspeed    = clsystem->ato((*def)[u8"speed"]);
+	healthmax = health = clsystem->ato((*def)[u8"health"]);
+	shieldmax = shield = clsystem->ato((*def)[u8"shield"]);
+	shieldrate	= clsystem->ato((*def)[u8"shieldrate"]);
+	armor		= clsystem->ato((*def)[u8"armor"]);
+	ammomounts	= clsystem->ato((*def)[u8"ammomounts"]);
 	points		= 10; //system->ato((*def)["points"]);
 	//*
 	
 	//load ammo types
-	xchar* ammoext[4] = { "ammotype0","ammotype1","ammotype2","ammotype3" };
-	xchar* fireext[4] = { "firerate0","firerate1","firerate2","firerate3" };
+	xchar* ammoext[4] = { u8"ammotype0",u8"ammotype1",u8"ammotype2",u8"ammotype3" };
+	xchar* fireext[4] = { u8"firerate0",u8"firerate1",u8"firerate2",u8"firerate3" };
 	ammotype = new xlong[ammomounts];
 	firerate = new xlong[ammomounts];
 	fireupdate = new xlong[ammomounts];
@@ -211,7 +211,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	
 	//load csv if present (*.csv)
 	csv = 0;
-	CLfile* entityaifile = entitya->findbyextension(".csv");
+	CLfile* entityaifile = entitya->findbyextension(u8".csv");
 	if(entityaifile!=0) csv = clformat->loadcsv(entityaifile);
 	//*
 	

@@ -50,12 +50,12 @@ class CLintro : public virtual CLcl //! noncritical
 void CLintro::atcrosslevel() const //! noncritical
 {
 	//load atcrosslevel model
-	CLfile *cf = introar->findbyname("atcl.y3d");
+	CLfile *cf = introar->findbyname(u8"atcl.y3d");
 	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
 	
 	//load animation file
-	CLfile* aniraw = introar->findbyname("atcl.ani");
+	CLfile* aniraw = introar->findbyname(u8"atcl.ani");
 	//*
 	
 	//create animation
@@ -74,15 +74,15 @@ void CLintro::atcrosslevel() const //! noncritical
 void CLintro::xizero() const //! noncritical
 {
 	//load atcrosslevel model
-	CLfile* fxi = introar->findbyname("xi.y3d");
+	CLfile* fxi = introar->findbyname(u8"xi.y3d");
 	CLobject* oxi = new CLobject(fxi,0);
-	CLfile* fzero = introar->findbyname("zero.y3d");
+	CLfile* fzero = introar->findbyname(u8"zero.y3d");
 	CLobject* ozero = new CLobject(fzero,0);
 	//*
 	
 	//load animation file
-	CLfile* axi = introar->findbyname("xi.ani");
-	CLfile* azero = introar->findbyname("zero.ani");
+	CLfile* axi = introar->findbyname(u8"xi.ani");
+	CLfile* azero = introar->findbyname(u8"zero.ani");
 	//*
 	
 	//create animation

@@ -276,7 +276,7 @@ xlong CLwindow::msgbox(const xchar* title,const xchar* message) //! noncritical
 					for(j=0; j<msglines; j++) { XDrawImageString(Xdisplay,msgbox,Xgc,10,20+16*j,&message[msgpos[j]],msglen[j]); }
 					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)-50,winheight-10,(winwidth/2)+50,winheight-10);
 					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)+50,winheight-30,(winwidth/2)+50,winheight-10);	
-					XDrawImageString(Xdisplay,msgbox,Xgc,(winwidth/2)-5,winheight-15,"OK",2);
+					XDrawImageString(Xdisplay,msgbox,Xgc,(winwidth/2)-5,winheight-15,u8"OK",2);
 					XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
 					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)-50,winheight-10);
 					XDrawLine(Xdisplay,msgbox,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)+50,winheight-30);

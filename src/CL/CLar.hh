@@ -61,7 +61,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 	//*
 
 	//check for "magic-string"
-	if( clsystem->cmpcstr(bf,"!<arch>",6) == 0 )
+	if( clsystem->cmpcstr(bf,u8"!<arch>",6) == 0 )
 	{
 		//init variables
 		xlong bc = 8;
@@ -127,7 +127,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 		for(uxlong j=0; j<fc; j++) { members[j] = tindex[j]; }
 		//*
 	}
-	else { tty(__func__); say("no \"!<arch>\" identifier found"); }
+	else { tty(__func__); say(u8"no \"!<arch>\" identifier found"); }
 }
 
 CLar::~CLar() { for(int i=0; i<filecount; i++) delete members[i]; } //! noncritical

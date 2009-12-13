@@ -47,7 +47,7 @@ void inline eol() { std::cout << std::endl; }
 
 void inline err(const xchar* f,const xchar* m) { std::cout << f << m << std::endl; }
 
-void inline bye() { std::cout << "bye" << std::endl; ::exit(0); } //force program exit
+void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } //force program exit
 
 xlong inline linear(xlong x,xlong y,xlong w) { return ((y*w)+x); }
 

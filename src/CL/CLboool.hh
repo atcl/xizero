@@ -35,10 +35,10 @@ class boool
 		xlong b;
 		
 	public:
-		boool();
-		boool(boool& a);
-		boool(bool a);
-		boool(xlong a);
+		boool() { this->b=0; };
+		boool(boool& a) { this->b=a.b; };
+		boool(bool a) { this->b=a; };
+		boool(xlong a) { this->b=clmath->sign(a); };
 		~boool() { };
 	
 		inline boool& operator=(boool& a);
@@ -78,53 +78,36 @@ class boool
 		friend boool operator-(xlong a,boool& b);
 		friend boool operator*(xlong a,boool& b);
 		
-		inline bool operator&&(boool& a) const;
-		inline bool operator||(boool& a) const;
-		inline bool operator^(boool& a)  const;
+		inline bool operator&&(boool& a) const { return (this->b && a); };
+		inline bool operator||(boool& a) const { return (this->b || a); };
+		inline bool operator^(boool& a)  const { return (this->b ^ a); };
 		
-		inline bool operator==(boool& a) const;
-		inline bool operator!=(boool& a) const;
-		inline bool operator<=(boool& a) const;
-		inline bool operator>=(boool& a) const;
-		inline bool operator<(boool& a)  const;
-		inline bool operator>(boool& a)  const;
-		inline bool operator==(bool a)   const;
-		inline bool operator!=(bool a)   const;
-		inline bool operator<=(bool a)   const;
-		inline bool operator>=(bool a)   const;
-		inline bool operator<(bool a)    const;
-		inline bool operator>(bool a)    const;
+		inline bool operator==(boool& a) const { return (this->b == a.b); };
+		inline bool operator!=(boool& a) const { return (this->b != a.b); };
+		inline bool operator<=(boool& a) const { return (this->b <= a.b); };
+		inline bool operator>=(boool& a) const { return (this->b >= a.b); };
+		inline bool operator<(boool& a)  const { return (this->b < a.b); };
+		inline bool operator>(boool& a)  const { return (this->b > a.b); };
+		inline bool operator==(bool a)   const { return (this->b == a); };
+		inline bool operator!=(bool a)   const { return (this->b == a); };
+		inline bool operator<=(bool a)   const { return (this->b <= a); };
+		inline bool operator>=(bool a)   const { return (this->b >= a); };
+		inline bool operator<(bool a)    const { return (this->b < a); };
+		inline bool operator>(bool a)    const { return (this->b > a); };
 		
-		friend bool operator==(bool a,boool& b);
-		friend bool operator!=(bool a,boool& b);
-		friend bool operator<=(bool a,boool& b);
-		friend bool operator>=(bool a,boool& b);
-		friend bool operator<(bool a,boool& b);
-		friend bool operator>(bool a,boool& b);
+		friend bool operator==(bool a,boool& b) { return (xlong(a) == b.b); };
+		friend bool operator!=(bool a,boool& b) { return (xlong(a) != b.b); };
+		friend bool operator<=(bool a,boool& b) { return (xlong(a) <= b.b); };
+		friend bool operator>=(bool a,boool& b) { return (xlong(a) >= b.b); };
+		friend bool operator<(bool a,boool& b) { return (xlong(a) < b.b); };
+		friend bool operator>(bool a,boool& b) { return (xlong(a) > b.b); };
 
-		inline operator bool()  const;		
-		inline operator xlong() const;
+		inline operator bool()  const { return bool(this->b); };		
+		inline operator xlong() const { return b; };
 };
 ///*
 
 ///implementation
-
-//unassigning constructor
-boool::boool() { this->b=0; } //! noncritical
-//*
-
-//boool assigning constructor
-boool::boool(boool& a) { this->b=a.b; } //! noncritical
-//*
-
-//bool assigning constructor
-boool::boool(bool a) { this->b=a; } //! noncritical
-//*
-
-//xlong assigning construcotr
-boool::boool(xlong a) { this->b=clmath->sign(a); } //! noncritical
-//*
-
 //assign boool
 boool& boool::operator=(boool& a) //! noncritical
 {
@@ -322,73 +305,6 @@ boool boool::operator*(xlong a) const //! noncritical
 	return temp;
 }
 //*
-	
-//logical and with boool	
-bool boool::operator&&(boool& a) const { return (this->b && a); } //! noncritical
-//*
-
-//logical or vboool
-bool boool::operator||(boool& a) const { return (this->b || a); } //! noncritical
-//*
-
-//logical xor with boool
-bool boool::operator^(boool& a)  const { return (this->b ^ a); } //! noncritical
-//*
-
-//equality with boool		
-bool boool::operator==(boool& a) const { return (this->b == a.b); } //! noncritical
-//*
-
-//inequality with boool
-bool boool::operator!=(boool& a) const { return (this->b != a.b); } //! noncritical
-//*
-
-//less or equal with boool
-bool boool::operator<=(boool& a) const { return (this->b <= a.b); } //! noncritical
-//*
-
-//greater or equal with boool
-bool boool::operator>=(boool& a) const { return (this->b >= a.b); } //! noncritical
-//*
-
-//less with boool
-bool boool::operator<(boool& a)  const { return (this->b < a.b); } //! noncritical
-//*
-
-//greater with boool
-bool boool::operator>(boool& a)  const { return (this->b > a.b); } //! noncritical
-
-//equality with bool
-bool boool::operator==(bool a)  const { return (this->b == a); } //! noncritical
-//*
-
-//inequality with bool
-bool boool::operator!=(bool a)  const { return (this->b == a); } //! noncritical
-//*
-
-//less or equal with bool
-bool boool::operator<=(bool a)  const { return (this->b <= a); } //! noncritical
-//*
-
-//greater or equal with bool
-bool boool::operator>=(bool a)  const { return (this->b >= a); } //! noncritical
-//*
-
-//less with bool
-bool boool::operator<(bool a)   const { return (this->b < a); } //! noncritical
-//*
-
-//greater with bool
-bool boool::operator>(bool a)   const { return (this->b > a); } //! noncritical
-//*
-
-//cast to bool
-boool::operator bool()  const { return bool(this->b); } //! noncritical
-//*
-
-//cast to xlong
-boool::operator xlong() const { return b; } //! noncritical
-//*
 
 //friends:
 
@@ -451,31 +367,6 @@ inline boool operator*(bool a,boool& b) //! noncritical
 	return temp;
 }
 //*
-
-//equality with bool from left
-inline bool operator==(bool a,boool& b) { return (xlong(a) == b.b); } //! noncritical
-//*
-
-//inequality with bool from left
-inline bool operator!=(bool a,boool& b) { return (xlong(a) != b.b); } //! noncritical
-//*
-
-//less or equal with bool from left
-inline bool operator<=(bool a,boool& b) { return (xlong(a) <= b.b); } //! noncritical
-//*
-
-//greater or equal with bool from left
-inline bool operator>=(bool a,boool& b) { return (xlong(a) >= b.b); } //! noncritical
-//*
-
-//less with bool from left
-inline bool operator<(bool a,boool& b) { return (xlong(a) < b.b); } //! noncritical
-//*
-
-//greater with bool from left
-inline bool operator>(bool a,boool& b) { return (xlong(a) > b.b); } //! noncritical
-//*
-
 ///*
 
 #endif

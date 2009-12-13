@@ -110,7 +110,7 @@ CLsound::CLsound() //! noncritical
 	//check if sound device is installed
 	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
 	{
-		say("No Soundblaster found");
+		say(u8"No Soundblaster found");
 		nosound = 1;
 	}
 	//*
@@ -144,15 +144,15 @@ bool CLsound::play(const xchar* f,bool l) //! noncritical
 		current.file = clsystem->getfile(f);
 		
 		//check if "RIFF"
-		if(current.file->data[0] != 'FFIR') { say("wav loading error (RIFF)"); return 0; }
+		if(current.file->data[0] != 'FFIR') { say(u8"wav loading error (RIFF)"); return 0; }
 		//*
 		
 		//check if "WAVE"
-		if(current.file->data[2] != 'EVAW') { say("wav loading error (WAVE)"); return 0; }
+		if(current.file->data[2] != 'EVAW') { say(u8"wav loading error (WAVE)"); return 0; }
 		//*
 		
 		//check if "fmt "
-		if(current.file->data[3] != ' tmf') { say("wav loading error (fmt )"); return 0; }
+		if(current.file->data[3] != ' tmf') { say(u8"wav loading error (fmt )"); return 0; }
 		//*
 		
 		//get length
@@ -161,30 +161,30 @@ bool CLsound::play(const xchar* f,bool l) //! noncritical
 		
 		//get and check if pcm
 		current.pcm = (current.file->data[5]>>16);
-		if(current.pcm != 1) { say("wav loading error (pcm)"); return 0; }
+		if(current.pcm != 1) { say(u8"wav loading error (pcm)"); return 0; }
 		//~ say(current.pcm);
 		//*
 		
 		//get and check channels
 		current.channel = (current.file->data[5]<<16)>>16;
-		if(current.channel != 1) { say("wav loading error (channel)"); return 0; }
+		if(current.channel != 1) { say(u8"wav loading error (channel)"); return 0; }
 		//~ say(current.channel);
 		//*
 		
 		//get bitrate
 		current.rate = current.file->data[6];
-		if(current.rate != 44100) { say("wav loading error (rate)"); return 0; }
+		if(current.rate != 44100) { say(u8"wav loading error (rate)"); return 0; }
 		//~ say(current.rate);
 		//*
 		
 		//get and check bits
 		current.bits = (current.file->data[8]>>16);
-		if(current.bits != 16) { say("wav loading error (bits)"); return 0; }
+		if(current.bits != 16) { say(u8"wav loading error (bits)"); return 0; }
 		//~ say(current.bits);
 		//*
 		
 		//check if "data"
-		if(current.file->data[9] != 'atad') { say("wav loading error (data)"); return 0; }
+		if(current.file->data[9] != 'atad') { say(u8"wav loading error (data)"); return 0; }
 		//*
 
 		//set device

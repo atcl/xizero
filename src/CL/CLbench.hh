@@ -82,7 +82,7 @@ void CLbench::print() const //! noncritical
 {
 		if(flags & COUT_FPS)
 		{
-			tty("fps: ");
+			tty(u8"fps: ");
 			say(framespersecond);
 		}
 		

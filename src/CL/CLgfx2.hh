@@ -68,12 +68,12 @@ void CLgfx2::loadfonts(CLfile* sf) //! critical
 {
 	fonts = new CLfont*[6];
 	CLar* fontsa = new CLar(sf);
-	mono = fonts[0] = clformat->loadtileset(fontsa->findbyname("CLmonotype.fnt"),16,16);
-	tele = fonts[1] = clformat->loadtileset(fontsa->findbyname("CLteletype.fnt"),16,16);
-	line = fonts[2] = clformat->loadtileset(fontsa->findbyname("CLlinetype.fnt"),16,16);
-	//term = fonts[3] = clformat->loadtileset(fontsa->findbyname("CLtermtype.fnt"),16,16);
-	//segm = fonts[4] = clformat->loadtileset(fontsa->findbyname("CLsegmtype.fnt"),16,16);
-	//tall = fonts[5] = clformat->loadtileset(fontsa->findbyname("CLtalltype.fnt"),16,16);
+	mono = fonts[0] = clformat->loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
+	tele = fonts[1] = clformat->loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
+	line = fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
+	//term = fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
+	//segm = fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),16,16);
+	//tall = fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),16,16);
 	//fonts[2] = line = clformat->loadtileset("dat/fonts/CLlinetype.im24",16,16); //temp
 }
 
