@@ -67,11 +67,11 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	xlong temp = 0;
 	
 	//determine max button caption length
-	xlong mbl = clutils->chararraylength(bt[0]);
+	xlong mbl = clstring->length(bt[0]);
 	xlong mbli = 0;
 	for(uxlong i=1; i<bc; i++)
 	{
-		temp = clutils->chararraylength(bt[i]);
+		temp = clstring->length(bt[i]);
 		if(temp>mbl) { mbli = i; mbl = temp; }
 	}
 	//*

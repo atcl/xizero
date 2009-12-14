@@ -33,6 +33,7 @@
 #define PI 3.14159265358979
 #define DEG2RAD PI/180
 #define RAD2DEG 180/PI
+#define SEED 22695477
 ///*
 
 ///definitions
@@ -41,6 +42,7 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 	friend class CLsingle<CLmath>;
 	
 	private:
+		xlong seed;
 		float  fxpi;
 		float  clpi;
 		float* clsin;
@@ -74,12 +76,15 @@ class CLmath : public virtual CLcl, public CLsingle<CLmath>
 		xlong arccos(float x) const;
 		xlong arctan(float x) const;
 		float odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const;
+		xlong random(uxlong range);
 };
 ///*
 
 ///implementation
 CLmath::CLmath() //! noncritical
 {
+	seed = SEED;
+	
 	//precalucalte pi approximation
 	fxpi = 355/113;
 	//*
@@ -321,6 +326,17 @@ float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 	}
 
 	return xk;
+}
+
+xlong CLmath::random(uxlong range) //! noncritical
+{
+	//xor-shift random number generator
+	seed++;
+	seed ^= (seed<<15);
+	seed ^= (seed>>21);
+	seed ^= (seed<<4);
+	return seed % range;
+	//*
 }
 ///*
 

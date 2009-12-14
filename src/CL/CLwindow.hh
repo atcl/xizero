@@ -65,6 +65,8 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong mouserb;
 		bool  displaycursor;
 		sprite* cursor;
+		xlong syskey;
+		void (*sysaction)();
 		CLwindow();
 		~CLwindow();
 		void handle();
@@ -80,12 +82,14 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmousey() const { return mousey; };
 		xlong getmouselb() const { return mouselb; };
 		xlong getmouserb() const { return mouserb; };
+		void setsyskey(uxchar k,void (*a)());
 };
 ///*
 
 ///implementation
 CLwindow::CLwindow() //! noncritical
 {
+	syskey = 0;
 	cursor = 0;
 	displaycursor = 0;
 	width = XRES;
@@ -159,6 +163,7 @@ void CLwindow::handle() //! critical
 			case KeyPress:
 				key = turbo = xchar(XLookupKeysym((XKeyEvent*)&Xevent,0));
 				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent));
+				if(key == syskey) sysaction();
 			break;
 			
 			case ButtonPress:
@@ -225,6 +230,8 @@ xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(m
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncritical
 
 xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
+
+void CLwindow::setsyskey(uxchar k,void (*a)()) { syskey = k; sysaction = a; };
 ///*
 	
 #endif

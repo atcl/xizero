@@ -131,7 +131,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//*
 
 	//determine level constants
-	levelheight = clutils->getlinecount(tf);
+	levelheight = clstring->linecount(tf);
 	blocksperscreeny = YRES / blockheight;
 	blocksperscreenx = XRES / blockwidth;
 	blockmark = levelheight - blocksperscreeny;

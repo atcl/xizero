@@ -73,9 +73,9 @@ void CLtransitions::dissolve() //! critical
 	{
 		for(uxlong j=0; j<1000; j++)
 		{
-			rx = clutils->getrandom(800);
-			ry = clutils->getrandom(600);
-			c = clutils->getrandom(-1);
+			rx = clmath->random(800);
+			ry = clmath->random(600);
+			c = clmath->random(-1);
 			clgfx1->drawpixel(rx,ry,c,1);
 		}
 		i++;

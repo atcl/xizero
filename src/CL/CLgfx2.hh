@@ -16,6 +16,7 @@
 #include "CLbuffer.hh"
 #include "CLformat.hh"
 #include "CLmacros.hh"
+#include "CLstring.hh"
 ///*
 
 ///header
@@ -162,7 +163,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlon
 
 void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong f,uxlong fc,uxlong bc) const //! critical
 {
-	xlong l = clutils->chararraylength(a);
+	xlong l = clstring->length(a);
 	xlong t = x;
 	
 	for(uxlong i=0; i<l; i++)
@@ -183,7 +184,7 @@ xlong CLgfx2::getfontstringwidth(const char* a,xlong f) const //! critical
 	CLfont* t = fonts[f];
 	//*
 	
-	xlong l = clutils->chararraylength(a);
+	xlong l = clstring->length(a);
 	xlong r = 0;
 	
 	uxlong srcoff = 0;
@@ -206,7 +207,7 @@ xlong CLgfx2::getfontstringheight(const char* a,xlong f) const //! critical
 	CLfont* t = fonts[f];
 	//*
 	
-	xlong l = clutils->chararraylength(a);
+	xlong l = clstring->length(a);
 	xlong r = t->tileheight;
 	
 	for(uxlong i=0; i<l; i++) { if(a[i]=='\n') r += t->tileheight; }

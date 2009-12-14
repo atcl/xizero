@@ -66,7 +66,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 		//init variables
 		xlong bc = 8;
 		xlong fc = 0;
-		xchar fn[16];
+		xchar* fn;
 		xlong fs = 0;
 		xlong ts[10];
 		//*
@@ -75,7 +75,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 		do
 		{
 			//read member header
-			clutils->copychararray(&fn[0],&bf[bc],16);	//member filename
+			fn = clstring->copy(&bf[bc],16);	//member filename
 			bc += 48;					//no necessary information here, so skip
 			//*
 			
@@ -104,7 +104,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			tindex[fc] = new CLfile;
 			tindex[fc]->size = fs;
 			tindex[fc]->lsize = fs2;
-			tindex[fc]->name = new xchar[16]; clutils->copychararray(tindex[fc]->name,&fn[0],16);
+			tindex[fc]->name = clstring->copy(&fn[0],16);
 			tindex[fc]->data = tb;
 			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
@@ -136,14 +136,28 @@ CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
 
+		xlong l = 0;
+		xlong m = clstring->length(e);
+		bool  b = 0;
+		xlong j = 0;
+		
 		for(uxlong h=0; h<filecount; h++)
 		{
-			if(clutils->checkextension(members[h]->name,16,e)==true)
+			l = clstring->length(members[h]->name);
+			for(xlong i=l-1; i>=l-m; i--,j++) { b = (members[h]->name[i]==e[j]); }
+
+			if(b==true)
 			{
 				r=h;
 				break;
 			}
+			
+			b=j=0;
 		}
+		
+		say(e);
+		say(members[r]->name);
+		eol();
 		
 		if(r==-1) return 0;
 		else return members[r];

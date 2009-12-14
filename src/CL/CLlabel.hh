@@ -53,7 +53,7 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	frame = f;
 	if(!f) rcolor = bcolor;
 	
-	text = clutils->clonechararray(t);
+	text = clstring->copy(t);
 	textwidth = clgfx2->getfontstringwidth(text,0) + 4;
 	textheight = clgfx2->getfontstringheight(text,0) + 4;
 	if(w==-1 || w<textwidth) width = textwidth;
@@ -72,7 +72,7 @@ void CLlabel::draw() const //! noncritical
 void CLlabel::settext(const xchar* t) //! noncritical
 {
 	delete text;
-	text = clutils->clonechararray(t);
+	text = clstring->copy(t);
 	textwidth = clgfx2->getfontstringwidth(text,0) + 4;
 	textheight = clgfx2->getfontstringheight(text,0) + 4;
 	if(width<textwidth) width = textwidth;

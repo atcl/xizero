@@ -14,7 +14,7 @@
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLstruct.hh"
-#include "CLutils.hh"
+#include "CLstring.hh"
 #include "CLmacros.hh"
 #include "CLsystem.hh"
 ///*
@@ -90,7 +90,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = clutils->getlinecount(sf);
+	xlong  lc = clstring->linecount(sf);
 	//*
 
 	//get comma count per line
@@ -148,7 +148,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //!
 	
 	xchar* bf = sf->text;
 	//xlong bs = sf->size;
-	xlong lc = clutils->getlinecount(sf);
+	xlong lc = clstring->linecount(sf);
 
 	//determine line length
 	xlong lw = 0;
@@ -433,12 +433,7 @@ xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 	
 	//copy filenames to buffer
 	xchar** fn = new xchar*[6];
-	for(uxlong j=0; j<6; j++)
-	{
-		fn[j] = new xchar[fl[j]+1];
-		fn[j][fl[j]] = 0;
-		clutils->copychararray(fn[j],fs[j],fl[j]);
-	}
+	for(uxlong j=0; j<6; j++) { fn[j] = clstring->copy(fs[j],fl[j]); }
 	//*
 	
 	return fn;
@@ -451,7 +446,7 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = clutils->getlinecount(sf);
+	xlong  lc = clstring->linecount(sf);
 	//*
 	
 	xlong cc=0;

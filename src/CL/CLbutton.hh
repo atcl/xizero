@@ -61,7 +61,7 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 {
 	action = a;
 	
-	caption = clutils->clonechararray(c);
+	caption = clstring->copy(c);
 	captionwidth = clgfx2->getfontstringwidth(caption,0) + 4;
 	captionheight = clgfx2->getfontstringheight(caption,0) + 4;
 	if(w==-1 || w<captionwidth) width = captionwidth;
@@ -84,7 +84,7 @@ void CLbutton::draw() const //! critical
 void CLbutton::setcaption(xchar* t) //! noncritical
 {
 	delete caption;
-	caption = clutils->clonechararray(t);
+	caption = clstring->copy(t);
 	captionwidth = clgfx2->getfontstringwidth(t,0) + 4;
 	captionheight = clgfx2->getfontstringheight(t,0) + 4;
 	if(width<captionwidth) width = captionwidth;

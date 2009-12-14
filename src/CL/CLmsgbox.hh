@@ -14,6 +14,7 @@
 #include <X11/keysym.h>
 
 #include "CLtypes.hh"
+#include "CLstring.hh"
 ///*
 
 ///header
@@ -69,8 +70,8 @@ CLmsgbox::~CLmsgbox() //! noncritical
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
 	//prepare message
-	xlong msglines = clutils->getlinecount(message);
-	xlong msglength = clutils->chararraylength(message);
+	xlong msglines = clstring->linecount(message);
+	xlong msglength = clstring->length(message);
 	xlong* msgpos = new xlong[msglines];
 	xlong* msglen = new xlong[msglines];
 	xlong npos = 0;

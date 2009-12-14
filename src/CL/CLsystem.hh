@@ -50,12 +50,14 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		bool    appendfile(const xchar* fn,xchar* b,xlong s);
 		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
 		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
+		
 		xlong   wait(xlong milliseconds);
 		xlong   getmilliseconds(); //since midnight
+		
 		xlong   system(const xchar* c);
+		
 		xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
 		xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
-		void    installsystemkey(xchar scancode,void *action);
 };
 ///*
 
@@ -224,11 +226,6 @@ xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l) //! noncritical
 {
 	if(l==0) return strcmp(a,b);
 	else return strncmp(a,b,l);
-}
-
-void CLsystem::installsystemkey(xchar scancode,void *action) //! noncritical
-{
-
 }
 ///*
 
