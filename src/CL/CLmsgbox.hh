@@ -126,8 +126,6 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
 			}				
 		}
-		
-		//draw();
 	}
 	//destroy window
 	XFreeGC(Xdisplay,Xgc);

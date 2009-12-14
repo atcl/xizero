@@ -31,14 +31,14 @@
 class boool
 {
 	private:
-		CLmath* clmath;
+		xlong sgn(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  };
 		xlong b;
 		
 	public:
 		boool() { this->b=0; };
 		boool(boool& a) { this->b=a.b; };
 		boool(bool a) { this->b=a; };
-		boool(xlong a) { this->b=clmath->sign(a); };
+		boool(xlong a) { this->b=sgn(a); };
 		~boool() { };
 	
 		inline boool& operator=(boool& a);
@@ -127,7 +127,7 @@ boool& boool::operator=(bool a) //! noncritical
 //assign xlong
 boool& boool::operator=(xlong a) //! noncritical
 {
-	this->b = clmath->sign(a);
+	this->b = sgn(a);
 	return *this;
 }
 //*
@@ -167,7 +167,7 @@ boool& boool::operator--() //! noncritical
 //assignment addition with boool
 boool& boool::operator+=(boool& a) //! noncritical
 {
-	this->b = clmath->sign(this->b + a.b);
+	this->b = sgn(this->b + a.b);
 	return *this;
 }
 //*
@@ -175,7 +175,7 @@ boool& boool::operator+=(boool& a) //! noncritical
 //assignment subtraction with boool
 boool& boool::operator-=(boool& a) //! noncritical
 {
-	this->b = clmath->sign(this->b - a.b);
+	this->b = sgn(this->b - a.b);
 	return *this;
 }
 //*
@@ -183,14 +183,14 @@ boool& boool::operator-=(boool& a) //! noncritical
 //assignment multiplication with boool
 boool& boool::operator*=(boool& a) //! noncritical
 {
-	this->b = clmath->sign(this->b * a.b);
+	this->b = sgn(this->b * a.b);
 	return *this;
 }
 
 //assignment addition with bool
 boool& boool::operator+=(bool a) //! noncritical
 {
-	this->b = clmath->sign(this->b + xlong(a));
+	this->b = sgn(this->b + xlong(a));
 	return *this;
 }
 //*
@@ -198,7 +198,7 @@ boool& boool::operator+=(bool a) //! noncritical
 //assignment subtraction with bool
 boool& boool::operator-=(bool a) //! noncritical
 {
-	this->b = clmath->sign(this->b - xlong(a));
+	this->b = sgn(this->b - xlong(a));
 	return *this;
 }
 //*
@@ -206,7 +206,7 @@ boool& boool::operator-=(bool a) //! noncritical
 //assignment multiplication with bool
 boool& boool::operator*=(bool a) //! noncritical
 {
-	this->b = clmath->sign(this->b * xlong(a));
+	this->b = sgn(this->b * xlong(a));
 	return *this;
 }
 //*
@@ -214,7 +214,7 @@ boool& boool::operator*=(bool a) //! noncritical
 //assignment addition with xlong
 boool& boool::operator+=(xlong a) //! noncritical
 {
-	this->b = clmath->sign(this->b + a);
+	this->b = sgn(this->b + a);
 	return *this;
 }
 //*
@@ -222,7 +222,7 @@ boool& boool::operator+=(xlong a) //! noncritical
 //assignment subtraction with xlong
 boool& boool::operator-=(xlong a) //! noncritical
 {
-	this->b = clmath->sign(this->b - a);
+	this->b = sgn(this->b - a);
 	return *this;
 }
 //*
@@ -230,7 +230,7 @@ boool& boool::operator-=(xlong a) //! noncritical
 //assignment multiplication with xlong
 boool& boool::operator*=(xlong a) //! noncritical
 {
-	this->b = clmath->sign(this->b * a);
+	this->b = sgn(this->b * a);
 	return *this;
 }
 //*
@@ -238,7 +238,7 @@ boool& boool::operator*=(xlong a) //! noncritical
 //add with boool
 boool boool::operator+(boool& a) const //! noncritical
 {
-	boool temp(clmath->sign(this->b + a.b));
+	boool temp(sgn(this->b + a.b));
 	return temp;
 }
 //*
@@ -246,14 +246,14 @@ boool boool::operator+(boool& a) const //! noncritical
 //subtract with boool
 boool boool::operator-(boool& a) const //! noncritical
 {
-	boool temp(clmath->sign(this->b - a.b));
+	boool temp(sgn(this->b - a.b));
 	return temp;
 }
 
 //multiplicate with bool
 boool boool::operator*(boool& a) const //! noncritical
 {
-	boool temp(clmath->sign(this->b * a.b));
+	boool temp(sgn(this->b * a.b));
 	return temp;
 }
 //*
@@ -261,7 +261,7 @@ boool boool::operator*(boool& a) const //! noncritical
 //add with bool
 boool boool::operator+(bool a)  const //! noncritical
 {
-	boool temp(clmath->sign(this->b + xlong(a)));
+	boool temp(sgn(this->b + xlong(a)));
 	return temp;
 }
 //*
@@ -269,7 +269,7 @@ boool boool::operator+(bool a)  const //! noncritical
 //subtract with bool
 boool boool::operator-(bool a)  const //! noncritical
 {
-	boool temp(clmath->sign(this->b - xlong(a)));
+	boool temp(sgn(this->b - xlong(a)));
 	return temp;	
 }
 //*
@@ -277,7 +277,7 @@ boool boool::operator-(bool a)  const //! noncritical
 //multiplicate with bool
 boool boool::operator*(bool a)  const //! noncritical
 {
-	boool temp(clmath->sign(this->b * xlong(a)));
+	boool temp(sgn(this->b * xlong(a)));
 	return temp;	
 }
 //*
@@ -285,7 +285,7 @@ boool boool::operator*(bool a)  const //! noncritical
 //add with xlong
 boool boool::operator+(xlong a) const //! noncritical
 {
-	boool temp(clmath->sign(this->b + a));
+	boool temp(sgn(this->b + a));
 	return temp;	
 }
 //*
@@ -293,7 +293,7 @@ boool boool::operator+(xlong a) const //! noncritical
 //subtract with xlong
 boool boool::operator-(xlong a) const //! noncritical
 {
-	boool temp(clmath->sign(this->b - a));
+	boool temp(sgn(this->b - a));
 	return temp;	
 }
 //*
@@ -301,11 +301,12 @@ boool boool::operator-(xlong a) const //! noncritical
 //multiplicate with xlong
 boool boool::operator*(xlong a) const //! noncritical
 {
-	boool temp(clmath->sign(this->b + a));
+	boool temp(sgn(this->b + a));
 	return temp;
 }
 //*
 
+/*
 //friends:
 
 //add with xlong from left
@@ -313,7 +314,7 @@ inline boool operator+(xlong a,boool& b) //! noncritical
 {
 	CLmath* clmath;
 	boool temp;
-	temp.b = clmath->sign(a+b.b);
+	temp.b = sgn(a+b.b);
 	return temp;
 }
 //*
@@ -323,7 +324,7 @@ inline boool operator-(xlong a,boool& b) //! noncritical
 {
 	CLmath* clmath;
 	boool temp;
-	temp.b = clmath->sign(a-b.b);
+	temp.b = sgn(a-b.b);
 	return temp;
 }
 //*
@@ -333,7 +334,7 @@ inline boool operator*(xlong a,boool& b) //! noncritical
 {
 	CLmath* clmath;
 	boool temp;
-	temp.b = clmath->sign(a*b.b);
+	temp.b = sgn(a*b.b);
 	return temp;
 }
 //*
@@ -343,7 +344,7 @@ inline boool operator+(bool a,boool& b) //! noncritical
 {
 	CLmath* clmath;
 	boool temp;
-	temp.b = clmath->sign(xlong(a)+b.b);
+	temp.b = sgn(xlong(a)+b.b);
 	return temp;
 }
 //*
@@ -353,7 +354,7 @@ inline boool operator-(bool a,boool& b) //! noncritical
 {
 	CLmath* clmath;
 	boool temp;
-	temp.b = clmath->sign(xlong(a)-b.b);
+	temp.b = sgn(xlong(a)-b.b);
 	return temp;
 }
 //*
@@ -363,10 +364,11 @@ inline boool operator*(bool a,boool& b) //! noncritical
 {
 	CLmath* clmath;
 	boool temp;
-	temp.b = clmath->sign(xlong(a)*b.b);
+	temp.b = sgn(xlong(a)*b.b);
 	return temp;
 }
 //*
+*/
 ///*
 
 #endif

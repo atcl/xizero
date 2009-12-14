@@ -9,7 +9,7 @@
 ///*
 
 ///declarations
-
+#define CLversion 0x00010000
 ///*
 
 #endif

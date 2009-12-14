@@ -53,15 +53,30 @@ class CLtree : public virtual CLcl
 		~CLtree();
 
 		void setroot() { current = rootnode; };
-		void child(xlong i);
-		xlong getchildcount() const { return current->childcount; };
-		void setparent() { current = current->parent; };
-		void next();	//next sibling
-		member* getdata() const { return current->data; };
-		void adddata(member* d);
+		bool isroot() const { return (current==rootnode); };
+		
 		void addchild();
 		void delchild(xlong i);
-		bool isroot() const { return (current==rootnode); };
+		void setchild(xlong i);
+		void setfirstchild();
+		void setlastchild();
+		xlong getchildcount() const { return current->childcount; };
+		
+		void setparent() { current = current->parent; };
+		
+		void addsibling();
+		void delcurrentsibling();
+		xlong setfirstsibling();
+		xlong setlastsibling();
+		xlong setnextsibling();
+		xlong setprevsibling();
+		xlong getsiblingcount() const { return current->parrent->childcount; };
+		bool isfirstsibling() const;
+		bool islastsibling() const;
+	
+		void adddata(member* d);
+		member* getdata() const { return current->data; };
+		
 		void print() const;
 };
 ///*
@@ -81,12 +96,6 @@ template<class member>
 CLtree<member>::~CLtree() { delete rootnode; } //! noncritical
 
 template<class member>
-void CLtree<member>::child(xlong i) { if(i<current->childcount) { current = current->child[i]; } }  //! noncritical
-
-template<class member>
-void CLtree<member>::next() { if(current->next!=0) { current = current->next; } }  //! noncritical
-
-template<class member>
 void CLtree<member>::adddata(member* d) { current->data = d; } //! noncritical
 
 template<class member>
@@ -96,20 +105,13 @@ void CLtree<member>::addchild() //! noncritical
 
 	newnode->parent = current;
 	newnode->next = newnode;
-	if(current->childcount==0)
-	{
-		newnode->prev = newnode;
-	}
-	else
-	{
-		newnode->prev = current->child[current->childcount-1];
-	}
+	if(current->childcount==0) { newnode->prev = newnode; }
+	else { newnode->prev = current->child[current->childcount-1]; }
 	newnode->child = 0;
 	newnode->childcount = 0;
 	newnode->data = 0;
 
 	current->childcount++;
-
 }
 
 template<class member>
@@ -125,6 +127,8 @@ void CLtree<member>::delchild(xlong i) //! noncritical
 template<class member>
 void CLtree<member>::print() const //! noncritical
 {
+	setroot();
+	
 	if(current->name!=0) say(current->name);
 	else say(0);
 	for(uxlong i=0; i<current->childcount; i++)

@@ -60,13 +60,16 @@ class CLlist : public virtual CLcl
 		xlong getindex();
 		void clear();
 		void smash(); //test
+		
 		xlong setfirst();
 		xlong setlast();
 		xlong setprev();
 		xlong setnext();
 		bool islast() const;
 		bool isfirst() const;
+		
 		void exchangesort(bool updown);
+		
 		void print() const;
 };
 ///*

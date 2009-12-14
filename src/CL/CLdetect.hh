@@ -67,7 +67,7 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		CLdetect();
 		~CLdetect() { };
 	public:
-		xlong cpu() const { return pcpu; };
+		xchar* cpu() const;
 		xlong cores() const { return pcores; };
 		xlong ram() const;
 		xchar* gpu() const;

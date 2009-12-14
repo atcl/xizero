@@ -49,7 +49,7 @@ xlong CLcl::id = 0;
 ///implementations
 CLcl::CLcl() { id++; } //! noncritical
 
-xlong CLcl::getversion() const { return version; } //! noncritical
+xlong CLcl::getversion() const { return CLversion; } //! noncritical
 ///*
 
 #endif

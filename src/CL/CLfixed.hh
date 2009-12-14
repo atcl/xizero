@@ -39,9 +39,9 @@ union xfixed
 	xlong  i;
 	xshush p;
 
-	xfixed();
-	xfixed(xlong a);
-	xfixed(xshort a);
+	xfixed() { this->i = 0; };
+	xfixed(xlong a) { this->i = xshort(a)<<16; };
+	xfixed(xshort a) { this->i = a<<16; };
 	xfixed(float a);
 
 	inline xfixed& operator=(xfixed &a);
@@ -80,26 +80,26 @@ union xfixed
 	friend xfixed operator*(xshort& a,xfixed& b);
 	friend xfixed operator/(xshort& a,xfixed& b);
 	
-	inline bool operator==(xfixed& a) const;
-	inline bool operator!=(xfixed& a) const;
-	inline bool operator<=(xfixed& a) const;
-	inline bool operator>=(xfixed& a) const;
-	inline bool operator<(xfixed& a) const;
-	inline bool operator>(xfixed& a) const;
+	inline bool operator==(xfixed& a) const { return !(this->i ^ a.i); };
+	inline bool operator!=(xfixed& a) const { return (this->i ^ a.i); };
+	inline bool operator<=(xfixed& a) const { return (this->i<=a.i); };
+	inline bool operator>=(xfixed& a) const { return (this->i>=a.i); };
+	inline bool operator<(xfixed& a) const { return (this->i<a.i); };
+	inline bool operator>(xfixed& a) const { return (this->i>a.i); };
 	
-	inline bool operator==(xshort& a) const;
-	inline bool operator!=(xshort& a) const;
-	inline bool operator<=(xshort& a) const;
-	inline bool operator>=(xshort& a) const;
-	inline bool operator<(xshort& a) const;
-	inline bool operator>(xshort& a) const;
+	inline bool operator==(xshort& a) const { return !(this->i ^ (xlong(a)<<16) ); };
+	inline bool operator!=(xshort& a) const { return (this->i ^ (xlong(a)<<16) ); };
+	inline bool operator<=(xshort& a) const { return (this->i<=xlong(a)<<16); };
+	inline bool operator>=(xshort& a) const { return (this->i>=xlong(a)<<16); };
+	inline bool operator<(xshort& a) const { return (this->i<xlong(a)<<16); };
+	inline bool operator>(xshort& a) const { return (this->i>xlong(a)<<16); };
 	
-	friend bool operator==(xshort& a,xfixed& b);
-	friend bool operator!=(xshort& a,xfixed& b);
-	friend bool operator<=(xshort& a,xfixed& b);
-	friend bool operator>=(xshort& a,xfixed& b);
-	friend bool operator<(xshort& a,xfixed& b);
-	friend bool operator>(xshort& a,xfixed& b);
+	friend bool operator==(xshort& a,xfixed& b) { return !((xlong(a)<<16) ^ b.i); };
+	friend bool operator!=(xshort& a,xfixed& b) { return ((xlong(a)<<16) ^ b.i); };
+	friend bool operator<=(xshort& a,xfixed& b) { return ((xlong(a)<<16)<=b.i); };
+	friend bool operator>=(xshort& a,xfixed& b) { return ((xlong(a)<<16)>=b.i); };
+	friend bool operator<(xshort& a,xfixed& b) { return ((xlong(a)<<16)<b.i); };
+	friend bool operator>(xshort& a,xfixed& b) { return ((xlong(a)<<16)>b.i); };
 	
 	operator xshort() const;
 	operator float() const;
@@ -107,26 +107,6 @@ union xfixed
 ///*
 
 ///implementation
-//unassigning constructor
-xfixed::xfixed() { this->i = 0; } //! noncritical
-//*
-
-//xlong assigning constructor
-xfixed::xfixed(xlong a) //! noncritical
-{
-	this->i = 0;
-	this->p.num = xshort(a);
-}
-//*
-
-//xshort assigning construcotr
-xfixed::xfixed(xshort a) //! noncritical
-{
-	this->i = 0;
-	this->p.num = a;
-}
-//*
-
 //float assigning constructor
 xfixed::xfixed(float a) //! noncritical
 {
@@ -317,54 +297,6 @@ xfixed xfixed::operator/(xshort& a) const //! critical
 }
 //*
 
-//equality with xfixed
-bool xfixed::operator==(xfixed& a) const { return !(this->i ^ a.i); } //! critical
-//*
-
-//equality with xshort
-bool xfixed::operator==(xshort& a) const { return !(this->i ^ (xlong(a)<<16) ); } //! critical
-//*
-
-//inequality with xfixed
-bool xfixed::operator!=(xfixed& a) const { return (this->i ^ a.i); } //! critical
-//*
-
-//inequality with xshort
-bool xfixed::operator!=(xshort& a) const { return (this->i ^ (xlong(a)<<16) ); } //! critical
-//*
-
-//less or equal with xfixed
-bool xfixed::operator<=(xfixed& a) const { return (this->i<=a.i); } //! critical
-//*
-
-//less or equal with xshort
-bool xfixed::operator<=(xshort& a) const { return (this->i<=xlong(a)<<16); }  //! critical
-//*
-
-//greater or equal with xfixed
-bool xfixed::operator>=(xfixed& a) const { return (this->i>=a.i); } //! critical
-//*
-
-//greater or equal with xshort
-bool xfixed::operator>=(xshort& a) const { return (this->i>=xlong(a)<<16); } //! critical
-//*
-
-//less with xfixed
-bool xfixed::operator<(xfixed& a) const { return (this->i<a.i); } //! critical
-//*
-
-//less with xshort
-bool xfixed::operator<(xshort& a) const { return (this->i<xlong(a)<<16); } //! critical
-//*
-
-//greater with xfixed
-bool xfixed::operator>(xfixed& a) const { return (this->i>a.i); } //! critical
-//*
-
-//greater with xshort
-bool xfixed::operator>(xshort& a) const { return (this->i>xlong(a)<<16); } //! critical
-//*
-
 //shift left
 xfixed xfixed::operator<<(xlong a) const //! critical
 {
@@ -438,30 +370,6 @@ inline xfixed operator/(xshort& a,xfixed& b)  //! critical
 	__asm__ __volatile__ ( "sarl $16,%%edx; shll $16,%%eax; idiv %%ebx;" : "=a"(r.i) : "a"(r.i),"d"(r.i),"b"(b) );
 	return r;
 }
-//*
-
-//equality with xshort from left
-inline bool operator==(xshort& a,xfixed& b) { return !((xlong(a)<<16) ^ b.i); } //! critical
-//*
-
-//inequality with xshort from left
-inline bool operator!=(xshort& a,xfixed& b) { return ((xlong(a)<<16) ^ b.i); } //! critical
-//*
-
-//less or equal with xshort from left
-inline bool operator<=(xshort& a,xfixed& b) { return ((xlong(a)<<16)<=b.i); } //! critical
-//*
-
-//greater or equal with xshort from left
-inline bool operator>=(xshort& a,xfixed& b) { return ((xlong(a)<<16)>=b.i); } //! critical
-//*
-
-//less with xshort from left
-inline bool operator<(xshort& a,xfixed& b) { return ((xlong(a)<<16)<b.i); } //! critical
-//*
-
-//greater with xshort from left
-inline bool operator>(xshort& a,xfixed& b) { return ((xlong(a)<<16)>b.i); } //! critical
 //*
 ///*
 

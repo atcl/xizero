@@ -45,7 +45,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		CLsystem() { };
 		~CLsystem() { };
 	public:
-		uxchar  eof();
 		CLfile* getfile(const xchar* fn);
 		bool    appendfile(const xchar* fn,xlong* b,xlong s);
 		bool    appendfile(const xchar* fn,xchar* b,xlong s);
@@ -61,8 +60,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 ///*
 
 ///implementation
-uxchar CLsystem::eof() { return 0x1A; } //! noncritical
-
 CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 {
 	CLfile* re = new CLfile;
@@ -90,7 +87,7 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 	//read file contents
 	fseek (of,0,SEEK_SET );
 	
-	try{ re->text = new xchar[((re->size)+4)]; } //unittest crashes here with ltype.tga
+	try{ re->text = new xchar[((re->size)+4)]; }
 	catch(std::bad_alloc& ba) { say(ba.what()); }
 	re->data = static_cast<xlong*>(static_cast<void*>(&re->text[0]));
 	fread(re->text,1,re->size,of);

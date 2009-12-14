@@ -44,6 +44,10 @@ class CLstring : public virtual CLcl, public CLsingle<CLstring>
 		xchar* unconst(const xchar* s) const;
 		xchar charat(const xchar* s,xlong p) const;
 		xlong getlinecount(const xchar* s) const;
+		xlong find(const xchar* s,xlong p=0) const;
+		
+		xlong getlinecount(CLfile* s) const;
+		xlong find(CLfile* s,xlong p=0) const;
 
 		//operator =
 		//operator +
