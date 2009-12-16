@@ -90,7 +90,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = clstring->linecount(sf);
+	xlong  lc = clstring->linecount(bf);
 	//*
 
 	//get comma count per line
@@ -148,7 +148,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //!
 	
 	xchar* bf = sf->text;
 	//xlong bs = sf->size;
-	xlong lc = clstring->linecount(sf);
+	xlong lc = clstring->linecount(bf);
 
 	//determine line length
 	xlong lw = 0;
@@ -444,9 +444,9 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	//inis need newline at end of file!!
 	xmap* r = new xmap;
 	xchar* bf = sf->text;
-	
+
 	//get linecount
-	xlong  lc = clstring->linecount(sf);
+	xlong lc = clstring->linecount(bf) - 1;
 	//*
 	
 	xlong cc=0;
@@ -531,13 +531,16 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 				//*
 			}
 		}
-			
-		//reset fopr next line
-		while(bf[cc] != '\n') cc++;
-		cc++;
+		
+		if(bf[cc]=='\n') { cc++; }
+		else
+		{
+			//reset for next line
+			while(bf[cc] != '\n') cc++;
+			cc++;
+			//*
+		}
 		aps=0;
-		//*
-
 	}
 	
 	return r;

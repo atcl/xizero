@@ -417,7 +417,7 @@ void CLobject::display(CLlvector p,xshort flags) //! noncritical
 
 void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h) //! noncritical
 {
-	//use special display method ONLY for zlevel map construction (see CLlevel Z179-2008)
+	//use special display method ONLY for zlevel map construction (see CLlevel Z179-208)
 	for(uxlong i=0;i<polycount;i++)	{ polyptr[i]->display(p,l,r,b,h); }
 	//*
 }

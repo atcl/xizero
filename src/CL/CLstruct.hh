@@ -33,7 +33,7 @@ union quadword //:doubleword
 	uxchar  db[8];
 };
 
-union color
+union CLcolor
 {
 	uxlong rgba;
 	uxchar r;

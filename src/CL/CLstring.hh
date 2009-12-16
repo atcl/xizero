@@ -36,7 +36,7 @@ class CLstring : public virtual CLcl, public CLsingle<CLstring>
 		~CLstring() { };
 		xchar* copy(const xchar* s,xlong l=0) const;
 		xlong length(const xchar* s) const;
-		xlong compare(const xchar* s,const xchar* t,bool f) const;
+		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
 		xlong tolong(const xchar* s) const;
 		xlong linecount(const xchar* s) const;
 		xlong find(const xchar* s,const xchar* f,xlong p=0) const;
@@ -47,7 +47,7 @@ class CLstring : public virtual CLcl, public CLsingle<CLstring>
 ///*
 
 ///implementation
-xchar* CLstring::copy(const xchar* s,xlong l) const
+xchar* CLstring::copy(const xchar* s,xlong l) const //! critical
 {
 	if(l==0) { while (s[l]) { l++; } }
 	xchar* r = new xchar[l+1];
@@ -56,24 +56,52 @@ xchar* CLstring::copy(const xchar* s,xlong l) const
 	return r;
 }
 
-xlong CLstring::length(const xchar* s) const
+xlong CLstring::length(const xchar* s) const //! critical
 {
 	xlong l = 0;
 	while (s[l]) { l++; }
 	return l;
 }
 
-xlong CLstring::compare(const xchar* s,const xchar* t,bool f) const
+xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncritical
 {
+	uxlong sl = length(s);
+	uxlong tl = length(t);
+	uxlong i = 0;
 	
+	while(i<sl && i<tl && (i<n ^ n==0) )
+	{
+		if(s[i]!=t[i]) { i=0; break; }
+		i++;
+	}
+
+	return i;
 }
 
-xlong CLstring::tolong(const xchar* s) const
+xlong CLstring::tolong(const xchar* s) const //! critical
 {
+	xlong i = 0;
+	xlong j = 0;
+	xlong r = 0;
+	xlong t = 0;
+	xlong u = 1;
 	
+	while(s[0]==' ') { i++; }
+	if(s[i]=='-') { u = -1; i++; }
+	j = i;
+	while(s[j]>=30 && s[j]<40) { j++; }
+	j -= i;
+	for(; j>0; j--)
+	{
+		for(xlong k=0; k<j; k++) t *= 10;
+		r += s[i] * t;
+		t = 0;
+	}
+	r *= u;
+	return r;
 }
 
-xlong CLstring::linecount(const xchar* s) const
+xlong CLstring::linecount(const xchar* s) const //! noncritical
 {
 	xlong c = 1;
 	xlong l = length(s);
@@ -81,7 +109,7 @@ xlong CLstring::linecount(const xchar* s) const
 	return c;
 }
 
-xlong CLstring::find(const xchar* s,const xchar* f,xlong p) const
+xlong CLstring::find(const xchar* s,const xchar* f,xlong p) const //! noncritical
 {
 	
 }

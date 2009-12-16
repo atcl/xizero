@@ -61,7 +61,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 	//*
 
 	//check for "magic-string"
-	if( clsystem->cmpcstr(bf,u8"!<arch>",6) == 0 )
+	if( clstring->compare(bf,u8"!<arch>",6) != 0 )
 	{
 		//init variables
 		xlong bc = 8;
@@ -93,10 +93,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			//*
 
 			//fill array
-			for(uxlong i=0; i<fs2; i++)
-			{
-				tb[i] = bf2[i];
-			}
+			for(uxlong i=0; i<fs2; i++) { tb[i] = bf2[i]; }
 			bc += fs;
 			//*
 
@@ -135,29 +132,15 @@ CLar::~CLar() { for(int i=0; i<filecount; i++) delete members[i]; } //! noncriti
 CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
-
 		xlong l = 0;
 		xlong m = clstring->length(e);
-		bool  b = 0;
-		xlong j = 0;
 		
 		for(uxlong h=0; h<filecount; h++)
 		{
-			l = clstring->length(members[h]->name);
-			for(xlong i=l-1; i>=l-m; i--,j++) { b = (members[h]->name[i]==e[j]); }
-
-			if(b==true)
-			{
-				r=h;
-				break;
-			}
-			
-			b=j=0;
+			while(members[h]->name[l]!='/') { l++; }
+			l-=m;
+			if(clstring->compare(&(members[h]->name[l]),e,m)!=0) { r = h; }
 		}
-		
-		say(e);
-		say(members[r]->name);
-		eol();
 		
 		if(r==-1) return 0;
 		else return members[r];
@@ -166,16 +149,8 @@ CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 CLfile* CLar::findbyname(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
-		xlong ti = 0;
 
-		for(uxlong h=0; h<filecount; h++)
-		{
-			while(e[ti]!=0)
-			{
-				if(e[ti]==members[h]->name[ti]) { r = h; ti++; }
-				else  { r = -1; break; }
-			}
-		}
+		for(uxlong h=0; h<filecount; h++) { if(clstring->compare(members[h]->name,e)!=0) { r = h; } }
 		
 		if(r==-1) return 0;
 		else return members[r];
