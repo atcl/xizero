@@ -68,13 +68,7 @@ xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncri
 	uxlong sl = length(s);
 	uxlong tl = length(t);
 	uxlong i = 0;
-	
-	while(i<sl && i<tl && (i<n ^ n==0) )
-	{
-		if(s[i]!=t[i]) { i=0; break; }
-		i++;
-	}
-
+	while(i<sl && i<tl && (i<n ^ n==0) ) { if(s[i]!=t[i]) { i=0; break; } i++; }
 	return i;
 }
 
@@ -83,19 +77,20 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 	xlong i = 0;
 	xlong j = 0;
 	xlong r = 0;
-	xlong t = 0;
+	xlong t = 1;
 	xlong u = 1;
 	
-	while(s[0]==' ') { i++; }
+	while(s[i]==' ') { i++; }
 	if(s[i]=='-') { u = -1; i++; }
 	j = i;
-	while(s[j]>=30 && s[j]<40) { j++; }
+	while(s[j]>='0' && s[j]<='9') { j++; }
+	say(j);
 	j -= i;
-	for(; j>0; j--)
+	for(; j>0; j--,i++)
 	{
-		for(xlong k=0; k<j; k++) t *= 10;
-		r += s[i] * t;
-		t = 0;
+		for(xlong k=1; k<j; k++) t *= 10;
+		r += (s[i]-'0') * t;
+		t = 1;
 	}
 	r *= u;
 	return r;

@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	//init sequence
 	CLglobal* clglobal = CLsetup();
 	cldata = new CLar(BASEDIR"xizero.dat");
-	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
+	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));	
 	//*
 
 		//test tree:
