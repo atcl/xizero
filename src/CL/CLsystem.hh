@@ -9,12 +9,9 @@
 ///*
 
 ///includes
-#include <iostream>
-#include <iomanip>
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
-#include <cstring>
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
@@ -55,8 +52,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		xlong   getmilliseconds(); //since midnight
 		
 		xlong   system(const xchar* c);
-		
-		xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
 };
 ///*
 
@@ -218,18 +213,6 @@ xlong CLsystem::wait(xlong milliseconds) //! noncritical
 xlong CLsystem::getmilliseconds() { return xlong(1000 * clock() / CLOCKS_PER_SEC); } //since midnight  //! noncritical
 
 xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
-
-xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l) //! noncritical
-{
-	if(l==0) return strcmp(a,b);
-	else return strncmp(a,b,l);
-}
-///*
-
-///declaration
-//temp
-namespace { CLsystem* clsystem = CLsystem::instance(); };
-//*
 ///*
 
 #endif

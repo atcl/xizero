@@ -10,6 +10,7 @@
 
 ///includes
 #include <iostream>
+#include <iomanip>
 
 #include "CLtypes.hh"
 #include "CLconsts.hh"
