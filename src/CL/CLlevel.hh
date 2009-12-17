@@ -23,7 +23,6 @@
 #include "CLenemy.hh"
 #include "CLboss.hh"
 #include "CLgame.hh"
-#include "CLmacros.hh"
 #include "CLgamepad.hh"
 ///*
 

@@ -15,7 +15,7 @@
 #include "CLcl.hh"
 #include "CLstruct.hh"
 #include "CLstring.hh"
-#include "CLmacros.hh"
+#include "CLutils.hh"
 ///*
 
 ///header
@@ -194,16 +194,16 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 {
 	xlong* lf = sf->data;
 
-	if(clutils->endian(lf[0])!=0x59A66A95) return 0; //test for magic number
-	xlong width = clutils->endian(lf[1]);
-	xlong height = clutils->endian(lf[2]);
-	xlong depth = clutils->endian(lf[3]);
+	if(endian(lf[0])!=0x59A66A95) return 0; //test for magic number
+	xlong width = endian(lf[1]);
+	xlong height = endian(lf[2]);
+	xlong depth = endian(lf[3]);
 	if(depth!=32 && depth!=24) return 0; //only 24bpp and 32bpp!
-	xlong length = clutils->endian(lf[4]);
-	xlong type = clutils->endian(lf[5]);
+	xlong length = endian(lf[4]);
+	xlong type = endian(lf[5]);
 	if(type!=0 && type!=1 && type!=2) return 0; //only types: old, standard and rle are supported
-	if(clutils->endian(lf[6])!=0) return 0; //color maps are not supported
-	if(clutils->endian(lf[7])!=0) return 0; //color maps are not supported
+	if(endian(lf[6])!=0) return 0; //color maps are not supported
+	if(endian(lf[7])!=0) return 0; //color maps are not supported
 	
 	xchar* bf = &((sf->text)[32]);
 	xlong pixelindex = 0;
@@ -333,23 +333,10 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 		xpm_ptr++; while( (xpm[i][xpm_ptr]) !=' ') xpm_ptr++;
 		xpm_ptr++;
 		if(xpm[i][xpm_ptr]!='c' && xpm[i][xpm_ptr]!='C') return 0;
-		xpm_ptr++; while( (xpm[i][xpm_ptr]) !=' ') xpm_ptr++;
+		xpm_ptr++; while( (xpm[i][xpm_ptr]) !=' ') { xpm_ptr++; }
 		xpm_ptr++;
-		if(xpm[i][xpm_ptr]=='#')
-		{
-			xpm_ptr++;
-			currcol  = clutils->hatoi(xpm[i][xpm_ptr])<<20; xpm_ptr++; 
-			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<16; xpm_ptr++;
-			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<12; xpm_ptr++;
-			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<8;  xpm_ptr++;
-			currcol += clutils->hatoi(xpm[i][xpm_ptr])<<4;  xpm_ptr++;
-			currcol += clutils->hatoi(xpm[i][xpm_ptr]);
-			ctable[cindex] = currcol;
-		}
-		else if( (xpm[i][xpm_ptr]=='N' || xpm[i][xpm_ptr]=='n') && (xpm[i][xpm_ptr+1]=='o' && xpm[i][xpm_ptr+2]=='n' && xpm[i][xpm_ptr+3]=='e') )
-		{
-			ctable[cindex] = 0xFF000000;
-		}
+		if(xpm[i][xpm_ptr]=='#') { xpm_ptr++; ctable[cindex] = clstring->hex(&(xpm[i][xpm_ptr])); }
+		else if( (xpm[i][xpm_ptr]=='N' || xpm[i][xpm_ptr]=='n') && (xpm[i][xpm_ptr+1]=='o' && xpm[i][xpm_ptr+2]=='n' && xpm[i][xpm_ptr+3]=='e') ) { ctable[cindex] = 0xFF000000; }
 		else return 0;
 	}
 	//*

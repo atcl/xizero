@@ -33,7 +33,6 @@ template<typename t> class CLvector; typedef CLvector<float> CLfvector; typedef 
 class CLwindow;
 class CLbench;
 class CLsystem;
-class CLutils;
 class CLformat;
 class CLmath;
 class CLgame;
@@ -83,7 +82,6 @@ class CLglobal
 		static CLbench*  clbench;
 		static CLsystem* clsystem;
 		static CLformat* clformat;
-		static CLutils*  clutils;
 		static CLmath*   clmath;
 		static CLgame*   clgame;
 		static CLmisc3d* clmisc3d;

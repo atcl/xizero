@@ -10,8 +10,6 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLmath.hh"
-#include "CLmacros.hh"
 ///*
 
 ///header

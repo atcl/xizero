@@ -40,6 +40,7 @@ class CLstring : public virtual CLcl, public CLsingle<CLstring>
 		xlong tolong(const xchar* s) const;
 		xlong linecount(const xchar* s) const;
 		xlong find(const xchar* s,const xchar* f,xlong p=0) const;
+		uxlong hex(const xchar* s) const;
 		
 		xlong linecount(CLfile* s) const { linecount(s->text); };
 		xlong find(CLfile* s,const xchar* f,xlong p=0) const { find(s->text,f,p); };
@@ -106,6 +107,24 @@ xlong CLstring::linecount(const xchar* s) const //! noncritical
 xlong CLstring::find(const xchar* s,const xchar* f,xlong p) const //! noncritical
 {
 	
+}
+
+uxlong CLstring::hex(const xchar* s) const //!  noncritical
+{
+	xlong i = 0;
+	xlong r = 0;
+	while(s[i]==' ') { i++; }
+	
+	for(xlong j=i; j<i+8; j++)
+	{
+		if(s[j]>='0' && s[j]<='9') { r += (s[j]-'0'); }
+		else if(s[j]>='A' && s[j]<='F') { r += (s[j]-'A'+10); }
+		else if(s[j]>='a' && s[j]<='f') { r += (s[j]-'a'+10); }
+		else { break; }
+		r <<= 4;
+	}
+
+	return (r>>4);
 }
 ///*
 

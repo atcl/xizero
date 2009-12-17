@@ -9,10 +9,11 @@
 ///*
 
 ///includes
+#include <iostream>
+#include <iomanip>
+#include <stdlib.h>
+
 #include "CLtypes.hh"
-#include "CLstruct.hh"
-#include "CLcl.hh"
-#include "CLsingle.hh"
 ///*
 
 ///header
@@ -29,118 +30,75 @@
 ///*
 
 ///definitions
-class CLutils : public virtual CLcl, public CLsingle<CLutils>
-{
-	friend class CLsingle<CLutils>;
-	
-	private:
-		CLutils() { };
-		~CLutils() { };
-	public:
-		xlong  endian(xlong l) const;
-		xlong  hatoi(uxchar c) const;
-		xlong  hatoi(const xchar* c) const;
-};
+
 ///*
 
 ///implementation
-xlong CLutils::endian(xlong l) const //! noncritical
+inline bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); } //check if point is off screen
+
+inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<0) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); } //check if rectangle s off screen
+
+inline void clip(xlong& x,xlong& y) { if(x<0) x=0; if(x>=XRES) x=XRES-1; if(y<0) y=0; if(y>=YRES) y=YRES-1; } //clip point against screen borders
+
+template<typename T>
+void inline tty(const T c) { std::cout << std::setprecision(4) << c; } //console output without lineend
+
+template<typename T>
+void inline say(const T c) { std::cout << std::setprecision(4) << c << std::endl; } //console output with lineend
+
+void inline eol() { std::cout << std::endl; }
+
+bool inline eof(xchar c) { return (c==0x1A); }
+
+void inline err(const xchar* f,const xchar* m) { std::cout << f << m << std::endl; }
+
+void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } //force program exit
+
+xlong inline lt(const xchar* a,const xchar* b)
 {
-	//converts/toggles endianess of l
+	xlong i = 0;
+	while(a[i]!=0 && b[i]!=0 && a[i]==b[i]) { i++; }
+	return xlong(a[i]-b[i]);
+}
 
-	xchar tc;
-	doubleword tl;
-	tl.dd = l;
-
-	tc = tl.db[0];
-	tl.db[0] = tl.db[3];
-	tl.db[3] = tc;
-
-	tc = tl.db[1];
-	tl.db[1] = tl.db[2];
-	tl.db[2] = tc;
-
+uxlong inline endian(xlong l)
+{
+	doubleword tl = { l };
+	tl.db[0] ^= tl.db[3] ^= tl.db[0] ^= tl.db[3];
+	tl.db[1] ^= tl.db[2] ^= tl.db[1] ^= tl.db[2];
 	return tl.dd;
 }
 
-xlong CLutils::hatoi(uxchar c) const //! noncritical
+uxlong inline byteadd(uxlong a,uxlong b)
 {
-	switch(c)
-	{
-		case '0': return 0;
-		case '1': return 1;
-		case '2': return 2;
-		case '3': return 3;
-		case '4': return 4;
-		case '5': return 5;
-		case '6': return 6;
-		case '7': return 7;
-		case '8': return 8;
-		case '9': return 9;
-		case 'A': return 10;
-		case 'B': return 11;
-		case 'C': return 12;
-		case 'D': return 13;
-		case 'E': return 14;
-		case 'F': return 15;
-		case 'a': return 10;
-		case 'b': return 11;
-		case 'c': return 12;
-		case 'd': return 13;
-		case 'e': return 14;
-		case 'f': return 15;
-		default:  return 0;
-	}
+	doubleword xa = { a };
+	doubleword xb = { b };
+	xb.db[0] = xa.db[0] + xb.db[0]; xb.db[0] = (uxchar(xb.db[0]<xa.db[0]))-1 | xb.db[0];
+	xb.db[1] = xa.db[1] + xb.db[1]; xb.db[1] = (uxchar(xb.db[1]<xa.db[1]))-1 | xb.db[1];
+	xb.db[2] = xa.db[2] + xb.db[2]; xb.db[2] = (uxchar(xb.db[2]<xa.db[2]))-1 | xb.db[2];
+	xb.db[3] = xa.db[3] + xb.db[3]; xb.db[3] = (uxchar(xb.db[3]<xa.db[3]))-1 | xb.db[3];
+	return xb.dd;
 }
 
-xlong CLutils::hatoi(const xchar* c) const //! noncritical
+uxlong inline bytesub(uxlong a,uxlong b)
 {
-	xchar currchar = 0;
-	xlong charcount = 0;
-	xlong currvalue = 0;
-	bool  hasval = 0;
-	xlong r = 0;
-	while(charcount<8)
-	{
-		currchar = c[charcount];
-		switch(currchar)
-		{
-			case '0': currvalue = 0; break;
-			case '1': currvalue = 1; break;
-			case '2': currvalue = 2; break;
-			case '3': currvalue = 3; break;
-			case '4': currvalue = 4; break;
-			case '5': currvalue = 5; break;
-			case '6': currvalue = 6; break;
-			case '7': currvalue = 7; break;
-			case '8': currvalue = 8; break;
-			case '9': currvalue = 9; break;
-			case 'A': currvalue = 10; break;
-			case 'B': currvalue = 11; break;
-			case 'C': currvalue = 12; break;
-			case 'D': currvalue = 13; break;
-			case 'E': currvalue = 14; break;
-			case 'F': currvalue = 15; break;
-			case 'a': currvalue = 10; break;
-			case 'b': currvalue = 11; break;
-			case 'c': currvalue = 12; break;
-			case 'd': currvalue = 13; break;
-			case 'e': currvalue = 14; break;
-			case 'f': currvalue = 15; break;
-			default:  currvalue = -1;
-		}
-		if(currvalue==-1) break;
-		if(hasval==0 && currvalue!=0) hasval = 1;
-		if(hasval==1)
-		{
-			r += currvalue;
-			r <<= 4;
-		}
-		charcount++;
-	}
-	r >>= 4;
-	return r;
+	doubleword xa = { a };
+	doubleword xb = { b };
+	xb.db[0] = xa.db[0] - xb.db[0]; xb.db[0] = (uxchar(xb.db[0]>xa.db[0]))-1 & xb.db[0];
+	xb.db[1] = xa.db[1] - xb.db[1]; xb.db[1] = (uxchar(xb.db[1]>xa.db[1]))-1 & xb.db[1];
+	xb.db[2] = xa.db[2] - xb.db[2]; xb.db[2] = (uxchar(xb.db[2]>xa.db[2]))-1 & xb.db[2];
+	xb.db[3] = xa.db[3] - xb.db[3]; xb.db[3] = (uxchar(xb.db[3]>xa.db[3]))-1 & xb.db[3];
+	return xb.dd;
 }
+
+uxlong inline bytemul(uxlong a,float s)
+{
+	doubleword xa = { a };
+	
+	return xa.dd;
+}
+
+void inline CLprefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); } //use prefetcht1???
 ///*
 
 #endif

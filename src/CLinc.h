@@ -79,10 +79,6 @@
 #include "CL/CLsetup.hh"
 //*
 
-//inline macros
-#include "CL/CLmacros.hh"
-//*
-
 //global maker
 #include "CL/CLglobal.hh"
 #include "CL/CLglobals.cc"

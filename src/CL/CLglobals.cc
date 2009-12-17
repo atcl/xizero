@@ -15,7 +15,6 @@
 #include "CLbench.hh"
 #include "CLsystem.hh"
 #include "CLformat.hh"
-#include "CLutils.hh"
 #include "CLmath.hh"
 #include "CLgame.hh"
 #include "CLmisc3d.hh"
@@ -53,7 +52,6 @@ CLwindow* CLglobal::clwindow = CLwindow::instance();
 CLbench*  CLglobal::clbench  = CLbench::instance();
 CLsystem* CLglobal::clsystem = CLsystem::instance();
 CLformat* CLglobal::clformat = CLformat::instance();
-CLutils*  CLglobal::clutils  = CLutils::instance();
 CLmath*   CLglobal::clmath   = CLmath::instance();
 CLgame*   CLglobal::clgame   = CLgame::instance();
 CLmisc3d* CLglobal::clmisc3d = CLmisc3d::instance();

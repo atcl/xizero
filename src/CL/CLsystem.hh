@@ -17,7 +17,6 @@
 #include "CLstruct.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
-#include "CLmacros.hh"
 ///*
 
 ///header
@@ -210,7 +209,7 @@ xlong CLsystem::wait(xlong milliseconds) //! noncritical
 	return 0;
 }
 
-xlong CLsystem::getmilliseconds() { return xlong(1000 * clock() / CLOCKS_PER_SEC); } //since midnight  //! noncritical
+xlong CLsystem::getmilliseconds() { return (1000 * clock() / CLOCKS_PER_SEC); } //since midnight  //! noncritical
 
 xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
 ///*
