@@ -18,7 +18,7 @@
 #include "CLobject.hh"
 #include "CLexplosion.hh"
 #include "CLammo.hh"
-#include "CLsystem.hh"
+#include "CLstring.hh"
 #include "CLformat.hh"
 #include "CLgame.hh"
 #include "CLmisc3d.hh"
@@ -182,13 +182,13 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	//*
 	
 	//load entity attributes
-	maxspeed    = clsystem->ato((*def)[u8"speed"]);
-	healthmax = health = clsystem->ato((*def)[u8"health"]);
-	shieldmax = shield = clsystem->ato((*def)[u8"shield"]);
-	shieldrate	= clsystem->ato((*def)[u8"shieldrate"]);
-	armor		= clsystem->ato((*def)[u8"armor"]);
-	ammomounts	= clsystem->ato((*def)[u8"ammomounts"]);
-	points		= 10; //system->ato((*def)["points"]);
+	maxspeed    = clstring->tolong((*def)[u8"speed"]);
+	healthmax = health = clstring->tolong((*def)[u8"health"]);
+	shieldmax = shield = clstring->tolong((*def)[u8"shield"]);
+	shieldrate	= clstring->tolong((*def)[u8"shieldrate"]);
+	armor		= clstring->tolong((*def)[u8"armor"]);
+	ammomounts	= clstring->tolong((*def)[u8"ammomounts"]);
+	points		= 10; //CLstring->tolong((*def)["points"]);
 	//*
 	
 	//load ammo types
@@ -199,8 +199,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	fireupdate = new xlong[ammomounts];
 	for(uxlong j=0; j<ammomounts; j++)
 	{
-		ammotype[j] = clsystem->ato((*def)[ammoext[j]]);
-		firerate[j] = clsystem->ato((*def)[fireext[j]]);
+		ammotype[j] = clstring->tolong((*def)[ammoext[j]]);
+		firerate[j] = clstring->tolong((*def)[fireext[j]]);
 		fireupdate[j] = clsystem->getmilliseconds();
 	}
 	//*

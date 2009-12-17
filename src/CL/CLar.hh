@@ -80,7 +80,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			//*
 			
 			//decode filesize of current ar member
-			fs = clsystem->ato(&bf[bc]);
+			fs = clstring->tolong(&bf[bc]);
 			bc+=12; //goto end of header
 			//*
 

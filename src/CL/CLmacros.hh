@@ -51,6 +51,13 @@ void inline err(const xchar* f,const xchar* m) { std::cout << f << m << std::end
 
 void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } //force program exit
 
+xlong inline lt(const xchar* a,const xchar* b)
+{
+	xlong i = 0;
+	while(a[i]!=0 && b[i]!=0 && a[i]==b[i]) { i++; }
+	return xlong(a[i]-b[i]);
+}
+
 xlong inline linear(xlong x,xlong y,xlong w) { return ((y*w)+x); }
 
 uxlong inline byteadd(uxlong a,uxlong b)

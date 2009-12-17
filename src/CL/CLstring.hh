@@ -84,7 +84,6 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 	if(s[i]=='-') { u = -1; i++; }
 	j = i;
 	while(s[j]>='0' && s[j]<='9') { j++; }
-	say(j);
 	j -= i;
 	for(; j>0; j--,i++)
 	{

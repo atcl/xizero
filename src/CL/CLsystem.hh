@@ -56,7 +56,6 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		
 		xlong   system(const xchar* c);
 		
-		xlong   ato(const xchar* c); //todo: template version for return type: xlong,xfixed,float,xchar
 		xlong   cmpcstr(const xchar* a,const xchar* b,xlong l=0);
 };
 ///*
@@ -219,8 +218,6 @@ xlong CLsystem::wait(xlong milliseconds) //! noncritical
 xlong CLsystem::getmilliseconds() { return xlong(1000 * clock() / CLOCKS_PER_SEC); } //since midnight  //! noncritical
 
 xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
-
-xlong CLsystem::ato(const xchar* c) { return atoi(c); } //! noncritical
 
 xlong CLsystem::cmpcstr(const xchar* a,const xchar* b,xlong l) //! noncritical
 {

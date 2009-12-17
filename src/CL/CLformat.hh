@@ -16,7 +16,6 @@
 #include "CLstruct.hh"
 #include "CLstring.hh"
 #include "CLmacros.hh"
-#include "CLsystem.hh"
 ///*
 
 ///header
@@ -33,7 +32,7 @@
 ///*
 
 ///definitions
-struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return CLsystem::instance()->cmpcstr(a,b) < 0; } };
+struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return lt(a,b) < 0; } };
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
@@ -128,12 +127,9 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 
 	while(tvc<=vc)
 	{
-		r[tvc] = clsystem->ato(&bf[tfc]);
+		r[tvc] = clstring->tolong(&bf[tfc]);
 		tvc++;
-		while(bf[tfc]!=sep && bf[tfc]!='\n')
-		{
-			tfc++;
-		}
+		while(bf[tfc]!=sep && bf[tfc]!='\n') { tfc++; }
 		tfc++;
 	}
 	//*
@@ -308,14 +304,11 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	uxlong xpm_ptr = 0;
 	
 	//read width,height,colors and chars per pixel
-	uxlong width = CLsystem::instance()->ato(&xpm[0][xpm_ptr]);
-	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
-	uxlong height = CLsystem::instance()->ato(&xpm[0][xpm_ptr]);
-	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
-	uxlong colors = CLsystem::instance()->ato(&xpm[0][xpm_ptr]);
-	xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') xpm_ptr++;
-	uxlong charpp = CLsystem::instance()->ato(&xpm[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
-	if(charpp!=1) return 0;
+	uxlong width = clstring->tolong(&xpm[0][xpm_ptr]);  xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') { xpm_ptr++; }
+	uxlong height = clstring->tolong(&xpm[0][xpm_ptr]); xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') { xpm_ptr++; }
+	uxlong colors = clstring->tolong(&xpm[0][xpm_ptr]); xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') { xpm_ptr++; }
+	uxlong charpp = clstring->tolong(&xpm[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
+	if(charpp!=1) { return 0; }
 	//uxlong bytesize = (width*height)<<2;
 	//*
 	

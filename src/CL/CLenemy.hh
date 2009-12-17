@@ -167,7 +167,7 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<
 	//*
 	
 	//set enemy specific attributes
-	points = clsystem->ato((*def)[u8"points"]);
+	points = clstring->tolong((*def)[u8"points"]);
 	speeddir.y  = maxspeed/20;
 	direction[0].y = -1;
 	//*
