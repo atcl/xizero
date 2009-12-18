@@ -113,7 +113,7 @@ CLwindow::CLwindow() //! noncritical
 	//init window title
 	XStoreName(Xdisplay,Xwindow,title);
 	//init icon
-	sprite* Ticon = clformat->loadxpm(icon);
+	sprite* Ticon = clformat->loadxpm(CLicon);
 	XImage* Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
 	Pixmap icon = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
 	XPutImage(Xdisplay,icon,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
@@ -231,7 +231,7 @@ xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncr
 
 xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
 
-void CLwindow::setsyskey(uxchar k,void (*a)()) { syskey = k; sysaction = a; };
+void CLwindow::setsyskey(uxchar k,void (*a)()) { syskey = k; sysaction = a; } //! noncritical
 ///*
 	
 #endif

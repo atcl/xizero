@@ -11,7 +11,7 @@
 //include data-ar?
 
 ///decarations
-const static xchar* icon[] =
+const static xchar* CLicon[] =
 { 
 "16 16 3 1",
 "# c #000000",

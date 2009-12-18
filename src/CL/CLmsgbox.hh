@@ -48,6 +48,8 @@ class CLmsgbox : public virtual CLcl, public CLsingle<CLmsgbox>
 		CLmsgbox();
 		~CLmsgbox();
 		xlong msgbox(const xchar* title,const xchar* message);
+		xlong yesnobox(const xchar* title,const xchar* message);
+		xlong alertbox(const xchar* title,xlong message);
 };
 ///*
 

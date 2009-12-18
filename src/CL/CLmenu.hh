@@ -8,11 +8,19 @@
 #define HH_CLMENU
 ///*
 
-///includes
+///sys includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
-#include "CLbuffer.hh"
-#include "CLgfx2.hh"
+#include "CLresource.hh"
+#include "CLstruct.hh"
+///*
+
+///api includes
+#include "CLformat.hh"
+#include "CLlabel.hh"
+#include "CLbutton.hh"
+#include "CLgfx1.hh"
+#include "CLsystem.hh"
 ///*
 
 ///header
@@ -32,40 +40,52 @@
 class CLmenu : public virtual CLcl
 {
 	private:
-		char* title;
-		xlong* icon;
-		void* actionptr;
+		sprite*   icon;
+		CLlabel*  title;
 		CLbutton* exit;
 		CLbutton* info;
 		CLbutton* about;
-		
+		void (*pause)();
+		void (*e)();
+		void (*i)();
+		void (*a)();
 	public:
-		CLmenu();
+		CLmenu(void (*p)());
 		~CLmenu();
 		void draw();
-		void action();
-		static void invoke();
 };
 ///*
 
 ///implementation
-CLmenu::CLmenu() //! noncritical
+CLmenu::CLmenu(void (*p)()) //! noncritical
 {
-
+	pause = p;
+	icon = clformat->loadxpm(CLicon);
+	title = new CLlabel(20,2,756,16,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",1);
+	exit = new CLbutton(20,20,80,20,0,0x00C0C0C0,0,p,"Exit",0);
+	info = new CLbutton(100,20,80,20,0,0x00C0C0C0,0,p,"Info",0);
+	about = new CLbutton(180,20,80,20,0,0x00C0C0C0,0,p,"About",1);
+	clwindow->setsyskey('^',pause);
 }
 
-CLmenu::~CLmenu() { } //! noncritical
+CLmenu::~CLmenu() //! noncritical
+{ 
+	delete icon;
+	delete title;
+	delete exit;
+	delete info;
+	delete about;	
+}
 
 void CLmenu::draw() //! noncritical
 {
-	//drawrectangle(0,0,xres,?,grey);	//win
-	//drawrectangle(2,2,xres,?/2,red);	//title
-	//drawrectangle(?,?,?,?,grey);		//close
-}
-
-void CLmenu::action() //! critical
-{
-
+	//pause();
+	clgfx1->drawrectangle(0,0,XRES,40,0x00C0C0C0,1);
+	clgfx1->drawsprite(2,2,icon);
+	title->draw();
+	exit->draw();
+	info->draw();
+	about->draw();
 }
 ///*
 

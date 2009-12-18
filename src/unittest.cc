@@ -7,8 +7,8 @@ CLar* cldata = 0;
 
 int main(int argc, char** argv)
 {
-	std::string argfile = "dat/other/test.y3d";
-	xlong  argfileindex =-1;
+	const xchar* argfile = "dat/other/test.y3d";
+	xlong argfileindex =-1;
 
 	if(argc>2) { argfileindex = atoi(argv[2]); }
 	else if(argc>1) { argfile = argv[1]; }
@@ -16,7 +16,9 @@ int main(int argc, char** argv)
 	//init sequence
 	CLglobal* clglobal = CLsetup();
 	cldata = new CLar(BASEDIR"xizero.dat");
-	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));		
+	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
+	
+	CLmenu* sysmenu = new CLmenu(&CLgarbage);		
 	//*
 
 		//test tree:
@@ -352,13 +354,13 @@ int main(int argc, char** argv)
 
 	if(argfileindex!=-1)
 	{
-		CLfile* arch = clglobal->clsystem->getfile(argfile.c_str());
+		CLfile* arch = clglobal->clsystem->getfile(argfile);
 		CLar* arar = new CLar(arch);
 		cube = arar->getmember(argfileindex);
 	}
 	else
 	{
-		CLfile* cubef = clglobal->clsystem->getfile(argfile.c_str());
+		CLfile* cubef = clglobal->clsystem->getfile(argfile);
 		cube = cubef;
 	}
 
@@ -482,6 +484,8 @@ int main(int argc, char** argv)
 			terrows[i]->display(q,SHAPE);
 			q.y += 20;
 		}
+	
+		sysmenu->draw();
 	
 		linearM->unit();
 
