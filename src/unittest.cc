@@ -30,7 +30,9 @@ int main(int argc, char** argv)
 	
 	
 	//audio test:
-	//~ clglobal->clsound->play("../../toxic.wav",1);
+	CLar* clsdata = new CLar(cldata->findbyname("sounds.a"));
+	clglobal->clsound->preload(clsdata);
+	clglobal->clsound->play(1,1);
 	//*
 	
 	//load height
@@ -423,7 +425,7 @@ int main(int argc, char** argv)
 			case ',':    cubus->translatealongnormals(-1.1); break;
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
-			//~ case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
+			case 'r':    clglobal->clsound->play(2); break;
 				
 			//System:
 			case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;

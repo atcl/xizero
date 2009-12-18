@@ -37,11 +37,6 @@
  */
 ///*
 
-///declarations
-#define NUMBUF 8
-#define NUMSRC 8
-///*
-
 ///definitions
 class CLsound : public virtual CLcl, public CLsingle<CLsound>
 {
