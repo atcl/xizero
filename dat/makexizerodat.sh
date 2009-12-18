@@ -3,6 +3,9 @@
 echo 'packing fonts'
 ar -q 'fonts.a' 'dat/fonts/CLsegmtype.fnt' 'dat/fonts/CLlinetype.fnt' 'dat/fonts/CLmonotype.fnt' 'dat/fonts/CLteletype.fnt' 'dat/fonts/CLtermtype.fnt'>> /dev/null 2>&1
 
+echo 'packing sounds'
+ar -q 'sounds.a' 'dat/sounds/mainmenu.mp3' 'dat/sounds/background.wav' 'dat/sounds/tankcannon.wav' 'dat/sounds/enemcannon.mp3'  >> /dev/null 2>&1
+
 echo 'packing intros'
 ar -q 'intro.a' 'dat/intro/atcl.ani' 'dat/intro/atcl.y3d' 'dat/intro/xi.ani' 'dat/intro/xi.y3d' 'dat/intro/zero.ani' 'dat/intro/zero.y3d' >> /dev/null 2>&1
 
@@ -51,7 +54,7 @@ done
 
 echo 'pack all of above into one super-ar'
 rm -f 'xizero.dat'
-ar -q 'xizero.a' 'bosses.a' 'enemies.a' 'player.a' 'screens.a' 'terrain.a' 'levels.a' 'intro.a' 'fonts.a' >> /dev/null 2>&1
+ar -q 'xizero.a' 'bosses.a' 'enemies.a' 'player.a' 'screens.a' 'terrain.a' 'levels.a' 'intro.a' 'fonts.a' 'sounds.a' >> /dev/null 2>&1
 
 for file in `ls dat/maps/*.a` ; do
 	ar -q 'xizero.a' $file >> /dev/null 2>&1
@@ -62,6 +65,7 @@ mv 'xizero.a' 'xizero.dat'
 
 echo 'cleaning up'
 rm -f 'fonts.a'
+rm -f 'sounds.a'
 rm -f 'intro.a'
 rm -f 'screens.a'
 rm -f 'levels.a'

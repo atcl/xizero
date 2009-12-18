@@ -56,12 +56,16 @@ class CLsound : public virtual CLcl, public CLsingle<CLsound>
 		xchar** names;
 		ALuint* alsources;
 		ALuint* alwavs;
+		ALuint alsource;
+		ALuint alwav;
 		CLsound();
 		~CLsound();
 	public:
 		bool preload(CLar* aa);
-		bool play(xlong i,bool l,bool o);
+		bool play(xlong i,bool l=0,bool o=0);
+		bool play(CLfile* f,bool l=0,bool o=0);
 		void stop();
+		void pause();
 };
 ///*
 
@@ -89,11 +93,17 @@ CLsound::CLsound() //! noncritical
 	alListenerfv(AL_VELOCITY,alvel);
 	alListenerfv(AL_ORIENTATION,alori);
 	//*
+	
+	//create single file source
+	alGenSources(1,&alsource);
+	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alGenSources"); }
+	//*
 }
 
 CLsound::~CLsound()
 {
 	//release buffers and sources
+	alDeleteSources(1,&alsource);
 	if(numsrc!=0) { alDeleteSources(numsrc,alsources); }
 	if(numbuf!=0) { alDeleteBuffers(numbuf,alwavs); }
 	//*
@@ -141,14 +151,45 @@ bool CLsound::play(xlong i,bool l,bool o) //! noncritical
 {
 	//set up 3d sound for source??? alSourcefv ?
 	
+	if(numbuf==0) return 0;
+	if(l) { alSourcei(alsources[i],AL_LOOPING,AL_TRUE); }
 	alSourcePlay(alsources[i]);
+	
+	return 1;
+}
+
+bool CLsound::play(CLfile* f,bool l,bool o) //! noncritical
+{
+	ALvoid* aldata = static_cast<void*>(f->data);
+	alwav = alutCreateBufferFromFileImage(aldata,f->size);
+	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alutCreateBufferFromFileImage"); return 0; }
+	
+	alSourcei(alsource,AL_BUFFER,alwav); 
+	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alSourcei"); return 0; }
+	
+	alSourcePlay(alsource);
 	
 	return 1;
 }
 
 void CLsound::stop() //! noncritical
 {
+	ALint playing;
+	for(xlong i=0; i<numbuf; i++)
+	{
+		alGetSourcei(alwavs[i],AL_SOURCE_STATE,&playing);
+		if(playing!=AL_PLAYING) { alSourceStop(alwavs[i]); }
+	}
+}
 
+void CLsound::pause() //! noncritical
+{
+	ALint playing;
+	for(xlong i=0; i<numbuf; i++)
+	{
+		alGetSourcei(alwavs[i],AL_SOURCE_STATE,&playing);
+		if(playing!=AL_PLAYING) { alSourcePause(alwavs[i]); }
+	}
 }
 ///*
 
