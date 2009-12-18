@@ -80,7 +80,7 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 	//*
 
 	//get value count
-	xlong vc = co + lc - 1;
+	xlong vc = co + lc;
 	say(vc);
 	//*
 	
@@ -90,15 +90,17 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 	cc = 0;
 	r[0] = vc;
 
-	while(tvc<=vc)
+	while(tvc<=vc && cc<sf->size)
 	{
 		r[tvc] = clstring->tolong(&bf[cc]);
 		tvc++;
-		while(bf[cc]!=sep && bf[cc]!='\n') { cc++; }
+		while(bf[cc]!=sep && bf[cc]!='\n' && cc<sf->size) { cc++; }
 		cc++;
 	}
 	//*
 
+	say(tvc);
+	eol();
 	//r is now array of xlongs, r[0] is count of values
 	return r;
 	//*
