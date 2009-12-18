@@ -63,31 +63,25 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 ///implementation
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 {
-	//! broken !!!
-	
 	xchar* bf = sf->text;
 	
 	//get linecount
 	xlong lc = clstring->linecount(bf);
 	//*
 
-	//get comma count per line
+	//get comma count
 	xlong cc = 0;
-	xlong* co = new xlong[lc];
-	for(xlong i=0; i<lc; i++)
+	xlong co = 0;
+	while(cc<sf->size)
 	{
-		while(bf[cc]!='\n' && bf[cc]<sf->size)
-		{
-			if(bf[cc]==sep) { co[i]++; }
-			cc++;
-		}
+		if(bf[cc]==sep) { co++; }
 		cc++;
 	}
 	//*
 
 	//get value count
-	xlong vc = 0;
-	for(xlong i=0; i<lc; i++) { if(co[i]!=0) vc += co[i] + 1; }
+	xlong vc = co + lc - 1;
+	say(vc);
 	//*
 	
 	//copy values
@@ -111,50 +105,39 @@ xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 }
 xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //! noncritical
 {
-	//calc subconst yourself by rc and rv
-	
 	xchar* bf = sf->text;
-	//xlong bs = sf->size;
-	xlong lc = clstring->linecount(bf);
-
+	xlong  lc = clstring->linecount(bf);
+	
 	//determine line length
 	xlong lw = 0;
 	xlong cc = 0;
-	while(cc < lc)
-	{
-		if(bf[cc]=='\n') break;
-		else lw++;
-		cc++;
-	}
-	//lw contains line length
+	while(bf[cc]!='\n') { lw++; cc++; }
+	//*
 
 	//for each row create xchar array of line length
 	xchar** rev = new xchar*[lc];
-	for(uxlong i=0; i<lc; i++)
-	{
-		rev[i] = new xchar[lw];
-	}
+	for(uxlong i=0; i<lc; i++) { rev[i] = new xchar[lw]; }
 	//*
 
 	//copy and manipulate contents depending on subconst,rc,rv
-	xlong li = 0;
+	cc = 0;
 	for(uxlong j=0; j<lc; j++)
 	{
 		for(uxlong k=0; k<lw; k++)
 		{
-			if(bf[li]!='\n')
+			if(bf[cc]!='\n')
 			{
-				if(bf[li]==rc) rev[j][k] = rv;
-				else rev[j][k] = bf[li] - subconst;
+				if(bf[cc]==rc) { rev[j][k] = rv; }
+				else { rev[j][k] = bf[cc] - subconst; }
 			}
 			else
 			{
 				err(__func__,u8"Map not conform with given width");
 				return 0;
 			}			
-			li++;
+			cc++;
 		}
-		li++;
+		cc++;
 	}
 	//*
 
