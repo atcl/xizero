@@ -63,63 +63,49 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 ///implementation
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 {
-	//add template parameter to change between xlong*,xchar**,xfixed* and float*
-	//Works only for integers!
-	
-	//! bug with new line at end of file !
-	//! add comma at end of line !
-	//! no comma after value means end of data !
-	//! crashes in line 84 (with new line at end of file) !
+	//! broken !!!
 	
 	xchar* bf = sf->text;
 	
 	//get linecount
-	xlong  lc = clstring->linecount(bf);
+	xlong lc = clstring->linecount(bf);
 	//*
 
 	//get comma count per line
-	xlong* cc = new xlong[lc];
-	xlong tfc = 0;
-	xlong tcc = 0;
-	xlong tlc = 0;
-	while(tlc<lc)
+	xlong cc = 0;
+	xlong* co = new xlong[lc];
+	for(xlong i=0; i<lc; i++)
 	{
-		if(bf[tfc]==sep) tcc++;
-		else if(bf[tfc]=='\n')
+		while(bf[cc]!='\n' && bf[cc]<sf->size)
 		{
-			cc[tlc] = tcc;
-			tcc = 0;
-			tlc++;
+			if(bf[cc]==sep) { co[i]++; }
+			cc++;
 		}
-		tfc++;
+		cc++;
 	}
 	//*
 
 	//get value count
 	xlong vc = 0;
-	
-	for(uxlong i=0; i<lc; i++)
-	{
-		if(cc[i]!=0) vc += cc[i] + 1; 	
-	}
-	vc++;
+	for(xlong i=0; i<lc; i++) { if(co[i]!=0) vc += co[i] + 1; }
 	//*
 	
 	//copy values
 	xlong* r = new xlong[vc+1];	
-	xlong tvc = 1; tfc = 0;
+	xlong tvc = 1; 
+	cc = 0;
 	r[0] = vc;
 
 	while(tvc<=vc)
 	{
-		r[tvc] = clstring->tolong(&bf[tfc]);
+		r[tvc] = clstring->tolong(&bf[cc]);
 		tvc++;
-		while(bf[tfc]!=sep && bf[tfc]!='\n') { tfc++; }
-		tfc++;
+		while(bf[cc]!=sep && bf[cc]!='\n') { cc++; }
+		cc++;
 	}
 	//*
 
-	//r is now array of xlongs, r[0] is coutn of values
+	//r is now array of xlongs, r[0] is count of values
 	return r;
 	//*
 }
@@ -296,7 +282,6 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	uxlong colors = clstring->tolong(&xpm[0][xpm_ptr]); xpm_ptr++; while( (xpm[0][xpm_ptr]) !=' ') { xpm_ptr++; }
 	uxlong charpp = clstring->tolong(&xpm[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
 	if(charpp!=1) { return 0; }
-	//uxlong bytesize = (width*height)<<2;
 	//*
 	
 	//allocate
@@ -333,14 +318,7 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	//fill data
 	uxlong data_ptr = 0; 
 	height += colors;
-	for(uxlong j=colors; j<height; j++)
-	{
-		for(uxlong k=0; k<width; k++)
-		{
-			r->data[data_ptr] = ctable[xpm[j][k]];
-			data_ptr++;
-		}
-	}
+	for(uxlong j=colors; j<height; j++) { for(uxlong k=0; k<width; k++,data_ptr++) { r->data[data_ptr] = ctable[xpm[j][k]]; } }
 	//*
 
 	return r;
@@ -418,101 +396,58 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	xchar* bf = sf->text;
 
 	//get linecount
-	xlong lc = clstring->linecount(bf) - 1;
+	xlong lc = clstring->linecount(bf);
 	//*
 	
-	xlong cc=0;
-	xlong tc0=0;
-	xlong tc1=0;
-	xchar* tp0=0;
-	xchar* tp1=0;
-	bool apos=0;
-	xlong aps=0;
+	xlong cc = 0;
 	for(uxlong i=0; i<lc; i++)
 	{
-		while(bf[cc]==' ') cc++;
+		while(bf[cc]==' ') { cc++; }
 		
-		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!='\n')
+		if(bf[cc]!=';' && bf[cc]!='#' && bf[cc]!='\n' && cc<sf->size)
 		{
 			//pre equal sign
-			tc0 = cc;
-			tc1=0;
-			bool noinfo = 0;
-			bool noequal = 0;
-			while(bf[cc]!='=')
+			xlong prestart = cc;
+			xlong prestop = cc;
+			xchar* prevalue = 0;
+			while(bf[cc]!='=' && bf[cc]!=' ')
 			{
-				if(bf[cc]!=' ') noinfo = 1;
-				if(bf[cc]=='\n' && noinfo==1) noequal = 1;
-				if(bf[cc]!=' ') tc1++;
+				prestop++;
 				cc++;
 			}
-			
-			if(noequal==0)
-			{
-				cc ^= tc0 ^= cc ^= tc0; //xor swap trick
-				
-				tp0 = new xchar[tc1+1];
-				tp0[tc1]=0;
-				for(uxlong j=0; j<tc1; j++)
-				{
-					tp0[j] = bf[cc+j];
-				}
-				cc = tc0;
-				cc++;
-				//*
-				
-				//post equal sign
-				while(bf[cc]==' ') cc++;
+			prevalue = clstring->copy(&(bf[prestart]),prestop-prestart);
+			//*
 
-				tc0 = cc;
-				tc1=0;
-				while(bf[cc] != '\n')
-				{
-						 if( (bf[cc]=='"' || bf[cc]=='\'') && apos==0) { apos=1; cc++; aps=cc; }
-					else if( (bf[cc]=='"' || bf[cc]=='\'') && apos==1) { apos=0; break; }
-					else if(bf[cc]!=' ' && apos==0) { tc1++; cc++; }
-					else if(apos==1) {tc1++; cc++; }
-					else if( bf[cc]=='#' || bf[cc]==';') break;
-				}
-
-				cc ^= tc0 ^= cc ^= tc0; //xor swap trick
-				
-				if(aps==0)
-				{
-					tp1 = new xchar[tc1+1];
-					tp1[tc1]=0;
-					for(uxlong j=0; j<tc1; j++)
-					{
-						tp1[j] = bf[cc+j];
-					}
-				}
-				else 
-				{
-					tp1 = new xchar[tc1+1];
-					tp1[tc1]=0;
-					for(uxlong j=0; j<tc1; j++)
-					{
-						tp1[j] = bf[aps+j];
-					}
-				}
-				cc = tc0;
-				//*
-				
-				//map values in xmap
-				(*r)[tp0] = tp1;
-				//*
-			}
-		}
-		
-		if(bf[cc]=='\n') { cc++; }
-		else
-		{
-			//reset for next line
-			while(bf[cc] != '\n') cc++;
+			//equal sign
+			while(bf[cc]!='=') { cc++; }
 			cc++;
+			while(bf[cc]==' ') { cc++; }
+			//*
+			
+			//post equal sign
+			xlong poststart = cc;
+			xlong poststop = cc;
+			xchar* postvalue = 0;
+			while(bf[cc]!=' ' && bf[cc]!=';' && bf[cc]!='#' && bf[cc]!='\n')
+			{
+				if(bf[cc]!=' ') { poststop++; }
+				cc++;
+			}
+			if( (bf[poststart]=='"' && bf[poststop]=='"') || (bf[poststart]=='\'' && bf[poststop]=='\'') )
+			{
+				poststart++;
+				poststop--;
+			}
+			postvalue = clstring->copy(&(bf[poststart]),poststop-poststart);
+			//*
+				
+			//map values in xmap
+			(*r)[prevalue] = postvalue;
 			//*
 		}
-		aps=0;
+		
+		while(bf[cc]!='\n' && cc<sf->size) { cc++; }
+		cc++;
 	}
 	
 	return r;

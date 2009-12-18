@@ -66,7 +66,7 @@ void CLintro::atcrosslevel() const //! noncritical
 	while(clwindow->run())
 	{
 		if(clwindow->getinkey()==SPACE) break;
-		if(atcl_intro->run()==0) break;
+		if(atcl_intro->run()==0) break; //! throws bad alloc afterwards !!!
 	}
 	//*
 }
