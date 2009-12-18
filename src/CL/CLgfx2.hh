@@ -76,10 +76,9 @@ void CLgfx2::loadfonts(CLfile* sf) //! critical
 	mono = fonts[0] = clformat->loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
 	tele = fonts[1] = clformat->loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
 	line = fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
-	//term = fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
-	//segm = fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),16,16);
+	term = fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
+	segm = fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),32,60);
 	//tall = fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),16,16);
-	//fonts[2] = line = clformat->loadtileset("dat/fonts/CLlinetype.im24",16,16); //temp
 }
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const //! critical
@@ -121,7 +120,7 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlong bc) const //! critical
 {
 	//select font
-	if(f>3) f = 0;
+	if(f>4) f = 0;
 	CLfont* t = fonts[f];
 	//*
 	
@@ -184,22 +183,16 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong f,uxlong fc,uxl
 xlong CLgfx2::getfontstringwidth(const char* a,xlong f) const //! critical
 {
 	//select font
-	if(f>3) f = 0;
+	if(f>4) f = 0;
 	CLfont* t = fonts[f];
 	//*
 	
 	xlong l = clstring->length(a);
 	xlong r = 0;
-	
 	uxlong srcoff = 0;
 	
 	for(uxlong i=0; i<l; i++)
-	{
-		for(uxlong j=0; j<t[i]->width; j++)
-		{
-			if(t[i]->data[j] != 0x00000000) r++;
-		}
-	}
+	{ for(uxlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
 	
 	return r;
 }
@@ -207,7 +200,7 @@ xlong CLgfx2::getfontstringwidth(const char* a,xlong f) const //! critical
 xlong CLgfx2::getfontstringheight(const char* a,xlong f) const //! critical
 {
 	//select font
-	if(f>3) f = 0;
+	if(f>4) f = 0;
 	CLfont* t = fonts[f];
 	//*
 	

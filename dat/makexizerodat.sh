@@ -1,7 +1,7 @@
 #!/bin/sh 
 
 echo 'packing fonts'
-ar -q 'fonts.a' 'dat/fonts/CL7segment.fnt' 'dat/fonts/CLlinetype.fnt' 'dat/fonts/CLmonotype.fnt' 'dat/fonts/CLteletype.fnt' >> /dev/null 2>&1
+ar -q 'fonts.a' 'dat/fonts/CLsegmtype.fnt' 'dat/fonts/CLlinetype.fnt' 'dat/fonts/CLmonotype.fnt' 'dat/fonts/CLteletype.fnt' 'dat/fonts/CLtermtype.fnt'>> /dev/null 2>&1
 
 echo 'packing intros'
 ar -q 'intro.a' 'dat/intro/atcl.ani' 'dat/intro/atcl.y3d' 'dat/intro/xi.ani' 'dat/intro/xi.y3d' 'dat/intro/zero.ani' 'dat/intro/zero.y3d' >> /dev/null 2>&1

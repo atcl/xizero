@@ -16,6 +16,7 @@
 #include "CLbuffer.hh"
 #include "CLobject.hh"
 #include "CLformat.hh"
+#include "CLgfx2.hh"
 ///*
 
 ///header
@@ -62,11 +63,25 @@ void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
 	CLanim* atcl_intro = new CLanim(atcl_obj,aniraw,0);
 	//*
 	
+	//prepare name string
+	const xchar* title = "atCROSSLEVEL";
+	xlong w = clgfx2->getfontstringwidth(title,4);
+	xlong x = (XRES - w)/2;
+	//*
+	
 	//run animation
+	bool skip = 0;
 	while(clwindow->run())
 	{
-		if(clwindow->getinkey()==SPACE) break;
-		if(atcl_intro->run()==0) break; //! throws bad alloc afterwards !!!
+		if(clwindow->getinkey()==SPACE) { skip = 1; break; }
+		if(atcl_intro->run()==0) { break; }
+	}
+	
+	if(skip==0)
+	{
+		clgfx2->drawfontstring(x,100,title,4,0x00800000);
+		clwindow->run();
+		clsystem->wait(4000);
 	}
 	//*
 }
