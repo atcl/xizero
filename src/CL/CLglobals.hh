@@ -50,6 +50,7 @@ class CLid;
 class CLstring;
 class CLapp;
 class CLmsgbox;
+class CLintro;
 ///*
 
 ///definitions
@@ -98,6 +99,7 @@ class CLglobal
 		static CLstring* clstring;
 		static CLapp*    clapp;
 		static CLmsgbox* clmsgbox;
+		static CLintro*  clintro;
 		
 		static CLglobal* getinstance();
 };

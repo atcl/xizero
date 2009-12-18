@@ -14,9 +14,8 @@ int main()
 	//*
 
 	//intros
-	CLintro* clintro = new CLintro(cldata->findbyname("intro.a"));
-	clintro->atcrosslevel();
-	clintro->xizero();
+	clglobal->clintro->atcrosslevel(cldata->findbyname("intro.a"));
+	clglobal->clintro->xizero(cldata->findbyname("intro.a"));
 	//*
 	
 	//mainmenu

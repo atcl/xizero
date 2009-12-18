@@ -32,24 +32,24 @@
 ///*
 
 ///definitions
-class CLintro : public virtual CLcl //! noncritical
+class CLintro : public virtual CLcl, public CLsingle<CLintro>
 {
 	friend class CLsingle<CLintro>;
 	
 	private:
-		CLar* introar;
-	public:
-		CLintro(CLfile* sf) { introar = new CLar(sf); };
+		CLintro() { };
 		~CLintro() { };
-		void atcrosslevel() const;
-		void xizero() const;
+	public:
+		void atcrosslevel(CLfile* sf) const;
+		void xizero(CLfile* sf) const;
 };
 ///*
 
 ///implementation
-void CLintro::atcrosslevel() const //! noncritical
+void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
 {
 	//load atcrosslevel model
+	CLar* introar = new CLar(sf);
 	CLfile *cf = introar->findbyname(u8"atcl.y3d");
 	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
@@ -71,9 +71,10 @@ void CLintro::atcrosslevel() const //! noncritical
 	//*
 }
 
-void CLintro::xizero() const //! noncritical
+void CLintro::xizero(CLfile* sf) const //! noncritical
 {
 	//load atcrosslevel model
+	CLar* introar = new CLar(sf);
 	CLfile* fxi = introar->findbyname(u8"xi.y3d");
 	CLobject* oxi = new CLobject(fxi,0);
 	CLfile* fzero = introar->findbyname(u8"zero.y3d");

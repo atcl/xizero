@@ -69,7 +69,7 @@ void CLtransitions::dissolve() //! critical
 	uxlong c = 0;
 	uxlong i = 0;
 	
-	while(clwindow->run() && i<200)
+	while(clwindow->run() && i<256)
 	{
 		for(uxlong j=0; j<1000; j++)
 		{

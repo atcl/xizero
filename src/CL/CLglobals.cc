@@ -30,6 +30,7 @@
 #include "CLstring.hh"
 #include "CLapp.hh"
 #include "CLmsgbox.hh"
+#include "CLintro.hh"
 
 #include "CLglobals.hh"
 ///*
@@ -68,6 +69,7 @@ CLid*     CLglobal::clid     = CLid::instance();
 CLstring* CLglobal::clstring = CLstring::instance();
 CLapp*    CLglobal::clapp    = CLapp::instance();
 CLmsgbox* CLglobal::clmsgbox = CLmsgbox::instance();
+CLintro*  CLglobal::clintro  = CLintro::instance();
 
 CLglobal* CLglobal::global = 0;
 ///*
