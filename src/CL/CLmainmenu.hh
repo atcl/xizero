@@ -41,8 +41,7 @@ class CLmainmenu : public virtual CLcl
 		CLlabel* header;
 		CLlabel* footer;
 	public:
-		CLmainmenu(const xchar* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
-		CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
+		CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc) { CLmainmenu(clformat->loadras(bg),bc,bt,a,hl,fl,fc); };
 		CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 		void draw() const;
@@ -51,12 +50,6 @@ class CLmainmenu : public virtual CLcl
 ///*
 
 ///implementation
-//~ CLmainmenu::CLmainmenu(const xchar* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
-//~ { CLmainmenu(clsystem->getfile(bg),bc,bt,a,hl,fl,fc); }
-//~ 
-//~ CLmainmenu::CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc)
-//~ { CLmainmenu(clformat->loadtga(bg),bc,bt,a,hl,fl,fc); }
-
 CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc) //! noncritical
 {
 	//set attributes
