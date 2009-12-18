@@ -27,29 +27,10 @@ int main(int argc, char** argv)
 			
 	//*
 	
-	//mul test (test mul vs add+shift)
-	//~ xlong sa1 = clglobal->clsystem->getmilliseconds();
-	//~ xlong ta = 1;
-	//~ for(xlong b=0; b<1000000000; b++)
-	//~ {
-		//~ ta = ta * 20;
-		//~ ta/=20;
-	//~ }
-	//~ xlong sa2 = clglobal->clsystem->getmilliseconds();
-	//~ 
-	//~ xlong sb1 = clglobal->clsystem->getmilliseconds();
-	//~ xlong tb = 1;
-	//~ for(xlong a=0; a<1000000000; a++)
-	//~ {
-		//~ tb = (tb<<4) + (tb<<2);
-		//~ tb/=20;
-	//~ }
-	//~ xlong sb2 = clglobal->clsystem->getmilliseconds();
-	//*
 	
 	
 	//audio test:
-	clglobal->clsound->play("../../toxic.wav",1);
+	//~ clglobal->clsound->play("../../toxic.wav",1);
 	//*
 	
 	//load height
@@ -442,7 +423,7 @@ int main(int argc, char** argv)
 			case ',':    cubus->translatealongnormals(-1.1); break;
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
-			case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
+			//~ case 'r':    clglobal->clsound->play("../../cannon.wav",0); break;
 				
 			//System:
 			case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;

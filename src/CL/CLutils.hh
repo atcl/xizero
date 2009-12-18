@@ -52,7 +52,7 @@ void inline eol() { std::cout << std::endl; }
 
 bool inline eof(xchar c) { return (c==0x1A); }
 
-void inline err(const xchar* f,const xchar* m) { std::cout << f << m << std::endl; }
+void inline err(const xchar* f,const xchar* m) { std::cout << f << ": " << m << std::endl; }
 
 void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } //force program exit
 

@@ -12,11 +12,7 @@ CLglobal* clglobal = 0;
 CLar* cldata = 0;
 xlong currlevel = 0;
 
-void exitgame()
-{
-	clglobal->clsound->exit();
-	clglobal->clapp->exit(0,"xizero says: bye");
-}
+void exitgame() { clglobal->clapp->exit(0,"xizero says: bye"); }
 
 void newgame()
 {

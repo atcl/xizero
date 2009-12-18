@@ -69,6 +69,17 @@ struct sprite
 	uxlong  count; //used for tilesets ONLY!
 };
 
+struct CLwav
+{
+	CLfile* file;
+	xlong pcm;
+	xlong channel;
+	xlong rate;
+	xlong bits;
+	xlong offset;
+	xlong length;
+};
+
 struct CLgamepadstate
 {
 	xlong axis[2];

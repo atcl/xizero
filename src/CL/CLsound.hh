@@ -8,22 +8,20 @@
 #define HH_CLSOUND
 ///*
 
-///includes
-#ifdef WIN32
-	#include <mmsystem.hh>
-#else //ifdef LINUX
-	#include <fcntl.h>
-	#include <linux/soundcard.h>
-	#include <sys/types.h>
-	#include <sys/ioctl.h>
-	#include <unistd.h>
-	#include <signal.h>
-#endif
+///sys includes
+#include <AL/al.h>
+#include <AL/alut.h>
+///*
 
+///idp includes
 #include "CLtypes.hh"
 #include "CLcl.hh"
 #include "CLsingle.hh"
-#include "CLsystem.hh"
+#include "CLutils.hh"
+///*
+
+///api includes
+#include "CLar.hh"
 ///*
 
 ///header
@@ -39,206 +37,119 @@
  */
 ///*
 
-///definitions
-struct CLwav
-{
-	CLfile* file;
-	xlong pcm;
-	xlong channel;
-	xlong rate;
-	xlong bits;
-	xlong offset;
-	xlong length;
-};
+///declarations
+#define NUMBUF 8
+#define NUMSRC 8
+///*
 
+///definitions
 class CLsound : public virtual CLcl, public CLsingle<CLsound>
 {
 	friend class CLsingle<CLsound>;
 	
 	private:
-		xlong device;
-		xlong isloop;
-		xlong nosound;
+		ALfloat	alpos[3];
+		ALfloat	alvel[3];
+		ALfloat	alori[6];
+		xlong numbuf;
+		xlong numsrc;
+		xchar** names;
+		ALuint* alsources;
+		ALuint* alwavs;
 		CLsound();
-		~CLsound() { };
+		~CLsound();
 	public:
-		bool play(const xchar* f,bool l);
+		bool preload(CLar* aa);
+		bool play(xlong i,bool l,bool o);
 		void stop();
-		void exit();
 };
 ///*
 
 ///implementation
-#ifdef WIN32
-
-CLsound::CLsound() { isloop = -1; device = 0; } //! noncritical
-
-bool CLsound::play(const xchar* f,bool l) //! noncritical
-{
-	switch(l)
-	{
-		//play sound once
-		case false:
-			return PlaySound(TEXT(f), NULL, SND_FILENAME | SND_ASYNC);
-		break;
-		//*
-		
-		//play sound async in loop
-		case true:
-			isloop = 1;
-			return PlaySound(TEXT(f), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-		break;
-		//*
-	}
-}
-
-void CLsound::stop() //! noncritical
-{
-	//stop async playing loop sound
-	PlaySound(NULL, 0, 0);
-	//*
-}
-
-void CLsound::exit() { } //! noncritical
-
-#else //ifdef LINUX
-
 CLsound::CLsound() //! noncritical
 {
-	isloop = -1;
+	numbuf = 0;
+	numsrc = 0;
+	names = 0;
 	
-	//check if sound device is installed
-	if( (device = open("/dev/dsp", O_WRONLY)) == -1)
-	{
-		say(u8"No Soundblaster found");
-		nosound = 1;
-	}
+	ALuint alwavs = 0;
+	
+	//Init
+	alutInit(0,0);
+	alGetError();
 	//*
 	
-	//set up sound device
-	int i = 0;
-	ioctl(device,SNDCTL_DSP_RESET,&i);
-	i = 0;
-	ioctl(device,SNDCTL_DSP_STEREO,&i);
-	i = 44100;
-	ioctl(device,SNDCTL_DSP_SPEED,&i);
-	i = AFMT_S16_LE;
-	ioctl(device,SNDCTL_DSP_SETFMT,&i);
+	//set up 3d sound
+	alpos[0] = 0; alpos[1] = 0; alpos[2] = 0;
+	alvel[0] = 0; alvel[1] = 0; alvel[2] = 0;
+	alori[0] = 0; alori[1] = 0; alori[2] = -1;
+	alori[3] = 0; alori[4] = 1; alori[5] = 0;
 	
-	ioctl(device,SNDCTL_DSP_SYNC,0);
+	alListenerfv(AL_POSITION,alpos);
+	alListenerfv(AL_VELOCITY,alvel);
+	alListenerfv(AL_ORIENTATION,alori);
 	//*
-	
-	nosound = 0;
 }
 
-bool CLsound::play(const xchar* f,bool l) //! noncritical
+CLsound::~CLsound()
 {
-	if(device<0 || nosound==1) return 0;
+	//release buffers and sources
+	if(numsrc!=0) { alDeleteSources(numsrc,alsources); }
+	if(numbuf!=0) { alDeleteBuffers(numbuf,alwavs); }
+	//*
+
+	//exit
+	alutExit();
+	//*
+}
+
+bool CLsound::preload(CLar* aa) //! noncritical
+{
+	//obtain sound file count
+	numbuf = numsrc = aa->getfilecount();
+	alsources = new ALuint[numsrc];
+	names = new xchar*[numbuf];
+	//*
 	
-	xlong playid = fork();
-	 
-	if(playid == 0)
+	//Create Sources
+	alGenSources(numsrc,alsources);
+	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alGenSources"); return 0; }
+	//*
+	
+	//Load Wavs
+	ALvoid* aldata = 0;
+	CLfile* curr = 0;
+	alwavs = new ALuint[numbuf];
+	for(xlong i=0; i<numbuf; i++)
 	{
-		CLwav current;
+		curr = aa->getmember(i);
+		names[i] = clstring->copy(curr->name);
 		
-		current.file = clsystem->getfile(f);
+		aldata = static_cast<void*>(curr->data);
+		alwavs[i] = alutCreateBufferFromFileImage(aldata,curr->size);
+		if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alutCreateBufferFromFileImage"); return 0; }
 		
-		//check if "RIFF"
-		if(current.file->data[0] != 'FFIR') { say(u8"wav loading error (RIFF)"); return 0; }
-		//*
-		
-		//check if "WAVE"
-		if(current.file->data[2] != 'EVAW') { say(u8"wav loading error (WAVE)"); return 0; }
-		//*
-		
-		//check if "fmt "
-		if(current.file->data[3] != ' tmf') { say(u8"wav loading error (fmt )"); return 0; }
-		//*
-		
-		//get length
-		current.length = current.file->data[4];
-		//*
-		
-		//get and check if pcm
-		current.pcm = (current.file->data[5]>>16);
-		if(current.pcm != 1) { say(u8"wav loading error (pcm)"); return 0; }
-		//~ say(current.pcm);
-		//*
-		
-		//get and check channels
-		current.channel = (current.file->data[5]<<16)>>16;
-		if(current.channel != 1) { say(u8"wav loading error (channel)"); return 0; }
-		//~ say(current.channel);
-		//*
-		
-		//get bitrate
-		current.rate = current.file->data[6];
-		if(current.rate != 44100) { say(u8"wav loading error (rate)"); return 0; }
-		//~ say(current.rate);
-		//*
-		
-		//get and check bits
-		current.bits = (current.file->data[8]>>16);
-		if(current.bits != 16) { say(u8"wav loading error (bits)"); return 0; }
-		//~ say(current.bits);
-		//*
-		
-		//check if "data"
-		if(current.file->data[9] != 'atad') { say(u8"wav loading error (data)"); return 0; }
-		//*
-
-		//set device
-		//later.. imo in init
-		//*
-
-		//write to dsp device
-		while(true)
-		{
-			uxlong till = (current.file->size-44)/1024;
-			for(uxlong i=0; i<till; i++)
-			{
-				write(device,&current.file->text[44+(i*1024)],1024);
-			}
-			
-			if(!l) break;
-		}
-		//*	
-		
-		_exit(playid);
+		alSourcei(alsources[i],AL_BUFFER,alwavs[i]); 
+		if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alSourcei"); return 0; }
 	}
-	else
-	{
-		if(l) isloop = playid;
-		 
-		return 1;
-	}
+	//*
+	
+	return 1;
+}
+
+bool CLsound::play(xlong i,bool l,bool o) //! noncritical
+{
+	//set up 3d sound for source??? alSourcefv ?
+	
+	alSourcePlay(alsources[i]);
+	
+	return 1;
 }
 
 void CLsound::stop() //! noncritical
 {
-	if(device != -1)
-	{
-		//stop async playing
-		kill(isloop,SIGKILL);
-		//*
-	}
-}
 
-void CLsound::exit() //! noncritical
-{
-	if(device != -1)
-	{
-		//stop any loop playing
-		stop();
-		//*
-		
-		//close the audio device
-		close(device);
-		//*
-	}
 }
-#endif
-//*
 ///*
 
 #endif
