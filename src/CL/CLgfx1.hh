@@ -65,8 +65,7 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const;
 		void drawsprite(xlong x,xlong y,sprite* s) const;
-		void drawtile(xlong x,xlong y,tileset* t,xlong a) const;
-		void drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const;
+		void drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
 		void drawscreen(sprite* s) const;
 };
@@ -539,48 +538,7 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 	//*	
 }
 
-void CLgfx1::drawtile(xlong x,xlong y,tileset* t,xlong a) const //! critical
-{
-	//set up variables
-	xlong swidth = t->tilewidth;
-	xlong sheight = t->tileheight;
-	xlong xs = x;
-	xlong ys = y;
-	xlong xe = x + swidth;
-	xlong ye = y + sheight;
-	//*
-
-	//clipping against screen borders
-	if(isoff(xs,ys,xe,ye)) return;
-	clip(xs,ys);
-	clip(xe,ye);
-	//*
-
-	//set up variables
-	xlong cwidth = xe - xs;
-	xlong cheight = ye - ys;
-	xlong cdiff = swidth - cwidth;
-	xlong doffset = (ys * XRES) + xs;
-	xlong soffset = 0;
-	uxlong svalue = 0;
-	//*
-
-	//drawloop
-	for(uxlong i=0; i<sheight ;i++)
-	{
-		for(uxlong j=0; j<swidth ;j++)
-		{
-			svalue = t->tiledata[a][soffset];
-			if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
-			soffset++;
-		}
-		doffset += XRES;
-		soffset += cdiff;
-	}
-	//*	
-}
-
-void CLgfx1::drawspriteanimated(xlong x,xlong y,tileset* s,xlong i) const //! critical
+void CLgfx1::drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const //! critical
 {
 
 }

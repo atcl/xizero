@@ -32,6 +32,10 @@
  */
 ///*
 
+///declarations
+typedef sprite* CLfont;
+///*
+
 ///definitions
 class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2> 
 {
@@ -122,8 +126,8 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlon
 	//*
 	
 	//xlong ssize = s->size;
-	xlong swidth = t->tilewidth;
-	xlong sheight = t->tileheight;
+	xlong swidth = t[a]->width;
+	xlong sheight = t[a]->height;
 	xlong xs = x;
 	xlong ys = y;
 	xlong xe = x + swidth;
@@ -148,7 +152,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlon
 	{
 		for(uxlong j=0; j<swidth ;j++)
 		{
-			srcval = t->tiledata[a][linearc];
+			srcval = t[a]->data[linearc];
 			if(srcval == 0x00FF0000) cldoublebuffer[xoffset+j] = fc;
 			else if(bc!=0 && srcval == 0x00FFFFFF) cldoublebuffer[xoffset+j] = bc;
 			if(i==0 && srcval != 0x00000000) rx++;
@@ -191,9 +195,9 @@ xlong CLgfx2::getfontstringwidth(const char* a,xlong f) const //! critical
 	
 	for(uxlong i=0; i<l; i++)
 	{
-		for(uxlong j=0; j<t->tilewidth; j++)
+		for(uxlong j=0; j<t[i]->width; j++)
 		{
-			if(t->tiledata[i][j] != 0x00000000) r++;
+			if(t[i]->data[j] != 0x00000000) r++;
 		}
 	}
 	
@@ -208,9 +212,9 @@ xlong CLgfx2::getfontstringheight(const char* a,xlong f) const //! critical
 	//*
 	
 	xlong l = clstring->length(a);
-	xlong r = t->tileheight;
+	xlong r = t[0]->height;
 	
-	for(uxlong i=0; i<l; i++) { if(a[i]=='\n') r += t->tileheight; }
+	for(uxlong i=0; i<l; i++) { if(a[i]=='\n') r += t[i]->height; }
 	
 	return r;
 }

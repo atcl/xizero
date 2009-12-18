@@ -8,14 +8,19 @@
 #define HH_CLFORMAT
 ///*
 
-///includes
+///sys includes
 #include <map>
+///*
 
+///idp includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
 #include "CLstruct.hh"
-#include "CLstring.hh"
 #include "CLutils.hh"
+///*
+
+///api includes
+#include "CLcl.hh"
+#include "CLstring.hh"
 ///*
 
 ///header
@@ -44,38 +49,18 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		CLformat() { };
 		~CLformat() { };
 	public:
-		inline xlong*   loadcsv(const xchar* sf,xchar sep=',') const;
-		inline xchar**  loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const;
-		inline sprite*  loadras(const xchar* sf) const;
-		inline tileset* loadtileset(const xchar* sf,xlong tw,xlong th) const;
-		inline xchar**  loadlvl(const xchar* sf) const;
-		inline xmap*    loadini(const xchar* bf) const;
-	
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
 		sprite*  loadras(CLfile* sf) const;
 		sprite*  loadxpm(const xchar* xpm[]) const;
 		sprite*  loadxpm(const xchar* xpm) const;
-		tileset* loadtileset(CLfile* sf,xlong tw,xlong th) const;
+		sprite** loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
 };
 ///*
 
 ///implementation
-xlong* CLformat::loadcsv(const xchar* sf,xchar sep) const { return loadcsv(clsystem->getfile(sf),sep); } //! noncritical
-
-xchar** CLformat::loadmap(const xchar* sf,xlong subconst,xchar rc,xlong rv) const { return loadmap(clsystem->getfile(sf),subconst,rc,rv); } //! noncritical
-
-sprite* CLformat::loadras(const xchar* sf) const { return loadras(clsystem->getfile(sf)); } //! noncritical
-
-tileset* CLformat::loadtileset(const xchar* sf,xlong tw,xlong th) const { return loadtileset(clsystem->getfile(sf),tw,th); } //! noncritical
-
-xchar** CLformat::loadlvl(const xchar* sf) const { return loadlvl(clsystem->getfile(sf)); } //! noncritical
-
-xmap* CLformat::loadini(const xchar* sf) const { return loadini(clsystem->getfile(sf)); } //! noncritical
-
-
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 {
 	//add template parameter to change between xlong*,xchar**,xfixed* and float*
@@ -218,6 +203,8 @@ sprite* CLformat::loadras(CLfile* sf) const //! noncritical
 	r->size = size;
 	r->width = width;
 	r->height = height;
+	r->index = 0;
+	r->count = 1;
 	uxchar* data = new uxchar[fullsize];
 	r->data = static_cast<uxlong*>(static_cast<void*>(&data[0]));
 	
@@ -317,6 +304,8 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	r->width = width;
 	r->height = height;
 	r->size = width*height;
+	r->index = 0;
+	r->count = 1;
 	uxlong* data = new uxlong[r->size];
 	r->data = data;
 	//*
@@ -357,26 +346,29 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	return r;
 }
 
-tileset* CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const //! noncritical
+sprite** CLformat::loadtileset(CLfile* fp,xlong tw,xlong th) const //! noncritical
 {
 	sprite* sp = loadras(fp);
-	tileset* r = new tileset;
-	r->tilewidth = tw;
-	r->tileheight = th;
-	r->tilesize = tw * th;
 	if( (sp->width%tw!=0) || (sp->height%th!=0) ) return 0;
-	r->tilecount = (sp->width / tw) * (sp->height / th);
-	r->tiledata = new uxlong*[r->tilecount];
+	uxlong tilecount = (sp->width / tw) * (sp->height / th);
+	uxlong tilesize = th*tw;
+	sprite** r = new sprite*[tilecount];
 
 	xlong tilesperrow = sp->width / tw;
 	xlong sourceindex = 0;
 	
-	for(xlong i=0; i<r->tilecount; i++)
+	for(xlong i=0; i<tilecount; i++)
 	{
-		r->tiledata[i] = new uxlong[r->tilesize];
+		r[i] = new sprite;
+		r[i]->width = tw;
+		r[i]->height = th;
+		r[i]->size = tilesize;
+		r[i]->index = i;
+		r[i]->count = tilecount;
+		r[i]->data = new uxlong[tilesize];
 		sourceindex = ((i/tilesperrow)*sp->width*th) + ((i%tilesperrow)*tw); 
 		
-		for(xlong j=0; j<th; j++) { for(xlong k=0; k<tw; k++) { r->tiledata[i][j*tw+k] = sp->data[sourceindex+(j*sp->width+k)]; } }
+		for(xlong j=0; j<th; j++) { for(xlong k=0; k<tw; k++) { r[i]->data[j*tw+k] = sp->data[sourceindex+(j*sp->width+k)]; } }
 	}
 	
 	return r;

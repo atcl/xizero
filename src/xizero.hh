@@ -156,6 +156,8 @@ void newgame()
 	//delete testlevel;
 	//*
 	
+	clglobal->cltransitions->fadetoblack();
+	
 	sprite* overscreen = 0;
 	switch(gamestate)
 	{
@@ -177,6 +179,8 @@ void newgame()
 		break;
 		//*
 	}
+	
+	clglobal->cltransitions->dissolve();
 	
 	clglobal->clwindow->showcursor();
 }

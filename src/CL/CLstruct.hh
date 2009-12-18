@@ -65,20 +65,9 @@ struct sprite
 	uxlong  width;
 	uxlong  height;
 	uxlong* data;
+	uxlong  index; //used for tilesets ONLY!
+	uxlong  count; //used for tilesets ONLY!
 };
-
-struct tileset
-{
-	uxlong  tilesize;
-	uxlong  tilewidth;
-	uxlong  tileheight;
-	uxlong  tilecount;
-	uxlong** tiledata;
-	
-	//sprite* getsprite(xlong i);
-};
-
-typedef tileset CLfont;
 
 struct CLgamepadstate
 {
