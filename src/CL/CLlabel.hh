@@ -55,7 +55,7 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	
 	text = clstring->copy(t);
 	textwidth = clgfx2->getfontstringwidth(text,0) + 4;
-	textheight = clgfx2->getfontstringheight(text,0) + 4;
+	textheight = clgfx2->getfontstringheight(text,0);
 	if(w==-1 || w<textwidth) width = textwidth;
 	if(h==-1 || h<textheight) height = textheight;
 	textx = (width - textwidth)>>1;
@@ -74,7 +74,7 @@ void CLlabel::settext(const xchar* t) //! noncritical
 	delete text;
 	text = clstring->copy(t);
 	textwidth = clgfx2->getfontstringwidth(text,0) + 4;
-	textheight = clgfx2->getfontstringheight(text,0) + 4;
+	textheight = clgfx2->getfontstringheight(text,0);
 	if(width<textwidth) width = textwidth;
 	if(height<textheight) height = textheight;
 	textx = (width - textwidth)>>1;

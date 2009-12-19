@@ -59,7 +59,6 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		xlong getfontstringwidth(const char* a,xlong f) const;
 		xlong getfontstringheight(const char* a,xlong f) const;
 		uxlong getEGAcolor(xchar c) const;
-		bool comparecolors(uxlong c1,uxlong c2) const;
 		uxlong blendcolors(uxlong c1,uxlong c2,xlong m) const;
 		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;
 		sprite* savescreen() const;
@@ -238,14 +237,28 @@ uxlong CLgfx2::getEGAcolor(xchar c) const //! critical
 	//*
 }
 
-bool CLgfx2::comparecolors(uxlong c1,uxlong c2) const //! critical
-{
-	return 0;
-}
-
 uxlong* CLgfx2::getgradient(uxlong s,uxlong e,xlong i) const //! critical
 {
-	//((s.r-e.r)/255)*i, ((s.g - e.g)/255)*i, ((s.b - e.b)/255)*i
+	doubleword a = { s };
+	doubleword b = { e };
+	
+	float at = (float(b.db[0]) - float(a.db[0])) / float(i); 
+	float rt = (float(b.db[1]) - float(a.db[1])) / float(i); 
+	float gt = (float(b.db[2]) - float(a.db[2])) / float(i); 
+	float bt = (float(b.db[3]) - float(a.db[3])) / float(i); 
+	
+	uxlong* r = new uxlong[i];
+	
+	for(xlong j=0; j<i; j++)
+	{
+		a.db[0] = uxchar(float(a.db[0]) + at);
+		a.db[1] = uxchar(float(a.db[1]) + rt);
+		a.db[2] = uxchar(float(a.db[2]) + gt);
+		a.db[3] = uxchar(float(a.db[3]) + bt);
+		r[i] = a.dd;
+	}
+	
+	return r;
 }
 
 uxlong CLgfx2::blendcolors(uxlong c1,uxlong c2,xlong m) const //! critical
@@ -261,9 +274,9 @@ uxlong CLgfx2::blendcolors(uxlong c1,uxlong c2,xlong m) const //! critical
 		case 4: r = ~(c1 & c2); break; //nand
 		case 5: r = ~(c1 | c2); break; //nor
 		case 6: r = ~c1; break; //not
-		case 7:  break; //add
-		case 8:  break; //sub
-		case 9:  break; //mul
+		case 7: r = byteadd(c1,c2); break; //add
+		case 8: r = bytesub(c1,c2); break; //sub
+		case 9: r = bytemul(c1,c2); break; //mul
 		default: r = c1; break;
 	}
 	

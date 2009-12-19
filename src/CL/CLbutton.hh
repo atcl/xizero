@@ -63,11 +63,12 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	
 	caption = clstring->copy(c);
 	captionwidth = clgfx2->getfontstringwidth(caption,0) + 4;
-	captionheight = clgfx2->getfontstringheight(caption,0) + 4;
+	captionheight = clgfx2->getfontstringheight(caption,0);
 	if(w==-1 || w<captionwidth) width = captionwidth;
 	if(h==-1 || h<captionheight) height = captionheight;
 	captionx = (width - captionwidth)>>1;
 	captiony = (height - captionheight)>>1;
+	flat = f;
 	
 	buttonlist->append(this);
 }
@@ -86,7 +87,7 @@ void CLbutton::setcaption(xchar* t) //! noncritical
 	delete caption;
 	caption = clstring->copy(t);
 	captionwidth = clgfx2->getfontstringwidth(t,0) + 4;
-	captionheight = clgfx2->getfontstringheight(t,0) + 4;
+	captionheight = clgfx2->getfontstringheight(t,0);
 	if(width<captionwidth) width = captionwidth;
 	if(height<captionheight) height = captionheight;
 	captionx = (width - captionwidth)>>1;

@@ -52,7 +52,7 @@ class CLmenu : public virtual CLcl
 	public:
 		CLmenu(void (*p)());
 		~CLmenu();
-		void draw();
+		void draw() const;
 };
 ///*
 
@@ -61,10 +61,10 @@ CLmenu::CLmenu(void (*p)()) //! noncritical
 {
 	pause = p;
 	icon = clformat->loadxpm(CLicon);
-	title = new CLlabel(20,2,756,16,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",1);
-	exit = new CLbutton(20,20,80,20,0,0x00C0C0C0,0,p,"Exit",0);
-	info = new CLbutton(100,20,80,20,0,0x00C0C0C0,0,p,"Info",0);
-	about = new CLbutton(180,20,80,20,0,0x00C0C0C0,0,p,"About",1);
+	title = new CLlabel(0,0,XRES,20,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",0);
+	exit = new CLbutton(781,1,18,18,0,0x00C0C0C0,0,p,"X",1);
+	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,p,"Info",1);
+	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,p,"About",1);
 	clwindow->setsyskey('^',pause);
 }
 
@@ -77,13 +77,13 @@ CLmenu::~CLmenu() //! noncritical
 	delete about;	
 }
 
-void CLmenu::draw() //! noncritical
+void CLmenu::draw() const //! noncritical
 {
 	//pause();
-	clgfx1->drawrectangle(0,0,XRES,40,0x00C0C0C0,1);
-	clgfx1->drawsprite(2,2,icon);
 	title->draw();
+	clgfx1->drawsprite(2,2,icon);
 	exit->draw();
+	clgfx1->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
 	info->draw();
 	about->draw();
 }

@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	//audio test:
 	CLar* clsdata = new CLar(cldata->findbyname("sounds.a"));
 	clglobal->clsound->preload(clsdata);
-	clglobal->clsound->play(1,1);
+	//clglobal->clsound->play(1,1);
 	//*
 	
 	//load height
