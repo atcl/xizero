@@ -93,25 +93,25 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	xlong doffset = ((y2-y1)*XRES);
 	xlong diff    = x2-x1;
 	uxlong c3     = c2;
-	if(f) c3 = 0x000FFFFFF - c2;
+	if(f) c3 = 0x00FFFFFF - c2;
 
 	for(int i=y1; i<=y2; i++)
 	{
-		cldoublebuffer[offset1] = c2;
+		cldoublebuffer[offset1] = c3;
 		offset1++;
 		for(int j=x1+1; j<x2; j++)
 		{
 			cldoublebuffer[offset1] = c1;
 			offset1++;
 		}
-		cldoublebuffer[offset1] = c3;
+		cldoublebuffer[offset1] = c2;
 		offset1 += XRES - diff;
 	}
 
 	for(int k=x1; k<x2; k++)
 	{
-		cldoublebuffer[offset2] = c2;
-		cldoublebuffer[offset2+doffset] = c3;
+		cldoublebuffer[offset2] = c3;
+		cldoublebuffer[offset2+doffset] = c2;
 		offset2++;
 	}
 }
