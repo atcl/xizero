@@ -70,10 +70,7 @@ void CLfifo<member>::in(member* f) //! critical
 	//*
 
 	//place first fifo member
-	if(length == 0)
-	{
-		tail = t;
-	}
+	if(length == 0) { tail = t; }
 	//
 	
 	//place default fifo member
@@ -96,7 +93,7 @@ template<class member>
 member* CLfifo<member>::out() //! critical
 {
 	//is fifo empty
-	if(length == 0) return 0;
+	if(length == 0) { return 0; }
 	//*
 	
 	//is fifo almost empty

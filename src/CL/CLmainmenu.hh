@@ -45,7 +45,7 @@ class CLmainmenu : public virtual CLcl
 		CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 		void draw() const;
-		void setback(sprite* s);
+		void setback(sprite* s) { background = s; };
 };
 ///*
 
@@ -123,8 +123,6 @@ void CLmainmenu::draw() const //! critical
 	for(uxlong i=0; i<buttoncount; i++) { button[i]->draw(); }
 	footer->draw();
 }
-
-void CLmainmenu::setback(sprite* s) { background = s; } //! noncritical
 ///*
 
 #endif

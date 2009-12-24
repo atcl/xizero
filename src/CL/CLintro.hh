@@ -43,6 +43,7 @@ class CLintro : public virtual CLcl, public CLsingle<CLintro>
 	public:
 		void atcrosslevel(CLfile* sf) const;
 		void xizero(CLfile* sf) const;
+		void torus() const;
 };
 ///*
 

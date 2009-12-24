@@ -318,11 +318,8 @@ float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 	float tk = t0;
 	float xk = x0;
 
-	for(int i=1;i<=k;i++)
-	{
-		xk = xk + (h * f(tk,xk) );
-	}
-
+	for(int i=1;i<=k;i++) { xk = xk + (h * f(tk,xk) ); }
+	
 	return xk;
 }
 

@@ -79,10 +79,8 @@ uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
 
 		for(uxlong j=0; j<8; j++)
 		{
-			if (r & 0x80000000) r = (r << 1) ^ crc32 ^ (o >> 7);
-
-			else r = (r << 1) ^ (o >> 7);
-
+			if (r & 0x80000000) { r = (r << 1) ^ crc32 ^ (o >> 7); }
+			else { r = (r << 1) ^ (o >> 7); }
 			o <<= 1;
 		}
 	}

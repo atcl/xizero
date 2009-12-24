@@ -8,13 +8,16 @@
 #define HH_CLSCREEN
 ///*
 
-///includes
+///idp includes
 #include "CLtypes.hh"
-#include "CLbuffer.hh"
 #include "CLutils.hh"
+#include "CLstruct.hh"
+///api includes
+
+///
+#include "CLbuffer.hh"
 #include "CLgfx1.hh"
 #include "CLwindow.hh"
-#include "CLstruct.hh"
 ///*
 
 ///header
@@ -36,9 +39,6 @@ class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
 	friend class CLsingle<CLtransitions>;
 	
 	private:
-		xchar fade_const;
-		xlong diss_const;
-		xlong circ_const;
 		CLtransitions() { };
 		~CLtransitions() { };
 	public:

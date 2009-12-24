@@ -57,7 +57,7 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		sprite** loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
-		void*    loadwav(CLfile* bf) const;
+		//void*    loadwav(CLfile* bf) const;
 };
 ///*
 
@@ -433,89 +433,6 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	}
 	
 	return r;
-}
-
-void* CLformat::loadwav(CLfile* bf) const
-{
-	//~ if(device<0 || nosound==1) return 0;
-	//~ 
-	//~ xlong playid = fork();
-	 //~ 
-	//~ if(playid == 0)
-	//~ {
-		//~ CLwav current;
-		//~ 
-		//~ current.file = clsystem->getfile(f);
-		//~ 
-		//~ //check if "RIFF"
-		//~ if(current.file->data[0] != 'FFIR') { say(u8"wav loading error (RIFF)"); return 0; }
-		//~ //*
-		//~ 
-		//~ //check if "WAVE"
-		//~ if(current.file->data[2] != 'EVAW') { say(u8"wav loading error (WAVE)"); return 0; }
-		//~ //*
-		//~ 
-		//~ //check if "fmt "
-		//~ if(current.file->data[3] != ' tmf') { say(u8"wav loading error (fmt )"); return 0; }
-		//~ //*
-		//~ 
-		//~ //get length
-		//~ current.length = current.file->data[4];
-		//~ //*
-		//~ 
-		//~ //get and check if pcm
-		//~ current.pcm = (current.file->data[5]>>16);
-		//~ if(current.pcm != 1) { say(u8"wav loading error (pcm)"); return 0; }
-		//~ say(current.pcm);
-		//~ //*
-		//~ 
-		//~ //get and check channels
-		//~ current.channel = (current.file->data[5]<<16)>>16;
-		//~ if(current.channel != 1) { say(u8"wav loading error (channel)"); return 0; }
-		//~ say(current.channel);
-		//~ //*
-		//~ 
-		//~ //get bitrate
-		//~ current.rate = current.file->data[6];
-		//~ if(current.rate != 44100) { say(u8"wav loading error (rate)"); return 0; }
-		//~ say(current.rate);
-		//~ //*
-		//~ 
-		//~ //get and check bits
-		//~ current.bits = (current.file->data[8]>>16);
-		//~ if(current.bits != 16) { say(u8"wav loading error (bits)"); return 0; }
-		//~ say(current.bits);
-		//~ //*
-		//~ 
-		//~ //check if "data"
-		//~ if(current.file->data[9] != 'atad') { say(u8"wav loading error (data)"); return 0; }
-		//~ //*
-//~ 
-		//~ //set device
-		//~ //later.. imo in init
-		//~ //*
-//~ 
-		//~ //write to dsp device
-		//~ while(true)
-		//~ {
-			//~ uxlong till = (current.file->size-44)/1024;
-			//~ for(uxlong i=0; i<till; i++)
-			//~ {
-				//~ write(device,&current.file->text[44+(i*1024)],1024);
-			//~ }
-			//~ 
-			//~ if(!l) break;
-		//~ }
-		//~ //*	
-		//~ 
-		//~ _exit(playid);
-	//~ }
-	//~ else
-	//~ {
-		//~ if(l) isloop = playid;
-		 //~ 
-		//~ return 1;
-	//~ }
 }
 ///*
 

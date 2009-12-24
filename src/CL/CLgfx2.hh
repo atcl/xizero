@@ -46,6 +46,7 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		CLfont* mono;
 		CLfont* line;
 		CLfont* term;
+		CLfont* symb;
 		CLfont* segm;
 		CLfont* tall;
 		CLfont** fonts;
@@ -70,24 +71,20 @@ CLgfx2::CLgfx2() { tele = mono = line = term = segm  = 0; }; //! noncritical
 
 void CLgfx2::loadfonts(CLfile* sf) //! critical
 {
-	fonts = new CLfont*[6];
+	fonts = new CLfont*[8];
 	CLar* fontsa = new CLar(sf);
 	mono = fonts[0] = clformat->loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
 	tele = fonts[1] = clformat->loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
 	line = fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
 	term = fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
 	segm = fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),32,60);
-	//tall = fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),16,16);
+	//tall = fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),32,32);
+	//symb = fonts[6] = clformat->loadtileset(fontsa->findbyname(u8"CLsymbtype.fnt"),16,16);
 }
 
 void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const //! critical
 {
 	//draw to top level of zbuffer!
-	
-	if(x1>x2) x1 ^= x2 ^= x1 ^= x2;
-	if(y1>y2) y1 ^= y2 ^= y1 ^= y2;
-	if(x1<0 || y1<0 || x2>XRES || y2>YRES || x2<0 || y2<0 || x1>XRES || y1>YRES) return;
-	
 	xlong offset1 = (y1*XRES)+x1;
 	xlong offset2 = offset1;
 	xlong doffset = ((y2-y1)*XRES);

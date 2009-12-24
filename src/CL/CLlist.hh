@@ -151,9 +151,6 @@ member* CLlist<member>::getcurrentdata() const //! noncritical
 {
 	//return current members data
 	if(current!=0) return current->data;
-	//*
-	
-	//return zero if list is empty
 	else return 0;
 	//*
 }
@@ -163,9 +160,6 @@ xchar* CLlist<member>::getcurrentname() const //! noncritical
 {
 	//return current members name
 	if(current!=0) return current->name;
-	//*
-	
-	//return zero if list is empty
 	else return 0;
 	//*
 }
@@ -242,7 +236,7 @@ bool CLlist<member>::seekdata(member* s) //! critical
 
 	for(uxlong j=0;j<length;j++)
 	{
-		if(current->data == s) return 1;
+		if(current->data == s) { return 1; }
 		setnext();
 	}
 	

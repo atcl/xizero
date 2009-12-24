@@ -62,7 +62,7 @@ CLmenu::CLmenu(void (*p)()) //! noncritical
 	pause = p;
 	icon = clformat->loadxpm(CLicon);
 	title = new CLlabel(0,0,XRES,20,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",0);
-	exit = new CLbutton(781,1,18,18,0,0x00C0C0C0,0,p,"X",1);
+	exit = new CLbutton(780,1,18,18,0,0x00C0C0C0,0,p,"X",1);
 	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,p,"Info",1);
 	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,p,"About",1);
 	clwindow->setsyskey('^',pause);

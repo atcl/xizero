@@ -23,6 +23,7 @@
 #include "CLgame.hh"
 #include "CLmisc3d.hh"
 #include "CLcl.hh"
+#include "CLsound.hh"
 ///*
 
 ///headers
@@ -77,6 +78,7 @@ class CLentity : public virtual CLcl
 		xlong shieldupdate;
 		xlong armor;
 		xlong points;
+		xlong sndfire;
 		void setspeed();
 		void fire(xlong at,xlong d,xlong i,xlong tz,xlong m=0);
 		//virtual void pretransform() = 0;
@@ -125,6 +127,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 	startposition.z += ammodocking->z;
 	clmisc3d->project(startposition,position);
 	ammoman->fire(at,startposition,targetdirection);
+	//clsound->play(sndfire);
 }
 
 template<int I>
@@ -282,10 +285,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	ammotype = entityptr->ammotype;
 	firerate = entityptr->firerate;
 	fireupdate = new xlong[ammomounts];
-	for(uxlong j=0; j<ammomounts; j++)
-	{
-		fireupdate[j] = clsystem->getmilliseconds();
-	}
+	for(uxlong j=0; j<ammomounts; j++) { fireupdate[j] = clsystem->getmilliseconds(); }
 	//*
 	
 	//create ammo manager
@@ -340,7 +340,7 @@ void CLentity<I>::display(xlong modelorshadow) //! critical
 		{
 			case 0:
 				//display model(s)
-				for(uxlong i=0; i<I; i++) model[i]->display(sposition,FLAT + AMBIENT);
+				for(uxlong i=0; i<I; i++) { model[i]->display(sposition,FLAT + AMBIENT); }
 				//*
 				
 				//display ammo
@@ -350,7 +350,7 @@ void CLentity<I>::display(xlong modelorshadow) //! critical
 			
 			case 1:
 				//display shadow(s)
-				for(uxlong i=0; i<I; i++) model[i]->display(sposition,SHADOW);
+				for(uxlong i=0; i<I; i++) { model[i]->display(sposition,SHADOW); }
 				//*
 			break;
 		}
@@ -360,10 +360,10 @@ void CLentity<I>::display(xlong modelorshadow) //! critical
 template<int I>
 void CLentity<I>::hit(xlong h) //! critical
 {
-	if(shield>0) shield -=h;
-	else health -= h; 
+	if(shield>0) { shield -=h; }
+	else { health -= h; }
 	
-	if(shield<0) health -= -shield; 
+	if(shield<0) { health -= -shield; } 
 }
 
 template<int I>

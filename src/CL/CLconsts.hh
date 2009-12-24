@@ -97,6 +97,7 @@
 #define TERMFONT 3;
 #define SEGMFONT 4;
 #define TALLFONT 5;
+#define SYMBFONT 6;
 //*
 
 //3d engine consts
