@@ -106,7 +106,21 @@ xlong CLstring::linecount(const xchar* s) const //! noncritical
 
 xlong CLstring::find(const xchar* s,const xchar* f,xlong p) const //! noncritical
 {
+	xlong l = length(s);
+	xlong m = length(f);
+	xlong t = 0;
+	xlong r = -1;
 	
+	if( (p>l) || (m>l) || (l-m<p) ) { return -1; }
+	
+	for(xlong i=p; i<l; i++)
+	{
+		t = i;
+		for(xlong j=0; j<m; j++,t++) { if(s[t]!=f[j]) break; }
+		if(t==i+m) { r = i; }
+	}
+	
+	return r;
 }
 
 uxlong CLstring::hex(const xchar* s) const //!  noncritical
