@@ -56,6 +56,8 @@ void inline err(const xchar* f,const xchar* m) { std::cout << f << ": " << m << 
 
 void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } //force program exit
 
+void inline nfo() { std::cout << u8"atCROSSLEVEL's XiZero Version 0.1" << std::endl; }
+
 xlong inline lt(const xchar* a,const xchar* b)
 {
 	xlong i = 0;

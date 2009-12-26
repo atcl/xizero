@@ -33,6 +33,8 @@
 ///definitions
 class CLmsgbox : public virtual CLcl, public CLsingle<CLmsgbox>
 {
+	friend class CLsingle<CLmsgbox>;
+	
 	private:
 		Display* Xdisplay;
 		Window Xwindow;
@@ -43,10 +45,9 @@ class CLmsgbox : public virtual CLcl, public CLsingle<CLmsgbox>
 		XColor Xblack;
 		XColor Xgrey;
 		XFontStruct* Xfont;
-		
-	public:
 		CLmsgbox();
 		~CLmsgbox();
+	public:
 		xlong msgbox(const xchar* title,const xchar* message);
 		xlong yesnobox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);

@@ -55,10 +55,10 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 	public:
 		void loadfonts(CLfile* sf);
 		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const;
-		xlong drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlong bc=0) const;
-		void drawfontstring(xlong x,xlong y,const xchar* a,xlong f,uxlong fc,uxlong bc=0) const;
-		xlong getfontstringwidth(const char* a,xlong f) const;
-		xlong getfontstringheight(const char* a,xlong f) const;
+		xlong drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc=0) const;
+		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0) const;
+		xlong getfontstringwidth(const char* a,uxlong f) const;
+		xlong getfontstringheight(const char* a,uxlong f) const;
 		uxlong getEGAcolor(xchar c) const;
 		uxlong blendcolors(uxlong c1,uxlong c2,xlong m) const;
 		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;
@@ -113,7 +113,7 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 	}
 }
 
-xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlong bc) const //! critical
+xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc) const //! critical
 {
 	//select font
 	if(f>4) f = 0;
@@ -160,7 +160,7 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,xlong f,uxlong fc,uxlon
 	return rx;
 }
 
-void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong f,uxlong fc,uxlong bc) const //! critical
+void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc) const //! critical
 {
 	xlong l = clstring->length(a);
 	xlong t = x;
@@ -176,7 +176,7 @@ void CLgfx2::drawfontstring(xlong x,xlong y,const xchar* a,xlong f,uxlong fc,uxl
 	}
 }
 
-xlong CLgfx2::getfontstringwidth(const char* a,xlong f) const //! critical
+xlong CLgfx2::getfontstringwidth(const char* a,uxlong f) const //! critical
 {
 	//select font
 	if(f>4) f = 0;
@@ -193,7 +193,7 @@ xlong CLgfx2::getfontstringwidth(const char* a,xlong f) const //! critical
 	return r;
 }
 
-xlong CLgfx2::getfontstringheight(const char* a,xlong f) const //! critical
+xlong CLgfx2::getfontstringheight(const char* a,uxlong f) const //! critical
 {
 	//select font
 	if(f>4) f = 0;

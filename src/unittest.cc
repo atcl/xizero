@@ -18,7 +18,8 @@ int main(int argc, char** argv)
 	cldata = new CLar(BASEDIR"xizero.dat");
 	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
 	
-	CLmenu* sysmenu = new CLmenu(&CLgarbage);		
+	CLmenu* sysmenu = new CLmenu();
+	
 	//*
 
 		//test tree:
@@ -419,7 +420,8 @@ int main(int argc, char** argv)
 			case '6':    linearM->scale(1,1,0.9);    cubus->update(linearM); break;
 
 			//Control:
-			case '^':    mode = !mode; break;
+			//case '^':    mode = !mode; break;
+			case '^':    sysmenu->show();
 			case '+':    cubus->reset(); ac = exp = 0; break;
 			case '-':    shadows = !shadows; break;
 			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
@@ -484,8 +486,6 @@ int main(int argc, char** argv)
 			terrows[i]->display(q,SHAPE);
 			q.y += 20;
 		}
-	
-		sysmenu->draw();
 	
 		linearM->unit();
 

@@ -13,6 +13,7 @@
 #include "CLcl.hh"
 #include "CLresource.hh"
 #include "CLstruct.hh"
+#include "CLutils.hh"
 ///*
 
 ///api includes
@@ -20,6 +21,7 @@
 #include "CLlabel.hh"
 #include "CLbutton.hh"
 #include "CLgfx1.hh"
+#include "CLgfx2.hh"
 #include "CLsystem.hh"
 ///*
 
@@ -40,36 +42,41 @@
 class CLmenu : public virtual CLcl
 {
 	private:
+		uxchar    syskey;
 		sprite*   icon;
 		CLlabel*  title;
 		CLbutton* exit;
 		CLbutton* info;
 		CLbutton* about;
 		void (*pause)();
-		void (*e)();
-		void (*i)();
-		void (*a)();
 	public:
-		CLmenu(void (*p)());
+		CLmenu();
 		~CLmenu();
-		void draw() const;
+		void show();
+		static void wrapper(void* me);
+		uxchar getsyskey() const { return syskey; };
 };
 ///*
 
 ///implementation
-CLmenu::CLmenu(void (*p)()) //! noncritical
+CLmenu::CLmenu() //! noncritical
 {
-	pause = p;
+	syskey = '^';
 	icon = clformat->loadxpm(CLicon);
 	title = new CLlabel(0,0,XRES,20,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",0);
-	exit = new CLbutton(780,1,18,18,0,0x00C0C0C0,0,p,"X",1);
-	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,p,"Info",1);
-	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,p,"About",1);
-	clwindow->setsyskey('^',pause);
+	exit = new CLbutton(780,1,18,18,0,0x00C0C0C0,0,&bye,"X",1);
+	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,&nfo,"Info",1);
+	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,&nfo,"About",1);
+	
+	exit->setvisible(0);
+	info->setvisible(0);
+	about->setvisible(0);
+	
+	clwindow->setsyskey(syskey,&wrapper,this);
 }
 
 CLmenu::~CLmenu() //! noncritical
-{ 
+{
 	delete icon;
 	delete title;
 	delete exit;
@@ -77,15 +84,48 @@ CLmenu::~CLmenu() //! noncritical
 	delete about;	
 }
 
-void CLmenu::draw() const //! noncritical
+void CLmenu::wrapper(void* me)
 {
+	CLmenu* myself = (CLmenu*)me;
+	myself->show();
+}
+
+void CLmenu::show() //! noncritical
+{
+	//save background
+	sprite* back = clgfx2->savescreen();
+	//*
+
+	//issue pause command to engine
 	//pause();
-	title->draw();
-	clgfx1->drawsprite(2,2,icon);
-	exit->draw();
-	clgfx1->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
-	info->draw();
-	about->draw();
+	//*
+	
+	//activate mouse cursor and activate buttons
+	clwindow->showcursor();
+	exit->setvisible(1);
+	info->setvisible(1);
+	about->setvisible(1);
+	//*
+	
+	while(clwindow->run() && clwindow->getinkey()!=syskey)
+	{
+		CLbutton::checkclick();
+		clgfx1->drawscreen(back);
+		
+		title->draw();
+		clgfx1->drawsprite(2,2,icon);
+		exit->draw();
+		clgfx1->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
+		info->draw();
+		about->draw();
+	}
+	
+	//activate mouse cursor and activate buttons
+	clwindow->hidecursor();
+	exit->setvisible(0);
+	info->setvisible(0);
+	about->setvisible(0);
+	//*
 }
 ///*
 

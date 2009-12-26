@@ -65,8 +65,9 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong mouserb;
 		bool  displaycursor;
 		sprite* cursor;
-		xlong syskey;
-		void (*sysaction)();
+		uxchar syskey;
+		void (*sysmenu)(void* o);
+		void* sysobj;
 		CLwindow();
 		~CLwindow();
 		void handle();
@@ -82,7 +83,7 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmousey() const { return mousey; };
 		xlong getmouselb() const { return mouselb; };
 		xlong getmouserb() const { return mouserb; };
-		void setsyskey(uxchar k,void (*a)());
+		void setsyskey(uxchar k=0,void (*m)(void* o)=0,void* mo=0);
 };
 ///*
 
@@ -163,7 +164,7 @@ void CLwindow::handle() //! critical
 			case KeyPress:
 				key = turbo = xchar(XLookupKeysym((XKeyEvent*)&Xevent,0));
 				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent));
-				if(key == syskey) sysaction();
+				if(key == syskey && syskey!=0) { sysmenu(sysobj); }
 			break;
 			
 			case ButtonPress:
@@ -231,7 +232,7 @@ xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncr
 
 xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
 
-void CLwindow::setsyskey(uxchar k,void (*a)()) { syskey = k; sysaction = a; } //! noncritical
+void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 ///*
 	
 #endif

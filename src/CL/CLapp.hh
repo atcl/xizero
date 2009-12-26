@@ -33,16 +33,17 @@
 ///definitions
 class CLapp : public virtual CLcl, public CLsingle<CLapp>
 {
+	friend class CLsingle<CLapp>;
+	
 	private:
 		xchar* name;
 		xchar* title;
 		xchar* icon;
 		uxlong size;
 		uxlong version;
-		
-	public:
 		CLapp();
 		~CLapp() { };
+	public:
 		void exit(xlong r=0,const xchar* m="");
 		xchar inkey(bool b);
 		xchar* getname() const { return name; };
