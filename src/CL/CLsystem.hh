@@ -61,7 +61,7 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 
 	FILE *of;
 
-	//check if file exists
+	//check if file exists (improve!!!)
 	if( !( of = fopen(fn,"rb") ) ) 
 	{
 		delete re;
@@ -70,8 +70,6 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 		return 0;
 	}
 	//*
-
-	of = fopen(fn,"rb"); //necessary?
 
 	//get file size
 	fseek (of,0,SEEK_END);

@@ -12,6 +12,7 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLsystem.hh"
+#include "CLstring.hh"
 #include "CLsingle.hh"
 ///*
 
@@ -42,7 +43,7 @@
 #define MMXFLAG   0b00000000100000000000000000000000
 #define SSEFLAG   0b00000010000000000000000000000000
 #define SSE2FLAG  0b00000100000000000000000000000000
-#define SSE3FLAG  0b00000000000000000000001000000001
+#define SSE3FLAG  0b00000000000000000000001000000000
 #define SSE41FLAG 0b00000000000010000000000000000000
 #define SSE42FLAG 0b00000000000100000000000000000000
 #define SSE4aFLAG 0b00000000000000000000000001000000
@@ -58,81 +59,57 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 	friend class CLsingle<CLdetect>;
 	
 	private:
-		xlong pcpu;
 		xlong pcores;
-		xlong l2;
+		xlong l2c;
 		bool havemmx;
 		bool havesse;
-		bool havex86;
 		CLdetect();
 		~CLdetect() { };
 	public:
-		xchar* cpu() const;
 		xlong cores() const { return pcores; };
 		xlong ram() const;
-		xchar* gpu() const;
 		xlong vram() const;
-		xchar* sb() const;
 		xlong ps() const;
+		xlong l2() const;
 		
 		bool mmx() const { return havemmx; };
 		bool sse() const { return havesse; };
-		bool x86() const { return havex86; };
 };
 ///*
 
 ///implementation
 CLdetect::CLdetect() //! noncritical
 {
-	#ifdef X86 
-		havex86 = 1;
-		havemmx = 0;
-		havesse = 0;
-	#else
-		havex86 = 0;
-		havemmx = 0;
-		havesse = 0;
-	#endif
-	
 	//cpu
-	xlong aa = 0;
-	xlong cc = 0;
-	xlong dd = 0;
-	pcpu = 0;
-	//~ __asm__ __volatile__ ("cpuid":"=c"(cc):"a"(1));
-	//~ if(cc && SSE3FLAG) pcpu += SSE3;
-	//~ if(cc && SSE41FLAG) pcpu += SSE41;
-	//~ if(cc && SSE42FLAG) pcpu += SSE42;
-	//~ __asm__ __volatile__ ("cpuid":"=d"(dd):"a"(1));
-	//~ if(dd && FPUFLAG) pcpu += FPU;
-	//~ if(dd && MMXFLAG) pcpu += MMX;
-	//~ if(dd && SSEFLAG) pcpu += SSE;
-	//~ if(dd && SSE2FLAG) pcpu += SSE2;
-	//~ if(dd && HTTFLAG) pcpu += HTT;
+	xlong c1 = 0;
+	xlong c2 = 0;
+	xlong c3 = 0;
+	xlong c4 = 0;
+	xlong c5 = 0;
 	
-	//~ cc=0;
-	//~ __asm__ __volatile__ ("cpuid":"=c"(cc):"a"(0x80000001));
-	//~ if(cc && SSE4aFLAG) pcpu += SSE4a;
-	//~ if(cc && SSE5aFLAG) pcpu += SSE5a;
-	//~ if(cc && PREFFLAG) pcpu += PREF;
-//~ 
-	//~ //cores
-	//~ aa=0;
-	//~ __asm__ __volatile__ ("cpuid":"=a"(aa):"a"(0x00000004));
-	//~ cc=0;
-	//~ __asm__ __volatile__ ("cpuid":"=c"(cc):"a"(0x80000008));
-	//~ pcores = (aa>>25) * (cc & 255);
-
-	//...	
+	//issue cpuid
+	__asm__ __volatile__ ("cpuid; nop;":"=d"(c2):"a"(0x00000001));
+	__asm__ __volatile__ ("cpuid":"=c"(c3):"a"(0x80000001));
+	__asm__ __volatile__ ("cpuid":"=a"(c4):"a"(0x00000004));
+	__asm__ __volatile__ ("cpuid":"=c"(c5):"a"(0x80000008));
+	//*
+	
+	//check ram //fix!
+	CLfile* mem = clsystem->getfile("/proc/meminfo");
+	xlong p = clstring->find(mem->text,"MemTotal:");
+	xlong m = clstring->tolong(&(mem->text[p+9]));
+	//*
+	
+	//process cuid results here so vars can find way back
+	if( (c2 & MMXFLAG)!=0 ) { havemmx = 1; } else { havemmx = 0; }
+	if( (c2 & SSEFLAG)!=0 ) { havesse = 1; } else { havesse = 0; }
+	pcores = (c4>>25); // * (c5 & 255); //fix!
+	//*
 }
 
 xlong CLdetect::ram() const { } //! noncritical
 
-xchar* CLdetect::gpu() const { } //! noncritical
-
 xlong CLdetect::vram() const { } //! noncritical
-
-xchar* CLdetect::sb() const { } //! noncritical
 
 xlong CLdetect::ps() const { } //! noncritical
 ///*
