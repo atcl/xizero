@@ -52,9 +52,9 @@ class CLpolygon : public virtual CLcl
 		CLfvector rnormal;
 
 		void polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		template<class clvector>clvector getzplanecoords(const clvector& a,const clvector& b,float pz);
-		template<class clvector>clvector getxplanecoords(const clvector& a,const clvector& b,float px);
-		template<class clvector>clvector getyplanecoords(const clvector& a,const clvector& b,float py);
+		template<class clvector> inline clvector getzplanecoords(const clvector& a,const clvector& b,float pz);
+		template<class clvector> inline clvector getxplanecoords(const clvector& a,const clvector& b,float px);
+		template<class clvector> inline clvector getyplanecoords(const clvector& a,const clvector& b,float py);
 		void zclipping();
 		void project(xlong px=0,xlong py=0,bool c=0);
 		void xyclipping();
@@ -63,13 +63,12 @@ class CLpolygon : public virtual CLcl
 		void flatshade(float pz,bool ambient,bool zlight);
 		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
 		void rasterize(xlong shadow); //too slow!!!
-		xlong circleinc(xlong x,xlong pc);
-		xlong circledec(xlong x,xlong pc);
+		inline xlong circleinc(xlong x,xlong pc);
+		inline xlong circledec(xlong x,xlong pc);
 
 	public:
 		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
-		~CLpolygon();
-		
+		~CLpolygon() { };
 		void update(CLmatrix* m,bool i);
 		void partupdate(CLmatrix* m);
 		void display(const CLlvector& p,xshort flags);
@@ -99,9 +98,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! criti
 	xlong off = y1*XRES+x1;
 
 	if(dx<0) { dx = -dx; xs = -xs; }
-
 	if(dy<0) { dy = -dy; ys = -ys; }
-
 	if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
 
 	len = dx+1;
@@ -121,38 +118,26 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! criti
 }
 
 template<class clvector>
-clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz)  //! noncritical //!change float pz to template arg of clvector!
+clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz)  //! noncritical
 {
 	float m = (pz - b.z) / (a.z - b.z);
-
-	clvector c;
-	c.x = (a.x - b.x) * m + b.x;
-	c.y = (a.y - b.y) * m + b.y;
-	c.z = pz;
+	clvector c( ((a.x - b.x) * m + b.x),((a.y - b.y) * m + b.y),pz );
 	return c;
 }
 
 template<class clvector>
-clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px)  //! noncritical //!change float pz to template arg of clvector!
+clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px)  //! noncritical
 {
 	float m = (px - b.x) / (a.x - b.x);
-
-	clvector c;
-	c.x = xlong(px);
-	c.y = xlong((a.y - b.y) * m + b.y);
-	c.z = xlong((a.z - b.z) * m + b.z);
+	clvector c( xlong(px),xlong((a.y - b.y) * m + b.y),xlong((a.z - b.z) * m + b.z) );
 	return c;
 }
 
 template<class clvector>
-clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py)  //! noncritical //!change float pz to template arg of clvector!
+clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py)  //! noncritical
 {
 	float m = (py - b.y) / (a.y - b.y);
-
-	clvector c;
-	c.x = xlong((a.x - b.x) * m + b.x);
-	c.y = xlong(py);
-	c.z = xlong((a.z - b.z) * m + b.z);
+	clvector c( xlong((a.x - b.x) * m + b.x),xlong(py),xlong((a.z - b.z) * m + b.z) );
 	return c;
 }
 
@@ -222,11 +207,7 @@ void CLpolygon::zclipping() //! noncritical
 void CLpolygon::project(xlong px,xlong py,bool c) //! critical
 {
 	//use screen center as attached position if wanted
-	if(c)
-	{
-		px = (XRES>>1);
-		py = (YRES>>1);
-	}
+	if(c) { px = (XRES>>1); py = (YRES>>1); }
 	//*
 
 	//project each vertex if vertex's z is greater zero
@@ -399,7 +380,7 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight) //! critical
 	float t = (normal * cllight) / ( !normal * !cllight );
 	t = clmath->absolute(t);
 	
-	if(t > 1) t = 1;
+	if(t > 1) { t = 1; }
 
 	uxchar ambientlighting = 0;
 	if(t<0.1)
@@ -423,7 +404,7 @@ template<class clvector>
 void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s) //! critical
 {
 	xlong length = xlong(e.y - b.y);
-	if(length <= 0) return;
+	if(length<=0) { return; }
 
 	float b_off = (b.y * XRES) + b.x;
 	float e_off = (e.y * XRES) + e.x;
@@ -439,15 +420,9 @@ void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s) //!
 	}
 }
 
-xlong CLpolygon::circleinc(xlong x,xlong pc) //! critical
-{
-	return ( (x+1) >= pc ) ? 0 : x+1;
-}
+xlong CLpolygon::circleinc(xlong x,xlong pc) { return ( (x+1) >= pc ) ? 0 : x+1; } //! critical
 
-xlong CLpolygon::circledec(xlong x,xlong pc) //! critical
-{
-	return ( (x-1) < 0 ) ? pc-1 : x-1;
-}
+xlong CLpolygon::circledec(xlong x,xlong pc) { return ( (x-1) < 0 ) ? pc-1 : x-1; } //! critical
 
 void CLpolygon::rasterize(xlong shadow) //! critical
 {
@@ -567,8 +542,6 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 	//*
 }
 
-CLpolygon::~CLpolygon() { }
-
 void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 {
 	if(flags&SHADOW)
@@ -600,7 +573,7 @@ void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 	zclipping();
 	project(p.x,p.y,flags&CENTER);
 	xyclipping();
-	if(cpointcount == 0) return;
+	if(cpointcount == 0) { return; }
 
 	if( !((flags&FLAT) || (flags&SHADOW)) ) //wireframe
 	{
@@ -672,11 +645,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	
 	xyclipping();
 
-	if(visible() && cpointcount!=0)
-	{
-		rasterize(2);
-	}
-
+	if(visible() && cpointcount!=0) { rasterize(2); }
 	//
 
 	leftside = backup_left;
