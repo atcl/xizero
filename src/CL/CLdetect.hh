@@ -59,6 +59,7 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 	friend class CLsingle<CLdetect>;
 	
 	private:
+		uxlong totalram;
 		xlong pcores;
 		xlong l2c;
 		bool havemmx;
@@ -80,24 +81,22 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 ///implementation
 CLdetect::CLdetect() //! noncritical
 {
-	//cpu
+	//issue cpuid
 	xlong c1 = 0;
 	xlong c2 = 0;
 	xlong c3 = 0;
 	xlong c4 = 0;
 	xlong c5 = 0;
-	
-	//issue cpuid
 	__asm__ __volatile__ ("cpuid; nop;":"=d"(c2):"a"(0x00000001));
 	__asm__ __volatile__ ("cpuid":"=c"(c3):"a"(0x80000001));
 	__asm__ __volatile__ ("cpuid":"=a"(c4):"a"(0x00000004));
 	__asm__ __volatile__ ("cpuid":"=c"(c5):"a"(0x80000008));
 	//*
 	
-	//check ram //fix!
+	//check ram
 	CLfile* mem = clsystem->getfile("/proc/meminfo");
 	xlong p = clstring->find(mem->text,"MemTotal:");
-	xlong m = clstring->tolong(&(mem->text[p+9]));
+	totalram = clstring->tolong(&(mem->text[p+9])) / 1024;
 	//*
 	
 	//process cuid results here so vars can find way back

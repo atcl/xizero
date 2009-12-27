@@ -11,7 +11,7 @@
 ///includes
 #include <stdlib.h>
 #include <time.h>
-#include <fstream>
+#include <stdio.h>
 
 #include "CLtypes.hh"
 #include "CLstruct.hh"
@@ -61,7 +61,7 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 
 	FILE *of;
 
-	//check if file exists (improve!!!)
+	//check if file exists
 	if( !( of = fopen(fn,"rb") ) ) 
 	{
 		delete re;
@@ -74,14 +74,20 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 	//get file size
 	fseek (of,0,SEEK_END);
 	re->size = (ftell(of));
+	if(re->size==0) //recheck if filesize seems to be zero (ie proc/meminfo or alike)
+	{
+		uxlong n=0;
+		while(!feof(of)) { fgetc(of); n++; }
+		re->size = n;
+	}
+	xlong mr = 4 - (re->size%4);
+	if(mr!=0) { re->size += mr; }
 	re->lsize = re->size>>2;
 	//*
 
 	//read file contents
-	fseek (of,0,SEEK_SET );
-	
-	try{ re->text = new xchar[((re->size)+4)]; }
-	catch(std::bad_alloc& ba) { say(ba.what()); }
+	fseek (of,0,SEEK_SET);
+	re->text = new xchar[((re->size)+4)];
 	re->data = static_cast<xlong*>(static_cast<void*>(&re->text[0]));
 	fread(re->text,1,re->size,of);
 	//*
