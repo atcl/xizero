@@ -131,6 +131,21 @@ void CLintro::xizero(CLfile* sf) const //! noncritical
 	}
 	//*
 }
+
+void CLintro::torus() const
+{
+	//build torus
+	
+	//*
+	
+	//setup animation
+	
+	//*
+	
+	//play animation
+	
+	//*
+}
 ///*
 
 #endif

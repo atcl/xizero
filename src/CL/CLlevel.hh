@@ -69,7 +69,7 @@ class CLlevel : public virtual CLcl
 		xlong smoothlevelheight;
 		xlong smoothlevelwidth;
 		xlong playerscreenylevel;
-		bool  paused;
+		static bool  paused;
 	public:
 		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype);
 		~CLlevel();
@@ -78,7 +78,7 @@ class CLlevel : public virtual CLcl
 		void subsmark(xlong m);
 		void setmark(xlong m);
 		void start();
-		void pause();
+		static void pause();
 		xlong getmark() const { return smoothmark; };
 		CLfbuffer* getlandscape() const { return levellandscape; };
 		CLplayer* getplayer() const { return player; };
@@ -89,6 +89,7 @@ xlong CLlevel::blockheight = 40;
 xlong CLlevel::blockwidth = 40;
 xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
+bool  CLlevel::paused = 0;
 ///*
 
 ///implementation

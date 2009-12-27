@@ -8,11 +8,13 @@
 #define HH_CLAPI
 ///*
 
-///includes
+///sys includes
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+///*
 
+///idp includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLresource.hh"
@@ -207,13 +209,14 @@ xlong CLsystem::wait(xlong milliseconds) //! noncritical
 
 	//do nothing while waiting for stoptime
 	xlong nowtime = 0;
-	while(nowtime < stoptime) nowtime = xlong(1000 * clock() / CLOCKS_PER_SEC);
+	while(nowtime < stoptime) nowtime = xlong( (1000 * clock()) / CLOCKS_PER_SEC);
 	//*
 	
 	return 0;
 }
 
-xlong CLsystem::getmilliseconds() { return (1000 * clock() / CLOCKS_PER_SEC); } //since midnight  //! noncritical
+//since program launch 
+xlong CLsystem::getmilliseconds() { return ( (1000 * clock()) / CLOCKS_PER_SEC); } //! noncritical
 
 xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
 ///*

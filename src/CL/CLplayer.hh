@@ -137,12 +137,12 @@ xlong CLplayer::collision(CLfbuffer* ll) //! critical
 	//*
 	
 	//adjust z position
-	if(clmath->absolute(zdiff)>1) tposition.z = zdiff-12;
+	if(clmath->absolute(zdiff)>1) { tposition.z = zdiff-12; }
 	//*	
 	
 	//adjust rotation around x andy axis
 		//rotate x about xangle,y about yangle
-		if(clmath->absolute(xangle)>=1) linear->rotate(xangle,yangle,0);
+		if(clmath->absolute(xangle)>=1) { linear->rotate(xangle,yangle,0); }
 		//~ if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
 		//~ if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
@@ -310,8 +310,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			
 			//w -> reset tower
 			case 'w':
-			if( (angles[1].z - angles[0].z) >  180) angles[1].z -= 360; 
-			if( (angles[1].z - angles[0].z) < -180) angles[1].z += 360;
+			if( (angles[1].z - angles[0].z) >  180) { angles[1].z -= 360; } 
+			if( (angles[1].z - angles[0].z) < -180) { angles[1].z += 360; }
 			tempangle = clmath->sign(angles[0].z-angles[1].z) * 5;
 			linear->rotate(0,0,tempangle);
 			pretransform(1);
@@ -369,16 +369,10 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 		
 		//if collision reset bounding box to state before pretransform
-		else
-		{
-			*(boundingbox[1][0]) = *(boundingbox[0][0]);
-		}
+		else { *(boundingbox[1][0]) = *(boundingbox[0][0]); }
 		//*
 	}
-	else if(active==-1)
-	{
-		if(expl[0]->next()==1) return points;
-	}
+	else if(active==-1) { if(expl[0]->next()==1) { return points; } }
 	
 	return -1;
 }

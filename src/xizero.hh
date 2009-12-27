@@ -87,6 +87,8 @@ void newgame()
 	//game loop
 	bool aa = 0;
 	
+	CLmenu* sysmenu = new CLmenu();
+	
 	while(gamestate>0 && clglobal->clwindow->run()) 
 	{
 		//check input
@@ -99,8 +101,6 @@ void newgame()
 		switch(input)
 		{
 			case 27: exitgame(); break;
-			
-			case '^': gamestate = -2; break;
 			
 			case 'p': testlevel->pause(); break;
 			
@@ -150,6 +150,7 @@ void newgame()
 	
 	//crush level
 	//delete testlevel;
+	delete sysmenu;
 	//*
 	
 	clglobal->cltransitions->fadetoblack();

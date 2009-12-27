@@ -40,7 +40,7 @@ template <typename T>class CLbuffer : public virtual CLcl
 		xlong ttype;
 	public:
 		CLbuffer(uxlong s,T ival=0);
-		~CLbuffer();
+		~CLbuffer() { };
 		void clear(T v);
 		void zero();
 		void copy(T* dst);
@@ -55,21 +55,21 @@ template <typename T>class CLbuffer : public virtual CLcl
 ///*
 
 ///implementation
-template <typename T>CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
+template <typename T>
+CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
 {
 	//adjust size and allocate buffer
 	size = (s+1) + (s%4); // make sure is amultiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
-	ttype = 1; // 0 + cldetect->x86() + cldetect->mmx() + cldetect->sse(); //crashes when calling cldetect members here
+	ttype = cldetect->mmx() + cldetect->sse();
+	ttype = 1;
 	clear(ival);
 	//*
 }
 
-//how to delete buffer?
-template <typename T>CLbuffer<T>::~CLbuffer() { } //! noncritical 
-
-template <typename T>void CLbuffer<T>::clear(T v) //! critical
+template <typename T>
+void CLbuffer<T>::clear(T v) //! critical
 {
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong purev = (reinterpret_cast<xlong*>(&v))[0];
@@ -78,7 +78,7 @@ template <typename T>void CLbuffer<T>::clear(T v) //! critical
 	register xlong i = size;
 
 	//x86 SSE1 assembly clear (very fast)
-	if(size>262144 && ttype==3 )
+	if(size>262144 && ttype==3)
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -101,7 +101,7 @@ template <typename T>void CLbuffer<T>::clear(T v) //! critical
 	//*
 	
 	//x86 MMX assembly clear (fast)
-	else if(size>65536 && ttype==2 )
+	else if(size>65536 && ttype==2)
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -132,14 +132,15 @@ template <typename T>void CLbuffer<T>::clear(T v) //! critical
 	//*
 }
 
-template <typename T>void CLbuffer<T>::copy(T *dst) //! critical
+template <typename T>
+void CLbuffer<T>::copy(T *dst) //! critical
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
 	register xlong i = size;
 	
 	//x86 SSE1 assembly copy (very fast)
-	if(size>262144 && ttype==3 )
+	if(size>262144 && ttype==3)
 	{
 		i>>=5;
 		for(;i>0;i--)
@@ -171,7 +172,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst) //! critical
 	//*
 	
 	//x86 MMX assembly copy (fast)
-	else if(size>65536 && ttype==2 )
+	else if(size>65536 && ttype==2)
 	{
 		i>>=4;
 		for(;i>0;i--)
@@ -202,7 +203,7 @@ template <typename T>void CLbuffer<T>::copy(T *dst) //! critical
 	//*
 	
 	//fallback if no SIMD neither MMX or SSE1 is available
-	else if(ttype==1) __asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
+	else if(ttype==1) __asm__ __volatile__ ("cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
 	//*
 	
 	//default for loop copy (slow)
@@ -210,9 +211,11 @@ template <typename T>void CLbuffer<T>::copy(T *dst) //! critical
 	//*
 }
 
-template <typename T>void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer()); } //! noncritical
+template <typename T>
+void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer()); } //! noncritical
 
-template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
+template <typename T>
+void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
@@ -550,11 +553,13 @@ template <typename T>void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 	//*
 }
 
-template <typename T>void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); } //! noncritical
+template <typename T>
+void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); } //! noncritical
 
-template <typename T>T& CLbuffer<T>::operator[](uxlong i) //! critical
+template <typename T>
+T& CLbuffer<T>::operator[](uxlong i) //! critical
 {
-	if(i>=size) return buffer[size];
+	if(i>=size) { return buffer[size]; }
 	return buffer[i];
 }
 ///*

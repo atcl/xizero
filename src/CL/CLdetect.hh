@@ -102,7 +102,7 @@ CLdetect::CLdetect() //! noncritical
 	//process cuid results here so vars can find way back
 	if( (c2 & MMXFLAG)!=0 ) { havemmx = 1; } else { havemmx = 0; }
 	if( (c2 & SSEFLAG)!=0 ) { havesse = 1; } else { havesse = 0; }
-	pcores = (c4>>25); // * (c5 & 255); //fix!
+	pcores = (c4>>25) * (c5 & 255); //fix!
 	//*
 }
 

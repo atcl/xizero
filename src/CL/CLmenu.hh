@@ -48,7 +48,6 @@ class CLmenu : public virtual CLcl
 		CLbutton* exit;
 		CLbutton* info;
 		CLbutton* about;
-		void (*pause)();
 	public:
 		CLmenu();
 		~CLmenu();
@@ -77,6 +76,7 @@ CLmenu::CLmenu() //! noncritical
 
 CLmenu::~CLmenu() //! noncritical
 {
+	clwindow->setsyskey();
 	delete icon;
 	delete title;
 	delete exit;
@@ -95,10 +95,6 @@ void CLmenu::show() //! noncritical
 	//save background
 	sprite* back = clgfx2->savescreen();
 	//*
-
-	//issue pause command to engine
-	//pause();
-	//*
 	
 	//activate mouse cursor and activate buttons
 	clwindow->showcursor();
@@ -107,11 +103,11 @@ void CLmenu::show() //! noncritical
 	about->setvisible(1);
 	//*
 	
-	while(clwindow->run() && clwindow->getinkey()!=syskey)
+	while(clwindow->run())
 	{
+		if(clwindow->getinkey()==SPACE) { break; }
 		CLbutton::checkclick();
 		clgfx1->drawscreen(back);
-		
 		title->draw();
 		clgfx1->drawsprite(2,2,icon);
 		exit->draw();

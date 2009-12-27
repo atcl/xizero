@@ -421,7 +421,7 @@ int main(int argc, char** argv)
 
 			//Control:
 			//case '^':    mode = !mode; break;
-			case '^':    sysmenu->show();
+			case 'o':    sysmenu->show();
 			case '+':    cubus->reset(); ac = exp = 0; break;
 			case '-':    shadows = !shadows; break;
 			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;

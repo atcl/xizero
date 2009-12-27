@@ -41,7 +41,7 @@ class CLenemy : public CLentity<1>
 	protected:
 		CLprogress* hprog;
 		xlong* aiarray;
-		xlong aitype; //0=straight, 1=vary x along aiarray, 2=aiarray to polygon, 3=1D random walk, 4=oscillate, 5=oscillate following
+		xlong aitype;
 		xlong aggrolevel;
 		CLbox* aggrobox;
 		void cruise();
@@ -63,30 +63,30 @@ void CLenemy::cruise() //! critical
 	//update enemy through ai array
 	switch(aitype)
 	{
-		case 0: 
+		case 0: //straight
 			gear=1;
 			setspeed(); 
 		break;
 		
-		case 1:
+		case 1: //vary x along aiarray
 		
 		break;
 		
-		case 2:
+		case 2: //aiarray to polygon
 		
 		break;
 		
-		case 3:
+		case 3: //1D random walk
 		
 		break;
 		
-		case 4:
+		case 4: //oscillate
 			if(speed.x==0) speed.x = -maxspeed/20;
 			if(position.x<=200 && speed.x==maxspeed/20) speed.x = -maxspeed/20;
 			if(position.x>=600 && speed.x==-maxspeed/20) speed.x = maxspeed/20;
 		break;
 		
-		case 5:
+		case 5: //oscillate following
 			if(speed.x==0) speed.x = -maxspeed/20;
 			if(position.x<=200 && speed.x==maxspeed/20) speed.x = -maxspeed/20;
 			if(position.x>=600 && speed.x==-maxspeed/20) speed.x = maxspeed/20;
@@ -127,10 +127,7 @@ xlong CLenemy::collision() //! critical
 	xlong bc = clgame->boundary(tposition,*boundingbox[1][0],1);
 	tposition.y += *mark;
 
-	if(bc==0)
-	{
-		visible = 1;
-	}
+	if(bc==0) { visible = 1; }
 	//*
 	
 	return r;
@@ -297,17 +294,11 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 		//*
 		
 		//if collision reset bounding box to state before pretransformation
-		else
-		{
-			*boundingbox[1] = *boundingbox[0];
-		}
+		else { *boundingbox[1] = *boundingbox[0]; }
 		//*
 	}
-	else if(active==-1)
-	{
-		if(expl[0]->next()==1) return points;
-	}
-	else lastupdate = clsystem->getmilliseconds();
+	else if(active==-1) { if(expl[0]->next()==1) return points; }
+	else { lastupdate = clsystem->getmilliseconds(); }
 	
 	return -1;
 }

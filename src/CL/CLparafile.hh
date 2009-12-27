@@ -10,6 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
+#include "CLxml.hh"
 ///*
 
 ///header
