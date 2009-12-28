@@ -11,7 +11,7 @@
 //include data-ar?
 
 ///decarations
-const static xchar* CLicon[] =
+const static char* CLicon[] =
 { 
 "16 16 3 1",
 "# c #000000",
@@ -37,7 +37,7 @@ const static xchar* CLicon[] =
 };
 
 //xpm xizero mouse cursor
-const static xchar* CLxzcursor[] = 
+const static char* CLxzcursor[] = 
 {
 "32 32 5 1",
 "# c None",

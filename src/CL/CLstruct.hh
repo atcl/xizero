@@ -76,21 +76,6 @@ struct CLwav
 	xlong offset;
 	xlong length;
 };
-
-struct CLgamepadstate
-{
-	xlong axis[2];
-	bool  button[10];
-	bool  tbutton[10];
-};
-
-struct CLexe
-{
-	xchar* name;
-	xchar* title;
-	xlong  size;
-	xlong  version;
-};
 ///*
 
 #endif

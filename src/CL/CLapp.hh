@@ -8,9 +8,11 @@
 #define HH_CLAPP
 ///*
 
-///includes
+///sys includes
 #include <stdlib.h>
+///*
 
+///api includes
 #include "CLtypes.hh"
 #include "CLversion.hh"
 #include "CLresource.hh"

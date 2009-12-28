@@ -28,8 +28,6 @@
 ///*
 
 ///defintions
-class CLutils;
-
 class CLcl : public CLglobal
 {
 	protected:

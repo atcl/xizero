@@ -26,8 +26,15 @@
 ///*
 
 ///definitions
+template<typename T,class clsingle>
+class CLsinglebase
+{
+	public:
+		static T* instance() { static_cast<clsingle*>(&CLsinglebase::instance)->instance(); };
+};
+
 template<class T>
-class CLsingle
+class CLsingle : public CLsinglebase<T,CLsingle<T> >
 {
 	private:
 		static T* single;

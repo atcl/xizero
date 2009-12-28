@@ -37,6 +37,13 @@
 ///*
 
 ///definitions
+struct CLgamepadstate
+{
+	xlong axis[2];
+	bool  button[10];
+	bool  tbutton[10];
+};
+
 class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
 {
 	friend class CLsingle<CLgamepad>;

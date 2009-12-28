@@ -8,6 +8,11 @@
 #define HH_CLLIGHT
 ///*
 
+///includes
+#include "CLcl.hh"
+#include "CLgfx1.hh"
+///*
+
 ///header
 /* class name:	CLlight
  * 
