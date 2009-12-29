@@ -22,11 +22,12 @@
 ///*
  
 ///definitions
-class CLewave : public virtual CLcl : public CLentity<1>
+class CLewave : public CLentity<1>
 {
 	private:
+	
+	protected:
 		bool updown;
-		
 	public:
 		CLewave(bool ud);
 		~CLewave();

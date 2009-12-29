@@ -13,7 +13,7 @@
 #include "CLvector.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLsystem.hh"
 ///*
 
@@ -35,9 +35,11 @@
 //use dyadic product to crumple object
 //reorder cyclic / or reset
 //then translate along normals for explosion
-class CLexplosion : public virtual CLcl
+class CLexplosion : public CLbase<CLexplosion,0>
 {
 	private:
+		static CLsystem* clsystem;
+	protected:
 		CLobject* object;
 		CLmatrix* linear;
 		CLfvector a;
@@ -54,6 +56,8 @@ class CLexplosion : public virtual CLcl
 		void first(bool t);
 		xlong next();
 };
+
+CLsystem* CLexplosion::clsystem = CLsystem::instance();
 ///*
 
 ///implementation

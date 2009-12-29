@@ -11,6 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLconsts.hh"
+#include "CLbase.hh"
 #include "CLbuffer.hh"
 #include "CLvector.hh"
 #include "CLglobal.hh"
@@ -30,11 +31,13 @@
 ///*
 
 ///definitions
-class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
+class CLmisc3d : public CLbase<CLmisc3d,1>
 {
-	friend class CLsingle<CLmisc3d>;
+	friend class CLbase<CLmisc3d,1>;
 	
 	private:
+		static CLgfx1* clgfx1;
+	protected:
 		CLmisc3d() { };
 		~CLmisc3d() { };
 	public:
@@ -44,6 +47,8 @@ class CLmisc3d : public virtual CLcl, public CLsingle<CLmisc3d>
 		template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
+
+CLgfx1* CLmisc3d::clgfx1 = CLgfx1::instance();
 ///*
 
 ///implementation

@@ -10,6 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
+#include "CLbase.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
 #include "CLformat.hh"
@@ -38,9 +39,13 @@ struct CLframe
 	float comm[12];
 };
 
-class CLanim : public virtual CLcl
+class CLanim : public CLbase<CLanim,0>
 {
 	private:
+		static CLsystem* clsystem;
+		static CLformat* clformat;
+		static CLmath*   clmath;
+	protected:
 		CLmatrix* linear;
 		CLobject* object;
 		xlong*   anicsv;
@@ -59,6 +64,10 @@ class CLanim : public virtual CLcl
 		void setposition(CLfvector& p) { position = p; };
 		CLfvector& getposition() { return position; };
 };
+
+CLsystem* CLanim::clsystem = CLsystem::instance();
+CLformat* CLanim::clformat = CLformat::instance();
+CLmath*   CLanim::clmath   = CLmath::instance();
 ///*
 
 ///implementation

@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -31,11 +31,11 @@
 //string: xizero ; crc: 1208686013
 
 ///definitions
-class CLid : public virtual CLcl, public CLsingle<CLid>
+class CLid : public CLbase<CLid,1>
 {
-	friend class CLsingle<CLid>;
+	friend class CLbase<CLid,1>;
 	
-	private: 
+	protected:
 		xlong  lastid;
 		static uxlong crc32;
 		CLid();

@@ -38,6 +38,9 @@
 ///definitions
 class CLenemy : public CLentity<1>
 {
+	private:
+		static CLgame*   clgame;
+		static CLstring* clstring;
 	protected:
 		CLprogress* hprog;
 		xlong* aiarray;
@@ -55,6 +58,9 @@ class CLenemy : public CLentity<1>
 		template<int I>xlong update(CLentity<I>* p);
 		void displayhud();
 };
+
+CLgame*   CLenemy::clgame   = CLgame::instance();
+CLstring* CLenemy::clstring = CLstring::instance();
 ///*
 
 ///implementation

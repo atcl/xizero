@@ -17,6 +17,7 @@
 ///*
 
 ///api includes
+#include "CLbase.hh"
 #include "CLformat.hh"
 #include "CLlabel.hh"
 #include "CLbutton.hh"
@@ -39,9 +40,14 @@
 ///*
 
 ///definition
-class CLmenu : public virtual CLcl
+class CLmenu : public CLbase<CLmenu,0>
 {
 	private:
+		static CLformat* clformat;
+		static CLwindow* clwindow;
+		static CLgfx1*   clgfx1;
+		static CLgfx2*   clgfx2;
+	protected:
 		uxchar    syskey;
 		sprite*   icon;
 		CLlabel*  title;
@@ -55,6 +61,11 @@ class CLmenu : public virtual CLcl
 		static void wrapper(void* me);
 		uxchar getsyskey() const { return syskey; };
 };
+
+CLformat* CLmenu::clformat = CLformat::instance();
+CLwindow* CLmenu::clwindow = CLwindow::instance();
+CLgfx1*   CLmenu::clgfx1   = CLgfx1::instance();
+CLgfx2*   CLmenu::clgfx2   = CLgfx2::instance();
 ///*
 
 ///implementation

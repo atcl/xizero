@@ -8,15 +8,18 @@
 #define HH_CLWINDOW
 ///*
 
-///includes
+///sys includes
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
+///*
 
+///api includes
 #include "CLtypes.hh"
 #include "CLresource.hh"
 #include "CLformat.hh"
 #include "CLapp.hh"
+#include "CLbase.hh" 
 ///*
 
 ///header
@@ -33,10 +36,14 @@
 ///*
 
 ///definitions
-class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
+class CLwindow : public CLbase<CLwindow,1>
 {
-	friend class CLsingle<CLwindow>;
+	friend class CLbase<CLwindow,1>;
 	
+	private:
+		static CLformat* clformat;
+		static CLapp*    clapp;
+		static CLgfx1*   clgfx1;
 	protected:
 		Display* Xdisplay;
 		Screen* Xscreen;
@@ -85,6 +92,10 @@ class CLwindow : public virtual CLcl, public CLsingle<CLwindow>
 		xlong getmouserb() const { return mouserb; };
 		void setsyskey(uxchar k=0,void (*m)(void* o)=0,void* mo=0);
 };
+
+CLformat* CLwindow::clformat = CLformat::instance();
+CLapp*    CLwindow::clapp    = CLapp::instance();
+CLgfx1*   CLwindow::clgfx1   = CLgfx1::instance();
 ///*
 
 ///implementation

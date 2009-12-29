@@ -14,6 +14,7 @@
 #include "CLglobal.hh"
 #include "CLmath.hh"
 #include "CLbuffer.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -30,11 +31,13 @@
 ///*
 
 ///definitions
-class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
+class CLfloor : public CLbase<CLfloor,1>
 {
-	friend class CLsingle<CLfloor>;
+	friend class CLbase<CLfloor,1>;
 	
 	private:
+		static CLmath* clmath;
+	protected:
 		CLubuffer* cmask;
 		CLfbuffer* zmask;
  		uxlong shade;
@@ -48,6 +51,8 @@ class CLfloor : public virtual CLcl, public CLsingle<CLfloor>
 		void init(xlong z,xlong w,uxlong c,bool s);
 		void draw() const; //too slow!!!
 };
+
+CLmath* CLfloor::clmath = CLmath::instance();
 ///*
 
 ///implementations

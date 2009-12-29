@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLstruct.hh"
 #include "CLdetect.hh"
 ///*
@@ -29,9 +29,12 @@
 ///*
 
 ///definitions
-template <typename T>class CLbuffer : public virtual CLcl
+template <typename T>
+class CLbuffer : public CLbase<CLbuffer<T>,0>
 {
 	private:
+		static CLdetect* cldetect;
+	protected:
 		T* buffer;
 		uxlong size;
 		uxlong bsize;
@@ -40,18 +43,22 @@ template <typename T>class CLbuffer : public virtual CLcl
 		xlong ttype;
 	public:
 		CLbuffer(uxlong s,T ival=0);
+		CLbuffer(const CLbuffer<T>& c);
 		~CLbuffer() { };
 		void clear(T v);
 		void zero();
-		void copy(T* dst);
-		void copy(CLbuffer* dst);
-		void blendcopy(T* dst,xlong o); //too slow!!!
-		void blendcopy(CLbuffer<T>* dst,xlong o);
+		void copy(T* dst) const;
+		void copy(CLbuffer<T>* dst) const;
+		void blendcopy(T* dst,xlong o) const; //too slow!!!
+		void blendcopy(CLbuffer<T>* dst,xlong o) const;
 		uxlong getsize() const { return size; };
 		uxlong getbytesize() const { return bsize; };
 		T* getbuffer() const { return buffer; };
 		T& operator[](uxlong i);
 };
+
+template <typename T>
+CLdetect* CLbuffer<T>::cldetect = CLdetect::instance();
 ///*
 
 ///implementation
@@ -66,6 +73,17 @@ CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
 	ttype = 1;
 	clear(ival);
 	//*
+}
+
+template <typename T>
+CLbuffer<T>::CLbuffer(const CLbuffer<T>& c) //! noncritical
+{
+	size = c.size;
+	bsize = c.bsize;
+	buffer = new T[size];
+	ttype = cldetect->mmx() + cldetect->sse();
+	ttype = 1;
+	c.copy(buffer);
 }
 
 template <typename T>
@@ -133,7 +151,7 @@ void CLbuffer<T>::clear(T v) //! critical
 }
 
 template <typename T>
-void CLbuffer<T>::copy(T *dst) //! critical
+void CLbuffer<T>::copy(T* dst) const //! critical
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
@@ -212,10 +230,10 @@ void CLbuffer<T>::copy(T *dst) //! critical
 }
 
 template <typename T>
-void CLbuffer<T>::copy(CLbuffer* dst) { copy(dst->getbuffer()); } //! noncritical
+void CLbuffer<T>::copy(CLbuffer<T>* dst) const { copy(dst->getbuffer()); } //! noncritical
 
 template <typename T>
-void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
+void CLbuffer<T>::blendcopy(T* dst,xlong o) const //! critical
 {
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
@@ -554,7 +572,7 @@ void CLbuffer<T>::blendcopy(T* dst,xlong o) //! critical
 }
 
 template <typename T>
-void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) { blendcopy(dst->getbuffer(),o); } //! noncritical
+void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) const { blendcopy(dst->getbuffer(),o); } //! noncritical
 
 template <typename T>
 T& CLbuffer<T>::operator[](uxlong i) //! critical

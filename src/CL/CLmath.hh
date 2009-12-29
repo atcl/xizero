@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLsingle.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -35,11 +35,13 @@
 ///*
 
 ///definitions
-class CLmath : public virtual CLcl, public CLsingle<CLmath>
+class CLmath : public CLbase<CLmath,1>
 {
-	friend class CLsingle<CLmath>;
+	friend class CLbase<CLmath,1>;
 	
 	private:
+	
+	protected:
 		xlong seed;
 		float  fxpi;
 		float  clpi;

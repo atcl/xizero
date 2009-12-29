@@ -19,7 +19,7 @@
 ///*
 
 ///api includes
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLstring.hh"
 ///*
 
@@ -41,11 +41,13 @@ struct cmpstr { bool operator()(const xchar* a,const xchar* b) { return lt(a,b) 
 
 typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 
-class CLformat : public virtual CLcl, public CLsingle<CLformat>
+class CLformat : public CLbase<CLformat,1>
 {
-	friend class CLsingle<CLformat>;
+	friend class CLbase<CLformat,1>;
 	
 	private:
+		static CLstring* clstring;
+	protected:
 		CLformat() { };
 		~CLformat() { };
 	public:
@@ -59,6 +61,8 @@ class CLformat : public virtual CLcl, public CLsingle<CLformat>
 		xmap*    loadini(CLfile* bf) const;
 		//void*    loadwav(CLfile* bf) const;
 };
+
+CLstring* CLformat::clstring = CLstring::instance();
 ///*
 
 ///implementation

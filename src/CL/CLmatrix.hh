@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLmath.hh"
 #include "CLutils.hh"
@@ -30,9 +30,11 @@
 ///*
 
 ///definitions
-class CLmatrix : public virtual CLcl
+class CLmatrix : public CLbase<CLmatrix,0>
 {
 	private:
+		static CLmath* clmath;
+	protected:
 		float m[4][4];
 		float t[4][4]; //todo: implement
 		inline void multiplicate();
@@ -57,6 +59,8 @@ class CLmatrix : public virtual CLcl
 		float determinate() const;
 		void print() const;
 };
+
+CLmath* CLmatrix::clmath = CLmath::instance();
 ///*
 
 ///implementation

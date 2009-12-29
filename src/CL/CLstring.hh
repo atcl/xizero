@@ -27,13 +27,14 @@
 ///*
 
 ///definitions
-class CLstring : public virtual CLcl, public CLsingle<CLstring>
+class CLstring : public CLbase<CLstring,1>
 {
-	private:
-		
-	public:
+	friend class CLbase<CLstring,1>;
+	
+	protected:
 		CLstring() { };
 		~CLstring() { };
+	public:
 		xchar* copy(const xchar* s,xlong l=0) const;
 		xlong length(const xchar* s) const;
 		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;

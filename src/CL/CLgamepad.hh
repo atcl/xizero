@@ -21,6 +21,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -44,11 +45,11 @@ struct CLgamepadstate
 	bool  tbutton[10];
 };
 
-class CLgamepad : public virtual CLcl, public CLsingle<CLgamepad>
+class CLgamepad : public CLbase<CLgamepad,1>
 {
-	friend class CLsingle<CLgamepad>;
+	friend class CLbase<CLgamepad,1>;
 	
-	private:
+	protected:
 		xlong device;
 		CLgamepad();
 		~CLgamepad() { };

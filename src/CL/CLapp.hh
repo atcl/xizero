@@ -17,6 +17,7 @@
 #include "CLversion.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -33,11 +34,11 @@
 ///*
 
 ///definitions
-class CLapp : public virtual CLcl, public CLsingle<CLapp>
+class CLapp : public CLbase<CLapp,1>
 {
-	friend class CLsingle<CLapp>;
+	friend class CLbase<CLapp,1>;
 	
-	private:
+	protected:
 		xchar* name;
 		xchar* title;
 		xchar* icon;

@@ -10,7 +10,8 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
+#include "CLglobal.hh"
 ///*
 
 ///header
@@ -27,11 +28,11 @@
 ///*
 
 ///definitions
-class CLfsprogress : public virtual CLcl, public CLsingle<CLfsprogress>
+class CLfsprogress : public CLbase<CLfsprogress,1>
 {
-	friend class CLsingle<CLfsprogress>;
-	
-	private:
+	friend class CLbase<CLfsprogress,1>;
+		
+	protected:
 		xlong pprogress;
 		xlong rprogress;
 		uxlong pcolor;

@@ -10,7 +10,6 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
 #include "CLguibase.hh"
 #include "CLgfx2.hh"
 ///*
@@ -32,6 +31,9 @@
 class CLlabel : public CLguibase
 {
 	private:
+		static CLstring* clstring;
+		static CLgfx2*   clgfx2;
+	protected:
 		xchar* text;
 		bool  frame;
 		xlong textwidth;
@@ -45,6 +47,9 @@ class CLlabel : public CLguibase
 		void settext(const xchar* t);
 		xchar* gettext() const { return text; };
 };
+
+CLstring* CLlabel::clstring = CLstring::instance();
+CLgfx2*   CLlabel::clgfx2   = CLgfx2::instance();
 ///*
 
 ///implementation

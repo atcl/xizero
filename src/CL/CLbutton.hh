@@ -33,6 +33,10 @@
 class CLbutton : public CLguibase
 {
 	private:
+		static CLstring* clstring;
+		static CLgfx2*   clgfx2;
+		static CLwindow* clwindow;
+	protected:
 		void (*action)();
 		xchar* caption;
 		bool flat;
@@ -53,6 +57,9 @@ class CLbutton : public CLguibase
 		static void checkclick();
 };
 
+CLstring* CLbutton::clstring = CLstring::instance();
+CLgfx2*   CLbutton::clgfx2   = CLgfx2::instance();
+CLwindow* CLbutton::clwindow = CLwindow::instance();
 CLlist<CLbutton>* CLbutton::buttonlist = new CLlist<CLbutton>;
 ///*
 

@@ -12,6 +12,7 @@
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -28,11 +29,13 @@
 ///*
 
 ///definitions
-class CLsprites : public virtual CLcl, public CLsingle<CLsprites>
+class CLsprites : public CLbase<CLsprites,1>
 {
-	friend class CLsingle<CLsprites>;
+	friend class CLbase<CLsprites,1>;
 	
 	private:
+	
+	protected:
 		CLsprites() { };
 		~CLsprites() { };
 	public:

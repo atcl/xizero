@@ -11,6 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLstructs.hh"
+#include "CLbase.hh"
 #include "CLsystem.hh"
 #include "CLxml.hh"
 #include "CLlabel.hh"
@@ -32,14 +33,11 @@
 ///*
 
 ///definition
-class CLxmlgui : public virtual CLcl
+class CLxmlgui : public CLbase<CLxmlgui,0>
 {
 	protected:
 		CLxml data;
-		
-	private:
 		xchar* title;
-		
 	public:
 		CLxmlgui(const xchar* filename);
 		CLxmlgui(CLfile* fileptr);

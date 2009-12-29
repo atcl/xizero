@@ -9,7 +9,7 @@
 ///*
 
 ///includes
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLgfx1.hh"
 ///*
 
@@ -27,9 +27,11 @@
 ///*
 
 ///definitions
-class CLlight : public virtual CLcl
+class CLlight : public CLbase<CLlight,0>
 {
 	private:
+		static CLgfx1* clgfx1;
+	protected:
 		xlong radius;
 		uxlong color;
 		sprite* mask;
@@ -39,6 +41,8 @@ class CLlight : public virtual CLcl
 		~CLlight();
 		void draw(xlong x,xlong y); 
 };
+
+CLgfx1* CLlight::clgfx1 = CLgfx1::instance();
 ///*
 
 ///implementation

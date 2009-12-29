@@ -17,6 +17,7 @@
 #include "CLobject.hh"
 #include "CLformat.hh"
 #include "CLgfx2.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -33,11 +34,15 @@
 ///*
 
 ///definitions
-class CLintro : public virtual CLcl, public CLsingle<CLintro>
+class CLintro : public CLbase<CLintro,1>
 {
-	friend class CLsingle<CLintro>;
+	friend class CLbase<CLintro,1>;
 	
 	private:
+		static CLgfx2*   clgfx2;
+		static CLwindow* clwindow;
+		static CLsystem* clsystem; 
+	protected:
 		CLintro() { };
 		~CLintro() { };
 	public:
@@ -45,6 +50,10 @@ class CLintro : public virtual CLcl, public CLsingle<CLintro>
 		void xizero(CLfile* sf) const;
 		void torus() const;
 };
+
+CLgfx2*   CLintro::clgfx2 = CLgfx2::instance();
+CLwindow* CLintro::clwindow = CLwindow::instance();
+CLsystem* CLintro::clsystem = CLsystem::instance();
 ///*
 
 ///implementation

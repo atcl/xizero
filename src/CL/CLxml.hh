@@ -12,6 +12,7 @@
 #include "CLtypes.hh"
 #include "CLsystem.hh"
 #include "CLtree.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -34,11 +35,10 @@ struct xmlelement
 	xchar** attributes;
 };
 
-class CLxml : public virtual CLcl
+class CLxml : public CLbase<CLxml,0>
 {
 	protected:
 		CLtree xmltree;
-
 	public:
 		CLxml(const xchar* filename);
 		CLxml(CLfile* fileptr);

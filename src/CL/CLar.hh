@@ -11,6 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -27,12 +28,14 @@
 ///*
 
 ///definitions
-class CLar : public virtual CLcl
+class CLar : public CLbase<CLar,0>
 {
 	private:
+		static CLsystem* clsystem;
+		static CLstring* clstring; 
+	protected:
 		CLfile** members;
 		uxlong   filecount;
-	
 	public:
 		CLar(const xchar* sf);
 		CLar(CLfile* sf);
@@ -43,6 +46,9 @@ class CLar : public virtual CLcl
 		CLfile* getmember(uxlong index) const;
 		uxlong  getfilecount() const { return filecount; };
 };
+
+CLsystem* CLar::clsystem = CLsystem::instance();
+CLstring* CLar::clstring = CLstring::instance();
 ///*
 
 ///implementation

@@ -13,7 +13,7 @@
 #include "CLconsts.hh"
 #include "CLstruct.hh"
 #include "CLmath.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
@@ -35,9 +35,11 @@
 ///*
 
 ///definitions
-class CLpolygon : public virtual CLcl
+class CLpolygon : CLbase<CLpolygon,0>
 {
 	private:
+		static CLmath* clmath;
+	protected:
 		static xlong pointcount;
 		static float shadezscale;
 
@@ -66,9 +68,9 @@ class CLpolygon : public virtual CLcl
 		void rasterize(xlong shadow); //too slow!!!
 		inline xlong circleinc(xlong x,xlong pc);
 		inline xlong circledec(xlong x,xlong pc);
-
 	public:
 		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
+		CLpolygon(const CLpolygon& c);
 		~CLpolygon() { };
 		void update(CLmatrix* m,bool i);
 		void partupdate(CLmatrix* m);
@@ -81,6 +83,7 @@ class CLpolygon : public virtual CLcl
 		CLfvector getnormal() const { return normal; };
 };
 
+CLmath* CLpolygon::clmath = CLmath::instance();
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
 ///*
@@ -543,6 +546,30 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 	//*
 }
 
+CLpolygon::CLpolygon(const CLpolygon& c)
+{
+	color  = c.color;
+	rcolor = c.rcolor;
+	scolor = c.scolor;
+	cpointcount = c.cpointcount;
+	
+	pointr[0] = c.pointr[0];
+	pointr[1] = c.pointr[1];
+	pointr[2] = c.pointr[2];
+	pointr[3] = c.pointr[3];
+	points[0] = c.points[0];
+	points[1] = c.points[1];
+	points[2] = c.points[2];
+	points[3] = c.points[3];
+	pointt[0] = c.pointt[0];
+	pointt[1] = c.pointt[1];
+	pointt[2] = c.pointt[2];
+	pointt[3] = c.pointt[3];
+	
+	normal = c.normal;
+	rnormal = c.rnormal;
+}
+
 void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 {
 	if(flags&SHADOW)
@@ -607,7 +634,8 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 {
 	screenside* backup_left = leftside;
 	screenside* backup_right = rightside;
-	CLfbuffer backup_zbuffer = clzbuffer;
+	CLfbuffer backup_zbuffer(clzbuffer.getsize());
+	clzbuffer.copy(&backup_zbuffer);
 	xlong backup_ymax = ymax;
 
 	leftside = l;
@@ -651,7 +679,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 
 	leftside = backup_left;
 	rightside = backup_right;
-	clzbuffer = backup_zbuffer;
+	backup_zbuffer.copy(&clzbuffer);
 	ymax = backup_ymax;
 }
 

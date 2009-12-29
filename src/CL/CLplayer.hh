@@ -40,15 +40,16 @@ typedef CLlist<CLenemy> CLenemylist;
 ///definitions
 class CLplayer : public CLentity<2>
 {
+	private:
+		static CLgame*   clgame;
+		static CLmath*   clmath;
+		static CLsystem* clsystem;
 	protected:
 		CLprogress* hprog;
 		CLprogress* sprog;
-	
-	private:
 		void pretransform(bool m);
 		void transform(bool m);
-		xlong collision(CLfbuffer* ll);
-	
+		xlong collision(CLfbuffer* ll);	
 	public:
 		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts=0);
 		~CLplayer();
@@ -57,6 +58,10 @@ class CLplayer : public CLentity<2>
 		void showbox();
 		void displayhud();
 };
+
+CLgame*   CLplayer::clgame   = CLgame::instance();
+CLmath*   CLplayer::clmath   = CLmath::instance();
+CLsystem* CLplayer::clsystem = CLsystem::instance();
 ///*
 
 ///implementation

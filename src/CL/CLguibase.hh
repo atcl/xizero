@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLgfx1.hh"
 #include "CLgfx2.hh"
 ///*
@@ -29,7 +29,7 @@
 ///*
 
 ///definitions
-class CLguibase : public virtual CLcl
+class CLguibase : public CLbase<CLguibase,0>
 {
 	protected:
 		xlong posx;
@@ -44,6 +44,7 @@ class CLguibase : public virtual CLcl
 		void basereset(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
 	public:
 		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
+		CLguibase(const CLguibase& c);
 		virtual ~CLguibase() { };
 		virtual void draw() { };
 		void setwidth(xlong w) { width = w; };
@@ -78,6 +79,19 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	flat = f;
 	visible = 1;
 	//*
+}
+
+CLguibase::CLguibase(const CLguibase& c)
+{
+	posx = c.posx;
+	posy = c.posy;
+	width = c.width;
+	height = c.height;
+	fcolor = c.fcolor;
+	bcolor = c.bcolor;
+	rcolor = c.rcolor;
+	flat = c.flat;
+	visible = c.visible;
 }
 
 void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical

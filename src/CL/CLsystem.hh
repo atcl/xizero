@@ -19,6 +19,7 @@
 #include "CLstruct.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -35,11 +36,11 @@
 ///*
 
 ///definitions
-class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
+class CLsystem : public CLbase<CLsystem,1>
 {
-	friend class CLsingle<CLsystem>;
+	friend class CLbase<CLsystem,1>;
 	
-	private:
+	protected:
 		CLsystem() { };
 		~CLsystem() { };
 	public:

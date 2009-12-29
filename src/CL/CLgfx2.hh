@@ -37,11 +37,14 @@ typedef sprite* CLfont;
 ///*
 
 ///definitions
-class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2> 
+class CLgfx2 : public CLbase<CLgfx2,1> 
 {
-	friend class CLsingle<CLgfx2>;
+	friend class CLbase<CLgfx2,1>;
 	
 	private:
+		static CLformat* clformat;
+		static CLstring* clstring;
+	protected:
 		CLfont* tele;
 		CLfont* mono;
 		CLfont* line;
@@ -64,6 +67,9 @@ class CLgfx2 : public virtual CLcl, public CLsingle<CLgfx2>
 		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;
 		sprite* savescreen() const;
 };
+
+CLformat* CLgfx2::clformat = CLformat::instance();
+CLstring* CLgfx2::clstring = CLstring::instance();
 ///*
 
 ///implementation

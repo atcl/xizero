@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLstruct.hh"
 ///*
 
@@ -42,12 +42,11 @@ struct node
 };
 
 template<class member>
-class CLtree : public virtual CLcl
+class CLtree : public CLbase<CLtree<member>,0>
 {
-	private:
+	protected:
 		node<member>* rootnode;
 		node<member>* current;
-
 	public:
 		CLtree();
 		~CLtree();

@@ -22,7 +22,7 @@
 #include "CLformat.hh"
 #include "CLgame.hh"
 #include "CLmisc3d.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLsound.hh"
 ///*
 
@@ -41,8 +41,13 @@
 
 ///definitions
 template<int I>
-class CLentity : public virtual CLcl
+class CLentity : public CLbase<CLentity<I>,0>
 {
+	private:
+		static CLmisc3d* clmisc3d;
+		static CLformat* clformat;
+		static CLstring* clstring;
+		static CLsystem* clsystem;
 	protected:
 		CLmatrix* linear;
 		CLammomanager* ammoman;
@@ -100,6 +105,11 @@ class CLentity : public virtual CLcl
 		void start();
 		void pause();
 };
+
+template<int I>CLmisc3d* CLentity<I>::clmisc3d = CLmisc3d::instance();
+template<int I>CLformat* CLentity<I>::clformat = CLformat::instance();
+template<int I>CLstring* CLentity<I>::clstring = CLstring::instance();
+template<int I>CLsystem* CLentity<I>::clsystem = CLsystem::instance();
 ///*
 
 ///implementations

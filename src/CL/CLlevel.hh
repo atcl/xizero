@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLbuffer.hh"
 #include "CLsystem.hh"
 #include "CLmath.hh"
@@ -44,9 +44,13 @@ typedef CLlist<CLenemy> CLenemylist;
 ///*
 
 ///definitions
-class CLlevel : public virtual CLcl
+class CLlevel : public CLbase<CLlevel,0>
 {
 	private:
+		static CLgame*   clgame;
+		static CLformat* clformat;
+		static CLstring* clstring;
+	protected:
 		CLmatrix*    linear;
 		CLplayer*    player;
 		CLenemylist* enemies;
@@ -84,6 +88,9 @@ class CLlevel : public virtual CLcl
 		CLplayer* getplayer() const { return player; };
 };
 
+CLgame*   CLlevel::clgame   = CLgame::instance();
+CLformat* CLlevel::clformat = CLformat::instance();
+CLstring* CLlevel::clstring = CLstring::instance();
 xlong CLlevel::levelwidth = 20; //in blocks
 xlong CLlevel::blockheight = 40;
 xlong CLlevel::blockwidth = 40;

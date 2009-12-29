@@ -14,6 +14,7 @@
 #include "CLsystem.hh"
 #include "CLstring.hh"
 #include "CLsingle.hh"
+#include "CLbase.hh"
 ///*
 
 ///os-dep
@@ -54,11 +55,14 @@
 ///*
 
 ///definitions
-class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
+class CLdetect : public CLbase<CLdetect,1>
 {
-	friend class CLsingle<CLdetect>;
+	friend class CLbase<CLdetect,1>;
 	
 	private:
+		static CLsystem* clsystem;
+		static CLstring* clstring;
+	protected:
 		uxlong totalram;
 		xlong pcores;
 		xlong l2c;
@@ -76,6 +80,9 @@ class CLdetect : public virtual CLcl, public CLsingle<CLdetect>
 		bool mmx() const { return havemmx; };
 		bool sse() const { return havesse; };
 };
+
+CLsystem* CLdetect::clsystem = CLsystem::instance();
+CLstring* CLdetect::clstring = CLstring::instance();
 ///*
 
 ///implementation

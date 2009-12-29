@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLstruct.hh"
 #include "CLmisc3d.hh"
 ///*
@@ -29,11 +29,13 @@
 ///*
 
 ///definitions
-class CLgame : public virtual CLcl, public CLsingle<CLgame>
+class CLgame : public CLbase<CLgame,1>
 {
-	friend class CLsingle<CLgame>;
+	friend class CLbase<CLgame,1>;
 	
 	private:
+		static CLmath* clmath;
+	protected:
 		xlong boundaryx1;
 		xlong boundaryx2;
 		xlong boundaryy1;
@@ -51,6 +53,8 @@ class CLgame : public virtual CLcl, public CLsingle<CLgame>
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
 		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
+
+CLmath* CLgame::clmath = CLmath::instance();
 ///*
 
 ///implementation

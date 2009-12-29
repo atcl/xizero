@@ -10,6 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
+#include "CLbase.hh"
 #include "CLsystem.hh"
 #include "CLlist.hh"
 #include "CLsprites.hh"
@@ -44,9 +45,14 @@ struct CLammo
 
 typedef CLlist<CLammo> CLammolist;
 
-class CLammomanager : public virtual CLcl
+class CLammomanager : public CLbase<CLammomanager,0>
 {
 	private:
+		static CLsprites* clsprites;
+		static CLsystem*  clsystem;
+		static CLgame*    clgame;
+		static CLmath*    clmath;
+	protected:
 		CLammolist* ammolist;
 		CLammo** ammotype;
 		xlong ammotypecount;
@@ -61,6 +67,11 @@ class CLammomanager : public virtual CLcl
 		void display() const;
 		void pause();
 };
+
+CLsprites* CLammomanager::clsprites = CLsprites::instance();
+CLsystem*  CLammomanager::clsystem  = CLsystem::instance();
+CLgame*    CLammomanager::clgame    = CLgame::instance();
+CLmath*    CLammomanager::clmath    = CLmath::instance();
 ///*
 
 ///implementation

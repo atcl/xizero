@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLstruct.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
@@ -41,11 +41,13 @@ struct CLpoint
 	CLpoint(xlong px,xlong py) { x=px; y=py; }
 };
 
-class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
+class CLgfx1 : public CLbase<CLgfx1,1>
 {
-	friend class CLsingle<CLgfx1>;
+	friend class CLbase<CLgfx1,1>;
 	
 	private:
+		static CLmath* clmath;
+	protected:
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		CLgfx1() { };
@@ -69,6 +71,8 @@ class CLgfx1 : public virtual CLcl, public CLsingle<CLgfx1>
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
 		void drawscreen(sprite* s) const;
 };
+
+CLmath* CLgfx1::clmath = CLmath::instance();
 ///*
 
 ///implementation

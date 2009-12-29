@@ -12,6 +12,7 @@
 #include "CLtypes.hh"
 #include "CLstruct.hh"
 #include "CLconsts.hh"
+#include "CLbase.hh"
 #include "CLgfx1.hh"
 #include "CLgfx2.hh"
 #include "CLlabel.hh"
@@ -32,9 +33,14 @@
 ///*
 
 ///definitions
-class CLmainmenu : public virtual CLcl
+class CLmainmenu : public CLbase<CLmainmenu,0>
 {
 	private:
+		static CLformat* clformat;
+		static CLstring* clstring;
+		static CLgfx1*   clgfx1;
+		static CLgfx2*   clgfx2;
+	protected:
 		sprite* background;
 		CLbutton** button;
 		xlong buttoncount;
@@ -47,6 +53,11 @@ class CLmainmenu : public virtual CLcl
 		void draw() const;
 		void setback(sprite* s) { background = s; };
 };
+
+CLformat* CLmainmenu::clformat = CLformat::instance();
+CLstring* CLmainmenu::clstring = CLstring::instance();
+CLgfx1*   CLmainmenu::clgfx1   = CLgfx1::instance();
+CLgfx2*   CLmainmenu::clgfx2   = CLgfx2::instance();
 ///*
 
 ///implementation

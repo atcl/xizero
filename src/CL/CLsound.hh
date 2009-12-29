@@ -15,7 +15,7 @@
 
 ///idp includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLsingle.hh"
 #include "CLutils.hh"
 ///*
@@ -38,11 +38,13 @@
 ///*
 
 ///definitions
-class CLsound : public virtual CLcl, public CLsingle<CLsound>
+class CLsound : public CLbase<CLsound,1>
 {
-	friend class CLsingle<CLsound>;
+	friend class CLbase<CLsound,1>;
 	
 	private:
+		static CLstring* clstring;
+	protected:
 		ALfloat	alpos[3];
 		ALfloat	alvel[3];
 		ALfloat	alori[6];
@@ -62,6 +64,8 @@ class CLsound : public virtual CLcl, public CLsingle<CLsound>
 		void stop();
 		void pause();
 };
+
+CLstring* CLsound::clstring = CLstring::instance();
 ///*
 
 ///implementation

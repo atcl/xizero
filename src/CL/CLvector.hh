@@ -56,8 +56,7 @@ template<typename T>
 struct CLvector : public CLvectorbase<T,CLvector<T> >
 {
 	private:
-		CLmath* clmath;
-	
+		static CLmath* clmath;
 	public:
 	T x;
 	T y;
@@ -91,6 +90,8 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 
 				void print() const;							//console output	
 };
+
+template<typename T>CLmath* CLvector<T>::clmath = CLmath::instance();
 ///*
 
 ///implementation

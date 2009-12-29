@@ -15,6 +15,7 @@
 
 #include "CLtypes.hh"
 #include "CLstring.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -31,11 +32,13 @@
 ///*
 
 ///definitions
-class CLmsgbox : public virtual CLcl, public CLsingle<CLmsgbox>
+class CLmsgbox : public CLbase<CLmsgbox,1>
 {
-	friend class CLsingle<CLmsgbox>;
+	friend class CLbase<CLmsgbox,1>;
 	
 	private:
+		static CLstring* clstring;
+	protected:
 		Display* Xdisplay;
 		Window Xwindow;
 		GC Xgc;
@@ -52,6 +55,8 @@ class CLmsgbox : public virtual CLcl, public CLsingle<CLmsgbox>
 		xlong yesnobox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);
 };
+
+CLstring* CLmsgbox::clstring = CLstring::instance();
 ///*
 
 ///implementation

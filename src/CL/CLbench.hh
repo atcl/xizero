@@ -28,11 +28,13 @@
 ///*
 
 ///definitions
-class CLbench : public virtual CLcl, public CLsingle<CLbench>
+class CLbench : public CLbase<CLbench,1>
 {
-	friend class CLsingle<CLbench>;
+	friend class CLbase<CLbench,1>;
 	
 	private:
+		static CLsystem* clsystem;
+	protected:
 		xlong framespersecond;
 		xlong currenttime;
 		xlong elapsedtime;
@@ -49,6 +51,8 @@ class CLbench : public virtual CLcl, public CLsingle<CLbench>
 		float getfps() const { return framespersecond; };
 		void print() const;
 };
+
+CLsystem* CLbench::clsystem = CLsystem::instance();
 ///*
 
 ///imlementation

@@ -14,7 +14,7 @@
 #include "CLstruct.hh"
 #include "CLsystem.hh"
 #include "CLmath.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
@@ -40,9 +40,11 @@ struct rawpoly { CLlvector v[4]; };
 
 struct CLbox { CLfvector c[8]; }; //c[0-3] bottom, c[4-7] top
 
-class CLobject : public virtual CLcl
+class CLobject : public CLbase<CLobject,0>
 {
 	private:
+		static CLsystem* clsystem;
+	protected:
 		CLpolygon** polyptr;
 		CLfvector** dockptr;
 		CLbox* boundingbox;
@@ -69,6 +71,8 @@ class CLobject : public virtual CLcl
 		void setcolor(uxlong co);
 		void resetcolor();
 };
+
+CLsystem* CLobject::clsystem = CLsystem::instance();
 ///*
 
 ///implementation

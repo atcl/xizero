@@ -31,6 +31,11 @@
 class CLprogress : public CLguibase
 {
 	private:
+		static CLstring* clstring;
+		static CLgfx1*   clgfx1;
+		static CLgfx2*   clgfx2;
+		static CLmath*   clmath;
+	protected:
 		float progress;
 		xlong start;
 		xlong end;
@@ -53,6 +58,11 @@ class CLprogress : public CLguibase
 		xlong getend() const { return end; };
 		xlong getprogress() const { return progress; };
 };
+
+CLstring* CLprogress::clstring = CLstring::instance();
+CLgfx1*   CLprogress::clgfx1   = CLgfx1::instance();
+CLgfx2*   CLprogress::clgfx2   = CLgfx2::instance();
+CLmath*   CLprogress::clmath   = CLmath::instance();
 ///*
 
 ///implementation

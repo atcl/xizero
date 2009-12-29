@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLutils.hh"
 ///*
 
@@ -39,9 +39,9 @@ struct listmember
 };
 
 template<class member>
-class CLlist : public virtual CLcl
+class CLlist : public CLbase<CLlist<member>,0>
 {
-	private:
+	protected:
 		listmember<member>* current;
 		listmember<member>* first;
 		listmember<member>* last;

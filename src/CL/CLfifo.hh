@@ -10,7 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 ///*
 
 ///header
@@ -35,9 +35,9 @@ struct fifomember
 };
 
 template<class member>
-class CLfifo : public virtual CLcl
+class CLfifo : public CLbase<CLfifo<member>,0>
 {
-	private:
+	protected:
 		fifomember<member>* head;
 		fifomember<member>* tail;
 		xlong length;

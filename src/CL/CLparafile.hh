@@ -27,9 +27,11 @@
 ///*
 
 ///declarations
-class CLparafile : public virtual CLcl
+class CLparafile : CLbase<CLparafile,0>
 {
 	private:
+	
+	protected:
 	
 	public:
 		CLparafile();
