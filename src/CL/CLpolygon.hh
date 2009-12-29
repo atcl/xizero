@@ -65,7 +65,7 @@ class CLpolygon : CLbase<CLpolygon,0>
 		void shape();
 		void flatshade(float pz,bool ambient,bool zlight);
 		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
-		void rasterize(xlong shadow); //too slow!!!
+		void rasterize(xlong shadow,CLfbuffer* t=0); //too slow!!!
 		inline xlong circleinc(xlong x,xlong pc);
 		inline xlong circledec(xlong x,xlong pc);
 	public:
@@ -428,7 +428,7 @@ xlong CLpolygon::circleinc(xlong x,xlong pc) { return ( (x+1) >= pc ) ? 0 : x+1;
 
 xlong CLpolygon::circledec(xlong x,xlong pc) { return ( (x-1) < 0 ) ? pc-1 : x-1; } //! critical
 
-void CLpolygon::rasterize(xlong shadow) //! critical
+void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 {
 	xlong x = 0;
 	xlong y = 0;
@@ -511,9 +511,9 @@ void CLpolygon::rasterize(xlong shadow) //! critical
 			case 2:
 				while(length > 0)
 				{
-					if(actz < clzbuffer[offset])
+					if(actz < (*t)[offset])
 					{
-						clzbuffer[offset] = actz;
+						(*t)[offset] = actz;
 					}
 					
 					offset++;
@@ -634,13 +634,10 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 {
 	screenside* backup_left = leftside;
 	screenside* backup_right = rightside;
-	CLfbuffer backup_zbuffer(clzbuffer.getsize());
-	clzbuffer.copy(&backup_zbuffer);
 	xlong backup_ymax = ymax;
 
 	leftside = l;
 	rightside = r;
-	clzbuffer = *b;
 	ymax = h-1;
 	
 	//
@@ -674,12 +671,11 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	
 	xyclipping();
 
-	if(visible() && cpointcount!=0) { rasterize(2); }
+	if(visible() && cpointcount!=0) { rasterize(2,b); }
 	//
 
 	leftside = backup_left;
 	rightside = backup_right;
-	backup_zbuffer.copy(&clzbuffer);
 	ymax = backup_ymax;
 }
 

@@ -66,7 +66,7 @@ template <typename T>
 CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
 {
 	//adjust size and allocate buffer
-	size = (s+1) + (s%4); // make sure is amultiple of 16byte
+	size = (s+1) + ((s+1)%4); // make sure is a multiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
 	ttype = cldetect->mmx() + cldetect->sse();
