@@ -21,16 +21,9 @@ int main(int argc, char** argv)
 	CLmenu* sysmenu = new CLmenu();
 
 	//*
-
 		//test tree:
-		CLtree<xlong>* testtree = new CLtree<xlong>();
-
-		// //test menu:
-			//CLmenu testmenu = new CLmenu();
-			
+		CLtree<xlong>* testtree = new CLtree<xlong>();	
 	//*
-	
-	
 	
 	//audio test:
 	CLar* clsdata = new CLar(cldata->findbyname("sounds.a"));
@@ -449,8 +442,6 @@ int main(int argc, char** argv)
 		clglobal->cldoublebuffer.clear(0);
 		clglobal->clzbuffer.clear(ZRES);
 		clglobal->clstencilbuffer.clear(0);
-
-		//clgfx1->drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i);
 
 		/*
 		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
