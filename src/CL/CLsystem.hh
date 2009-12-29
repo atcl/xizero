@@ -48,10 +48,8 @@ class CLsystem : public virtual CLcl, public CLsingle<CLsystem>
 		bool    appendfile(const xchar* fn,xchar* b,xlong s);
 		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
 		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
-		
 		xlong   wait(xlong milliseconds);
-		xlong   getmilliseconds(); //since midnight
-		
+		xlong   getmilliseconds(); //since program launch
 		xlong   system(const xchar* c);
 };
 ///*
@@ -209,14 +207,14 @@ xlong CLsystem::wait(xlong milliseconds) //! noncritical
 
 	//do nothing while waiting for stoptime
 	xlong nowtime = 0;
-	while(nowtime < stoptime) nowtime = xlong( (1000 * clock()) / CLOCKS_PER_SEC);
+	while(nowtime < stoptime) nowtime = xlong( clock() / 1000); //actually 1000*clock()/CLOCKS_PER_SEC but on unix systems CLOCKS_PER_SEC=1000000
 	//*
 	
 	return 0;
 }
 
 //since program launch 
-xlong CLsystem::getmilliseconds() { return ( (1000 * clock()) / CLOCKS_PER_SEC); } //! noncritical
+xlong CLsystem::getmilliseconds() { return ( clock() / 1000); } //! noncritical
 
 xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
 ///*

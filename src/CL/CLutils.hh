@@ -103,12 +103,10 @@ uxlong inline bytemul(uxlong a,float s)
 	return xa.dd;
 }
 
-void inline swap(void* a,void* b)
-{
-	
-}
+template<typename T>
+void inline swap(T* a,T* b) { if(a==b) { return; } *a^=*b; *b^=*a; *a^=*b; }
 
-void inline CLprefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); } //use prefetcht1???
+void inline prefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); }
 ///*
 
 #endif

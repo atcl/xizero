@@ -167,7 +167,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 		case 1:
 			a = y1;
 			b = y2;
-			if(a>b) a ^= b ^= a ^= b;
+			if(a>b) { swap(&a,&b); }
 			offset = (a*XRES)+x1;
 			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset] = c; offset+=XRES; }
 		break;
@@ -175,7 +175,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 		case -1:
 			a = x1;
 			b = x2;
-			if(a>b) a ^= b ^= a ^= b;
+			if(a>b) { swap(&a,&b); }
 			offset = (y1*XRES);
 			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset+i] = c; }
 		break;
@@ -185,7 +185,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 
 			if(dx<0) { dx = -dx; xs = -xs; }
 			if(dy<0) { dy = -dy; ys = -ys; }
-			if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
+			if(dy > dx) { swap(&dx,&dy); swap(&xs,&ys); }
 
 			len = dx+1;
 			e = dy;
@@ -204,7 +204,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 
 			if(dx<0) { dx = -dx; xs = -xs; }
 			if(dy<0) { dy = -dy; ys = -ys; }
-			if(dy > dx) { dx ^= dy ^= dx ^= dy; xs ^= ys ^= xs ^= ys; }
+			if(dy > dx) { swap(&dx,&dy); swap(&xs,&ys); }
 		
 			len = dx+1;
 			e = dy;
@@ -242,8 +242,8 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) 
 	if(f)
 	{
 		//make sure x1<x2 and y1<y2
-		if(x2<x1) x1 ^= x2 ^= x1 ^= x2;
-		if(y2<y1) y1 ^= y2 ^= y1 ^= y2;
+		if(x2<x1) { swap(&x1,&x2); }
+		if(y2<y1) { swap(&y1,&y2); }
 		//*
 		
 		//decide wether to use horizontal or vertical lines

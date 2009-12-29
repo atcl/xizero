@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
 	
 	CLmenu* sysmenu = new CLmenu();
-	
+
 	//*
 
 		//test tree:
