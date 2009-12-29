@@ -10,7 +10,7 @@
 
 ///sys includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
+#include "CLbase.hh"
 #include "CLresource.hh"
 #include "CLstruct.hh"
 #include "CLutils.hh"

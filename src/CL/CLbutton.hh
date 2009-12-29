@@ -10,7 +10,6 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLcl.hh"
 #include "CLutils.hh"
 #include "CLguibase.hh"
 #include "CLgfx2.hh"

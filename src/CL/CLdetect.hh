@@ -13,7 +13,6 @@
 #include "CLconsts.hh"
 #include "CLsystem.hh"
 #include "CLstring.hh"
-#include "CLsingle.hh"
 #include "CLbase.hh"
 ///*
 

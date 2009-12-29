@@ -34,11 +34,16 @@
 ///*
 
 ///definitions
-class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
+class CLtransitions : public CLbase<CLtransitions,1>
 {
-	friend class CLsingle<CLtransitions>;
+	friend class CLbase<CLtransitions,1>;
 	
 	private:
+		static CLwindow* clwindow;
+		static CLsystem* clsystem;
+		static CLmath*   clmath;
+		static CLgfx1*   clgfx1;
+	protected:
 		CLtransitions() { };
 		~CLtransitions() { };
 	public:
@@ -46,6 +51,11 @@ class CLtransitions : public virtual CLcl, public CLsingle<CLtransitions>
 		void dissolve();
 		void fadetoblack();
 };
+
+CLwindow* CLtransitions::clwindow = CLwindow::instance();
+CLsystem* CLtransitions::clsystem = CLsystem::instance();
+CLmath*   CLtransitions::clmath   = CLmath::instance();
+CLgfx1*   CLtransitions::clgfx1   = CLgfx1::instance();
 ///*
 
 ///implementation

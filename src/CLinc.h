@@ -15,8 +15,7 @@
 //*
 
 //base classes
-#include "CL/CLcl.hh"
-#include "CL/CLsingle.hh"
+#include "CL/CLbase.hh"
 //*
 
 //type classes
