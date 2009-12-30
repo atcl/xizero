@@ -4,8 +4,8 @@
 ///*
 
 ///guard
-#ifndef HH_CLGFX1
-#define HH_CLGFX1
+#ifndef HH_CLgfx
+#define HH_CLgfx
 ///*
 
 ///includes
@@ -16,10 +16,13 @@
 #include "CLfifo.hh"
 #include "CLmath.hh"
 #include "CLutils.hh"
+#include "CLformat.hh"
+#include "CLstring.hh"
+#include "CLar.hh"
 ///*
 
 ///header
-/* class name:	CLgfx1
+/* class name:	CLgfx
  * 
  * description:	standard 2d graphics routines.
  * 
@@ -31,6 +34,20 @@
  */
 ///*
 
+///declarations
+//font types
+#define TELEFONT 0;
+#define MONOFONT 1;
+#define LINEFONT 2;
+#define TERMFONT 3;
+#define SEGMFONT 4;
+#define TALLFONT 5;
+#define SYMBFONT 6;
+//*
+
+typedef sprite* CLfont;
+///*
+
 ///definitions
 struct CLpoint
 {
@@ -40,18 +57,21 @@ struct CLpoint
 	CLpoint(xlong px,xlong py) { x=px; y=py; }
 };
 
-class CLgfx1 : public CLbase<CLgfx1,1>
+class CLgfx : public CLbase<CLgfx,1>
 {
-	friend class CLbase<CLgfx1,1>;
+	friend class CLbase<CLgfx,1>;
 	
 	private:
 		static CLmath* clmath;
 		static CLscreen* clscreen;
+		static CLformat* clformat;
+		static CLstring* clstring;
 	protected:
+		CLfont** fonts;
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
-		CLgfx1() { };
-		~CLgfx1() { };
+		CLgfx() { fonts = 0; };
+		~CLgfx() { };
 	public:
 		uxlong readpixel(xlong x,xlong y) const;
 		void drawpixel(xlong x,xlong y,uxlong c,bool b=0) const;
@@ -60,6 +80,7 @@ class CLgfx1 : public CLbase<CLgfx1,1>
 		void drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const;
 		void drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa=0) const;
 		void drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f=0) const;
+		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const;
 		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const;
 		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const;
 		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a=0) const;
@@ -69,26 +90,26 @@ class CLgfx1 : public CLbase<CLgfx1,1>
 		void drawsprite(xlong x,xlong y,sprite* s) const;
 		void drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
-		void drawscreen(sprite* s) const;
-		
 		void loadfonts(CLfile* sf);
-		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const;
 		xlong drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc=0) const;
 		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0) const;
 		xlong getfontstringwidth(const char* a,uxlong f) const;
 		xlong getfontstringheight(const char* a,uxlong f) const;
+		sprite* savescreen() const;
+		void drawscreen(sprite* s) const;
 		uxlong getEGAcolor(xchar c) const;
 		uxlong blendcolors(uxlong c1,uxlong c2,xlong m) const;
-		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;
-		sprite* savescreen() const;
+		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;	
 };
 
-CLmath* CLgfx1::clmath = CLmath::instance();
-CLscreen* CLgfx1::clscreen = CLscreen::instance();
+CLmath*   CLgfx::clmath   = CLmath::instance();
+CLscreen* CLgfx::clscreen = CLscreen::instance();
+CLformat* CLgfx::clformat = CLformat::instance();
+CLstring* CLgfx::clstring = CLstring::instance();
 ///*
 
 ///implementation
-void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
+void CLgfx::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
 {
 	//precalculate linear address components (especially multiplications)
 	xlong b1 = (yc*XRES)+xc;
@@ -108,7 +129,7 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const /
 	//*
 }
 
-void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
+void CLgfx::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
 {
 	//precalculate linear address components (especially multiplications) 
 	xlong a = (yc*XRES)+xc;
@@ -123,13 +144,13 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const 
 	//*
 }
 
-uxlong CLgfx1::readpixel(xlong x,xlong y) const //! critical
+uxlong CLgfx::readpixel(xlong x,xlong y) const //! critical
 {
 	if(isoff(x,y)) { return -1; }
 	return (clscreen->cldoublebuffer[(y*XRES)+x]);
 }
 
-void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const //! critical
+void CLgfx::drawpixel(xlong x,xlong y,uxlong c,bool b) const //! critical
 {
 	if(isoff(x,y)) { return; }
 	clscreen->cldoublebuffer[(y*XRES)+x] = c;
@@ -141,24 +162,24 @@ void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const //! critical
 	}
 }
 
-void CLgfx1::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const //! critical
+void CLgfx::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const //! critical
 {
 	if(isoff(x,y)) { return; }
 	b[(y*XRES)+x] = c;
 }
 
-void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
+void CLgfx::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
 {
 	if(isoff(x1,x2)||isoff(x2,y2)) { return; }
 	clscreen->cldoublebuffer[(y1*XRES)+x1] = clscreen->cldoublebuffer[(y2*XRES)+x2];
 }
 
-void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
+void CLgfx::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
 {
 
 }
 
-void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical
+void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical
 {
 	//! todo: if(a) then anti-aliased line
 	
@@ -253,7 +274,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 	}
 }
 
-void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const //! critical
+void CLgfx::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) const //! critical
 {
 	if(f)
 	{
@@ -278,7 +299,38 @@ void CLgfx1::drawrectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool f) 
 	}
 }
 
-void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const //! critical
+void CLgfx::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const //! critical
+{
+	//draw to top level of zbuffer!
+	xlong offset1 = (y1*XRES)+x1;
+	xlong offset2 = offset1;
+	xlong doffset = ((y2-y1)*XRES);
+	xlong diff    = x2-x1;
+	uxlong c3     = c2;
+	if(f) c3 = 0x00FFFFFF - c2;
+
+	for(int i=y1; i<=y2; i++)
+	{
+		clscreen->cldoublebuffer[offset1] = c3;
+		offset1++;
+		for(int j=x1+1; j<x2; j++)
+		{
+			clscreen->cldoublebuffer[offset1] = c1;
+			offset1++;
+		}
+		clscreen->cldoublebuffer[offset1] = c2;
+		offset1 += XRES - diff;
+	}
+
+	for(int k=x1; k<x2; k++)
+	{
+		clscreen->cldoublebuffer[offset2] = c3;
+		clscreen->cldoublebuffer[offset2+doffset] = c2;
+		offset2++;
+	}
+}
+
+void CLgfx::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const //! critical
 {
 	//draw outline of four-sided polygon
 	drawline(x1,y1,x2,y2,c);
@@ -288,7 +340,7 @@ void CLgfx1::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,x
 	//*
 }
 
-void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const //! critical
+void CLgfx::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const //! critical
 {
 	//angle preparations
 	xlong as = clmath->sign(a);
@@ -331,7 +383,7 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 	//*
 }
 
-void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! critical
+void CLgfx::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! critical
 {
 	//center and radius clipping
 	if(isoff(xc-r,yc-r,xc+r,yc+r)) { return; }
@@ -356,7 +408,7 @@ void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! cri
 	}
 }
 
-void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const //! critical
+void CLgfx::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const //! critical
 {
 	xlong x = r1;
 	xlong y = 0;
@@ -408,7 +460,7 @@ void CLgfx1::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const //!
 	}
 }
 
-void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
+void CLgfx::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 {
 	//set up fifo
 	CLfifo<CLpoint> fillfifo;
@@ -459,7 +511,7 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 	//*
 }
 
-void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
+void CLgfx::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 {
 	//set up fifo
 	CLfifo<CLpoint> fillfifo;
@@ -510,7 +562,7 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 	//*
 }
 
-void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
+void CLgfx::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 {
 	//set up variables
 	xlong swidth = s->width;
@@ -554,12 +606,12 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 	//*	
 }
 
-void CLgfx1::drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const //! critical
+void CLgfx::drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const //! critical
 {
 
 }
 
-void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! critical
+void CLgfx::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! critical
 {
 	//set up variables
 	xlong swidth = s->width;
@@ -868,7 +920,132 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 	//*
 }
 
-void CLgfx1::drawscreen(sprite* s) const //! critical
+void CLgfx::loadfonts(CLfile* sf) //! critical
+{
+	fonts = new CLfont*[8];
+	CLar* fontsa = new CLar(sf);
+	fonts[0] = clformat->loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
+	fonts[1] = clformat->loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
+	fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
+	fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
+	fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),32,60);
+	//fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),32,32);
+	//fonts[6] = clformat->loadtileset(fontsa->findbyname(u8"CLsymbtype.fnt"),16,16);
+}
+
+xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc) const //! critical
+{
+	//select font
+	if(fonts==0) { return -1; }
+	if(f>4) { f = 0; }
+	CLfont* t = fonts[f];
+	//*
+	
+	//xlong ssize = s->size;
+	xlong swidth = t[a]->width;
+	xlong sheight = t[a]->height;
+	xlong xs = x;
+	xlong ys = y;
+	xlong xe = x + swidth;
+	xlong ye = y + sheight;
+	//*
+
+	//clipping against screen borders
+	if(isoff(xs,ys,xe,ye)) return -1;
+	clip(xs,ys);
+	clip(xe,ye);
+	//*
+
+	//set up variables
+	xlong xoffset = (ys * XRES) + xs;
+	xlong linearc = 0;
+	xlong rx = x;
+	uxlong srcval = 0;
+	//*
+
+	//drawloop
+	for(uxlong i=0; i<sheight ;i++)
+	{
+		for(uxlong j=0; j<swidth ;j++)
+		{
+			srcval = t[a]->data[linearc];
+			if(srcval == 0x00FF0000) clscreen->cldoublebuffer[xoffset+j] = fc;
+			else if(bc!=0 && srcval == 0x00FFFFFF) clscreen->cldoublebuffer[xoffset+j] = bc;
+			if(i==0 && srcval != 0x00000000) rx++;
+			linearc++;
+		}
+		xoffset += XRES;
+	}
+	//*
+	
+	return rx;
+}
+
+void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc) const //! critical
+{
+	if(fonts==0) { return; }
+	xlong l = clstring->length(a);
+	xlong t = x;
+	
+	for(uxlong i=0; i<l; i++)
+	{
+		if(a[i]=='\n') { t = x; y += 16; }
+		else
+		{
+			t = drawfontchar(t,y,a[i],f,fc,bc);
+			if(t==-1) return;
+		}
+	}
+}
+
+xlong CLgfx::getfontstringwidth(const char* a,uxlong f) const //! critical
+{
+	//select font
+	if(fonts==0) { return 0; }
+	if(f>4) f = 0;
+	CLfont* t = fonts[f];
+	//*
+	
+	xlong l = clstring->length(a);
+	xlong r = 0;
+	uxlong srcoff = 0;
+	
+	for(uxlong i=0; i<l; i++)
+	{ for(uxlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
+	
+	return r;
+}
+
+xlong CLgfx::getfontstringheight(const char* a,uxlong f) const //! critical
+{
+	//select font
+	if(fonts==0) { return 0; }
+	if(f>4) f = 0;
+	CLfont* t = fonts[f];
+	//*
+	
+	xlong l = clstring->length(a);
+	xlong r = t[0]->height;
+	
+	for(uxlong i=0; i<l; i++) { if(a[i]=='\n') r += t[i]->height; }
+	
+	return r;
+}
+
+sprite* CLgfx::savescreen() const //! critical
+{
+	sprite* r = new sprite;
+	r->width = XRES;
+	r->height = YRES;
+	r->size = (XRES*YRES);
+	r->data = new uxlong[r->size];
+	
+	for(uxlong i=0; i<r->size; i++) { r->data[i] = clscreen->cldoublebuffer[i]; }
+	
+	return r;
+}
+
+void CLgfx::drawscreen(sprite* s) const //! critical
 {
 	//check if sprite has correct dimensions
 	if(s->width==XRES && s->height==YRES)
@@ -878,6 +1055,78 @@ void CLgfx1::drawscreen(sprite* s) const //! critical
 		//*
 	}
 	//*
+}
+
+uxlong CLgfx::getEGAcolor(xchar c) const //! critical
+{
+	//return the 16 EGA colors
+	switch(c)
+	{
+		case 0:  return 0x00000000; break; //black
+		case 1:  return 0x000000FF; break; //blue
+		case 2:  return 0x0000FF00; break; //green
+		case 3:  return 0x0000FFFF; break; //cyan
+		case 4:  return 0x00FF0000; break; //red
+		case 5:  return 0x00FF00FF; break; //magenta
+		case 6:  return 0x00FFFF00; break; //yellow
+		case 7:  return 0x00808080; break; //dark white?
+		case 8:  return 0x00404040; break; //gray
+		case 9:  return 0x008080FF; break; //light blue
+		case 10: return 0x0080FF80; break; //light green
+		case 11: return 0x0080FFFF; break; //light cyan
+		case 12: return 0x00FF8080; break; //light red
+		case 13: return 0x00FF80FF; break; //light magenta
+		case 14: return 0x00FFFF80; break; //light yellow
+		case 15: return 0x00FFFFFF; break; //white
+		default: return 0;
+	}
+	//*
+}
+
+uxlong* CLgfx::getgradient(uxlong s,uxlong e,xlong i) const //! critical
+{
+	doubleword a = { s };
+	doubleword b = { e };
+	
+	float at = (float(b.db[0]) - float(a.db[0])) / float(i); 
+	float rt = (float(b.db[1]) - float(a.db[1])) / float(i); 
+	float gt = (float(b.db[2]) - float(a.db[2])) / float(i); 
+	float bt = (float(b.db[3]) - float(a.db[3])) / float(i); 
+	
+	uxlong* r = new uxlong[i];
+	
+	for(xlong j=0; j<i; j++)
+	{
+		a.db[0] = uxchar(float(a.db[0]) + at);
+		a.db[1] = uxchar(float(a.db[1]) + rt);
+		a.db[2] = uxchar(float(a.db[2]) + gt);
+		a.db[3] = uxchar(float(a.db[3]) + bt);
+		r[i] = a.dd;
+	}
+	
+	return r;
+}
+
+uxlong CLgfx::blendcolors(uxlong c1,uxlong c2,xlong m) const //! critical
+{
+	uxlong r = 0;
+	
+	switch(m)
+	{
+		case 0: r = c1; break; //normal
+		case 1: r = c1 & c2; break; //and
+		case 2: r = c1 | c2; break; //or	
+		case 3: r = c1 ^ c2; break; //xor
+		case 4: r = ~(c1 & c2); break; //nand
+		case 5: r = ~(c1 | c2); break; //nor
+		case 6: r = ~c1; break; //not
+		case 7: r = byteadd(c1,c2); break; //add
+		case 8: r = bytesub(c1,c2); break; //sub
+		case 9: r = bytemul(c1,c2); break; //mul
+		default: r = c1; break;
+	}
+	
+	return r;
 }
 ///*
 

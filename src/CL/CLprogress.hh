@@ -12,6 +12,7 @@
 #include "CLtypes.hh"
 #include "CLbase.hh"
 #include "CLguibase.hh"
+#include "CLgfx.hh"
 ///*
 
 ///header
@@ -32,8 +33,7 @@ class CLprogress : public CLguibase
 {
 	private:
 		static CLstring* clstring;
-		static CLgfx1*   clgfx1;
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 		static CLmath*   clmath;
 	protected:
 		float progress;
@@ -60,8 +60,7 @@ class CLprogress : public CLguibase
 };
 
 CLstring* CLprogress::clstring = CLstring::instance();
-CLgfx1*   CLprogress::clgfx1   = CLgfx1::instance();
-CLgfx2*   CLprogress::clgfx2   = CLgfx2::instance();
+CLgfx*    CLprogress::clgfx    = CLgfx::instance();
 CLmath*   CLprogress::clmath   = CLmath::instance();
 ///*
 
@@ -127,17 +126,17 @@ void CLprogress::draw() const //! noncritical
 	if(visible==0) return;
 
 	//draw enclosing frame
-	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
+	clgfx->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
 	//*
 
 	switch(horver)
 	{
 		//draw horizontal progress
-		case 0: clgfx1->drawrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor,1); break;
+		case 0: clgfx->drawrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor,1); break;
 		//*
 		
 		//draw vertical progress
-		case 1: clgfx1->drawrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor,1); break;
+		case 1: clgfx->drawrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor,1); break;
 		//*
 	}
 }

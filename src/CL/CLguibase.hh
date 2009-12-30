@@ -11,8 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLbase.hh"
-#include "CLgfx1.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 ///*
 
 ///header

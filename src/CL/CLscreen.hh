@@ -42,7 +42,7 @@ class CLscreen : public CLbase<CLscreen,1>
 		uxlong pixeldepth;
 		uxlong pixelsize;
 		CLscreen();
-		~CLscreen();
+		~CLscreen() { };
 	public:
 		uxlong getbytewidth() const { return bytewidth; };
 		uxlong getbyteheight() const { return byteheight; };
@@ -71,11 +71,6 @@ CLscreen::CLscreen() : cldoublebuffer((XRES*YRES),0), clframebuffer((XRES*YRES),
 	pixelheight = YRES;
 	pixeldepth = ZRES;
 	pixelsize = XRES*YRES;
-}
-
-CLscreen::~CLscreen()
-{
-	
 }
 ///*
 

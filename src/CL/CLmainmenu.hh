@@ -13,8 +13,7 @@
 #include "CLstruct.hh"
 #include "CLconsts.hh"
 #include "CLbase.hh"
-#include "CLgfx1.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 #include "CLlabel.hh"
 #include "CLbutton.hh"
 ///*
@@ -38,8 +37,7 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 	private:
 		static CLformat* clformat;
 		static CLstring* clstring;
-		static CLgfx1*   clgfx1;
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 	protected:
 		sprite* background;
 		CLbutton** button;
@@ -56,8 +54,7 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 
 CLformat* CLmainmenu::clformat = CLformat::instance();
 CLstring* CLmainmenu::clstring = CLstring::instance();
-CLgfx1*   CLmainmenu::clgfx1   = CLgfx1::instance();
-CLgfx2*   CLmainmenu::clgfx2   = CLgfx2::instance();
+CLgfx*   CLmainmenu::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
@@ -81,7 +78,7 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//*
 	
 	//determine button positions
-	temp = clgfx2->getfontstringwidth(bt[mbli],0);
+	temp = clgfx->getfontstringwidth(bt[mbli],0);
 	xlong bw = temp + 4;
 	if(bw<XRES>>2) bw = XRES>>2;
 	xlong bx = (XRES>>1) - (bw>>1);
@@ -95,17 +92,17 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//*
 	
 	//determine header position
-	temp = clgfx2->getfontstringwidth(hl,0) + 4;
+	temp = clgfx->getfontstringwidth(hl,0) + 4;
 	xlong hx = (XRES>>1) - (temp>>1);
 	xlong hw = temp;
 	xlong hy = 20;
 	//*
 	
 	//determine footer position
-	temp = clgfx2->getfontstringwidth(fl,0) + 4;
+	temp = clgfx->getfontstringwidth(fl,0) + 4;
 	xlong fx = XRES - temp - 16;
 	xlong fw = temp;
-	xlong fh = clgfx2->getfontstringheight(fl,0) + 4;
+	xlong fh = clgfx->getfontstringheight(fl,0) + 4;
 	xlong fy = YRES - fh; 
 	//*
 	
@@ -129,7 +126,7 @@ CLmainmenu::~CLmainmenu()
 
 void CLmainmenu::draw() const //! critical
 {
-	clgfx1->drawscreen(background);
+	clgfx->drawscreen(background);
 	header->draw();
 	for(uxlong i=0; i<buttoncount; i++) { button[i]->draw(); }
 	footer->draw();

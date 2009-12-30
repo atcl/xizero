@@ -409,9 +409,9 @@ void CLplayer::showbox() //! noncritical
 	d.y -= boundingbox[1][0]->c[3].y;
 	d.z += boundingbox[1][0]->c[3].z;
 	
-	CLgfx1::instance()->drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
-	CLgfx1::instance()->drawpixel(d.x,d.y,0,1);
-	CLgfx1::instance()->drawpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0,1);
+	CLgfx::instance()->drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
+	CLgfx::instance()->drawpixel(d.x,d.y,0,1);
+	CLgfx::instance()->drawpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0,1);
 }
 //*
 

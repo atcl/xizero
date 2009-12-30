@@ -35,7 +35,7 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 	friend class CLbase<CLmisc3d,1>;
 	
 	private:
-		static CLgfx1*   clgfx1;
+		static CLgfx*    clgfx;
 		static CLscreen* clscreen;
 	protected:
 		CLmisc3d() { };
@@ -48,7 +48,7 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
 
-CLgfx1*   CLmisc3d::clgfx1   = CLgfx1::instance();
+CLgfx*    CLmisc3d::clgfx    = CLgfx::instance();
 CLscreen* CLmisc3d::clscreen = CLscreen::instance();
 ///*
 
@@ -113,7 +113,7 @@ void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa) //! critical
 		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
 		xlong ox = xlong( ( 80 * q.x) / q.z) + (XRES>>1);
 		xlong oy = xlong( (-95 * q.y) / q.z) + (YRES>>1);
-		clgfx1->drawline(nx,ny,ox,oy,c,aa);
+		clgfx->drawline(nx,ny,ox,oy,c,aa);
 	}
 	//*
 }

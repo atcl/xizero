@@ -10,7 +10,7 @@ int main()
 	//init sequence
 	clglobal = CLsetup();
 	cldata = new CLar(BASEDIR"xizero.dat");
-	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
+	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
 	//*
 
 	//intros
@@ -19,7 +19,7 @@ int main()
 	//*
 	
 	//mainmenu
-	sprite* xzmenuback = clglobal->clgfx2->savescreen();
+	sprite* xzmenuback = clglobal->clgfx->savescreen();
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);

@@ -43,7 +43,7 @@ class CLwindow : public CLbase<CLwindow,1>
 	private:
 		static CLformat* clformat;
 		static CLapp*    clapp;
-		static CLgfx1*   clgfx1;
+		static CLgfx*    clgfx;
 		static CLscreen* clscreen;
 	protected:
 		Display* Xdisplay;
@@ -96,7 +96,7 @@ class CLwindow : public CLbase<CLwindow,1>
 
 CLformat* CLwindow::clformat = CLformat::instance();
 CLapp*    CLwindow::clapp    = CLapp::instance();
-CLgfx1*   CLwindow::clgfx1   = CLgfx1::instance();
+CLgfx*    CLwindow::clgfx    = CLgfx::instance();
 CLscreen* CLwindow::clscreen = CLscreen::instance();
 ///*
 
@@ -239,7 +239,7 @@ void CLwindow::handle() //! critical
 	}
 }
 
-xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx1->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; } //! noncritical
+xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; } //! noncritical
 
 xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncritical
 

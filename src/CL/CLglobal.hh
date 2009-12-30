@@ -23,8 +23,7 @@
 #include "CLfsprog.hh"
 #include "CLdetect.hh"
 #include "CLgamepad.hh"
-#include "CLgfx1.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 #include "CLtrans.hh"
 #include "CLsound.hh"
 #include "CLid.hh"
@@ -72,8 +71,7 @@ class CLglobal : public CLbase<CLglobal,1>
 		static CLdetect* cldetect;
 		static CLfsprogress* clfsprogress;
 		static CLgamepad* clgamepad;
-		static CLgfx1*   clgfx1;
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 		static CLtransitions* cltransitions;
 		static CLsound*  clsound;
 		static CLsprites* clsprites;
@@ -96,8 +94,7 @@ CLfloor*  CLglobal::clfloor  = CLfloor::instance();
 CLdetect* CLglobal::cldetect = CLdetect::instance();
 CLfsprogress* CLglobal::clfsprogress = CLfsprogress::instance();
 CLgamepad* CLglobal::clgamepad = CLgamepad::instance();
-CLgfx1*   CLglobal::clgfx1   = CLgfx1::instance();
-CLgfx2*   CLglobal::clgfx2   = CLgfx2::instance();
+CLgfx*   CLglobal::clgfx   = CLgfx::instance();
 CLtransitions* CLglobal::cltransitions = CLtransitions::instance();
 CLsound*  CLglobal::clsound  = CLsound::instance();
 CLsprites* CLglobal::clsprites = CLsprites::instance();

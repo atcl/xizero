@@ -12,7 +12,7 @@
 #include "CLtypes.hh"
 #include "CLutils.hh"
 #include "CLguibase.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 ///*
 
 ///header
@@ -33,7 +33,7 @@ class CLbutton : public CLguibase
 {
 	private:
 		static CLstring* clstring;
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 		static CLwindow* clwindow;
 	protected:
 		void (*action)();
@@ -57,7 +57,7 @@ class CLbutton : public CLguibase
 };
 
 CLstring* CLbutton::clstring = CLstring::instance();
-CLgfx2*   CLbutton::clgfx2   = CLgfx2::instance();
+CLgfx*   CLbutton::clgfx   = CLgfx::instance();
 CLwindow* CLbutton::clwindow = CLwindow::instance();
 CLlist<CLbutton>* CLbutton::buttonlist = new CLlist<CLbutton>;
 ///*
@@ -68,8 +68,8 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	action = a;
 	
 	caption = clstring->copy(c);
-	captionwidth = clgfx2->getfontstringwidth(caption,0) + 4;
-	captionheight = clgfx2->getfontstringheight(caption,0);
+	captionwidth = clgfx->getfontstringwidth(caption,0) + 4;
+	captionheight = clgfx->getfontstringheight(caption,0);
 	if(w==-1 || w<captionwidth) width = captionwidth;
 	if(h==-1 || h<captionheight) height = captionheight;
 	captionx = (width - captionwidth)>>1;
@@ -84,16 +84,16 @@ CLbutton::~CLbutton() { delete[] caption; } //! noncritical
 void CLbutton::draw() const //! critical
 {
 	if(visible==0) return;
-	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
-	clgfx2->drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
+	clgfx->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
+	clgfx->drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
 }
 
 void CLbutton::setcaption(xchar* t) //! noncritical
 {
 	delete caption;
 	caption = clstring->copy(t);
-	captionwidth = clgfx2->getfontstringwidth(t,0) + 4;
-	captionheight = clgfx2->getfontstringheight(t,0);
+	captionwidth = clgfx->getfontstringwidth(t,0) + 4;
+	captionheight = clgfx->getfontstringheight(t,0);
 	if(width<captionwidth) width = captionwidth;
 	if(height<captionheight) height = captionheight;
 	captionx = (width - captionwidth)>>1;

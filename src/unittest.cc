@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	//init sequence
 	CLglobal* clglobal = CLsetup();
 	cldata = new CLar(BASEDIR"xizero.dat");
-	clglobal->clgfx2->loadfonts(cldata->findbyname("fonts.a"));
+	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
 	
 	CLmenu* sysmenu = new CLmenu();
 
@@ -444,17 +444,17 @@ int main(int argc, char** argv)
 		clglobal->clscreen->clstencilbuffer.clear(0);
 
 		/*
-		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
-		clglobal->clgfx2->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,90,"Use + for reseting",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,110,"Use # for exploding",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,130,"Use ^ for toggling between shading",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,150,"Use - for toggling between shadowing",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,170,"Use . and  , to translate along normals",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
-		clglobal->clgfx2->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
+		clglobal->clgfx->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,90,"Use + for reseting",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,110,"Use # for exploding",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,130,"Use ^ for toggling between shading",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,150,"Use - for toggling between shadowing",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,170,"Use . and  , to translate along normals",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
 
 		if(shadows==1)
 		{
@@ -465,7 +465,7 @@ int main(int argc, char** argv)
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
 
-		clglobal->clgfx1->drawsprite(10,10,testlevel);*/
+		clglobal->clgfx->drawsprite(10,10,testlevel);*/
 		
 		q.y = 20;
 		for(xlong i=0; i<25; i++)

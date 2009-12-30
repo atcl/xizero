@@ -11,7 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLguibase.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 ///*
 
 ///header
@@ -32,7 +32,7 @@ class CLlabel : public CLguibase
 {
 	private:
 		static CLstring* clstring;
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 	protected:
 		xchar* text;
 		bool  frame;
@@ -49,7 +49,7 @@ class CLlabel : public CLguibase
 };
 
 CLstring* CLlabel::clstring = CLstring::instance();
-CLgfx2*   CLlabel::clgfx2   = CLgfx2::instance();
+CLgfx*    CLlabel::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
@@ -59,8 +59,8 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	if(!f) rcolor = bcolor;
 	
 	text = clstring->copy(t);
-	textwidth = clgfx2->getfontstringwidth(text,0) + 4;
-	textheight = clgfx2->getfontstringheight(text,0);
+	textwidth = clgfx->getfontstringwidth(text,0) + 4;
+	textheight = clgfx->getfontstringheight(text,0);
 	if(w==-1 || w<textwidth) width = textwidth;
 	if(h==-1 || h<textheight) height = textheight;
 	textx = (width - textwidth)>>1;
@@ -70,16 +70,16 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 void CLlabel::draw() const //! noncritical
 {
 	if(visible==0) return;
-	clgfx2->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
-	clgfx2->drawfontstring(posx+textx,posy+texty,text,0,fcolor,bcolor);
+	clgfx->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
+	clgfx->drawfontstring(posx+textx,posy+texty,text,0,fcolor,bcolor);
 }
 
 void CLlabel::settext(const xchar* t) //! noncritical
 {
 	delete text;
 	text = clstring->copy(t);
-	textwidth = clgfx2->getfontstringwidth(text,0) + 4;
-	textheight = clgfx2->getfontstringheight(text,0);
+	textwidth = clgfx->getfontstringwidth(text,0) + 4;
+	textheight = clgfx->getfontstringheight(text,0);
 	if(width<textwidth) width = textwidth;
 	if(height<textheight) height = textheight;
 	textx = (width - textwidth)>>1;

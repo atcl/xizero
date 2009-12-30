@@ -29,7 +29,7 @@ void newgame()
 	//display intro
 	sprite* introscreen = 0;
 	introscreen = clglobal->clformat->loadras(screens->findbyname("intro000.ras"));
-	clglobal->clgfx1->drawscreen(introscreen);
+	clglobal->clgfx->drawscreen(introscreen);
 	clglobal->clwindow->draw();
 	clglobal->clsystem->wait(1000);
 	clglobal->clfsprogress->set(10);
@@ -161,7 +161,7 @@ void newgame()
 		//draw winner screen
 		case 0:
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gamewon.ras"));
-			clglobal->clgfx1->drawscreen(overscreen);
+			clglobal->clgfx->drawscreen(overscreen);
 			clglobal->clwindow->draw();
 			clglobal->clsystem->wait(11000);
 		break;
@@ -170,7 +170,7 @@ void newgame()
 		//draw looser screen
 		case -1:
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gameover.ras"));
-			clglobal->clgfx1->drawscreen(overscreen);
+			clglobal->clgfx->drawscreen(overscreen);
 			clglobal->clwindow->draw();
 			clglobal->clsystem->wait(11000);
 		break;

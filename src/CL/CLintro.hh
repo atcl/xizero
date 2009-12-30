@@ -15,7 +15,7 @@
 #include "CLbuffer.hh"
 #include "CLobject.hh"
 #include "CLformat.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 #include "CLbase.hh"
 ///*
 
@@ -38,7 +38,7 @@ class CLintro : public CLbase<CLintro,1>
 	friend class CLbase<CLintro,1>;
 	
 	private:
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 		static CLwindow* clwindow;
 		static CLsystem* clsystem;
 		static CLscreen* clscreen;
@@ -51,7 +51,7 @@ class CLintro : public CLbase<CLintro,1>
 		void torus() const;
 };
 
-CLgfx2*   CLintro::clgfx2   = CLgfx2::instance();
+CLgfx *   CLintro::clgfx    = CLgfx::instance();
 CLwindow* CLintro::clwindow = CLwindow::instance();
 CLsystem* CLintro::clsystem = CLsystem::instance();
 CLscreen* CLintro::clscreen = CLscreen::instance();
@@ -76,7 +76,7 @@ void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
 	
 	//prepare name string
 	const xchar* title = "atCROSSLEVEL";
-	xlong w = clgfx2->getfontstringwidth(title,4);
+	xlong w = clgfx->getfontstringwidth(title,4);
 	xlong x = (XRES - w)/2;
 	//*
 	
@@ -90,7 +90,7 @@ void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
 	
 	if(skip==0)
 	{
-		clgfx2->drawfontstring(x,100,title,4,0x00800000);
+		clgfx->drawfontstring(x,100,title,4,0x00800000);
 		clwindow->run();
 		clsystem->wait(4000);
 	}

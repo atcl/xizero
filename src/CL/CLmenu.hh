@@ -21,8 +21,7 @@
 #include "CLformat.hh"
 #include "CLlabel.hh"
 #include "CLbutton.hh"
-#include "CLgfx1.hh"
-#include "CLgfx2.hh"
+#include "CLgfx.hh"
 #include "CLsystem.hh"
 ///*
 
@@ -45,8 +44,7 @@ class CLmenu : public CLbase<CLmenu,0>
 	private:
 		static CLformat* clformat;
 		static CLwindow* clwindow;
-		static CLgfx1*   clgfx1;
-		static CLgfx2*   clgfx2;
+		static CLgfx*    clgfx;
 	protected:
 		uxchar    syskey;
 		sprite*   icon;
@@ -64,8 +62,7 @@ class CLmenu : public CLbase<CLmenu,0>
 
 CLformat* CLmenu::clformat = CLformat::instance();
 CLwindow* CLmenu::clwindow = CLwindow::instance();
-CLgfx1*   CLmenu::clgfx1   = CLgfx1::instance();
-CLgfx2*   CLmenu::clgfx2   = CLgfx2::instance();
+CLgfx*    CLmenu::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
@@ -104,7 +101,7 @@ void CLmenu::wrapper(void* me)
 void CLmenu::show() //! noncritical
 {
 	//save background
-	sprite* back = clgfx2->savescreen();
+	sprite* back = clgfx->savescreen();
 	//*
 	
 	//activate mouse cursor and activate buttons
@@ -118,11 +115,11 @@ void CLmenu::show() //! noncritical
 	{
 		if(clwindow->getinkey()==SPACE) { break; }
 		CLbutton::checkclick();
-		clgfx1->drawscreen(back);
+		clgfx->drawscreen(back);
 		title->draw();
-		clgfx1->drawsprite(2,2,icon);
+		clgfx->drawsprite(2,2,icon);
 		exit->draw();
-		clgfx1->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
+		clgfx->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
 		info->draw();
 		about->draw();
 	}

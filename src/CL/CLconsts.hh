@@ -22,6 +22,10 @@
 ///*
 
 ///declarations
+//return value
+#define CLOK     'CLOK'
+//*
+
 //basic colors
 #define CLsyscol 0x00C0C0C0
 #define CLtrans  0xFF000000
@@ -88,16 +92,6 @@
 #define PLAYER 0
 #define ENEMY  1
 #define BOSS   2
-//*
-
-//font types
-#define TELEFONT 0;
-#define MONOFONT 1;
-#define LINEFONT 2;
-#define TERMFONT 3;
-#define SEGMFONT 4;
-#define TALLFONT 5;
-#define SYMBFONT 6;
 //*
 
 //3d engine consts
