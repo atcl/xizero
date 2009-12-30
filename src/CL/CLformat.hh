@@ -60,6 +60,8 @@ class CLformat : public CLbase<CLformat,1>
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
 		//void*    loadwav(CLfile* bf) const;
+		
+		CLfile*  saveras(sprite* sp,const xchar* fn="test.ras") const;
 };
 
 CLstring* CLformat::clstring = CLstring::instance();
@@ -437,6 +439,27 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	}
 	
 	return r;
+}
+
+CLfile* CLformat::saveras(sprite* sp,const xchar* fn) const //! noncritical
+{
+	CLfile* r = new CLfile;
+	r->name = clstring->copy(fn);
+	r->lsize = sp->size + 8;
+	r->size = r->lsize * 4;
+	r->data = new xlong[sp->size + 8];
+	r->text = static_cast<xchar*>(static_cast<void*>(&r->data[0]));
+	
+	r->data[0] = endian(0x956aa659);
+	r->data[1] = sp->width;
+	r->data[2] = sp->height;
+	r->data[3] = 32;
+	r->data[4] = sp->size;
+	r->data[5] = 3;
+	r->data[6] = 0;
+	r->data[7] = 0;
+	
+	for(xlong i=0; i<sp->size; i++) { r->data[8+i] = sp->data[i]; }
 }
 ///*
 

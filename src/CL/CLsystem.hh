@@ -49,6 +49,7 @@ class CLsystem : public CLbase<CLsystem,1>
 		bool    appendfile(const xchar* fn,xchar* b,xlong s);
 		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
 		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
+		bool    writefile(CLfile* f,bool ow=0);
 		xlong   wait(xlong milliseconds);
 		xlong   getmilliseconds(); //since program launch
 		xlong   system(const xchar* c);
@@ -150,7 +151,7 @@ bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) //! noncritic
 	FILE* of;
 	
 	//if file exist and overwrite not set return
-	if( of = fopen(fn,"rb") ) 
+	if(of = fopen(fn,"rb") ) 
 	{
 		fclose(of);
 		if(!ow)	return 0;
@@ -177,7 +178,7 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	FILE* of;
 	
 	//if file exist and overwrite not set return
-	if( of = fopen(fn,"rb") ) 
+	if(of = fopen(fn,"rb") ) 
 	{
 		fclose(of);
 		if(!ow)	return 0;
@@ -190,6 +191,33 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	
 	//write sequential data to file
 	fwrite(b,1,s,of);
+	//*
+	
+	//close file
+	fclose(of);
+	//*
+	
+	return 1;
+}
+
+bool CLsystem::writefile(CLfile* f,bool ow) //! noncritical
+{
+	FILE* of;
+	
+	//if file exist and overwrite not set return
+	if(of = fopen("test.im32","rb") ) 
+	{
+		fclose(of);
+		if(!ow)	return 0;
+	}
+	//*
+	
+	//open for (over-)writing
+	if( (of = fopen("test.im32","w")) == 0 ) return 0;
+	//*
+	
+	//write sequential data to file
+	fwrite(f->text,1,f->size,of);
 	//*
 	
 	//close file

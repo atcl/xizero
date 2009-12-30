@@ -375,6 +375,9 @@ int main(int argc, char** argv)
 
 	CLlight* testl = new CLlight(50,0x00FF0000);
 
+	sprite* screens;
+	CLfile* screenf;
+
 	while(clglobal->clwindow->run())
 	{
 		if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();
@@ -423,7 +426,11 @@ int main(int argc, char** argv)
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
 			case 'r':    clglobal->clsound->play(2); break;
-				
+			case 'i':    
+				screens = clglobal->clgfx->savescreen();
+				screenf = clglobal->clformat->saveras(screens,"screen.im32");
+				say(clglobal->clsystem->writefile(screenf,1));
+			break;
 			//System:
 			case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
 		}

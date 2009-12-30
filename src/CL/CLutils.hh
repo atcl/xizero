@@ -66,7 +66,7 @@ xlong inline lt(const xchar* a,const xchar* b)
 	return xlong(a[i]-b[i]);
 }
 
-uxlong inline endian(xlong l)
+uxlong inline endian(uxlong l)
 {
 	doubleword tl = { l };
 	tl.db[0] ^= tl.db[3] ^= tl.db[0] ^= tl.db[3];
