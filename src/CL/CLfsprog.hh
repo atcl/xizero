@@ -11,7 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLbase.hh"
-#include "CLglobal.hh"
+#include "CLscreen.hh"
 ///*
 
 ///header
@@ -32,6 +32,8 @@ class CLfsprogress : public CLbase<CLfsprogress,1>
 {
 	friend class CLbase<CLfsprogress,1>;
 		
+	private:
+		static CLscreen* clscreen;
 	protected:
 		xlong pprogress;
 		xlong rprogress;
@@ -45,6 +47,8 @@ class CLfsprogress : public CLbase<CLfsprogress,1>
 		void reset();
 		xlong get() const { return pprogress; };
 };
+
+CLscreen* CLfsprogress::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -60,7 +64,7 @@ void CLfsprogress::draw() const //! critical
 		
 		for(uxlong i=0; i<YRES; i++)
 		{
-			for(uxlong j=0; j<rprogress; j++,offset++) { cldoublebuffer[offset] = cldoublebuffer[offset] & pcolor; }
+			for(uxlong j=0; j<rprogress; j++,offset++) { clscreen->cldoublebuffer[offset] = clscreen->cldoublebuffer[offset] & pcolor; }
 			offset += diff;
 		}
 	}

@@ -50,6 +50,7 @@ class CLlevel : public CLbase<CLlevel,0>
 		static CLgame*   clgame;
 		static CLformat* clformat;
 		static CLstring* clstring;
+		static CLscreen* clscreen;
 	protected:
 		CLmatrix*    linear;
 		CLplayer*    player;
@@ -91,6 +92,7 @@ class CLlevel : public CLbase<CLlevel,0>
 CLgame*   CLlevel::clgame   = CLgame::instance();
 CLformat* CLlevel::clformat = CLformat::instance();
 CLstring* CLlevel::clstring = CLstring::instance();
+CLscreen* CLlevel::clscreen = CLscreen::instance();
 xlong CLlevel::levelwidth = 20; //in blocks
 xlong CLlevel::blockheight = 40;
 xlong CLlevel::blockwidth = 40;
@@ -479,7 +481,7 @@ void CLlevel::display() //! critical
 		currentenemy->display(1);
 	}
 	boss->display(1);
-	clstencilbuffer.blendcopy(cldoublebuffer.getbuffer(),9);
+	clscreen->clstencilbuffer.blendcopy(clscreen->cldoublebuffer.getbuffer(),9);
 	//*
 
 	//display player:

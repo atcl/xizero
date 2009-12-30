@@ -44,6 +44,7 @@ class CLgfx2 : public CLbase<CLgfx2,1>
 	private:
 		static CLformat* clformat;
 		static CLstring* clstring;
+		static CLscreen* clscreen;
 	protected:
 		CLfont* tele;
 		CLfont* mono;
@@ -70,6 +71,7 @@ class CLgfx2 : public CLbase<CLgfx2,1>
 
 CLformat* CLgfx2::clformat = CLformat::instance();
 CLstring* CLgfx2::clstring = CLstring::instance();
+CLscreen* CLgfx2::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -100,21 +102,21 @@ void CLgfx2::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlo
 
 	for(int i=y1; i<=y2; i++)
 	{
-		cldoublebuffer[offset1] = c3;
+		clscreen->cldoublebuffer[offset1] = c3;
 		offset1++;
 		for(int j=x1+1; j<x2; j++)
 		{
-			cldoublebuffer[offset1] = c1;
+			clscreen->cldoublebuffer[offset1] = c1;
 			offset1++;
 		}
-		cldoublebuffer[offset1] = c2;
+		clscreen->cldoublebuffer[offset1] = c2;
 		offset1 += XRES - diff;
 	}
 
 	for(int k=x1; k<x2; k++)
 	{
-		cldoublebuffer[offset2] = c3;
-		cldoublebuffer[offset2+doffset] = c2;
+		clscreen->cldoublebuffer[offset2] = c3;
+		clscreen->cldoublebuffer[offset2+doffset] = c2;
 		offset2++;
 	}
 }
@@ -154,8 +156,8 @@ xlong CLgfx2::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlo
 		for(uxlong j=0; j<swidth ;j++)
 		{
 			srcval = t[a]->data[linearc];
-			if(srcval == 0x00FF0000) cldoublebuffer[xoffset+j] = fc;
-			else if(bc!=0 && srcval == 0x00FFFFFF) cldoublebuffer[xoffset+j] = bc;
+			if(srcval == 0x00FF0000) clscreen->cldoublebuffer[xoffset+j] = fc;
+			else if(bc!=0 && srcval == 0x00FFFFFF) clscreen->cldoublebuffer[xoffset+j] = bc;
 			if(i==0 && srcval != 0x00000000) rx++;
 			linearc++;
 		}
@@ -294,7 +296,7 @@ sprite* CLgfx2::savescreen() const //! critical
 	r->size = (XRES*YRES);
 	r->data = new uxlong[r->size];
 	
-	for(uxlong i=0; i<r->size; i++) { r->data[i] = cldoublebuffer[i]; }
+	for(uxlong i=0; i<r->size; i++) { r->data[i] = clscreen->cldoublebuffer[i]; }
 	
 	return r;
 }

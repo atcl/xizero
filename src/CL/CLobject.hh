@@ -17,7 +17,6 @@
 #include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
-#include "CLglobal.hh"
 #include "CLpolygon.hh"
 #include "CLmatrix.hh"
 ///*

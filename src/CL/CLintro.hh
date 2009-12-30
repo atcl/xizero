@@ -10,7 +10,6 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLglobal.hh"
 #include "CLconsts.hh"
 #include "CLsystem.hh"
 #include "CLbuffer.hh"
@@ -41,7 +40,8 @@ class CLintro : public CLbase<CLintro,1>
 	private:
 		static CLgfx2*   clgfx2;
 		static CLwindow* clwindow;
-		static CLsystem* clsystem; 
+		static CLsystem* clsystem;
+		static CLscreen* clscreen;
 	protected:
 		CLintro() { };
 		~CLintro() { };
@@ -51,9 +51,10 @@ class CLintro : public CLbase<CLintro,1>
 		void torus() const;
 };
 
-CLgfx2*   CLintro::clgfx2 = CLgfx2::instance();
+CLgfx2*   CLintro::clgfx2   = CLgfx2::instance();
 CLwindow* CLintro::clwindow = CLwindow::instance();
 CLsystem* CLintro::clsystem = CLsystem::instance();
+CLscreen* CLintro::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -123,8 +124,8 @@ void CLintro::xizero(CLfile* sf) const //! noncritical
 	while(clwindow->run())
 	{
 		//clear buffers
-		cldoublebuffer.clear(0);
-		clzbuffer.clear(ZRES);
+		clscreen->cldoublebuffer.clear(0);
+		clscreen->clzbuffer.clear(ZRES);
 		//*
 		
 		//update animation

@@ -13,7 +13,6 @@
 #include "CLbase.hh"
 #include "CLstruct.hh"
 #include "CLbuffer.hh"
-#include "CLglobal.hh"
 #include "CLfifo.hh"
 #include "CLmath.hh"
 #include "CLutils.hh"
@@ -47,6 +46,7 @@ class CLgfx1 : public CLbase<CLgfx1,1>
 	
 	private:
 		static CLmath* clmath;
+		static CLscreen* clscreen;
 	protected:
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
@@ -70,9 +70,21 @@ class CLgfx1 : public CLbase<CLgfx1,1>
 		void drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
 		void drawscreen(sprite* s) const;
+		
+		void loadfonts(CLfile* sf);
+		void drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlong c2,bool f) const;
+		xlong drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc=0) const;
+		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0) const;
+		xlong getfontstringwidth(const char* a,uxlong f) const;
+		xlong getfontstringheight(const char* a,uxlong f) const;
+		uxlong getEGAcolor(xchar c) const;
+		uxlong blendcolors(uxlong c1,uxlong c2,xlong m) const;
+		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;
+		sprite* savescreen() const;
 };
 
 CLmath* CLgfx1::clmath = CLmath::instance();
+CLscreen* CLgfx1::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -85,14 +97,14 @@ void CLgfx1::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const /
 	//*
 	
 	//draw the eight pixels for each (1/8) section of the circle
- 	cldoublebuffer[b1+a1+x] = c;
- 	cldoublebuffer[b1-a1+x] = c;
- 	cldoublebuffer[b1+a1-x] = c;
- 	cldoublebuffer[b1-a1-x] = c;
- 	cldoublebuffer[b1+a2+y] = c;
- 	cldoublebuffer[b1-a2+y] = c;
- 	cldoublebuffer[b1+a2-y] = c;
- 	cldoublebuffer[b1-a2-y] = c;
+ 	clscreen->cldoublebuffer[b1+a1+x] = c;
+ 	clscreen->cldoublebuffer[b1-a1+x] = c;
+ 	clscreen->cldoublebuffer[b1+a1-x] = c;
+ 	clscreen->cldoublebuffer[b1-a1-x] = c;
+ 	clscreen->cldoublebuffer[b1+a2+y] = c;
+ 	clscreen->cldoublebuffer[b1-a2+y] = c;
+ 	clscreen->cldoublebuffer[b1+a2-y] = c;
+ 	clscreen->cldoublebuffer[b1-a2-y] = c;
 	//*
 }
 
@@ -104,41 +116,41 @@ void CLgfx1::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const 
 	//*
 
 	//draw the four pixels for each (1/4) section of the ellipse
-	cldoublebuffer[a+x+b] = c;
-	cldoublebuffer[a-x+b] = c;
-	cldoublebuffer[a-x-b] = c;
-	cldoublebuffer[a+x-b] = c;
+	clscreen->cldoublebuffer[a+x+b] = c;
+	clscreen->cldoublebuffer[a-x+b] = c;
+	clscreen->cldoublebuffer[a-x-b] = c;
+	clscreen->cldoublebuffer[a+x-b] = c;
 	//*
 }
 
 uxlong CLgfx1::readpixel(xlong x,xlong y) const //! critical
 {
-	if(isoff(x,y)) return -1;
-	return (cldoublebuffer[(y*XRES)+x]);
+	if(isoff(x,y)) { return -1; }
+	return (clscreen->cldoublebuffer[(y*XRES)+x]);
 }
 
 void CLgfx1::drawpixel(xlong x,xlong y,uxlong c,bool b) const //! critical
 {
-	if(isoff(x,y)) return;
-	cldoublebuffer[(y*XRES)+x] = c;
+	if(isoff(x,y)) { return; }
+	clscreen->cldoublebuffer[(y*XRES)+x] = c;
 	if(b)
 	{
-		cldoublebuffer[(y*XRES)+x+1] = c;
-		cldoublebuffer[((y+1)*XRES)+x] = c;
-		cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
+		clscreen->cldoublebuffer[(y*XRES)+x+1] = c;
+		clscreen->cldoublebuffer[((y+1)*XRES)+x] = c;
+		clscreen->cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
 	}
 }
 
 void CLgfx1::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const //! critical
 {
-	if(isoff(x,y)) return;
+	if(isoff(x,y)) { return; }
 	b[(y*XRES)+x] = c;
 }
 
 void CLgfx1::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
 {
-	if(isoff(x1,x2)||isoff(x2,y2)) return;
-	cldoublebuffer[(y1*XRES)+x1] = cldoublebuffer[(y2*XRES)+x2];
+	if(isoff(x1,x2)||isoff(x2,y2)) { return; }
+	clscreen->cldoublebuffer[(y1*XRES)+x1] = clscreen->cldoublebuffer[(y2*XRES)+x2];
 }
 
 void CLgfx1::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
@@ -150,7 +162,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 {
 	//! todo: if(a) then anti-aliased line
 	
-	if( (x1==x2 && y1==y2) || isoff(x1,y1,x2,y2)) return;
+	if( (x1==x2 && y1==y2) || isoff(x1,y1,x2,y2)) { return; }
 	clip(x1,y1);
 	clip(x2,y2);
 
@@ -173,7 +185,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 			b = y2;
 			if(a>b) { swap(&a,&b); }
 			offset = (a*XRES)+x1;
-			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset] = c; offset+=XRES; }
+			for(uxlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset] = c; offset+=XRES; }
 		break;
 		
 		case -1:
@@ -181,7 +193,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 			b = x2;
 			if(a>b) { swap(&a,&b); }
 			offset = (y1*XRES);
-			for(uxlong i=a; i<=b; i++) { cldoublebuffer[offset+i] = c; }
+			for(uxlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset+i] = c; }
 		break;
 		
 		case 0:
@@ -196,7 +208,7 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 
 			for(uxlong i=0; i<len; i++)
 			{
-				cldoublebuffer[offset] = c;
+				clscreen->cldoublebuffer[offset] = c;
 				offset += xs;
 				e += dy;
 				if(e >= dx) { e -= dx; offset += ys; }
@@ -222,17 +234,17 @@ void CLgfx1::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) cons
 
 			for(uxlong i=0; i<len; i++)
 			{
-				tcolor.dd = cldoublebuffer[offset-xs];
+				tcolor.dd = clscreen->cldoublebuffer[offset-xs];
 				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
 				tcolor.db[2] = (tcolor.db[2] + ccolor.db[2])>>1;
 				tcolor.db[3] = (tcolor.db[3] + ccolor.db[3])>>1;	
-				cldoublebuffer[offset-xs] = tcolor.dd;
-				cldoublebuffer[offset] = c;
-				tcolor.dd = cldoublebuffer[offset+xs];
+				clscreen->cldoublebuffer[offset-xs] = tcolor.dd;
+				clscreen->cldoublebuffer[offset] = c;
+				tcolor.dd = clscreen->cldoublebuffer[offset+xs];
 				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
 				tcolor.db[2] = (tcolor.db[2] + ccolor.db[2])>>1;
 				tcolor.db[3] = (tcolor.db[3] + ccolor.db[3])>>1;	
-				cldoublebuffer[offset+xs] = tcolor.dd;
+				clscreen->cldoublebuffer[offset+xs] = tcolor.dd;
 				offset += xs;
 				e += dy;
 				if(e >= dx) { e -= dx; offset += ys; }
@@ -314,7 +326,7 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 		o = t*t; 
 		x = xlong(m * x1 + n * x3 + o * x2);
 		y = xlong(m * y1 + n * y3 + o * y2);
-		cldoublebuffer[(y*XRES)+x] = c;
+		clscreen->cldoublebuffer[(y*XRES)+x] = c;
 	}
 	//*
 }
@@ -322,7 +334,7 @@ void CLgfx1::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const
 void CLgfx1::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! critical
 {
 	//center and radius clipping
-	if(isoff(xc-r,yc-r,xc+r,yc+r)) return;
+	if(isoff(xc-r,yc-r,xc+r,yc+r)) { return; }
 	//*
 	
 	xlong d = 3 - (r<<1);
@@ -424,7 +436,7 @@ void CLgfx1::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 		if( temp->x>=0 && temp->x<XRES && temp->y>=0 && temp->y<YRES && readpixel(temp->x,temp->y)==oc )
 		{
 			//fill the pixel with the new color
-			cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
+			clscreen->cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -475,7 +487,7 @@ void CLgfx1::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 		if( temp->x>=0 && temp->x<XRES && temp->y>=0 && temp->y<YRES && readpixel(temp->x,temp->y)!=fc )
 		{
 			//fill the pixel with the new color
-			cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
+			clscreen->cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -532,8 +544,8 @@ void CLgfx1::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 		{
 			svalue = s->data[soffset];
 			istrans = svalue & 0xFF000000;
-			if(istrans != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
-			//cldoublebuffer[doffset+j] = ((xlong(istrans!=0xFF000000)--) & svalue) + ((xlong(istrans==0xFF000000)--) & cldoublebuffer[doffset+j])
+			if(istrans != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
+			//clscreen->cldoublebuffer[doffset+j] = ((xlong(istrans!=0xFF000000)--) & svalue) + ((xlong(istrans==0xFF000000)--) & clscreen->cldoublebuffer[doffset+j])
 			soffset++;
 		}
 		soffset += cdiff;
@@ -580,7 +592,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 	if(t=0)
 	{
 		tdiff = XRES;
-		tbuffer = cldoublebuffer.getbuffer();
+		tbuffer = clscreen->cldoublebuffer.getbuffer();
 	}
 	else
 	{
@@ -599,7 +611,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -613,7 +625,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -627,7 +639,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -641,7 +653,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -655,7 +667,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -669,7 +681,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -683,7 +695,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -697,7 +709,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -711,7 +723,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -726,7 +738,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = dvalue & svalue;
+					clscreen->cldoublebuffer[doffset+j] = dvalue & svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -741,7 +753,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = dvalue | svalue;
+					clscreen->cldoublebuffer[doffset+j] = dvalue | svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -756,7 +768,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = dvalue ^ svalue;
+					clscreen->cldoublebuffer[doffset+j] = dvalue ^ svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -771,7 +783,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = ~(dvalue | svalue);
+					clscreen->cldoublebuffer[doffset+j] = ~(dvalue | svalue);
 					soffset++;
 				}
 				soffset += cdiff;
@@ -786,7 +798,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = ~(dvalue | svalue);
+					clscreen->cldoublebuffer[doffset+j] = ~(dvalue | svalue);
 					soffset++;
 				}
 				soffset += cdiff;
@@ -800,7 +812,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				for(xlong j=0; j<cwidth; j++)
 				{
 					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) cldoublebuffer[doffset+j] = ~svalue;
+					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = ~svalue;
 					soffset++;
 				}
 				soffset += cdiff;
@@ -815,7 +827,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = byteadd(dvalue,svalue);
+					clscreen->cldoublebuffer[doffset+j] = byteadd(dvalue,svalue);
 					soffset++;
 				}
 				soffset += cdiff;
@@ -830,7 +842,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = bytesub(dvalue,svalue);
+					clscreen->cldoublebuffer[doffset+j] = bytesub(dvalue,svalue);
 					soffset++;
 				}
 				soffset += cdiff;
@@ -845,7 +857,7 @@ void CLgfx1::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cr
 				{
 					svalue = s->data[soffset];
 					dvalue = t->data[soffset];
-					cldoublebuffer[doffset+j] = svalue; //bytemul(dvalue,svalue)
+					clscreen->cldoublebuffer[doffset+j] = svalue; //bytemul(dvalue,svalue)
 					soffset++;
 				}
 				soffset += cdiff;
@@ -862,7 +874,7 @@ void CLgfx1::drawscreen(sprite* s) const //! critical
 	if(s->width==XRES && s->height==YRES)
 	{
 		//draw loop
-		for(uxlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) cldoublebuffer[i] = s->data[i]; }
+		for(uxlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) clscreen->cldoublebuffer[i] = s->data[i]; }
 		//*
 	}
 	//*

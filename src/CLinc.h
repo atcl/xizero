@@ -32,7 +32,7 @@
 #include "CL/CLsystem.hh"
 #include "CL/CLutils.hh"
 #include "CL/CLfsprog.hh"
-#include "CL/CLscreen.hh"
+#include "CL/CLtrans.hh"
 #include "CL/CLsound.hh"
 #include "CL/CLgamepad.hh"
 #include "CL/CLbench.hh"
@@ -80,7 +80,6 @@
 
 //global maker
 #include "CL/CLglobal.hh"
-#include "CL/CLglobals.cc"
 //*
 
 #endif

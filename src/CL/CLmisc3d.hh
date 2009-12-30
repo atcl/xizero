@@ -14,7 +14,6 @@
 #include "CLbase.hh"
 #include "CLbuffer.hh"
 #include "CLvector.hh"
-#include "CLglobal.hh"
 ///*
 
 ///header
@@ -36,7 +35,8 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 	friend class CLbase<CLmisc3d,1>;
 	
 	private:
-		static CLgfx1* clgfx1;
+		static CLgfx1*   clgfx1;
+		static CLscreen* clscreen;
 	protected:
 		CLmisc3d() { };
 		~CLmisc3d() { };
@@ -48,7 +48,8 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
 
-CLgfx1* CLmisc3d::clgfx1 = CLgfx1::instance();
+CLgfx1*   CLmisc3d::clgfx1   = CLgfx1::instance();
+CLscreen* CLmisc3d::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -97,7 +98,7 @@ void CLmisc3d::draw3dpixel(clvector& p,uxlong c) //! critical
 		xlong nx = xlong( ( 80 * p.x) / p.z) + (XRES>>1);
 		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
 
-		cldoublebuffer[(ny*XRES)+nx] = c;
+		clscreen->cldoublebuffer[(ny*XRES)+nx] = c;
 	}
 	//*
 }
@@ -121,7 +122,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis) //! critical
 {
 	xlong z = 0;
 
-	if(zb==0) zb = &clzbuffer;
+	if(zb==0) zb = &clscreen->clzbuffer;
 
 	xlong ii = 0;
 	xlong tt = 0;
@@ -132,7 +133,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis) //! critical
 		{
 			tt = ii + j;
 			z = xlong((*zb)[tt+srcdis])<<2 ;
-			cldoublebuffer[tt] = z;
+			clscreen->cldoublebuffer[tt] = z;
 		}
 		
 		ii += XRES;

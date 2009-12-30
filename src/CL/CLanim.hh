@@ -45,6 +45,7 @@ class CLanim : public CLbase<CLanim,0>
 		static CLsystem* clsystem;
 		static CLformat* clformat;
 		static CLmath*   clmath;
+		static CLscreen* clscreen;
 	protected:
 		CLmatrix* linear;
 		CLobject* object;
@@ -68,6 +69,7 @@ class CLanim : public CLbase<CLanim,0>
 CLsystem* CLanim::clsystem = CLsystem::instance();
 CLformat* CLanim::clformat = CLformat::instance();
 CLmath*   CLanim::clmath   = CLmath::instance();
+CLscreen* CLanim::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -312,8 +314,8 @@ xlong CLanim::run() //! critical
 	//in example intro animations
 	
 	//clear buffers
-	cldoublebuffer.clear(0);
-	clzbuffer.clear(ZRES);
+	clscreen->cldoublebuffer.clear(0);
+	clscreen->clzbuffer.clear(ZRES);
 	//*
 	
 	//update animation

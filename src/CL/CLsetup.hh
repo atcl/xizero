@@ -29,7 +29,7 @@ void CLgarbage();
 ///implementation
 CLglobal* CLsetup() //! noncritical
 {
-	CLglobal* clglobal = CLglobal::getinstance(); 
+	CLglobal* clglobal = CLglobal::instance(); 
 
 	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
 	clglobal->clwindow->setcursor(cursor);

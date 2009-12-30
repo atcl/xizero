@@ -44,6 +44,7 @@ class CLwindow : public CLbase<CLwindow,1>
 		static CLformat* clformat;
 		static CLapp*    clapp;
 		static CLgfx1*   clgfx1;
+		static CLscreen* clscreen;
 	protected:
 		Display* Xdisplay;
 		Screen* Xscreen;
@@ -96,6 +97,7 @@ class CLwindow : public CLbase<CLwindow,1>
 CLformat* CLwindow::clformat = CLformat::instance();
 CLapp*    CLwindow::clapp    = CLapp::instance();
 CLgfx1*   CLwindow::clgfx1   = CLgfx1::instance();
+CLscreen* CLwindow::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -141,7 +143,7 @@ CLwindow::CLwindow() //! noncritical
 	//show window
 	XMapRaised(Xdisplay,Xwindow);
 	//init doublebuffer
-	xchar* dbuffer = (xchar*)(cldoublebuffer.getbuffer());
+	xchar* dbuffer = (xchar*)(clscreen->cldoublebuffer.getbuffer());
 	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
 	//init x-cursor
 	xchar data[1] = {0};

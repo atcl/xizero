@@ -16,7 +16,7 @@
 #include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
-#include "CLglobal.hh"
+#include "CLglobals.hh"
 #include "CLpolyinc.hh"
 #include "CLutils.hh"
 ///*
@@ -38,7 +38,8 @@
 class CLpolygon : CLbase<CLpolygon,0>
 {
 	private:
-		static CLmath* clmath;
+		static CLmath*   clmath;
+		static CLscreen* clscreen;
 	protected:
 		static xlong pointcount;
 		static float shadezscale;
@@ -83,7 +84,8 @@ class CLpolygon : CLbase<CLpolygon,0>
 		CLfvector getnormal() const { return normal; };
 };
 
-CLmath* CLpolygon::clmath = CLmath::instance();
+CLmath*   CLpolygon::clmath   = CLmath::instance();
+CLscreen* CLpolygon::clscreen = CLscreen::instance();
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
 ///*
@@ -110,7 +112,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! criti
 
 	for(uxlong i=0; i<len; i++)
 	{
-		cldoublebuffer[off] = c;
+		clscreen->cldoublebuffer[off] = c;
 		off += xs;
 		e += dy;
 		if(e >= dx)
@@ -482,10 +484,10 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 			case 0:
 				while(length > 0)
 				{
-					if(actz < clzbuffer[offset] || (actz==clzbuffer[offset] &&normal.z<0) )
+					if(actz < clscreen->clzbuffer[offset] || (actz==clscreen->clzbuffer[offset] &&normal.z<0) )
 					{
-						cldoublebuffer[offset] = shade;
-						clzbuffer[offset] = actz;
+						clscreen->cldoublebuffer[offset] = shade;
+						clscreen->clzbuffer[offset] = actz;
 					}
 					
 					offset++;
@@ -499,7 +501,7 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 			case 1:
 				while(length > 0)
 				{
-					clstencilbuffer[offset] = scolor;
+					clscreen->clstencilbuffer[offset] = scolor;
 					
 					offset++;
 					length--;

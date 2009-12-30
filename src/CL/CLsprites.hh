@@ -11,7 +11,6 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLbuffer.hh"
-#include "CLglobal.hh"
 #include "CLbase.hh"
 ///*
 
@@ -34,7 +33,7 @@ class CLsprites : public CLbase<CLsprites,1>
 	friend class CLbase<CLsprites,1>;
 	
 	private:
-	
+		static CLscreen* clscreen;
 	protected:
 		CLsprites() { };
 		~CLsprites() { };
@@ -42,6 +41,8 @@ class CLsprites : public CLbase<CLsprites,1>
 		static void drawantimatter(xlong x,xlong y);
 		static void drawplasma(xlong x,xlong y);
 };
+
+CLscreen* CLsprites::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -61,53 +62,53 @@ void CLsprites::drawantimatter(xlong x,xlong y) //! critical
 	//*
 	
 	//draw frst row
-	cldoublebuffer[l1] = 0x00800080; l1++;
-	cldoublebuffer[l1] = 0x00800080; l1++;
-	cldoublebuffer[l1] = 0x00800080; l1++;
-	cldoublebuffer[l1] = 0x00800080;
+	clscreen->cldoublebuffer[l1] = 0x00800080; l1++;
+	clscreen->cldoublebuffer[l1] = 0x00800080; l1++;
+	clscreen->cldoublebuffer[l1] = 0x00800080; l1++;
+	clscreen->cldoublebuffer[l1] = 0x00800080;
 	//*
 	
 	//draw second row
-	cldoublebuffer[l2] = 0x00800080; l2++;
-	cldoublebuffer[l2] = 0x00AD00AD; l2++;
-	cldoublebuffer[l2] = 0x00AD00AD; l2++;
-	cldoublebuffer[l2] = 0x00AD00AD; l2++;
-	cldoublebuffer[l2] = 0x00AD00AD; l2++;
-	cldoublebuffer[l2] = 0x00800080;
+	clscreen->cldoublebuffer[l2] = 0x00800080; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00AD00AD; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00AD00AD; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00AD00AD; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00AD00AD; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00800080;
 	//*
 	
 	//draw third row
-	cldoublebuffer[l3] = 0x00800080; l3++;
-	cldoublebuffer[l3] = 0x00AD00AD; l3++;
-	cldoublebuffer[l3] = 0x00FF00FF; l3++;
-	cldoublebuffer[l3] = 0x00FF00FF; l3++;
-	cldoublebuffer[l3] = 0x00AD00AD; l3++;
-	cldoublebuffer[l3] = 0x00800080;
+	clscreen->cldoublebuffer[l3] = 0x00800080; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00AD00AD; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00FF00FF; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00FF00FF; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00AD00AD; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00800080;
 	//*
 	
 	//draw fourth row
-	cldoublebuffer[l4] = 0x00800080; l4++;
-	cldoublebuffer[l4] = 0x00AD00AD; l4++;
-	cldoublebuffer[l4] = 0x00FF00FF; l4++;
-	cldoublebuffer[l4] = 0x00FF00FF; l4++;
-	cldoublebuffer[l4] = 0x00AD00AD; l4++;
-	cldoublebuffer[l4] = 0x00800080;
+	clscreen->cldoublebuffer[l4] = 0x00800080; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00AD00AD; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00FF00FF; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00FF00FF; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00AD00AD; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00800080;
 	//*
 	
 	//draw fifth row
-	cldoublebuffer[l5] = 0x00800080; l5++;
-	cldoublebuffer[l5] = 0x00AD00AD; l5++;
-	cldoublebuffer[l5] = 0x00AD00AD; l5++;
-	cldoublebuffer[l5] = 0x00AD00AD; l5++;
-	cldoublebuffer[l5] = 0x00AD00AD; l5++;
-	cldoublebuffer[l5] = 0x00800080;
+	clscreen->cldoublebuffer[l5] = 0x00800080; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00AD00AD; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00AD00AD; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00AD00AD; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00AD00AD; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00800080;
 	//*
 	
 	//draw sixth row
-	cldoublebuffer[l6] = 0x00800080; l6++;
-	cldoublebuffer[l6] = 0x00800080; l6++;
-	cldoublebuffer[l6] = 0x00800080; l6++;
-	cldoublebuffer[l6] = 0x00800080;
+	clscreen->cldoublebuffer[l6] = 0x00800080; l6++;
+	clscreen->cldoublebuffer[l6] = 0x00800080; l6++;
+	clscreen->cldoublebuffer[l6] = 0x00800080; l6++;
+	clscreen->cldoublebuffer[l6] = 0x00800080;
 	//*
 }
 
@@ -127,53 +128,53 @@ void CLsprites::drawplasma(xlong x,xlong y) //! critical
 	//*
 	
 	//draw first row
-	cldoublebuffer[l1] = 0x000000FF; l1++;
-	cldoublebuffer[l1] = 0x000000FF; l1++;
-	cldoublebuffer[l1] = 0x000000FF; l1++;
-	cldoublebuffer[l1] = 0x000000FF;
+	clscreen->cldoublebuffer[l1] = 0x000000FF; l1++;
+	clscreen->cldoublebuffer[l1] = 0x000000FF; l1++;
+	clscreen->cldoublebuffer[l1] = 0x000000FF; l1++;
+	clscreen->cldoublebuffer[l1] = 0x000000FF;
 	//*
 	
 	//draw second row
-	cldoublebuffer[l2] = 0x000000FF; l2++;
-	cldoublebuffer[l2] = 0x00000080; l2++;
-	cldoublebuffer[l2] = 0x00000080; l2++;
-	cldoublebuffer[l2] = 0x00000080; l2++;
-	cldoublebuffer[l2] = 0x00000080; l2++;
-	cldoublebuffer[l2] = 0x000000FF;
+	clscreen->cldoublebuffer[l2] = 0x000000FF; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00000080; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00000080; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00000080; l2++;
+	clscreen->cldoublebuffer[l2] = 0x00000080; l2++;
+	clscreen->cldoublebuffer[l2] = 0x000000FF;
 	//*
 	
 	//draw third row
-	cldoublebuffer[l3] = 0x00FF0000; l3++;
-	cldoublebuffer[l3] = 0x00000080; l3++;
-	cldoublebuffer[l3] = 0x00000080; l3++;
-	cldoublebuffer[l3] = 0x00000080; l3++;
-	cldoublebuffer[l3] = 0x00000080; l3++;
-	cldoublebuffer[l3] = 0x00FF0000;
+	clscreen->cldoublebuffer[l3] = 0x00FF0000; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00000080; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00000080; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00000080; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00000080; l3++;
+	clscreen->cldoublebuffer[l3] = 0x00FF0000;
 	//*
 	
 	//draw fourth row
-	cldoublebuffer[l4] = 0x000000FF; l4++;
-	cldoublebuffer[l4] = 0x00000080; l4++;
-	cldoublebuffer[l4] = 0x00000080; l4++;
-	cldoublebuffer[l4] = 0x00000080; l4++;
-	cldoublebuffer[l4] = 0x00000080; l4++;
-	cldoublebuffer[l4] = 0x000000FF;
+	clscreen->cldoublebuffer[l4] = 0x000000FF; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00000080; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00000080; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00000080; l4++;
+	clscreen->cldoublebuffer[l4] = 0x00000080; l4++;
+	clscreen->cldoublebuffer[l4] = 0x000000FF;
 	//*
 	
 	//draw fifth row
-	cldoublebuffer[l5] = 0x000000FF; l5++;
-	cldoublebuffer[l5] = 0x00000080; l5++;
-	cldoublebuffer[l5] = 0x00000080; l5++;
-	cldoublebuffer[l5] = 0x00000080; l5++;
-	cldoublebuffer[l5] = 0x00000080; l5++;
-	cldoublebuffer[l5] = 0x000000FF;
+	clscreen->cldoublebuffer[l5] = 0x000000FF; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00000080; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00000080; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00000080; l5++;
+	clscreen->cldoublebuffer[l5] = 0x00000080; l5++;
+	clscreen->cldoublebuffer[l5] = 0x000000FF;
 	//*
 	
 	//draw sixth row
-	cldoublebuffer[l6] = 0x000000FF; l6++;
-	cldoublebuffer[l6] = 0x000000FF; l6++;
-	cldoublebuffer[l6] = 0x000000FF; l6++;
-	cldoublebuffer[l6] = 0x000000FF;
+	clscreen->cldoublebuffer[l6] = 0x000000FF; l6++;
+	clscreen->cldoublebuffer[l6] = 0x000000FF; l6++;
+	clscreen->cldoublebuffer[l6] = 0x000000FF; l6++;
+	clscreen->cldoublebuffer[l6] = 0x000000FF;
 	//*
 }
 ///*

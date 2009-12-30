@@ -11,7 +11,6 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLstruct.hh"
-#include "CLglobal.hh"
 #include "CLmath.hh"
 #include "CLbuffer.hh"
 #include "CLbase.hh"
@@ -36,7 +35,8 @@ class CLfloor : public CLbase<CLfloor,1>
 	friend class CLbase<CLfloor,1>;
 	
 	private:
-		static CLmath* clmath;
+		static CLmath*   clmath;
+		static CLscreen* clscreen;
 	protected:
 		CLubuffer* cmask;
 		CLfbuffer* zmask;
@@ -52,7 +52,8 @@ class CLfloor : public CLbase<CLfloor,1>
 		void draw() const; //too slow!!!
 };
 
-CLmath* CLfloor::clmath = CLmath::instance();
+CLmath*   CLfloor::clmath   = CLmath::instance();
+CLscreen* CLfloor::clscreen = CLscreen::instance();
 ///*
 
 ///implementations
@@ -113,9 +114,9 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s) //! noncritical
 
 void CLfloor::draw() const //! critical
 {
-	clstencilbuffer.clear(0);
-	cmask->copy(cldoublebuffer.getbuffer());
-	zmask->copy(clzbuffer.getbuffer());
+	clscreen->clstencilbuffer.clear(0);
+	cmask->copy(clscreen->cldoublebuffer.getbuffer());
+	zmask->copy(clscreen->clzbuffer.getbuffer());
 }
 ///*
 

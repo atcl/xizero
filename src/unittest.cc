@@ -439,9 +439,9 @@ int main(int argc, char** argv)
 		//3. blend stencil to double
 		//4. all shadow casting objects
 
-		clglobal->cldoublebuffer.clear(0);
-		clglobal->clzbuffer.clear(ZRES);
-		clglobal->clstencilbuffer.clear(0);
+		clglobal->clscreen->cldoublebuffer.clear(0);
+		clglobal->clscreen->clzbuffer.clear(ZRES);
+		clglobal->clscreen->clstencilbuffer.clear(0);
 
 		/*
 		clglobal->clgfx2->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
