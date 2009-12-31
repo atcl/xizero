@@ -1038,9 +1038,9 @@ sprite* CLgfx::savescreen() const //! critical
 	r->width = XRES;
 	r->height = YRES;
 	r->size = (XRES*YRES);
-	r->data = new uxlong[r->size];
+	r->data = new uxlong[(r->size)];
 	
-	for(uxlong i=0; i<r->size; i++) { r->data[i] = clscreen->cldoublebuffer[i]; }
+	for(xlong i=0; i<r->size; i++) { r->data[i] = clscreen->cldoublebuffer[i]; }
 	
 	return r;
 }
@@ -1051,7 +1051,7 @@ void CLgfx::drawscreen(sprite* s) const //! critical
 	if(s->width==XRES && s->height==YRES)
 	{
 		//draw loop
-		for(uxlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) clscreen->cldoublebuffer[i] = s->data[i]; }
+		for(xlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) clscreen->cldoublebuffer[i] = s->data[i]; }
 		//*
 	}
 	//*

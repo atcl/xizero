@@ -186,7 +186,7 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	//*
 	
 	//open for (over-)writing
-	if( (of = fopen(fn,"w")) == 0 ) return 0;
+	if( (of = fopen(fn,"wb")) == 0 ) return 0;
 	//*
 	
 	//write sequential data to file
@@ -205,22 +205,14 @@ bool CLsystem::writefile(CLfile* f,bool ow) //! noncritical
 	FILE* of;
 	
 	//if file exist and overwrite not set return
-	if(of = fopen("test.im32","rb") ) 
-	{
-		fclose(of);
-		if(!ow)	return 0;
-	}
+	of = fopen(f->name,"rb");
+	if(of && !ow) { fclose(of); return 0; } 
+	fclose(of);
 	//*
 	
 	//open for (over-)writing
-	if( (of = fopen("test.im32","w")) == 0 ) return 0;
-	//*
-	
-	//write sequential data to file
+	of = fopen(f->name,"wb");
 	fwrite(f->text,1,f->size,of);
-	//*
-	
-	//close file
 	fclose(of);
 	//*
 	

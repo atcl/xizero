@@ -445,21 +445,23 @@ CLfile* CLformat::saveras(sprite* sp,const xchar* fn) const //! noncritical
 {
 	CLfile* r = new CLfile;
 	r->name = clstring->copy(fn);
-	r->lsize = sp->size + 8;
-	r->size = r->lsize * 4;
-	r->data = new xlong[sp->size + 8];
-	r->text = static_cast<xchar*>(static_cast<void*>(&r->data[0]));
+	r->lsize = (sp->size) + 8;
+	r->size = (r->lsize) * 4;
+	r->text = new xchar[(r->size)];
+	r->data = static_cast<xlong*>(static_cast<void*>(&r->text[0]));
 	
-	r->data[0] = endian(0x956aa659);
-	r->data[1] = sp->width;
-	r->data[2] = sp->height;
-	r->data[3] = 32;
-	r->data[4] = sp->size;
-	r->data[5] = 3;
+	r->data[0] = 0x956aa659;
+	r->data[1] = endian(sp->width);
+	r->data[2] = endian(sp->height);
+	r->data[3] = endian(32);
+	r->data[4] = endian(sp->size);
+	r->data[5] = endian(1);
 	r->data[6] = 0;
 	r->data[7] = 0;
 	
-	for(xlong i=0; i<sp->size; i++) { r->data[8+i] = sp->data[i]; }
+	for(xlong i=0; i<sp->size; i++) { r->data[8+i] = endian(sp->data[i]); }
+	
+	return r;
 }
 ///*
 
