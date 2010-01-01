@@ -19,7 +19,8 @@
 #include "CLresource.hh"
 #include "CLformat.hh"
 #include "CLapp.hh"
-#include "CLbase.hh" 
+#include "CLbase.hh"
+#include "CLscreen.hh"
 ///*
 
 ///header

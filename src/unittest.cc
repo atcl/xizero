@@ -484,7 +484,7 @@ int main(int argc, char** argv)
 			terrows[i]->display(q,SHAPE);
 			q.y += 20;
 		}
-	
+
 		linearM->unit();
 
 		clglobal->clbench->inc();

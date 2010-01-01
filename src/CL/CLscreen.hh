@@ -41,6 +41,11 @@ class CLscreen : public CLbase<CLscreen,1>
 		uxlong pixelheight;
 		uxlong pixeldepth;
 		uxlong pixelsize;
+		CLubuffer doublebuffer;
+		CLubuffer framebuffer;
+		CLubuffer stencilbuffer;
+		CLfbuffer zbuffer;
+		//CLubuffer clabuffer;
 		CLscreen();
 		~CLscreen() { };
 	public:
@@ -52,16 +57,15 @@ class CLscreen : public CLbase<CLscreen,1>
 		uxlong getpixelheight() const { return pixelheight; };
 		uxlong getpixeldepth() const { return pixeldepth; };
 		uxlong getpixelsize() const { return pixelsize; };
-		CLubuffer cldoublebuffer;
-		CLubuffer clframebuffer;
-		CLubuffer clstencilbuffer;
-		CLfbuffer clzbuffer;
-		//CLubuffer clabuffer;
+		CLubuffer& cldoublebuffer;
+		CLubuffer& clframebuffer;
+		CLubuffer& clstencilbuffer;
+		CLfbuffer& clzbuffer;
 };
 ///*
 
 ///implementation
-CLscreen::CLscreen() : cldoublebuffer((XRES*YRES),0), clframebuffer((XRES*YRES),0), clstencilbuffer((XRES*YRES),0), clzbuffer((XRES*YRES),ZRES)
+CLscreen::CLscreen() : doublebuffer((XRES*YRES),0), framebuffer((XRES*YRES),0), stencilbuffer((XRES*YRES),0), zbuffer((XRES*YRES),ZRES), cldoublebuffer(doublebuffer), clframebuffer(framebuffer), clstencilbuffer(stencilbuffer), clzbuffer(zbuffer)
 {
 	bytewidth = XRES<<2;
 	byteheight = YRES<<2;
