@@ -39,6 +39,7 @@ class CLstring : public CLbase<CLstring,1>
 		xlong length(const xchar* s) const;
 		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
 		xlong tolong(const xchar* s) const;
+		xchar* toascii(xlong v) const;
 		xlong linecount(const xchar* s) const;
 		xlong find(const xchar* s,const xchar* f,xlong p=0) const;
 		uxlong hex(const xchar* s) const;
@@ -94,6 +95,25 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 		t = 1;
 	}
 	r *= u;
+	return r;
+}
+
+xchar* CLstring::toascii(xlong v) const //! noncritical
+{
+	xchar* r = new xchar[12];
+	r[0] = '-';
+	bool s = (v<0);
+	if(s) { v*=-1; }
+	xlong i = 0;
+	xlong t = 0;
+	bool u = 0;
+	for(xlong j=1000000000; j>0; j/=10)
+	{
+		t = ((v/j)%10) + '0';
+		r[i+s] = t;
+		if(t!='0' || u!=0 ) { i++; u=1; }
+	}
+	r[i+s] = 0;
 	return r;
 }
 
