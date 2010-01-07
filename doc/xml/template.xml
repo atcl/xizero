@@ -1,26 +1,38 @@
-<? xml-version="1.0" ?>
+<?xml-version="1.0" encoding="utf-8" ?>
 
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
 
-<class>
+<class static="" template="">
 	
 	<filename></filename>
 	
+	<name></name>
+	
+	<template>
+		<parameter type=""><paramter>
+	</template>
+	
 	<depends>
-		<class></class>
-		<library></library>
+		<module href=""></module>
+		<library partof=""></library>
 	</depends>
+	
+	<derived>
+		<parent href=""></parent>	
+	</derived>
 	
 	<attribute ispublic="" isstatic="">
 		<name></name>
 		<datatype></datatype>
+		<info></info>
 	<attribute>
 	
-	<method ispublic="">
+	<method ispublic="" isstatic="">
 		<name></name>
-		<returntype></returntype>
+		<returns></returns>
 		<parameter></parameter>
 		<parameter></parameter>
-		<infotext></infotext>
+		<info></info>
 		<example></example>
 	</method>	
 	
