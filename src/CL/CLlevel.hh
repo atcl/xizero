@@ -326,6 +326,9 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 //***
 	
 	//release loaded files
+	delete enemiesa;
+	delete bossa;
+	delete levela;
 	delete enemyp;
 	delete bossp;
 	delete playerp;
@@ -340,9 +343,9 @@ CLlevel::~CLlevel() //! noncritical
 {
 	delete player;
 	delete linear;
-	//~ delete enemies;
-	//~ delete boss;
-	//~ delete levellandscape;
+	delete enemies;
+	delete boss;
+	delete levellandscape;
 	delete terrain;
 }
 

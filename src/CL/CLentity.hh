@@ -236,6 +236,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	active = 0;
 	shieldupdate = lastupdate = clsystem->getmilliseconds();
 	//*
+	
+	delete entitya; 
 }
 
 template<int I>

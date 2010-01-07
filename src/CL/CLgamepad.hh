@@ -52,7 +52,7 @@ class CLgamepad : public CLbase<CLgamepad,1>
 	protected:
 		xlong device;
 		CLgamepad();
-		~CLgamepad() { };
+		~CLgamepad();
 		
 		#ifdef WIN32
 			struct JOYINFO gp;
@@ -72,6 +72,8 @@ class CLgamepad : public CLbase<CLgamepad,1>
 ///*
 
 ///implementation
+CLgamepad::~CLgamepad() { delete pad; }
+
 #ifdef WIN32
 
 CLgamepad::CLgamepad() //! noncritical

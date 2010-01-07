@@ -46,7 +46,7 @@ class CLfloor : public CLbase<CLfloor,1>
 		uxlong xend;
 		uxlong width;
 		CLfloor();
-		~CLfloor() { };
+		~CLfloor();
 	public:
 		void init(xlong z,xlong w,uxlong c,bool s);
 		void draw() const; //too slow!!!
@@ -58,6 +58,8 @@ CLscreen* CLfloor::clscreen = CLscreen::instance();
 
 ///implementations
 CLfloor::CLfloor() { zlevel = ZRES; xstart = 0; xend = XRES-1; width = XRES; shade = 0; } //! noncritical
+
+CLfloor::~CLfloor() { delete cmask; delete zmask; }
 
 void CLfloor::init(xlong z,xlong w,uxlong c,bool s) //! noncritical
 {

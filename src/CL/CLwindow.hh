@@ -156,6 +156,7 @@ CLwindow::CLwindow() //! noncritical
 
 CLwindow::~CLwindow() //! noncritical
 {
+	delete title;
 	XDestroyImage(Ximage);
 	XFreeGC(Xdisplay,Xgc);
 	XDestroyWindow(Xdisplay,Xwindow);

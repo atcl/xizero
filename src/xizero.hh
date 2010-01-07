@@ -180,6 +180,10 @@ void newgame()
 	clglobal->cltransitions->dissolve();
 	
 	clglobal->clwindow->showcursor();
+	
+	delete screens;
+	delete lvls;
+	delete testlevel; 
 }
 
 
