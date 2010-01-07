@@ -1,15 +1,17 @@
-<?xml-version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
 
-<class static="" template="">
+<class static="" istemplate="">
 	
 	<filename></filename>
 	
 	<name></name>
 	
+	<info></info>
+	
 	<template>
-		<parameter type=""><paramter>
+		<parameter type=""><parameter>
 	</template>
 	
 	<depends>
@@ -23,9 +25,9 @@
 	
 	<attribute ispublic="" isstatic="">
 		<name></name>
-		<datatype></datatype>
+		<type></type>
 		<info></info>
-	<attribute>
+	</attribute>
 	
 	<method ispublic="" isstatic="">
 		<name></name>
