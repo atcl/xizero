@@ -378,6 +378,13 @@ int main(int argc, char** argv)
 	sprite* screens;
 	CLfile* screenf;
 
+	for(xlong i=0; i<25; i++)
+	{
+		linearM->unit();
+		linearM->translate(0,-i*20,0);
+		terrows[i]->update(linearM);
+	}
+
 	while(clglobal->clwindow->run())
 	{
 		if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();
@@ -474,7 +481,7 @@ int main(int argc, char** argv)
 
 		clglobal->clgfx->drawsprite(10,10,testlevel);*/
 		
-		q.y = 20;
+		q.y = 10;
 		for(xlong i=0; i<25; i++)
 		//for(xlong i=25; i<50; i++)
 		//for(xlong i=50; i<75; i++)
@@ -482,7 +489,7 @@ int main(int argc, char** argv)
 		{
 			terrows[i]->display(q,AMBIENT + FLAT + ZLIGHT);
 			terrows[i]->display(q,SHAPE);
-			q.y += 20;
+			//q.y += 20;
 		}
 
 		linearM->unit();

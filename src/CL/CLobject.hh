@@ -46,6 +46,8 @@ class CLobject : public CLbase<CLobject,0>
 	protected:
 		CLpolygon** polyptr;
 		CLfvector** dockptr;
+		CLfvector position;
+		CLmatrix linear;
 		CLbox* boundingbox;
 		CLbox* rboundingbox;
 		xlong polycount;
@@ -65,6 +67,7 @@ class CLobject : public CLbase<CLobject,0>
 		xlong getname() const { return name; };
 		CLfvector* getdockingpoint(xlong t,xlong i) const;
 		void translatealongnormals(float speed);
+		CLfvector getnormalofpolygonat(CLfvector* p);
 		CLbox* getboundingbox() const { return boundingbox; };
 		void reset();
 		void setcolor(uxlong co);
@@ -138,7 +141,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 		
 		//subobject read loop
 		d = 8;
-		for(uxlong i=0;i<sobjcount;i++)
+		for(xlong i=0;i<sobjcount;i++)
 		{
 			//read SOBJ tag ( 'SOBJ' , subobject_name , subobject_polygon_count , subobject_dockingpoint_count )
 			if(dataptr[d] != 'SOBJ' ) err(__func__,u8"No SOBJ tag");
@@ -246,7 +249,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 			//*
 			
 			//docking point read loop
-			for(uxlong k=0;k<localdockcount;k++)
+			for(xlong k=0;k<localdockcount;k++)
 			{
 				//read DP tag ( 'DP' , docckingpoint_type , x_value , y_value , z_value )
 				s.dd = dataptr[d]; d++; //"DP"+docktype
@@ -335,9 +338,9 @@ CLobject::CLobject(CLobject* obj) //! noncritical
 	rboundingbox = new CLbox(*(obj->rboundingbox));
 	name = obj->name;
 	
-	for(uxlong i=0; i<polycount; i++) { polyptr[i] = new CLpolygon(*(obj->polyptr[i])); }
+	for(xlong i=0; i<polycount; i++) { polyptr[i] = new CLpolygon(*(obj->polyptr[i])); }
 	
-	for(uxlong j=0; j<dockcount; j++) { dockptr[j] = new CLfvector(*(obj->dockptr[j])); }
+	for(xlong j=0; j<dockcount; j++) { dockptr[j] = new CLfvector(*(obj->dockptr[j])); }
 }
 
 CLobject::~CLobject() //! noncritical
@@ -349,11 +352,11 @@ CLobject::~CLobject() //! noncritical
 void CLobject::update(CLmatrix* m) //! noncritical
 {
 	//transform each polygon
-	for(uxlong i=0;i<polycount;i++) { polyptr[i]->update(m,0); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->update(m,0); }
 	//*
 
 	//transform each docking point
-	for(uxlong j=0;j<dockcount;j++) { *dockptr[j] = m->transform(*dockptr[j]); }
+	for(xlong j=0;j<dockcount;j++) { *dockptr[j] = m->transform(*dockptr[j]); }
 	//*
 
 	//transform bounding box
@@ -371,11 +374,11 @@ void CLobject::update(CLmatrix* m) //! noncritical
 void CLobject::partupdate(CLmatrix* m) //! noncritical
 {
 	//transform each polygon
-	for(uxlong i=0;i<polycount;i++) { polyptr[i]->partupdate(m); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->partupdate(m); }
 	//*
 
 	//transform each docking point
-	for(uxlong j=0;j<dockcount;j++) { *dockptr[j] = m->transform(*dockptr[j]); }
+	for(xlong j=0;j<dockcount;j++) { *dockptr[j] = m->transform(*dockptr[j]); }
 	//*
 
 	//after partupdate boundingbox is without value
@@ -390,7 +393,7 @@ void CLobject::display(CLlvector p,xshort flags) //! noncritical
 	//display objects shadow
 	if(flags&SHADOW)
 	{
-		for(uxlong i=0;i<polycount;i++)
+		for(xlong i=0;i<polycount;i++)
 		{
 			polyptr[i]->update(shadowM,1);
 			polyptr[i]->display(p,flags);
@@ -421,7 +424,7 @@ void CLobject::display(CLlvector p,xshort flags) //! noncritical
 void CLobject::display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h) //! noncritical
 {
 	//use special display method ONLY for zlevel map construction (see CLlevel Z179-208)
-	for(uxlong i=0;i<polycount;i++)	{ polyptr[i]->display(p,l,r,b,h); }
+	for(xlong i=0;i<polycount;i++)	{ polyptr[i]->display(p,l,r,b,h); }
 	//*
 }
 
@@ -432,7 +435,7 @@ CLfvector* CLobject::getdockingpoint(xlong t,xlong i) const //! noncritical
 	xlong d= 0;
 
 	//search requested docking point
-	for(uxlong j=0;j<dockcount;j++)
+	for(xlong j=0;j<dockcount;j++)
 	{
 		//requested docking point type found
 		if(dockptr[j]->e == t)
@@ -469,7 +472,7 @@ void CLobject::translatealongnormals(float speed) //! noncritical
 	CLfvector t;
 
 	//move all polygons along their normal by given speed
-	for(uxlong i=0;i<polycount;i++)
+	for(xlong i=0;i<polycount;i++)
 	{
 		t = polyptr[i]->getnormal();
 		t.x = (t.x / !t) * speed;
@@ -481,9 +484,19 @@ void CLobject::translatealongnormals(float speed) //! noncritical
 	//*
 }
 
+CLfvector CLobject::getnormalofpolygonat(CLfvector* p)
+{
+	CLfvector r = position - *p;
+	CLfvector n(0,0,0); 
+	
+	for(xlong i=0;i<polycount;i++) { if(polyptr[i]->isinside(&r)) { n = polyptr[i]->getnormal(); } }
+	
+	return n;
+}
+
 void CLobject::reset() //! noncritical
 {
-	for(uxlong i=0;i<polycount;i++) { polyptr[i]->reset(); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->reset(); }
 	
 	*boundingbox = *rboundingbox;
 }
@@ -491,14 +504,14 @@ void CLobject::reset() //! noncritical
 void CLobject::setcolor(uxlong co) //! noncritical
 {
 	//set colors of all polygons
-	for(uxlong i=0;i<polycount;i++) { polyptr[i]->setcolor(co); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->setcolor(co); }
 	//*
 }
 
 void CLobject::resetcolor() //! noncritical
 {
 	//reset colors of all polygons
-	for(uxlong i=0;i<polycount;i++) { polyptr[i]->resetcolor(); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->resetcolor(); }
 	//*
 }
 ///*

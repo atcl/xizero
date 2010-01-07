@@ -82,6 +82,7 @@ class CLpolygon : CLbase<CLpolygon,0>
 		void setcolor(uxlong co) { color = co; };
 		void resetcolor();
 		CLfvector getnormal() const { return normal; };
+		bool isinside(CLfvector* p) const;
 };
 
 CLmath*   CLpolygon::clmath   = CLmath::instance();
@@ -734,6 +735,13 @@ void CLpolygon::reset() //! noncritical
 }
 
 void CLpolygon::resetcolor() { color = rcolor; } //! noncritical
+
+bool CLpolygon::isinside(CLfvector* p) const
+{
+	if( p->x > points[0].x && p->x < points[1].x && p->x > points[3].x && p->x < points[2].x &&
+	    p->y > points[0].y && p->y > points[1].y && p->y < points[3].x && p->y < points[2].y) { return 1; }
+	else { return 0; }
+}
 ///*
 
 #endif
