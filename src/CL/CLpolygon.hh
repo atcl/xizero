@@ -736,7 +736,7 @@ void CLpolygon::reset() //! noncritical
 
 void CLpolygon::resetcolor() { color = rcolor; } //! noncritical
 
-bool CLpolygon::isinside(CLfvector* p) const
+bool CLpolygon::isinside(CLfvector* p) const //! critical
 {
 	if( p->x > points[0].x && p->x < points[1].x && p->x > points[3].x && p->x < points[2].x &&
 	    p->y > points[0].y && p->y > points[1].y && p->y < points[3].x && p->y < points[2].y) { return 1; }

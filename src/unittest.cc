@@ -363,7 +363,6 @@ int main(int argc, char** argv)
 	CLexplosion* ex = new CLexplosion(cubus);
 
 	CLlvector p(400,300,100);
-	CLlvector q(400,0,100);
 
 	bool mode = 1;
 	bool shadows = 0;
@@ -378,10 +377,10 @@ int main(int argc, char** argv)
 	sprite* screens;
 	CLfile* screenf;
 
-	for(xlong i=0; i<25; i++)
+	for(xlong i=0; i<30; i++)
 	{
 		linearM->unit();
-		linearM->translate(0,-i*20,0);
+		linearM->translate(0,(14-i)*20,0);
 		terrows[i]->update(linearM);
 	}
 
@@ -481,15 +480,13 @@ int main(int argc, char** argv)
 
 		clglobal->clgfx->drawsprite(10,10,testlevel);*/
 		
-		q.y = 10;
-		for(xlong i=0; i<25; i++)
+		for(xlong i=0; i<30; i++)
 		//for(xlong i=25; i<50; i++)
 		//for(xlong i=50; i<75; i++)
 		//for(xlong i=75; i<90; i++)
 		{
-			terrows[i]->display(q,AMBIENT + FLAT + ZLIGHT);
-			terrows[i]->display(q,SHAPE);
-			//q.y += 20;
+			terrows[i]->display(p,AMBIENT + FLAT + ZLIGHT);
+			terrows[i]->display(p,SHAPE);
 		}
 
 		linearM->unit();

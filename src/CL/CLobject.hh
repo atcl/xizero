@@ -47,7 +47,7 @@ class CLobject : public CLbase<CLobject,0>
 		CLpolygon** polyptr;
 		CLfvector** dockptr;
 		CLfvector position;
-		CLmatrix linear;
+		CLmatrix* linear;
 		CLbox* boundingbox;
 		CLbox* rboundingbox;
 		xlong polycount;
@@ -72,6 +72,7 @@ class CLobject : public CLbase<CLobject,0>
 		void reset();
 		void setcolor(uxlong co);
 		void resetcolor();
+		CLmatrix* getmatrix() const { return linear; };
 };
 
 CLsystem* CLobject::clsystem = CLsystem::instance();
@@ -484,7 +485,7 @@ void CLobject::translatealongnormals(float speed) //! noncritical
 	//*
 }
 
-CLfvector CLobject::getnormalofpolygonat(CLfvector* p)
+CLfvector CLobject::getnormalofpolygonat(CLfvector* p) //! critical
 {
 	CLfvector r = position - *p;
 	CLfvector n(0,0,0); 

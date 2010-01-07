@@ -40,7 +40,7 @@ class CLcamera : public CLbase<CLcamera,1>
 		CLcamera() { };
 		~CLcamera() { };
 	public:
-		
+	
 };
 ///*
 

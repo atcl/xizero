@@ -77,6 +77,7 @@ class CLlevel : public CLbase<CLlevel,0>
 		static bool  paused;
 	public:
 		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype);
+		CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong bosstype);
 		~CLlevel();
 		xlong update(xchar input,xchar turbo,CLgamepadstate* p);
 		void display();
@@ -337,6 +338,37 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//*
 
 //***
+}
+
+CLlevel::CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong bosstype)
+{
+	//load level map
+	
+		//load heightmap (plain)
+		
+		//*
+		
+		//load heightmap (ramps)
+		
+		//*
+		
+		//load entites
+		
+		//*
+	
+	//*
+	
+	//load player
+	
+	//*
+	
+	//load enemies
+	
+	//*
+	
+	//load boss
+	
+	//*
 }
 
 CLlevel::~CLlevel() //! noncritical
