@@ -20,8 +20,6 @@ int main(int argc, char** argv)
 	
 	CLmenu* sysmenu = new CLmenu();
 
-	clglobal->clmsgbox->alertbox("my value:",45);
-
 	//*
 		//test tree:
 		CLtree<xlong>* testtree = new CLtree<xlong>();	

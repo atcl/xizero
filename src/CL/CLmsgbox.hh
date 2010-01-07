@@ -194,6 +194,7 @@ xlong CLmsgbox::alertbox(const xchar* title,xlong value) //! noncritical
 		}
 	}
 	//destroy window
+	delete message;
 	XFreeGC(Xdisplay,Xgc);
 	XDestroyWindow(Xdisplay,Xwindow);
 	XFlush(Xdisplay);
