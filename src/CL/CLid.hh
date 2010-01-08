@@ -36,24 +36,22 @@ class CLid : public CLbase<CLid,1>
 	friend class CLbase<CLid,1>;
 	
 	protected:
-		xlong  lastid;
+		static uxlong lastid;
 		static uxlong crc32;
-		CLid();
+		CLid() { };
 		~CLid() { };
 	public:
-		xlong generateid();
+		uxlong generateid();
 		uxlong generatecrc(xchar* d,xlong l);
 		bool checkcrc(uxlong c);
-		xlong one() const;
 };
 
+uxlong CLid::lastid = 0;
 uxlong CLid::crc32 = 0x04C11DB7;
 ///*
 
 ///implementation
-CLid::CLid() { lastid = 0; } //! noncritical
-
-xlong CLid::generateid() //! noncritical
+uxlong CLid::generateid() //! noncritical
 {
 	lastid++;
 	return lastid;
@@ -64,7 +62,7 @@ uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
 	uxlong r = 0;
 	uxchar o = 0;
 
-	if(l<4) return 0;
+	if(l<4) { return 0; }
 
 	r  = *d++ << 24;
 	r |= *d++ << 16;
@@ -86,7 +84,6 @@ uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
 	}
 
 	return r;
-
 }
 
 bool CLid::checkcrc(uxlong c) //! noncritical
@@ -96,8 +93,6 @@ bool CLid::checkcrc(uxlong c) //! noncritical
 	if(t==0) return true;
 	else return false;
 }
-
-xlong CLid::one() const { return 1; } //! noncritical
 ///*
 
 #endif

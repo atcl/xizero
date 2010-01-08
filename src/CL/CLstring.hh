@@ -22,11 +22,12 @@
  * 
  * notes:	finish implementing.
  * 
- * version: 0.1
+ * version: 0.2
  */
 ///*
 
 ///definitions
+#define __class__ CLstring
 class CLstring : public CLbase<CLstring,1>
 {
 	friend class CLbase<CLstring,1>;
@@ -175,5 +176,6 @@ uxlong CLstring::hex(const xchar* s) const //!  noncritical
 }
 ///*
 
+#undef __class__
 #endif
 

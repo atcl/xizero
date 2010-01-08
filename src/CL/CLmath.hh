@@ -170,7 +170,7 @@ template<>
 float CLmath::absolute<float>(float x) const //! noncritical
 {
 	__asm__ __volatile__ ("andl $0x7FFFFFFF,%%eax;" : "=a"(x) : "a"(x) );
-	return x; 
+	return x;
 }
 
 template<typename T>

@@ -39,7 +39,6 @@ class CLxmlgui : public CLbase<CLxmlgui,0>
 		CLxml data;
 		xchar* title;
 	public:
-		CLxmlgui(const xchar* filename);
 		CLxmlgui(CLfile* fileptr);
 		~CLxmlgui();
 		
@@ -50,11 +49,6 @@ class CLxmlgui : public CLbase<CLxmlgui,0>
 ///*
 
 ///implementation
-CLxmlgui::CLxmlgui(const xchar* filename) //! noncritical
-{
-	
-}
-
 CLxmlgui::CLxmlgui(CLfile fileptr) //! noncritical
 {
 	
