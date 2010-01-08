@@ -19,6 +19,12 @@ int main(int argc, char** argv)
 	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
 	
 	CLmenu* sysmenu = new CLmenu();
+	
+	xfixed test1 = 23;
+	xfixed test2 = 3;
+	
+	say(float(test1));
+	say(float(test2));
 
 	//*
 		//test tree:

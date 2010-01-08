@@ -131,7 +131,7 @@ CLvector<T> CLvector<T>::operator*(T c) const //! noncritical
 template<typename T>
 CLvector<T> CLvector<T>::cross(const CLvector<T>& a) const //! critical
 {
-	return CLvector( ( (this->y * a.z) - (this->z * a.y) ),( (this->z * a.x) - (this->x * a.z) ),( (this->x * a.y) - (this->y * a.x) ) );
+	return CLvector<T>( ( (this->y * a.z) - (this->z * a.y) ),( (this->z * a.x) - (this->x * a.z) ),( (this->x * a.y) - (this->y * a.x) ) );
 }
 //*
 

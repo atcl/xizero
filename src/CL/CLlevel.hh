@@ -375,6 +375,7 @@ CLlevel::CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,
 		xlong x2 = 0;
 		xlong x3 = 0;
 		xlong xz = 0;
+		
 		xlong o0 = 0;
 		xlong o1 = 0;
 		xlong o2 = 0;
@@ -387,7 +388,7 @@ CLlevel::CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,
 		xlong y1 = 0;
 		xlong y2 = 0;
 
-		//check each row
+		//check each row of pixels
 		for(xlong i=0; i<rows-1; i++)
 		{
 			while(o1<cols && o2<cols)
