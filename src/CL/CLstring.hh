@@ -36,6 +36,7 @@ class CLstring : public CLbase<CLstring,1>
 		~CLstring() { };
 	public:
 		xchar* copy(const xchar* s,xlong l=0) const;
+		xchar* concat(const xchar* a,const xchar* b) const;
 		xlong length(const xchar* s) const;
 		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
 		xlong tolong(const xchar* s) const;
@@ -56,6 +57,17 @@ xchar* CLstring::copy(const xchar* s,xlong l) const //! critical
 	xchar* r = new xchar[l+1];
 	for(uxlong i=0; i<l; i++) { r[i] = s[i]; }
 	r[l] = 0;
+	return r;
+}
+
+xchar* CLstring::concat(const xchar* a,const xchar* b) const //!noncritical
+{
+	xlong la = length(a);
+	xlong lb = length(b);
+	xchar* r = new xchar[la+lb+1];
+	for(xlong i=0; i<la; i++) { r[i] = a[i]; }
+	for(xlong i=0; i<lb; i++) { r[la+i] = b[i]; }
+	r[la+lb] = 0;
 	return r;
 }
 

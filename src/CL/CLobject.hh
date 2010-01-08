@@ -118,7 +118,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 	//*
 
 	//check if first 4 bytes of file have y3d id
-	if(dataptr[0] != '<CLY') { err(__func__,u8"wrong y3d format, may be endianess?"); }
+	if(dataptr[0] != '<CLY') { err(__FILE__,__func__,u8"wrong y3d format, may be endianess?"); }
 	//*
 
 	//check if second 4 bytes of file have binary id
@@ -132,7 +132,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 		shadowcolor = dataptr[3];
 		
 		//read OBJT tag ( 'OBJT' , object_name , subobject_count , dockingpoint_count )
-		if(dataptr[4] != 'OBJT' ) err(__func__,u8"No OBJT tag");
+		if(dataptr[4] != 'OBJT' ) err(__FILE__,__func__,u8"No OBJT tag");
 		name = dataptr[5];
 		sobjcount = dataptr[6];
 		dockcount = dataptr[7];
@@ -145,7 +145,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 		for(xlong i=0;i<sobjcount;i++)
 		{
 			//read SOBJ tag ( 'SOBJ' , subobject_name , subobject_polygon_count , subobject_dockingpoint_count )
-			if(dataptr[d] != 'SOBJ' ) err(__func__,u8"No SOBJ tag");
+			if(dataptr[d] != 'SOBJ' ) err(__FILE__,__func__,u8"No SOBJ tag");
 			d++; //"SOBJ"
 			d++; //subobject identifier
 			localpolycount = dataptr[d]; d++;
@@ -153,7 +153,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 			//*
 
 			//read CONN tag ( 'CONN' , x_reference , y_reference , z_reference )
-			if(dataptr[d] != 'CONN' ) err(__func__,u8"No CONN tag");
+			if(dataptr[d] != 'CONN' ) err(__FILE__,__func__,u8"No CONN tag");
 			d++; //"CONN"
 			xoff = dataptr[d]; d++;
 			yoff = dataptr[d]; d++;
@@ -164,7 +164,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 			for(uxlong j=0;j<localpolycount;j++,polycounter++)
 			{
 				//read POLY tag ( 'POLY' , polygon_name , polygon_color , 0 )
-				if(dataptr[d] != 'POLY' ) err(__func__,u8"No POLY tag");
+				if(dataptr[d] != 'POLY' ) err(__FILE__,__func__,u8"No POLY tag");
 				d++; //"POLY"
 				d++; //identifier
 				localcolor = dataptr[d]; d++; //color
@@ -172,7 +172,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 				//*
 
 				//read 1st VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) err(__func__,u8"No VECT tag");
+				if(dataptr[d] != 'VECT' ) err(__FILE__,__func__,u8"No VECT tag");
 				d++; //"VECT"
 				t[0].x = dataptr[d] + xoff; d++; //x1
 				t[0].y = dataptr[d] + yoff; d++; //y1
@@ -189,7 +189,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 				//*
 
 				//read 2nd VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) err(__func__,u8"No VECT tag");
+				if(dataptr[d] != 'VECT' ) err(__FILE__,__func__,u8"No VECT tag");
 				d++; //"VECT"
 				t[1].x = dataptr[d] + xoff; d++; //x2
 				t[1].y = dataptr[d] + yoff; d++; //y2
@@ -206,7 +206,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 				//*
 
 				//read 3rd VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) err(__func__,u8"No VECT tag");
+				if(dataptr[d] != 'VECT' ) err(__FILE__,__func__,u8"No VECT tag");
 				d++; //"VECT"
 				t[2].x = dataptr[d] + xoff; d++; //x3
 				t[2].y = dataptr[d] + yoff; d++; //y3
@@ -223,7 +223,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 				//*
 
 				//read 4th VECT tag ( 'VECT' , x_value , y_value , z_value )
-				if(dataptr[d] != 'VECT' ) err(__func__,u8"No VECT tag");
+				if(dataptr[d] != 'VECT' ) err(__FILE__,__func__,u8"No VECT tag");
 				d++; //"VECT"
 				t[3].x = dataptr[d] + xoff; d++; //x4
 				t[3].y = dataptr[d] + yoff; d++; //y4

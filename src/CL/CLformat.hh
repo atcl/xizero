@@ -137,7 +137,7 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //!
 			}
 			else
 			{
-				err(__func__,u8"Map not conform with given width");
+				err(__FILE__,__func__,u8"Map not conform with given width");
 				return 0;
 			}			
 			cc++;

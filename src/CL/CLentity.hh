@@ -164,7 +164,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	{
 		//find and load model(s) (*.y3d)
 		entitymodelfile = entitya->findbyextension(testext[i]);
-		if(entitymodelfile==0) err(__func__,u8"no entity model file found");
+		if(entitymodelfile==0) err(__FILE__,__func__,u8"no entity model file found");
 		model[i] = new CLobject(entitymodelfile,0);
 		//*
 		
@@ -190,7 +190,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	
 	//find and load definition (*.ini)
 	CLfile* entitydefinitionfile = entitya->findbyextension(u8".ini");
-	if(entitydefinitionfile==0) err(__func__,u8"no entity definition found");
+	if(entitydefinitionfile==0) err(__FILE__,__func__,u8"no entity definition found");
 	def = clformat->loadini(entitydefinitionfile);
 	//*
 	

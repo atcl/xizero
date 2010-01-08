@@ -94,7 +94,7 @@ CLsound::CLsound() //! noncritical
 	
 	//create single file source
 	alGenSources(1,&alsource);
-	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alGenSources"); }
+	if(alGetError()!=AL_NO_ERROR) { err(__FILE__,__func__,"OpenAL error: alGenSources"); }
 	//*
 }
 
@@ -121,7 +121,7 @@ bool CLsound::preload(CLar* aa) //! noncritical
 	
 	//Create Sources
 	alGenSources(numsrc,alsources);
-	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alGenSources"); return 0; }
+	if(alGetError()!=AL_NO_ERROR) { err(__FILE__,__func__,"OpenAL error: alGenSources"); return 0; }
 	//*
 	
 	//Load Wavs
@@ -135,10 +135,10 @@ bool CLsound::preload(CLar* aa) //! noncritical
 		
 		aldata = static_cast<void*>(curr->data);
 		alwavs[i] = alutCreateBufferFromFileImage(aldata,curr->size);
-		if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alutCreateBufferFromFileImage"); return 0; }
+		if(alGetError()!=AL_NO_ERROR) { err(__FILE__,__func__,"OpenAL error: alutCreateBufferFromFileImage"); return 0; }
 		
 		alSourcei(alsources[i],AL_BUFFER,alwavs[i]); 
-		if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alSourcei"); return 0; }
+		if(alGetError()!=AL_NO_ERROR) { err(__FILE__,__func__,"OpenAL error: alSourcei"); return 0; }
 	}
 	//*
 	
@@ -160,10 +160,10 @@ bool CLsound::play(CLfile* f,bool l,bool o) //! noncritical
 {
 	ALvoid* aldata = static_cast<void*>(f->data);
 	alwav = alutCreateBufferFromFileImage(aldata,f->size);
-	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alutCreateBufferFromFileImage"); return 0; }
+	if(alGetError()!=AL_NO_ERROR) { err(__FILE__,__func__,"OpenAL error: alutCreateBufferFromFileImage"); return 0; }
 	
 	alSourcei(alsource,AL_BUFFER,alwav); 
-	if(alGetError()!=AL_NO_ERROR) { err(__func__,"OpenAL error: alSourcei"); return 0; }
+	if(alGetError()!=AL_NO_ERROR) { err(__FILE__,__func__,"OpenAL error: alSourcei"); return 0; }
 	
 	alSourcePlay(alsource);
 	

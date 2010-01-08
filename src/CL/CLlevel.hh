@@ -138,7 +138,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	
 	//terrain map:
 	CLfile* tf = levela->findbyextension(u8".mapt");
-	if(tf==0) err(__func__,u8"no terrain map found");
+	if(tf==0) err(__FILE__,__func__,u8"no terrain map found");
 	xchar** terrainmap = clformat->loadmap(tf,33,' ',-1);
 	//*
 
@@ -152,18 +152,18 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	smoothmark = smoothmarkmax;
 	smoothlevelheight = levelheight * blockheight;
 	smoothlevelwidth = levelwidth * blockwidth;
-	if(blockmark < 0) err(__func__,u8"Level too short");
+	if(blockmark < 0) err(__FILE__,__func__,u8"Level too short");
 	//*
 
 	//height map:
 	CLfile* hf = levela->findbyextension(u8".maph");
-	if(hf==0) err(__func__,u8"no height map found");
+	if(hf==0) err(__FILE__,__func__,u8"no height map found");
 	xchar** heightmap = clformat->loadmap(hf,48,' ',0);
 	//*
 
 	//entity map:
 	CLfile* ef = levela->findbyextension(u8".mape");
-	if(ef==0) err(__func__,u8"no entity map found");
+	if(ef==0) err(__FILE__,__func__,u8"no entity map found");
 	xchar** entitymap = clformat->loadmap(ef,35,'.',-3);
 	//*
 
@@ -248,7 +248,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 			}
 		}
 	}
-	if(startposfound==false) err(__func__,u8"no player start position found in entity map");
+	if(startposfound==false) err(__FILE__,__func__,u8"no player start position found in entity map");
 	//*
 
 	//create player
@@ -319,7 +319,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 			}
 		}
 	}
-	if(bossposfound==false) err(__func__,u8"no boss position found in entity map");
+	if(bossposfound==false) err(__FILE__,__func__,u8"no boss position found in entity map");
 	//*
 
 	//load boss
