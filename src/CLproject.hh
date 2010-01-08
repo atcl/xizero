@@ -9,8 +9,6 @@
 ///*
 
 ///declarations
-#define FNAME __func__" "
-
 #if __GNUC__ <= 4 && __GNUC_MINOR__ < 5
 	#define u8 
 #endif

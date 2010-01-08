@@ -65,17 +65,6 @@ struct sprite
 	uxlong  index; //used for tilesets ONLY!
 	uxlong  count; //used for tilesets ONLY!
 };
-
-struct CLwav
-{
-	CLfile* file;
-	xlong pcm;
-	xlong channel;
-	xlong rate;
-	xlong bits;
-	xlong offset;
-	xlong length;
-};
 ///*
 
 #endif

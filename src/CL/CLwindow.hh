@@ -62,9 +62,9 @@ class CLwindow : public CLbase<CLwindow,1>
 		XColor Xblack;
 		XColor Xgrey;
 
+		const xchar* title;
 		uxlong width;
 		uxlong height;
-		const xchar* title;
 		xlong key;
 		xlong keyup;
 		xlong turbo;

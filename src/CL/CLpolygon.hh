@@ -56,9 +56,9 @@ class CLpolygon : CLbase<CLpolygon,0>
 		CLfvector rnormal;
 
 		void polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
-		template<class clvector> inline clvector getzplanecoords(const clvector& a,const clvector& b,float pz);
-		template<class clvector> inline clvector getxplanecoords(const clvector& a,const clvector& b,float px);
-		template<class clvector> inline clvector getyplanecoords(const clvector& a,const clvector& b,float py);
+		template<class clvector> inline clvector getzplanecoords(const clvector& a,const clvector& b,float pz) const;
+		template<class clvector> inline clvector getxplanecoords(const clvector& a,const clvector& b,float px) const;
+		template<class clvector> inline clvector getyplanecoords(const clvector& a,const clvector& b,float py) const;
 		void zclipping();
 		void project(xlong px=0,xlong py=0,bool c=0);
 		void xyclipping();
@@ -67,8 +67,8 @@ class CLpolygon : CLbase<CLpolygon,0>
 		void flatshade(float pz,bool ambient,bool zlight);
 		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
 		void rasterize(xlong shadow,CLfbuffer* t=0); //too slow!!!
-		inline xlong circleinc(xlong x,xlong pc);
-		inline xlong circledec(xlong x,xlong pc);
+		inline xlong circleinc(xlong x,xlong pc) const;
+		inline xlong circledec(xlong x,xlong pc) const;
 	public:
 		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
 		CLpolygon(const CLpolygon& c);
@@ -94,38 +94,38 @@ float CLpolygon::shadezscale = 128/100;
 ///implementation
 void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! critical
 {
-	if(x1==x2 && y1==y2) return;
+	if(x1==x2 && y1==y2) { return; }
 
 	xlong dx = x2 - x1;
 	xlong dy = y2 - y1;
 	xlong e;
 	xlong xs = 1;
 	xlong ys = XRES;
-	xlong len;
-	xlong off = y1*XRES+x1;
+	xlong length;
+	xlong offset = y1*XRES+x1;
 
 	if(dx<0) { dx = -dx; xs = -xs; }
 	if(dy<0) { dy = -dy; ys = -ys; }
 	if(dy>dx) { swap(&dx,&dy); swap(&xs,&ys); }
 
-	len = dx+1;
+	length = dx+1;
 	e = dy;
 
-	for(uxlong i=0; i<len; i++)
+	for(xlong i=0; i<length; i++)
 	{
-		clscreen->cldoublebuffer[off] = c;
-		off += xs;
+		clscreen->cldoublebuffer[offset] = c;
+		offset += xs;
 		e += dy;
 		if(e >= dx)
 		{
 			e -= dx;
-			off += ys;
+			offset += ys;
 		}
 	}
 }
 
 template<class clvector>
-clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz)  //! noncritical
+clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz) const //! noncritical
 {
 	float m = (pz - b.z) / (a.z - b.z);
 	clvector c( ((a.x - b.x) * m + b.x),((a.y - b.y) * m + b.y),pz );
@@ -133,7 +133,7 @@ clvector CLpolygon::getzplanecoords(const clvector& a,const clvector& b,float pz
 }
 
 template<class clvector>
-clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px)  //! noncritical
+clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px) const //! noncritical
 {
 	float m = (px - b.x) / (a.x - b.x);
 	clvector c( xlong(px),xlong((a.y - b.y) * m + b.y),xlong((a.z - b.z) * m + b.z) );
@@ -141,7 +141,7 @@ clvector CLpolygon::getxplanecoords(const clvector& a,const clvector& b,float px
 }
 
 template<class clvector>
-clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py)  //! noncritical
+clvector CLpolygon::getyplanecoords(const clvector& a,const clvector& b,float py) const //! noncritical
 {
 	float m = (py - b.y) / (a.y - b.y);
 	clvector c( xlong((a.x - b.x) * m + b.x),xlong(py),xlong((a.z - b.z) * m + b.z) );
@@ -427,9 +427,9 @@ void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s) //!
 	}
 }
 
-xlong CLpolygon::circleinc(xlong x,xlong pc) { return ( (x+1) >= pc ) ? 0 : x+1; } //! critical
+xlong CLpolygon::circleinc(xlong x,xlong pc) const { return ( (x+1) >= pc ) ? 0 : x+1; } //! critical
 
-xlong CLpolygon::circledec(xlong x,xlong pc) { return ( (x-1) < 0 ) ? pc-1 : x-1; } //! critical
+xlong CLpolygon::circledec(xlong x,xlong pc) const { return ( (x-1) < 0 ) ? pc-1 : x-1; } //! critical
 
 void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 {

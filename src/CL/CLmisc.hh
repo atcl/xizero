@@ -38,14 +38,13 @@ void hide() { }
 void show() { }
 void setto() { }
 
-//console: clk,end,info,ver,mem,set,run,see,
+//console: clk,end,info,ver,mem,set,run,see,cls
 
 //ASCIImissile
 //CLxml
 
 //template version of CLformat.loadcsv 
 //CLmath.acos,asin mit lookup tables
-//template version of CLsystem.ato
 //flatshade in asm
 //terrain dep transformations
 //CLgfx1.drawsprite ao: transparency check with logic-ops instead of if

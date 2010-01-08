@@ -59,7 +59,6 @@ class CLformat : public CLbase<CLformat,1>
 		sprite** loadtileset(CLfile* sf,xlong tw,xlong th) const;
 		xchar**  loadlvl(CLfile* sf) const;
 		xmap*    loadini(CLfile* bf) const;
-		//void*    loadwav(CLfile* bf) const;
 		
 		CLfile*  saveras(sprite* sp,const xchar* fn="test.ras") const;
 };

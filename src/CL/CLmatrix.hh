@@ -36,7 +36,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		static CLmath* clmath;
 	protected:
 		float m[4][4];
-		float t[4][4]; //todo: implement
+		float t[4][4];
 		inline void multiplicate();
 	public:
 		CLmatrix(bool i=1);

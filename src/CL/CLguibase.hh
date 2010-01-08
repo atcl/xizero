@@ -67,7 +67,6 @@ class CLguibase : public CLbase<CLguibase,0>
 ///implementation
 CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
 {
-	//set up attributes
 	posx = px;
 	posy = py;
 	width = w;
@@ -77,7 +76,6 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	rcolor = rc;
 	flat = f;
 	visible = 1;
-	//*
 }
 
 CLguibase::CLguibase(const CLguibase& c)
