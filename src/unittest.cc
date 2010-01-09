@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 		if(shadows==1)
 		{
 			cubus->display(p,CENTER + SHADOW);
-			clglobal->clscreen->clstencilbuffer.blendcopy(clglobal->clscreen->cldoublebuffer.getbuffer(),4);
+			clglobal->clscreen->clstencilbuffer.blendcopy(&clglobal->clscreen->cldoublebuffer,4);
 		}
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);

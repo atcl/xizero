@@ -45,11 +45,8 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 		CLbuffer(uxlong s,T ival=0);
 		CLbuffer(const CLbuffer<T>& c);
 		~CLbuffer() { };
-		void clear(T v);
-		void zero();
-		void copy(T* dst) const;
+		void clear(T v=0);
 		void copy(CLbuffer<T>* dst) const;
-		void blendcopy(T* dst,xlong o) const; //too slow!!!
 		void blendcopy(CLbuffer<T>* dst,xlong o) const;
 		uxlong getsize() const { return size; };
 		uxlong getbytesize() const { return bsize; };
@@ -151,10 +148,11 @@ void CLbuffer<T>::clear(T v) //! critical
 }
 
 template <typename T>
-void CLbuffer<T>::copy(T* dst) const //! critical
+void CLbuffer<T>::copy(CLbuffer<T>* dst) const //! critical
 {
+	T* dstbuf = dst->getbuffer();
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
-	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
+	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dstbuf[0]));
 	register xlong i = size;
 	
 	//x86 SSE1 assembly copy (very fast)
@@ -225,18 +223,14 @@ void CLbuffer<T>::copy(T* dst) const //! critical
 	//*
 	
 	//default for loop copy (slow)
-	else { i--; for(;i>=0;i--) { dst[i] = buffer[i]; } }
+	else { i--; for(;i>=0;i--) { dstbuf[i] = buffer[i]; } }
 	//*
 }
 
 template <typename T>
-void CLbuffer<T>::copy(CLbuffer<T>* dst) const { copy(dst->getbuffer()); } //! noncritical
-
-template <typename T>
-void CLbuffer<T>::blendcopy(T* dst,xlong o) const //! critical
+void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) const //! critical
 {
-	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
-	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dst[0]));
+	T* dstbuf = dst->getbuffer();
 	register xlong i = size;
 	doubleword tx = { 0 };
 	doubleword ty = { 0 };
@@ -244,335 +238,53 @@ void CLbuffer<T>::blendcopy(T* dst,xlong o) const //! critical
 	doubleword tw = { 0 };
 		
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
-	if(ttype==4) //set back to 1 if byte add and sub solved!
-	{		
-		switch(o)
-		{
-			case 0:		//NONE //?default
-				__asm__ __volatile__ (	"cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
-			break;
-			
-			case 1:		//AND
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"andl %%ebx,%%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 2:		//OR
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"orl %%ebx,%%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 3:		//NAND
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"andl %%ebx,%%eax;"
-											"notl %%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 4:		//NOR
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"orl %%ebx,%%eax;"
-											"notl %%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 5:		//XOR
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"xorl %%ebx,%%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 6:		//ADD
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"addl %%ebx,%%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 7:		//SUB
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"xchg %%esi,%%edi;"
-											"subl %%ebx,%%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 8:		//BYTE ADD
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"movl %%ebx,%%ecx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"movl %%eax,%%edx;"
-											"xchg %%esi,%%edi;"
-											"addb %%bl,%%al;"
-											//~ "cmovob $255,%%al;"
-											"addb %%bh,%%ah;"
-											//~ "cmovob $255,%%ah;"
-											"bswap %%eax;"
-											"bswap %%ebx;"
-											"addb %%bl,%%al;"
-											//~ "cmovob $255,%%al;"
-											"addb %%bh,%%ah;"
-											//~ "cmovob $255,%%ah;"
-											"bswap %%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 9:		//BYTE SUB
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"movl %%eax,%%ebx;"
-											"movl %%ebx,%%ecx;"
-											"xchg %%esi,%%edi;"
-											"lodsl;"
-											"movl %%eax,%%edx;"
-											"xchg %%esi,%%edi;"
-											"subb %%bl,%%al;"
-											//~ "cmovob $0,%%al;"
-											"subb %%bh,%%ah;"
-											//~ "cmovob $0,%%ah;"
-											"bswap %%eax;"
-											"bswap %%ebx;"
-											"subb %%bl,%%al;"
-											//~ "cmovob $0,%%al;"
-											"subb %%bh,%%ah;"
-											//~ "cmovob $0,%%ah;"
-											"bswap %%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 10:	//2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
-				i-=(XRES+2); 
-				for(;i>=XRES+1;i--)
-				{
-					tx.dd = buffer[i-XRES-1];
-					ty.dd = buffer[i+XRES+1];
-					tz.dd = buffer[i];
-
-					tw.db[0] = uxchar( ( (uxlong(tx.db[0])<<1) + uxlong(ty.db[0]) + uxlong(tz.db[0]) ) >>2 );
-					tw.db[1] = uxchar( ( (uxlong(tx.db[1])<<1) + uxlong(ty.db[1]) + uxlong(tz.db[1]) ) >>2 );  
-					tw.db[2] = uxchar( ( (uxlong(tx.db[2])<<1) + uxlong(ty.db[2]) + uxlong(tz.db[2]) ) >>2 );  
-					tw.db[3] = uxchar( ( (uxlong(tx.db[3])<<1) + uxlong(ty.db[3]) + uxlong(tz.db[3]) ) >>2 );
-					
-					dst[i] = tw.dd;    
-				}
-			break;
-			
-			case 11:	//ALPHA
-			
-			break;
-			
-			case 12:	//NOT
-				i--;
-				for(;i>=0;i--)
-				{
-					__asm__ __volatile__ (	"cld;" 
-											"lodsl;"
-											"notl %%eax;"
-											"stosl;" 
-											: :"S"(puresrc),"D"(puredst));
-				}
-			break;
-			
-			case 13:	//BYTE MUL
-			
-			break;
-		}
-	}
-	else
+	switch(o)
 	{
-		switch(o)
-		{
-			case 0:		//NONE //?default
-				i--; for(;i>=0;i--) { dst[i] = buffer[i]; }
-			break;
-			
-			case 1:		//AND
-				i--; for(;i>=0;i--) { dst[i] = dst[i] & buffer[i]; }
-			break;
-			
-			case 2:		//OR
-				i--; for(;i>=0;i--) { dst[i] = dst[i] | buffer[i]; }
-			break;
-			
-			case 3:		//NAND
-				i--; for(;i>=0;i--) { dst[i] = !(dst[i] & buffer[i]); }
-			break;
-			
-			case 4:		//NOR
-				i--; for(;i>=0;i--) { dst[i] = !(dst[i] | buffer[i]); }
-			break;
-			
-			case 5:		//XOR
-				i--; for(;i>=0;i--) { dst[i] = dst[i] ^ buffer[i]; }
-			break;
-			
-			case 6:		//ADD
-				i--; for(;i>=0;i--) { dst[i] = dst[i] + buffer[i]; }
-			break;
-			
-			case 7:		//SUB
-				i--; for(;i>=0;i--) { dst[i] = dst[i] - buffer[i]; }
-			break;
-			
-			case 8:		//BYTE ADD
-				for(;i>=0;i--)
-				{
-					//neu: dst[i] = byteadd(dst[i],buffer[i];
-					
-					tx.dd = dst[i];
-					ty.dd = buffer[i];
+		case 1: i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] & buffer[i]; } break; //AND
+		
+		case 2: i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] | buffer[i]; } break; //OR
+		
+		case 3:	i--; for(;i>=0;i--) { dstbuf[i] = !(dstbuf[i] & buffer[i]); } break; //NAND
+		
+		case 4:	i--; for(;i>=0;i--) { dstbuf[i] = !(dstbuf[i] | buffer[i]); } break; //NOR
+		
+		case 5:	i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] ^ buffer[i]; } break; //XOR
+		
+		case 6:	i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] + buffer[i]; } break; //ADD
+		
+		case 7:	i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] - buffer[i]; } break; //SUB
+		
+		case 8:	i--; for(;i>=0;i--) { dstbuf[i] = byteadd(dstbuf[i],buffer[i]); } break; //BYTE ADD
+		
+		case 9:	i--; for(;i>=0;i--) { dstbuf[i] = bytesub(dstbuf[i],buffer[i]); } break; //BYTE SUB
+		
+		case 10:	//2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
+			i-=(XRES+2); 
+			for(;i>=XRES+1;i--)
+			{
+				tx.dd = buffer[i-XRES-1];
+				ty.dd = buffer[i+XRES+1];
+				tz.dd = buffer[i];
 
-					//~ tz.db[0] = tx.db[0] + ty.db[0]; if(tz.db[0]<tx.db[0]) tz.db[0] = 0xFF;
-					//~ tz.db[1] = tx.db[1] + ty.db[1]; if(tz.db[1]<tx.db[1]) tz.db[1] = 0xFF;
-					//~ tz.db[2] = tx.db[2] + ty.db[2]; if(tz.db[2]<tx.db[2]) tz.db[2] = 0xFF;
-					//~ tz.db[3] = tx.db[3] + ty.db[3]; if(tz.db[3]<tx.db[3]) tz.db[3] = 0xFF;
-					tz.db[0] = tx.db[0] + ty.db[0]; tz.db[0] = (uxchar(tz.db[0]<tx.db[0]))-1 | tz.db[0];
-					tz.db[1] = tx.db[1] + ty.db[1]; tz.db[1] = (uxchar(tz.db[1]<tx.db[1]))-1 | tz.db[1];
-					tz.db[2] = tx.db[2] + ty.db[2]; tz.db[2] = (uxchar(tz.db[2]<tx.db[2]))-1 | tz.db[2];
-					tz.db[3] = tx.db[3] + ty.db[3]; tz.db[3] = (uxchar(tz.db[3]<tx.db[3]))-1 | tz.db[3];
-					//
-					dst[i] = tz.dd;
-				}
-			break;
-			
-			case 9:		//BYTE SUB
-				for(;i>=0;i--)
-				{
-					//neu: dst[i] = bytesub(dst[i],buffer[i];
-					
-					tx.dd = dst[i];
-					ty.dd = buffer[i];
-					
-					//~ tz.db[0] = tx.db[0] - ty.db[0]; if(tz.db[0]>tx.db[0]) tz.db[0] = 0;
-					//~ tz.db[1] = tx.db[1] - ty.db[1]; if(tz.db[1]>tx.db[1]) tz.db[1] = 0;
-					//~ tz.db[2] = tx.db[2] - ty.db[2]; if(tz.db[2]>tx.db[2]) tz.db[2] = 0;
-					//~ tz.db[3] = tx.db[3] - ty.db[3]; if(tz.db[3]>tx.db[3]) tz.db[3] = 0;
-					tz.db[0] = tx.db[0] - ty.db[0]; tz.db[0] = (uxchar(tz.db[0]>tx.db[0]))-1 & tz.db[0];
-					tz.db[1] = tx.db[1] - ty.db[1]; tz.db[1] = (uxchar(tz.db[1]>tx.db[1]))-1 & tz.db[1];
-					tz.db[2] = tx.db[2] - ty.db[2]; tz.db[2] = (uxchar(tz.db[2]>tx.db[2]))-1 & tz.db[2];
-					tz.db[3] = tx.db[3] - ty.db[3]; tz.db[3] = (uxchar(tz.db[3]>tx.db[3]))-1 & tz.db[3];
-					//
-					dst[i] = tz.dd;
-				}
-			break;
-			
-			case 10:	//2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
-				i-=(XRES+2); 
-				for(;i>=XRES+1;i--)
-				{
-					tx.dd = buffer[i-XRES-1];
-					ty.dd = buffer[i+XRES+1];
-					tz.dd = buffer[i];
-
-					tw.db[0] = uxchar( ( (uxlong(tx.db[0])<<1) + uxlong(ty.db[0]) + uxlong(tz.db[0]) ) >>2 );
-					tw.db[1] = uxchar( ( (uxlong(tx.db[1])<<1) + uxlong(ty.db[1]) + uxlong(tz.db[1]) ) >>2 );  
-					tw.db[2] = uxchar( ( (uxlong(tx.db[2])<<1) + uxlong(ty.db[2]) + uxlong(tz.db[2]) ) >>2 );  
-					tw.db[3] = uxchar( ( (uxlong(tx.db[3])<<1) + uxlong(ty.db[3]) + uxlong(tz.db[3]) ) >>2 ); 
-					
-					dst[i] = tw.dd;  
-				}
-			break;
-			
-			case 11:	//ALPHA
-			
-			break;
-			
-			case 12:	//NOT
-				i--; for(;i>=0;i--) { dst[i] = !buffer[i]; }
-			break;
-			
-			case 13:	//BYTE MUL
-			
-			break;
-		}
+				tw.db[0] = uxchar( ( (uxlong(tx.db[0])<<1) + uxlong(ty.db[0]) + uxlong(tz.db[0]) ) >>2 );
+				tw.db[1] = uxchar( ( (uxlong(tx.db[1])<<1) + uxlong(ty.db[1]) + uxlong(tz.db[1]) ) >>2 );  
+				tw.db[2] = uxchar( ( (uxlong(tx.db[2])<<1) + uxlong(ty.db[2]) + uxlong(tz.db[2]) ) >>2 );  
+				tw.db[3] = uxchar( ( (uxlong(tx.db[3])<<1) + uxlong(ty.db[3]) + uxlong(tz.db[3]) ) >>2 ); 
+				
+				dstbuf[i] = tw.dd;  
+			}
+		break;
+		
+		case 11: i--; break; //ALPHA
+		
+		case 12: i--; for(;i>=0;i--) { dstbuf[i] = !buffer[i]; } break; //NOT
+		
+		case 13: i--; break; //BYTE MUL
+		
+		default: for(;i>=0;i--) { dstbuf[i] = buffer[i]; } break; //NONE
 	}
 	//*
 }
-
-template <typename T>
-void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) const { blendcopy(dst->getbuffer(),o); } //! noncritical
 
 template <typename T>
 T& CLbuffer<T>::operator[](uxlong i) //! critical

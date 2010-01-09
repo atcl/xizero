@@ -81,5 +81,12 @@
 #include "CL/CLglobal.hh"
 //*
 
+//~ __asm__ __volatile__ (
+	//~ "1: prefetchnta (%0)\n"
+	//~ "   prefetchnta 64(%0)\n"
+	//~ "   prefetchnta 128(%0)\n"
+	//~ "   prefetchnta 192(%0)\n"
+	//~ : : "r" (puresrc) );
+
 #endif
 

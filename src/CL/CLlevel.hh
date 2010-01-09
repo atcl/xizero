@@ -827,7 +827,7 @@ void CLlevel::display() //! critical
 		currentenemy->display(1);
 	}
 	boss->display(1);
-	clscreen->clstencilbuffer.blendcopy(clscreen->cldoublebuffer.getbuffer(),9);
+	clscreen->clstencilbuffer.blendcopy(&clscreen->cldoublebuffer,9);
 	//*
 
 	//display player:

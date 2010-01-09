@@ -117,8 +117,8 @@ void CLfloor::init(xlong z,xlong w,uxlong c,bool s) //! noncritical
 void CLfloor::draw() const //! critical
 {
 	clscreen->clstencilbuffer.clear(0);
-	cmask->copy(clscreen->cldoublebuffer.getbuffer());
-	zmask->copy(clscreen->clzbuffer.getbuffer());
+	cmask->copy(&clscreen->cldoublebuffer);
+	zmask->copy(&clscreen->clzbuffer);
 }
 ///*
 
