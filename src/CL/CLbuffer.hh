@@ -38,16 +38,13 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 		T* buffer;
 		uxlong size;
 		uxlong bsize;
-		uxlong ds;
-		uxlong qs;
-		xlong ttype;
+		xlong  ttype;
 	public:
 		CLbuffer(uxlong s,T ival=0);
 		CLbuffer(const CLbuffer<T>& c);
-		~CLbuffer() { };
+		~CLbuffer() { delete buffer; };
 		void clear(T v=0);
-		void copy(CLbuffer<T>* dst) const;
-		void blendcopy(CLbuffer<T>* dst,xlong o) const;
+		void copy(CLbuffer<T>* dst,xlong o=0) const;
 		uxlong getsize() const { return size; };
 		uxlong getbytesize() const { return bsize; };
 		T* getbuffer() const { return buffer; };
@@ -63,7 +60,7 @@ template <typename T>
 CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
 {
 	//adjust size and allocate buffer
-	size = (s+1) + ((s+1)%4); // make sure is a multiple of 16byte
+	size = s + (s%4); // make sure is a multiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
 	ttype = cldetect->mmx() + cldetect->sse();
@@ -92,11 +89,10 @@ void CLbuffer<T>::clear(T v) //! critical
 	pack[0] = pack[1] = pack[2] = pack[3] = purev;
 	register xlong i = size;
 
-	//x86 SSE1 assembly clear (very fast)
-	if(size>262144 && ttype==3)
+	//x86 SSE1 assembly clear 
+	if(ttype==3)
 	{
-		i>>=5;
-		for(;i>0;i--)
+		for(i>>=5;i>0;i--)
 		{
 			//blast with all 8 xmm regs, and movaps instead of movups (?)
 			__asm__ __volatile__ (
@@ -113,124 +109,16 @@ void CLbuffer<T>::clear(T v) //! critical
 			puredst+=32;
 		}
 	}
-	//*
-	
-	//x86 MMX assembly clear (fast)
-	else if(size>65536 && ttype==2)
-	{
-		i>>=4;
-		for(;i>0;i--)
-		{
-			//blast with all 8 mm regs
-			__asm__ __volatile__ (
-			"movq (%0), %%mm0;"
-			"movq %%mm0,(%1);"
-			"movq %%mm0,8(%1);"
-			"movq %%mm0,16(%1);"
-			"movq %%mm0,24(%1);"
-			"movq %%mm0,32(%1);"
-			"movq %%mm0,40(%1);"
-			"movq %%mm0,48(%1);"
-			"movq %%mm0,56(%1);"		
-			: : "r"(pack),"r"(puredst) );
-			puredst+=16;
-		}
-	}
-	//*
-	
-	//fallback if no SIMD, neither MMX or SSE1 is available
-	else if(ttype==1) __asm__ __volatile__ (	"cld; rep; stosl;" : : "a"(purev),"D"(puredst),"c"(size));
-	//*
-	
-	//default for loop clear (slow)
 	else for(;i>=0;i--) { buffer[i] = v; }
 	//*
 }
 
 template <typename T>
-void CLbuffer<T>::copy(CLbuffer<T>* dst) const //! critical
+void CLbuffer<T>::copy(CLbuffer<T>* dst,xlong o) const //! critical
 {
 	T* dstbuf = dst->getbuffer();
 	xlong* puresrc = static_cast<xlong*>(static_cast<void*>(&buffer[0]));
 	xlong* puredst = static_cast<xlong*>(static_cast<void*>(&dstbuf[0]));
-	register xlong i = size;
-	
-	//x86 SSE1 assembly copy (very fast)
-	if(size>262144 && ttype==3)
-	{
-		i>>=5;
-		for(;i>0;i--)
-		{
-			//blast wth all 8 xmm regs, and movaps instead of movups (?)
-			__asm__ __volatile__ (
-			"prefetch 128(%0);"
-			"movups (%0),   %%xmm0;"
-			"movups 16(%0), %%xmm1;"
-			"movups 32(%0), %%xmm2;"
-			"movups 48(%0), %%xmm3;"
-			"movups 64(%0), %%xmm4;"
-			"movups 80(%0), %%xmm5;"
-			"movups 96(%0), %%xmm6;"
-			"movups 112(%0),%%xmm7;"
-			"movups %%xmm0,(%1);"
-			"movups %%xmm1,16(%1);"
-			"movups %%xmm2,32(%1);"
-			"movups %%xmm3,48(%1);"
-			"movups %%xmm4,64(%1);"
-			"movups %%xmm5,80(%1);"
-			"movups %%xmm6,96(%1);"
-			"movups %%xmm7,112(%1);"	
-			: : "r"(puresrc),"r"(puredst) );
-			puresrc+=32;
-			puredst+=32;
-		}
-	}
-	//*
-	
-	//x86 MMX assembly copy (fast)
-	else if(size>65536 && ttype==2)
-	{
-		i>>=4;
-		for(;i>0;i--)
-		{
-			//blast with all 8 mm regs
-			__asm__ __volatile__ (
-			"movq   (%0),%%mm0;"
-			"movq  8(%0),%%mm1;"
-			"movq 16(%0),%%mm2;"
-			"movq 24(%0),%%mm3;"
-			"movq 32(%0),%%mm4;"
-			"movq 40(%0),%%mm5;"
-			"movq 48(%0),%%mm6;"
-			"movq 56(%0),%%mm7;"
-			"movq %%mm0,  (%1);"
-			"movq %%mm1, 8(%1);"
-			"movq %%mm2,16(%1);"
-			"movq %%mm3,24(%1);"
-			"movq %%mm4,32(%1);"
-			"movq %%mm5,40(%1);"
-			"movq %%mm6,48(%1);"
-			"movq %%mm7,56(%1);"		
-			: : "r"(puresrc),"r"(puredst) );
-			puresrc+=16;
-			puredst+=16;
-		}
-	}
-	//*
-	
-	//fallback if no SIMD neither MMX or SSE1 is available
-	else if(ttype==1) __asm__ __volatile__ ("cld; rep; movsl;" : :"S"(puresrc),"D"(puredst),"c"(i));
-	//*
-	
-	//default for loop copy (slow)
-	else { i--; for(;i>=0;i--) { dstbuf[i] = buffer[i]; } }
-	//*
-}
-
-template <typename T>
-void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) const //! critical
-{
-	T* dstbuf = dst->getbuffer();
 	register xlong i = size;
 	doubleword tx = { 0 };
 	doubleword ty = { 0 };
@@ -240,27 +128,36 @@ void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) const //! critical
 	//special copy methods utilizing logical and arthmic operators to combine source with buffers
 	switch(o)
 	{
-		case 1: i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] & buffer[i]; } break; //AND
-		
-		case 2: i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] | buffer[i]; } break; //OR
-		
-		case 3:	i--; for(;i>=0;i--) { dstbuf[i] = !(dstbuf[i] & buffer[i]); } break; //NAND
-		
-		case 4:	i--; for(;i>=0;i--) { dstbuf[i] = !(dstbuf[i] | buffer[i]); } break; //NOR
-		
-		case 5:	i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] ^ buffer[i]; } break; //XOR
-		
-		case 6:	i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] + buffer[i]; } break; //ADD
-		
-		case 7:	i--; for(;i>=0;i--) { dstbuf[i] = dstbuf[i] - buffer[i]; } break; //SUB
-		
-		case 8:	i--; for(;i>=0;i--) { dstbuf[i] = byteadd(dstbuf[i],buffer[i]); } break; //BYTE ADD
-		
-		case 9:	i--; for(;i>=0;i--) { dstbuf[i] = bytesub(dstbuf[i],buffer[i]); } break; //BYTE SUB
-		
-		case 10:	//2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
-			i-=(XRES+2); 
-			for(;i>=XRES+1;i--)
+		case 1: //FAST
+			for(i>>=5;i>0;i--)
+			{
+				//blast wth all 8 xmm regs, and movaps instead of movups (?)
+				__asm__ __volatile__ (
+				"prefetch 128(%0);"
+				"movups (%0),   %%xmm0;"
+				"movups 16(%0), %%xmm1;"
+				"movups 32(%0), %%xmm2;"
+				"movups 48(%0), %%xmm3;"
+				"movups 64(%0), %%xmm4;"
+				"movups 80(%0), %%xmm5;"
+				"movups 96(%0), %%xmm6;"
+				"movups 112(%0),%%xmm7;"
+				"movups %%xmm0,(%1);"
+				"movups %%xmm1,16(%1);"
+				"movups %%xmm2,32(%1);"
+				"movups %%xmm3,48(%1);"
+				"movups %%xmm4,64(%1);"
+				"movups %%xmm5,80(%1);"
+				"movups %%xmm6,96(%1);"
+				"movups %%xmm7,112(%1);"	
+				: : "r"(puresrc),"r"(puredst) );
+				puresrc+=32;
+				puredst+=32;
+			}
+			break;
+			
+		case 2: //2xAA = 2xRGMS : (2*(x,y) + (x+1,y-1) + (x-1,y+1))/4
+			for(i-=(XRES+2);i>=XRES+1;i--)
 			{
 				tx.dd = buffer[i-XRES-1];
 				ty.dd = buffer[i+XRES+1];
@@ -274,14 +171,28 @@ void CLbuffer<T>::blendcopy(CLbuffer<T>* dst,xlong o) const //! critical
 				dstbuf[i] = tw.dd;  
 			}
 		break;
+			
+		case 3: for(i--;i>=0;i--) { dstbuf[i] = !buffer[i]; } break; //NOT
 		
-		case 11: i--; break; //ALPHA
+		//~ case 4: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] & buffer[i]; } break; //AND
+		//~ 
+		//~ case 5: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] | buffer[i]; } break; //OR
+		//~ 
+		//~ case 6:	for(i--;i>=0;i--) { dstbuf[i] = !(dstbuf[i] & buffer[i]); } break; //NAND
+		//~ 
+		//~ case 7:	for(i--;i>=0;i--) { dstbuf[i] = !(dstbuf[i] | buffer[i]); } break; //NOR
+		//~ 
+		//~ case 8:	for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] ^ buffer[i]; } break; //XOR
 		
-		case 12: i--; for(;i>=0;i--) { dstbuf[i] = !buffer[i]; } break; //NOT
+		case 9:	 for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] + buffer[i]; } break; //ADD
 		
-		case 13: i--; break; //BYTE MUL
+		case 10: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] - buffer[i]; } break; //SUB
 		
-		default: for(;i>=0;i--) { dstbuf[i] = buffer[i]; } break; //NONE
+		case 11: for(i--;i>=0;i--) { dstbuf[i] = byteadd(dstbuf[i],buffer[i]); } break; //BYTE ADD
+		
+		case 12: for(i--;i>=0;i--) { dstbuf[i] = bytesub(dstbuf[i],buffer[i]); } break; //BYTE SUB
+		
+		default: for(i--;i>=0;i--) { dstbuf[i] = buffer[i]; } break; //NONE
 	}
 	//*
 }

@@ -115,8 +115,8 @@ void newgame()
 
 		if(aa)
 		{
-			clglobal->clscreen->cldoublebuffer.blendcopy(&clglobal->clscreen->clframebuffer,10);
-			clglobal->clscreen->clframebuffer.copy(&clglobal->clscreen->cldoublebuffer);
+			clglobal->clscreen->cldoublebuffer.copy(&clglobal->clscreen->clframebuffer,2);
+			clglobal->clscreen->clframebuffer.copy(&clglobal->clscreen->cldoublebuffer,1);
 		}
 
 		//~ //render level depending on mode (modes just for dev)

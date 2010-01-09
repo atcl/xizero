@@ -165,13 +165,11 @@ int main(int argc, char** argv)
 		if(shadows==1)
 		{
 			cubus->display(p,CENTER + SHADOW);
-			clglobal->clscreen->clstencilbuffer.blendcopy(&clglobal->clscreen->cldoublebuffer,4);
+			clglobal->clscreen->clstencilbuffer.copy(&clglobal->clscreen->cldoublebuffer,12);
 		}
 
 		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
 		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
-
-		//clglobal->clgfx->drawsprite(10,10,testlevel);
 		
 		//~ for(xlong i=0; i<30; i++)
 		//~ //for(xlong i=25; i<50; i++)

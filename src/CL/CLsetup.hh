@@ -42,9 +42,6 @@ CLglobal* CLsetup() //! noncritical
 	shadowM->shadow(clslight,clplane);
 	//*
 	
-	leftside = new screenside[YRES];
-	rightside = new screenside[YRES];
-	
 	return clglobal;
 }
 
@@ -53,8 +50,6 @@ void CLgarbage() //! noncritical
 	//free globals
 	delete linearM;
 	delete shadowM;
-	delete leftside;
-	delete rightside;
 	//*
 }
 ///*
