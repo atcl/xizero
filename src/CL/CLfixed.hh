@@ -40,11 +40,11 @@ union xfixed
 	xshush p;
 
 	xfixed() { this->i = 0; };
-	xfixed(xlong a) { this->i = xshort(a)<<16; };
-	xfixed(xshort a) { this->i = a<<16; };
+	xfixed(xlong a) { this->p.num = xshort(a); this->p.frc = 0; };
+	xfixed(xshort a) { this->p.num = a; this->p.frc = 0; };
 	xfixed(float a);
 
-	inline xfixed& operator=(xfixed &a);
+	inline xfixed& operator=(xfixed& a);
 	inline xfixed& operator=(xshort& a);
 	
 	inline xfixed operator-() const;
@@ -111,12 +111,12 @@ union xfixed
 xfixed::xfixed(float a) //! noncritical
 {
 	this->p.num = xshort(a);
-	this->p.frc = xshort((a - float(this->p.num))*65536);
+	this->p.frc = xshort( (a - float(xshort(a))) * 65536.0);
 }
 //*
 
 //assign xfixed
-xfixed& xfixed::operator=(xfixed &a) //! noncritical
+xfixed& xfixed::operator=(xfixed& a) //! noncritical
 {
 	this->i = a.i;
 	return *this;
@@ -124,7 +124,7 @@ xfixed& xfixed::operator=(xfixed &a) //! noncritical
 //*
 
 //assign xshort
-xfixed& xfixed::operator=(xshort &a) //! noncritical
+xfixed& xfixed::operator=(xshort& a) //! noncritical
 {
 	this->p.num = a;
 	this->p.frc = 0;
@@ -317,7 +317,7 @@ xfixed xfixed::operator>>(xlong a) const //! critical
 xfixed::operator xshort() const //! noncritical
 {
 	xshort o = this->p.frc >> 15;
-	xshort r = (this->i >> 16) + o;
+	xshort r = this->p.num + o;
 	return r; 
 }
 //*
@@ -325,7 +325,7 @@ xfixed::operator xshort() const //! noncritical
 //cast to float
 xfixed::operator float() const //! noncritical
 {
-	float r = float(this->p.num) + (float(this->p.frc)/65536);
+	float r = (float(this->p.num)) + (float(this->p.frc)/65536);
 	return r; 
 }
 //*

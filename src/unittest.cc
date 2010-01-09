@@ -20,8 +20,8 @@ int main(int argc, char** argv)
 	
 	CLmenu* sysmenu = new CLmenu();
 	
-	xfixed test1 = 23;
-	xfixed test2 = 3;
+	xfixed test1 = 3;
+	xfixed test2 = float(93.56234);
 	
 	say(float(test1));
 	say(float(test2));
