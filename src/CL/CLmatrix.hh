@@ -56,7 +56,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		template<class clvector>void shadow(const clvector& l,const clvector& p);
 		void project();
 		float trace() const;
-		float determinate() const;
+		void set(float a00,float a01,float a02,float a03,float a10,float a11,float a12,float a13,float a20,float a21,float a22,float a23,float a30,float a31,float a32,float a33);
 		void print() const;
 		
 		CLmatrix& operator=(const CLmatrix& c);
@@ -306,6 +306,26 @@ float CLmatrix::trace() const //! noncritical
 	//*
 }
 
+void CLmatrix::set(float a00,float a01,float a02,float a03,float a10,float a11,float a12,float a13,float a20,float a21,float a22,float a23,float a30,float a31,float a32,float a33) //! noncritical
+{
+	m[0][0] = a00;
+	m[0][1] = a01;
+	m[0][2] = a02;
+	m[0][3] = a03;
+	m[1][0] = a10;
+	m[1][1] = a11;
+	m[1][2] = a12;
+	m[1][3] = a13;
+	m[2][0] = a20;
+	m[2][1] = a21;
+	m[2][2] = a22;
+	m[2][3] = a23;
+	m[3][0] = a30;
+	m[3][1] = a31;
+	m[3][2] = a32;
+	m[3][3] = a33;
+}
+
 void CLmatrix::print() const //! noncritical
 {
 	tty(m[0][0]); tty(' '); tty(m[0][1]); tty(' '); tty(m[0][2]); tty(' '); say(m[0][3]);
@@ -333,6 +353,8 @@ CLmatrix& CLmatrix::operator=(const CLmatrix& c) //! noncritical
 	m[3][1] = c.m[3][1];
 	m[3][2] = c.m[3][2];
 	m[3][3] = c.m[3][3];
+	
+	return *this;
 }
 ///*
 

@@ -59,6 +59,7 @@
 #include "CL/CLobject.hh"
 #include "CL/CLmisc3d.hh"
 #include "CL/CLlight.hh"
+#include "CL/CLcamera.hh"
 //*
 
 //game classes
