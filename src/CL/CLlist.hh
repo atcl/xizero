@@ -35,7 +35,6 @@ struct listmember
 	listmember*		next;
 	listmember*		prev;
 	xchar*			name;
-	xlong			hash;
 };
 
 template<class member>
@@ -53,7 +52,7 @@ class CLlist : public CLbase<CLlist<member>,0>
 		xlong getlength() const { return length; };
 		member* getcurrentdata() const;
 		xchar* getcurrentname() const;
-		void append(member* e,const xchar* n=u8" ",xlong h=0);
+		void append(member* e,const xchar* n=u8" ");
 		xlong delcurrent(bool smash=0); //test smash option
 		bool seekdata(member* s);
 		void clear();
@@ -99,15 +98,8 @@ CLlist<member>::~CLlist() //! noncritical
 }
 
 template<class member>
-void CLlist<member>::append(member* e,const xchar* n,xlong h) //! noncritical
+void CLlist<member>::append(member* e,const xchar* n) //! noncritical
 {
-	//move these out of the if's
-	//~ current = new listmember;
-	//~ current->data = e;
-	//~ current->name = (xchar*)n;
-	//~ current->hash = h;
-	//*
-	
 	//enter very first member into list
 	if(length==0)
 	{
@@ -118,7 +110,6 @@ void CLlist<member>::append(member* e,const xchar* n,xlong h) //! noncritical
 		current->next = current;
 		current->prev = current;
 		current->name = (xchar*)n;
-		current->hash = h;
 	}
 	//*
 	
@@ -133,7 +124,6 @@ void CLlist<member>::append(member* e,const xchar* n,xlong h) //! noncritical
 		current->next->next = current->next;
 		current = current->next;
 		current->name = (xchar*)n;
-		current->hash = h;
 	}
 	//*
 
@@ -280,7 +270,7 @@ template<class member>
 xlong CLlist<member>::setnext() //! noncritical
 {
 	//set next member from current
-	if(length==0) return 0;
+	if(length==0) { return 0; }
 	current = current->next;
 	return 1;
 	//*

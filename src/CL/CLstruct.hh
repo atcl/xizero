@@ -50,12 +50,6 @@ struct CLfile
 	//~CLfile() { delete text; delete name; }
 };
 
-struct screenside
-{
-	xlong offset;
-	float z;
-};
-
 struct sprite
 {
 	uxlong  size;

@@ -12,7 +12,6 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
-#include "CLsystem.hh"
 #include "CLmath.hh"
 #include "CLbase.hh"
 #include "CLvector.hh"
@@ -42,7 +41,6 @@ struct CLbox { CLfvector c[8]; }; //c[0-3] bottom, c[4-7] top
 class CLobject : public CLbase<CLobject,0>
 {
 	private:
-		static CLsystem* clsystem;
 	protected:
 		CLpolygon** polyptr;
 		CLfvector** dockptr;
@@ -55,7 +53,6 @@ class CLobject : public CLbase<CLobject,0>
 		xlong name;
 		uxlong shadowcolor;
 	public:
-		CLobject(const xchar* fileptr,bool zs);
 		CLobject(CLfile* fileptr,bool zs);
 		CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc);
 		CLobject(CLobject* obj);
@@ -74,13 +71,9 @@ class CLobject : public CLbase<CLobject,0>
 		void resetcolor();
 		CLmatrix* getmatrix() const { return linear; };
 };
-
-CLsystem* CLobject::clsystem = CLsystem::instance();
 ///*
 
 ///implementation
-CLobject::CLobject(const xchar* fileptr,bool zs) { CLobject(clsystem->getfile(fileptr),zs); } //! noncritical
-
 CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 {	
 	//init bounding box

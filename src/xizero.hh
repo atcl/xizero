@@ -181,9 +181,9 @@ void newgame()
 	
 	clglobal->clwindow->showcursor();
 	
-	delete screens;
-	delete lvls;
-	delete testlevel; 
+	//~ delete screens;
+	//~ delete lvls;
+	//~ delete testlevel; 
 }
 
 

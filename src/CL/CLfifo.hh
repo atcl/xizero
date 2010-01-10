@@ -44,7 +44,7 @@ class CLfifo : public CLbase<CLfifo<member>,0>
 		member** que;
 	public:
 		CLfifo();
-		~CLfifo() { }
+		~CLfifo() { };
 		void in(member* f);
 		member* out();
 		xlong getlength() const { return length; };

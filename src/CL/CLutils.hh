@@ -47,7 +47,6 @@ xlong inline lt(const xchar* a,const xchar* b);					//compare cstrings
 uxlong inline endian(uxlong l);									//invert endianess
 uxlong inline byteadd(uxlong a,uxlong b);
 uxlong inline bytesub(uxlong a,uxlong b);
-uxlong inline bytemul(uxlong a,float s);
 template<typename T>void inline swap(T* a,T* b);				//swap two 32bit vars with XOR trick
 void inline prefetch(void* hint);								//prefetch memory at hint
 ///*
@@ -108,13 +107,6 @@ uxlong inline bytesub(uxlong a,uxlong b)
 	xb.db[2] = xa.db[2] - xb.db[2]; xb.db[2] = (uxchar(xb.db[2]>xa.db[2]))-1 & xb.db[2];
 	xb.db[3] = xa.db[3] - xb.db[3]; xb.db[3] = (uxchar(xb.db[3]>xa.db[3]))-1 & xb.db[3];
 	return xb.dd;
-}
-
-uxlong inline bytemul(uxlong a,float s)
-{
-	doubleword xa = { a };
-	
-	return xa.dd;
 }
 
 template<typename T>void inline swap(T* a,T* b) { if(a==b) { return; } *a^=*b; *b^=*a; *a^=*b; }

@@ -35,7 +35,6 @@
 class CLmainmenu : public CLbase<CLmainmenu,0>
 {
 	private:
-		static CLformat* clformat;
 		static CLstring* clstring;
 		static CLgfx*    clgfx;
 	protected:
@@ -45,14 +44,12 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 		CLlabel* header;
 		CLlabel* footer;
 	public:
-		CLmainmenu(CLfile* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc) { CLmainmenu(clformat->loadras(bg),bc,bt,a,hl,fl,fc); };
 		CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 		void draw() const;
 		void setback(sprite* s) { background = s; };
 };
 
-CLformat* CLmainmenu::clformat = CLformat::instance();
 CLstring* CLmainmenu::clstring = CLstring::instance();
 CLgfx*   CLmainmenu::clgfx    = CLgfx::instance();
 ///*

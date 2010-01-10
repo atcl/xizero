@@ -122,7 +122,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis) //! critical
 {
 	xlong z = 0;
 
-	if(zb==0) zb = &clscreen->clzbuffer;
+	if(zb==0) { zb = &clscreen->clzbuffer; }
 
 	xlong ii = 0;
 	xlong tt = 0;

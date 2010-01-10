@@ -129,6 +129,14 @@ void CLbuffer<T>::copy(CLbuffer<T>* dst,xlong o) const //! critical
 	switch(o)
 	{
 		case 1: //FAST
+		
+			//~ __asm__ __volatile__ (
+			//~ "1: prefetchnta (%0)\n"
+			//~ "   prefetchnta 64(%0)\n"
+			//~ "   prefetchnta 128(%0)\n"
+			//~ "   prefetchnta 192(%0)\n"
+			//~ : : "r" (puresrc) );
+		
 			for(i>>=5;i>0;i--)
 			{
 				//blast wth all 8 xmm regs, and movaps instead of movups (?)
@@ -200,7 +208,7 @@ void CLbuffer<T>::copy(CLbuffer<T>* dst,xlong o) const //! critical
 template <typename T>
 T& CLbuffer<T>::operator[](uxlong i) //! critical
 {
-	if(i>=size) { return buffer[size]; }
+	if(i>=size) { return buffer[size-1]; }
 	return buffer[i];
 }
 ///*

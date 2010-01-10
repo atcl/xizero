@@ -39,6 +39,12 @@ CLfvector dpoint[8];
 CLfvector spoint[8];
 
 ///definitions
+struct screenside
+{
+	xlong offset;
+	float z;
+};
+
 class CLpolygon : CLbase<CLpolygon,0>
 {
 	private:

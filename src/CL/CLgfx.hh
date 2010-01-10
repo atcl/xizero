@@ -66,6 +66,7 @@ class CLgfx : public CLbase<CLgfx,1>
 		static CLscreen* clscreen;
 		static CLformat* clformat;
 		static CLstring* clstring;
+		static CLsystem* clsystem;
 	protected:
 		CLfont** fonts;
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
@@ -106,6 +107,7 @@ CLmath*   CLgfx::clmath   = CLmath::instance();
 CLscreen* CLgfx::clscreen = CLscreen::instance();
 CLformat* CLgfx::clformat = CLformat::instance();
 CLstring* CLgfx::clstring = CLstring::instance();
+CLsystem* CLgfx::clsystem = CLsystem::instance();
 ///*
 
 ///implementation
@@ -176,7 +178,9 @@ void CLgfx::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
 
 void CLgfx::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
 {
-
+	if(isoff(x,y)) { return; }
+	else if(clsystem->getmilliseconds()%i<0) { clscreen->cldoublebuffer[(y*XRES)+x] = c1; }
+	else { clscreen->cldoublebuffer[(y*XRES)+x] = c2; }
 }
 
 void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical
@@ -252,7 +256,6 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			//*
 
 			//aa as in xiaolin wu
-
 			for(uxlong i=0; i<len; i++)
 			{
 				tcolor.dd = clscreen->cldoublebuffer[offset-xs];
@@ -901,21 +904,6 @@ void CLgfx::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cri
 				doffset += XRES;
 			}
 		break;
-		
-		case 19: //byte mul
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = svalue; //bytemul(dvalue,svalue)
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
 	}
 	//*
 }
@@ -1122,7 +1110,6 @@ uxlong CLgfx::blendcolors(uxlong c1,uxlong c2,xlong m) const //! critical
 		case 6: r = ~c1; break; //not
 		case 7: r = byteadd(c1,c2); break; //add
 		case 8: r = bytesub(c1,c2); break; //sub
-		case 9: r = bytemul(c1,c2); break; //mul
 		default: r = c1; break;
 	}
 	
