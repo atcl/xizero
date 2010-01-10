@@ -89,6 +89,7 @@ class CLgfx : public CLbase<CLgfx,1>
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const;
 		void drawsprite(xlong x,xlong y,sprite* s) const;
+		void drawspriterotated(xlong x,xlong y,sprite* s,xlong w) const;
 		void drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
 		void loadfonts(CLfile* sf);
@@ -607,6 +608,31 @@ void CLgfx::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 		doffset += XRES;
 	}
 	//*	
+}
+
+void CLgfx::drawspriterotated(xlong x,xlong y,sprite* s,xlong w) const //! critical
+{
+	float a = -clmath->tan(w/2);
+	float b = clmath->sin(w);
+	float c = a;
+	
+	float t00 = 1+(a*b);
+	float t01 = a+c*(1+(a*b));
+	float t10 = b;
+	float t11 = (b*c)+1;
+	
+	xlong f = 0;
+	xlong g = 0;
+	
+	for(xlong u=0; u<s->height; u++)
+	{
+		for(xlong v=0; v<s->width; v++)
+		{
+			f = (v*t00)+(u*t01);
+			g = (v*t10)+(u*t11);
+			clscreen->cldoublebuffer[g*XRES+f] = s->data[u*s->width+v];
+		}
+	}
 }
 
 void CLgfx::drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const //! critical
