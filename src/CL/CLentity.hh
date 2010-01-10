@@ -49,7 +49,6 @@ class CLentity : public CLbase<CLentity<I>,0>
 		static CLstring* clstring;
 		static CLsystem* clsystem;
 	protected:
-		CLmatrix* linear;
 		CLammomanager* ammoman;
 		CLobject* model[I];
 		CLexplosion* expl[I];
@@ -142,11 +141,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 
 template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
-{
-	//create transformation matrix
-	linear = new CLmatrix(1);
-	//*
-	
+{	
 	//set mark pointer from level
 	mark = markptr;
 	markmax = mm;
@@ -243,10 +238,6 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 template<int I>
 CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 {
-	//create transformation matrix
-	linear = new CLmatrix(1);
-	//*
-	
 	//set mark pointer from level
 	mark = entityptr->mark;
 	markmax = entityptr->markmax;
@@ -322,7 +313,6 @@ template<int I>
 CLentity<I>::~CLentity<I>() //! noncritical
 {
 	delete def;
-	delete linear;
 	delete ammoman; 
 	delete[] ammotype;
 	delete[] firerate;

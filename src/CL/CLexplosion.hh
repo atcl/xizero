@@ -41,7 +41,6 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		static CLsystem* clsystem;
 	protected:
 		CLobject* object;
-		CLmatrix* linear;
 		CLfvector a;
 		CLfvector b;
 		xlong starttime;
@@ -52,7 +51,7 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		bool type;
 	public:
 		CLexplosion(CLobject* o);
-		~CLexplosion();
+		~CLexplosion() { };
 		void first(bool t);
 		xlong next();
 };
@@ -64,26 +63,23 @@ CLsystem* CLexplosion::clsystem = CLsystem::instance();
 CLexplosion::CLexplosion(CLobject* o) //! noncritical
 {
 	//set up attributes
-	linear = new CLmatrix(1);
 	object = o;
 	step = 0;
 	interval = 30;
 	transdir = 1.1f;
 	//*
-	
-	//set up explosion matrix
-	a = CLfvector(1,0.5,1);
-	b = CLfvector(0.5,1,0.5);
-	linear->dyadic(a,b);
-	//*
 }
-
-CLexplosion::~CLexplosion() { delete linear; } //! noncritical
 
 void CLexplosion::first(bool t) //! noncritical
 {
+	//set up explosion matrix
+	a = CLfvector(1,0.5,1);
+	b = CLfvector(0.5,1,0.5);
+	object->getmatrix()->dyadic(a,b);
+	//*
+	
 	type = t;
-	if(type) object->partupdate(linear);
+	if(type) { object->partupdate(); }
 	starttime = lastupdate = clsystem->getmilliseconds(); 
 }
 
@@ -114,9 +110,9 @@ xlong CLexplosion::next() //! critical
 			//phase 2:
 			else if(temp < starttime + 400)
 			{
-				linear->unit();
-				linear->aspectscale( 1 - ( float(temp-lastupdate)/50.0 ) );
-				object->update(linear);
+				object->getmatrix()->unit();
+				object->getmatrix()->aspectscale( 1 - ( float(temp-lastupdate)/50.0 ) );
+				object->update();
 			}	
 			//*
 			
@@ -135,9 +131,9 @@ xlong CLexplosion::next() //! critical
 			//phase 2:
 			else if(temp < starttime + 400)
 			{
-				linear->unit();
-				linear->aspectscale( 1 - ( float(temp-lastupdate)/50.0 ) );
-				object->update(linear);
+				object->getmatrix()->unit();
+				object->getmatrix()->aspectscale( 1 - ( float(temp-lastupdate)/50.0 ) );
+				object->update();
 			}	
 			//*
 			

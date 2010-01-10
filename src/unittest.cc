@@ -81,32 +81,32 @@ int main(int argc, char** argv)
 			break;
 	
 			//Translate:
-			case RIGHT:  linearM->translate(2,0,0);  cubus->update(linearM); break;
-			case LEFT:   linearM->translate(-2,0,0); cubus->update(linearM); break;
-			case UP:     linearM->translate(0,2,0);  cubus->update(linearM); break;
-			case DOWN: 	 linearM->translate(0,-2,0); cubus->update(linearM); break;
-			case PGUP:   linearM->translate(0,0,2);	 cubus->update(linearM); break;
-			case PGDOWN: linearM->translate(0,0,-2); cubus->update(linearM); break;			
+			case RIGHT:  cubus->getmatrix()->translate(2,0,0);  cubus->update(); break;
+			case LEFT:   cubus->getmatrix()->translate(-2,0,0); cubus->update(); break;
+			case UP:     cubus->getmatrix()->translate(0,2,0);  cubus->update(); break;
+			case DOWN: 	 cubus->getmatrix()->translate(0,-2,0); cubus->update(); break;
+			case PGUP:   cubus->getmatrix()->translate(0,0,2);	cubus->update(); break;
+			case PGDOWN: cubus->getmatrix()->translate(0,0,-2); cubus->update(); break;			
 
 			//Rotate:
-			case 'a':    linearM->rotate(0,5,0);     cubus->update(linearM); break;
-			case 'd':    linearM->rotate(0,-5,0);    cubus->update(linearM); break;
-			case 'w':    linearM->rotate(-5,0,0);    cubus->update(linearM); break;
-			case 's':    linearM->rotate(5,0,0);     cubus->update(linearM); break;
-			case 'q':    linearM->rotate(0,0,-5);    cubus->update(linearM); break;
-			case 'e':    linearM->rotate(0,0,5);     cubus->update(linearM); break;
+			case 'a':    cubus->getmatrix()->rotate(0,5,0);  cubus->update(); break;
+			case 'd':    cubus->getmatrix()->rotate(0,-5,0); cubus->update(); break;
+			case 'w':    cubus->getmatrix()->rotate(-5,0,0); cubus->update(); break;
+			case 's':    cubus->getmatrix()->rotate(5,0,0);  cubus->update(); break;
+			case 'q':    cubus->getmatrix()->rotate(0,0,-5); cubus->update(); break;
+			case 'e':    cubus->getmatrix()->rotate(0,0,5);  cubus->update(); break;
 
 			//Aspectscale:
-			case '7':    linearM->aspectscale(1.1);  cubus->update(linearM); break;
-			case '8':    linearM->aspectscale(0.9);  cubus->update(linearM); break;
+			case '7':    cubus->getmatrix()->aspectscale(1.1); cubus->update(); break;
+			case '8':    cubus->getmatrix()->aspectscale(0.9); cubus->update(); break;
 
 			//Scale
-			case '1':    linearM->scale(1.1,1,1);    cubus->update(linearM); break;
-			case '2':    linearM->scale(0.9,1,1);    cubus->update(linearM); break;
-			case '3':    linearM->scale(1,1.1,1);    cubus->update(linearM); break;
-			case '4':    linearM->scale(1,0.9,1);    cubus->update(linearM); break;
-			case '5':    linearM->scale(1,1,1.1);    cubus->update(linearM); break;
-			case '6':    linearM->scale(1,1,0.9);    cubus->update(linearM); break;
+			case '1':    cubus->getmatrix()->scale(1.1,1,1);    cubus->update(); break;
+			case '2':    cubus->getmatrix()->scale(0.9,1,1);    cubus->update(); break;
+			case '3':    cubus->getmatrix()->scale(1,1.1,1);    cubus->update(); break;
+			case '4':    cubus->getmatrix()->scale(1,0.9,1);    cubus->update(); break;
+			case '5':    cubus->getmatrix()->scale(1,1,1.1);    cubus->update(); break;
+			case '6':    cubus->getmatrix()->scale(1,1,0.9);    cubus->update(); break;
 
 			//Control:
 			//case '^':    mode = !mode; break;
@@ -174,7 +174,7 @@ int main(int argc, char** argv)
 			//~ terrows[i]->display(p,SHAPE);
 		//~ }
 
-		linearM->unit();
+		cubus->getmatrix()->unit();
 
 		clglobal->clbench->inc();
 	}

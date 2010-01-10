@@ -40,7 +40,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		inline void multiplicate();
 	public:
 		CLmatrix(bool i=1);
-		~CLmatrix();
+		~CLmatrix() { };
 		void rotate(xlong x,xlong y,xlong z);
 		void translate(float x,float y,float z);
 		void scale(float x,float y,float z);
@@ -58,6 +58,8 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		float trace() const;
 		float determinate() const;
 		void print() const;
+		
+		CLmatrix& operator=(const CLmatrix& c);
 };
 
 CLmath* CLmatrix::clmath = CLmath::instance();
@@ -99,8 +101,6 @@ CLmatrix::CLmatrix(bool i) //! noncritical
 	if(i==false) clear(0);
 	if(i==true) unit();
 }
-
-CLmatrix::~CLmatrix() { } //! noncritical
 
 void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
 {
@@ -313,6 +313,26 @@ void CLmatrix::print() const //! noncritical
 	tty(m[2][0]); tty(' '); tty(m[2][1]); tty(' '); tty(m[2][2]); tty(' '); say(m[2][3]);
 	tty(m[3][0]); tty(' '); tty(m[3][1]); tty(' '); tty(m[3][2]); tty(' '); say(m[3][3]);
 	eol();
+}
+
+CLmatrix& CLmatrix::operator=(const CLmatrix& c) //! noncritical
+{
+	m[0][0] = c.m[0][0];
+	m[0][1] = c.m[0][1];
+	m[0][2] = c.m[0][2];
+	m[0][3] = c.m[0][3];
+	m[1][0] = c.m[1][0];
+	m[1][1] = c.m[1][1];
+	m[1][2] = c.m[1][2];
+	m[1][3] = c.m[1][3];
+	m[2][0] = c.m[2][0];
+	m[2][1] = c.m[2][1];
+	m[2][2] = c.m[2][2];
+	m[2][3] = c.m[2][3];
+	m[3][0] = c.m[3][0];
+	m[3][1] = c.m[3][1];
+	m[3][2] = c.m[3][2];
+	m[3][3] = c.m[3][3];
 }
 ///*
 

@@ -68,27 +68,27 @@ CLsystem* CLplayer::clsystem = CLsystem::instance();
 void CLplayer::pretransform(bool m) //! critical
 {
 	//transform tower bounding box
-	boundingbox[1][1]->c[0] = linear->transform(boundingbox[1][1]->c[0]);
-	boundingbox[1][1]->c[1] = linear->transform(boundingbox[1][1]->c[1]);
-	boundingbox[1][1]->c[2] = linear->transform(boundingbox[1][1]->c[2]);
-	boundingbox[1][1]->c[3] = linear->transform(boundingbox[1][1]->c[3]);
-	boundingbox[1][1]->c[4] = linear->transform(boundingbox[1][1]->c[4]);
-	boundingbox[1][1]->c[5] = linear->transform(boundingbox[1][1]->c[5]);
-	boundingbox[1][1]->c[6] = linear->transform(boundingbox[1][1]->c[6]);
-	boundingbox[1][1]->c[7] = linear->transform(boundingbox[1][1]->c[7]);
+	boundingbox[1][1]->c[0] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[0]);
+	boundingbox[1][1]->c[1] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[1]);
+	boundingbox[1][1]->c[2] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[2]);
+	boundingbox[1][1]->c[3] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[3]);
+	boundingbox[1][1]->c[4] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[4]);
+	boundingbox[1][1]->c[5] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[5]);
+	boundingbox[1][1]->c[6] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[6]);
+	boundingbox[1][1]->c[7] = model[1]->getmatrix()->transform(boundingbox[1][1]->c[7]);
 	//*
 	
-	//transform chassis bounding box if wanted
+	//transform chassis bounding box if requested
 	if(m==0)
 	{
-		boundingbox[1][0]->c[0] = linear->transform(boundingbox[1][0]->c[0]);
-		boundingbox[1][0]->c[1] = linear->transform(boundingbox[1][0]->c[1]);
-		boundingbox[1][0]->c[2] = linear->transform(boundingbox[1][0]->c[2]);
-		boundingbox[1][0]->c[3] = linear->transform(boundingbox[1][0]->c[3]);
-		boundingbox[1][0]->c[4] = linear->transform(boundingbox[1][0]->c[4]);
-		boundingbox[1][0]->c[5] = linear->transform(boundingbox[1][0]->c[5]);
-		boundingbox[1][0]->c[6] = linear->transform(boundingbox[1][0]->c[6]);
-		boundingbox[1][0]->c[7] = linear->transform(boundingbox[1][0]->c[7]);
+		boundingbox[1][0]->c[0] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[0]);
+		boundingbox[1][0]->c[1] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[1]);
+		boundingbox[1][0]->c[2] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[2]);
+		boundingbox[1][0]->c[3] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[3]);
+		boundingbox[1][0]->c[4] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[4]);
+		boundingbox[1][0]->c[5] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[5]);
+		boundingbox[1][0]->c[6] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[6]);
+		boundingbox[1][0]->c[7] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[7]);
 	}
 	//*
 }
@@ -96,16 +96,16 @@ void CLplayer::pretransform(bool m) //! critical
 void CLplayer::transform(bool m) //! noncritical
 {
 	//transform tower
-	model[1]->update(linear);
-	direction[1] = linear->transform(direction[1]);
+	model[1]->update();
+	direction[1] = model[1]->getmatrix()->transform(direction[1]);
 	//*
 	
 	//transform chassis if wanted
 	if(m==0)
 	{
-		model[0]->update(linear);
-		direction[0] = linear->transform(direction[0]); 
-		speeddir = linear->transform(speeddir);
+		model[0]->update();
+		direction[0] = model[0]->getmatrix()->transform(direction[0]); 
+		speeddir = model[0]->getmatrix()->transform(speeddir);
 	}
 	//*
 }
@@ -145,9 +145,9 @@ xlong CLplayer::collision(CLfbuffer* ll) //! critical
 	if(clmath->absolute(zdiff)>1) { tposition.z = zdiff-12; }
 	//*	
 	
-	//adjust rotation around x andy axis
+	//adjust rotation around x and y axis
 		//rotate x about xangle,y about yangle
-		if(clmath->absolute(xangle)>=1) { linear->rotate(xangle,yangle,0); }
+		//~ if(clmath->absolute(xangle)>=1) { linear->rotate(xangle,yangle,0); }
 		//~ if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
 		//~ if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
@@ -224,7 +224,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		
 		//init variables
 		xlong time = clsystem->getmilliseconds();
-		linear->unit();
+		model[0]->getmatrix()->unit();
+		model[1]->getmatrix()->unit();
 		bool what = 0;
 		xlong tempangle = 0;
 		//*
@@ -234,7 +235,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		{
 			shield++;
 			shieldupdate = time;
-			if(shield>shieldmax) shield = shieldmax;
+			if(shield>shieldmax) { shield = shieldmax; }
 		}
 		//*
 
@@ -280,7 +281,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//arrow left -> turn left
 			case LEFT: 
 				tempangle = 3;
-				linear->rotate(0,0,3);
+				model[0]->getmatrix()->rotate(0,0,3);
+				model[1]->getmatrix()->rotate(0,0,3);
 				pretransform(0);	
 				setspeed();
 			break;
@@ -289,7 +291,8 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//arrow right -> turn right
 			case RIGHT: 
 				tempangle = -3;
-				linear->rotate(0,0,-3);
+				model[0]->getmatrix()->rotate(0,0,-3);
+				model[1]->getmatrix()->rotate(0,0,-3);
 				pretransform(0);
 				setspeed();
 			break;
@@ -298,7 +301,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//a -> turn tower left
 			case 'a': 
 				tempangle = 5;
-				linear->rotate(0,0,5);
+				model[1]->getmatrix()->rotate(0,0,5);
 				pretransform(1);
 				what=1;
 			break;
@@ -307,7 +310,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			//d -> turn tower right
 			case 'd': 
 				tempangle = -5;
-				linear->rotate(0,0,-5);
+				model[1]->getmatrix()->rotate(0,0,-5);
 				pretransform(1);
 				what=1;
 			break;
@@ -318,7 +321,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 			if( (angles[1].z - angles[0].z) >  180) { angles[1].z -= 360; } 
 			if( (angles[1].z - angles[0].z) < -180) { angles[1].z += 360; }
 			tempangle = clmath->sign(angles[0].z-angles[1].z) * 5;
-			linear->rotate(0,0,tempangle);
+			model[1]->getmatrix()->rotate(0,0,tempangle);
 			pretransform(1);
 			what=1;
 			break;

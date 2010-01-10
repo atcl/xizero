@@ -37,7 +37,6 @@ CLglobal* CLsetup() //! noncritical
 	clglobal->clmath->pi();
 
 	//init matrices
-	linearM  = new CLmatrix(1);
 	shadowM  = new CLmatrix(1);
 	shadowM->shadow(clslight,clplane);
 	//*
@@ -48,7 +47,6 @@ CLglobal* CLsetup() //! noncritical
 void CLgarbage() //! noncritical
 {
 	//free globals
-	delete linearM;
 	delete shadowM;
 	//*
 }

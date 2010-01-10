@@ -47,7 +47,6 @@ class CLanim : public CLbase<CLanim,0>
 		static CLmath*   clmath;
 		static CLscreen* clscreen;
 	protected:
-		CLmatrix* linear;
 		CLobject* object;
 		xlong*   anicsv;
 		bool loop;
@@ -75,10 +74,6 @@ CLscreen* CLanim::clscreen = CLscreen::instance();
 ///implementation
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 {	
-	//create linear transformation matrix
-	linear = new CLmatrix(1);
-	//*
-	
 	//set up attributes
 	object = obj;
 	anicsv = clformat->loadcsv(ani,',');
@@ -158,8 +153,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 }
 
 CLanim::~CLanim() //! noncritical
-{
-	delete linear;
+{ 
 	delete[] frame;
 }
 
@@ -173,17 +167,11 @@ xlong CLanim::update() //! critical
 		position.x += frame[currframe]->units[0];
 		position.y += frame[currframe]->units[1];
 		position.z += frame[currframe]->units[2];
-		linear->translate(frame[currframe]->units[3],frame[currframe]->units[4],frame[currframe]->units[5]);
-		linear->rotate(frame[currframe]->units[6],frame[currframe]->units[7],frame[currframe]->units[8]);
-		linear->scale(1+frame[currframe]->units[9],1+frame[currframe]->units[10],1+frame[currframe]->units[11]);
-		object->update(linear);
-		//*
-		
-		//unit matrix
-		linear->unit();
-		//*
-		
-		//increase frame counter
+		object->getmatrix()->translate(frame[currframe]->units[3],frame[currframe]->units[4],frame[currframe]->units[5]);
+		object->getmatrix()->rotate(frame[currframe]->units[6],frame[currframe]->units[7],frame[currframe]->units[8]);
+		object->getmatrix()->scale(1+frame[currframe]->units[9],1+frame[currframe]->units[10],1+frame[currframe]->units[11]);
+		object->update();
+		object->getmatrix()->unit();
 		currframe++;
 		//*
 	}
@@ -226,18 +214,18 @@ xlong CLanim::update() //! critical
 				
 		//translate
 		if(!(frame[currframe]->curr[3]==0 && frame[currframe]->curr[4]==0 && frame[currframe]->curr[5]==0 ))
-			linear->translate(clmath->round(frame[currframe]->curr[3]),clmath->round(frame[currframe]->curr[4]),clmath->round(frame[currframe]->curr[5]));
+			{ object->getmatrix()->translate(clmath->round(frame[currframe]->curr[3]),clmath->round(frame[currframe]->curr[4]),clmath->round(frame[currframe]->curr[5])); }
 		//*
 				
 		//rotate around x
 		if(frame[currframe]->curr[6]!=0)
 		{
-			if(frame[currframe]->curr[6] < 1) frame[currframe]->comm[6] += frame[currframe]->curr[6];
-			else frame[currframe]->comm[6] = frame[currframe]->curr[6];
+			if(frame[currframe]->curr[6] < 1) { frame[currframe]->comm[6] += frame[currframe]->curr[6]; }
+			else { frame[currframe]->comm[6] = frame[currframe]->curr[6]; }
 			
 			if( clmath->round(frame[currframe]->comm[6]) != 0)
 			{
-				linear->rotate(xlong(frame[currframe]->comm[6]),0,0);
+				object->getmatrix()->rotate(xlong(frame[currframe]->comm[6]),0,0);
 				frame[currframe]->comm[6] -= xlong(frame[currframe]->comm[6]);
 			}
 		}
@@ -246,12 +234,12 @@ xlong CLanim::update() //! critical
 		//rotate around y
 		if(frame[currframe]->curr[7]!= 0)
 		{
-			if(frame[currframe]->curr[7] < 1) frame[currframe]->comm[7] += frame[currframe]->curr[7];
-			else frame[currframe]->comm[7] = frame[currframe]->curr[7];
+			if(frame[currframe]->curr[7] < 1) { frame[currframe]->comm[7] += frame[currframe]->curr[7]; }
+			else { frame[currframe]->comm[7] = frame[currframe]->curr[7]; }
 			
 			if( clmath->round(frame[currframe]->comm[7]) != 0)
 			{
-				linear->rotate(0,xlong(frame[currframe]->comm[7]),0);
+				object->getmatrix()->rotate(0,xlong(frame[currframe]->comm[7]),0);
 				frame[currframe]->comm[7] -= xlong(frame[currframe]->comm[7]);
 			}
 		}
@@ -260,12 +248,12 @@ xlong CLanim::update() //! critical
 		//rotate around z
 		if(frame[currframe]->curr[8]!= 0)
 		{
-			if(frame[currframe]->curr[8] < 1) frame[currframe]->comm[8] += frame[currframe]->curr[8];
-			else frame[currframe]->comm[8] = frame[currframe]->curr[8];
+			if(frame[currframe]->curr[8] < 1) { frame[currframe]->comm[8] += frame[currframe]->curr[8]; }
+			else { frame[currframe]->comm[8] = frame[currframe]->curr[8]; }
 			
 			if( clmath->round(frame[currframe]->comm[8]) != 0)
 			{
-				linear->rotate(0,0,xlong(frame[currframe]->comm[8]));
+				object->getmatrix()->rotate(0,0,xlong(frame[currframe]->comm[8]));
 				frame[currframe]->comm[8] -= xlong(frame[currframe]->comm[8]);
 			}
 		}
@@ -273,15 +261,15 @@ xlong CLanim::update() //! critical
 				
 		//scale
 		if(!(frame[currframe]->curr[9]==0 && frame[currframe]->curr[10] && frame[currframe]->curr[11]==0 ))
-			linear->scale(1+frame[currframe]->curr[9],1+frame[currframe]->curr[10],1+frame[currframe]->curr[11]);
+			{ object->getmatrix()->scale(1+frame[currframe]->curr[9],1+frame[currframe]->curr[10],1+frame[currframe]->curr[11]); }
 		//*
 				
 		//apply linear transformations
-		object->update(linear);
+		object->update();
 		//*
 		
 		//unit matrix
-		linear->unit();
+		object->getmatrix()->unit();
 		//*
 		
 		//save time
@@ -291,21 +279,14 @@ xlong CLanim::update() //! critical
 		//increase frame counter if last run of frame
 		if(lastrun)
 		{
-			if(loop && currframe==frames+1)
-			{
-				currframe=0;
-			}
-			else
-			{
-				currframe++;
-				starttime=0;
-			}
+			if(loop && currframe==frames+1) { currframe=0; }
+			else { currframe++; starttime=0; }
 		}
 		//*
 	}
 	
-	if(!loop && currframe==frames) return 0;
-	else return 1;
+	if(!loop && currframe==frames) { return 0; }
+	else { return 1; }
 }
 
 xlong CLanim::run() //! critical

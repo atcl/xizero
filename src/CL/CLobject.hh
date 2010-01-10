@@ -57,8 +57,9 @@ class CLobject : public CLbase<CLobject,0>
 		CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc);
 		CLobject(CLobject* obj);
 		~CLobject();
+		void update();
 		void update(CLmatrix* m);
-		void partupdate(CLmatrix* m);
+		void partupdate();
 		void display(CLlvector p,xshort flags);
 		void display(CLlvector p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
 		xlong getname() const { return name; };
@@ -76,6 +77,8 @@ class CLobject : public CLbase<CLobject,0>
 ///implementation
 CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 {	
+	linear = new CLmatrix(1);
+	
 	//init bounding box
 	rboundingbox = new CLbox;
 	boundingbox = new CLbox;
@@ -309,6 +312,8 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 
 CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
 {
+	linear = new CLmatrix(1);
+	
 	//init bounding box
 	rboundingbox = new CLbox;
 	boundingbox = new CLbox;
@@ -324,6 +329,8 @@ CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
 
 CLobject::CLobject(CLobject* obj) //! noncritical
 {
+	linear = new CLmatrix(1);
+	
 	polycount = obj->polycount;
 	polyptr = new CLpolygon*[polycount];
 	dockcount = obj->dockcount;
@@ -341,6 +348,28 @@ CLobject::~CLobject() //! noncritical
 {
 	delete boundingbox;
 	delete rboundingbox;
+}
+
+void CLobject::update() //! noncritical
+{
+	//transform each polygon
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->update(linear,0); }
+	//*
+
+	//transform each docking point
+	for(xlong j=0;j<dockcount;j++) { *dockptr[j] = linear->transform(*dockptr[j]); }
+	//*
+
+	//transform bounding box
+	boundingbox->c[0] = linear->transform(boundingbox->c[0]);
+	boundingbox->c[1] = linear->transform(boundingbox->c[1]);
+	boundingbox->c[2] = linear->transform(boundingbox->c[2]);
+	boundingbox->c[3] = linear->transform(boundingbox->c[3]);
+	boundingbox->c[4] = linear->transform(boundingbox->c[4]);
+	boundingbox->c[5] = linear->transform(boundingbox->c[5]);
+	boundingbox->c[6] = linear->transform(boundingbox->c[6]);
+	boundingbox->c[7] = linear->transform(boundingbox->c[7]);
+	//*
 }
 
 void CLobject::update(CLmatrix* m) //! noncritical
@@ -365,14 +394,14 @@ void CLobject::update(CLmatrix* m) //! noncritical
 	//*
 }
 
-void CLobject::partupdate(CLmatrix* m) //! noncritical
+void CLobject::partupdate() //! noncritical
 {
 	//transform each polygon
-	for(xlong i=0;i<polycount;i++) { polyptr[i]->partupdate(m); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i]->partupdate(linear); }
 	//*
 
 	//transform each docking point
-	for(xlong j=0;j<dockcount;j++) { *dockptr[j] = m->transform(*dockptr[j]); }
+	for(xlong j=0;j<dockcount;j++) { *dockptr[j] = linear->transform(*dockptr[j]); }
 	//*
 
 	//after partupdate boundingbox is without value

@@ -104,23 +104,23 @@ void CLenemy::cruise() //! critical
 void CLenemy::pretransform() //! critical
 {
 	//transform enemy bounding box
-	boundingbox[1][0]->c[0] = linear->transform(boundingbox[1][0]->c[0]);
-	boundingbox[1][0]->c[1] = linear->transform(boundingbox[1][0]->c[1]);
-	boundingbox[1][0]->c[2] = linear->transform(boundingbox[1][0]->c[2]);
-	boundingbox[1][0]->c[3] = linear->transform(boundingbox[1][0]->c[3]);
-	boundingbox[1][0]->c[4] = linear->transform(boundingbox[1][0]->c[4]);
-	boundingbox[1][0]->c[5] = linear->transform(boundingbox[1][0]->c[5]);
-	boundingbox[1][0]->c[6] = linear->transform(boundingbox[1][0]->c[6]);
-	boundingbox[1][0]->c[7] = linear->transform(boundingbox[1][0]->c[7]);
+	boundingbox[1][0]->c[0] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[0]);
+	boundingbox[1][0]->c[1] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[1]);
+	boundingbox[1][0]->c[2] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[2]);
+	boundingbox[1][0]->c[3] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[3]);
+	boundingbox[1][0]->c[4] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[4]);
+	boundingbox[1][0]->c[5] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[5]);
+	boundingbox[1][0]->c[6] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[6]);
+	boundingbox[1][0]->c[7] = model[0]->getmatrix()->transform(boundingbox[1][0]->c[7]);
 	//*
 }
 
 void CLenemy::transform() //! critical
 {
 	//transform enemy
-	model[0]->update(linear);
-	direction[0] = linear->transform(direction[0]);
-	speeddir = linear->transform(speeddir);
+	model[0]->update();
+	direction[0] = model[0]->getmatrix()->transform(direction[0]);
+	speeddir = model[0]->getmatrix()->transform(speeddir);
 	//*
 }
 
@@ -267,7 +267,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	{
 		xlong time = clsystem->getmilliseconds();
 
-		linear->unit();
+		model[0]->getmatrix()->unit();
 		
 		cruise();
 		

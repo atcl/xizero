@@ -217,7 +217,6 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 
 				terrain[currentterrain]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
 				terrain[currentterrain]->reset();
-				linear->unit();
 				current.z = localfloorheight;
 			}
 			current.x += blockwidth;
@@ -781,7 +780,7 @@ void CLlevel::display() //! critical
 				{
 					currentheight = levellayers[1][ii][j];
 					currententity = levellayers[2][ii][j];
-					linear->translate(ckeeper.x,ckeeper.y,0);
+					linear->translate(ckeeper.x,ckeeper.y,0); 
 
 					if(currentheight!=0)
 					{
