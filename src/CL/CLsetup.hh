@@ -35,20 +35,13 @@ CLglobal* CLsetup() //! noncritical
 	clglobal->clwindow->setcursor(cursor);
 
 	clglobal->clmath->pi();
-
-	//init matrices
-	shadowM  = new CLmatrix(1);
-	shadowM->shadow(clslight,clplane);
-	//*
 	
 	return clglobal;
 }
 
 void CLgarbage() //! noncritical
 {
-	//free globals
-	delete shadowM;
-	//*
+
 }
 ///*
 

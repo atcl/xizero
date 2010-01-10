@@ -42,6 +42,7 @@ class CLobject : public CLbase<CLobject,0>
 {
 	private:
 	protected:
+		static CLmatrix* shadow;
 		CLpolygon** polyptr;
 		CLfvector** dockptr;
 		CLfvector position;
@@ -72,6 +73,8 @@ class CLobject : public CLbase<CLobject,0>
 		void resetcolor();
 		CLmatrix* getmatrix() const { return linear; };
 };
+
+CLmatrix* CLobject::shadow = new CLmatrix(clslight,clplane);
 ///*
 
 ///implementation
@@ -418,7 +421,7 @@ void CLobject::display(CLlvector p,xshort flags) //! noncritical
 	{
 		for(xlong i=0;i<polycount;i++)
 		{
-			polyptr[i]->update(shadowM,1);
+			polyptr[i]->update(shadow,1);
 			polyptr[i]->display(p,flags);
 		}
 	}

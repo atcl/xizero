@@ -40,6 +40,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		inline void multiplicate();
 	public:
 		CLmatrix(bool i=1);
+		CLmatrix(const CLfvector& l,const CLfvector& p);
 		~CLmatrix() { };
 		void rotate(xlong x,xlong y,xlong z);
 		void translate(float x,float y,float z);
@@ -100,6 +101,11 @@ CLmatrix::CLmatrix(bool i) //! noncritical
 {
 	if(i==false) clear(0);
 	if(i==true) unit();
+}
+
+CLmatrix::CLmatrix(const CLfvector& l,const CLfvector& p) //! noncritical
+{
+	shadow(l,p);
 }
 
 void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
