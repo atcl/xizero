@@ -14,7 +14,7 @@
 #include "CLmatrix.hh"
 #include "CLobject.hh"
 #include "CLbase.hh"
-#include "CLsystem.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -38,7 +38,7 @@
 class CLexplosion : public CLbase<CLexplosion,0>
 {
 	private:
-		static CLsystem* clsystem;
+		static CLwindow* clwindow;
 	protected:
 		CLobject* object;
 		CLfvector a;
@@ -56,7 +56,7 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		xlong next();
 };
 
-CLsystem* CLexplosion::clsystem = CLsystem::instance();
+CLwindow* CLexplosion::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -80,12 +80,12 @@ void CLexplosion::first(bool t) //! noncritical
 	
 	type = t;
 	if(type) { object->partupdate(); }
-	starttime = lastupdate = clsystem->getmilliseconds(); 
+	starttime = lastupdate = clwindow->getmilliseconds(); 
 }
 
 xlong CLexplosion::next() //! critical
 {
-	xlong temp = clsystem->getmilliseconds();
+	xlong temp = clwindow->getmilliseconds();
 
 	switch(type)
 	{

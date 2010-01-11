@@ -57,8 +57,6 @@ int main(int argc, char** argv)
 	bool exp = 0;
 	bool mm = 0;
 
-	clglobal->clbench->init(3,COUT_FPS);
-
 	CLlight* testl = new CLlight(50,0x00FF0000);
 
 	sprite* screens;
@@ -175,8 +173,6 @@ int main(int argc, char** argv)
 		//~ }
 
 		cubus->getmatrix()->unit();
-
-		clglobal->clbench->inc();
 	}
 
 	//exit sequence

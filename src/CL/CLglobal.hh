@@ -13,7 +13,6 @@
 #include "CLbase.hh"
 #include "CLscreen.hh"
 #include "CLwindow.hh"
-#include "CLbench.hh"
 #include "CLsystem.hh"
 #include "CLformat.hh"
 #include "CLmath.hh"
@@ -61,7 +60,6 @@ class CLglobal : public CLbase<CLglobal,1>
 	public:
 		static CLscreen* clscreen;		
 		static CLwindow* clwindow;
-		static CLbench*  clbench;
 		static CLsystem* clsystem;
 		static CLformat* clformat;
 		static CLmath*   clmath;
@@ -84,7 +82,6 @@ class CLglobal : public CLbase<CLglobal,1>
 
 CLscreen* CLglobal::clscreen = CLscreen::instance();
 CLwindow* CLglobal::clwindow = CLwindow::instance();
-CLbench*  CLglobal::clbench  = CLbench::instance();
 CLsystem* CLglobal::clsystem = CLsystem::instance();
 CLformat* CLglobal::clformat = CLformat::instance();
 CLmath*   CLglobal::clmath   = CLmath::instance();

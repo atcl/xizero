@@ -79,12 +79,12 @@ CLmenu::CLmenu() //! noncritical
 	info->setvisible(0);
 	about->setvisible(0);
 	
-	clwindow->setsyskey(syskey,&wrapper,this);
+	//clwindow->setsyskey(syskey,&wrapper,this);
 }
 
 CLmenu::~CLmenu() //! noncritical
 {
-	clwindow->setsyskey();
+	//clwindow->setsyskey();
 	delete icon;
 	delete title;
 	delete exit;

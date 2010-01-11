@@ -14,7 +14,7 @@
 #include "CLmatrix.hh"
 #include "CLobject.hh"
 #include "CLformat.hh"
-#include "CLsystem.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -42,7 +42,7 @@ struct CLframe
 class CLanim : public CLbase<CLanim,0>
 {
 	private:
-		static CLsystem* clsystem;
+		static CLwindow* clwindow;
 		static CLformat* clformat;
 		static CLmath*   clmath;
 		static CLscreen* clscreen;
@@ -65,7 +65,7 @@ class CLanim : public CLbase<CLanim,0>
 		CLfvector& getposition() { return position; };
 };
 
-CLsystem* CLanim::clsystem = CLsystem::instance();
+CLwindow* CLanim::clwindow = CLwindow::instance();
 CLformat* CLanim::clformat = CLformat::instance();
 CLmath*   CLanim::clmath   = CLmath::instance();
 CLscreen* CLanim::clscreen = CLscreen::instance();
@@ -178,11 +178,11 @@ xlong CLanim::update() //! critical
 	else
 	{
 		//is first run in this frame
-		if(starttime==0) lastupdate = starttime = clsystem->getmilliseconds();
+		if(starttime==0) lastupdate = starttime = clwindow->getmilliseconds();
 		//*
 		
 		//determine time
-		float curr_time = float(clsystem->getmilliseconds());
+		float curr_time = float(clwindow->getmilliseconds());
 		float time_diff = float(curr_time - lastupdate);
 		//*
 		

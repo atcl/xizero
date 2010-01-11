@@ -9,9 +9,8 @@
 ///*
 
 ///sys includes
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
+#include <GL/gl.h>
+#include <GL/glut.h>
 ///*
 
 ///api includes
@@ -36,6 +35,10 @@
  */
 ///*
 
+///*
+void empty(void* o) { };
+///*
+
 ///definitions
 class CLwindow : public CLbase<CLwindow,1>
 {
@@ -47,207 +50,131 @@ class CLwindow : public CLbase<CLwindow,1>
 		static CLgfx*    clgfx;
 		static CLscreen* clscreen;
 	protected:
-		Display* Xdisplay;
-		Screen* Xscreen;
-		Visual* Xvisual;
-		Window Xwindow;
-		GC Xgc;
-		Atom Xatom;
-		XImage* Ximage;
-		XEvent Xevent;
-		Cursor Xblank;
-		Cursor Xcursor;
-		Colormap Xcolormap;
-		XColor Xwhite;
-		XColor Xblack;
-		XColor Xgrey;
+		int winid;
 
-		const xchar* title;
-		uxlong width;
-		uxlong height;
-		xlong key;
-		xlong keyup;
-		xlong turbo;
-		xlong mousex;
-		xlong mousey;
-		xlong mouselb;	
-		xlong mouserb;
 		bool  displaycursor;
 		sprite* cursor;
-		uxchar syskey;
-		void (*sysmenu)(void* o);
-		void* sysobj;
+		static xlong keydn;
+		static xlong keyup;
+		static xlong turbo;
+		static xlong mousex;
+		static xlong mousey;
+		static xlong mouselb;	
+		static xlong mouserb;
+		//~ static uxchar syskey;
+		//~ static void (*sysmenu)(void* o);
+		//~ static void* sysobj;
+		static float frame;
+		static float time;
+		static float timebase;
+		static float fps;
 		CLwindow();
-		~CLwindow();
-		void handle();
+		~CLwindow() { };
+		static void setmouse(xlong button,xlong state,xlong x,xlong y);
+		static void setkeys(uxchar key,xlong x,xlong y);
+		static void idle();
 	public:
-		void draw();
+		static void draw();
 		xlong run();
 		void showcursor() { displaycursor = 1; };
 		void hidecursor() { displaycursor = 0; };
 		void setcursor(sprite* s) { cursor = s; };
-		xlong getinkey();
-		xlong getturbo();
+		xlong getinkey() { xlong temp = keydn; keydn = 0; return temp; };
+		xlong getturbo() { return turbo; };
 		xlong getmousex() const { return mousex; };
 		xlong getmousey() const { return mousey; };
 		xlong getmouselb() const { return mouselb; };
 		xlong getmouserb() const { return mouserb; };
-		void setsyskey(uxchar k=0,void (*m)(void* o)=0,void* mo=0);
+		//void setsyskey(uxchar k=0,void (*m)(void* o)=0,void* mo=0);
+		xlong getmilliseconds() const { return glutGet(GLUT_ELAPSED_TIME); };
+		void sleep(xlong ms) const;
+		xlong getfps();
 };
 
 CLformat* CLwindow::clformat = CLformat::instance();
 CLapp*    CLwindow::clapp    = CLapp::instance();
 CLgfx*    CLwindow::clgfx    = CLgfx::instance();
 CLscreen* CLwindow::clscreen = CLscreen::instance();
+
+xlong CLwindow::keydn = 0;
+xlong CLwindow::keyup = 0;
+xlong CLwindow::turbo = 0;
+xlong CLwindow::mousex = 0;
+xlong CLwindow::mousey = 0;
+xlong CLwindow::mouselb = 0;	
+xlong CLwindow::mouserb = 0;
+//~ uxchar CLwindow::syskey = 0;
+//~ void (*sysmenu)(void* o) = empty;
+//~ void* CLwindow::sysobj = 0;
+float CLwindow::frame = 0;
+float CLwindow::time = 0;
+float CLwindow::timebase = 0;
+float CLwindow::fps = 0;
 ///*
 
 ///implementation
+void CLwindow::setmouse(xlong button,xlong state,xlong x,xlong y) //! noncritical
+{
+	mousex = x;
+	mousey = y;
+	mouselb = (state==GLUT_DOWN) && (button==GLUT_LEFT_BUTTON);
+	mouserb = (state==GLUT_DOWN) && (button==GLUT_RIGHT_BUTTON);
+}
+
+void CLwindow::setkeys(uxchar key,xlong x,xlong y) //! noncritical
+{
+	keydn = key;
+	if(turbo==key) { turbo = 0; }
+	//if(key==syskey) { sysmenu(sysobj); }
+}
+
+void CLwindow::idle()
+{
+	frame++;
+	time=glutGet(GLUT_ELAPSED_TIME);
+	
+	if(time-timebase>1000)
+	{
+		fps = frame*1000.0/(time-timebase);
+	 	timebase = time;		
+		frame = 0;
+	}
+	
+	tty("fps: "); say(fps);
+}
+
 CLwindow::CLwindow() //! noncritical
 {
-	syskey = 0;
 	cursor = 0;
 	displaycursor = 0;
-	width = XRES;
-	height = YRES;
-	title = TITLE;
 	
-	//init window
-	Xdisplay = XOpenDisplay(0);
-	Xscreen = DefaultScreenOfDisplay(Xdisplay);
-	Xvisual = DefaultVisualOfScreen(Xscreen);
-	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,width,height,0,Xblack.pixel,Xblack.pixel);
-	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
-	Xcolormap = DefaultColormap(Xdisplay,XDefaultScreen(Xdisplay));
-	XColor dummy;
-	XAllocNamedColor(Xdisplay,Xcolormap,"white",&Xwhite,&dummy);
-	XAllocNamedColor(Xdisplay,Xcolormap,"black",&Xblack,&dummy);
-	XAllocNamedColor(Xdisplay,Xcolormap,"grey",&Xgrey,&dummy);
-	//init events
-	XAutoRepeatOn(Xdisplay);
-	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|LeaveWindowMask|EnterWindowMask);
-	//init window title
-	XStoreName(Xdisplay,Xwindow,title);
-	//init icon
-	sprite* Ticon = clformat->loadxpm(CLicon);
-	XImage* Xicon = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,(xchar*)Ticon->data,Ticon->width,Ticon->height,32,(Ticon->width)<<2);
-	Pixmap icon = XCreatePixmap(Xdisplay,DefaultRootWindow(Xdisplay),Ticon->width,Ticon->height,24);
-	XPutImage(Xdisplay,icon,Xgc,Xicon,0,0,0,0,Ticon->width,Ticon->height);
-	XWMHints* Xhints;
-	Xhints = XAllocWMHints();
-	Xhints->flags = IconPixmapHint;
-	Xhints->icon_pixmap = icon;
-	XSetWMHints(Xdisplay,Xwindow,Xhints);
-	XFree(Xhints);
-	//init close button
-	Xatom = XInternAtom(Xdisplay,"WM_DELETE_WINDOW",True);
-	XSetWMProtocols(Xdisplay,Xwindow,&Xatom,1);
-	//show window
-	XMapRaised(Xdisplay,Xwindow);
-	//init doublebuffer
-	xchar* dbuffer = (xchar*)(clscreen->cldoublebuffer.getbuffer());
-	Ximage = XCreateImage(Xdisplay,Xvisual,24,ZPixmap,0,dbuffer,width,height,32,width<<2);
-	//init x-cursor
-	xchar data[1] = {0};
-	Pixmap blank = XCreateBitmapFromData(Xdisplay,Xwindow,data,1,1);
-	Xblank = XCreatePixmapCursor(Xdisplay,blank,blank,&dummy,&dummy,0,0);
-	XFreePixmap(Xdisplay,blank);
-	XDefineCursor(Xdisplay,Xwindow,Xblank);
+	xlong argc = 1;
+    xchar *argv[] = { "xizero",NULL };
+	glutInit(&argc,argv);
+	glutInitWindowPosition(5,5);
+	glutInitWindowSize(XRES,YRES);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
+	winid = glutCreateWindow(TITLE);
+	glutSetCursor(GLUT_CURSOR_NONE);
+	glutMouseFunc(setmouse);
+	glutDisplayFunc(draw);
+	glutIdleFunc(idle);
+	glutMainLoop();
 }
 
-CLwindow::~CLwindow() //! noncritical
+void CLwindow::draw() { glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_INT,clscreen->cldoublebuffer.getbuffer()); } //! noncritical
+
+xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); } draw(); return 1; } //! noncritical
+
+//void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
+
+void CLwindow::sleep(xlong ms) const //! noncritical
 {
-	delete title;
-	XDestroyImage(Ximage);
-	XFreeGC(Xdisplay,Xgc);
-	XDestroyWindow(Xdisplay,Xwindow);
-	XCloseDisplay(Xdisplay);	
+	xlong starttime = glutGet(GLUT_ELAPSED_TIME);
+	xlong stoptime = (starttime + ms);
+	xlong nowtime = 0;
+	while(nowtime < stoptime) { nowtime = glutGet(GLUT_ELAPSED_TIME); }
 }
-
-void CLwindow::draw() { XPutImage(Xdisplay,Xwindow,Xgc,Ximage,0,0,0,0,width,height); } //! noncritical
-
-void CLwindow::handle() //! critical
-{
-	if(XPending(Xdisplay)!=0)
-	{
-		XNextEvent(Xdisplay,&Xevent);
-		switch(Xevent.type)
-		{
-			case Expose:
-				draw();
-			break;
-			
-			case KeyPress:
-				key = turbo = xchar(XLookupKeysym((XKeyEvent*)&Xevent,0));
-				while(XCheckWindowEvent(Xdisplay,Xwindow,KeyPressMask,&Xevent));
-				if(key == syskey && syskey!=0) { sysmenu(sysobj); }
-			break;
-			
-			case ButtonPress:
-				switch(Xevent.xbutton.button)
-				{
-					case Button1:
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouselb = 1;
-					break;
-					
-					case Button2: 
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouserb = 1;
-					break;
-				}
-			break;
-			
-			case ButtonRelease:
-				switch(Xevent.xbutton.button)
-				{
-					case Button1:
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouselb = 0;
-					break;
-					
-					case Button2: 
-						mousex = Xevent.xbutton.x;
-						mousey = Xevent.xbutton.y;
-						mouserb = 0;
-					break;
-				}
-			break;
-			
-			case MotionNotify:
-				mousex = Xevent.xmotion.x;
-				mousey = Xevent.xmotion.y;
-				while(XCheckWindowEvent(Xdisplay,Xwindow,PointerMotionMask,&Xevent))
-				{
-					mousex = Xevent.xmotion.x;
-					mousey = Xevent.xmotion.y;
-				}
-			break;
-			
-			case EnterNotify:
-				XDefineCursor(Xdisplay,Xwindow,Xblank);
-			break;
-			
-			case LeaveNotify:
-				XUndefineCursor(Xdisplay,Xwindow);
-			break;
-			
-			case ClientMessage:
-				clapp->exit(0,"xizero exits: bye");
-			break;
-		}
-	}
-}
-
-xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); } handle(); draw(); return 1; } //! noncritical
-
-xlong CLwindow::getinkey() { xlong temp = key; key = 0; return temp; } //! noncritical
-
-xlong CLwindow::getturbo() { xlong temp = turbo; turbo = 0; return temp; } //! noncritical
-
-void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 ///*
 	
 #endif

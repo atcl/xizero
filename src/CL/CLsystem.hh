@@ -10,7 +10,6 @@
 
 ///sys includes
 #include <stdlib.h>
-#include <time.h>
 #include <stdio.h>
 ///*
 
@@ -50,8 +49,6 @@ class CLsystem : public CLbase<CLsystem,1>
 		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
 		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
 		bool    writefile(CLfile* f,bool ow=0);
-		xlong   wait(xlong milliseconds);
-		xlong   getmilliseconds(); //since program launch
 		xlong   system(const xchar* c);
 };
 ///*
@@ -218,24 +215,6 @@ bool CLsystem::writefile(CLfile* f,bool ow) //! noncritical
 	
 	return 1;
 }
-
-xlong CLsystem::wait(xlong milliseconds) //! noncritical
-{
-	//get current time and calc stop time
-	xlong starttime = xlong(1000 * clock() / CLOCKS_PER_SEC);
-	xlong stoptime = (starttime + milliseconds);
-	//*
-
-	//do nothing while waiting for stoptime
-	xlong nowtime = 0;
-	while(nowtime < stoptime) nowtime = xlong( clock() / 1000); //actually 1000*clock()/CLOCKS_PER_SEC but on unix systems CLOCKS_PER_SEC=1000000
-	//*
-	
-	return 0;
-}
-
-//since program launch 
-xlong CLsystem::getmilliseconds() { return ( clock() / 1000); } //! noncritical
 
 xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
 ///*

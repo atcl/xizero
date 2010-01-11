@@ -31,7 +31,7 @@ void newgame()
 	introscreen = clglobal->clformat->loadras(screens->findbyname("intro000.ras"));
 	clglobal->clgfx->drawscreen(introscreen);
 	clglobal->clwindow->draw();
-	clglobal->clsystem->wait(1000);
+	clglobal->clwindow->sleep(1000);
 	clglobal->clfsprogress->set(10);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
@@ -52,7 +52,7 @@ void newgame()
 	clglobal->clfsprogress->set(100);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->draw();
-	clglobal->clsystem->wait(1000);
+	clglobal->clwindow->sleep(1000);
 	//*
 	
 	//game loop variables
@@ -78,10 +78,6 @@ void newgame()
 							"After pressing OK the game will start immediately!";
 							
 	if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) testlevel->start();
-	//*
-	
-	//init benchmarking
-	clglobal->clbench->init(3,COUT_FPS);
 	//*
 	
 	//game loop
@@ -141,10 +137,6 @@ void newgame()
 			//~ break;
 			//~ //*
 		//~ }
-		
-		//increment fps count
-		clglobal->clbench->inc();		
-		//*
 	}
 	//*
 	
@@ -163,7 +155,7 @@ void newgame()
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gamewon.ras"));
 			clglobal->clgfx->drawscreen(overscreen);
 			clglobal->clwindow->draw();
-			clglobal->clsystem->wait(11000);
+			clglobal->clwindow->sleep(11000);
 		break;
 		//*
 		
@@ -172,7 +164,7 @@ void newgame()
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gameover.ras"));
 			clglobal->clgfx->drawscreen(overscreen);
 			clglobal->clwindow->draw();
-			clglobal->clsystem->wait(11000);
+			clglobal->clwindow->sleep(11000);
 		break;
 		//*
 	}

@@ -12,10 +12,10 @@
 #include "CLtypes.hh"
 #include "CLconsts.hh"
 #include "CLstruct.hh"
-#include "CLsystem.hh"
 #include "CLgame.hh"
 #include "CLammo.hh"
 #include "CLentity.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -41,6 +41,7 @@ class CLenemy : public CLentity<1>
 	private:
 		static CLgame*   clgame;
 		static CLstring* clstring;
+		static CLwindow* clwindow;
 	protected:
 		CLprogress* hprog;
 		xlong* aiarray;
@@ -61,6 +62,7 @@ class CLenemy : public CLentity<1>
 
 CLgame*   CLenemy::clgame   = CLgame::instance();
 CLstring* CLenemy::clstring = CLstring::instance();
+CLwindow* CLenemy::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -265,7 +267,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	
 	if(active==1)
 	{
-		xlong time = clsystem->getmilliseconds();
+		xlong time = clwindow->getmilliseconds();
 
 		model[0]->getmatrix()->unit();
 		
@@ -304,7 +306,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 		//*
 	}
 	else if(active==-1) { if(expl[0]->next()==1) return points; }
-	else { lastupdate = clsystem->getmilliseconds(); }
+	else { lastupdate = clwindow->getmilliseconds(); }
 	
 	return -1;
 }

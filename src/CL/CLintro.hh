@@ -92,7 +92,7 @@ void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
 	{
 		clgfx->drawfontstring(x,100,title,4,0x00800000);
 		clwindow->run();
-		clsystem->wait(4000);
+		clwindow->sleep(4000);
 	}
 	//*
 }

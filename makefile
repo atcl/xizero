@@ -7,7 +7,7 @@ WAFLAGS = -Wall
 O0FLAGS = -O0
 O2FLAGS = -O2
 OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
-LDFLAGS = -lX11 -lalut
+LDFLAGS = -lglut -lalut -lX11
 OUTPARA = -o 
 DEBUG   = -g
 LINUX   = -DLINUX
@@ -50,8 +50,8 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 # Compile:
 default:
 	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
-	$(STRIP) $(TARGET1)
-	$(XZDAT) 
+	#$(STRIP) $(TARGET1)
+	#$(XZDAT) 
 
 install:
 	$(MK) $(BINDST)
@@ -68,7 +68,7 @@ data:
 
 unit:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
-	$(STRIP) $(TARGET2)
+	#$(STRIP) $(TARGET2)
 
 debug:
 	$(CC) $(O0FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(LINUX) $(DEBUG)

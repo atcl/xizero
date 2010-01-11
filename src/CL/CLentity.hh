@@ -24,6 +24,7 @@
 #include "CLmisc3d.hh"
 #include "CLbase.hh"
 #include "CLsound.hh"
+#include "CLwindow.hh"
 ///*
 
 ///headers
@@ -47,7 +48,7 @@ class CLentity : public CLbase<CLentity<I>,0>
 		static CLmisc3d* clmisc3d;
 		static CLformat* clformat;
 		static CLstring* clstring;
-		static CLsystem* clsystem;
+		static CLwindow* clwindow;
 	protected:
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -108,7 +109,7 @@ class CLentity : public CLbase<CLentity<I>,0>
 template<int I>CLmisc3d* CLentity<I>::clmisc3d = CLmisc3d::instance();
 template<int I>CLformat* CLentity<I>::clformat = CLformat::instance();
 template<int I>CLstring* CLentity<I>::clstring = CLstring::instance();
-template<int I>CLsystem* CLentity<I>::clsystem = CLsystem::instance();
+template<int I>CLwindow* CLentity<I>::clwindow = CLwindow::instance();
 ///*
 
 ///implementations
@@ -209,7 +210,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	{
 		ammotype[j] = clstring->tolong((*def)[ammoext[j]]);
 		firerate[j] = clstring->tolong((*def)[fireext[j]]);
-		fireupdate[j] = clsystem->getmilliseconds();
+		fireupdate[j] = clwindow->getmilliseconds();
 	}
 	//*
 	
@@ -229,7 +230,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	gear = 0;
 	visible = 0;
 	active = 0;
-	shieldupdate = lastupdate = clsystem->getmilliseconds();
+	shieldupdate = lastupdate = clwindow->getmilliseconds();
 	//*
 	
 	delete entitya; 
@@ -288,7 +289,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	ammotype = entityptr->ammotype;
 	firerate = entityptr->firerate;
 	fireupdate = new xlong[ammomounts];
-	for(uxlong j=0; j<ammomounts; j++) { fireupdate[j] = clsystem->getmilliseconds(); }
+	for(uxlong j=0; j<ammomounts; j++) { fireupdate[j] = clwindow->getmilliseconds(); }
 	//*
 	
 	//create ammo manager
@@ -305,7 +306,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	gear = 0;
 	visible = 0;
 	active = 0;
-	shieldupdate = lastupdate = clsystem->getmilliseconds();
+	shieldupdate = lastupdate = clwindow->getmilliseconds();
 	//*
 }
 
@@ -371,7 +372,7 @@ void CLentity<I>::hit(xlong h) //! critical
 template<int I>
 void CLentity<I>::start() //! noncritical
 {
-	xlong currtime = clsystem->getmilliseconds();
+	xlong currtime = clwindow->getmilliseconds();
 	lastupdate = currtime;
 	shieldupdate = currtime;
 	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
@@ -380,7 +381,7 @@ void CLentity<I>::start() //! noncritical
 template<int I>
 void CLentity<I>::pause() //! noncritical
 {
-	xlong currtime = clsystem->getmilliseconds();
+	xlong currtime = clwindow->getmilliseconds();
 	lastupdate = currtime;
 	shieldupdate = currtime;
 	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;

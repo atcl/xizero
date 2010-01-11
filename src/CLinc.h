@@ -35,7 +35,6 @@
 #include "CL/CLtrans.hh"
 #include "CL/CLsound.hh"
 #include "CL/CLgamepad.hh"
-#include "CL/CLbench.hh"
 #include "CL/CLformat.hh"
 #include "CL/CLmath.hh"
 #include "CL/CLgfx.hh"

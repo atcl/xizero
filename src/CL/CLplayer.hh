@@ -18,6 +18,7 @@
 #include "CLentity.hh"
 #include "CLenemy.hh"
 #include "CLboss.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -43,7 +44,7 @@ class CLplayer : public CLentity<2>
 	private:
 		static CLgame*   clgame;
 		static CLmath*   clmath;
-		static CLsystem* clsystem;
+		static CLwindow* clwindow;
 	protected:
 		CLprogress* hprog;
 		CLprogress* sprog;
@@ -61,7 +62,7 @@ class CLplayer : public CLentity<2>
 
 CLgame*   CLplayer::clgame   = CLgame::instance();
 CLmath*   CLplayer::clmath   = CLmath::instance();
-CLsystem* CLplayer::clsystem = CLsystem::instance();
+CLwindow* CLplayer::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -148,8 +149,6 @@ xlong CLplayer::collision(CLfbuffer* ll) //! critical
 	//adjust rotation around x and y axis
 		//rotate x about xangle,y about yangle
 		//~ if(clmath->absolute(xangle)>=1) { linear->rotate(xangle,yangle,0); }
-		//~ if(CLmath::absolute(xangle)>=1) CLsystem::print(xangle);
-		//~ if(CLmath::absolute(yangle)>=1) CLsystem::print(yangle);
 	//*
 
 	return r;
@@ -223,7 +222,7 @@ xlong CLplayer::update(xchar input,xchar turbo,CLfbuffer* ll,CLenemylist* enemie
 		//*
 		
 		//init variables
-		xlong time = clsystem->getmilliseconds();
+		xlong time = clwindow->getmilliseconds();
 		model[0]->getmatrix()->unit();
 		model[1]->getmatrix()->unit();
 		bool what = 0;

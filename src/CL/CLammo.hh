@@ -11,7 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLbase.hh"
-#include "CLsystem.hh"
+#include "CLwindow.hh"
 #include "CLlist.hh"
 #include "CLsprites.hh"
 #include "CLgame.hh"
@@ -49,7 +49,7 @@ class CLammomanager : public CLbase<CLammomanager,0>
 {
 	private:
 		static CLsprites* clsprites;
-		static CLsystem*  clsystem;
+		static CLwindow*  clwindow;
 		static CLgame*    clgame;
 		static CLmath*    clmath;
 	protected:
@@ -69,7 +69,7 @@ class CLammomanager : public CLbase<CLammomanager,0>
 };
 
 CLsprites* CLammomanager::clsprites = CLsprites::instance();
-CLsystem*  CLammomanager::clsystem  = CLsystem::instance();
+CLwindow*  CLammomanager::clwindow  = CLwindow::instance();
 CLgame*    CLammomanager::clgame    = CLgame::instance();
 CLmath*    CLammomanager::clmath    = CLmath::instance();
 ///*
@@ -121,7 +121,7 @@ void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvecto
 
 void CLammomanager::update() //! critical
 {
-	xlong time = clsystem->getmilliseconds();
+	xlong time = clwindow->getmilliseconds();
 	bool listfix=0;
 	CLammo* currammo = 0;
 	
@@ -199,7 +199,7 @@ void CLammomanager::display() const //! critical
 	//*
 }
 
-void CLammomanager::pause() { lastupdate = clsystem->getmilliseconds(); } //! noncritical
+void CLammomanager::pause() { lastupdate = clwindow->getmilliseconds(); } //! noncritical
 ///*
 
 #endif

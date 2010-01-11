@@ -180,8 +180,8 @@ void CLgfx::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
 void CLgfx::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
 {
 	if(isoff(x,y)) { return; }
-	else if(clsystem->getmilliseconds()%i<0) { clscreen->cldoublebuffer[(y*XRES)+x] = c1; }
-	else { clscreen->cldoublebuffer[(y*XRES)+x] = c2; }
+	//else if(clsystem->getmilliseconds()%i<0) { clscreen->cldoublebuffer[(y*XRES)+x] = c1; }
+	//else { clscreen->cldoublebuffer[(y*XRES)+x] = c2; }
 }
 
 void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical

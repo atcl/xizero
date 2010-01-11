@@ -15,8 +15,6 @@
 #include "CLbuffer.hh"
 #include "CLglobal.hh"
 #include "CLglobals.hh"
-#include "CLbench.hh"
-#include "CLmatrix.hh"
 ///*
 
 ///definitions
