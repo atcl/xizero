@@ -53,7 +53,8 @@ class CLpolygon : CLbase<CLpolygon,0>
 	protected:
 		static xlong pointcount;
 		static float shadezscale;
-		static CLfvector* temppoint;
+		static CLfvector* vpoint;
+		static CLfvector* wpoint;
 		static screenside* leftside;
 		static screenside* rightside;
 
@@ -102,7 +103,8 @@ CLmath*   CLpolygon::clmath   = CLmath::instance();
 CLscreen* CLpolygon::clscreen = CLscreen::instance();
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
-CLfvector* CLpolygon::temppoint = new CLfvector[8];
+CLfvector* CLpolygon::vpointpoint = new CLfvector[8];
+CLfvector* CLpolygon::wpointpoint = new CLfvector[8];
 screenside* CLpolygon::leftside = new screenside[YRES];
 screenside* CLpolygon::rightside = new screenside[YRES];
 ///*

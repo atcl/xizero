@@ -50,10 +50,9 @@ class CLwindow : public CLbase<CLwindow,1>
 		static CLgfx*    clgfx;
 		static CLscreen* clscreen;
 	protected:
-		int winid;
-
 		bool  displaycursor;
 		sprite* cursor;
+		static bool  glut;
 		static xlong keydn;
 		static xlong keyup;
 		static xlong turbo;
@@ -89,13 +88,14 @@ class CLwindow : public CLbase<CLwindow,1>
 		xlong getmilliseconds() const { return glutGet(GLUT_ELAPSED_TIME); };
 		void sleep(xlong ms) const;
 		xlong getfps();
+		static bool isglut() { return glut; };
 };
 
 CLformat* CLwindow::clformat = CLformat::instance();
 CLapp*    CLwindow::clapp    = CLapp::instance();
 CLgfx*    CLwindow::clgfx    = CLgfx::instance();
 CLscreen* CLwindow::clscreen = CLscreen::instance();
-
+bool  CLwindow::glut = 0;
 xlong CLwindow::keydn = 0;
 xlong CLwindow::keyup = 0;
 xlong CLwindow::turbo = 0;
@@ -154,12 +154,13 @@ CLwindow::CLwindow() //! noncritical
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
-	winid = glutCreateWindow(TITLE);
+	glutCreateWindow(TITLE);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutMouseFunc(setmouse);
 	glutDisplayFunc(draw);
 	glutIdleFunc(idle);
 	glutMainLoop();
+	glut = 1;
 }
 
 void CLwindow::draw() { glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_INT,clscreen->cldoublebuffer.getbuffer()); } //! noncritical

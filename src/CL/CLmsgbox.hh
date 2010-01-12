@@ -8,11 +8,12 @@
 #define HH_CLMSGBOX
 ///*
 
-///includes
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
+///sys includes
+#include <GL/gl.h>
+#include <GL/glut.h>
+///*
 
+///api includes
 #include "CLtypes.hh"
 #include "CLstring.hh"
 #include "CLbase.hh"
@@ -39,15 +40,7 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 	private:
 		static CLstring* clstring;
 	protected:
-		Display* Xdisplay;
-		Window Xwindow;
-		GC Xgc;
-		XEvent Xevent;
-		Colormap Xcolormap;
-		XColor Xwhite;
-		XColor Xblack;
-		XColor Xgrey;
-		XFontStruct* Xfont;
+
 		CLmsgbox();
 		~CLmsgbox();
 	public:
@@ -62,17 +55,12 @@ CLstring* CLmsgbox::clstring = CLstring::instance();
 ///implementation
 CLmsgbox::CLmsgbox() //! noncritical
 {
-	Xdisplay = XOpenDisplay(0);
-	Xcolormap = DefaultColormap(Xdisplay,XDefaultScreen(Xdisplay));
-	XColor dummy;
-	XAllocNamedColor(Xdisplay,Xcolormap,"white",&Xwhite,&dummy);
-	XAllocNamedColor(Xdisplay,Xcolormap,"black",&Xblack,&dummy);
-	XAllocNamedColor(Xdisplay,Xcolormap,"grey",&Xgrey,&dummy);
+	
 }
 
 CLmsgbox::~CLmsgbox() //! noncritical
 {
-	XCloseDisplay(Xdisplay);	
+
 }
 
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
@@ -92,54 +80,54 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	}
 	xlong maxline = 0;
 	for(xlong i=1; i<msglines; i++) { if(msglen[i]>msglen[maxline]) maxline = i; }
-	//create window
-	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,1,1,0,Xgrey.pixel,Xgrey.pixel);
-	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
-	Xfont = XQueryFont(Xdisplay,XGContextFromGC(Xgc));
-	xlong winwidth = 20+XTextWidth(Xfont,&message[msgpos[maxline]],msglen[maxline]);
+	xlong winwidth = 20; //+XTextWidth(Xfont,&message[msgpos[maxline]],msglen[maxline]);
 	xlong winheight = 40+msglines*16;
 	if(winwidth<200) winwidth = 200;
 	if(winwidth>800) winwidth = 400;
 	if(winheight<100) winheight = 100;
 	if(winheight>600) winheight = 600;
-	XResizeWindow(Xdisplay,Xwindow,winwidth,winheight);
-	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|ButtonPressMask|StructureNotifyMask);
-	//set title
-	XStoreName(Xdisplay,Xwindow,title);
-	//show window
-	XMapRaised(Xdisplay,Xwindow);
-	for(;;) { XNextEvent(Xdisplay, &Xevent); if (Xevent.type == MapNotify) break; }
-	xlong j= 0;
 	
-	//wait till press
-	bool wait = 0;
-	while(wait==0)
+	if(CLwindow::isglut()==0)
 	{
-		if(XPending(Xdisplay)!=0)
-		{			
-			XNextEvent(Xdisplay,&Xevent);
-			switch(Xevent.type)
-			{				
-				case Expose:
-					XSetForeground(Xdisplay,Xgc,Xblack.pixel);
-					XSetBackground(Xdisplay,Xgc,Xgrey.pixel);
-					for(j=0; j<msglines; j++) { XDrawImageString(Xdisplay,Xwindow,Xgc,10,20+16*j,&message[msgpos[j]],msglen[j]); }
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-10,(winwidth/2)+50,winheight-10);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)+50,winheight-30,(winwidth/2)+50,winheight-10);	
-					XDrawImageString(Xdisplay,Xwindow,Xgc,(winwidth/2)-5,winheight-15,u8"OK",2);
-					XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)-50,winheight-10);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)+50,winheight-30);
-				break;
-				case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
-				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
-			}				
-		}
+		xlong argc = 1;
+		xchar *argv[] = { "xizero",NULL };
+		glutInit(&argc,argv);
 	}
-	//destroy window
-	XFreeGC(Xdisplay,Xgc);
-	XDestroyWindow(Xdisplay,Xwindow);
-	XFlush(Xdisplay);
+	
+	glutInitWindowPosition(5,5);
+	glutInitWindowSize(winwidth,winheight);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
+	glutCreateWindow(title);
+	
+	//~ //wait till press
+	//~ bool wait = 0;
+	//~ while(wait==0)
+	//~ {
+		//~ if(XPending(Xdisplay)!=0)
+		//~ {			
+			//~ XNextEvent(Xdisplay,&Xevent);
+			//~ switch(Xevent.type)
+			//~ {				
+				//~ case Expose:
+					//~ XSetForeground(Xdisplay,Xgc,Xblack.pixel);
+					//~ XSetBackground(Xdisplay,Xgc,Xgrey.pixel);
+					//~ for(j=0; j<msglines; j++) { XDrawImageString(Xdisplay,Xwindow,Xgc,10,20+16*j,&message[msgpos[j]],msglen[j]); }
+					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-10,(winwidth/2)+50,winheight-10);
+					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)+50,winheight-30,(winwidth/2)+50,winheight-10);	
+					//~ XDrawImageString(Xdisplay,Xwindow,Xgc,(winwidth/2)-5,winheight-15,u8"OK",2);
+					//~ XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
+					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)-50,winheight-10);
+					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)+50,winheight-30);
+				//~ break;
+				//~ case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
+				//~ case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
+			//~ }				
+		//~ }
+	//~ }
+	//~ //destroy window
+	//~ XFreeGC(Xdisplay,Xgc);
+	//~ XDestroyWindow(Xdisplay,Xwindow);
+	//~ XFlush(Xdisplay);
 	return 1;
 }
 
@@ -153,51 +141,9 @@ xlong CLmsgbox::alertbox(const xchar* title,xlong value) //! noncritical
 	//prepare message
 	xchar* message = clstring->toascii(value);
 	xlong msglen = clstring->length(message);
-	//create window
-	Xwindow = XCreateSimpleWindow(Xdisplay,DefaultRootWindow(Xdisplay),0,0,1,1,0,Xgrey.pixel,Xgrey.pixel);
-	Xgc = XCreateGC(Xdisplay,Xwindow,0,0);
-	Xfont = XQueryFont(Xdisplay,XGContextFromGC(Xgc));
-	xlong winwidth = 200;
-	xlong winheight = 100;
-	XResizeWindow(Xdisplay,Xwindow,winwidth,winheight);
-	XSelectInput(Xdisplay,Xwindow,ExposureMask|KeyPressMask|ButtonPressMask|StructureNotifyMask);
-	//set title
-	XStoreName(Xdisplay,Xwindow,title);
-	//show window
-	XMapRaised(Xdisplay,Xwindow);
-	for(;;) { XNextEvent(Xdisplay, &Xevent); if (Xevent.type == MapNotify) break; }
-	xlong j= 0;
 	
-	//wait till press
-	bool wait = 0;
-	while(wait==0)
-	{
-		if(XPending(Xdisplay)!=0)
-		{			
-			XNextEvent(Xdisplay,&Xevent);
-			switch(Xevent.type)
-			{				
-				case Expose:
-					XSetForeground(Xdisplay,Xgc,Xblack.pixel);
-					XSetBackground(Xdisplay,Xgc,Xgrey.pixel);
-					XDrawImageString(Xdisplay,Xwindow,Xgc,10,20+16*j,message,msglen);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-10,(winwidth/2)+50,winheight-10);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)+50,winheight-30,(winwidth/2)+50,winheight-10);	
-					XDrawImageString(Xdisplay,Xwindow,Xgc,(winwidth/2)-5,winheight-15,u8"OK",2);
-					XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)-50,winheight-10);
-					XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)+50,winheight-30);
-				break;
-				case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
-				case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
-			}				
-		}
-	}
-	//destroy window
+	
 	delete message;
-	XFreeGC(Xdisplay,Xgc);
-	XDestroyWindow(Xdisplay,Xwindow);
-	XFlush(Xdisplay);
 	return 1;
 }
 ///*
