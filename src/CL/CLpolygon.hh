@@ -33,11 +33,6 @@
  */
 ///*
 
-CLfvector ppoint[8];
-CLfvector cpoint[8];
-CLfvector dpoint[8];
-CLfvector spoint[8];
-
 ///definitions
 struct screenside
 {
@@ -103,8 +98,8 @@ CLmath*   CLpolygon::clmath   = CLmath::instance();
 CLscreen* CLpolygon::clscreen = CLscreen::instance();
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
-CLfvector* CLpolygon::vpointpoint = new CLfvector[8];
-CLfvector* CLpolygon::wpointpoint = new CLfvector[8];
+CLfvector* CLpolygon::vpoint = new CLfvector[8];
+CLfvector* CLpolygon::wpoint = new CLfvector[8];
 screenside* CLpolygon::leftside = new screenside[YRES];
 screenside* CLpolygon::rightside = new screenside[YRES];
 ///*
@@ -176,24 +171,24 @@ void CLpolygon::zclipping() //! noncritical
 	for(x=pointcount-1, y=0; y<pointcount; x=y, y++)
 	{
 		//inside
-		if(ppoint[x].z >= ZMIN && ppoint[y].z >= ZMIN)
+		if(vpoint[x].z >= ZMIN && vpoint[y].z >= ZMIN)
 		{
-			cpoint[localpointcount++] = ppoint[y];
+			wpoint[localpointcount++] = vpoint[y];
 		}
 		//*
 		
 		//entering
-		else if(ppoint[x].z >= ZMIN && ppoint[y].z < ZMIN)
+		else if(vpoint[x].z >= ZMIN && vpoint[y].z < ZMIN)
 		{
-			cpoint[localpointcount++] = getzplanecoords(ppoint[x],ppoint[y],ZMIN);
+			wpoint[localpointcount++] = getzplanecoords(vpoint[x],vpoint[y],ZMIN);
 		}
 		//*
 		
 		//leaving
-		else if(ppoint[x].z < ZMIN && ppoint[y].z >= ZMIN)
+		else if(vpoint[x].z < ZMIN && vpoint[y].z >= ZMIN)
 		{
-			cpoint[localpointcount++] = getzplanecoords(ppoint[x],ppoint[y],ZMIN);
-			cpoint[localpointcount++] = ppoint[y];
+			wpoint[localpointcount++] = getzplanecoords(vpoint[x],vpoint[y],ZMIN);
+			wpoint[localpointcount++] = vpoint[y];
 		}
 		//*
 	}
@@ -205,24 +200,24 @@ void CLpolygon::zclipping() //! noncritical
 	for(x=localpointcount-1, y=0; y<localpointcount; x=y, y++)
 	{
 		//inside
-		if(cpoint[x].z <= ZMAX && cpoint[y].z <= ZMAX)
+		if(wpoint[x].z <= ZMAX && wpoint[y].z <= ZMAX)
 		{
-			ppoint[cpointcount++] = cpoint[y];
+			vpoint[cpointcount++] = wpoint[y];
 		}
 		//*
 		
 		//entering
-		else if(cpoint[x].z <= ZMAX && cpoint[y].z > ZMAX)
+		else if(wpoint[x].z <= ZMAX && wpoint[y].z > ZMAX)
 		{
-			cpoint[cpointcount++] = getzplanecoords(cpoint[x],cpoint[y],ZMAX);
+			vpoint[cpointcount++] = getzplanecoords(wpoint[x],wpoint[y],ZMAX);
 		}
 		//*
 		
 		//leaving
-		else if(cpoint[x].z > ZMAX && cpoint[y].z <= ZMAX)
+		else if(wpoint[x].z > ZMAX && wpoint[y].z <= ZMAX)
 		{
-			cpoint[cpointcount++] = getzplanecoords(cpoint[x],cpoint[y],ZMAX);
-			cpoint[cpointcount++] = cpoint[y];
+			wpoint[cpointcount++] = getzplanecoords(wpoint[x],wpoint[y],ZMAX);
+			wpoint[cpointcount++] = wpoint[y];
 		}
 		//*
 	}
@@ -238,11 +233,11 @@ void CLpolygon::project(xlong px,xlong py,bool c) //! critical
 	//project each vertex if vertex's z is greater zero
 	for(xlong x=0; x<cpointcount; x++)
 	{
-		if(ppoint[x].z > 0)
+		if(vpoint[x].z > 0)
 		{
-			spoint[x].x = xlong( ( prjx * (ppoint[x].x / ppoint[x].z) ) + px );
-			spoint[x].y = xlong( (-prjy * (ppoint[x].y / ppoint[x].z) ) + py );
-			spoint[x].z = ppoint[x].z;
+			wpoint[x].x = xlong( ( prjx * (vpoint[x].x / vpoint[x].z) ) + px );
+			wpoint[x].y = xlong( (-prjy * (vpoint[x].y / vpoint[x].z) ) + py );
+			wpoint[x].z = vpoint[x].z;
 		}
 		else
 		{
@@ -264,24 +259,24 @@ void CLpolygon::xyclipping() //! noncritical
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
 		//inside
-		if(spoint[x].x >= XMIN && spoint[y].x >= XMIN)
+		if(wpoint[x].x >= XMIN && wpoint[y].x >= XMIN)
 		{
-			dpoint[localpointcount++] = spoint[y];
+			vpoint[localpointcount++] = wpoint[y];
 		}
 		//*
 		
 		//entering
-		else if(spoint[x].x >= XMIN && spoint[y].x < XMIN )
+		else if(wpoint[x].x >= XMIN && wpoint[y].x < XMIN )
 		{
-			dpoint[localpointcount++] = getxplanecoords(spoint[x],spoint[y],XMIN);
+			vpoint[localpointcount++] = getxplanecoords(wpoint[x],wpoint[y],XMIN);
 		}
 		//*
 		
 		//leaving
-		else if(spoint[x].x < XMIN && spoint[y].x >= XMIN )
+		else if(wpoint[x].x < XMIN && wpoint[y].x >= XMIN )
 		{
-			dpoint[localpointcount++] = getxplanecoords(spoint[x],spoint[y],XMIN);
-			dpoint[localpointcount++] = spoint[y];	
+			vpoint[localpointcount++] = getxplanecoords(wpoint[x],wpoint[y],XMIN);
+			vpoint[localpointcount++] = wpoint[y];	
 		}
 		//*
 	}
@@ -293,24 +288,24 @@ void CLpolygon::xyclipping() //! noncritical
 	for(x=localpointcount-1, y=0; y<localpointcount; x=y, y++)
 	{
 		//inside
-		if(dpoint[x].x <= XMAX && dpoint[y].x <= XMAX)
+		if(vpoint[x].x <= XMAX && vpoint[y].x <= XMAX)
 		{
-			spoint[cpointcount++] = dpoint[y];
+			wpoint[cpointcount++] = vpoint[y];
 		}
 		//*
 		
 		//entering
-		else if(dpoint[x].x <= XMAX && dpoint[y].x > XMAX)
+		else if(vpoint[x].x <= XMAX && vpoint[y].x > XMAX)
 		{
-			spoint[cpointcount++] = getxplanecoords(dpoint[x],dpoint[y],XMAX);
+			wpoint[cpointcount++] = getxplanecoords(vpoint[x],vpoint[y],XMAX);
 		}
 		//*
 		
 		//leaving
-		else if(dpoint[x].x > XMAX && dpoint[y].x <= XMAX)
+		else if(vpoint[x].x > XMAX && vpoint[y].x <= XMAX)
 		{
-			spoint[cpointcount++] = getxplanecoords(dpoint[x],dpoint[y],XMAX);
-			spoint[cpointcount++] = dpoint[y];	
+			wpoint[cpointcount++] = getxplanecoords(vpoint[x],vpoint[y],XMAX);
+			wpoint[cpointcount++] = vpoint[y];	
 		}
 		//*
 	}
@@ -322,24 +317,24 @@ void CLpolygon::xyclipping() //! noncritical
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
 		//inside
-		if(spoint[x].y >= YMIN && spoint[y].y >= YMIN)
+		if(wpoint[x].y >= YMIN && wpoint[y].y >= YMIN)
 		{
-			dpoint[localpointcount++] = spoint[y];
+			vpoint[localpointcount++] = wpoint[y];
 		}
 		//*
 		
 		//entering
-		else if(spoint[x].y >= YMIN && spoint[y].y < YMIN )
+		else if(wpoint[x].y >= YMIN && wpoint[y].y < YMIN )
 		{
-			dpoint[localpointcount++] = getyplanecoords(spoint[x],spoint[y],YMIN);
+			vpoint[localpointcount++] = getyplanecoords(wpoint[x],wpoint[y],YMIN);
 		}
 		//*
 		
 		//leaving
-		else if(spoint[x].y < YMIN && spoint[y].y >= YMIN)
+		else if(wpoint[x].y < YMIN && wpoint[y].y >= YMIN)
 		{
-			dpoint[localpointcount++] = getyplanecoords(spoint[x],spoint[y],YMIN);
-			dpoint[localpointcount++] = spoint[y];	
+			vpoint[localpointcount++] = getyplanecoords(wpoint[x],wpoint[y],YMIN);
+			vpoint[localpointcount++] = wpoint[y];	
 		}
 		//*
 	}
@@ -351,24 +346,24 @@ void CLpolygon::xyclipping() //! noncritical
 	for(x=localpointcount-1, y=0; y<localpointcount; x=y, y++)
 	{
 		//inside
-		if(dpoint[x].y <= YMAX && dpoint[y].y <= YMAX)
+		if(vpoint[x].y <= YMAX && vpoint[y].y <= YMAX)
 		{
-			spoint[cpointcount++] = dpoint[y];
+			wpoint[cpointcount++] = vpoint[y];
 		}
 		//*
 		
 		//entering
-		else if(dpoint[x].y <= YMAX && dpoint[y].y > YMAX)
+		else if(vpoint[x].y <= YMAX && vpoint[y].y > YMAX)
 		{
-			spoint[cpointcount++] = getyplanecoords(dpoint[x],dpoint[y],YMAX);
+			wpoint[cpointcount++] = getyplanecoords(vpoint[x],vpoint[y],YMAX);
 		}
 		//*
 		
 		//leaving
-		else if(dpoint[x].y > YMAX && dpoint[y].y <= YMAX)
+		else if(vpoint[x].y > YMAX && vpoint[y].y <= YMAX)
 		{
-			spoint[cpointcount++] = getyplanecoords(dpoint[x],dpoint[y],YMAX);
-			spoint[cpointcount++] = dpoint[y];	
+			wpoint[cpointcount++] = getyplanecoords(vpoint[x],vpoint[y],YMAX);
+			wpoint[cpointcount++] = vpoint[y];	
 		}
 		//*
 	}
@@ -378,7 +373,8 @@ void CLpolygon::xyclipping() //! noncritical
 bool CLpolygon::visible() //! noncritical
 {
 	//calc z component of cross product of two edges (with one comon corner)
-	xlong f = xlong(((spoint[cpointcount-1].x - spoint[0].x) * (spoint[1].y - spoint[0].y)) - ((spoint[cpointcount-1].y - spoint[0].y) * (spoint[1].x - spoint[0].x)));
+	xlong f = xlong(((wpoint[cpointcount-1].x - wpoint[0].x) * (wpoint[1].y - wpoint[0].y)) - ((wpoint[cpointcount-1].y - wpoint[0].y) * (wpoint[1].x - wpoint[0].x)));
+	//? replace by real cross product
 	//*
 
 	//poly is visible if z component of cross product is below zero (below one to rule out rundng erros)
@@ -393,7 +389,7 @@ void CLpolygon::shape() //! noncritical
 	xlong y = 0;
 	for(x=cpointcount-1, y=0; y<cpointcount; x=y, y++)
 	{
-		polyline(xlong(spoint[x].x),xlong(spoint[x].y),xlong(spoint[y].x),xlong(spoint[y].y),0x00FF0000);
+		polyline(xlong(wpoint[x].x),xlong(wpoint[x].y),xlong(wpoint[y].x),xlong(wpoint[y].y),0x00FF0000);
 	}
 	//*
 }
@@ -459,22 +455,22 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 	//find top and bottom vertex
 	for(x=1; x<cpointcount; x++)
 	{
-		if(xlong(spoint[top].y) > xlong(spoint[x].y)) top = x;
-		if(xlong(spoint[bot].y) < xlong(spoint[x].y)) bot = x;
+		if(xlong(wpoint[top].y) > xlong(wpoint[x].y)) top = x;
+		if(xlong(wpoint[bot].y) < xlong(wpoint[x].y)) bot = x;
 	}
 	//*
 
 	//set left side rasterizing start postion(s)
 	x=y=top;
-	for(y=circledec(y,cpointcount); x!=bot; x=y, y=circledec(y,cpointcount)) { setside(spoint[x],spoint[y],leftside); }
+	for(y=circledec(y,cpointcount); x!=bot; x=y, y=circledec(y,cpointcount)) { setside(wpoint[x],wpoint[y],leftside); }
 	//*
 	
 	//set right side rasterizing start position(s)
 	x=y=top;
-	for(y=circleinc(y,cpointcount); x!=bot; x=y, y=circleinc(y,cpointcount)) { setside(spoint[x],spoint[y],rightside); }
+	for(y=circleinc(y,cpointcount); x!=bot; x=y, y=circleinc(y,cpointcount)) { setside(wpoint[x],wpoint[y],rightside); }
 	//*
 
-	xlong m = xlong(spoint[bot].y + spoint[top].y) >> 1;
+	xlong m = xlong(wpoint[bot].y + wpoint[top].y) >> 1;
 	if(leftside[m].offset > rightside[m].offset)
 	{
 		//swap left and right per xor trick?
@@ -489,7 +485,7 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 	float actz = 0;
 	float zstep = 0;
 
-	for(y=xlong(spoint[top].y); y<=xlong(spoint[bot].y); y++)
+	for(y=xlong(wpoint[top].y); y<=xlong(wpoint[bot].y); y++)
 	{
 		length = rightside[y].offset - leftside[y].offset;
 		if(length != 0) zstep = ((rightside[y].z - leftside[y].z) / length);
@@ -595,30 +591,30 @@ void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 {
 	if(flags&SHADOW)
 	{
-		ppoint[0] = pointt[0];
-		ppoint[1] = pointt[1];
-		ppoint[2] = pointt[2];
-		ppoint[3] = pointt[3];
+		vpoint[0] = pointt[0];
+		vpoint[1] = pointt[1];
+		vpoint[2] = pointt[2];
+		vpoint[3] = pointt[3];
 	}
 	else if(flags&ANTICY)
 	{
-		ppoint[0] = points[0];
-		ppoint[2] = points[1];
-		ppoint[1] = points[2];
-		ppoint[3] = points[3];
+		vpoint[0] = points[0];
+		vpoint[2] = points[1];
+		vpoint[1] = points[2];
+		vpoint[3] = points[3];
 	}
 	else
 	{
-		ppoint[0] = points[0];
-		ppoint[1] = points[1];
-		ppoint[2] = points[2];
-		ppoint[3] = points[3];
+		vpoint[0] = points[0];
+		vpoint[1] = points[1];
+		vpoint[2] = points[2];
+		vpoint[3] = points[3];
 	}
 
-	ppoint[0].z += float(p.z);
-	ppoint[1].z += float(p.z);
-	ppoint[2].z += float(p.z);
-	ppoint[3].z += float(p.z);
+	vpoint[0].z += float(p.z);
+	vpoint[1].z += float(p.z);
+	vpoint[2].z += float(p.z);
+	vpoint[3].z += float(p.z);
 	zclipping();
 	project(p.x,p.y,flags&CENTER);
 	xyclipping();
@@ -634,12 +630,12 @@ void CLpolygon::display(const CLlvector& p,xshort flags) //! critical
 		{
 			if(flags&DEBUG)		//plain color
 			{
-				shade=color;
+				shade = color;
 				rasterize(0);
 			}
 			else if( !(flags&SHADOW) )	//default
 			{
-				flatshade(ppoint[0].z,flags&AMBIENT,flags&ZLIGHT);
+				flatshade(wpoint[0].z,flags&AMBIENT,flags&ZLIGHT);
 				rasterize(0);
 			}
 			else			//shadow
@@ -661,30 +657,30 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	
 	//
 
-	ppoint[0] = points[0];
-	ppoint[1] = points[1];
-	ppoint[2] = points[2];
-	ppoint[3] = points[3];
+	vpoint[0] = points[0];
+	vpoint[1] = points[1];
+	vpoint[2] = points[2];
+	vpoint[3] = points[3];
 
-	ppoint[0].z += float(p.z);
-	ppoint[1].z += float(p.z);
-	ppoint[2].z += float(p.z);
-	ppoint[3].z += float(p.z);
+	vpoint[0].z += float(p.z);
+	vpoint[1].z += float(p.z);
+	vpoint[2].z += float(p.z);
+	vpoint[3].z += float(p.z);
 	zclipping();
 	
 	for(xlong x=0; x<cpointcount; x++)
 	{
-		if(ppoint[x].z > 0)
+		if(vpoint[x].z > 0)
 		{
-			spoint[x].x = float(xlong(  ppoint[x].x ) + p.x );
-			spoint[x].y = float(xlong( -ppoint[x].y ) + p.y );
-			spoint[x].z = ppoint[x].z; // + cleartrans;
+			wpoint[x].x = float(xlong(  vpoint[x].x ) + p.x );
+			wpoint[x].y = float(xlong( -vpoint[x].y ) + p.y );
+			wpoint[x].z = vpoint[x].z; // + cleartrans;
 		}
 		else
 		{
 			tty(__func__);
 			tty("Invalid z value: ");
-			say(ppoint[x].z);
+			say(wpoint[x].z);
 		}
 	}
 	
