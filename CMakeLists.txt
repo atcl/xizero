@@ -20,40 +20,19 @@ SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".lib" ".a")
 
 
 SET( EXTRA_FLAGS
-	"-O3 -funroll-loops -fomit-frame-pointer" CACHE STRING
+	"-fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time" CACHE STRING
 	"" )
 
-
-SET( FLTK_CONFIG
-	/usr/bin/fltk-config CACHE STRING
-	"" )
-
-SET( AUDIERE_CONFIG
-	/usr/bin/audiere-config CACHE STRING
-	"" )
-
-SET( FREETYPE_CONFIG
-	/usr/bin/freetype-config CACHE STRING
-	"" )
-	
-EXECUTE_PROCESS(
-	COMMAND ${FREETYPE_CONFIG} "--cflags"
-	OUTPUT_VARIABLE freetypeCFLAGS
-	ERROR_VARIABLE shell_error
-)
-
-EXECUTE_PROCESS(
-	COMMAND ${FLTK_CONFIG} "--ldstaticflags" 
-	OUTPUT_VARIABLE fltkLDFLAGS
-	ERROR_VARIABLE shell_error
-)
-
-EXECUTE_PROCESS(
-	COMMAND ${AUDIERE_CONFIG} "--libs"
-	OUTPUT_VARIABLE audiereLDFLAGS
-	ERROR_VARIABLE shell_error
-)
-
+FIND_PACKAGE(OpenAL REQUIRED)
+#very weird here, need to both set the path AND include with full path or else cmake errors out...
+SET(CMAKE_MODULE_PATH ${xizero_SOURCE_DIR}/cmake)
+include(${xizero_SOURCE_DIR}/cmake/FindALUT.cmake)
+FIND_PACKAGE(ALUT REQUIRED)
+FIND_PACKAGE(OpenGL REQUIRED)
+FIND_PACKAGE(GLU REQUIRED)
+FIND_PACKAGE(GLUT REQUIRED)
+LIST(APPEND xizero_libraries ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${GLUT_LIBRARIES} ${OPENAL_LIBRARY} ${ALUT_LIBRARY} )
+INCLUDE_DIRECTORIES(${OPENAL_INCLUDE_DIR} ${ALUT_INCLUDE_DIR} )
 #----------------------------------------------------------------------------------------------------
 # Source listing
 #----------------------------------------------------------------------------------------------------
@@ -64,10 +43,6 @@ INCLUDE_DIRECTORIES(${xizero_SOURCE_DIR}  )
 
 SET(xizeroSrc
 	src/xizero.cc
-)
-
-SET(testxSrc
-	src/testx.cc
 )
 
 SET(unittestSrc
@@ -89,12 +64,12 @@ ADD_DEFINITIONS( ${freetypeCFLAGS} "-g" )
 ADD_DEFINITIONS( ${EXTRA_FLAGS} )
 
 ADD_EXECUTABLE(xizero ${xizeroSrc} )
-#ADD_EXECUTABLE(testx ${testxSrc} )
 ADD_EXECUTABLE(unittest ${unittestSrc} )
 
+TARGET_LINK_LIBRARIES(xizero ${xizero_libraries})
+TARGET_LINK_LIBRARIES(unittest ${xizero_libraries})
 
+add_custom_target(dat ${xizero_SOURCE_DIR}/dat/makexizerodat.sh )
 
-# Here the wxWidgets Libraries are added. These are set for us by the FIND Script. If you need other Libraries, you can add them here as well.
-TARGET_LINK_LIBRARIES(xizero ${audiereLDFLAGS} ${fltkLDFLAGS})
-#TARGET_LINK_LIBRARIES(testx ${audiereLDFLAGS} ${fltkLDFLAGS})
-TARGET_LINK_LIBRARIES(unittest ${audiereLDFLAGS} ${fltkLDFLAGS})
+add_dependencies( xizero dat )
+add_dependencies( unittest dat )
