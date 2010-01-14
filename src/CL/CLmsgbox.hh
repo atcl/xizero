@@ -97,7 +97,7 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(winwidth,winheight);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
-	glutCreateWindow(title);
+	xlong currid = glutCreateWindow(title);
 	
 	//~ //wait till press
 	//~ bool wait = 0;

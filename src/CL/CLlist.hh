@@ -55,6 +55,7 @@ class CLlist : public CLbase<CLlist<member>,0>
 		void append(member* e,const xchar* n=u8" ");
 		xlong delcurrent(bool smash=0); //test smash option
 		bool seekdata(member* s);
+		member* findbyname(const xchar* n); //for xml?
 		void clear();
 		void smash(); //test
 		

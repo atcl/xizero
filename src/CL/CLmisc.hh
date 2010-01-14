@@ -30,7 +30,7 @@ xlong* getbufferptr() { }
 void int() { }
 
 //kern
-xchar* getexesize() { }
+xlong getexesize() { }
 void getenv() { }
 
 //class mouse

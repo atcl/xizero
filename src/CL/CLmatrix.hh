@@ -47,7 +47,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		void scale(float x,float y,float z);
 		void aspectscale(float x);
 		void superscale(float x);
-		void reflect();
+		void reflect(bool x=0,bool y=0,bool z=0);
 		template<class clvector>clvector transform(const clvector& t) const;
 		void clear(xlong i);
 		void zero();
@@ -187,6 +187,17 @@ void CLmatrix::superscale(float x) //! noncritical
 	//*
 }
 
+void CLmatrix::reflect(bool x,bool y,bool z) //! critical
+{
+	//* reflect on axis
+	t[0][0] = (x==0)-(x!=0); t[0][1] = 0;             t[0][2] = 0;             t[0][3] = 0;
+	t[1][0] = 0;             t[1][1] = (y==0)-(y!=0); t[1][2] = 0;             t[1][3] = 0;
+	t[2][0] = 0;             t[2][1] = 0;             t[2][2] = (z==0)-(z!=0); t[2][3] = 0;
+	t[3][0] = 0;             t[3][1] = 0;             t[3][2] = 0;             t[3][3] = 1;
+	multiplicate();
+	//*
+}
+
 template<class clvector>
 clvector CLmatrix::transform(const clvector& t) const //! critical
 {
@@ -238,47 +249,20 @@ void CLmatrix::shadow(const clvector& l,const clvector& p) //! critical
 	float ldotp = l*p;
 
 	//set matrix to shadow matrix of light l and plane p 
-	m[0][0] = (ldotp - (l.x * p.x));
-	m[0][1] = -(l.x * p.y);
-	m[0][2] = -(l.x * p.z);
-	m[0][3] = 0;
-	m[1][0] = -(l.y * p.x);
-	m[1][1] = (ldotp - (l.y * p.y));
-	m[1][2] = -(l.y * p.z);
-	m[1][3] = 0;
-	m[2][0] = -(l.z * p.x);
-	m[2][1] = -(l.z * p.y);
-	m[2][2] = (ldotp - (l.z * p.z));
-	m[2][3] = 0;
-	m[3][0] = 0;
-	m[3][1] = 0;
-	m[3][2] = 0;
-	m[3][3] = 1;
+	m[0][0] = (ldotp - (l.x * p.x)); m[0][1] = -(l.x * p.y);          m[0][2] = -(l.x * p.z);          m[0][3] = 0;
+	m[1][0] = -(l.y * p.x);          m[1][1] = (ldotp - (l.y * p.y)); m[1][2] = -(l.y * p.z);          m[1][3] = 0;
+	m[2][0] = -(l.z * p.x);          m[2][1] = -(l.z * p.y);          m[2][2] = (ldotp - (l.z * p.z)); m[2][3] = 0;
+	m[3][0] = 0;                     m[3][1] = 0;                     m[3][2] = 0;                     m[3][3] = 1;
 	//*
 }
 
 void CLmatrix::project() //! critical
 {
-	float zmin = 1;
-	float zmax = ZRES-1;
-
 	//set matrix to linear projection 
-	m[0][0] = (2 * zmin / XRES);
-	m[0][1] = 0;
-	m[0][2] = 0;
-	m[0][3] = 0;
-	m[1][0] = 0;
-	m[1][1] = (2 * zmin / YRES);
-	m[1][2] = 0;
-	m[1][3] = 0;
-	m[2][0] = 0;
-	m[2][1] = 0;
-	m[2][2] = ( zmax / (zmax - zmin) );
-	m[2][3] = ( -zmax * zmin / (zmax - zmin) );
-	m[3][0] = 0;
-	m[3][1] = 0;
-	m[3][2] = 1;
-	m[3][3] = 0;
+	m[0][0] = (2 * ZMIN / XRES); m[0][1] = 0;                 m[0][2] = 0;                        m[0][3] = 0;
+	m[1][0] = 0;                 m[1][1] = (2 * ZMIN / YRES); m[1][2] = 0;                        m[1][3] = 0;
+	m[2][0] = 0;                 m[2][1] = 0;                 m[2][2] = ( ZMAX / (ZMAX - ZMIN) ); m[2][3] = ( -ZMAX * ZMIN / (ZMAX - ZMIN) );
+	m[3][0] = 0;                 m[3][1] = 0;                 m[3][2] = 1;                        m[3][3] = 0;
 	//*
 }
 
@@ -286,50 +270,21 @@ template<class clvector>
 void CLmatrix::dyadic(const clvector& a,const clvector& b) //! critical
 {
 	//set matrix to 3x3 dyadic product of a and b
-	m[0][0] = float(a.x * b.x);
-	m[0][1] = float(a.x * b.y);
-	m[0][2] = float(a.x * b.z);
-	m[0][3] = 0;
-	m[1][0] = float(a.y * b.x);
-	m[1][1] = float(a.y * b.y);
-	m[1][2] = float(a.y * b.z);
-	m[1][3] = 0;
-	m[2][0] = float(a.z * b.x);
-	m[2][1] = float(a.z * b.y);
-	m[2][2] = float(a.z * b.z);
-	m[2][3] = 0;
-	m[3][0] = 0;
-	m[3][1] = 0;
-	m[3][2] = 0;
-	m[3][3] = 1;
+	m[0][0] = float(a.x * b.x); m[0][1] = float(a.x * b.y); m[0][2] = float(a.x * b.z); m[0][3] = 0;
+	m[1][0] = float(a.y * b.x); m[1][1] = float(a.y * b.y); m[1][2] = float(a.y * b.z); m[1][3] = 0;
+	m[2][0] = float(a.z * b.x); m[2][1] = float(a.z * b.y); m[2][2] = float(a.z * b.z); m[2][3] = 0;
+	m[3][0] = 0;                m[3][1] = 0;                m[3][2] = 0;                m[3][3] = 1;
 	//*
 }
 
-float CLmatrix::trace() const //! noncritical 
-{
-	//sum of all main diagonal elements
-	return (m[0][0] + m[1][1] + m[2][2] + m[3][3]);
-	//*
-}
+float CLmatrix::trace() const { return (m[0][0] + m[1][1] + m[2][2] + m[3][3]); } //! noncritical
 
 void CLmatrix::set(float a00,float a01,float a02,float a03,float a10,float a11,float a12,float a13,float a20,float a21,float a22,float a23,float a30,float a31,float a32,float a33) //! noncritical
 {
-	m[0][0] = a00;
-	m[0][1] = a01;
-	m[0][2] = a02;
-	m[0][3] = a03;
-	m[1][0] = a10;
-	m[1][1] = a11;
-	m[1][2] = a12;
-	m[1][3] = a13;
-	m[2][0] = a20;
-	m[2][1] = a21;
-	m[2][2] = a22;
-	m[2][3] = a23;
-	m[3][0] = a30;
-	m[3][1] = a31;
-	m[3][2] = a32;
-	m[3][3] = a33;
+	m[0][0] = a00; m[0][1] = a01; m[0][2] = a02; m[0][3] = a03;
+	m[1][0] = a10; m[1][1] = a11; m[1][2] = a12; m[1][3] = a13;
+	m[2][0] = a20; m[2][1] = a21; m[2][2] = a22; m[2][3] = a23;
+	m[3][0] = a30; m[3][1] = a31; m[3][2] = a32; m[3][3] = a33;
 }
 
 void CLmatrix::print() const //! noncritical
@@ -343,23 +298,10 @@ void CLmatrix::print() const //! noncritical
 
 CLmatrix& CLmatrix::operator=(const CLmatrix& c) //! noncritical
 {
-	m[0][0] = c.m[0][0];
-	m[0][1] = c.m[0][1];
-	m[0][2] = c.m[0][2];
-	m[0][3] = c.m[0][3];
-	m[1][0] = c.m[1][0];
-	m[1][1] = c.m[1][1];
-	m[1][2] = c.m[1][2];
-	m[1][3] = c.m[1][3];
-	m[2][0] = c.m[2][0];
-	m[2][1] = c.m[2][1];
-	m[2][2] = c.m[2][2];
-	m[2][3] = c.m[2][3];
-	m[3][0] = c.m[3][0];
-	m[3][1] = c.m[3][1];
-	m[3][2] = c.m[3][2];
-	m[3][3] = c.m[3][3];
-	
+	m[0][0] = c.m[0][0]; m[0][1] = c.m[0][1]; m[0][2] = c.m[0][2]; m[0][3] = c.m[0][3];
+	m[1][0] = c.m[1][0]; m[1][1] = c.m[1][1]; m[1][2] = c.m[1][2]; m[1][3] = c.m[1][3];
+	m[2][0] = c.m[2][0]; m[2][1] = c.m[2][1]; m[2][2] = c.m[2][2]; m[2][3] = c.m[2][3];
+	m[3][0] = c.m[3][0]; m[3][1] = c.m[3][1]; m[3][2] = c.m[3][2]; m[3][3] = c.m[3][3];
 	return *this;
 }
 ///*

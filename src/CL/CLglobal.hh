@@ -55,8 +55,8 @@ class CLglobal : public CLbase<CLglobal,1>
 	friend class CLbase<CLglobal,1>; 
 	
 	protected:
-		CLglobal() { };
-		~CLglobal() { };
+		CLglobal();
+		~CLglobal();
 	public:
 		static CLscreen* clscreen;		
 		static CLwindow* clwindow;
@@ -100,6 +100,18 @@ CLstring* CLglobal::clstring = CLstring::instance();
 CLapp*    CLglobal::clapp    = CLapp::instance();
 CLmsgbox* CLglobal::clmsgbox = CLmsgbox::instance();
 CLintro*  CLglobal::clintro  = CLintro::instance();
+///*
+
+///implementation
+CLglobal::CLglobal() //! noncritical
+{
+	
+}
+	
+CLglobal::~CLglobal() //! noncritical
+{
+	
+}
 ///*
 
 #endif
