@@ -49,6 +49,9 @@ SET(unittestSrc
 	src/unittest.cc
 )
 
+#add all header to project so they show up in qtcreator filelist
+FILE( GLOB_RECURSE header  "*.h?" )
+
 #----------------------------------------------------------------------------------------------------
 # Build target defintions
 #----------------------------------------------------------------------------------------------------
@@ -63,11 +66,11 @@ cmake_policy(SET CMP0006 OLD)
 ADD_DEFINITIONS( ${freetypeCFLAGS} "-g" )
 ADD_DEFINITIONS( ${EXTRA_FLAGS} )
 
-ADD_EXECUTABLE(xizero ${xizeroSrc} )
-ADD_EXECUTABLE(unittest ${unittestSrc} )
+ADD_EXECUTABLE(xizero ${xizeroSrc} ${header} )
+ADD_EXECUTABLE(unittest ${unittestSrc} ${header} )
 
-TARGET_LINK_LIBRARIES(xizero ${xizero_libraries})
-TARGET_LINK_LIBRARIES(unittest ${xizero_libraries})
+TARGET_LINK_LIBRARIES(xizero ${xizero_libraries}  )
+TARGET_LINK_LIBRARIES(unittest ${xizero_libraries} )
 
 add_custom_target(dat ${xizero_SOURCE_DIR}/dat/makexizerodat.sh )
 
