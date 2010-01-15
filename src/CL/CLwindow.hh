@@ -52,6 +52,7 @@ class CLwindow : public CLbase<CLwindow,1>
 	protected:
 		bool  displaycursor;
 		sprite* cursor;
+		static uxchar* framebuffer;
 		static bool  glut;
 		static xlong keydn;
 		static xlong keyup;
@@ -110,6 +111,7 @@ float CLwindow::frame = 0;
 float CLwindow::time = 0;
 float CLwindow::timebase = 0;
 float CLwindow::fps = 0;
+uxchar* CLwindow::framebuffer = 0;
 ///*
 
 ///implementation
@@ -146,23 +148,31 @@ CLwindow::CLwindow() //! noncritical
 {
 	cursor = 0;
 	displaycursor = 0;
+	framebuffer = (uxchar*)(clscreen->cldoublebuffer.getbuffer());
 	
 	xlong argc = 1;
     xchar *argv[] = { "xizero",NULL };
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
+	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
 	glutCreateWindow(TITLE);
-	glutSetCursor(GLUT_CURSOR_NONE);
-	glutMouseFunc(setmouse);
+	//~ glutSetCursor(GLUT_CURSOR_NONE);
+	//~ glutMouseFunc(setmouse);
+	//~ glutKeyboardFunc(setkeys);
+	//~ glutIdleFunc(idle);
 	glutDisplayFunc(draw);
-	glutIdleFunc(idle);
 	glutMainLoop();
 	glut = 1;
 }
 
-void CLwindow::draw() { glRasterPos2i(0,0); glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_INT_8_8_8_8,clscreen->cldoublebuffer.getbuffer()); } //! noncritical
+void CLwindow::draw() //! noncritical
+{
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer); 
+	glFlush();
+	say("hi");
+}
 
 xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); } draw(); return 1; } //! noncritical
 
