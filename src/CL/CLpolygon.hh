@@ -563,7 +563,7 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 	//*
 }
 
-CLpolygon::CLpolygon(const CLpolygon& c)
+CLpolygon::CLpolygon(const CLpolygon& c) : CLbase<CLpolygon,0>(c)
 {
 	color  = c.color;
 	rcolor = c.rcolor;

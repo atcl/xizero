@@ -9,7 +9,7 @@
 ///*
 
 ///sys includes
-#include <stdlib.h>
+#include <cstdlib>
 ///*
 
 ///api includes
@@ -39,8 +39,8 @@ class CLapp : public CLbase<CLapp,1>
 	friend class CLbase<CLapp,1>;
 	
 	protected:
-		xchar* name;
-		xchar* title;
+		const xchar* name;
+		const xchar* title;
 		xchar* icon;
 		uxlong size;
 		uxlong version;
@@ -49,8 +49,8 @@ class CLapp : public CLbase<CLapp,1>
 	public:
 		void exit(xlong r=0,const xchar* m="");
 		xchar inkey(bool b);
-		xchar* getname() const { return name; };
-		xchar* gettitle() const { return title; };
+		const xchar* getname() const { return name; };
+		const xchar* gettitle() const { return title; };
 		xchar* geticon() const { return icon; };
 		uxlong getsize() const { return size; };
 		uxlong getversion() const { return version; };
@@ -58,7 +58,7 @@ class CLapp : public CLbase<CLapp,1>
 ///*
 
 ///implementation
-CLapp::CLapp() //! noncritical
+CLapp::CLapp() : name(TITLE), title(TITLE) //! noncritical
 {
 	//name = argv[0];
 	//size = argv[-1];

@@ -60,7 +60,7 @@ install:
 	$(CP) $(GAMEDAT) $(DATDST)
 
 local:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) -Wall -Wextra -Weffc++
 	$(STRIP) $(TARGET1)
 	
 data:

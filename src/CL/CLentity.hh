@@ -154,7 +154,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 
 	//for each model
 	CLfile* entitymodelfile = 0;
-	xchar* testext[2] = { u8"0.y3d",u8"1.y3d" };
+	const xchar* testext[2] = { u8"0.y3d",u8"1.y3d" };
 	if(I==1) testext[0] = u8".y3d";
 	for(uxlong i=0; i<I; i++)
 	{
@@ -201,12 +201,12 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	//*
 	
 	//load ammo types
-	xchar* ammoext[4] = { u8"ammotype0",u8"ammotype1",u8"ammotype2",u8"ammotype3" };
-	xchar* fireext[4] = { u8"firerate0",u8"firerate1",u8"firerate2",u8"firerate3" };
+	const xchar* ammoext[4] = { u8"ammotype0",u8"ammotype1",u8"ammotype2",u8"ammotype3" };
+	const xchar* fireext[4] = { u8"firerate0",u8"firerate1",u8"firerate2",u8"firerate3" };
 	ammotype = new xlong[ammomounts];
 	firerate = new xlong[ammomounts];
 	fireupdate = new xlong[ammomounts];
-	for(uxlong j=0; j<ammomounts; j++)
+	for(xlong j=0; j<ammomounts; j++)
 	{
 		ammotype[j] = clstring->tolong((*def)[ammoext[j]]);
 		firerate[j] = clstring->tolong((*def)[fireext[j]]);
@@ -245,7 +245,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	//*
 	
 	//for each model
-	for(uxlong i=0; i<I; i++)
+	for(xlong i=0; i<I; i++)
 	{
 		//find and load model(s) (*.y3d)
 		model[i] = new CLobject(entityptr->model[i]);
@@ -289,7 +289,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	ammotype = entityptr->ammotype;
 	firerate = entityptr->firerate;
 	fireupdate = new xlong[ammomounts];
-	for(uxlong j=0; j<ammomounts; j++) { fireupdate[j] = clwindow->getmilliseconds(); }
+	for(xlong j=0; j<ammomounts; j++) { fireupdate[j] = clwindow->getmilliseconds(); }
 	//*
 	
 	//create ammo manager
@@ -319,7 +319,7 @@ CLentity<I>::~CLentity<I>() //! noncritical
 	delete[] firerate;
 	delete[] fireupdate;
 	
-	for(uxlong i=0; i<I; i++)
+	for(xlong i=0; i<I; i++)
 	{
 		delete model[i];
 		delete expl[i];
@@ -353,7 +353,7 @@ void CLentity<I>::display(xlong modelorshadow) //! critical
 			
 			case 1:
 				//display shadow(s)
-				for(uxlong i=0; i<I; i++) { model[i]->display(sposition,SHADOW); }
+				for(xlong i=0; i<I; i++) { model[i]->display(sposition,SHADOW); }
 				//*
 			break;
 		}
@@ -375,7 +375,7 @@ void CLentity<I>::start() //! noncritical
 	xlong currtime = clwindow->getmilliseconds();
 	lastupdate = currtime;
 	shieldupdate = currtime;
-	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
+	for(xlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
 } 
 
 template<int I>
@@ -384,7 +384,7 @@ void CLentity<I>::pause() //! noncritical
 	xlong currtime = clwindow->getmilliseconds();
 	lastupdate = currtime;
 	shieldupdate = currtime;
-	for(uxlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
+	for(xlong i=0; i<ammomounts; i++) fireupdate[i] = currtime;
 	ammoman->pause();
 }
 ///*

@@ -67,7 +67,7 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//determine max button caption length
 	xlong mbl = clstring->length(bt[0]);
 	xlong mbli = 0;
-	for(uxlong i=1; i<bc; i++)
+	for(xlong i=1; i<bc; i++)
 	{
 		temp = clstring->length(bt[i]);
 		if(temp>mbl) { mbli = i; mbl = temp; }
@@ -81,7 +81,7 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	xlong bx = (XRES>>1) - (bw>>1);
 	xlong* by = new xlong[bc];
 	xlong bh = ((YRES - (YRES>>2))/bc);
-	for(uxlong j=0; j<bc; j++)
+	for(xlong j=0; j<bc; j++)
 	{
 		by[j] = (YRES>>2) + j*bh;
 	}
@@ -104,7 +104,7 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//*
 	
 	button = new CLbutton*[bc]; 
-	for(uxlong k=0; k<bc; k++)
+	for(xlong k=0; k<bc; k++)
 	{
 		button[k] = new CLbutton(bx,by[k],bw,bh,0x00FFFFFF,0x00808080,0x00808080,a[k],bt[k],0);
 	}
@@ -125,7 +125,7 @@ void CLmainmenu::draw() const //! critical
 {
 	clgfx->drawscreen(background);
 	header->draw();
-	for(uxlong i=0; i<buttoncount; i++) { button[i]->draw(); }
+	for(xlong i=0; i<buttoncount; i++) { button[i]->draw(); }
 	footer->draw();
 }
 ///*

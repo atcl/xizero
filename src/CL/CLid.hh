@@ -71,11 +71,11 @@ uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
 	r  = ~r;
 	l -= 4;
 
-	for(uxlong i=0; i<l; i++)
+	for(xlong i=0; i<l; i++)
 	{
 		o = *(d++);
 
-		for(uxlong j=0; j<8; j++)
+		for(xlong j=0; j<8; j++)
 		{
 			if (r & 0x80000000) { r = (r << 1) ^ crc32 ^ (o >> 7); }
 			else { r = (r << 1) ^ (o >> 7); }

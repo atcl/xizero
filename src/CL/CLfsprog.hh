@@ -62,9 +62,9 @@ void CLfsprogress::draw() const //! critical
 		xlong offset = 0;
 		xlong diff = -rprogress + XRES;
 		
-		for(uxlong i=0; i<YRES; i++,offset+=diff)
+		for(xlong i=0; i<YRES; i++,offset+=diff)
 		{
-			for(uxlong j=0; j<rprogress; j++,offset++) { clscreen->cldoublebuffer[offset] = clscreen->cldoublebuffer[offset] & pcolor; }
+			for(xlong j=0; j<rprogress; j++,offset++) { clscreen->cldoublebuffer[offset] = clscreen->cldoublebuffer[offset] & pcolor; }
 		}
 	}
 	//*

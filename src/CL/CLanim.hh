@@ -88,7 +88,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 	frame = new CLframe*[frames];
 	currframe = 0;
 	
-	for(uxlong i=0; i<frames; i++)
+	for(xlong i=0; i<frames; i++)
 	{
 		frame[i] = new CLframe;
 		frame[i]->duration = float(anicsv[anipointer]);

@@ -99,7 +99,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			//*
 
 			//fill array
-			for(uxlong i=0; i<fs2; i++) { tb[i] = bf2[i]; }
+			for(xlong i=0; i<fs2; i++) { tb[i] = bf2[i]; }
 			bc += fs;
 			//*
 
@@ -127,13 +127,13 @@ void CLar::loadar(CLfile* sf) //! noncritical
 		//*
 
 		//copy armembers to arfile
-		for(uxlong j=0; j<fc; j++) { members[j] = tindex[j]; }
+		for(xlong j=0; j<fc; j++) { members[j] = tindex[j]; }
 		//*
 	}
 	else { tty(__func__); say(u8"no \"!<arch>\" identifier found"); }
 }
 
-CLar::~CLar() { for(int i=0; i<filecount; i++) delete members[i]; } //! noncritical
+CLar::~CLar() { delete[] members; delete members; } //! noncritical
 
 CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {

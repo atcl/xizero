@@ -211,7 +211,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			b = y2;
 			if(a>b) { swap(&a,&b); }
 			offset = (a*XRES)+x1;
-			for(uxlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset] = c; offset+=XRES; }
+			for(xlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset] = c; offset+=XRES; }
 		break;
 		
 		case -1:
@@ -219,7 +219,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			b = x2;
 			if(a>b) { swap(&a,&b); }
 			offset = (y1*XRES);
-			for(uxlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset+i] = c; }
+			for(xlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset+i] = c; }
 		break;
 		
 		case 0:
@@ -232,7 +232,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			len = dx+1;
 			e = dy;
 
-			for(uxlong i=0; i<len; i++)
+			for(xlong i=0; i<len; i++)
 			{
 				clscreen->cldoublebuffer[offset] = c;
 				offset += xs;
@@ -257,7 +257,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			//*
 
 			//aa as in xiaolin wu
-			for(uxlong i=0; i<len; i++)
+			for(xlong i=0; i<len; i++)
 			{
 				tcolor.dd = clscreen->cldoublebuffer[offset-xs];
 				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
@@ -313,11 +313,11 @@ void CLgfx::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlon
 	uxlong c3     = c2;
 	if(f) c3 = 0x00FFFFFF - c2;
 
-	for(int i=y1; i<=y2; i++)
+	for(xlong i=y1; i<=y2; i++)
 	{
 		clscreen->cldoublebuffer[offset1] = c3;
 		offset1++;
-		for(int j=x1+1; j<x2; j++)
+		for(xlong j=x1+1; j<x2; j++)
 		{
 			clscreen->cldoublebuffer[offset1] = c1;
 			offset1++;
@@ -326,7 +326,7 @@ void CLgfx::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlon
 		offset1 += XRES - diff;
 	}
 
-	for(int k=x1; k<x2; k++)
+	for(xlong k=x1; k<x2; k++)
 	{
 		clscreen->cldoublebuffer[offset2] = c3;
 		clscreen->cldoublebuffer[offset2+doffset] = c2;
@@ -978,9 +978,9 @@ xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlon
 	//*
 
 	//drawloop
-	for(uxlong i=0; i<sheight ;i++)
+	for(xlong i=0; i<sheight ;i++)
 	{
-		for(uxlong j=0; j<swidth ;j++)
+		for(xlong j=0; j<swidth ;j++)
 		{
 			srcval = t[a]->data[linearc];
 			if(srcval == 0x00FF0000) clscreen->cldoublebuffer[xoffset+j] = fc;
@@ -1001,7 +1001,7 @@ void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxl
 	xlong l = clstring->length(a);
 	xlong t = x;
 	
-	for(uxlong i=0; i<l; i++)
+	for(xlong i=0; i<l; i++)
 	{
 		if(a[i]=='\n') { t = x; y += 16; }
 		else
@@ -1024,8 +1024,8 @@ xlong CLgfx::getfontstringwidth(const char* a,uxlong f) const //! critical
 	xlong r = 0;
 	uxlong srcoff = 0;
 	
-	for(uxlong i=0; i<l; i++)
-	{ for(uxlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
+	for(xlong i=0; i<l; i++)
+	{ for(xlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
 	
 	return r;
 }
@@ -1041,7 +1041,7 @@ xlong CLgfx::getfontstringheight(const char* a,uxlong f) const //! critical
 	xlong l = clstring->length(a);
 	xlong r = t[0]->height;
 	
-	for(uxlong i=0; i<l; i++) { if(a[i]=='\n') r += t[i]->height; }
+	for(xlong i=0; i<l; i++) { if(a[i]=='\n') r += t[i]->height; }
 	
 	return r;
 }

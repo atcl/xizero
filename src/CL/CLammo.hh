@@ -61,7 +61,7 @@ class CLammomanager : public CLbase<CLammomanager,0>
 	public:
 		CLammomanager(xlong atc,xlong* ats,xlong* m);
 		~CLammomanager();
-		void fire(uxlong ammotype,const CLfvector& startposition,const CLfvector direction);
+		void fire(xlong ammotype,const CLfvector& startposition,const CLfvector direction);
 		void update();
 		template<int I>void collision(CLentity<I>* e);
 		void display() const;
@@ -85,7 +85,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
 	//*
 	
 	//fill ammotypes
-	for(uxlong i=0; i<atc; i++)
+	for(xlong i=0; i<atc; i++)
 	{
 			ammotype[i] = new CLammo;
 			ammotype[i]->p = CLfvector();
@@ -105,7 +105,7 @@ CLammomanager::~CLammomanager() //! noncritical
 	delete[] ammotype;
 }
 
-void CLammomanager::fire(uxlong at,const CLfvector& startposition,const CLfvector direction) //! critical
+void CLammomanager::fire(xlong at,const CLfvector& startposition,const CLfvector direction) //! critical
 {
 	//append ammolist if ammotype exists
 	if(at<ammotypecount)

@@ -78,7 +78,7 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	visible = 1;
 }
 
-CLguibase::CLguibase(const CLguibase& c)
+CLguibase::CLguibase(const CLguibase& c) : CLbase<CLguibase,0>(c)
 {
 	posx = c.posx;
 	posy = c.posy;

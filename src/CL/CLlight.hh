@@ -95,9 +95,9 @@ CLlight::CLlight(xlong r,uxlong c) //! noncritical
 	
 	uxlong temp = 0;
 	xlong diff = r;
-	for(uxlong i=0; i<length; i++)
+	for(xlong i=0; i<length; i++)
 	{
-		for(uxlong j=0; j<length; j++)
+		for(xlong j=0; j<length; j++)
 		{
 			mask->data[(i*mask->width)+j] = lambertslaw(j-diff,i-diff);	
 		}

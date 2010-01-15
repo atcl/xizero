@@ -46,8 +46,8 @@ class CLstring : public CLbase<CLstring,1>
 		xlong find(const xchar* s,const xchar* f,xlong p=0) const;
 		uxlong hex(const xchar* s) const;
 		
-		xlong linecount(CLfile* s) const { linecount(s->text); };
-		xlong find(CLfile* s,const xchar* f,xlong p=0) const { find(s->text,f,p); };
+		xlong linecount(CLfile* s) const { return linecount(s->text); };
+		xlong find(CLfile* s,const xchar* f,xlong p=0) const { return find(s->text,f,p); };
 };
 ///*
 
@@ -56,7 +56,7 @@ xchar* CLstring::copy(const xchar* s,xlong l) const //! critical
 {
 	if(l==0) { while (s[l]) { l++; } }
 	xchar* r = new xchar[l+1];
-	for(uxlong i=0; i<l; i++) { r[i] = s[i]; }
+	for(xlong i=0; i<l; i++) { r[i] = s[i]; }
 	r[l] = 0;
 	return r;
 }
@@ -134,7 +134,7 @@ xlong CLstring::linecount(const xchar* s) const //! noncritical
 {
 	xlong c = 1;
 	xlong l = length(s);
-	for(uxlong i=0; i<l; i++) { if( s[i] == '\n' ) c++; }
+	for(xlong i=0; i<l; i++) { if( s[i] == '\n' ) c++; }
 	return c;
 }
 

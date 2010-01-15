@@ -216,7 +216,7 @@ bool CLlist<member>::seekdata(member* s) //! critical
 {
 	setfirst();
 
-	for(uxlong j=0;j<length;j++)
+	for(xlong j=0;j<length;j++)
 	{
 		if(current->data == s) { return 1; }
 		setnext();
@@ -281,7 +281,7 @@ template<class member>
 xlong CLlist<member>::setprev() //! noncritical
 {
 	//set previous member from current
-	if(length==0) return 0;
+	if(length==0) { return 0; }
 	current = current->prev;
 	return -1;
 	//*
@@ -295,9 +295,9 @@ void CLlist<member>::exchangesort(bool updown) //! noncritical
 	//sort descending
 	if(updown)
 	{
-		for(uxlong i=0; i<length-1; i++)
+		for(xlong i=0; i<length-1; i++)
 		{
-			for(uxlong j=(i+1); j<length; j++)
+			for(xlong j=(i+1); j<length; j++)
 			{
 				if(current->hash<current->next->hash)
 				{
@@ -317,9 +317,9 @@ void CLlist<member>::exchangesort(bool updown) //! noncritical
 	//sort ascending
 	else
 	{
-		for(uxlong i=0; i<length-1; i++)
+		for(xlong i=0; i<length-1; i++)
 		{
-			for(uxlong j=(i+1); j<length; j++)
+			for(xlong j=(i+1); j<length; j++)
 			{
 				if(current->hash>current->next->hash)
 				{

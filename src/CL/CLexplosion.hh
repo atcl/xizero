@@ -48,7 +48,7 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		xlong interval;
 		xlong step;
 		float transdir;
-		bool type;
+		xlong type;
 	public:
 		CLexplosion(CLobject* o);
 		~CLexplosion() { };

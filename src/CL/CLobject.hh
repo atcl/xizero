@@ -160,7 +160,7 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 			//*
 
 			//polygon read loop
-			for(uxlong j=0;j<localpolycount;j++,polycounter++)
+			for(xlong j=0;j<localpolycount;j++,polycounter++)
 			{
 				//read POLY tag ( 'POLY' , polygon_name , polygon_color , 0 )
 				if(dataptr[d] != 'POLY' ) err(__FILE__,__func__,u8"No POLY tag");
@@ -430,7 +430,7 @@ void CLobject::display(CLlvector p,xshort flags) //! noncritical
 	//display all polygons
 	else
 	{
-		for(uxlong i=0;i<polycount;i++)
+		for(xlong i=0;i<polycount;i++)
 		{
 			currnormal = polyptr[i]->getnormal();
 			if( !( (flags&XPLUS  && currnormal.x>0 && currnormal.y==0 && currnormal.z==0) ||

@@ -120,14 +120,14 @@ xchar** CLformat::loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const //!
 
 	//for each row create xchar array of line length
 	xchar** rev = new xchar*[lc];
-	for(uxlong i=0; i<lc; i++) { rev[i] = new xchar[lw]; }
+	for(xlong i=0; i<lc; i++) { rev[i] = new xchar[lw]; }
 	//*
 
 	//copy and manipulate contents depending on subconst,rc,rv
 	cc = 0;
-	for(uxlong j=0; j<lc; j++)
+	for(xlong j=0; j<lc; j++)
 	{
-		for(uxlong k=0; k<lw; k++)
+		for(xlong k=0; k<lw; k++)
 		{
 			if(bf[cc]!='\n')
 			{
@@ -287,7 +287,7 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	uxlong ctable[256];
 	uxchar cindex = 0;
 	uxlong currcol = 0;
-	for(uxlong i=1; i<colors; i++)
+	for(xlong i=1; i<colors; i++)
 	{
 		xpm_ptr = 0;
 		cindex = xpm[i][0];
@@ -305,7 +305,7 @@ sprite* CLformat::loadxpm(const xchar* xpm[]) const //! noncritical
 	//fill data
 	uxlong data_ptr = 0; 
 	height += colors;
-	for(uxlong j=colors; j<height; j++) { for(uxlong k=0; k<width; k++,data_ptr++) { r->data[data_ptr] = ctable[xpm[j][k]]; } }
+	for(xlong j=colors; j<height; j++) { for(xlong k=0; k<width; k++,data_ptr++) { r->data[data_ptr] = ctable[xpm[j][k]]; } }
 	//*
 
 	return r;
@@ -348,7 +348,7 @@ xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 	xlong fl[6] = { 0,0,0,0,0,0 };
 	bool marks = 0;
 	xlong fsc = 0;
-	for(uxlong i=0; i<sf->size; i++)
+	for(xlong i=0; i<sf->size; i++)
 	{
 		if(marks==0 && bf[i]=='"')
 		{
@@ -370,7 +370,7 @@ xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 	
 	//copy filenames to buffer
 	xchar** fn = new xchar*[6];
-	for(uxlong j=0; j<6; j++) { fn[j] = clstring->copy(fs[j],fl[j]); }
+	for(xlong j=0; j<6; j++) { fn[j] = clstring->copy(fs[j],fl[j]); }
 	//*
 	
 	return fn;
@@ -387,7 +387,7 @@ xmap* CLformat::loadini(CLfile* sf) const //! noncritical
 	//*
 	
 	xlong cc = 0;
-	for(uxlong i=0; i<lc; i++)
+	for(xlong i=0; i<lc; i++)
 	{
 		while(bf[cc]==' ') { cc++; }
 		
