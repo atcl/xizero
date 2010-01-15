@@ -58,54 +58,52 @@ class CLglobal : public CLbase<CLglobal,1>
 		CLglobal();
 		~CLglobal();
 	public:
-		static CLscreen* clscreen;		
-		static CLwindow* clwindow;
-		static CLsystem* clsystem;
-		static CLformat* clformat;
-		static CLmath*   clmath;
-		static CLgame*   clgame;
-		static CLmisc3d* clmisc3d;
-		static CLfloor*  clfloor;
-		static CLdetect* cldetect;
-		static CLfsprogress* clfsprogress;
-		static CLgamepad* clgamepad;
-		static CLgfx*    clgfx;
-		static CLtransitions* cltransitions;
-		static CLsound*  clsound;
-		static CLsprites* clsprites;
-		static CLid*     clid;
-		static CLstring* clstring;
-		static CLapp*    clapp;
-		static CLmsgbox* clmsgbox;
-		static CLintro*  clintro;
+		CLscreen* clscreen;		
+		CLwindow* clwindow;
+		CLsystem* clsystem;
+		CLformat* clformat;
+		CLmath*   clmath;
+		CLgame*   clgame;
+		CLmisc3d* clmisc3d;
+		CLfloor*  clfloor;
+		CLdetect* cldetect;
+		CLfsprogress* clfsprogress;
+		CLgamepad* clgamepad;
+		CLgfx*    clgfx;
+		CLtransitions* cltransitions;
+		CLsound*  clsound;
+		CLsprites* clsprites;
+		CLid*     clid;
+		CLstring* clstring;
+		CLapp*    clapp;
+		CLmsgbox* clmsgbox;
+		CLintro*  clintro;
 };
-
-CLscreen* CLglobal::clscreen = CLscreen::instance();
-CLwindow* CLglobal::clwindow = CLwindow::instance();
-CLsystem* CLglobal::clsystem = CLsystem::instance();
-CLformat* CLglobal::clformat = CLformat::instance();
-CLmath*   CLglobal::clmath   = CLmath::instance();
-CLgame*   CLglobal::clgame   = CLgame::instance();
-CLmisc3d* CLglobal::clmisc3d = CLmisc3d::instance();
-CLfloor*  CLglobal::clfloor  = CLfloor::instance();
-CLdetect* CLglobal::cldetect = CLdetect::instance();
-CLfsprogress* CLglobal::clfsprogress = CLfsprogress::instance();
-CLgamepad* CLglobal::clgamepad = CLgamepad::instance();
-CLgfx*    CLglobal::clgfx    = CLgfx::instance();
-CLtransitions* CLglobal::cltransitions = CLtransitions::instance();
-CLsound*  CLglobal::clsound  = CLsound::instance();
-CLsprites* CLglobal::clsprites = CLsprites::instance();
-CLid*     CLglobal::clid     = CLid::instance();
-CLstring* CLglobal::clstring = CLstring::instance();
-CLapp*    CLglobal::clapp    = CLapp::instance();
-CLmsgbox* CLglobal::clmsgbox = CLmsgbox::instance();
-CLintro*  CLglobal::clintro  = CLintro::instance();
 ///*
 
 ///implementation
 CLglobal::CLglobal() //! noncritical
 {
-	
+	clscreen = CLscreen::instance();
+	clwindow = CLwindow::instance();
+	clsystem = CLsystem::instance();
+	clformat = CLformat::instance();
+	clmath   = CLmath::instance();
+	clgame   = CLgame::instance();
+	clmisc3d = CLmisc3d::instance();
+	clfloor  = CLfloor::instance();
+	cldetect = CLdetect::instance();
+	clfsprogress = CLfsprogress::instance();
+	clgamepad = CLgamepad::instance();
+	clgfx    = CLgfx::instance();
+	cltransitions = CLtransitions::instance();
+	clsound  = CLsound::instance();
+	clsprites = CLsprites::instance();
+	clid     = CLid::instance();
+	clstring = CLstring::instance();
+	clapp    = CLapp::instance();
+	clmsgbox = CLmsgbox::instance();
+	clintro  = CLintro::instance();
 }
 	
 CLglobal::~CLglobal() //! noncritical
