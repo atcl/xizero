@@ -50,7 +50,7 @@ SET(unittestSrc
 )
 
 #add all header to project so they show up in qtcreator filelist
-FILE( GLOB_RECURSE header  "*.h?" )
+FILE( GLOB_RECURSE header RELATIVE ${xizero_SOURCE_DIR} "*.h?" )
 
 #----------------------------------------------------------------------------------------------------
 # Build target defintions
