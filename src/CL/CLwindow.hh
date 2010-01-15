@@ -133,14 +133,13 @@ void CLwindow::idle()
 	frame++;
 	time=glutGet(GLUT_ELAPSED_TIME);
 	
-	if(time-timebase>1000)
+	if(time-timebase>2000)
 	{
-		fps = frame*1000.0/(time-timebase);
+		fps = frame*2000.0/(time-timebase);
 	 	timebase = time;		
 		frame = 0;
+		tty("fps: "); say(xlong(fps));
 	}
-	
-	tty("fps: "); say(fps);
 }
 
 CLwindow::CLwindow() //! noncritical
@@ -153,7 +152,7 @@ CLwindow::CLwindow() //! noncritical
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
+	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
 	glutCreateWindow(TITLE);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutMouseFunc(setmouse);
@@ -163,7 +162,7 @@ CLwindow::CLwindow() //! noncritical
 	glut = 1;
 }
 
-void CLwindow::draw() { glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_INT,clscreen->cldoublebuffer.getbuffer()); } //! noncritical
+void CLwindow::draw() { glRasterPos2i(0,0); glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_INT_8_8_8_8,clscreen->cldoublebuffer.getbuffer()); } //! noncritical
 
 xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); } draw(); return 1; } //! noncritical
 
