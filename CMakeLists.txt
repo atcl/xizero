@@ -20,7 +20,7 @@ SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".lib" ".a")
 
 
 SET( EXTRA_FLAGS
-	"-fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time" CACHE STRING
+	"-fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time -Wextra -Wall -Weffc++" CACHE STRING
 	"" )
 
 FIND_PACKAGE(OpenAL REQUIRED)
