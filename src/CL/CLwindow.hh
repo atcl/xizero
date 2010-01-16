@@ -10,7 +10,7 @@
 
 ///sys includes
 #include <GL/gl.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 ///*
 
 ///api includes
@@ -52,7 +52,7 @@ class CLwindow : public CLbase<CLwindow,1>
 	protected:
 		bool  displaycursor;
 		sprite* cursor;
-		uxlong* framebuffer;
+		static uxlong* framebuffer;
 		bool  glut;
 		static xlong keydn;
 		static xlong keyup;
@@ -75,8 +75,8 @@ class CLwindow : public CLbase<CLwindow,1>
 		static void setkeys(uxchar key,xlong x,xlong y);
 		static void idle();
 	public:
-		void draw();
-		void run();
+		static void draw();
+		bool run();
 		void showcursor() { displaycursor = 1; };
 		void hidecursor() { displaycursor = 0; };
 		void setcursor(sprite* s) { cursor = s; };
@@ -112,6 +112,7 @@ float CLwindow::frame = 0;
 float CLwindow::time = 0;
 float CLwindow::timebase = 0;
 float CLwindow::fps = 0;
+uxlong* CLwindow::framebuffer = clscreen->cldoublebuffer.getbuffer();
 ///*
 
 ///implementation
@@ -154,7 +155,6 @@ CLwindow::CLwindow() //! noncritical
 {
 	cursor = 0;
 	displaycursor = 0;
-	framebuffer = clscreen->cldoublebuffer.getbuffer();
 	
 	xlong argc = 1;
     xchar *argv[] = { "xizero",NULL };
@@ -168,12 +168,13 @@ CLwindow::CLwindow() //! noncritical
 	glutMotionFunc(setmotion);
 	glutKeyboardFunc(setkeys);
 	glutIdleFunc(idle);
+	glutDisplayFunc(draw);
 	glut = 1;
 }
 
 void CLwindow::draw() //! noncritical
 {
-	if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
+	//if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
 	//glClear(GL_COLOR_BUFFER_BIT); // not necessary when full dump
 	glRasterPos2i(-1,1);
 	//glTranslatei(XRES/2,YRES/2,0); //alternative for glRasterPos2i
@@ -182,7 +183,7 @@ void CLwindow::draw() //! noncritical
 	glFlush();
 }
 
-void CLwindow::run() { glutMainLoop(); } //! noncritical //take care its called only one time
+bool CLwindow::run() { glutMainLoopEvent(); return 1; } //! noncritical
 
 //void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 

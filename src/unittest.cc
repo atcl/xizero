@@ -18,110 +18,6 @@ sprite* screens;
 CLfile* screenf;
 CLmenu* sysmenu;
 
-void show()
-{
-	uxchar k = clglobal->clwindow->getinkey();
-	say(k);
-	
-	switch(k)
-	{
-		case 0:
-		break;
-
-		//Translate:
-		case RIGHT:  cubus->getmatrix()->translate(2,0,0);  cubus->update(); break;
-		case LEFT:   cubus->getmatrix()->translate(-2,0,0); cubus->update(); break;
-		case UP:     cubus->getmatrix()->translate(0,2,0);  cubus->update(); break;
-		case DOWN: 	 cubus->getmatrix()->translate(0,-2,0); cubus->update(); break;
-		case PGUP:   cubus->getmatrix()->translate(0,0,2);	cubus->update(); break;
-		case PGDOWN: cubus->getmatrix()->translate(0,0,-2); cubus->update(); break;			
-
-		//Rotate:
-		case 'a':    cubus->getmatrix()->rotate(0,5,0);  cubus->update(); break;
-		case 'd':    cubus->getmatrix()->rotate(0,-5,0); cubus->update(); break;
-		case 'w':    cubus->getmatrix()->rotate(-5,0,0); cubus->update(); break;
-		case 's':    cubus->getmatrix()->rotate(5,0,0);  cubus->update(); break;
-		case 'q':    cubus->getmatrix()->rotate(0,0,-5); cubus->update(); break;
-		case 'e':    cubus->getmatrix()->rotate(0,0,5);  cubus->update(); break;
-
-		//Aspectscale:
-		case '7':    cubus->getmatrix()->aspectscale(1.1); cubus->update(); break;
-		case '8':    cubus->getmatrix()->aspectscale(0.9); cubus->update(); break;
-
-		//Scale
-		case '1':    cubus->getmatrix()->scale(1.1,1,1);    cubus->update(); break;
-		case '2':    cubus->getmatrix()->scale(0.9,1,1);    cubus->update(); break;
-		case '3':    cubus->getmatrix()->scale(1,1.1,1);    cubus->update(); break;
-		case '4':    cubus->getmatrix()->scale(1,0.9,1);    cubus->update(); break;
-		case '5':    cubus->getmatrix()->scale(1,1,1.1);    cubus->update(); break;
-		case '6':    cubus->getmatrix()->scale(1,1,0.9);    cubus->update(); break;
-
-		//Control:
-		//case '^':    mode = !mode; break;
-		case 'o':    sysmenu->show();
-		case '+':    cubus->reset(); ac = exp = 0; break;
-		case '-':    shadows = !shadows; break;
-		case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
-		case '.':    cubus->translatealongnormals(1.1); break;
-		case ',':    cubus->translatealongnormals(-1.1); break;
-		case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
-		case ' ':    clglobal->clsound->stop(); break;
-		case 'r':    clglobal->clsound->play(2); break;
-		case 'i':    
-			screens = clglobal->clgfx->savescreen();
-			screenf = clglobal->clformat->saveras(screens,"screen.im32");
-			say(clglobal->clsystem->writefile(screenf,1));
-		break;
-		//System:
-		case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
-	}
-
-	//render sequence:
-	//1. all non shadow objects (floor,terrain)
-	//2. all shadows of all shadow casting objects
-	//3. blend stencil to double
-	//4. all shadow casting objects
-
-	clglobal->clscreen->cldoublebuffer.clear(0);
-	clglobal->clscreen->clzbuffer.clear(ZRES);
-	clglobal->clscreen->clstencilbuffer.clear(0);
-
-	
-	clglobal->clgfx->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
-	clglobal->clgfx->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,90,"Use + for reseting",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,110,"Use # for exploding",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,130,"Use ^ for toggling between shading",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,150,"Use - for toggling between shadowing",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,170,"Use . and  , to translate along normals",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
-	clglobal->clgfx->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
-
-	if(shadows==1)
-	{
-		cubus->display(p,CENTER + SHADOW);
-		clglobal->clscreen->clstencilbuffer.copy(&clglobal->clscreen->cldoublebuffer,12);
-	}
-
-	if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
-	else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
-	
-	//~ for(xlong i=0; i<30; i++)
-	//~ //for(xlong i=25; i<50; i++)
-	//~ //for(xlong i=50; i<75; i++)
-	//~ //for(xlong i=75; i<90; i++)
-	//~ {
-		//~ terrows[i]->display(p,AMBIENT + FLAT + ZLIGHT);
-		//~ terrows[i]->display(p,SHAPE);
-	//~ }
-
-	cubus->getmatrix()->unit();
-	
-	clglobal->clwindow->draw();
-}
-
 int main(int argc, char** argv)
 {
 	const xchar* argfile = "dat/other/test.y3d";
@@ -166,8 +62,106 @@ int main(int argc, char** argv)
 	ex = new CLexplosion(cubus);
 	testl = new CLlight(50,0x00FF0000);
 	
-	clglobal->clwindow->setdisplay(show);
-	clglobal->clwindow->run();
+	while(clglobal->clwindow->run())
+	{
+		uxchar k = clglobal->clwindow->getinkey();
+		
+		switch(k)
+		{
+			case 0:
+			break;
+
+			//Translate:
+			case RIGHT:  cubus->getmatrix()->translate(2,0,0);  cubus->update(); break;
+			case LEFT:   cubus->getmatrix()->translate(-2,0,0); cubus->update(); break;
+			case UP:     cubus->getmatrix()->translate(0,2,0);  cubus->update(); break;
+			case DOWN: 	 cubus->getmatrix()->translate(0,-2,0); cubus->update(); break;
+			case PGUP:   cubus->getmatrix()->translate(0,0,2);	cubus->update(); break;
+			case PGDOWN: cubus->getmatrix()->translate(0,0,-2); cubus->update(); break;			
+
+			//Rotate:
+			case 'a':    cubus->getmatrix()->rotate(0,5,0);  cubus->update(); break;
+			case 'd':    cubus->getmatrix()->rotate(0,-5,0); cubus->update(); break;
+			case 'w':    cubus->getmatrix()->rotate(-5,0,0); cubus->update(); break;
+			case 's':    cubus->getmatrix()->rotate(5,0,0);  cubus->update(); break;
+			case 'q':    cubus->getmatrix()->rotate(0,0,-5); cubus->update(); break;
+			case 'e':    cubus->getmatrix()->rotate(0,0,5);  cubus->update(); break;
+
+			//Aspectscale:
+			case '7':    cubus->getmatrix()->aspectscale(1.1); cubus->update(); break;
+			case '8':    cubus->getmatrix()->aspectscale(0.9); cubus->update(); break;
+
+			//Scale
+			case '1':    cubus->getmatrix()->scale(1.1,1,1);    cubus->update(); break;
+			case '2':    cubus->getmatrix()->scale(0.9,1,1);    cubus->update(); break;
+			case '3':    cubus->getmatrix()->scale(1,1.1,1);    cubus->update(); break;
+			case '4':    cubus->getmatrix()->scale(1,0.9,1);    cubus->update(); break;
+			case '5':    cubus->getmatrix()->scale(1,1,1.1);    cubus->update(); break;
+			case '6':    cubus->getmatrix()->scale(1,1,0.9);    cubus->update(); break;
+
+			//Control:
+			//case '^':    mode = !mode; break;
+			case 'o':    sysmenu->show();
+			case '+':    cubus->reset(); ac = exp = 0; break;
+			case '-':    shadows = !shadows; break;
+			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
+			case '.':    cubus->translatealongnormals(1.1); break;
+			case ',':    cubus->translatealongnormals(-1.1); break;
+			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
+			case ' ':    clglobal->clsound->stop(); break;
+			case 'r':    clglobal->clsound->play(2); break;
+			case 'i':    
+				screens = clglobal->clgfx->savescreen();
+				screenf = clglobal->clformat->saveras(screens,"screen.im32");
+				say(clglobal->clsystem->writefile(screenf,1));
+			break;
+			//System:
+			case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
+		}
+
+		//render sequence:
+		//1. all non shadow objects (floor,terrain)
+		//2. all shadows of all shadow casting objects
+		//3. blend stencil to double
+		//4. all shadow casting objects
+
+		clglobal->clscreen->cldoublebuffer.clear(0);
+		clglobal->clscreen->clzbuffer.clear(ZRES);
+		clglobal->clscreen->clstencilbuffer.clear(0);
+
+		
+		clglobal->clgfx->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
+		clglobal->clgfx->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,50,"Use 7,8 for aspect-scaling",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,70,"Use arrow keys and scroll-up/down for translating",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,90,"Use + for reseting",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,110,"Use # for exploding",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,130,"Use ^ for toggling between shading",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,150,"Use - for toggling between shadowing",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,170,"Use . and  , to translate along normals",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,190,"Use < anti-cyclicly rotate vertices",2,0x00FFFFFF);
+		clglobal->clgfx->drawfontstring(100,210,"Use 0 to exit",2,0x00FFFFFF);
+
+		if(shadows==1)
+		{
+			cubus->display(p,CENTER + SHADOW);
+			clglobal->clscreen->clstencilbuffer.copy(&clglobal->clscreen->cldoublebuffer,12);
+		}
+
+		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
+		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
+		
+		//~ for(xlong i=0; i<30; i++)
+		//~ //for(xlong i=25; i<50; i++)
+		//~ //for(xlong i=50; i<75; i++)
+		//~ //for(xlong i=75; i<90; i++)
+		//~ {
+			//~ terrows[i]->display(p,AMBIENT + FLAT + ZLIGHT);
+			//~ terrows[i]->display(p,SHAPE);
+		//~ }
+
+		cubus->getmatrix()->unit();
+	}
 
 	//exit sequence
 	//~ CLsound::exit();
