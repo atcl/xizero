@@ -34,7 +34,7 @@ const static char* CLicon[] =
 "..#++######++#..",
 "...##++++++##...",
 ".....######....."
-};
+}; 
 
 //xpm xizero mouse cursor
 const static char* CLxzcursor[] = 
