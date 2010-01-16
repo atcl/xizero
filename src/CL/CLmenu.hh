@@ -52,11 +52,12 @@ class CLmenu : public CLbase<CLmenu,0>
 		CLbutton* exit;
 		CLbutton* info;
 		CLbutton* about;
+		static void wrapper(void* me);
+		static void draw();
 	public:
 		CLmenu();
 		~CLmenu();
 		void show();
-		static void wrapper(void* me);
 		uxchar getsyskey() const { return syskey; };
 };
 
@@ -111,18 +112,18 @@ void CLmenu::show() //! noncritical
 	about->setvisible(1);
 	//*
 	
-	while(clwindow->run())
-	{
-		if(clwindow->getinkey()==SPACE) { break; }
-		CLbutton::checkclick();
-		clgfx->drawscreen(back);
-		title->draw();
-		clgfx->drawsprite(2,2,icon);
-		exit->draw();
-		clgfx->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
-		info->draw();
-		about->draw();
-	}
+	//~ while(clwindow->run())
+	//~ {
+		//~ if(clwindow->getinkey()==SPACE) { break; }
+		//~ CLbutton::checkclick();
+		//~ clgfx->drawscreen(back);
+		//~ title->draw();
+		//~ clgfx->drawsprite(2,2,icon);
+		//~ exit->draw();
+		//~ clgfx->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
+		//~ info->draw();
+		//~ about->draw();
+	//~ }
 	
 	//activate mouse cursor and activate buttons
 	clwindow->hidecursor();

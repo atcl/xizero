@@ -52,33 +52,35 @@ class CLwindow : public CLbase<CLwindow,1>
 	protected:
 		bool  displaycursor;
 		sprite* cursor;
-		static uxchar* framebuffer;
-		static bool  glut;
-		static xlong keydn;
-		static xlong keyup;
-		static xlong turbo;
-		static xlong mousex;
-		static xlong mousey;
-		static xlong mouselb;	
-		static xlong mouserb;
+		uxlong* framebuffer;
+		bool  glut;
+		xlong keydn;
+		xlong keyup;
+		xlong turbo;
+		xlong mousex;
+		xlong mousey;
+		xlong mouselb;	
+		xlong mouserb;
 		//~ static uxchar syskey;
 		//~ static void (*sysmenu)(void* o);
 		//~ static void* sysobj;
-		static float frame;
-		static float time;
-		static float timebase;
-		static float fps;
+		float frame;
+		float time;
+		float timebase;
+		float fps;
 		CLwindow();
 		~CLwindow() { };
-		static void setmouse(xlong button,xlong state,xlong x,xlong y);
-		static void setkeys(uxchar key,xlong x,xlong y);
-		static void idle();
+		void setmouse(xlong button,xlong state,xlong x,xlong y);
+		void setmotion(xlong x,xlong y);
+		void setkeys(uxchar key,xlong x,xlong y);
+		void idle();
 	public:
-		static void draw();
-		xlong run();
+		void draw();
+		void run();
 		void showcursor() { displaycursor = 1; };
 		void hidecursor() { displaycursor = 0; };
 		void setcursor(sprite* s) { cursor = s; };
+		void setdisplay(void (*f)(void)) { glutDisplayFunc(f); };
 		xlong getinkey() { xlong temp = keydn; keydn = 0; return temp; };
 		xlong getturbo() { return turbo; };
 		xlong getmousex() const { return mousex; };
@@ -89,29 +91,16 @@ class CLwindow : public CLbase<CLwindow,1>
 		xlong getmilliseconds() const { return glutGet(GLUT_ELAPSED_TIME); };
 		void sleep(xlong ms) const;
 		xlong getfps();
-		static bool isglut() { return glut; };
+		bool isglut() { return glut; };
 };
 
 CLformat* CLwindow::clformat = CLformat::instance();
 CLapp*    CLwindow::clapp    = CLapp::instance();
 CLgfx*    CLwindow::clgfx    = CLgfx::instance();
 CLscreen* CLwindow::clscreen = CLscreen::instance();
-bool  CLwindow::glut = 0;
-xlong CLwindow::keydn = 0;
-xlong CLwindow::keyup = 0;
-xlong CLwindow::turbo = 0;
-xlong CLwindow::mousex = 0;
-xlong CLwindow::mousey = 0;
-xlong CLwindow::mouselb = 0;	
-xlong CLwindow::mouserb = 0;
 //~ uxchar CLwindow::syskey = 0;
 //~ void (*sysmenu)(void* o) = empty;
 //~ void* CLwindow::sysobj = 0;
-float CLwindow::frame = 0;
-float CLwindow::time = 0;
-float CLwindow::timebase = 0;
-float CLwindow::fps = 0;
-uxchar* CLwindow::framebuffer = 0;
 ///*
 
 ///implementation
@@ -121,6 +110,12 @@ void CLwindow::setmouse(xlong button,xlong state,xlong x,xlong y) //! noncritica
 	mousey = y;
 	mouselb = (state==GLUT_DOWN) && (button==GLUT_LEFT_BUTTON);
 	mouserb = (state==GLUT_DOWN) && (button==GLUT_RIGHT_BUTTON);
+}
+
+void CLwindow::setmotion(xlong x,xlong y) //! noncritical
+{
+	mousex = x;
+	mousey = y;
 }
 
 void CLwindow::setkeys(uxchar key,xlong x,xlong y) //! noncritical
@@ -148,7 +143,7 @@ CLwindow::CLwindow() //! noncritical
 {
 	cursor = 0;
 	displaycursor = 0;
-	framebuffer = (uxchar*)(clscreen->cldoublebuffer.getbuffer());
+	framebuffer = clscreen->cldoublebuffer.getbuffer();
 	
 	xlong argc = 1;
     xchar *argv[] = { "xizero",NULL };
@@ -159,22 +154,21 @@ CLwindow::CLwindow() //! noncritical
 	glutCreateWindow(TITLE);
 	//~ glutSetCursor(GLUT_CURSOR_NONE);
 	//~ glutMouseFunc(setmouse);
+	//~ glutMotionFunc(setmotion);
 	//~ glutKeyboardFunc(setkeys);
 	//~ glutIdleFunc(idle);
-	glutDisplayFunc(draw);
-	glutMainLoop();
 	glut = 1;
 }
 
 void CLwindow::draw() //! noncritical
 {
+	if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
 	//glClear(GL_COLOR_BUFFER_BIT);
 	glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer); 
 	glFlush();
-	say("hi");
 }
 
-xlong CLwindow::run() { if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); } draw(); return 1; } //! noncritical
+void CLwindow::run() { glutMainLoop(); } //! noncritical
 
 //void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 

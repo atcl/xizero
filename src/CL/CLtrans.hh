@@ -47,10 +47,11 @@ class CLtransitions : public CLbase<CLtransitions,1>
 	protected:
 		CLtransitions() { };
 		~CLtransitions() { };
+		static void circleblend(xlong x,xlong y,xlong r,xlong t);
+		static void dissolve();
+		static void fadetoblack();
 	public:
-		void circleblend(xlong x,xlong y,xlong r,xlong t) const;
-		void dissolve() const;
-		void fadetoblack() const;
+		void transition(xlong t) const;
 };
 
 CLwindow* CLtransitions::clwindow = CLwindow::instance();
@@ -61,27 +62,21 @@ CLscreen* CLtransitions::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
-void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t) const //! critical
+void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t) //! critical
 {
-	bool secondtime = 0;
-	
-	while(clwindow->run())
-	{
-		if(secondtime) { clwindow->sleep(t); break; }
-		clgfx->drawcircle(x,y,r,0x00FFFFFF);
-		clgfx->fill(5,30,0,0x00FFFFFF);
-		secondtime = 1;
-	}
+	clgfx->drawcircle(x,y,r,0x00FFFFFF);
+	clgfx->fill(5,30,0,0x00FFFFFF);
+	clwindow->draw();
+	clwindow->sleep(t/1000);
 }
 
-void CLtransitions::dissolve() const //! critical
+void CLtransitions::dissolve() //! critical
 {
 	xlong rx = 0;
 	xlong ry = 0;
 	uxlong c = 0;
-	uxlong i = 0;
 	
-	while(clwindow->run() && i<256)
+	for(xlong i=0; i<256; i++)
 	{
 		for(xlong j=0; j<1000; j++)
 		{
@@ -90,17 +85,16 @@ void CLtransitions::dissolve() const //! critical
 			c = clmath->random(-1);
 			clgfx->drawpixel(rx,ry,c,1);
 		}
-		i++;
+		clwindow->draw();
 		clwindow->sleep(10);
 	}
 }
 
-void CLtransitions::fadetoblack() const //! critical
+void CLtransitions::fadetoblack() //! critical
 {
 	doubleword comp = { 0 };
-	uxlong i = 0;
 	
-	while(clwindow->run() && i<256)
+	for(xlong i=0; i<256; i++)
 	{		
 		for(xlong j=0; j<(XRES*YRES); j++)
 		{
@@ -111,8 +105,19 @@ void CLtransitions::fadetoblack() const //! critical
 			if(comp.db[3] > 0) comp.db[3]--;
 			clscreen->cldoublebuffer[j] = comp.dd;
 		}
-		i++;
+		clwindow->draw();
 		clwindow->sleep(5);
+	}
+}
+
+void CLtransitions::transition(xlong t) const
+{
+	switch(t)
+	{
+		case 0: clwindow->setdisplay(dissolve); break;
+		case 1: clwindow->setdisplay(fadetoblack); break;
+		case 2: clwindow->setdisplay(dissolve); break;
+		default: return; break;
 	}
 }
 ///*

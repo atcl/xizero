@@ -87,12 +87,12 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	if(winheight<100) winheight = 100;
 	if(winheight>600) winheight = 600;
 	
-	if(CLwindow::isglut()==0)
-	{
-		xlong argc = 1;
-		xchar *argv[] = { "xizero",NULL };
-		glutInit(&argc,argv);
-	}
+	//~ if(clwindow->isglut()==0)
+	//~ {
+		//~ xlong argc = 1;
+		//~ xchar *argv[] = { "xizero",NULL };
+		//~ glutInit(&argc,argv);
+	//~ }
 	
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(winwidth,winheight);

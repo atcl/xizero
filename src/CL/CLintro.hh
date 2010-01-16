@@ -45,23 +45,27 @@ class CLintro : public CLbase<CLintro,1>
 	protected:
 		CLintro() { };
 		~CLintro() { };
+		static CLfile* source;
+		static void atcrosslevel();
+		static void xizero();
+		static void torus();
 	public:
-		void atcrosslevel(CLfile* sf) const;
-		void xizero(CLfile* sf) const;
-		void torus() const;
+		void intro(xlong t,CLfile* f) const;
 };
 
 CLgfx *   CLintro::clgfx    = CLgfx::instance();
 CLwindow* CLintro::clwindow = CLwindow::instance();
 CLsystem* CLintro::clsystem = CLsystem::instance();
 CLscreen* CLintro::clscreen = CLscreen::instance();
+
+CLfile* CLintro::source = 0;
 ///*
 
 ///implementation
-void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
+void CLintro::atcrosslevel() //! noncritical
 {
 	//load atcrosslevel model
-	CLar* introar = new CLar(sf);
+	CLar* introar = new CLar(source);
 	CLfile *cf = introar->findbyname(u8"atcl.y3d");
 	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
@@ -82,25 +86,26 @@ void CLintro::atcrosslevel(CLfile* sf) const //! noncritical
 	
 	//run animation
 	bool skip = 0;
-	while(clwindow->run())
+	while(true)
 	{
 		if(clwindow->getinkey()==SPACE) { skip = 1; break; }
 		if(atcl_intro->run()==0) { break; }
+		clwindow->draw();
 	}
 	
 	if(skip==0)
 	{
 		clgfx->drawfontstring(x,100,title,4,0x00800000);
-		clwindow->run();
+		clwindow->draw();
 		clwindow->sleep(4000);
 	}
 	//*
 }
 
-void CLintro::xizero(CLfile* sf) const //! noncritical
+void CLintro::xizero() //! noncritical
 {
 	//load atcrosslevel model
-	CLar* introar = new CLar(sf);
+	CLar* introar = new CLar(source);
 	CLfile* fxi = introar->findbyname(u8"xi.y3d");
 	CLobject* oxi = new CLobject(fxi,0);
 	CLfile* fzero = introar->findbyname(u8"zero.y3d");
@@ -121,7 +126,7 @@ void CLintro::xizero(CLfile* sf) const //! noncritical
 	xlong r = 0;
 	CLlvector position;
 	position = 0;
-	while(clwindow->run())
+	while(true)
 	{
 		//clear buffers
 		clscreen->cldoublebuffer.clear(0);
@@ -137,12 +142,13 @@ void CLintro::xizero(CLfile* sf) const //! noncritical
 		ozero->display(izero->getposition(),SHAPE + AMBIENT + ZLIGHT);
 		//*
 		
+		clwindow->draw();
 		if(r==0) break;
 	}
 	//*
 }
 
-void CLintro::torus() const
+void CLintro::torus()
 {
 	//build torus
 	
@@ -155,6 +161,19 @@ void CLintro::torus() const
 	//play animation
 	
 	//*
+}
+
+void CLintro::intro(xlong t,CLfile* f) const
+{
+	source = f;
+	
+	switch(t)
+	{
+		case 0: clwindow->setdisplay(atcrosslevel); break;
+		case 1: clwindow->setdisplay(xizero); break;
+		case 2: clwindow->setdisplay(torus); break;
+		default: return; break;
+	}
 }
 ///*
 
