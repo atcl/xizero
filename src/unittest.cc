@@ -20,9 +20,10 @@ CLmenu* sysmenu;
 
 void show()
 {
-	if(clglobal->clwindow->getmouselb()!=0) CLbutton::checkclick();
-		
-	switch(clglobal->clwindow->getturbo())
+	uxchar k = clglobal->clwindow->getinkey();
+	say(k);
+	
+	switch(k)
 	{
 		case 0:
 		break;
@@ -73,11 +74,6 @@ void show()
 		break;
 		//System:
 		case '0':    xlong rval = clglobal->clmsgbox->msgbox("hi","bye"); clglobal->clapp->exit(rval,"user : exit"); break;
-	}
-	
-	switch(clglobal->clwindow->getinkey())
-	{
-		
 	}
 
 	//render sequence:

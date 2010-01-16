@@ -54,26 +54,26 @@ class CLwindow : public CLbase<CLwindow,1>
 		sprite* cursor;
 		uxlong* framebuffer;
 		bool  glut;
-		xlong keydn;
-		xlong keyup;
-		xlong turbo;
-		xlong mousex;
-		xlong mousey;
-		xlong mouselb;	
-		xlong mouserb;
+		static xlong keydn;
+		static xlong keyup;
+		static xlong turbo;
+		static xlong mousex;
+		static xlong mousey;
+		static xlong mouselb;	
+		static xlong mouserb;
 		//~ static uxchar syskey;
 		//~ static void (*sysmenu)(void* o);
 		//~ static void* sysobj;
-		float frame;
-		float time;
-		float timebase;
-		float fps;
+		static float frame;
+		static float time;
+		static float timebase;
+		static float fps;
 		CLwindow();
 		~CLwindow() { };
-		void setmouse(xlong button,xlong state,xlong x,xlong y);
-		void setmotion(xlong x,xlong y);
-		void setkeys(uxchar key,xlong x,xlong y);
-		void idle();
+		static void setmouse(xlong button,xlong state,xlong x,xlong y);
+		static void setmotion(xlong x,xlong y);
+		static void setkeys(uxchar key,xlong x,xlong y);
+		static void idle();
 	public:
 		void draw();
 		void run();
@@ -101,6 +101,17 @@ CLscreen* CLwindow::clscreen = CLscreen::instance();
 //~ uxchar CLwindow::syskey = 0;
 //~ void (*sysmenu)(void* o) = empty;
 //~ void* CLwindow::sysobj = 0;
+xlong CLwindow::keydn = 0;
+xlong CLwindow::keyup = 0;
+xlong CLwindow::turbo = 0;
+xlong CLwindow::mousex = 0;
+xlong CLwindow::mousey = 0;
+xlong CLwindow::mouselb = 0;	
+xlong CLwindow::mouserb = 0;
+float CLwindow::frame = 0;
+float CLwindow::time = 0;
+float CLwindow::timebase = 0;
+float CLwindow::fps = 0;
 ///*
 
 ///implementation
@@ -152,11 +163,11 @@ CLwindow::CLwindow() //! noncritical
 	glutInitWindowSize(XRES,YRES);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
 	glutCreateWindow(TITLE);
-	glutSetCursor(GLUT_CURSOR_NONE);
-	//~ glutMouseFunc(setmouse);
-	//~ glutMotionFunc(setmotion);
-	//~ glutKeyboardFunc(setkeys);
-	//~ glutIdleFunc(idle);
+	//~ glutSetCursor(GLUT_CURSOR_NONE);
+	glutMouseFunc(setmouse);
+	glutMotionFunc(setmotion);
+	glutKeyboardFunc(setkeys);
+	glutIdleFunc(idle);
 	glut = 1;
 }
 
@@ -171,7 +182,7 @@ void CLwindow::draw() //! noncritical
 	glFlush();
 }
 
-void CLwindow::run() { glutMainLoop(); } //! noncritical //take its called only one time
+void CLwindow::run() { glutMainLoop(); } //! noncritical //take care its called only one time
 
 //void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 
