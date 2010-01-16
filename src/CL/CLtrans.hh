@@ -47,11 +47,10 @@ class CLtransitions : public CLbase<CLtransitions,1>
 	protected:
 		CLtransitions() { };
 		~CLtransitions() { };
-		static void circleblend(xlong x,xlong y,xlong r,xlong t);
-		static void dissolve();
-		static void fadetoblack();
 	public:
-		void transition(xlong t) const;
+		void circleblend(xlong x,xlong y,xlong r,xlong t) const;
+		void dissolve() const;
+		void fadetoblack() const;
 };
 
 CLwindow* CLtransitions::clwindow = CLwindow::instance();
@@ -62,15 +61,15 @@ CLscreen* CLtransitions::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
-void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t) //! critical
+void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t) const //! critical
 {
 	clgfx->drawcircle(x,y,r,0x00FFFFFF);
 	clgfx->fill(5,30,0,0x00FFFFFF);
-	clwindow->draw();
+	clwindow->run();
 	clwindow->sleep(t/1000);
 }
 
-void CLtransitions::dissolve() //! critical
+void CLtransitions::dissolve() const //! critical
 {
 	xlong rx = 0;
 	xlong ry = 0;
@@ -85,12 +84,12 @@ void CLtransitions::dissolve() //! critical
 			c = clmath->random(-1);
 			clgfx->drawpixel(rx,ry,c,1);
 		}
-		clwindow->draw();
+		clwindow->run();
 		clwindow->sleep(10);
 	}
 }
 
-void CLtransitions::fadetoblack() //! critical
+void CLtransitions::fadetoblack() const //! critical
 {
 	doubleword comp = { 0 };
 	
@@ -105,19 +104,8 @@ void CLtransitions::fadetoblack() //! critical
 			if(comp.db[3] > 0) comp.db[3]--;
 			clscreen->cldoublebuffer[j] = comp.dd;
 		}
-		clwindow->draw();
+		clwindow->run();
 		clwindow->sleep(5);
-	}
-}
-
-void CLtransitions::transition(xlong t) const
-{
-	switch(t)
-	{
-		case 0: clwindow->setdisplay(dissolve); break;
-		case 1: clwindow->setdisplay(fadetoblack); break;
-		case 2: clwindow->setdisplay(dissolve); break;
-		default: return; break;
 	}
 }
 ///*

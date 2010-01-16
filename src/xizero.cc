@@ -14,8 +14,8 @@ int main()
 	//*
 
 	//intros
-	clglobal->clintro->intro(0,cldata->findbyname("intro.a"));
-	clglobal->clintro->intro(1,cldata->findbyname("intro.a"));
+	clglobal->clintro->atcrosslevel(cldata->findbyname("intro.a"));
+	clglobal->clintro->xizero(cldata->findbyname("intro.a"));
 	//*
 	
 	//mainmenu
@@ -28,7 +28,7 @@ int main()
 	{
 		CLbutton::checkclick();
 		xzmainmenu->draw();
-		clglobal->clwindow->draw();
+		clglobal->clwindow->run();
 	}
 	//*
 

@@ -356,11 +356,11 @@ CLobject::~CLobject() //! noncritical
 void CLobject::update() //! noncritical
 {
 	//transform each polygon
-	for(xlong i=0;i<polycount;i++) { polyptr[i]->update(linear,0); }
+	for(xlong i=0; i<polycount; i++) { polyptr[i]->update(linear,0); }
 	//*
 
 	//transform each docking point
-	for(xlong j=0;j<dockcount;j++) { *dockptr[j] = linear->transform(*dockptr[j]); }
+	for(xlong j=0; j<dockcount; j++) { *dockptr[j] = linear->transform(*dockptr[j]); }
 	//*
 
 	//transform bounding box

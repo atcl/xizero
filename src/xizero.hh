@@ -30,11 +30,11 @@ void newgame()
 	sprite* introscreen = 0;
 	introscreen = clglobal->clformat->loadras(screens->findbyname("intro000.ras"));
 	clglobal->clgfx->drawscreen(introscreen);
-	clglobal->clwindow->draw();
+	clglobal->clwindow->run();
 	clglobal->clwindow->sleep(1000);
 	clglobal->clfsprogress->set(10);
 	clglobal->clfsprogress->draw();
-	clglobal->clwindow->draw();
+	clglobal->clwindow->run();
 	//*
 	
 	//load and init level
@@ -43,7 +43,7 @@ void newgame()
 	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),cldata->findbyname(lfn[5]),currlevel);
 	clglobal->clfsprogress->set(90);
 	clglobal->clfsprogress->draw();
-	clglobal->clwindow->draw();
+	clglobal->clwindow->run();
 	//*
 	
 	//init level floor
@@ -51,7 +51,7 @@ void newgame()
 	clglobal->clfloor->init(100,670,floorcolor,1);
 	clglobal->clfsprogress->set(100);
 	clglobal->clfsprogress->draw();
-	clglobal->clwindow->draw();
+	clglobal->clwindow->run();
 	clglobal->clwindow->sleep(1000);
 	//*
 	
@@ -77,7 +77,7 @@ void newgame()
 							"Esc:              Quit XiZero\n"
 							"After pressing OK the game will start immediately!";
 							
-	if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) testlevel->start();
+	//if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) testlevel->start();
 	//*
 	
 	//game loop
@@ -85,7 +85,7 @@ void newgame()
 	
 	CLmenu* sysmenu = new CLmenu();
 	
-	while(gamestate>0) 
+	while(clglobal->clwindow->run() && gamestate>0) 
 	{
 		//check input
 		turbo = clglobal->clwindow->getturbo();
@@ -96,7 +96,7 @@ void newgame()
 		//grab system keys and update level
 		switch(input)
 		{
-			case 27: exitgame(); break;
+			case ESC: exitgame(); break;
 			
 			case 'p': testlevel->pause(); break;
 			
@@ -137,8 +137,6 @@ void newgame()
 			//~ break;
 			//~ //*
 		//~ }
-		
-		clglobal->clwindow->draw();
 	}
 	//*
 	
@@ -147,7 +145,7 @@ void newgame()
 	delete sysmenu;
 	//*
 	
-	clglobal->cltransitions->transition(1);
+	clglobal->cltransitions->fadetoblack();
 	
 	sprite* overscreen = 0;
 	switch(gamestate)
@@ -156,7 +154,7 @@ void newgame()
 		case 0:
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gamewon.ras"));
 			clglobal->clgfx->drawscreen(overscreen);
-			clglobal->clwindow->draw();
+			clglobal->clwindow->run();
 			clglobal->clwindow->sleep(11000);
 		break;
 		//*
@@ -165,13 +163,13 @@ void newgame()
 		case -1:
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gameover.ras"));
 			clglobal->clgfx->drawscreen(overscreen);
-			clglobal->clwindow->draw();
+			clglobal->clwindow->run();
 			clglobal->clwindow->sleep(11000);
 		break;
 		//*
 	}
 	
-	clglobal->cltransitions->transition(0);
+	clglobal->cltransitions->dissolve();
 	
 	clglobal->clwindow->showcursor();
 	

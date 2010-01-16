@@ -82,7 +82,7 @@ class CLpolygon : CLbase<CLpolygon,0>
 		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
 		CLpolygon(const CLpolygon& c);
 		~CLpolygon() { };
-		void update(CLmatrix* m,bool i);
+		void update(CLmatrix* m,bool i=0);
 		void partupdate(CLmatrix* m);
 		void display(const CLlvector& p,xshort flags);
 		void display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer* b,xlong h);
@@ -693,7 +693,7 @@ void CLpolygon::display(const CLlvector& p,screenside* l,screenside* r,CLfbuffer
 	rightside = backup_right;
 }
 
-void CLpolygon::update(CLmatrix* m,bool i=0) //! noncritical
+void CLpolygon::update(CLmatrix* m,bool i) //! noncritical
 {
 	switch(i)
 	{

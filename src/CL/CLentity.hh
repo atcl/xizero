@@ -151,7 +151,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	//load entity archive 
 	CLar* entitya = new CLar(ea);
 	//*
-
+	
 	//for each model
 	CLfile* entitymodelfile = 0;
 	const xchar* testext[2] = { u8"0.y3d",u8"1.y3d" };
@@ -232,8 +232,6 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	active = 0;
 	shieldupdate = lastupdate = clwindow->getmilliseconds();
 	//*
-	
-	delete entitya; 
 }
 
 template<int I>

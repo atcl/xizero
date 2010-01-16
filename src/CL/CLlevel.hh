@@ -125,7 +125,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	CLar* terraina = new CLar(terrainlib);
 	uxlong terraincount = terraina->getfilecount();
 	terrain = new CLobject*[terraincount];
-	for(xlong g=0; g<terraincount; g++) { terrain[g] = new CLobject(terraina->getmember(g),1); }
+	for(uxlong g=0; g<terraincount; g++) { terrain[g] = new CLobject(terraina->getmember(g),1); }
 	//*
 
 //***
@@ -197,9 +197,9 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//*
 
 	//render landscape
-	for(xlong i=0; i<levelheight; i++)
+	for(uxlong i=0; i<levelheight; i++)
 	{
-		for(xlong j=0; j<levelwidth; j++)
+		for(uxlong j=0; j<levelwidth; j++)
 		{
 			currentterrain = xlong(levellayers[0][i][j]);
 			if(currentterrain != -1)
@@ -208,7 +208,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 				currententity = levellayers[2][i][j];
 				if(currentheight!=0)
 				{
-					for(xlong k=1; k<=currentheight; k++)
+					for(int k=1; k<=currentheight; k++)
 					{
 						terrain[0]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
 						current.z -= blockdepth>>2;
@@ -225,7 +225,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 		current.y += blockheight;	
 	}
 	//*
-	
+
 //***
 
 //player:
@@ -233,9 +233,9 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//search player start pos and set player pos to it
 	bool startposfound = false;
 	CLlvector* playerp = new CLlvector();
-	for(xlong h=0; h<levelheight; h++)
+	for(uxlong h=0; h<levelheight; h++)
 	{
-		for(xlong i=0; i<levelwidth; i++)
+		for(uxlong i=0; i<levelwidth; i++)
 		{
 			if(levellayers[2][h][i] == -2)
 			{
@@ -247,7 +247,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 			}
 		}
 	}
-	if(startposfound==false) err(__FILE__,__func__,u8"no player start position found in entity map");
+	if(startposfound==false) { err(__FILE__,__func__,u8"no player start position found in entity map"); }
 	//*
 
 	//create player
@@ -274,11 +274,11 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	enemies = new CLenemylist();
 	CLenemy* currentenemy;
 	CLlvector* enemyp = new CLlvector();
-	for(xlong l=0; l<differentenemies; l++)
+	for(uxlong l=0; l<differentenemies; l++)
 	{ 
-		for(xlong m=0; m<levelheight; m++)
+		for(uxlong m=0; m<levelheight; m++)
 		{
-			for(xlong n=0; n<levelwidth; n++)
+			for(uxlong n=0; n<levelwidth; n++)
 			{
 				if(levellayers[2][m][n] == l)
 				{
@@ -292,7 +292,7 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 		}
 	}
 	//*
-	
+
 //***
 	
 //boss
@@ -304,9 +304,9 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//search player start pos and set player pos to it
 	bool bossposfound = false;
 	CLlvector* bossp = new CLlvector();
-	for(xlong h=0; h<levelheight; h++)
+	for(uxlong h=0; h<levelheight; h++)
 	{
-		for(xlong i=0; i<levelwidth; i++)
+		for(uxlong i=0; i<levelwidth; i++)
 		{
 			if(levellayers[2][h][i] == -1)
 			{
@@ -328,14 +328,14 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 //***
 	
 	//release loaded files
-	delete enemiesa;
-	delete bossa;
-	delete levela;
-	delete enemyp;
-	delete bossp;
-	delete playerp;
-	delete[] templevelrside;
-	delete[] templevellside;
+	//~ delete enemiesa;
+	//~ delete bossa;
+	//~ delete levela;
+	//~ delete enemyp;
+	//~ delete bossp;
+	//~ delete playerp;
+	//~ delete[] templevelrside;
+	//~ delete[] templevellside;
 	//*
 
 //***
@@ -763,7 +763,7 @@ void CLlevel::display() //! critical
 
 	//render level to screen block by block
 	linear->unit();
-	for(xlong i=-1; i<blocksperscreeny+2; i++)
+	for(int i=-1; i<blocksperscreeny+2; i++)
 	{
 		ii = blockmark + i;
 		
@@ -773,7 +773,7 @@ void CLlevel::display() //! critical
 		{
 		if( !( i==blocksperscreeny+1 && smoothmark>=smoothmarkmax-blockheight ) )
 		{
-			for(xlong j=0; j<blocksperscreenx; j++)
+			for(uxlong j=0; j<blocksperscreenx; j++)
 			{
 				currentterrain = xlong(levellayers[0][ii][j]);
 				if(currentterrain!=-1)

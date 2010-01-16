@@ -74,8 +74,8 @@ class CLwindow : public CLbase<CLwindow,1>
 		static void setmotion(xlong x,xlong y);
 		static void setkeys(uxchar key,xlong x,xlong y);
 		static void idle();
-	public:
 		static void draw();
+	public:
 		bool run();
 		void showcursor() { displaycursor = 1; };
 		void hidecursor() { displaycursor = 0; };
@@ -132,8 +132,8 @@ void CLwindow::setmotion(xlong x,xlong y) //! noncritical
 
 void CLwindow::setkeys(uxchar key,xlong x,xlong y) //! noncritical
 {
-	keydn = key;
-	if(turbo==key) { turbo = 0; }
+	turbo = keydn = key;
+	//if(turbo==key) { turbo = 0; }
 	//if(key==syskey) { sysmenu(sysobj); }
 }
 
@@ -183,7 +183,7 @@ void CLwindow::draw() //! noncritical
 	glFlush();
 }
 
-bool CLwindow::run() { glutMainLoopEvent(); return 1; } //! noncritical
+bool CLwindow::run() { glutMainLoopEvent(); draw(); return 1; } //! noncritical
 
 //void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 

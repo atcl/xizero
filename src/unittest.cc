@@ -3,65 +3,70 @@
 
 #include "CLinc.h"
 
-CLar* cldata = 0;
-bool mode = 1;
-bool shadows = 0;
-short ac = 0;
-bool exp = 0;
-bool mm = 0;
-CLglobal* clglobal;
-CLobject* cubus;
-CLexplosion* ex;
-CLlvector p(400,300,100);
-CLlight* testl;
-sprite* screens;
-CLfile* screenf;
-CLmenu* sysmenu;
-
 int main(int argc, char** argv)
 {
+	//init API
+	CLglobal* clglobal = CLglobal::instance(); 
+	//*
+	
+	//set command line arguments
 	const xchar* argfile = "dat/other/test.y3d";
 	xlong argfileindex =-1;
-
+	if(argc>1) { argfile = argv[1]; }
 	if(argc>2) { argfileindex = atoi(argv[2]); }
-	else if(argc>1) { argfile = argv[1]; }
-
-	//init sequence
-		clglobal = CLsetup();
-	cldata = new CLar(BASEDIR"xizero.dat");
-	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
-	
-	sysmenu = new CLmenu();
-
-	//*
-		//test tree:
-		CLtree<xlong>* testtree = new CLtree<xlong>();	
 	//*
 	
-	//audio test:
-	CLar* clsdata = new CLar(cldata->findbyname("sounds.a"));
-	clglobal->clsound->preload(clsdata);
-	//clglobal->clsound->play(1,1);
-	//*
-
-	CLfile* cube;
-
-	if(argfileindex!=-1)
+	//load argument file
+	CLfile* objfile;
+	if(argfileindex==-1)
 	{
-		CLfile* arch = clglobal->clsystem->getfile(argfile);
-		CLar* arar = new CLar(arch);
-		cube = arar->getmember(argfileindex);
+		objfile = clglobal->clsystem->getfile(argfile);
 	}
 	else
 	{
-		CLfile* cubef = clglobal->clsystem->getfile(argfile);
-		cube = cubef;
+		CLfile* objarch = clglobal->clsystem->getfile(argfile);
+		CLar* objar = new CLar(objarch);
+		objfile = objar->getmember(argfileindex);
 	}
+	CLobject* test = new CLobject(objfile,0);
+	//*
+
+	//load datafile
+	CLar* cldata = new CLar(BASEDIR"xizero.dat");
+	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
+	//*
 	
-	cubus = new CLobject(cube,0);
-	ex = new CLexplosion(cubus);
-	testl = new CLlight(50,0x00FF0000);
+	//init system menu
+	CLmenu* sysmenu = new CLmenu();
+	//*
+
+	//cl test section
 	
+		//test tree:
+		CLtree<xlong>* testtree = new CLtree<xlong>();	
+		//*
+		
+		//test audio:
+		CLar* clsdata = new CLar(cldata->findbyname("sounds.a"));
+		clglobal->clsound->preload(clsdata);
+		//clglobal->clsound->play(1,1);
+		//*
+		
+	//*
+	
+	//main loop variables
+	CLexplosion* ex = new CLexplosion(test);
+	bool mode = 1;
+	bool shadows = 0;
+	short ac = 0;
+	bool exp = 0;
+	bool mm = 0;
+	CLlvector p(400,300,100);
+	sprite* screens;
+	CLfile* screenf;
+	//*
+	
+	//main loop
 	while(clglobal->clwindow->run())
 	{
 		uxchar k = clglobal->clwindow->getinkey();
@@ -72,41 +77,41 @@ int main(int argc, char** argv)
 			break;
 
 			//Translate:
-			case RIGHT:  cubus->getmatrix()->translate(2,0,0);  cubus->update(); break;
-			case LEFT:   cubus->getmatrix()->translate(-2,0,0); cubus->update(); break;
-			case UP:     cubus->getmatrix()->translate(0,2,0);  cubus->update(); break;
-			case DOWN: 	 cubus->getmatrix()->translate(0,-2,0); cubus->update(); break;
-			case PGUP:   cubus->getmatrix()->translate(0,0,2);	cubus->update(); break;
-			case PGDOWN: cubus->getmatrix()->translate(0,0,-2); cubus->update(); break;			
+			case RIGHT:  test->getmatrix()->translate(2,0,0);  test->update(); break;
+			case LEFT:   test->getmatrix()->translate(-2,0,0); test->update(); break;
+			case UP:     test->getmatrix()->translate(0,2,0);  test->update(); break;
+			case DOWN: 	 test->getmatrix()->translate(0,-2,0); test->update(); break;
+			case PGUP:   test->getmatrix()->translate(0,0,2);	test->update(); break;
+			case PGDOWN: test->getmatrix()->translate(0,0,-2); test->update(); break;			
 
 			//Rotate:
-			case 'a':    cubus->getmatrix()->rotate(0,5,0);  cubus->update(); break;
-			case 'd':    cubus->getmatrix()->rotate(0,-5,0); cubus->update(); break;
-			case 'w':    cubus->getmatrix()->rotate(-5,0,0); cubus->update(); break;
-			case 's':    cubus->getmatrix()->rotate(5,0,0);  cubus->update(); break;
-			case 'q':    cubus->getmatrix()->rotate(0,0,-5); cubus->update(); break;
-			case 'e':    cubus->getmatrix()->rotate(0,0,5);  cubus->update(); break;
+			case 'a':    test->getmatrix()->rotate(0,5,0);  test->update(); break;
+			case 'd':    test->getmatrix()->rotate(0,-5,0); test->update(); break;
+			case 'w':    test->getmatrix()->rotate(-5,0,0); test->update(); break;
+			case 's':    test->getmatrix()->rotate(5,0,0);  test->update(); break;
+			case 'q':    test->getmatrix()->rotate(0,0,-5); test->update(); break;
+			case 'e':    test->getmatrix()->rotate(0,0,5);  test->update(); break;
 
 			//Aspectscale:
-			case '7':    cubus->getmatrix()->aspectscale(1.1); cubus->update(); break;
-			case '8':    cubus->getmatrix()->aspectscale(0.9); cubus->update(); break;
+			case '7':    test->getmatrix()->aspectscale(1.1); test->update(); break;
+			case '8':    test->getmatrix()->aspectscale(0.9); test->update(); break;
 
 			//Scale
-			case '1':    cubus->getmatrix()->scale(1.1,1,1);    cubus->update(); break;
-			case '2':    cubus->getmatrix()->scale(0.9,1,1);    cubus->update(); break;
-			case '3':    cubus->getmatrix()->scale(1,1.1,1);    cubus->update(); break;
-			case '4':    cubus->getmatrix()->scale(1,0.9,1);    cubus->update(); break;
-			case '5':    cubus->getmatrix()->scale(1,1,1.1);    cubus->update(); break;
-			case '6':    cubus->getmatrix()->scale(1,1,0.9);    cubus->update(); break;
+			case '1':    test->getmatrix()->scale(1.1,1,1);    test->update(); break;
+			case '2':    test->getmatrix()->scale(0.9,1,1);    test->update(); break;
+			case '3':    test->getmatrix()->scale(1,1.1,1);    test->update(); break;
+			case '4':    test->getmatrix()->scale(1,0.9,1);    test->update(); break;
+			case '5':    test->getmatrix()->scale(1,1,1.1);    test->update(); break;
+			case '6':    test->getmatrix()->scale(1,1,0.9);    test->update(); break;
 
 			//Control:
 			//case '^':    mode = !mode; break;
 			case 'o':    sysmenu->show();
-			case '+':    cubus->reset(); ac = exp = 0; break;
+			case '+':    test->reset(); ac = exp = 0; break;
 			case '-':    shadows = !shadows; break;
 			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
-			case '.':    cubus->translatealongnormals(1.1); break;
-			case ',':    cubus->translatealongnormals(-1.1); break;
+			case '.':    test->translatealongnormals(1.1); break;
+			case ',':    test->translatealongnormals(-1.1); break;
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
 			case 'r':    clglobal->clsound->play(2); break;
@@ -144,12 +149,12 @@ int main(int argc, char** argv)
 
 		if(shadows==1)
 		{
-			cubus->display(p,CENTER + SHADOW);
+			test->display(p,CENTER + SHADOW);
 			clglobal->clscreen->clstencilbuffer.copy(&clglobal->clscreen->cldoublebuffer,12);
 		}
 
-		if(mode==false) cubus->display(p,CENTER + AMBIENT + SHAPE + ac);
-		else cubus->display(p,CENTER + AMBIENT + FLAT + ac);
+		if(mode==false) test->display(p,CENTER + AMBIENT + SHAPE + ac);
+		else test->display(p,CENTER + AMBIENT + FLAT + ac);
 		
 		//~ for(xlong i=0; i<30; i++)
 		//~ //for(xlong i=25; i<50; i++)
@@ -160,8 +165,9 @@ int main(int argc, char** argv)
 			//~ terrows[i]->display(p,SHAPE);
 		//~ }
 
-		cubus->getmatrix()->unit();
+		test->getmatrix()->unit();
 	}
+	//*
 
 	//exit sequence
 	//~ CLsound::exit();
