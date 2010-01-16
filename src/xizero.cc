@@ -14,8 +14,8 @@ int main()
 	//*
 
 	//intros
-	clglobal->clintro->atcrosslevel(cldata->findbyname("intro.a"));
-	clglobal->clintro->xizero(cldata->findbyname("intro.a"));
+	clglobal->clintro->intro(0,cldata->findbyname("intro.a"));
+	clglobal->clintro->intro(1,cldata->findbyname("intro.a"));
 	//*
 	
 	//mainmenu
@@ -24,10 +24,11 @@ int main()
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);
 	clglobal->clwindow->showcursor();
-	while(clglobal->clwindow->run())
+	while(true)
 	{
 		CLbutton::checkclick();
 		xzmainmenu->draw();
+		clglobal->clwindow->draw();
 	}
 	//*
 

@@ -152,8 +152,7 @@ CLwindow::CLwindow() //! noncritical
 	glutInitWindowSize(XRES,YRES);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
 	glutCreateWindow(TITLE);
-	glViewport(0,0,XRES,YRES)
-	//~ glutSetCursor(GLUT_CURSOR_NONE);
+	glutSetCursor(GLUT_CURSOR_NONE);
 	//~ glutMouseFunc(setmouse);
 	//~ glutMotionFunc(setmotion);
 	//~ glutKeyboardFunc(setkeys);
@@ -164,12 +163,15 @@ CLwindow::CLwindow() //! noncritical
 void CLwindow::draw() //! noncritical
 {
 	if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
-	//glClear(GL_COLOR_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT); // not necessary when full dump
+	glRasterPos2i(-1,1);
+	//glTranslatei(XRES/2,YRES/2,0); //alternative for glRasterPos2i
+	glPixelZoom(1.0,-1.0);
 	glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer); 
 	glFlush();
 }
 
-void CLwindow::run() { glutMainLoop(); } //! noncritical
+void CLwindow::run() { glutMainLoop(); } //! noncritical //take its called only one time
 
 //void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 

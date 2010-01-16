@@ -85,7 +85,7 @@ void newgame()
 	
 	CLmenu* sysmenu = new CLmenu();
 	
-	while(gamestate>0 && clglobal->clwindow->run()) 
+	while(gamestate>0) 
 	{
 		//check input
 		turbo = clglobal->clwindow->getturbo();
@@ -137,6 +137,8 @@ void newgame()
 			//~ break;
 			//~ //*
 		//~ }
+		
+		clglobal->clwindow->draw();
 	}
 	//*
 	
@@ -145,7 +147,7 @@ void newgame()
 	delete sysmenu;
 	//*
 	
-	clglobal->cltransitions->fadetoblack();
+	clglobal->cltransitions->transition(1);
 	
 	sprite* overscreen = 0;
 	switch(gamestate)
@@ -169,7 +171,7 @@ void newgame()
 		//*
 	}
 	
-	clglobal->cltransitions->dissolve();
+	clglobal->cltransitions->transition(0);
 	
 	clglobal->clwindow->showcursor();
 	
