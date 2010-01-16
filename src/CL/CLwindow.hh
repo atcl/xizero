@@ -152,6 +152,7 @@ CLwindow::CLwindow() //! noncritical
 	glutInitWindowSize(XRES,YRES);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
 	glutCreateWindow(TITLE);
+	glViewport(0,0,XRES,YRES)
 	//~ glutSetCursor(GLUT_CURSOR_NONE);
 	//~ glutMouseFunc(setmouse);
 	//~ glutMotionFunc(setmotion);
