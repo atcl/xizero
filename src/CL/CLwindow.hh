@@ -141,10 +141,10 @@ void CLwindow::idle()
 {
 	frame++;
 	time=glutGet(GLUT_ELAPSED_TIME);
-	
-	if(time-timebase>2000)
+
+	if(time-timebase>1000)
 	{
-		fps = frame*2000.0/(time-timebase);
+		fps = frame*1000.0/(time-timebase);
 	 	timebase = time;		
 		frame = 0;
 		tty("fps: "); say(xlong(fps));

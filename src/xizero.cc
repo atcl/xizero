@@ -24,11 +24,10 @@ int main()
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);
 	clglobal->clwindow->showcursor();
-	while(true)
+	while(clglobal->clwindow->run())
 	{
 		CLbutton::checkclick();
 		xzmainmenu->draw();
-		clglobal->clwindow->run();
 	}
 	//*
 

@@ -133,7 +133,6 @@ int main(int argc, char** argv)
 		clglobal->clscreen->cldoublebuffer.clear(0);
 		clglobal->clscreen->clzbuffer.clear(ZRES);
 		clglobal->clscreen->clstencilbuffer.clear(0);
-
 		
 		clglobal->clgfx->drawfontstring(100,10,"Use w,s,a,d,q,e for rotation",2,0x00FFFFFF,0x00FF0000);
 		clglobal->clgfx->drawfontstring(100,30,"Use 1,2,3,4,5,6 for scaling",2,0x00FFFFFF);

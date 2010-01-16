@@ -59,8 +59,8 @@ void newgame()
 	xlong gamestate = 1;
 	xlong mode = 1;
 	xlong displacement = 0;
-	xchar input = 0;
-	xchar turbo = 0;
+	uxchar input = 0;
+	uxchar turbo = 0;
 	//*
 	
 	//display key bindings and init level
