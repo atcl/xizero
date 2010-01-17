@@ -64,10 +64,10 @@ class CLwindow : public CLbase<CLwindow,1>
 		//~ static uxchar syskey;
 		//~ static void (*sysmenu)(void* o);
 		//~ static void* sysobj;
-		static float frame;
-		static float time;
-		static float timebase;
-		static float fps;
+		static uxlong frame;
+		static uxlong time;
+		static uxlong timebase;
+		static uxlong fps;
 		CLwindow();
 		~CLwindow() { };
 		static void setmouse(xlong button,xlong state,xlong x,xlong y);
@@ -109,10 +109,10 @@ xlong CLwindow::mousex = 0;
 xlong CLwindow::mousey = 0;
 xlong CLwindow::mouselb = 0;	
 xlong CLwindow::mouserb = 0;
-float CLwindow::frame = 0;
-float CLwindow::time = 0;
-float CLwindow::timebase = 0;
-float CLwindow::fps = 0;
+uxlong CLwindow::frame = 0;
+uxlong CLwindow::time = 0;
+uxlong CLwindow::timebase = 0;
+uxlong CLwindow::fps = 0;
 uxlong* CLwindow::framebuffer = clscreen->cldoublebuffer.getbuffer();
 ///*
 
@@ -151,17 +151,18 @@ void CLwindow::setspec(xlong key,xlong x,xlong y) //! noncritical
 	}
 }
 
-void CLwindow::idle() //! noncritical
+void CLwindow::idle() //! critical
 {
 	frame++;
 	time = glutGet(GLUT_ELAPSED_TIME);
+	uxlong timediff = time-timebase;
 
-	if(time-timebase>1000)
+	if(timediff>1024)
 	{
-		fps = frame*1000.0/(time-timebase);
+		fps = (frame<<10)/timediff;
 	 	timebase = time;		
 		frame = 0;
-		tty("fps: "); say(xlong(fps));
+		tty("fps: "); say(fps);
 	}
 }
 
@@ -175,7 +176,7 @@ CLwindow::CLwindow() //! noncritical
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);
-	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE); // GLUT_SINGLE, GLUT_STENCIL, GLUT_DEPTH, GLUT_ACCUM
+	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE); 
 	glutCreateWindow(TITLE);
 	//~ glutSetCursor(GLUT_CURSOR_NONE);
 	glutMouseFunc(setmouse);
@@ -185,6 +186,27 @@ CLwindow::CLwindow() //! noncritical
 	glutDisplayFunc(draw);
 	glutIdleFunc(idle);
 	glut = 1;
+	//speed up gldrawpixels:
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DITHER);
+	glDisable(GL_FOG);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_LOGIC_OP);
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_TEXTURE_1D);
+	glDisable(GL_TEXTURE_2D);
+	glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
+	glPixelTransferi(GL_RED_SCALE, 1);
+	glPixelTransferi(GL_RED_BIAS, 0);
+	glPixelTransferi(GL_GREEN_SCALE, 1);
+	glPixelTransferi(GL_GREEN_BIAS, 0);
+	glPixelTransferi(GL_BLUE_SCALE, 1);
+	glPixelTransferi(GL_BLUE_BIAS, 0);
+	glPixelTransferi(GL_ALPHA_SCALE, 1);
+	glPixelTransferi(GL_ALPHA_BIAS, 0);
+	//*
 	glClear(GL_COLOR_BUFFER_BIT);
 	glFlush();
 }
