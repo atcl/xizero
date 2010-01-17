@@ -15,8 +15,9 @@
 
 ///api includes
 #include "CLtypes.hh"
-#include "CLstring.hh"
 #include "CLbase.hh"
+#include "CLstring.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -39,6 +40,7 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 	
 	private:
 		static CLstring* clstring;
+		static CLwindow* clwindow;
 	protected:
 		static xlong mousex;
 		static xlong mousey;
@@ -54,6 +56,7 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 };
 
 CLstring* CLmsgbox::clstring = CLstring::instance();
+CLwindow* CLmsgbox::clwindow = CLwindow::instance();
 
 xlong CLmsgbox::mousex = 0;
 xlong CLmsgbox::mousey = 0;
@@ -64,6 +67,8 @@ xlong CLmsgbox::keydn = 0;
 ///implementation
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
+	//set for 9x15 font
+	
 	//prepare message
 	xlong msglines = clstring->linecount(message);
 	xlong msglength = clstring->length(message);
@@ -79,54 +84,83 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	}
 	xlong maxline = 0;
 	for(xlong i=1; i<msglines; i++) { if(msglen[i]>msglen[maxline]) maxline = i; }
-	xlong winwidth = 20; //+XTextWidth(Xfont,&message[msgpos[maxline]],msglen[maxline]);
-	xlong winheight = 40+msglines*16;
-	if(winwidth<200) winwidth = 200;
-	if(winwidth>800) winwidth = 400;
-	if(winheight<100) winheight = 100;
-	if(winheight>600) winheight = 600;
+	xlong winwidth = 20+(9*msglen[maxline]);
+	xlong winheight = 40+msglines*15;
+	if(winwidth<200) { winwidth = 200; }
+	if(winwidth>800) { winwidth = 400; }
+	if(winheight<100) { winheight = 100; }
+	if(winheight>600) { winheight = 600; }
 	
-	//~ if(clwindow->isglut()==0)
-	//~ {
-		//~ xlong argc = 1;
-		//~ xchar *argv[] = { "xizero",NULL };
-		//~ glutInit(&argc,argv);
-	//~ }
-	
+	xlong mainid = glutGetWindow(); 
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(winwidth,winheight);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
 	xlong currid = glutCreateWindow(title);
+	glutSetWindow(currid);
 	
-	//~ //wait till press
-	//~ bool wait = 0;
-	//~ while(wait==0)
-	//~ {
-		//~ if(XPending(Xdisplay)!=0)
-		//~ {			
-			//~ XNextEvent(Xdisplay,&Xevent);
-			//~ switch(Xevent.type)
-			//~ {				
-				//~ case Expose:
-					//~ XSetForeground(Xdisplay,Xgc,Xblack.pixel);
-					//~ XSetBackground(Xdisplay,Xgc,Xgrey.pixel);
-					//~ for(j=0; j<msglines; j++) { XDrawImageString(Xdisplay,Xwindow,Xgc,10,20+16*j,&message[msgpos[j]],msglen[j]); }
-					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-10,(winwidth/2)+50,winheight-10);
-					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)+50,winheight-30,(winwidth/2)+50,winheight-10);	
-					//~ XDrawImageString(Xdisplay,Xwindow,Xgc,(winwidth/2)-5,winheight-15,u8"OK",2);
-					//~ XSetForeground(Xdisplay,Xgc,Xwhite.pixel);
-					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)-50,winheight-10);
-					//~ XDrawLine(Xdisplay,Xwindow,Xgc,(winwidth/2)-50,winheight-30,(winwidth/2)+50,winheight-30);
-				//~ break;
-				//~ case KeyPress: if(XLookupKeysym((XKeyEvent*)&Xevent,0)==32) wait = 1; break;
-				//~ case ButtonPress: if(Xevent.xbutton.button == Button1 && Xevent.xbutton.x>(winwidth/2)-50 && Xevent.xbutton.y>winheight-30 && Xevent.xbutton.x<(winwidth/2)+50 && Xevent.xbutton.y<winheight-10 ) { wait = 1; } break; 
-			//~ }				
+	while(true)
+	{
+		glutMainLoopEvent();
+		
+		//get input
+		if(clwindow->getinkey()==SPACE) { break; };
+		if(clwindow->getmouselb()==1)
+		{
+			if(clwindow->getmousex()>(winwidth/2)-50 &&
+			   clwindow->getmousex()<(winwidth/2)+50 &&
+			   clwindow->getmousey()>winheight-25 &&
+			   clwindow->getmousey()<winheight-5) { break; }
+		}
+		//*
+		
+		//~ glRasterPos2f(-1,1);
+		
+		//draw background
+		glColor3f(0.5,0.5,0.5);
+		glBegin(GL_QUADS);
+		glVertex2f(-1,-1);
+		glVertex2f(-1,1);
+		glVertex2f(1,1);
+		glVertex2f(1,-1);
+		glEnd();
+		//*
+		
+		//draw text
+		//~ glColor3f(0,0,0);
+		//~ for(xlong i=0; i<msglines; i++)
+		//~ {
+			//~ for(xlong j=0; j<msglen[i]; j++)
+			//~ {
+				//~ glRasterPos2i(10+j*9,10+i*15);
+				//~ glutBitmapCharacter(GLUT_BITMAP_9_BY_15,message[msgpos[i]+j]);
+			//~ }
 		//~ }
-	//~ }
-	//~ //destroy window
-	//~ XFreeGC(Xdisplay,Xgc);
-	//~ XDestroyWindow(Xdisplay,Xwindow);
-	//~ XFlush(Xdisplay);
+		//*
+		
+		//draw button
+		//~ glColor3f(0,0,0);
+		//~ glBegin(GL_LINES);
+		//~ glVertex2i((winwidth/2)-50,winheight-25);
+		//~ glVertex2i((winwidth/2)+50,winheight-25);
+		//~ glVertex2i((winwidth/2)+50,winheight-25);
+		//~ glVertex2i((winwidth/2)+50,winheight-5);
+		//~ glEnd();
+		//~ 
+		//~ glColor3f(1,1,1);
+		//~ glBegin(GL_LINES);
+		//~ glVertex2i((winwidth/2)+50,winheight-5);
+		//~ glVertex2i((winwidth/2)-50,winheight-5);
+		//~ glVertex2i((winwidth/2)-50,winheight-5);
+		//~ glVertex2i((winwidth/2)-50,winheight-25);
+		//~ glEnd();
+		//*
+		
+		glFlush();
+	}
+	
+	
+	glutSetWindow(mainid);
+	glutDestroyWindow(currid);
 	return 1;
 }
 
