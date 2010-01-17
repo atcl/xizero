@@ -258,7 +258,7 @@ xlong CLplayer::update(const uxchar input,const uxchar turbo,CLfbuffer* ll,CLene
 		//~ }
 		//*
 
-		switch(turbo)
+		switch(input)
 		{
 			//stop backward driving and drive forward
 			case UP:
@@ -273,10 +273,7 @@ xlong CLplayer::update(const uxchar input,const uxchar turbo,CLfbuffer* ll,CLene
 				else { gear=-1; setspeed(); }
 			break;
 			//*
-		}
-
-		switch(input)
-		{
+			
 			//arrow left -> turn left
 			case LEFT: 
 				tempangle = 3;
