@@ -23,7 +23,7 @@ int main()
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);
-	clglobal->clwindow->showcursor();
+	clglobal->clwindow->showcursor(1);
 	while(clglobal->clwindow->run())
 	{
 		CLbutton::checkclick();

@@ -14,7 +14,7 @@ description=
 run_cmd=
 
 [files]
-current_page=24
+current_page=70
 FILE_NAME_0=1129;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/unittest.cc;0
 FILE_NAME_1=671;C;0;16;1;1;0;/home/atcl/devs/xizero/src/CLinc.h;0
 FILE_NAME_2=155;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CLproject.hh;0
@@ -85,5 +85,5 @@ FILE_NAME_66=1282;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLtrans.hh;0
 FILE_NAME_67=23997;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLgfx.hh;0
 FILE_NAME_68=1012;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmark.hh;0
 FILE_NAME_69=1545;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLcamera.hh;0
-FILE_NAME_70=5054;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLwindow.hh;0
+FILE_NAME_70=4075;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLwindow.hh;0
 FILE_NAME_71=15;Conf;0;16;1;1;0;/home/atcl/devs/xizero/src/glut.rc;0

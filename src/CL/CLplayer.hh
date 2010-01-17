@@ -54,7 +54,7 @@ class CLplayer : public CLentity<2>
 	public:
 		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts=0);
 		~CLplayer();
-		xlong update(const uxchar input,const uxchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p);
+		xlong update(CLfbuffer* ll,CLenemylist* enemies,CLboss* boss);
 		void addpoints(xlong p);
 		void showbox();
 		void displayhud();
@@ -191,7 +191,7 @@ CLplayer::~CLplayer() //! noncritical
 	delete sprog;
 }
 
-xlong CLplayer::update(const uxchar input,const uxchar turbo,CLfbuffer* ll,CLenemylist* enemies,CLboss* boss,CLgamepadstate* p) //! critical
+xlong CLplayer::update(CLfbuffer* ll,CLenemylist* enemies,CLboss* boss) //! critical
 {
 	//update ammo
 	CLenemy* currenemy = 0;
@@ -238,27 +238,7 @@ xlong CLplayer::update(const uxchar input,const uxchar turbo,CLfbuffer* ll,CLene
 		}
 		//*
 
-		//temp use gamepad
-		//~ if(p!=0)
-		//~ {
-			//~ if(p->axis[1]<0) input = UP;
-			//~ if(p->axis[1]>0) input = DOWN;
-			//~ if(p->axis[0]<0) turbo = LEFT;
-			//~ if(p->axis[0]>0) turbo = RIGHT;
-			//~ if(p->button[0]!=0) turbo = LCTRL;
-			//~ if(p->button[1]!=0) turbo = SPACE;
-			//~ if(p->button[2]!=0) turbo = 'q';
-			//~ if(p->button[3]!=0) turbo = 'w';
-			//~ if(p->button[4]!=0) turbo = 'e';
-			//~ if(p->button[5]!=0) turbo = 's';
-			//~ if(p->button[6]!=0) turbo = 'a';
-			//~ if(p->button[7]!=0) turbo = 'd';
-			//~ //if(p->button[8]!=0) turbo = ?;
-			//~ //if(p->button[9]!=0) turbo = ?;
-		//~ }
-		//*
-
-		switch(input)
+		switch(clwindow->getinkey())
 		{
 			//stop backward driving and drive forward
 			case UP:
@@ -273,7 +253,10 @@ xlong CLplayer::update(const uxchar input,const uxchar turbo,CLfbuffer* ll,CLene
 				else { gear=-1; setspeed(); }
 			break;
 			//*
-			
+		}
+
+		switch(clwindow->getturbo())
+		{
 			//arrow left -> turn left
 			case LEFT: 
 				tempangle = 3;

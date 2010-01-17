@@ -106,7 +106,7 @@ void CLmenu::show() //! noncritical
 	//*
 	
 	//activate mouse cursor and activate buttons
-	clwindow->showcursor();
+	clwindow->showcursor(1);
 	exit->setvisible(1);
 	info->setvisible(1);
 	about->setvisible(1);
@@ -126,7 +126,7 @@ void CLmenu::show() //! noncritical
 	//~ }
 	
 	//activate mouse cursor and activate buttons
-	clwindow->hidecursor();
+	clwindow->showcursor(0);
 	exit->setvisible(0);
 	info->setvisible(0);
 	about->setvisible(0);

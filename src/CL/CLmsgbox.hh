@@ -40,29 +40,28 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 	private:
 		static CLstring* clstring;
 	protected:
-
-		CLmsgbox();
-		~CLmsgbox();
+		static xlong mousex;
+		static xlong mousey;
+		static xlong mouselb;
+		static xlong keydn;
+		static void setkeys(uxchar key,xlong x,xlong y);
+		static void setmouse(xlong button,xlong state,xlong x,xlong y);
+		CLmsgbox() { };
+		~CLmsgbox() { };
 	public:
 		xlong msgbox(const xchar* title,const xchar* message);
-		xlong yesnobox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);
 };
 
 CLstring* CLmsgbox::clstring = CLstring::instance();
+
+xlong CLmsgbox::mousex = 0;
+xlong CLmsgbox::mousey = 0;
+xlong CLmsgbox::mouselb = 0;
+xlong CLmsgbox::keydn = 0;
 ///*
 
 ///implementation
-CLmsgbox::CLmsgbox() //! noncritical
-{
-	
-}
-
-CLmsgbox::~CLmsgbox() //! noncritical
-{
-
-}
-
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
 	//prepare message
@@ -129,11 +128,6 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	//~ XDestroyWindow(Xdisplay,Xwindow);
 	//~ XFlush(Xdisplay);
 	return 1;
-}
-
-xlong CLmsgbox::yesnobox(const xchar* title,const xchar* message) //! noncritical
-{
-
 }
 
 xlong CLmsgbox::alertbox(const xchar* title,xlong value) //! noncritical

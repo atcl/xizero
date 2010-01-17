@@ -21,7 +21,6 @@
 #include "CLfloor.hh"
 #include "CLfsprog.hh"
 #include "CLdetect.hh"
-#include "CLgamepad.hh"
 #include "CLgfx.hh"
 #include "CLtrans.hh"
 #include "CLsound.hh"
@@ -68,7 +67,6 @@ class CLglobal : public CLbase<CLglobal,1>
 		CLfloor*  clfloor;
 		CLdetect* cldetect;
 		CLfsprogress* clfsprogress;
-		CLgamepad* clgamepad;
 		CLgfx*    clgfx;
 		CLtransitions* cltransitions;
 		CLsound*  clsound;
@@ -94,7 +92,6 @@ CLglobal::CLglobal() //! noncritical
 	clfloor  = CLfloor::instance();
 	cldetect = CLdetect::instance();
 	clfsprogress = CLfsprogress::instance();
-	clgamepad = CLgamepad::instance();
 	clgfx    = CLgfx::instance();
 	cltransitions = CLtransitions::instance();
 	clsound  = CLsound::instance();

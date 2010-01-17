@@ -16,7 +16,7 @@ void exitgame() { clglobal->clapp->exit(0,"xizero says: bye"); }
 
 void newgame()
 {
-	clglobal->clwindow->hidecursor();
+	clglobal->clwindow->showcursor(0);
 	
 	//open full screen images archive
 	CLar* screens = new CLar(cldata->findbyname("screens.a"));
@@ -85,12 +85,12 @@ void newgame()
 	
 	CLmenu* sysmenu = new CLmenu();
 	testlevel->start();
+	clglobal->clwindow->showfps(1);
 	while(clglobal->clwindow->run() && gamestate>0) 
 	{
 		//check input
-		turbo = clglobal->clwindow->getturbo();
+		//turbo = clglobal->clwindow->getturbo();
 		input = clglobal->clwindow->getinkey();
-		clglobal->clgamepad->handle();
 		//*
 
 		//grab system keys and update level
@@ -102,7 +102,7 @@ void newgame()
 			
 			case '#': aa = !aa;
 			
-			default: gamestate = testlevel->update(input,turbo,clglobal->clgamepad->getstate()); break;
+			default: gamestate = testlevel->update(); break;
 		}
 		//*
 
@@ -171,7 +171,8 @@ void newgame()
 	
 	clglobal->cltransitions->dissolve();
 	
-	clglobal->clwindow->showcursor();
+	clglobal->clwindow->showcursor(0);
+	clglobal->clwindow->showcursor(1);
 	
 	//~ delete screens;
 	//~ delete lvls;

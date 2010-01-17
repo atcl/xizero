@@ -23,7 +23,6 @@
 #include "CLenemy.hh"
 #include "CLboss.hh"
 #include "CLgame.hh"
-#include "CLgamepad.hh"
 ///*
 
 ///header
@@ -80,7 +79,7 @@ class CLlevel : public CLbase<CLlevel,0>
 		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype);
 		CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong bosstype);
 		~CLlevel();
-		xlong update(xchar input,xchar turbo,CLgamepadstate* p);
+		xlong update();
 		void display();
 		void subsmark(xlong m);
 		void setmark(xlong m);
@@ -691,7 +690,7 @@ CLlevel::~CLlevel() //! noncritical
 	delete terrain;
 }
 
-xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p) //! critical
+xlong CLlevel::update() //! critical
 {
 	if(paused)
 	{
@@ -704,7 +703,7 @@ xlong CLlevel::update(xchar input,xchar turbo,CLgamepadstate* p) //! critical
 	xlong isdead = 0;
 	
 	//update player
-	isdead = player->update(input,turbo,levellandscape,enemies,boss,p);
+	isdead = player->update(levellandscape,enemies,boss);
 	if(isdead != -1) { return -1; }
 	//*
 
