@@ -50,8 +50,8 @@ class CLwindow : public CLbase<CLwindow,1>
 		static CLgfx*    clgfx;
 		static CLscreen* clscreen;
 	protected:
-		bool drawcursor;
-		sprite* cursor;
+		static bool drawcursor;
+		static sprite* cursor;
 		static uxlong* framebuffer;
 		static bool  glut;
 		static xlong keydn;
@@ -111,6 +111,8 @@ xlong CLwindow::mousey = 0;
 xlong CLwindow::mouselb = 0;	
 xlong CLwindow::mouserb = 0;
 uxlong* CLwindow::framebuffer = clscreen->cldoublebuffer.getbuffer();
+sprite* CLwindow::cursor = 0;
+bool CLwindow::drawcursor = 0;
 ///*
 
 ///implementation
@@ -191,8 +193,6 @@ void CLwindow::idle() //! critical
 
 CLwindow::CLwindow() //! noncritical
 {
-	cursor = 0;
-	drawcursor = 0;
 	frame = 0;
 	time = 0;
 	timebase = 0;
@@ -206,9 +206,9 @@ CLwindow::CLwindow() //! noncritical
 	glutInitWindowSize(XRES,YRES);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE); 
 	glutCreateWindow(TITLE);
-	//~ glutSetCursor(GLUT_CURSOR_NONE);
+	glutSetCursor(GLUT_CURSOR_NONE);
 	glutMouseFunc(setmouse);
-	glutMotionFunc(setmotion);
+	glutPassiveMotionFunc(setmotion);
 	glutKeyboardFunc(setkeydn);
 	glutKeyboardUpFunc(setkeyup);
 	glutSpecialFunc(setspecdn);
@@ -243,7 +243,7 @@ CLwindow::CLwindow() //! noncritical
 
 void CLwindow::draw() //! noncritical
 {
-	//if(cursor!=0 && drawcursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
+	if(cursor!=0 && drawcursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
 	glRasterPos2i(-1,1);
 	glPixelZoom(1.0,-1.0);
 	glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer); 

@@ -48,6 +48,8 @@ class boool
 		
 		inline boool& operator++();
 		inline boool& operator--();
+		inline boool& operator++(xlong);
+		inline boool& operator--(xlong);
 		
 		inline boool& operator+=(boool& a);
 		inline boool& operator-=(boool& a);
@@ -92,13 +94,25 @@ class boool
 		inline bool operator>=(bool a)   const { return (this->b >= a); };
 		inline bool operator<(bool a)    const { return (this->b < a); };
 		inline bool operator>(bool a)    const { return (this->b > a); };
+		inline bool operator==(xlong a)   const { return (this->b == a); };
+		inline bool operator!=(xlong a)   const { return (this->b == a); };
+		inline bool operator<=(xlong a)   const { return (this->b <= a); };
+		inline bool operator>=(xlong a)   const { return (this->b >= a); };
+		inline bool operator<(xlong a)    const { return (this->b < a); };
+		inline bool operator>(xlong a)    const { return (this->b > a); };
 		
 		friend bool operator==(bool a,boool& b) { return (xlong(a) == b.b); };
 		friend bool operator!=(bool a,boool& b) { return (xlong(a) != b.b); };
 		friend bool operator<=(bool a,boool& b) { return (xlong(a) <= b.b); };
 		friend bool operator>=(bool a,boool& b) { return (xlong(a) >= b.b); };
-		friend bool operator<(bool a,boool& b) { return (xlong(a) < b.b); };
-		friend bool operator>(bool a,boool& b) { return (xlong(a) > b.b); };
+		friend bool operator<(bool a,boool& b)  { return (xlong(a) < b.b); };
+		friend bool operator>(bool a,boool& b)  { return (xlong(a) > b.b); };
+		friend bool operator==(xlong a,boool& b) { return (a == b.b); };
+		friend bool operator!=(xlong a,boool& b) { return (a != b.b); };
+		friend bool operator<=(xlong a,boool& b) { return (a <= b.b); };
+		friend bool operator>=(xlong a,boool& b) { return (a >= b.b); };
+		friend bool operator<(xlong a,boool& b)  { return (a < b.b); };
+		friend bool operator>(xlong a,boool& b)  { return (a > b.b); };
 
 		inline operator bool()  const { return bool(this->b); };		
 		inline operator xlong() const { return b; };
@@ -149,7 +163,7 @@ boool boool::operator!() const //! noncritical
 //increment
 boool& boool::operator++() //! noncritical
 {
-	if(this->b<1) this->b++;
+	if(this->b<1) { this->b++; }
 	return *this;
 }
 //*
@@ -157,7 +171,23 @@ boool& boool::operator++() //! noncritical
 //decrement
 boool& boool::operator--() //! noncritical
 {
-	if(this->b>-1) this->b--;
+	if(this->b>-1) { this->b--; }
+	return *this;
+}
+//*
+
+//increment
+boool& boool::operator++(xlong) //! noncritical
+{
+	if(this->b<1) { this->b++; }
+	return *this;
+}
+//*
+
+//decrement
+boool& boool::operator--(xlong) //! noncritical
+{
+	if(this->b>-1) { this->b--; }
 	return *this;
 }
 //*

@@ -13,6 +13,7 @@
 #include "CLconsts.hh"
 #include "CLvector.hh"
 #include "CLstruct.hh"
+#include "CLboool.hh"
 #include "CLar.hh"
 #include "CLmatrix.hh"
 #include "CLobject.hh"
@@ -66,7 +67,7 @@ class CLentity : public CLbase<CLentity<I>,0>
 		xlong type;
 		xlong* mark;
 		xlong markmax;
-		xlong gear;
+		boool gear;
 		float maxspeed;
 		xlong active;
 		xlong visible;
@@ -116,7 +117,7 @@ template<int I>CLwindow* CLentity<I>::clwindow = CLwindow::instance();
 template<int I>
 void CLentity<I>::setspeed() //! critical
 {
-	switch(gear)
+	switch(xlong(gear))
 	{
 		case 0: speed = 0; break;
 		case 1: speed = speeddir; break;

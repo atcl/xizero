@@ -241,13 +241,15 @@ xlong CLplayer::update(CLfbuffer* ll,CLenemylist* enemies,CLboss* boss) //! crit
 		switch(clwindow->getinkey())
 		{
 			case UP: //stop backward driving and drive forward
-				if(gear==-1) { gear=0; setspeed(); }
-				else { gear=1; setspeed(); }
+				//~ if(gear==-1) { gear=0; setspeed(); }
+				//~ else { gear=1; setspeed(); }
+				gear++; setspeed();
 			break; //*
 
 			case DOWN: //stop forward driving and drive backward
-				if(gear==1) { gear=0; setspeed(); }
-				else { gear=-1; setspeed(); }
+				//~ if(gear==1) { gear=0; setspeed(); }
+				//~ else { gear=-1; setspeed(); }
+				gear--; setspeed();
 			break; //*
 		}
 
