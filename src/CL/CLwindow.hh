@@ -73,6 +73,7 @@ class CLwindow : public CLbase<CLwindow,1>
 		static void setmouse(xlong button,xlong state,xlong x,xlong y);
 		static void setmotion(xlong x,xlong y);
 		static void setkeys(uxchar key,xlong x,xlong y);
+		static void setspec(xlong key,xlong x,xlong y);
 		static void idle();
 		static void draw();
 	public:
@@ -137,10 +138,23 @@ void CLwindow::setkeys(uxchar key,xlong x,xlong y) //! noncritical
 	//if(key==syskey) { sysmenu(sysobj); }
 }
 
-void CLwindow::idle()
+void CLwindow::setspec(xlong key,xlong x,xlong y) //! noncritical
+{
+	switch(key)
+	{
+		case GLUT_KEY_LEFT: turbo = keydn = LEFT; break;
+		case GLUT_KEY_RIGHT: turbo = keydn = RIGHT; break;
+		case GLUT_KEY_UP: turbo = keydn = UP; break;
+		case GLUT_KEY_DOWN: turbo = keydn = DOWN; break;
+		case GLUT_KEY_PAGE_UP: turbo = keydn = PGUP; break;
+		case GLUT_KEY_PAGE_DOWN: turbo = keydn = PGDOWN; break;
+	}
+}
+
+void CLwindow::idle() //! noncritical
 {
 	frame++;
-	time=glutGet(GLUT_ELAPSED_TIME);
+	time = glutGet(GLUT_ELAPSED_TIME);
 
 	if(time-timebase>1000)
 	{
@@ -167,15 +181,17 @@ CLwindow::CLwindow() //! noncritical
 	glutMouseFunc(setmouse);
 	glutMotionFunc(setmotion);
 	glutKeyboardFunc(setkeys);
-	glutIdleFunc(idle);
+	glutSpecialFunc(setspec);
 	glutDisplayFunc(draw);
+	glutIdleFunc(idle);
 	glut = 1;
+	glClear(GL_COLOR_BUFFER_BIT);
+	glFlush();
 }
 
 void CLwindow::draw() //! noncritical
 {
 	//if(cursor!=0 && displaycursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
-	//glClear(GL_COLOR_BUFFER_BIT); // not necessary when full dump
 	glRasterPos2i(-1,1);
 	//glTranslatei(XRES/2,YRES/2,0); //alternative for glRasterPos2i
 	glPixelZoom(1.0,-1.0);
@@ -183,7 +199,7 @@ void CLwindow::draw() //! noncritical
 	glFlush();
 }
 
-bool CLwindow::run() { glutMainLoopEvent(); draw(); return 1; } //! noncritical
+bool CLwindow::run() { glutMainLoopEvent(); draw(); idle(); return 1; } //! noncritical
 
 //void CLwindow::setsyskey(uxchar k,void (*m)(void* o),void* mo) { syskey = k; sysmenu = m; sysobj = mo; } //! noncritical
 

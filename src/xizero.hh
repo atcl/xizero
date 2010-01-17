@@ -84,7 +84,7 @@ void newgame()
 	bool aa = 0;
 	
 	CLmenu* sysmenu = new CLmenu();
-	
+	testlevel->start();
 	while(clglobal->clwindow->run() && gamestate>0) 
 	{
 		//check input
