@@ -89,8 +89,7 @@ void newgame()
 	while(clglobal->clwindow->run() && gamestate>0) 
 	{
 		//check input
-		//turbo = clglobal->clwindow->getturbo();
-		input = clglobal->clwindow->getinkey();
+		input = clglobal->clwindow->getinkey(1);
 		//*
 
 		//grab system keys and update level

@@ -240,92 +240,75 @@ xlong CLplayer::update(CLfbuffer* ll,CLenemylist* enemies,CLboss* boss) //! crit
 
 		switch(clwindow->getinkey())
 		{
-			//stop backward driving and drive forward
-			case UP:
+			case UP: //stop backward driving and drive forward
 				if(gear==-1) { gear=0; setspeed(); }
 				else { gear=1; setspeed(); }
-			break;
-			//*
+			break; //*
 
-			//stop forward driving and drive backward
-			case DOWN:
+			case DOWN: //stop forward driving and drive backward
 				if(gear==1) { gear=0; setspeed(); }
 				else { gear=-1; setspeed(); }
-			break;
-			//*
+			break; //*
 		}
 
 		switch(clwindow->getturbo())
 		{
-			//arrow left -> turn left
-			case LEFT: 
+			case LEFT: //arrow left -> turn left
 				tempangle = 3;
 				model[0]->getmatrix()->rotate(0,0,3);
 				model[1]->getmatrix()->rotate(0,0,3);
 				pretransform(0);	
 				setspeed();
-			break;
-			//*
+			break; //*
 
-			//arrow right -> turn right
-			case RIGHT: 
+			case RIGHT: //arrow right -> turn right
 				tempangle = -3;
 				model[0]->getmatrix()->rotate(0,0,-3);
 				model[1]->getmatrix()->rotate(0,0,-3);
 				pretransform(0);
 				setspeed();
-			break;
-			//*
+			break; //*
 
-			//a -> turn tower left
-			case 'a': 
+			case 'a': //a -> turn tower left
 				tempangle = 5;
 				model[1]->getmatrix()->rotate(0,0,5);
 				pretransform(1);
 				what=1;
-			break;
-			//*
+			break; //*
 
-			//d -> turn tower right
-			case 'd': 
+			case 'd': //d -> turn tower right
 				tempangle = -5;
 				model[1]->getmatrix()->rotate(0,0,-5);
 				pretransform(1);
 				what=1;
-			break;
-			//*
+			break; //*
 			
-			//w -> reset tower
-			case 'w':
+			case 'w': //w -> reset tower
 			if( (angles[1].z - angles[0].z) >  180) { angles[1].z -= 360; } 
 			if( (angles[1].z - angles[0].z) < -180) { angles[1].z += 360; }
 			tempangle = clmath->sign(angles[0].z-angles[1].z) * 5;
 			model[1]->getmatrix()->rotate(0,0,tempangle);
 			pretransform(1);
 			what=1;
-			break;
-			//*
+			break; //*
 
-			//space -> fire tower weapon
-			case SPACE: 
+			
+			case SPACE: //space -> fire tower weapon
 				if(time >= fireupdate[1] + firerate[1])
 				{
 					fire(1,4,0,ENEMYZLEVEL,1);
 					fireupdate[1] = time;
 				}
-			break;
-			//*
+			break; //*
 
-			//strg -> fire chassis weapon(s)
-			case LCTRL: 
+			case '0': //0 -> fire chassis weapon(s)
 				if(time >= fireupdate[0] + firerate[0])
 				{
 					fire(0,3,0,ENEMYZLEVEL,0);
 					fire(0,3,1,ENEMYZLEVEL,0);
 					fireupdate[0] = time;
 				}
-			break;
-			//*
+			break; //*
 
 			case 'q': //fire (tachyon) laser
 			break; //*

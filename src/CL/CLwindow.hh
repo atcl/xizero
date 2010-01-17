@@ -84,7 +84,7 @@ class CLwindow : public CLbase<CLwindow,1>
 		void showcursor(bool b) { drawcursor = b; };
 		void showfps(bool b) { printfps = b; }
 		void setcursor(sprite* s) { cursor = s; };
-		xlong getinkey() { xlong temp = keydn; keydn = 0; return temp; };
+		xlong getinkey(bool d=0) { if(d) { return keydn; } else { xlong temp = keydn; keydn = 0; return temp; } };
 		xlong getturbo() { return turbo; };
 		xlong getmousex() const { return mousex; };
 		xlong getmousey() const { return mousey; };
