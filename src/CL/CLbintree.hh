@@ -54,7 +54,7 @@ class CLbintree : CLbase<CLbintree<member>,0>
 
 ///implementation
 template<class member>
-node* CLbintree<member>::search(xlong k,node* n) //! critical
+typename CLbintree<member>::node* CLbintree<member>::search(xlong k,node* n) //! critical
 {
 
 }

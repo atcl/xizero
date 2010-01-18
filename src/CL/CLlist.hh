@@ -29,21 +29,20 @@
 
 ///definitions
 template<class member>
-struct listmember
-{
-	member*			data;
-	listmember*		next;
-	listmember*		prev;
-	xchar*			name;
-};
-
-template<class member>
 class CLlist : public CLbase<CLlist<member>,0>
 {
 	protected:
-		listmember<member>* current;
-		listmember<member>* first;
-		listmember<member>* last;
+		struct listmember
+		{
+			member*			data;
+			listmember*		next;
+			listmember*		prev;
+			xchar*			name;
+		};
+	
+		listmember* current;
+		listmember* first;
+		listmember* last;
 		xlong length;
 	public:
 		CLlist();
@@ -104,7 +103,7 @@ void CLlist<member>::append(member* e,const xchar* n) //! noncritical
 	//enter very first member into list
 	if(length==0)
 	{
-		current = new listmember<member>; //<member>
+		current = new listmember; //<member>
 		first = current;
 		last = current;
 		current->data = e;
@@ -118,7 +117,7 @@ void CLlist<member>::append(member* e,const xchar* n) //! noncritical
 	else
 	{
 		setlast();
-		current->next = new listmember<member>; //<member>
+		current->next = new listmember; //<member>
 		last = current->next;
 		current->next->data = e;
 		current->next->prev = current;
@@ -194,8 +193,8 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 	//delete some member in the middle
 	else
 	{
-		listmember<member>* tempnext = current->next;
-		listmember<member>* tempprev = current->prev;
+		listmember* tempnext = current->next;
+		listmember* tempprev = current->prev;
 		setnext();
 		delete current->prev;
 		current->prev = tempprev;
@@ -290,7 +289,7 @@ xlong CLlist<member>::setprev() //! noncritical
 template<class member>
 void CLlist<member>::exchangesort(bool updown) //! noncritical
 {
-	listmember<member>* temp = 0;
+	listmember* temp = 0;
 	
 	//sort descending
 	if(updown)
