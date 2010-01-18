@@ -29,24 +29,22 @@
 
 ///definitions
 template<class member>
-struct node
-{
-	node*  parent;
-	node*  next;
-	node*  prev;
-	node** child;
-	xlong  childcount;
-	member*  data;
-	xchar* name;
-	xlong* hash;
-};
-
-template<class member>
 class CLtree : public CLbase<CLtree<member>,0>
 {
 	protected:
-		node<member>* rootnode;
-		node<member>* current;
+		struct node
+		{
+			node*  parent;
+			node*  next;
+			node*  prev;
+			node** child;
+			xlong  childcount;
+			member*  data;
+			xchar* name;
+		};
+	
+		node* rootnode;
+		node* current;
 	public:
 		CLtree();
 		~CLtree();
@@ -84,7 +82,7 @@ class CLtree : public CLbase<CLtree<member>,0>
 template<class member>
 CLtree<member>::CLtree() //! noncritical
 {
-	rootnode = new node<member>;
+	rootnode = new node;
 	rootnode->parent = 0;
 	rootnode->childcount = 0;
 
@@ -100,7 +98,7 @@ void CLtree<member>::adddata(member* d) { current->data = d; } //! noncritical
 template<class member>
 void CLtree<member>::addchild() //! noncritical
 {
-	node<member>* newnode = new node<member>;
+	node* newnode = new node;
 
 	newnode->parent = current;
 	newnode->next = newnode;
