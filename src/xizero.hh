@@ -77,7 +77,7 @@ void newgame()
 							"Esc:              Quit XiZero\n"
 							"After pressing OK the game will start immediately!";
 							
-	//if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) testlevel->start();
+	if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) { xlong tempo = 0; } //testlevel->start();
 	//*
 	
 	//game loop

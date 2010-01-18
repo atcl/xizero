@@ -42,14 +42,10 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 		static CLstring* clstring;
 		static CLwindow* clwindow;
 	protected:
-		static xlong mousex;
-		static xlong mousey;
-		static xlong mouselb;
-		static xlong keydn;
-		static void setkeys(uxchar key,xlong x,xlong y);
-		static void setmouse(xlong button,xlong state,xlong x,xlong y);
 		CLmsgbox() { };
 		~CLmsgbox() { };
+		static xlong currid;
+		static void draw();
 	public:
 		xlong msgbox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);
@@ -57,14 +53,15 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 
 CLstring* CLmsgbox::clstring = CLstring::instance();
 CLwindow* CLmsgbox::clwindow = CLwindow::instance();
-
-xlong CLmsgbox::mousex = 0;
-xlong CLmsgbox::mousey = 0;
-xlong CLmsgbox::mouselb = 0;
-xlong CLmsgbox::keydn = 0;
+xlong CLmsgbox::currid = 0;
 ///*
 
 ///implementation
+void CLmsgbox::draw()
+{
+	glFlush();
+}
+
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
 	//set for 9x15 font
@@ -85,24 +82,72 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	xlong maxline = 0;
 	for(xlong i=1; i<msglines; i++) { if(msglen[i]>msglen[maxline]) maxline = i; }
 	xlong winwidth = 20+(9*msglen[maxline]);
-	xlong winheight = 40+msglines*15;
+	xlong winheight = 40+(msglines*15);
 	if(winwidth<200) { winwidth = 200; }
 	if(winwidth>800) { winwidth = 400; }
 	if(winheight<100) { winheight = 100; }
-	if(winheight>600) { winheight = 600; }
+	if(winheight>300) { winheight = 300; }
 	
-	xlong mainid = glutGetWindow(); 
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(winwidth,winheight);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
-	xlong currid = glutCreateWindow(title);
-	glutSetWindow(currid);
+	currid = glutCreateWindow(title);
+	glutMouseFunc(CLwindow::setmouse);
+	glutKeyboardFunc(CLwindow::setkeydn);
+	glutDisplayFunc(draw);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0,winwidth,0,winheight);
+	
+		glutSetWindow(currid);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glFlush();
+		
+		//draw background
+		glColor3f(0.7,0.7,0.7);
+		glBegin(GL_QUADS);
+		glVertex2i(0,0);
+		glVertex2i(winwidth,0);
+		glVertex2i(winwidth,winheight);
+		glVertex2i(0,winheight);
+		glEnd();
+		//*
+		
+		//draw text
+		glColor3f(0,0,0);
+		for(xlong i=0; i<msglines; i++)
+		{
+			for(xlong j=0; j<msglen[i]; j++)
+			{
+				glRasterPos2i(10+j*9,winheight-10-(i+1)*15);
+				glutBitmapCharacter(GLUT_BITMAP_9_BY_15,message[msgpos[i]+j]);
+			}
+		}
+		//*
+		
+		//draw button
+		glColor3f(1,1,1);
+		glBegin(GL_LINES);
+		glVertex2i((winwidth/2)-50,25);
+		glVertex2i((winwidth/2)+50,25);
+		glVertex2i((winwidth/2)+50,25);
+		glVertex2i((winwidth/2)+50,5);
+		glColor3f(0,0,0);
+		glVertex2i((winwidth/2)+50,5);
+		glVertex2i((winwidth/2)-50,5);
+		glVertex2i((winwidth/2)-50,5);
+		glVertex2i((winwidth/2)-50,25);
+		glEnd();
+		
+		glRasterPos2i((winwidth/2)-9,10);
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15,'O');
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15,'K');
+		//*
 	
 	while(true)
 	{
 		glutMainLoopEvent();
-		
-		//get input
+
 		if(clwindow->getinkey()==SPACE) { break; };
 		if(clwindow->getmouselb()==1)
 		{
@@ -111,55 +156,8 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 			   clwindow->getmousey()>winheight-25 &&
 			   clwindow->getmousey()<winheight-5) { break; }
 		}
-		//*
-		
-		//~ glRasterPos2f(-1,1);
-		
-		//draw background
-		glColor3f(0.5,0.5,0.5);
-		glBegin(GL_QUADS);
-		glVertex2f(-1,-1);
-		glVertex2f(-1,1);
-		glVertex2f(1,1);
-		glVertex2f(1,-1);
-		glEnd();
-		//*
-		
-		//draw text
-		//~ glColor3f(0,0,0);
-		//~ for(xlong i=0; i<msglines; i++)
-		//~ {
-			//~ for(xlong j=0; j<msglen[i]; j++)
-			//~ {
-				//~ glRasterPos2i(10+j*9,10+i*15);
-				//~ glutBitmapCharacter(GLUT_BITMAP_9_BY_15,message[msgpos[i]+j]);
-			//~ }
-		//~ }
-		//*
-		
-		//draw button
-		//~ glColor3f(0,0,0);
-		//~ glBegin(GL_LINES);
-		//~ glVertex2i((winwidth/2)-50,winheight-25);
-		//~ glVertex2i((winwidth/2)+50,winheight-25);
-		//~ glVertex2i((winwidth/2)+50,winheight-25);
-		//~ glVertex2i((winwidth/2)+50,winheight-5);
-		//~ glEnd();
-		//~ 
-		//~ glColor3f(1,1,1);
-		//~ glBegin(GL_LINES);
-		//~ glVertex2i((winwidth/2)+50,winheight-5);
-		//~ glVertex2i((winwidth/2)-50,winheight-5);
-		//~ glVertex2i((winwidth/2)-50,winheight-5);
-		//~ glVertex2i((winwidth/2)-50,winheight-25);
-		//~ glEnd();
-		//*
-		
-		glFlush();
 	}
 	
-	
-	glutSetWindow(mainid);
 	glutDestroyWindow(currid);
 	return 1;
 }

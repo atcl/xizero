@@ -14,7 +14,7 @@ description=
 run_cmd=
 
 [files]
-current_page=70
+current_page=63
 FILE_NAME_0=1129;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/unittest.cc;0
 FILE_NAME_1=644;C;0;16;1;1;0;/home/atcl/devs/xizero/src/CLinc.h;0
 FILE_NAME_2=155;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CLproject.hh;0
@@ -78,11 +78,11 @@ FILE_NAME_59=2138;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLlight.hh;0
 FILE_NAME_60=443;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLparafile.hh;0
 FILE_NAME_61=1063;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLapp.hh;0
 FILE_NAME_62=284;C;0;16;1;1;0;/home/atcl/devs/xizero/src/xizero.h;0
-FILE_NAME_63=1933;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmsgbox.hh;0
+FILE_NAME_63=2569;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmsgbox.hh;0
 FILE_NAME_64=554;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLbase.hh;0
 FILE_NAME_65=1282;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLtrans.hh;0
 FILE_NAME_66=23997;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLgfx.hh;0
 FILE_NAME_67=1012;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLmark.hh;0
 FILE_NAME_68=1545;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLcamera.hh;0
-FILE_NAME_69=5044;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLwindow.hh;0
+FILE_NAME_69=6327;C++;0;16;1;1;0;/home/atcl/devs/xizero/src/CL/CLwindow.hh;0
 FILE_NAME_70=261;Conf;0;16;1;1;0;/home/atcl/devs/xizero/src/glut.rc;0

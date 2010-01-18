@@ -71,15 +71,15 @@ class CLwindow : public CLbase<CLwindow,1>
 		CLwindow();
 		~CLwindow() { };
 		void idle();
-		static void setmouse(xlong button,xlong state,xlong x,xlong y);
 		static void setmotion(xlong x,xlong y);
-		static void setkeydn(uxchar key,xlong x,xlong y);
 		static void setkeyup(uxchar key,xlong x,xlong y);
 		static void setspecdn(xlong key,xlong x,xlong y);
 		static void setspecup(xlong key,xlong x,xlong y);
 		static void setgpad(uxlong buttonMask,xlong x,xlong y,xlong z);
 		static void draw();
 	public:
+		static void setkeydn(uxchar key,xlong x,xlong y);
+		static void setmouse(xlong button,xlong state,xlong x,xlong y);
 		bool run();
 		void showcursor(bool b) { drawcursor = b; };
 		void showfps(bool b) { printfps = b; }
