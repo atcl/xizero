@@ -3,18 +3,7 @@
 
 #include "CLinc.h"
 
-bool isbalanced(rawpoly* t)
-{
-	
-}
-
-bool islevel(rawpoly* t)
-{
-	
-}
-
-//split by level
-//split by balance
+CLglobal* clglobal;
 
 CLobject** loadheightmap(sprite* h)
 {
@@ -23,32 +12,69 @@ CLobject** loadheightmap(sprite* h)
 	uxlong* data = h->data;
 	
 	rawpoly* grid = new rawpoly[4*width];
-	xlong current = 0;
+	xlong curr = 0;
+	rawpoly temp;
+	rawpoly semp;
 	
 	CLobject** r = new CLobject*[height];
 	
-	for(xlong i=0; i<height; i++)
+	for(xlong i=0; i<height-1; i++)
 	{
 	
 		//generate stripe horizontally
-		for(xlong j=0; j<width; j++)
+		for(xlong j=0; j<width-1; j++)
 		{
 			//setup poly
+			temp.v[0].x = 400-(j*20);
+			temp.v[0].y = i*20;
+			temp.v[0].z = data[(i*width)+j];
 			
+			temp.v[1].x = 400-((j+1)*20);
+			temp.v[1].y = i*20;
+			temp.v[1].z = data[(i*width)+(j+1)];
+			
+			temp.v[2].x = 400-((j+1)*20);
+			temp.v[2].y = (i+1)*20;
+			temp.v[2].z = data[((i+1)*width)+(j+1)];
+			
+			temp.v[3].x = 400-(j*20);
+			temp.v[3].y = (i+1)*20;
+			temp.v[3].z = data[((i+1)*width)+j];
 			//*
 			
-			//split by level
-			
-			//*
-			
-			//split by balance
-			
+			//split by level and balance
+			if( !((temp.v[0].z==temp.v[1].z) && (temp.v[3].z==temp.v[2].z)) && (clglobal->clmath->absolute(temp.v[0].z-temp.v[2].z)>10) )
+			{
+				
+			}
+			if( !((temp.v[0].z==temp.v[3].z) && (temp.v[1].z==temp.v[2].z)) && (clglobal->clmath->absolute(temp.v[0].z-temp.v[2].z)>10) )
+			{
+				
+			}
+			if( (temp.v[0].z==temp.v[2].z) && (temp.v[1].z!=temp.v[3].z) && ( (temp.v[0].z==temp.v[1].z) || (temp.v[0].z==temp.v[3].z) ) )
+			{
+				
+				if( clglobal->clmath->absolute(temp.v[1].z-temp.v[3].z)>10 )
+				{
+					
+				}
+			}
+			if( (temp.v[1].z==temp.v[3].z) && (temp.v[0].z!=temp.v[2].z) && ( (temp.v[1].z==temp.v[0].z) || (temp.v[1].z==temp.v[2].z) ) )
+			{
+				
+				if( clglobal->clmath->absolute(temp.v[0].z-temp.v[2].z)>10 )
+				{
+					
+				}
+			}
 			//*
 			
 			//unify horizontally
-			
+			if(curr>0)
+			{
+				
+			}
 			//*
-			
 		}
 		//*
 		
@@ -56,7 +82,7 @@ CLobject** loadheightmap(sprite* h)
 		for(xlong j=0; j<width; j++)
 		{
 			//setup poly
-			
+
 			//*
 			
 			//unify horizontally
@@ -74,7 +100,7 @@ CLobject** loadheightmap(sprite* h)
 		//* 			
 	}
 	
-	//delete[] grid;
+	delete[] grid;
 	return r;
 }
 
@@ -86,7 +112,7 @@ void displaymap(CLobject** l)
 int main(int argc, char** argv)
 {
 	//init API
-	CLglobal* clglobal = CLglobal::instance(); 
+	clglobal = CLglobal::instance(); 
 	//*
 	
 	//set command line arguments
