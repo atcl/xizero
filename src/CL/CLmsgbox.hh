@@ -84,24 +84,23 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	xlong winwidth = 20+(9*msglen[maxline]);
 	xlong winheight = 40+(msglines*15);
 	if(winwidth<200) { winwidth = 200; }
-	if(winwidth>800) { winwidth = 400; }
+	if(winwidth>400) { winwidth = 400; }
 	if(winheight<100) { winheight = 100; }
-	if(winheight>300) { winheight = 300; }
+	if(winheight>200) { winheight = 200; }
 	
-	glutInitWindowPosition(5,5);
+	glutInitWindowPosition(10,10);
 	glutInitWindowSize(winwidth,winheight);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
 	currid = glutCreateWindow(title);
 	glutMouseFunc(CLwindow::setmouse);
 	glutKeyboardFunc(CLwindow::setkeydn);
 	glutDisplayFunc(draw);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0,winwidth,0,winheight);
-	
-		glutSetWindow(currid);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glFlush();
+	//~ glMatrixMode(GL_PROJECTION);
+	//~ glLoadIdentity();
+	//~ gluOrtho2D(0,winwidth,0,winheight);
+	//~ glutSetWindow(currid);
+	//~ glClear(GL_COLOR_BUFFER_BIT);
+	//~ glFlush();
 		
 		//draw background
 		glColor3f(0.7,0.7,0.7);
@@ -167,7 +166,6 @@ xlong CLmsgbox::alertbox(const xchar* title,xlong value) //! noncritical
 	//prepare message
 	xchar* message = clstring->toascii(value);
 	xlong msglen = clstring->length(message);
-	
 	
 	delete message;
 	return 1;

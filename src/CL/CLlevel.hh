@@ -342,320 +342,335 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 
 CLlevel::CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong bosstype)
 {
-	//load level map
+	//!load level map data as sprite from file
+	//******************************************************************
 	CLfile* testim24 = clsystem->getfile("dat/maps/test.im24");
 	sprite* testlevel = clformat->loadras(testim24);
+	//******************************************************************
 	
-		//load heightmap (plain)
-		xlong rows = testlevel->height;
-		xlong cols = testlevel->width;
-		uxlong* hmap = testlevel->data;
-		doubleword currz = { 0 };
-		doubleword lastz = { 0 };
-		xlong vertcount = 0;
-		xlong polycount = 0;
-		xlong opolycount = 0;
-		xlong oldpolycount = 0;
-		xlong ooldpolycount = 0;
-		rawpoly* polys = new rawpoly[cols*3];
-		rawpoly* opolys = new rawpoly[cols*3];
-		
-		CLobject** terrows = new CLobject*[rows-1];
-		
-		xlong jj = 0;
-		xlong kk = 0;
-		xlong j = 0;
-		xlong k = 0;
-		xlong l = 0;
-		
-		xlong x0 = 0;
-		xlong x1 = 0;
-		xlong x2 = 0;
-		xlong x3 = 0;
-		xlong xz = 0;
-		
-		xlong o0 = 0;
-		xlong o1 = 0;
-		xlong o2 = 0;
-		xlong o3 = 0;
-		xlong oz = 0;
-		
-		bool resetx2 = 0;
-		bool resetx3 = 0;
-		bool resetx22 = 0;
-		xlong y1 = 0;
-		xlong y2 = 0;
+	//!load heightmap (plain = red channel)
+	//******************************************************************
+	//******************************************************************
+	
+	//!setup variables
+	//******************************************************************
+	xlong   rows = testlevel->height;
+	xlong   cols = testlevel->width;
+	uxlong* hmap = testlevel->data;
+	
+	doubleword currz = { 0 };
+	doubleword lastz = { 0 };
+	
+	xlong vertcount = 0;
+	xlong polycount = 0;
+	xlong opolycount = 0;
+	xlong oldpolycount = 0;
+	xlong ooldpolycount = 0;
+	
+	rawpoly* polys = new rawpoly[cols*3];
+	rawpoly* opolys = new rawpoly[cols*3];
+	
+	CLobject** terrows = new CLobject*[rows-1];
+	
+	xlong jj = 0;
+	xlong kk = 0;
+	xlong j = 0;
+	xlong k = 0;
+	xlong l = 0;
+	
+	xlong x0 = 0; xlong x1 = 0; xlong x2 = 0; xlong x3 = 0; xlong xz = 0;
+	xlong o0 = 0; xlong o1 = 0; xlong o2 = 0; xlong o3 = 0; xlong oz = 0;
+	
+	bool resetx2 = 0;
+	bool resetx3 = 0;
+	bool resetx22 = 0;
+	xlong y1 = 0;
+	xlong y2 = 0;
+	//******************************************************************
 
-		//check each row of pixels
-		for(xlong i=0; i<rows-1; i++)
+	//!go through each row in heightmap
+	//******************************************************************
+	for(xlong i=0; i<rows-1; i++)
+	{
+		//!do while the last polygon's right vertices were on the map
+		//**************************************************************
+		while(o1<cols && o2<cols)
 		{
-			while(o1<cols && o2<cols)
+			//!set first vertex
+			//**********************************************************
+			x0 = o1;
+			currz.dd = hmap[i*cols+x0];
+			xz = currz.db[2];
+			polys[polycount].v[0].x = (x0*20)-400;
+			polys[polycount].v[0].y = 10;
+			polys[polycount].v[0].z = -(xz/4);
+			//**********************************************************
+			
+			//!find second vertex
+			//**********************************************************
+			if(x0<cols)
 			{
-				//set first vertex
-				x0 = o1;
-				currz.dd = hmap[i*cols+x0];
-				xz = currz.db[2];
-				polys[polycount].v[0].x = (x0*20)-400;
-				polys[polycount].v[0].y = 10;
-				polys[polycount].v[0].z = -(xz/4);
-				//*
+				for(x1=x0; x1<cols; x1++) //->cols-1 
+				{
+					currz.dd = hmap[i*cols+x1];
+					if(currz.db[2]!=xz) break;
+				}
 				
-				//find second vertex
-				if(x0<cols)
+				//inter gap
+				for(y1=x1; y1<cols; y1++)
 				{
-					for(x1=x0; x1<cols; x1++) //->cols-1 
+					currz.dd = hmap[(i*cols)+y1];
+					if(currz.db[2]==xz)
 					{
-						currz.dd = hmap[i*cols+x1];
-						if(currz.db[2]!=xz) break;
-					}
-					
-					//inter gap
-					for(y1=x1; y1<cols; y1++)
-					{
-						currz.dd = hmap[(i*cols)+y1];
-						if(currz.db[2]==xz)
-						{
-							resetx22 = 1;
-							break;
-						}
-					}
-					//*
-				}
-				else
-				{
-					x1 = x0;
-				}
-				//*
-				
-				//set second vertex
-				polys[polycount].v[1].x = (x1*20)-400;
-				polys[polycount].v[1].y = 10;
-				polys[polycount].v[1].z = -(xz/4);
-				//*
-				
-				//find third vertex
-				currz.dd = hmap[((i+1)*cols)+x0];
-				if(currz.db[2]==xz)
-				{
-					for(x3=x0; x3>o2; x3--)
-					{
-						currz.dd = hmap[((i+1)*cols)+x3];
-						if(currz.db[2]!=xz) break;
-					}
-				}
-				else
-				{
-					for(x3=x0; x3<cols; x3++)
-					{
-						currz.dd = hmap[((i+1)*cols)+x3];
-						if(currz.db[2]==xz) break;
-					}
-					if(x3>x1)
-					{
-						x3 = x0;
-						currz.dd = hmap[((i+1)*cols)+x3];
-						xz = currz.db[2];
-						polys[polycount].v[0].z = -(xz/4);
-						polys[polycount].v[1].z = -(xz/4);
-						resetx2 = 1;
+						resetx22 = 1;
+						break;
 					}
 				}
 				//*
+			}
+			else
+			{
+				x1 = x0;
+			}
+			//**********************************************************
+			
+			//!set second vertex
+			//**********************************************************
+			polys[polycount].v[1].x = (x1*20)-400;
+			polys[polycount].v[1].y = 10;
+			polys[polycount].v[1].z = -(xz/4);
+			//**********************************************************
+			
+			//!find third vertex
+			//**********************************************************
+			currz.dd = hmap[((i+1)*cols)+x0];
+			if(currz.db[2]==xz)
+			{
+				for(x3=x0; x3>o2; x3--)
+				{
+					currz.dd = hmap[((i+1)*cols)+x3];
+					if(currz.db[2]!=xz) break;
+				}
+			}
+			else
+			{
+				for(x3=x0; x3<cols; x3++)
+				{
+					currz.dd = hmap[((i+1)*cols)+x3];
+					if(currz.db[2]==xz) break;
+				}
+				if(x3>x1)
+				{
+					x3 = x0;
+					currz.dd = hmap[((i+1)*cols)+x3];
+					xz = currz.db[2];
+					polys[polycount].v[0].z = -(xz/4);
+					polys[polycount].v[1].z = -(xz/4);
+					resetx2 = 1;
+				}
+			}
+			//**********************************************************
 
-				//set third vertex
-				polys[polycount].v[3].x = (x3*20)-400;
-				polys[polycount].v[3].y = -10;
-				polys[polycount].v[3].z = -(xz/4);
-				//*
-				
-				//find fourth vertex
-				if(resetx2==0)
+			//!set third vertex
+			//**********************************************************
+			polys[polycount].v[3].x = (x3*20)-400;
+			polys[polycount].v[3].y = -10;
+			polys[polycount].v[3].z = -(xz/4);
+			//**********************************************************
+			
+			//!find fourth vertex
+			//**********************************************************
+			if(resetx2==0)
+			{
+				for(x2=x3; x2<cols; x2++)
 				{
-					for(x2=x3; x2<cols; x2++)
-					{
-						currz.dd = hmap[((i+1)*cols)+x2];
-						if(currz.db[2]!=xz) break;
-					}
-					
-					//inter gap
-					if(resetx3!=0)
-					{
-						x3 = x0;
-						polys[polycount].v[3].x = (x3*20)-400;
-						resetx3 = 0;
-					}
-					
-					for(y2=x2; y2<cols; y2++)
-					{
-						currz.dd = hmap[((i+1)*cols)+y2];
-						if(currz.db[2]==xz && y2<x1)
-						{
-							x1 = x2;
-							polys[polycount].v[1].x = (x1*20)-400;
-							resetx3 = 1;
-							break;
-						}
-					}
-					
-					if(resetx22==1 && y1<x2)
-					{
-						x2 = x1;
-						resetx22 = 0;
-					}
-					//*
+					currz.dd = hmap[((i+1)*cols)+x2];
+					if(currz.db[2]!=xz) break;
 				}
-				else
+				
+				//inter gap
+				if(resetx3!=0)
+				{
+					x3 = x0;
+					polys[polycount].v[3].x = (x3*20)-400;
+					resetx3 = 0;
+				}
+				
+				for(y2=x2; y2<cols; y2++)
+				{
+					currz.dd = hmap[((i+1)*cols)+y2];
+					if(currz.db[2]==xz && y2<x1)
+					{
+						x1 = x2;
+						polys[polycount].v[1].x = (x1*20)-400;
+						resetx3 = 1;
+						break;
+					}
+				}
+				
+				if(resetx22==1 && y1<x2)
 				{
 					x2 = x1;
+					resetx22 = 0;
 				}
-				//*
-				
-				//set fourth vertex
-				polys[polycount].v[2].x = (x2*20)-400;
-				polys[polycount].v[2].y = -10;
-				polys[polycount].v[2].z = -(xz/4);
-				//*
-				
-				//fix start and end of rows
-				if(x0==0)
-				{
-					polys[polycount].v[3].x = -400;
-				}
-				//~ else if(x1==cols-1)
-				//~ {
-					//~ polys[polycount].v[2].x = (x1*20)-400;
-				//~ }
-				//~ else if(x2==cols-1)
-				//~ {
-					//~ polys[polycount].v[1].x = (x2*20)-400;
-				//~ }
-				//*
-				
-				//merge if mergeable with previous polygon and prepare for next polygon
-				if(oz==xz && o1==x0 && o2==x3)
-				{
-					polys[polycount-1].v[1].x = polys[polycount].v[1].x;
-					polys[polycount-1].v[2].x = polys[polycount].v[2].x;
-					o1 = x1;
-					o2 = x2;
-				}
-				else
-				{
-					polycount++;
-					o0 = x0;
-					o1 = x1;
-					o2 = x2;
-					o3 = x3;
-					oz = xz;
-				}
-					
-				resetx2 = 0;
 				//*
 			}
-			
-			//insert horizontal connecting polygons
-			oldpolycount = polycount;
-			for(xlong j=1; j<oldpolycount; j++)
+			else
 			{
-				polys[polycount].v[0].x = polys[j-1].v[1].x;
-				polys[polycount].v[1].x = polys[j].v[0].x;
-				polys[polycount].v[2].x = polys[j].v[3].x;
-				polys[polycount].v[3].x = polys[j-1].v[2].x;
-				
-				polys[polycount].v[0].y = 10;
-				polys[polycount].v[1].y = 10;
-				polys[polycount].v[2].y = -10;
-				polys[polycount].v[3].y = -10;
-				
-				polys[polycount].v[0].z = polys[j-1].v[0].z;
-				polys[polycount].v[1].z = polys[j].v[0].z;
-				polys[polycount].v[2].z = polys[j].v[0].z;
-				polys[polycount].v[3].z = polys[j-1].v[0].z;
-				
+				x2 = x1;
+			}
+			//**********************************************************
+			
+			//!set fourth vertex
+			//**********************************************************
+			polys[polycount].v[2].x = (x2*20)-400;
+			polys[polycount].v[2].y = -10;
+			polys[polycount].v[2].z = -(xz/4);
+			//**********************************************************
+			
+			//!fix start and end of rows
+			//**********************************************************
+			if(x0==0)
+			{
+				polys[polycount].v[3].x = -400;
+			}
+			//~ else if(x1==cols-1)
+			//~ {
+				//~ polys[polycount].v[2].x = (x1*20)-400;
+			//~ }
+			//~ else if(x2==cols-1)
+			//~ {
+				//~ polys[polycount].v[1].x = (x2*20)-400;
+			//~ }
+			//**********************************************************
+			
+			//!merge if mergeable with previous polygon and prepare for next polygon
+			//**********************************************************
+			if(oz==xz && o1==x0 && o2==x3)
+			{
+				polys[polycount-1].v[1].x = polys[polycount].v[1].x;
+				polys[polycount-1].v[2].x = polys[polycount].v[2].x;
+				o1 = x1;
+				o2 = x2;
+			}
+			else
+			{
 				polycount++;
+				o0 = x0;
+				o1 = x1;
+				o2 = x2;
+				o3 = x3;
+				oz = xz;
 			}
-			//*
-			
-			//insert lower vertical connecting polygons
-			if(i>0 && i<(rows-1))
-			{
-				xlong cp0 = 0;
-				xlong cp1 = ooldpolycount - 1;
-				xlong cp = 0;
 				
-				for(xlong k=0; k<ooldpolycount; k++)
-				{
-					//~ while(cp0 < ooldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
-					//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
-					//~ 
-					//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
-					//~ {
-						//~ cp = cp0;
-						//~ if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
-						//~ 
-						//~ polys[polycount].v[0].x = opolys[k].v[3].x;
-						//~ polys[polycount].v[1].x = opolys[k].v[2].x;
-						//~ polys[polycount].v[2].x = opolys[k].v[2].x;
-						//~ polys[polycount].v[3].x = opolys[k].v[3].x;
-						//~ 
-						//~ polys[polycount].v[0].y = 10;
-						//~ polys[polycount].v[1].y = 10;
-						//~ polys[polycount].v[2].y = 10;
-						//~ polys[polycount].v[3].y = 10;
-						//~ 
-						//~ polys[polycount].v[0].z = opolys[k].v[0].z;
-						//~ polys[polycount].v[1].z = opolys[k].v[0].z;
-						//~ polys[polycount].v[2].z = polys[cp].v[0].z;
-						//~ polys[polycount].v[3].z = polys[cp].v[0].z;
-						//~ 
-						//~ polycount++;
-					//~ }
-					//~ 
-					//~ cp0 = 0;
-					//~ cp1 = ooldpolycount - 1;
-				//~ }
-				
-				//~ for(xlong k=0; k<oldpolycount; k++)
-				//~ {
-					//~ while(cp0 < oldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
-					//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
-					//~ 
-					//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
-					//~ {
-						//~ cp = cp0;
-						//~ if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
-						//~ 
-						//~ polys[polycount].v[0].x = polys[k].v[0].x;
-						//~ polys[polycount].v[1].x = polys[k].v[1].x;
-						//~ polys[polycount].v[2].x = polys[k].v[1].x;
-						//~ polys[polycount].v[3].x = polys[k].v[0].x;
-						//~ 
-						//~ polys[polycount].v[0].y = 10;
-						//~ polys[polycount].v[1].y = 10;
-						//~ polys[polycount].v[2].y = 10;
-						//~ polys[polycount].v[3].y = 10;
-						//~ 
-						//~ polys[polycount].v[0].z = polys[k].v[0].z;
-						//~ polys[polycount].v[1].z = ppolys[k].v[0].z;
-						//~ polys[polycount].v[2].z = opolys[cp].v[0].z;
-						//~ polys[polycount].v[3].z = opolys[cp].v[0].z;
-				//~ 
-						//~ polycount++;
-					//~ }
-					//~ 
-					//~ cp0 = 0;
-					//~ cp1 = oldpolycount - 1;
-				}
-			}
-			//*
+			resetx2 = 0;
+			//**********************************************************
+		}
+		//**************************************************************
+		
+		//insert horizontal connecting polygons
+		oldpolycount = polycount;
+		for(xlong j=1; j<oldpolycount; j++)
+		{
+			polys[polycount].v[0].x = polys[j-1].v[1].x;
+			polys[polycount].v[1].x = polys[j].v[0].x;
+			polys[polycount].v[2].x = polys[j].v[3].x;
+			polys[polycount].v[3].x = polys[j-1].v[2].x;
 			
-			terrows[i] = new CLobject(polys,polycount,0x000000FF,0);
-			for(xlong l=0; l<polycount; l++) { opolys[l] = polys[l]; }
-			opolycount = polycount;
-			ooldpolycount = oldpolycount;
-			polycount = x0 = x1 = x2 = x3 = xz = o0 = o1 = o2 = o3 = oz = y1 = y2 = 0;
+			polys[polycount].v[0].y = 10;
+			polys[polycount].v[1].y = 10;
+			polys[polycount].v[2].y = -10;
+			polys[polycount].v[3].y = -10;
+			
+			polys[polycount].v[0].z = polys[j-1].v[0].z;
+			polys[polycount].v[1].z = polys[j].v[0].z;
+			polys[polycount].v[2].z = polys[j].v[0].z;
+			polys[polycount].v[3].z = polys[j-1].v[0].z;
+			
+			polycount++;
 		}
 		//*
+		
+		//insert lower vertical connecting polygons
+		if(i>0 && i<(rows-1))
+		{
+			xlong cp0 = 0;
+			xlong cp1 = ooldpolycount - 1;
+			xlong cp = 0;
+			
+			for(xlong k=0; k<ooldpolycount; k++)
+			{
+				//~ while(cp0 < ooldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
+				//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
+				//~ 
+				//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
+				//~ {
+					//~ cp = cp0;
+					//~ if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
+					//~ 
+					//~ polys[polycount].v[0].x = opolys[k].v[3].x;
+					//~ polys[polycount].v[1].x = opolys[k].v[2].x;
+					//~ polys[polycount].v[2].x = opolys[k].v[2].x;
+					//~ polys[polycount].v[3].x = opolys[k].v[3].x;
+					//~ 
+					//~ polys[polycount].v[0].y = 10;
+					//~ polys[polycount].v[1].y = 10;
+					//~ polys[polycount].v[2].y = 10;
+					//~ polys[polycount].v[3].y = 10;
+					//~ 
+					//~ polys[polycount].v[0].z = opolys[k].v[0].z;
+					//~ polys[polycount].v[1].z = opolys[k].v[0].z;
+					//~ polys[polycount].v[2].z = polys[cp].v[0].z;
+					//~ polys[polycount].v[3].z = polys[cp].v[0].z;
+					//~ 
+					//~ polycount++;
+				//~ }
+				//~ 
+				//~ cp0 = 0;
+				//~ cp1 = ooldpolycount - 1;
+			//~ }
+			
+			//~ for(xlong k=0; k<oldpolycount; k++)
+			//~ {
+				//~ while(cp0 < oldpolycount) { if(polys[cp0].v[0].x <= opolys[k].v[3].x && polys[cp0+1].v[0].x > opolys[k].v[3].x) { break; } cp0++; }
+				//~ while(cp1 >= 0) { if(polys[cp1].v[1].x >= opolys[k].v[2].x && polys[cp1-1].v[1].x < opolys[k].v[3].x) { break; } cp1--; }
+				//~ 
+				//~ if(opolys[k].v[0].z != polys[cp0].v[0].z || opolys[k].v[0].z != polys[cp1].v[0].z)
+				//~ {
+					//~ cp = cp0;
+					//~ if( polys[cp1].v[0].z < polys[cp0].v[0].z) cp = cp1;
+					//~ 
+					//~ polys[polycount].v[0].x = polys[k].v[0].x;
+					//~ polys[polycount].v[1].x = polys[k].v[1].x;
+					//~ polys[polycount].v[2].x = polys[k].v[1].x;
+					//~ polys[polycount].v[3].x = polys[k].v[0].x;
+					//~ 
+					//~ polys[polycount].v[0].y = 10;
+					//~ polys[polycount].v[1].y = 10;
+					//~ polys[polycount].v[2].y = 10;
+					//~ polys[polycount].v[3].y = 10;
+					//~ 
+					//~ polys[polycount].v[0].z = polys[k].v[0].z;
+					//~ polys[polycount].v[1].z = ppolys[k].v[0].z;
+					//~ polys[polycount].v[2].z = opolys[cp].v[0].z;
+					//~ polys[polycount].v[3].z = opolys[cp].v[0].z;
+			//~ 
+					//~ polycount++;
+				//~ }
+				//~ 
+				//~ cp0 = 0;
+				//~ cp1 = oldpolycount - 1;
+			}
+		}
+		//*
+		
+		terrows[i] = new CLobject(polys,polycount,0x000000FF,0);
+		for(xlong l=0; l<polycount; l++) { opolys[l] = polys[l]; }
+		opolycount = polycount;
+		ooldpolycount = oldpolycount;
+		polycount = x0 = x1 = x2 = x3 = xz = o0 = o1 = o2 = o3 = oz = y1 = y2 = 0;
+	}
+	//*
 		
 		//load heightmap (ramps)
 		

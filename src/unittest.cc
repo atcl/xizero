@@ -3,6 +3,86 @@
 
 #include "CLinc.h"
 
+bool isbalanced(rawpoly* t)
+{
+	
+}
+
+bool islevel(rawpoly* t)
+{
+	
+}
+
+//split by level
+//split by balance
+
+CLobject** loadheightmap(sprite* h)
+{
+	xlong width = h->width;
+	xlong height = h->height;
+	uxlong* data = h->data;
+	
+	rawpoly* grid = new rawpoly[4*width];
+	xlong current = 0;
+	
+	CLobject** r = new CLobject*[height];
+	
+	for(xlong i=0; i<height; i++)
+	{
+	
+		//generate stripe horizontally
+		for(xlong j=0; j<width; j++)
+		{
+			//setup poly
+			
+			//*
+			
+			//split by level
+			
+			//*
+			
+			//split by balance
+			
+			//*
+			
+			//unify horizontally
+			
+			//*
+			
+		}
+		//*
+		
+		//generate inbetween stripe 
+		for(xlong j=0; j<width; j++)
+		{
+			//setup poly
+			
+			//*
+			
+			//unify horizontally
+			
+			//*
+		}
+		//*
+		
+		//generate object
+		
+		//*
+		
+		//reset for next stripe
+		
+		//* 			
+	}
+	
+	//delete[] grid;
+	return r;
+}
+
+void displaymap(CLobject** l)
+{
+	
+}
+
 int main(int argc, char** argv)
 {
 	//init API
@@ -52,6 +132,12 @@ int main(int argc, char** argv)
 		//clglobal->clsound->play(1,1);
 		//*
 		
+	//*
+	
+	//test heightmap
+	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test.im24");
+	sprite* testlevel = clglobal->clformat->loadras(testim24);
+	CLobject** hlev = loadheightmap(testlevel);
 	//*
 	
 	//main loop variables

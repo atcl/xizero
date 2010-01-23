@@ -26,7 +26,7 @@
  * 
  * author:	atcl
  * 
- * notes:	
+ * notes:	enclose in namespace?
  * 
  * version: 0.1
  */
