@@ -5,6 +5,8 @@
 
 CLglobal* clglobal;
 
+inline xlong extractz(sprite* h,xlong y,xlong x) { return (-1) * ((xlong(((xchar*)(&h->data[(y*h->width)+x]))[2]))>>2); }
+
 CLobject** loadheightmap(sprite* h)
 {
 	xlong width = h->width;
@@ -13,8 +15,6 @@ CLobject** loadheightmap(sprite* h)
 	
 	rawpoly* grid = new rawpoly[4*width];
 	xlong curr = 0;
-	rawpoly temp;
-	rawpoly semp;
 	
 	CLobject** r = new CLobject*[height];
 	
@@ -23,51 +23,220 @@ CLobject** loadheightmap(sprite* h)
 	
 		//generate stripe horizontally
 		for(xlong j=0; j<width-1; j++)
-		{
+		{			
 			//setup poly
-			temp.v[0].x = 400-(j*20);
-			temp.v[0].y = i*20;
-			temp.v[0].z = data[(i*width)+j];
-			
-			temp.v[1].x = 400-((j+1)*20);
-			temp.v[1].y = i*20;
-			temp.v[1].z = data[(i*width)+(j+1)];
-			
-			temp.v[2].x = 400-((j+1)*20);
-			temp.v[2].y = (i+1)*20;
-			temp.v[2].z = data[((i+1)*width)+(j+1)];
-			
-			temp.v[3].x = 400-(j*20);
-			temp.v[3].y = (i+1)*20;
-			temp.v[3].z = data[((i+1)*width)+j];
+			grid[curr].v[0].x = (j*20)-400;
+			grid[curr].v[0].y = 10;
+			grid[curr].v[0].z = extractz(h,i,j);
+			grid[curr].v[1].x = ((j+1)*20)-400;
+			grid[curr].v[1].y = 10;
+			grid[curr].v[1].z = extractz(h,i,j+1);
+			grid[curr].v[2].x = ((j+1)*20)-400;
+			grid[curr].v[2].y = -10;
+			grid[curr].v[2].z = extractz(h,i+1,j+1);
+			grid[curr].v[3].x = (j*20)-400;
+			grid[curr].v[3].y = -10;
+			grid[curr].v[3].z = extractz(h,i+1,j);
 			//*
 			
 			//split by level and balance
-			if( !((temp.v[0].z==temp.v[1].z) && (temp.v[3].z==temp.v[2].z)) && (clglobal->clmath->absolute(temp.v[0].z-temp.v[2].z)>10) )
+			//~ if( ((grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[3].z==grid[curr].v[2].z)) && (clglobal->clmath->absolute(grid[curr].v[0].z-grid[curr].v[2].z)>5) )
+			//~ {
+				//~ curr++;
+				//~ grid[curr].v[0].x = grid[curr-1].v[0].x;
+				//~ grid[curr].v[0].y = grid[curr-1].v[0].y;
+				//~ grid[curr].v[0].z = grid[curr-1].v[2].z;
+				//~ grid[curr].v[1].x = grid[curr-1].v[1].x;
+				//~ grid[curr].v[1].y = grid[curr-1].v[1].y;
+				//~ grid[curr].v[1].z = grid[curr-1].v[2].z;
+				//~ grid[curr].v[2].x = grid[curr-1].v[2].x;
+				//~ grid[curr].v[2].y = grid[curr-1].v[2].y;
+				//~ grid[curr].v[2].z = grid[curr-1].v[2].z;
+				//~ grid[curr].v[3].x = grid[curr-1].v[3].x;
+				//~ grid[curr].v[3].y = grid[curr-1].v[3].y;
+				//~ grid[curr].v[3].z = grid[curr-1].v[2].z;
+				//~ 
+				//~ grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				//~ grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				//~ grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				//~ grid[curr-1].v[1].x = grid[curr-1].v[1].x;
+				//~ grid[curr-1].v[1].y = grid[curr-1].v[0].y;
+				//~ grid[curr-1].v[1].z = grid[curr-1].v[0].z;
+				//~ grid[curr-1].v[2].x = grid[curr-1].v[1].x;
+				//~ grid[curr-1].v[2].y = grid[curr-1].v[0].y;
+				//~ grid[curr-1].v[2].z = grid[curr-1].v[2].z;
+				//~ grid[curr-1].v[3].x = grid[curr-1].v[0].x;
+				//~ grid[curr-1].v[3].y = grid[curr-1].v[0].y;
+				//~ grid[curr-1].v[3].z = grid[curr-1].v[2].z;
+			//~ }
+			//~ if( ((grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[1].z==grid[curr].v[2].z)) && (clglobal->clmath->absolute(grid[curr].v[0].z-grid[curr].v[2].z)>5) )
+			//~ {
+				//~ curr++;
+				//~ grid[curr].v[0].x = grid[curr-1].v[0].x;
+				//~ grid[curr].v[0].y = grid[curr-1].v[0].y;
+				//~ grid[curr].v[0].z = grid[curr-1].v[2].z;
+				//~ grid[curr].v[1].x = grid[curr-1].v[1].x;
+				//~ grid[curr].v[1].y = grid[curr-1].v[1].y;
+				//~ grid[curr].v[1].z = grid[curr-1].v[2].z;
+				//~ grid[curr].v[2].x = grid[curr-1].v[2].x;
+				//~ grid[curr].v[2].y = grid[curr-1].v[2].y;
+				//~ grid[curr].v[2].z = grid[curr-1].v[2].z;
+				//~ grid[curr].v[3].x = grid[curr-1].v[3].x;
+				//~ grid[curr].v[3].y = grid[curr-1].v[3].y;
+				//~ grid[curr].v[3].z = grid[curr-1].v[2].z;
+				//~ 
+				//~ grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				//~ grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				//~ grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				//~ grid[curr-1].v[1].x = grid[curr-1].v[0].x;
+				//~ grid[curr-1].v[1].y = grid[curr-1].v[0].y;
+				//~ grid[curr-1].v[1].z = grid[curr-1].v[2].z;
+				//~ grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				//~ grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				//~ grid[curr-1].v[2].z = grid[curr-1].v[2].z;
+				//~ grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				//~ grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				//~ grid[curr-1].v[3].z = grid[curr-1].v[0].z;
+			//~ }
+			if( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
 			{
+				curr++;
+				grid[curr].v[0].x = grid[curr-1].v[1].x;
+				grid[curr].v[0].y = grid[curr-1].v[1].y;
+				grid[curr].v[0].z = grid[curr-1].v[1].z;
+				grid[curr].v[1].x = grid[curr-1].v[2].x;
+				grid[curr].v[1].y = grid[curr-1].v[2].y;
+				grid[curr].v[1].z = grid[curr-1].v[2].z;
+				grid[curr].v[2].x = grid[curr-1].v[3].x;
+				grid[curr].v[2].y = grid[curr-1].v[3].y;
+				grid[curr].v[2].z = grid[curr-1].v[3].z;
+				grid[curr].v[3].x = grid[curr-1].v[3].x;
+				grid[curr].v[3].y = grid[curr-1].v[3].y;
+				grid[curr].v[3].z = grid[curr-1].v[3].z;
 				
-			}
-			if( !((temp.v[0].z==temp.v[3].z) && (temp.v[1].z==temp.v[2].z)) && (clglobal->clmath->absolute(temp.v[0].z-temp.v[2].z)>10) )
-			{
+				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				grid[curr-1].v[1].x = grid[curr-1].v[1].x;
+				grid[curr-1].v[1].y = grid[curr-1].v[1].y;
+				grid[curr-1].v[1].z = grid[curr-1].v[1].z;
+				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
+				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
 				
-			}
-			if( (temp.v[0].z==temp.v[2].z) && (temp.v[1].z!=temp.v[3].z) && ( (temp.v[0].z==temp.v[1].z) || (temp.v[0].z==temp.v[3].z) ) )
-			{
-				
-				if( clglobal->clmath->absolute(temp.v[1].z-temp.v[3].z)>10 )
+				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
 				{
 					
 				}
 			}
-			if( (temp.v[1].z==temp.v[3].z) && (temp.v[0].z!=temp.v[2].z) && ( (temp.v[1].z==temp.v[0].z) || (temp.v[1].z==temp.v[2].z) ) )
+			else if( (grid[curr].v[2].z==grid[curr].v[1].z) && (grid[curr].v[2].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
 			{
+				curr++;
+				grid[curr].v[0].x = grid[curr-1].v[1].x;
+				grid[curr].v[0].y = grid[curr-1].v[1].y;
+				grid[curr].v[0].z = grid[curr-1].v[1].z;
+				grid[curr].v[1].x = grid[curr-1].v[2].x;
+				grid[curr].v[1].y = grid[curr-1].v[2].y;
+				grid[curr].v[1].z = grid[curr-1].v[2].z;
+				grid[curr].v[2].x = grid[curr-1].v[3].x;
+				grid[curr].v[2].y = grid[curr-1].v[3].y;
+				grid[curr].v[2].z = grid[curr-1].v[3].z;
+				grid[curr].v[3].x = grid[curr-1].v[3].x;
+				grid[curr].v[3].y = grid[curr-1].v[3].y;
+				grid[curr].v[3].z = grid[curr-1].v[3].z;
 				
-				if( clglobal->clmath->absolute(temp.v[0].z-temp.v[2].z)>10 )
+				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				grid[curr-1].v[1].x = grid[curr-1].v[1].x;
+				grid[curr-1].v[1].y = grid[curr-1].v[1].y;
+				grid[curr-1].v[1].z = grid[curr-1].v[1].z;
+				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
+				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+								
+				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
+				{
+					
+				}
+			}
+			else if( (grid[curr].v[1].z==grid[curr].v[0].z) && (grid[curr].v[1].z==grid[curr].v[2].z) && (grid[curr].v[1].z!=grid[curr].v[3].z) )
+			{
+				curr++;
+				grid[curr].v[0].x = grid[curr-1].v[0].x;
+				grid[curr].v[0].y = grid[curr-1].v[0].y;
+				grid[curr].v[0].z = grid[curr-1].v[0].z;
+				grid[curr].v[1].x = grid[curr-1].v[1].x;
+				grid[curr].v[1].y = grid[curr-1].v[1].y;
+				grid[curr].v[1].z = grid[curr-1].v[1].z;
+				grid[curr].v[2].x = grid[curr-1].v[2].x;
+				grid[curr].v[2].y = grid[curr-1].v[2].y;
+				grid[curr].v[2].z = grid[curr-1].v[2].z;
+				grid[curr].v[3].x = grid[curr-1].v[2].x;
+				grid[curr].v[3].y = grid[curr-1].v[2].y;
+				grid[curr].v[3].z = grid[curr-1].v[2].z;
+				
+				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				grid[curr-1].v[1].x = grid[curr-1].v[2].x;
+				grid[curr-1].v[1].y = grid[curr-1].v[2].y;
+				grid[curr-1].v[1].z = grid[curr-1].v[2].z;
+				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
+				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+				
+				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
+				{
+					
+				}
+			}
+			else if( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
+			{
+				curr++;
+				grid[curr].v[0].x = grid[curr-1].v[0].x;
+				grid[curr].v[0].y = grid[curr-1].v[0].y;
+				grid[curr].v[0].z = grid[curr-1].v[0].z;
+				grid[curr].v[1].x = grid[curr-1].v[1].x;
+				grid[curr].v[1].y = grid[curr-1].v[1].y;
+				grid[curr].v[1].z = grid[curr-1].v[1].z;
+				grid[curr].v[2].x = grid[curr-1].v[2].x;
+				grid[curr].v[2].y = grid[curr-1].v[2].y;
+				grid[curr].v[2].z = grid[curr-1].v[2].z;
+				grid[curr].v[3].x = grid[curr-1].v[2].x;
+				grid[curr].v[3].y = grid[curr-1].v[2].y;
+				grid[curr].v[3].z = grid[curr-1].v[2].z;
+				
+				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				grid[curr-1].v[1].x = grid[curr-1].v[2].x;
+				grid[curr-1].v[1].y = grid[curr-1].v[2].y;
+				grid[curr-1].v[1].z = grid[curr-1].v[2].z;
+				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
+				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+				
+				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
 				{
 					
 				}
 			}
 			//*
+			
+			curr++;
 			
 			//unify horizontally
 			if(curr>0)
@@ -92,11 +261,11 @@ CLobject** loadheightmap(sprite* h)
 		//*
 		
 		//generate object
-		
+		r[i] = new CLobject(grid,curr,0xFFFFFFFF,0x000000FF);
 		//*
 		
 		//reset for next stripe
-		
+		curr = 0;
 		//* 			
 	}
 	
@@ -242,7 +411,7 @@ int main(int argc, char** argv)
 		//3. blend stencil to double
 		//4. all shadow casting objects
 
-		clglobal->clscreen->cldoublebuffer.clear(0);
+		clglobal->clscreen->cldoublebuffer.clear(0x00FF0000);
 		clglobal->clscreen->clzbuffer.clear(ZRES);
 		clglobal->clscreen->clstencilbuffer.clear(0);
 		
@@ -264,17 +433,19 @@ int main(int argc, char** argv)
 			clglobal->clscreen->clstencilbuffer.copy(&clglobal->clscreen->cldoublebuffer,12);
 		}
 
-		if(mode==false) test->display(p,CENTER + AMBIENT + SHAPE + ac);
-		else test->display(p,CENTER + AMBIENT + FLAT + ac);
+		//if(mode==false) test->display(p,CENTER + AMBIENT + SHAPE + ac);
+		//else test->display(p,CENTER + AMBIENT + FLAT + ac);
 		
-		//~ for(xlong i=0; i<30; i++)
-		//~ //for(xlong i=25; i<50; i++)
-		//~ //for(xlong i=50; i<75; i++)
-		//~ //for(xlong i=75; i<90; i++)
-		//~ {
-			//~ terrows[i]->display(p,AMBIENT + FLAT + ZLIGHT);
-			//~ terrows[i]->display(p,SHAPE);
-		//~ }
+		for(xlong i=0; i<25; i++)
+		//for(xlong i=25; i<50; i++)
+		//for(xlong i=50; i<75; i++)
+		//for(xlong i=75; i<90; i++)
+		{
+			hlev[i]->display(p,AMBIENT + FLAT + ZLIGHT);
+			hlev[i]->display(p,SHAPE);
+			p.y += 20;
+		}
+		p.y = 10;
 
 		test->getmatrix()->unit();
 	}
