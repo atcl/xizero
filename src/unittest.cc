@@ -200,7 +200,7 @@ CLobject** loadheightmap(sprite* h)
 					
 				}
 			}
-			else if( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
+			else if( (grid[curr].v[3].z==grid[curr].v[0].z) && (grid[curr].v[3].z==grid[curr].v[2].z) && (grid[curr].v[3].z!=grid[curr].v[1].z) )
 			{
 				curr++;
 				grid[curr].v[0].x = grid[curr-1].v[0].x;
