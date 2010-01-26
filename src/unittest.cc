@@ -6,6 +6,9 @@
 CLglobal* clglobal;
 
 inline xlong extractz(sprite* h,xlong y,xlong x) { return (-1) * ((xlong(((xchar*)(&h->data[(y*h->width)+x]))[2]))>>2); }
+inline xlong extracte(sprite* h,xlong y,xlong x) { return (xlong(((xchar*)(&h->data[(y*h->width)+x]))[1])); }
+inline xlong extracts(sprite* h,xlong y,xlong x) { return (xlong(((xchar*)(&h->data[(y*h->width)+x]))[0])); }
+inline xlong extractb(sprite* h,xlong y,xlong x) { return (xlong(((xchar*)(&h->data[(y*h->width)+x]))[3])); }
 
 CLobject** loadheightmap(sprite* h)
 {
@@ -17,6 +20,10 @@ CLobject** loadheightmap(sprite* h)
 	xlong curr = 0;
 	
 	CLobject** r = new CLobject*[height];
+	
+	xlong hordiff[4];
+	xlong verdiff[4];
+	bool  unbalanced = 0;
 	
 	for(xlong i=0; i<height-1; i++)
 	{
@@ -69,6 +76,8 @@ CLobject** loadheightmap(sprite* h)
 				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
 				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
 				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+				
+				unbalanced = 1;
 			}
 			else if( ( (grid[curr].v[1].z==grid[curr].v[0].z) && (grid[curr].v[1].z==grid[curr].v[2].z) && (grid[curr].v[1].z!=grid[curr].v[3].z) )
 			     ||  ( (grid[curr].v[3].z==grid[curr].v[0].z) && (grid[curr].v[3].z==grid[curr].v[2].z) && (grid[curr].v[3].z!=grid[curr].v[1].z) ) )
@@ -99,17 +108,39 @@ CLobject** loadheightmap(sprite* h)
 				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
 				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
 				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+				
+				unbalanced = 1;
 			}
 			//*
-			
-			curr++;
 			
 			//unify horizontally
-			if(curr>0)
+			else if(curr>0 && unbalanced==0)
 			{
+				hordiff[0] = grid[curr-1].v[1].z - grid[curr-1].v[0].z;
+				hordiff[1] = grid[curr-1].v[2].z - grid[curr-1].v[3].z;
+				hordiff[2] = grid[curr].v[1].z   - grid[curr].v[0].z;
+				hordiff[3] = grid[curr].v[2].z   - grid[curr].v[3].z;
 				
+				verdiff[0] = grid[curr-1].v[3].z - grid[curr-1].v[0].z;
+				verdiff[1] = grid[curr-1].v[2].z - grid[curr-1].v[1].z;
+				verdiff[2] = grid[curr].v[3].z   - grid[curr].v[0].z;
+				verdiff[3] = grid[curr].v[2].z   - grid[curr].v[1].z;
+				
+				if( hordiff[0]==hordiff[2] && hordiff[1]==hordiff[3]
+				&&  verdiff[0]==verdiff[2] && verdiff[1]==verdiff[3] )
+				{
+					grid[curr-1].v[1].x = grid[curr].v[1].x;
+					grid[curr-1].v[2].x = grid[curr].v[2].x;
+					grid[curr-1].v[1].z = grid[curr].v[1].z;
+					grid[curr-1].v[2].z = grid[curr].v[2].z;
+					curr--;
+				}
 			}
 			//*
+			
+			else { unbalanced = 0; }
+			
+			curr++;
 		}
 		//*
 		
