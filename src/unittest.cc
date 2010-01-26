@@ -39,66 +39,9 @@ CLobject** loadheightmap(sprite* h)
 			grid[curr].v[3].z = extractz(h,i+1,j);
 			//*
 			
-			//split by level and balance
-			//~ if( ((grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[3].z==grid[curr].v[2].z)) && (clglobal->clmath->absolute(grid[curr].v[0].z-grid[curr].v[2].z)>5) )
-			//~ {
-				//~ curr++;
-				//~ grid[curr].v[0].x = grid[curr-1].v[0].x;
-				//~ grid[curr].v[0].y = grid[curr-1].v[0].y;
-				//~ grid[curr].v[0].z = grid[curr-1].v[2].z;
-				//~ grid[curr].v[1].x = grid[curr-1].v[1].x;
-				//~ grid[curr].v[1].y = grid[curr-1].v[1].y;
-				//~ grid[curr].v[1].z = grid[curr-1].v[2].z;
-				//~ grid[curr].v[2].x = grid[curr-1].v[2].x;
-				//~ grid[curr].v[2].y = grid[curr-1].v[2].y;
-				//~ grid[curr].v[2].z = grid[curr-1].v[2].z;
-				//~ grid[curr].v[3].x = grid[curr-1].v[3].x;
-				//~ grid[curr].v[3].y = grid[curr-1].v[3].y;
-				//~ grid[curr].v[3].z = grid[curr-1].v[2].z;
-				//~ 
-				//~ grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				//~ grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				//~ grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				//~ grid[curr-1].v[1].x = grid[curr-1].v[1].x;
-				//~ grid[curr-1].v[1].y = grid[curr-1].v[0].y;
-				//~ grid[curr-1].v[1].z = grid[curr-1].v[0].z;
-				//~ grid[curr-1].v[2].x = grid[curr-1].v[1].x;
-				//~ grid[curr-1].v[2].y = grid[curr-1].v[0].y;
-				//~ grid[curr-1].v[2].z = grid[curr-1].v[2].z;
-				//~ grid[curr-1].v[3].x = grid[curr-1].v[0].x;
-				//~ grid[curr-1].v[3].y = grid[curr-1].v[0].y;
-				//~ grid[curr-1].v[3].z = grid[curr-1].v[2].z;
-			//~ }
-			//~ if( ((grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[1].z==grid[curr].v[2].z)) && (clglobal->clmath->absolute(grid[curr].v[0].z-grid[curr].v[2].z)>5) )
-			//~ {
-				//~ curr++;
-				//~ grid[curr].v[0].x = grid[curr-1].v[0].x;
-				//~ grid[curr].v[0].y = grid[curr-1].v[0].y;
-				//~ grid[curr].v[0].z = grid[curr-1].v[2].z;
-				//~ grid[curr].v[1].x = grid[curr-1].v[1].x;
-				//~ grid[curr].v[1].y = grid[curr-1].v[1].y;
-				//~ grid[curr].v[1].z = grid[curr-1].v[2].z;
-				//~ grid[curr].v[2].x = grid[curr-1].v[2].x;
-				//~ grid[curr].v[2].y = grid[curr-1].v[2].y;
-				//~ grid[curr].v[2].z = grid[curr-1].v[2].z;
-				//~ grid[curr].v[3].x = grid[curr-1].v[3].x;
-				//~ grid[curr].v[3].y = grid[curr-1].v[3].y;
-				//~ grid[curr].v[3].z = grid[curr-1].v[2].z;
-				//~ 
-				//~ grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				//~ grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				//~ grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				//~ grid[curr-1].v[1].x = grid[curr-1].v[0].x;
-				//~ grid[curr-1].v[1].y = grid[curr-1].v[0].y;
-				//~ grid[curr-1].v[1].z = grid[curr-1].v[2].z;
-				//~ grid[curr-1].v[2].x = grid[curr-1].v[3].x;
-				//~ grid[curr-1].v[2].y = grid[curr-1].v[3].y;
-				//~ grid[curr-1].v[2].z = grid[curr-1].v[2].z;
-				//~ grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				//~ grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				//~ grid[curr-1].v[3].z = grid[curr-1].v[0].z;
-			//~ }
-			if( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
+			//split by balance
+			if( ( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
+			||  ( (grid[curr].v[2].z==grid[curr].v[1].z) && (grid[curr].v[2].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) ) )
 			{
 				curr++;
 				grid[curr].v[0].x = grid[curr-1].v[1].x;
@@ -114,59 +57,21 @@ CLobject** loadheightmap(sprite* h)
 				grid[curr].v[3].y = grid[curr-1].v[3].y;
 				grid[curr].v[3].z = grid[curr-1].v[3].z;
 				
-				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				grid[curr-1].v[1].x = grid[curr-1].v[1].x;
-				grid[curr-1].v[1].y = grid[curr-1].v[1].y;
-				grid[curr-1].v[1].z = grid[curr-1].v[1].z;
+				//grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				//grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				//grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				//grid[curr-1].v[1].x = grid[curr-1].v[1].x;
+				//grid[curr-1].v[1].y = grid[curr-1].v[1].y;
+				//grid[curr-1].v[1].z = grid[curr-1].v[1].z;
 				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
 				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
 				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
-				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
-				
-				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
-				{
-					
-				}
+				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
 			}
-			else if( (grid[curr].v[2].z==grid[curr].v[1].z) && (grid[curr].v[2].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
-			{
-				curr++;
-				grid[curr].v[0].x = grid[curr-1].v[1].x;
-				grid[curr].v[0].y = grid[curr-1].v[1].y;
-				grid[curr].v[0].z = grid[curr-1].v[1].z;
-				grid[curr].v[1].x = grid[curr-1].v[2].x;
-				grid[curr].v[1].y = grid[curr-1].v[2].y;
-				grid[curr].v[1].z = grid[curr-1].v[2].z;
-				grid[curr].v[2].x = grid[curr-1].v[3].x;
-				grid[curr].v[2].y = grid[curr-1].v[3].y;
-				grid[curr].v[2].z = grid[curr-1].v[3].z;
-				grid[curr].v[3].x = grid[curr-1].v[3].x;
-				grid[curr].v[3].y = grid[curr-1].v[3].y;
-				grid[curr].v[3].z = grid[curr-1].v[3].z;
-				
-				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				grid[curr-1].v[1].x = grid[curr-1].v[1].x;
-				grid[curr-1].v[1].y = grid[curr-1].v[1].y;
-				grid[curr-1].v[1].z = grid[curr-1].v[1].z;
-				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
-				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
-								
-				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
-				{
-					
-				}
-			}
-			else if( (grid[curr].v[1].z==grid[curr].v[0].z) && (grid[curr].v[1].z==grid[curr].v[2].z) && (grid[curr].v[1].z!=grid[curr].v[3].z) )
+			else if( ( (grid[curr].v[1].z==grid[curr].v[0].z) && (grid[curr].v[1].z==grid[curr].v[2].z) && (grid[curr].v[1].z!=grid[curr].v[3].z) )
+			     ||  ( (grid[curr].v[3].z==grid[curr].v[0].z) && (grid[curr].v[3].z==grid[curr].v[2].z) && (grid[curr].v[3].z!=grid[curr].v[1].z) ) )
 			{
 				curr++;
 				grid[curr].v[0].x = grid[curr-1].v[0].x;
@@ -182,57 +87,18 @@ CLobject** loadheightmap(sprite* h)
 				grid[curr].v[3].y = grid[curr-1].v[2].y;
 				grid[curr].v[3].z = grid[curr-1].v[2].z;
 				
-				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				//grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				//grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				//grid[curr-1].v[0].z = grid[curr-1].v[0].z;
 				grid[curr-1].v[1].x = grid[curr-1].v[2].x;
 				grid[curr-1].v[1].y = grid[curr-1].v[2].y;
 				grid[curr-1].v[1].z = grid[curr-1].v[2].z;
 				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
 				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
 				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
-				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
-				
-				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
-				{
-					
-				}
-			}
-			else if( (grid[curr].v[3].z==grid[curr].v[0].z) && (grid[curr].v[3].z==grid[curr].v[2].z) && (grid[curr].v[3].z!=grid[curr].v[1].z) )
-			{
-				curr++;
-				grid[curr].v[0].x = grid[curr-1].v[0].x;
-				grid[curr].v[0].y = grid[curr-1].v[0].y;
-				grid[curr].v[0].z = grid[curr-1].v[0].z;
-				grid[curr].v[1].x = grid[curr-1].v[1].x;
-				grid[curr].v[1].y = grid[curr-1].v[1].y;
-				grid[curr].v[1].z = grid[curr-1].v[1].z;
-				grid[curr].v[2].x = grid[curr-1].v[2].x;
-				grid[curr].v[2].y = grid[curr-1].v[2].y;
-				grid[curr].v[2].z = grid[curr-1].v[2].z;
-				grid[curr].v[3].x = grid[curr-1].v[2].x;
-				grid[curr].v[3].y = grid[curr-1].v[2].y;
-				grid[curr].v[3].z = grid[curr-1].v[2].z;
-				
-				grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				grid[curr-1].v[1].x = grid[curr-1].v[2].x;
-				grid[curr-1].v[1].y = grid[curr-1].v[2].y;
-				grid[curr-1].v[1].z = grid[curr-1].v[2].z;
-				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
-				grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[3].z = grid[curr-1].v[3].z;
-				
-				if( clglobal->clmath->absolute(grid[curr].v[1].z-grid[curr].v[3].z)>10 )
-				{
-					
-				}
+				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
 			}
 			//*
 			
@@ -243,19 +109,6 @@ CLobject** loadheightmap(sprite* h)
 			{
 				
 			}
-			//*
-		}
-		//*
-		
-		//generate inbetween stripe 
-		for(xlong j=0; j<width; j++)
-		{
-			//setup poly
-
-			//*
-			
-			//unify horizontally
-			
 			//*
 		}
 		//*
@@ -347,6 +200,12 @@ int main(int argc, char** argv)
 	CLfile* screenf;
 	//*
 	
+	for(xlong i=10; i<40; i++)
+	{
+		hlev[i]->getmatrix()->translate(0,((i-10)-15)*-20,0);
+		hlev[i]->update();
+	}
+	
 	//main loop
 	while(clglobal->clwindow->run())
 	{
@@ -436,16 +295,11 @@ int main(int argc, char** argv)
 		//if(mode==false) test->display(p,CENTER + AMBIENT + SHAPE + ac);
 		//else test->display(p,CENTER + AMBIENT + FLAT + ac);
 		
-		for(xlong i=0; i<25; i++)
-		//for(xlong i=25; i<50; i++)
-		//for(xlong i=50; i<75; i++)
-		//for(xlong i=75; i<90; i++)
+		for(xlong i=10; i<40; i++)
 		{
 			hlev[i]->display(p,AMBIENT + FLAT + ZLIGHT);
 			hlev[i]->display(p,SHAPE);
-			p.y += 20;
 		}
-		p.y = 10;
 
 		test->getmatrix()->unit();
 	}
