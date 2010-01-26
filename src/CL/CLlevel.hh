@@ -39,6 +39,8 @@
 ///*
 
 ///declarations
+#define UNITHEIGHT 20
+#define UNITWIDTH  20
 typedef CLlist<CLenemy> CLenemylist;
 ///*
 
@@ -52,41 +54,35 @@ class CLlevel : public CLbase<CLlevel,0>
 		static CLscreen* clscreen;
 		static CLsystem* clsystem; //temp!
 	protected:
-		CLmatrix*    linear;
+		CLobject**   levelmap;
 		CLplayer*    player;
-		CLenemylist* enemies;
+		CLenemylist* enemylist;
 		CLboss*      boss;
-		CLobject**   terrain;
-		CLfbuffer*   levellandscape;
-		static xlong levelwidth;
-		static xlong blockheight;
-		static xlong blockwidth;
-		static xlong blockdepth;
-		static xlong floorheight;
-		xchar*** levellayers;
+		xlong levelwidth;
 		xlong levelheight;
-		xlong blocksperscreeny;
-		xlong blocksperscreenx;
-		xlong blockmark;
-		xlong smoothmark;
-		xlong smoothmarkmin;
-		xlong smoothmarkmax;
-		xlong smoothlevelheight;
-		xlong smoothlevelwidth;
+		xlong levelmarkmax;
+		xlong levelmarkmin;
+		xlong levelmark;
+		xlong stripewidth;
+		xlong stripeheight;
+		xlong stripemarkmax;
+		xlong stripemarkmin;
+		xlong stripemark;
+		static xlong floorheight;
 		xlong playerscreenylevel;
-		static bool  paused;
+		static bool paused;
+		
+		inline xlong extract(sprite* h,xlong y,xlong x,xlong i) { return (xlong(((uxchar*)(&h->data[(y*h->width)+x]))[i])); }
 	public:
 		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype);
-		CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong bosstype);
+		CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong level,xlong bosstype);
 		~CLlevel();
 		xlong update();
 		void display();
-		void subsmark(xlong m);
 		void setmark(xlong m);
 		void start();
 		static void pause();
-		xlong getmark() const { return smoothmark; };
-		CLfbuffer* getlandscape() const { return levellandscape; };
+		xlong getmark() const { return levelmark; };
 		CLplayer* getplayer() const { return player; };
 };
 
@@ -95,21 +91,13 @@ CLformat* CLlevel::clformat = CLformat::instance();
 CLstring* CLlevel::clstring = CLstring::instance();
 CLscreen* CLlevel::clscreen = CLscreen::instance();
 CLsystem* CLlevel::clsystem = CLsystem::instance();
-xlong CLlevel::levelwidth = 20; //in blocks
-xlong CLlevel::blockheight = 40;
-xlong CLlevel::blockwidth = 40;
-xlong CLlevel::blockdepth = 40;
 xlong CLlevel::floorheight = 100;
 bool  CLlevel::paused = 0;
 ///*
 
 ///implementation
-CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype) //! noncritical
+CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong level,xlong bosstype) //! noncritical
 {
-	//matrix for linear transformations of level objects
-	linear = new CLmatrix(1);
-	//*
-	
 	//set screen boundaries
 	clgame->setboundaries(60,0,740,600);
 	//*
@@ -117,275 +105,285 @@ CLlevel::CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* b
 	//game is not paused from beginning
 	paused = 0;
 	//*
-
-//terrain:
-
-	//load terrainlib from .ar to array of CLobject* pointing to y3d objects
-	CLar* terraina = new CLar(terrainlib);
-	uxlong terraincount = terraina->getfilecount();
-	terrain = new CLobject*[terraincount];
-	for(uxlong g=0; g<terraincount; g++) { terrain[g] = new CLobject(terraina->getmember(g),1); }
-	//*
-
-//***
-
-//level:
-
-	//load levelmaps from .ar
-	CLar* levela = new CLar(levelcontainer);
-	//*
 	
-	//terrain map:
-	CLfile* tf = levela->findbyextension(u8".mapt");
-	if(tf==0) err(__FILE__,__func__,u8"no terrain map found");
-	xchar** terrainmap = clformat->loadmap(tf,33,' ',-1);
-	//*
-
-	//determine level constants
-	levelheight = clstring->linecount(tf->text);
-	blocksperscreeny = YRES / blockheight;
-	blocksperscreenx = XRES / blockwidth;
-	blockmark = levelheight - blocksperscreeny;
-	smoothmarkmin = 0;
-	smoothmarkmax = blockmark * blockheight;
-	smoothmark = smoothmarkmax;
-	smoothlevelheight = levelheight * blockheight;
-	smoothlevelwidth = levelwidth * blockwidth;
-	if(blockmark < 0) err(__FILE__,__func__,u8"Level too short");
-	//*
-
-	//height map:
-	CLfile* hf = levela->findbyextension(u8".maph");
-	if(hf==0) err(__FILE__,__func__,u8"no height map found");
-	xchar** heightmap = clformat->loadmap(hf,48,' ',0);
-	//*
-
-	//entity map:
-	CLfile* ef = levela->findbyextension(u8".mape");
-	if(ef==0) err(__FILE__,__func__,u8"no entity map found");
-	xchar** entitymap = clformat->loadmap(ef,35,'.',-3);
-	//*
-
-	//build levellayerscontaining all sub maps
-	levellayers = new xchar**[4];
-	levellayers[0] = terrainmap;
-	levellayers[1] = heightmap;
-	levellayers[2] = entitymap;
-	//levellayers[3] = specialmap //later when needed.
-
-//***
-
-//level landscape generation:
-
-	//create landscape buffer and virtual screenside for rendering to landscape buffer
-	xlong templevelheight = smoothlevelheight;
-	levellandscape = new CLfbuffer(smoothlevelwidth*templevelheight);
-	levellandscape->clear(floorheight);
-	screenside* templevelrside = new screenside[templevelheight];
-	screenside* templevellside = new screenside[templevelheight];
-	//*
-
-	//set variables for controlling the render loop
-	xlong currentterrain = 0;
-	xchar currentheight = 0;
-	xchar currententity = 0;
-	xlong blockoffsetx = blockwidth >> 1;
-	xlong blockoffsety = blockheight >> 1;
-	xlong localfloorheight = floorheight - 5;
-	CLlvector current(blockoffsetx,blockoffsety,localfloorheight);
-	//*
-
-	//render landscape
-	for(uxlong i=0; i<levelheight; i++)
-	{
-		for(uxlong j=0; j<levelwidth; j++)
-		{
-			currentterrain = xlong(levellayers[0][i][j]);
-			if(currentterrain != -1)
-			{
-				currentheight = levellayers[1][i][j];
-				currententity = levellayers[2][i][j];
-				if(currentheight!=0)
-				{
-					for(int k=1; k<=currentheight; k++)
-					{
-						terrain[0]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
-						current.z -= blockdepth>>2;
-					}
-				}
-
-				terrain[currentterrain]->display(current,templevellside,templevelrside,levellandscape,templevelheight);
-				terrain[currentterrain]->reset();
-				current.z = localfloorheight;
-			}
-			current.x += blockwidth;
-		}
-		current.x = blockoffsetx;
-		current.y += blockheight;	
-	}
-	//*
-
-//***
-
-//player:
-
-	//search player start pos and set player pos to it
-	bool startposfound = false;
-	CLlvector* playerp = new CLlvector();
-	for(uxlong h=0; h<levelheight; h++)
-	{
-		for(uxlong i=0; i<levelwidth; i++)
-		{
-			if(levellayers[2][h][i] == -2)
-			{
-				startposfound = true;
-				playerp->x = i * blockwidth;
-				playerp->y = h * blockheight;
-				playerp->z = levellayers[1][h][i] * blockdepth;
-				break;
-			}
-		}
-	}
-	if(startposfound==false) { err(__FILE__,__func__,u8"no player start position found in entity map"); }
-	//*
-
-	//create player
-	player = new CLplayer(playerlib,&smoothmark,smoothlevelheight+10,playerp);
+	//load combined level map file
+	//******************************************************************
+	CLar* levela = new CLar(maplib);
+	sprite* h = clformat->loadras(levela->findbyname("level000.map"));
+	xlong width = h->width;
+	xlong height = h->height;
+	uxlong* data = h->data;
+	
+	xlong stripesperscreen = YRES / UNITHEIGHT;
+	levelwidth = width * UNITWIDTH;
+	levelheight = height * UNITHEIGHT;
+	levelmarkmax = levelheight - (stripesperscreen * UNITHEIGHT);
+	levelmarkmin = 0;
+	levelmark = levelmarkmax;
+	stripewidth = width;
+	stripeheight = height;
+	stripemarkmax = height - stripesperscreen;
+	stripemarkmin = 0;
+	stripemark = stripemarkmax;
+	
+	if(stripemark < 0) err(__FILE__,__func__,u8"Level too short");
 	playerscreenylevel = 3*(YRES>>2);
-	//*
-
-//***
-
-//enemies:
-
-	//load enemy archive
-	CLar* enemiesa = new CLar(enemylib);
-	//*
+	//******************************************************************
 	
-	//load all enemies in archive (base enemies) into array
+	//load heightmap
+	//******************************************************************
+	rawpoly* grid = new rawpoly[4*width];
+	xlong curr = 0;
+	levelmap = new CLobject*[height];
+	
+	xlong hordiff[4];
+	xlong verdiff[4];
+	bool  unbalanced = 0;
+	
+	for(xlong i=0; i<height-1; i++)
+	{
+	
+		//generate stripe horizontally
+		for(xlong j=0; j<width-1; j++)
+		{			
+			//setup poly
+			grid[curr].v[0].x = (j*20)-400;
+			grid[curr].v[0].y = 10;
+			grid[curr].v[0].z = -extract(h,i,j,2)/4;
+			grid[curr].v[1].x = ((j+1)*20)-400;
+			grid[curr].v[1].y = 10;
+			grid[curr].v[1].z = -extract(h,i,j+1,2)/4;
+			grid[curr].v[2].x = ((j+1)*20)-400;
+			grid[curr].v[2].y = -10;
+			grid[curr].v[2].z = -extract(h,i+1,j+1,2)/4;
+			grid[curr].v[3].x = (j*20)-400;
+			grid[curr].v[3].y = -10;
+			grid[curr].v[3].z = -extract(h,i+1,j,2)/4;
+			//*
+			
+			//split by balance
+			if( ( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
+			||  ( (grid[curr].v[2].z==grid[curr].v[1].z) && (grid[curr].v[2].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) ) )
+			{
+				curr++;
+				grid[curr].v[0].x = grid[curr-1].v[1].x;
+				grid[curr].v[0].y = grid[curr-1].v[1].y;
+				grid[curr].v[0].z = grid[curr-1].v[1].z;
+				grid[curr].v[1].x = grid[curr-1].v[2].x;
+				grid[curr].v[1].y = grid[curr-1].v[2].y;
+				grid[curr].v[1].z = grid[curr-1].v[2].z;
+				grid[curr].v[2].x = grid[curr-1].v[3].x;
+				grid[curr].v[2].y = grid[curr-1].v[3].y;
+				grid[curr].v[2].z = grid[curr-1].v[3].z;
+				grid[curr].v[3].x = grid[curr-1].v[3].x;
+				grid[curr].v[3].y = grid[curr-1].v[3].y;
+				grid[curr].v[3].z = grid[curr-1].v[3].z;
+				
+				//grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				//grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				//grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				//grid[curr-1].v[1].x = grid[curr-1].v[1].x;
+				//grid[curr-1].v[1].y = grid[curr-1].v[1].y;
+				//grid[curr-1].v[1].z = grid[curr-1].v[1].z;
+				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
+				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+				
+				unbalanced = 1;
+			}
+			else if( ( (grid[curr].v[1].z==grid[curr].v[0].z) && (grid[curr].v[1].z==grid[curr].v[2].z) && (grid[curr].v[1].z!=grid[curr].v[3].z) )
+			     ||  ( (grid[curr].v[3].z==grid[curr].v[0].z) && (grid[curr].v[3].z==grid[curr].v[2].z) && (grid[curr].v[3].z!=grid[curr].v[1].z) ) )
+			{
+				curr++;
+				grid[curr].v[0].x = grid[curr-1].v[0].x;
+				grid[curr].v[0].y = grid[curr-1].v[0].y;
+				grid[curr].v[0].z = grid[curr-1].v[0].z;
+				grid[curr].v[1].x = grid[curr-1].v[1].x;
+				grid[curr].v[1].y = grid[curr-1].v[1].y;
+				grid[curr].v[1].z = grid[curr-1].v[1].z;
+				grid[curr].v[2].x = grid[curr-1].v[2].x;
+				grid[curr].v[2].y = grid[curr-1].v[2].y;
+				grid[curr].v[2].z = grid[curr-1].v[2].z;
+				grid[curr].v[3].x = grid[curr-1].v[2].x;
+				grid[curr].v[3].y = grid[curr-1].v[2].y;
+				grid[curr].v[3].z = grid[curr-1].v[2].z;
+				
+				//grid[curr-1].v[0].x = grid[curr-1].v[0].x;
+				//grid[curr-1].v[0].y = grid[curr-1].v[0].y;
+				//grid[curr-1].v[0].z = grid[curr-1].v[0].z;
+				grid[curr-1].v[1].x = grid[curr-1].v[2].x;
+				grid[curr-1].v[1].y = grid[curr-1].v[2].y;
+				grid[curr-1].v[1].z = grid[curr-1].v[2].z;
+				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
+				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
+				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
+				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
+				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
+				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
+				
+				unbalanced = 1;
+			}
+			//*
+			
+			//unify horizontally
+			else if(curr>0 && unbalanced==0)
+			{
+				hordiff[0] = grid[curr-1].v[1].z - grid[curr-1].v[0].z;
+				hordiff[1] = grid[curr-1].v[2].z - grid[curr-1].v[3].z;
+				hordiff[2] = grid[curr].v[1].z   - grid[curr].v[0].z;
+				hordiff[3] = grid[curr].v[2].z   - grid[curr].v[3].z;
+				
+				verdiff[0] = grid[curr-1].v[3].z - grid[curr-1].v[0].z;
+				verdiff[1] = grid[curr-1].v[2].z - grid[curr-1].v[1].z;
+				verdiff[2] = grid[curr].v[3].z   - grid[curr].v[0].z;
+				verdiff[3] = grid[curr].v[2].z   - grid[curr].v[1].z;
+				
+				if( hordiff[0]==hordiff[2] && hordiff[1]==hordiff[3]
+				&&  verdiff[0]==verdiff[2] && verdiff[1]==verdiff[3] )
+				{
+					grid[curr-1].v[1].x = grid[curr].v[1].x;
+					grid[curr-1].v[2].x = grid[curr].v[2].x;
+					grid[curr-1].v[1].z = grid[curr].v[1].z;
+					grid[curr-1].v[2].z = grid[curr].v[2].z;
+					curr--;
+				}
+			}
+			//*
+			
+			else { unbalanced = 0; }
+			
+			curr++;
+		}
+		//*
+		
+		//generate object
+		levelmap[i] = new CLobject(grid,curr,0xFFFFFFFF,0x000000FF);
+		//*
+		
+		//reset for next stripe
+		curr = 0;
+		//* 			
+	}
+	
+	delete[] grid;
+	//******************************************************************
+	
+	
+	//load player, enemies and boss
+	//******************************************************************
+	uxchar type = 0;
+	
+	CLar* bossa = new CLar(bosslib);
+	CLar* enemiesa = new CLar(enemylib);
 	xlong differentenemies = enemiesa->getfilecount();
 	CLenemy** baseenemies = new CLenemy*[differentenemies];
-	for(uxlong k=0; k<differentenemies; k++) { baseenemies[k] = new CLenemy(enemiesa->getmember(k),&smoothmark,smoothlevelheight+10); }
-	//*
-
-	//create all enemies in level through copying from base enemies from archive
-	//find enemy startpos in entity map and associate (copy) from baseenemy in enemy list
-	enemies = new CLenemylist();
-	CLenemy* currentenemy;
-	CLlvector* enemyp = new CLlvector();
-	for(uxlong l=0; l<differentenemies; l++)
-	{ 
-		for(uxlong m=0; m<levelheight; m++)
-		{
-			for(uxlong n=0; n<levelwidth; n++)
-			{
-				if(levellayers[2][m][n] == l)
-				{
-					enemyp->x = n * blockwidth;
-					enemyp->y = m * blockheight;
-					enemyp->z = levellayers[1][m][n];
-					currentenemy = new CLenemy(baseenemies[l],enemyp);
-					enemies->append(currentenemy);
-				}
-			}
-		}
-	}
-	//*
-
-//***
+	for(uxlong k=0; k<differentenemies; k++) { baseenemies[k] = new CLenemy(enemiesa->getmember(k),&levelmark,levelheight+10); }
 	
-//boss
-
-	//load enemy archive
-	CLar* bossa = new CLar(bosslib);
-	//*
-
-	//search player start pos and set player pos to it
-	bool bossposfound = false;
-	CLlvector* bossp = new CLlvector();
-	for(uxlong h=0; h<levelheight; h++)
+	CLlvector* ppos = new CLlvector(0,0,0,-1);
+	CLlvector* epos = new CLlvector(0,0,0,-1);
+	CLlvector* bpos = new CLlvector(0,0,0,-1);
+	enemylist = new CLenemylist();
+	CLenemy* currentenemy;
+	
+	for(xlong i=0; i<height; i++)
 	{
-		for(uxlong i=0; i<levelwidth; i++)
+		for(xlong j=0; j<width; j++)
 		{
-			if(levellayers[2][h][i] == -1)
+			type = extract(h,i,j,1);
+			
+			switch(type)
 			{
-				bossposfound = true;
-				bossp->x = i * blockwidth;
-				bossp->y = h * blockheight;
-				bossp->z = levellayers[1][h][i] * blockdepth;
+				case 0: //nothing
+				
+				case 63: //player start position
+					if(ppos->e==-1)
+					{
+						ppos->x = j * UNITHEIGHT;
+						ppos->y = i * UNITWIDTH;
+						ppos->z = -extract(h,i,j,2)/4;;
+						ppos->e = 0;
+						player = new CLplayer(playerlib,&levelmark,levelheight+10,ppos);
+					}
+				break;
+				
+				case 255: //boss start position
+					if(bpos->e==-1)
+					{
+						bpos->x = j * UNITHEIGHT;
+						bpos->y = i * UNITWIDTH;
+						bpos->z = -extract(h,i,j,2)/4;
+						bpos->e = 0;
+						boss = new CLboss(bossa->getmember(bosstype),&levelmark,levelheight+10,bpos);
+					}
+				break;
+				
+				default: //enemy start position
+					bpos->x = j * UNITHEIGHT;
+					bpos->y = i * UNITWIDTH;
+					bpos->z = -extract(h,i,j,2)/4;
+					bpos->e = 0;
+					currentenemy = new CLenemy(baseenemies[127+type],epos);
+					enemylist->append(currentenemy);
 				break;
 			}
 		}
 	}
-	if(bossposfound==false) err(__FILE__,__func__,u8"no boss position found in entity map");
-	//*
-
-	//load boss
-	boss = new CLboss(bossa->getmember(bosstype),&smoothmark,smoothlevelheight+10,bossp);
-	//*
-
-//***
 	
-	//release loaded files
-	//~ delete enemiesa;
-	//~ delete bossa;
-	//~ delete levela;
-	//~ delete enemyp;
-	//~ delete bossp;
-	//~ delete playerp;
-	//~ delete[] templevelrside;
-	//~ delete[] templevellside;
-	//*
-
-//***
-}
-
-CLlevel::CLlevel(CLfile* map,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong bosstype)
-{
-
+	if(ppos->e==-1) { err(__FILE__,__func__,u8"no player start position found in combined map"); }
+	if(epos->e==-1) { err(__FILE__,__func__,u8"no enemy start position found in combined map"); }
+	if(bpos->e==-1) { err(__FILE__,__func__,u8"no boss start position found in combined map"); }
+	
+	delete bossa;
+	delete enemiesa;
+	delete[] baseenemies;
+	//******************************************************************
+	
+	
 }
 
 CLlevel::~CLlevel() //! noncritical
 {
 	delete player;
-	delete linear;
-	delete enemies;
+	delete enemylist;
 	delete boss;
-	delete levellandscape;
-	delete terrain;
 }
 
 xlong CLlevel::update() //! critical
 {
+	//check if game paused
 	if(paused)
 	{
 		player->pause();
-		for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext()) { enemies->getcurrentdata()->pause(); }
+		for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->pause(); }
 		boss->pause();
 		return 1;
 	}
+	//*
 	
 	xlong isdead = 0;
 	
 	//update player
-	isdead = player->update(levellandscape,enemies,boss);
+	isdead = player->update(levellandscape,enemylist,boss);
 	if(isdead != -1) { return -1; }
 	//*
 
 	//update enemies
 	CLenemy* currentenemy;
 	bool listfix = 0;
-	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
+	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext())
 	{
-		if(listfix) { i+=enemies->setprev(); listfix=0; }
-		currentenemy = enemies->getcurrentdata();
+		if(listfix) { i+=enemylist->setprev(); listfix=0; }
+		currentenemy = enemylist->getcurrentdata();
 		isdead = currentenemy->update(player);
 		if(isdead!=-1)
 		{
 			//delete static_cast<CLenemy*>(enemies->delcurrent(1));
 			player->addpoints(isdead);
-			enemies->delcurrent(0);
-			listfix = enemies->isfirst();
+			enemylist->delcurrent(0);
+			listfix = enemylist->isfirst();
 		}
 	}
 	//*
@@ -401,9 +399,9 @@ xlong CLlevel::update() //! critical
 
 	//adjust section of level to be displayed by ("new") player position
 	xlong py = player->getposition()->y;
-	if(py<playerscreenylevel) setmark(smoothmarkmin);
-	else if(py>(smoothmarkmax+playerscreenylevel)) setmark(smoothmarkmax);
-	else setmark(py - playerscreenylevel);
+	     if(py<playerscreenylevel)                 { setmark(levelmarkmin); }
+	else if(py>(levelmarkmax+playerscreenylevel))  { setmark(levelmarkmax); }
+	else                                           { setmark(py - playerscreenylevel); }
 	//*
 	
 	return 1;
@@ -411,130 +409,40 @@ xlong CLlevel::update() //! critical
 
 void CLlevel::display() //! critical
 {
-	//set variables controlling render loop
-	xlong currentterrain = 0;
-	xchar currentheight = 0;
-	xchar currententity = 0;
-	xlong blockoffsetx = blockwidth >> 1;
-	xlong blockoffsety = blockheight >> 1; 
-	xlong yoffset = smoothmark % blockheight;
-	xlong localfloorheight = floorheight - 5;
-	CLlvector ckeeper( -(XRES >> 1) + blockoffsetx , (YRES >> 1) - blockoffsety + yoffset  + blockheight , localfloorheight );
-	CLlvector current( 0 , 0 , localfloorheight );
-	xshort dontrender = 0; 
-	uxlong ii = 0;
-	//*
-
-	//render level to screen block by block
-	linear->unit();
-	for(int i=-1; i<blocksperscreeny+2; i++)
-	{
-		ii = blockmark + i;
-		
-		if( !( i<0                   && blockmark<=0 ) )
-		{
-		if( !( i==blocksperscreeny   && smoothmark>=smoothmarkmax ) )
-		{
-		if( !( i==blocksperscreeny+1 && smoothmark>=smoothmarkmax-blockheight ) )
-		{
-			for(uxlong j=0; j<blocksperscreenx; j++)
-			{
-				currentterrain = xlong(levellayers[0][ii][j]);
-				if(currentterrain!=-1)
-				{
-					currentheight = levellayers[1][ii][j];
-					currententity = levellayers[2][ii][j];
-					linear->translate(ckeeper.x,ckeeper.y,0); 
-
-					if(currentheight!=0)
-					{
-						terrain[0]->update(linear);
-						for(int k=1; k<=currentheight; k++)
-						{
-							//~ if( (k<currentheight-1) || (k<currentheight && currentterrain==0) ) dontrender += ZMINUS;
-							terrain[0]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT);
-							current.z -= blockdepth>>2;
-						}
-						terrain[0]->reset();
-						dontrender = 0;
-					}
-					
-					terrain[currentterrain]->update(linear);
-					//~ if( (j>0                && currentterrain == levellayers[0][ii][j-1] && currentheight == levellayers[1][ii][j-1]) || j==0 ) dontrender += XMINUS;
-					//~ if( (j<blocksperscreenx && currentterrain == levellayers[0][ii][j+1] && currentheight == levellayers[1][ii][j+1]) || j==blocksperscreenx ) dontrender += XPLUS;
-					//~ if( (i>0                && currentterrain == levellayers[0][ii-1][j] && currentheight == levellayers[1][ii-1][j]) || i==-1 ) dontrender += YPLUS;
-					//~ if( (ii<levelheight-1   && currentterrain == levellayers[0][ii+1][j] && currentheight == levellayers[1][ii+1][j]) || ii==levelheight-1 ) dontrender += YMINUS;
-					terrain[currentterrain]->display(current,CENTER + FLAT + AMBIENT + ZLIGHT + dontrender);
-					terrain[currentterrain]->reset();
-					current.z = ckeeper.z;
-					linear->unit();
-					dontrender = 0;
-				}
-				ckeeper.x += blockwidth;
-			}
-		}
-		}
-		}
-		ckeeper.x = -(XRES >> 1) + blockoffsetx;
-		ckeeper.y -= blockheight;	
-	}
-	//*
+	//render terrain
 	
-	CLenemy* currentenemy;
+	for(xlong i=0; i<30; i++)
+	{
+		
+	}
+	
+	//*
 	
 	//cast shadows of entities
 	player->display(1);
-	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
-	{
-		currentenemy = enemies->getcurrentdata();
-		currentenemy->display(1);
-	}
+	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->display(1); }
 	boss->display(1);
+	
 	clscreen->clstencilbuffer.copy(&clscreen->cldoublebuffer,12);
 	//*
 
-	//display player:
+	//display enitities
 	player->display();
-	//*
-	
-	//display enemies:
-	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
-	{
-		currentenemy = enemies->getcurrentdata();
-		currentenemy->display();
-	}
-	//*
-	
-	//display boss
+	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->display(); }
 	boss->display();
 	//*
 	
 	//display hud
 	player->displayhud();
-	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext())
-	{
-		currentenemy = enemies->getcurrentdata();
-		currentenemy->displayhud();
-	}
+	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->displayhud(); }
 	boss->displayhud();
 	//*
 }
 
-void CLlevel::subsmark(xlong m) //! noncritical
-{
-	xlong sm = smoothmark - m;
-
-	if( sm<smoothmarkmax && sm>smoothmarkmin )
-	{
-		smoothmark = sm;
-		blockmark = smoothmark / blockheight;
-	}
-}
-
 void CLlevel::setmark(xlong m) //! noncritical
 {
-	smoothmark = m;
-	blockmark = smoothmark / blockheight;
+	levelmark = m;
+	stripemark = levelmark / UNITHEIGHT;
 }
 
 void CLlevel::pause() { paused = !paused; } //! noncritical
@@ -542,7 +450,7 @@ void CLlevel::pause() { paused = !paused; } //! noncritical
 void CLlevel::start() //! noncritical
 {
 	player->start();
-	for(xlong i=enemies->setfirst(); i<enemies->getlength(); i+=enemies->setnext()) { enemies->getcurrentdata()->start(); }
+	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->start(); }
 	boss->start();
 }
 ///*

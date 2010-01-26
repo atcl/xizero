@@ -19,6 +19,9 @@ echo 'packing level maps'
 for file in `ls dat/maps/*.mapt` ; do
 	ar -q ${file%'.mapt'}'.a' ${file%'.mapt'}'.mapt' ${file%'.mapt'}'.maph' ${file%'.mapt'}'.mape' >> /dev/null 2>&1
 done
+for file in `ls dat/maps/*.map` ; do
+	ar -q ${file%'.map'}'.a' ${file%'.map'}'.map' >> /dev/null 2>&1
+done
 
 echo 'packing levels'
 for file in `ls dat/levels/*.lvl` ; do

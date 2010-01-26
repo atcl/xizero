@@ -40,7 +40,8 @@ void newgame()
 	//load and init level
 	CLar* lvls = new CLar(cldata->findbyname("levels.a"));
 	xchar** lfn = clglobal->clformat->loadlvl(lvls->getmember(currlevel));
-	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),cldata->findbyname(lfn[5]),currlevel);
+	//CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),cldata->findbyname(lfn[5]),currlevel);
+	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[5]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),0,currlevel);
 	clglobal->clfsprogress->set(90);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->run();
