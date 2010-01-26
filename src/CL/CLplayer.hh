@@ -50,11 +50,11 @@ class CLplayer : public CLentity<2>
 		CLprogress* sprog;
 		void pretransform(bool m);
 		void transform(bool m);
-		xlong collision(CLfbuffer* ll);	
+		xlong collision(CLobject** ll);	
 	public:
 		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts=0);
 		~CLplayer();
-		xlong update(CLfbuffer* ll,CLenemylist* enemies,CLboss* boss);
+		xlong update(CLobject** ll,CLenemylist* enemies,CLboss* boss);
 		void addpoints(xlong p);
 		void showbox();
 		void displayhud();
@@ -111,7 +111,7 @@ void CLplayer::transform(bool m) //! noncritical
 	//*
 }
 
-xlong CLplayer::collision(CLfbuffer* ll) //! critical
+xlong CLplayer::collision(CLobject** ll) //! critical
 {
 	xlong r = 0;
 
@@ -132,7 +132,7 @@ xlong CLplayer::collision(CLfbuffer* ll) //! critical
 	float zdiff  = 0;
 	float xangle = 0;
 	float yangle = 0;
-	xlong tc = clgame->terrain(ll,boundingbox[1][0],boundingbox[0][0],tposition,position,xangle,yangle,zdiff); 
+	xlong tc = 0; //clgame->terrain(ll,boundingbox[1][0],boundingbox[0][0],tposition,position,xangle,yangle,zdiff); 
  
 	if(tc!=0)
 	{
@@ -191,7 +191,7 @@ CLplayer::~CLplayer() //! noncritical
 	delete sprog;
 }
 
-xlong CLplayer::update(CLfbuffer* ll,CLenemylist* enemies,CLboss* boss) //! critical
+xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! critical
 {
 	//update ammo
 	CLenemy* currenemy = 0;

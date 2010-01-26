@@ -68,6 +68,7 @@ class CLlevel : public CLbase<CLlevel,0>
 		xlong stripemarkmax;
 		xlong stripemarkmin;
 		xlong stripemark;
+		xlong striperest;
 		static xlong floorheight;
 		xlong playerscreenylevel;
 		static bool paused;
@@ -118,13 +119,14 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 	levelwidth = width * UNITWIDTH;
 	levelheight = height * UNITHEIGHT;
 	levelmarkmax = levelheight - (stripesperscreen * UNITHEIGHT);
-	levelmarkmin = 0;
+	levelmarkmin = 1;
 	levelmark = levelmarkmax;
 	stripewidth = width;
 	stripeheight = height;
 	stripemarkmax = height - stripesperscreen;
-	stripemarkmin = 0;
+	stripemarkmin = 1;
 	stripemark = stripemarkmax;
+	striperest = 0;
 	
 	if(stripemark < 0) err(__FILE__,__func__,u8"Level too short");
 	playerscreenylevel = 3*(YRES>>2);
@@ -363,10 +365,18 @@ xlong CLlevel::update() //! critical
 	}
 	//*
 	
+	//update terrain
+	for(xlong i=-1; i<31; i++)
+	{
+		levelmap[stripemark+i]->getmatrix()->translate(0,i,0);
+		levelmap[stripemark+i]->update();
+	}
+	//*
+	
 	xlong isdead = 0;
 	
 	//update player
-	isdead = player->update(levellandscape,enemylist,boss);
+	isdead = player->update(levelmap,enemylist,boss);
 	if(isdead != -1) { return -1; }
 	//*
 
@@ -410,12 +420,12 @@ xlong CLlevel::update() //! critical
 void CLlevel::display() //! critical
 {
 	//render terrain
-	
-	for(xlong i=0; i<30; i++)
+	CLlvector p(400,300-striperest,100);
+	for(xlong i=-1; i<31; i++)
 	{
-		
+		levelmap[stripemark+i]->display(p,AMBIENT + FLAT + ZLIGHT);
+		levelmap[stripemark+i]->reset();
 	}
-	
 	//*
 	
 	//cast shadows of entities
@@ -443,6 +453,7 @@ void CLlevel::setmark(xlong m) //! noncritical
 {
 	levelmark = m;
 	stripemark = levelmark / UNITHEIGHT;
+	striperest = levelmark % UNITHEIGHT;
 }
 
 void CLlevel::pause() { paused = !paused; } //! noncritical

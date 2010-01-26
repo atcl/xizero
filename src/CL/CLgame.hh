@@ -51,7 +51,7 @@ class CLgame : public CLbase<CLgame,1>
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision2d(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
-		template<class clvector>bool terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
+		template<class clvector>bool terrain(CLobject** ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
 };
 
 CLmath* CLgame::clmath = CLmath::instance();
@@ -293,7 +293,7 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n) 
 }
 
 template<class clvector>
-bool CLgame::terrain(CLfbuffer* ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd) //! critical
+bool CLgame::terrain(CLobject** ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd) //! critical
 {
 	//! this is still a big constrution site! Especially the not working calculation of the x and y angle !
 	
