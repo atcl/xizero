@@ -373,6 +373,8 @@ void CLobject::update() //! noncritical
 	boundingbox->c[6] = linear->transform(boundingbox->c[6]);
 	boundingbox->c[7] = linear->transform(boundingbox->c[7]);
 	//*
+	
+	//linear->unit();
 }
 
 void CLobject::update(CLmatrix* m) //! noncritical
@@ -410,6 +412,8 @@ void CLobject::partupdate() //! noncritical
 	//after partupdate boundingbox is without value
 	boundingbox->c[0] = boundingbox->c[1] = boundingbox->c[2] = boundingbox->c[3] = boundingbox->c[4] = boundingbox->c[5] = boundingbox->c[6] = boundingbox->c[7] = 0;
 	//*
+	
+	//linear->unit();
 }
 
 void CLobject::display(CLlvector p,xshort flags) //! noncritical

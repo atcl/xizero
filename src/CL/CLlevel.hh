@@ -115,7 +115,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 	xlong height = h->height;
 	uxlong* data = h->data;
 	
-	xlong stripesperscreen = YRES / UNITHEIGHT;
+	xlong stripesperscreen = 33;
 	levelwidth = width * UNITWIDTH;
 	levelheight = height * UNITHEIGHT;
 	levelmarkmax = levelheight - (stripesperscreen * UNITHEIGHT);
@@ -366,14 +366,6 @@ xlong CLlevel::update() //! critical
 	}
 	//*
 	
-	//update terrain
-	for(xlong i=0; i<20; i++)
-	{
-		levelmap[stripemark+i]->getmatrix()->translate(0,i,0);
-		levelmap[stripemark+i]->update();
-	}
-	//*
-	
 	xlong isdead = 0;
 	
 	//update player
@@ -422,10 +414,14 @@ void CLlevel::display() //! critical
 {
 	//render terrain
 	CLlvector p(400,300-striperest,100);
-	for(xlong i=0; i<20; i++)
+	xlong temp = 32 + (player->getposition()->y<=(levelmarkmax+playerscreenylevel)) + (player->getposition()->y<=(levelmarkmax+playerscreenylevel-UNITHEIGHT));
+	for(xlong i=0; i<temp; i++)
 	{
+		levelmap[stripemark+i]->getmatrix()->translate(0,-(i-16)*20,0);
+		levelmap[stripemark+i]->update();
 		levelmap[stripemark+i]->display(p,AMBIENT + FLAT + ZLIGHT);
 		levelmap[stripemark+i]->reset();
+		levelmap[stripemark+i]->getmatrix()->unit();
 	}
 	//*
 	
