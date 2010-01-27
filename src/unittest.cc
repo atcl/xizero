@@ -214,7 +214,7 @@ int main(int argc, char** argv)
 	//*
 	
 	//test heightmap
-	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/test.im24");
+	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/level000.im24");
 	sprite* testlevel = clglobal->clformat->loadras(testim24);
 	CLobject** hlev = loadheightmap(testlevel);
 	//*

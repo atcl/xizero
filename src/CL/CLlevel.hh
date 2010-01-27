@@ -276,7 +276,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 	
 	//load player, enemies and boss
 	//******************************************************************
-	uxchar type = 0;
+	xlong type = 0;
 	
 	CLar* bossa = new CLar(bosslib);
 	CLar* enemiesa = new CLar(enemylib);
@@ -299,6 +299,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 			switch(type)
 			{
 				case 0: //nothing
+				break;
 				
 				case 63: //player start position
 					if(ppos->e==-1)
@@ -323,11 +324,11 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 				break;
 				
 				default: //enemy start position
-					bpos->x = j * UNITHEIGHT;
-					bpos->y = i * UNITWIDTH;
-					bpos->z = -extract(h,i,j,2)/4;
-					bpos->e = 0;
-					currentenemy = new CLenemy(baseenemies[127+type],epos);
+					epos->x = j * UNITHEIGHT;
+					epos->y = i * UNITWIDTH;
+					epos->z = -extract(h,i,j,2)/4;
+					epos->e = 0;
+					currentenemy = new CLenemy(baseenemies[type-128],epos);
 					enemylist->append(currentenemy);
 				break;
 			}
@@ -338,9 +339,9 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 	if(epos->e==-1) { err(__FILE__,__func__,u8"no enemy start position found in combined map"); }
 	if(bpos->e==-1) { err(__FILE__,__func__,u8"no boss start position found in combined map"); }
 	
-	delete bossa;
-	delete enemiesa;
-	delete[] baseenemies;
+	//delete bossa;
+	//delete enemiesa;
+	//delete[] baseenemies;
 	//******************************************************************
 	
 	
@@ -366,7 +367,7 @@ xlong CLlevel::update() //! critical
 	//*
 	
 	//update terrain
-	for(xlong i=-1; i<31; i++)
+	for(xlong i=0; i<20; i++)
 	{
 		levelmap[stripemark+i]->getmatrix()->translate(0,i,0);
 		levelmap[stripemark+i]->update();
@@ -421,7 +422,7 @@ void CLlevel::display() //! critical
 {
 	//render terrain
 	CLlvector p(400,300-striperest,100);
-	for(xlong i=-1; i<31; i++)
+	for(xlong i=0; i<20; i++)
 	{
 		levelmap[stripemark+i]->display(p,AMBIENT + FLAT + ZLIGHT);
 		levelmap[stripemark+i]->reset();
