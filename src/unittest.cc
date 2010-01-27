@@ -296,7 +296,7 @@ int main(int argc, char** argv)
 		}
 
 		//render sequence:
-		//1. all non shadow objects (floor,terrain)
+		//1. all non shadow objects (terrain)
 		//2. all shadows of all shadow casting objects
 		//3. blend stencil to double
 		//4. all shadow casting objects

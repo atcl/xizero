@@ -70,7 +70,6 @@
 #include "CL/CLanim.hh"
 #include "CL/CLintro.hh"
 #include "CL/CLsprites.hh"
-#include "CL/CLfloor.hh"
 //*
 
 //super constructor

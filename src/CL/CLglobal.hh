@@ -18,7 +18,6 @@
 #include "CLmath.hh"
 #include "CLgame.hh"
 #include "CLmisc3d.hh"
-#include "CLfloor.hh"
 #include "CLfsprog.hh"
 #include "CLdetect.hh"
 #include "CLgfx.hh"
@@ -64,7 +63,6 @@ class CLglobal : public CLbase<CLglobal,1>
 		CLmath*   clmath;
 		CLgame*   clgame;
 		CLmisc3d* clmisc3d;
-		CLfloor*  clfloor;
 		CLdetect* cldetect;
 		CLfsprogress* clfsprogress;
 		CLgfx*    clgfx;
@@ -89,7 +87,6 @@ CLglobal::CLglobal() //! noncritical
 	clmath   = CLmath::instance();
 	clgame   = CLgame::instance();
 	clmisc3d = CLmisc3d::instance();
-	clfloor  = CLfloor::instance();
 	cldetect = CLdetect::instance();
 	clfsprogress = CLfsprogress::instance();
 	clgfx    = CLgfx::instance();

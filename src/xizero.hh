@@ -40,16 +40,7 @@ void newgame()
 	//load and init level
 	CLar* lvls = new CLar(cldata->findbyname("levels.a"));
 	xchar** lfn = clglobal->clformat->loadlvl(lvls->getmember(currlevel));
-	//CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),cldata->findbyname(lfn[5]),currlevel);
 	CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[5]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),0,currlevel);
-	clglobal->clfsprogress->set(90);
-	clglobal->clfsprogress->draw();
-	clglobal->clwindow->run();
-	//*
-	
-	//init level floor
-	uxlong floorcolor = clglobal->clstring->hex(lfn[0]);
-	clglobal->clfloor->init(100,670,floorcolor,1);
 	clglobal->clfsprogress->set(100);
 	clglobal->clfsprogress->draw();
 	clglobal->clwindow->run();
@@ -106,7 +97,9 @@ void newgame()
 		}
 		//*
 
-		clglobal->clfloor->draw();
+		clglobal->clscreen->cldoublebuffer.clear();
+		clglobal->clscreen->clstencilbuffer.clear();
+		clglobal->clscreen->clzbuffer.clear(ZRES);
 		testlevel->display();
 
 		if(aa)
@@ -131,7 +124,6 @@ void newgame()
 //~ 
 			//~ //render zbuffer
 			//~ case 3:
-				//~ clglobal->clfloor->draw();
 				//~ testlevel->display();
 				//~ clglobal->clmisc3d->drawzbuffer();
 			//~ break;
