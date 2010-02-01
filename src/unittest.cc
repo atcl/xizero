@@ -5,163 +5,6 @@
 
 CLglobal* clglobal;
 
-inline xlong extractz(sprite* h,xlong y,xlong x) { return (-1) * ((xlong(((xchar*)(&h->data[(y*h->width)+x]))[2]))>>2); }
-inline xlong extracte(sprite* h,xlong y,xlong x) { return (xlong(((xchar*)(&h->data[(y*h->width)+x]))[1])); }
-inline xlong extracts(sprite* h,xlong y,xlong x) { return (xlong(((xchar*)(&h->data[(y*h->width)+x]))[0])); }
-inline xlong extractb(sprite* h,xlong y,xlong x) { return (xlong(((xchar*)(&h->data[(y*h->width)+x]))[3])); }
-
-CLobject** loadheightmap(sprite* h)
-{
-	xlong width = h->width;
-	xlong height = h->height;
-	uxlong* data = h->data;
-	
-	rawpoly* grid = new rawpoly[4*width];
-	xlong curr = 0;
-	
-	CLobject** r = new CLobject*[height];
-	
-	xlong hordiff[4];
-	xlong verdiff[4];
-	bool  unbalanced = 0;
-	
-	for(xlong i=0; i<height-1; i++)
-	{
-	
-		//generate stripe horizontally
-		for(xlong j=0; j<width-1; j++)
-		{			
-			//setup poly
-			grid[curr].v[0].x = (j*20)-400;
-			grid[curr].v[0].y = 10;
-			grid[curr].v[0].z = extractz(h,i,j);
-			grid[curr].v[1].x = ((j+1)*20)-400;
-			grid[curr].v[1].y = 10;
-			grid[curr].v[1].z = extractz(h,i,j+1);
-			grid[curr].v[2].x = ((j+1)*20)-400;
-			grid[curr].v[2].y = -10;
-			grid[curr].v[2].z = extractz(h,i+1,j+1);
-			grid[curr].v[3].x = (j*20)-400;
-			grid[curr].v[3].y = -10;
-			grid[curr].v[3].z = extractz(h,i+1,j);
-			//*
-			
-			//split by balance
-			if( ( (grid[curr].v[0].z==grid[curr].v[1].z) && (grid[curr].v[0].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) )
-			||  ( (grid[curr].v[2].z==grid[curr].v[1].z) && (grid[curr].v[2].z==grid[curr].v[3].z) && (grid[curr].v[0].z!=grid[curr].v[2].z) ) )
-			{
-				curr++;
-				grid[curr].v[0].x = grid[curr-1].v[1].x;
-				grid[curr].v[0].y = grid[curr-1].v[1].y;
-				grid[curr].v[0].z = grid[curr-1].v[1].z;
-				grid[curr].v[1].x = grid[curr-1].v[2].x;
-				grid[curr].v[1].y = grid[curr-1].v[2].y;
-				grid[curr].v[1].z = grid[curr-1].v[2].z;
-				grid[curr].v[2].x = grid[curr-1].v[3].x;
-				grid[curr].v[2].y = grid[curr-1].v[3].y;
-				grid[curr].v[2].z = grid[curr-1].v[3].z;
-				grid[curr].v[3].x = grid[curr-1].v[3].x;
-				grid[curr].v[3].y = grid[curr-1].v[3].y;
-				grid[curr].v[3].z = grid[curr-1].v[3].z;
-				
-				//grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				//grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				//grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				//grid[curr-1].v[1].x = grid[curr-1].v[1].x;
-				//grid[curr-1].v[1].y = grid[curr-1].v[1].y;
-				//grid[curr-1].v[1].z = grid[curr-1].v[1].z;
-				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
-				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
-				
-				unbalanced = 1;
-			}
-			else if( ( (grid[curr].v[1].z==grid[curr].v[0].z) && (grid[curr].v[1].z==grid[curr].v[2].z) && (grid[curr].v[1].z!=grid[curr].v[3].z) )
-			     ||  ( (grid[curr].v[3].z==grid[curr].v[0].z) && (grid[curr].v[3].z==grid[curr].v[2].z) && (grid[curr].v[3].z!=grid[curr].v[1].z) ) )
-			{
-				curr++;
-				grid[curr].v[0].x = grid[curr-1].v[0].x;
-				grid[curr].v[0].y = grid[curr-1].v[0].y;
-				grid[curr].v[0].z = grid[curr-1].v[0].z;
-				grid[curr].v[1].x = grid[curr-1].v[1].x;
-				grid[curr].v[1].y = grid[curr-1].v[1].y;
-				grid[curr].v[1].z = grid[curr-1].v[1].z;
-				grid[curr].v[2].x = grid[curr-1].v[2].x;
-				grid[curr].v[2].y = grid[curr-1].v[2].y;
-				grid[curr].v[2].z = grid[curr-1].v[2].z;
-				grid[curr].v[3].x = grid[curr-1].v[2].x;
-				grid[curr].v[3].y = grid[curr-1].v[2].y;
-				grid[curr].v[3].z = grid[curr-1].v[2].z;
-				
-				//grid[curr-1].v[0].x = grid[curr-1].v[0].x;
-				//grid[curr-1].v[0].y = grid[curr-1].v[0].y;
-				//grid[curr-1].v[0].z = grid[curr-1].v[0].z;
-				grid[curr-1].v[1].x = grid[curr-1].v[2].x;
-				grid[curr-1].v[1].y = grid[curr-1].v[2].y;
-				grid[curr-1].v[1].z = grid[curr-1].v[2].z;
-				grid[curr-1].v[2].x = grid[curr-1].v[3].x;
-				grid[curr-1].v[2].y = grid[curr-1].v[3].y;
-				grid[curr-1].v[2].z = grid[curr-1].v[3].z;
-				//grid[curr-1].v[3].x = grid[curr-1].v[3].x;
-				//grid[curr-1].v[3].y = grid[curr-1].v[3].y;
-				//grid[curr-1].v[3].z = grid[curr-1].v[3].z;
-				
-				unbalanced = 1;
-			}
-			//*
-			
-			//unify horizontally
-			else if(curr>0 && unbalanced==0)
-			{
-				hordiff[0] = grid[curr-1].v[1].z - grid[curr-1].v[0].z;
-				hordiff[1] = grid[curr-1].v[2].z - grid[curr-1].v[3].z;
-				hordiff[2] = grid[curr].v[1].z   - grid[curr].v[0].z;
-				hordiff[3] = grid[curr].v[2].z   - grid[curr].v[3].z;
-				
-				verdiff[0] = grid[curr-1].v[3].z - grid[curr-1].v[0].z;
-				verdiff[1] = grid[curr-1].v[2].z - grid[curr-1].v[1].z;
-				verdiff[2] = grid[curr].v[3].z   - grid[curr].v[0].z;
-				verdiff[3] = grid[curr].v[2].z   - grid[curr].v[1].z;
-				
-				if( hordiff[0]==hordiff[2] && hordiff[1]==hordiff[3]
-				&&  verdiff[0]==verdiff[2] && verdiff[1]==verdiff[3] )
-				{
-					grid[curr-1].v[1].x = grid[curr].v[1].x;
-					grid[curr-1].v[2].x = grid[curr].v[2].x;
-					grid[curr-1].v[1].z = grid[curr].v[1].z;
-					grid[curr-1].v[2].z = grid[curr].v[2].z;
-					curr--;
-				}
-			}
-			//*
-			
-			else { unbalanced = 0; }
-			
-			curr++;
-		}
-		//*
-		
-		//generate object
-		r[i] = new CLobject(grid,curr,0xFFFFFFFF,0x000000FF);
-		//*
-		
-		//reset for next stripe
-		curr = 0;
-		//* 			
-	}
-	
-	delete[] grid;
-	return r;
-}
-
-void displaymap(CLobject** l)
-{
-	
-}
-
 int main(int argc, char** argv)
 {
 	//init API
@@ -213,12 +56,6 @@ int main(int argc, char** argv)
 		
 	//*
 	
-	//test heightmap
-	CLfile* testim24 = clglobal->clsystem->getfile("dat/maps/level000.im24");
-	sprite* testlevel = clglobal->clformat->loadras(testim24);
-	CLobject** hlev = loadheightmap(testlevel);
-	//*
-	
 	//main loop variables
 	CLexplosion* ex = new CLexplosion(test);
 	bool mode = 1;
@@ -230,12 +67,6 @@ int main(int argc, char** argv)
 	sprite* screens;
 	CLfile* screenf;
 	//*
-	
-	for(xlong i=10; i<40; i++)
-	{
-		hlev[i]->getmatrix()->translate(0,((i-10)-15)*-20,0);
-		hlev[i]->update();
-	}
 	
 	//main loop
 	while(clglobal->clwindow->run())
@@ -301,7 +132,7 @@ int main(int argc, char** argv)
 		//3. blend stencil to double
 		//4. all shadow casting objects
 
-		clglobal->clscreen->cldoublebuffer.clear(0x00FF0000);
+		clglobal->clscreen->cldoublebuffer.clear(0);
 		clglobal->clscreen->clzbuffer.clear(ZRES);
 		clglobal->clscreen->clstencilbuffer.clear(0);
 		
@@ -323,14 +154,8 @@ int main(int argc, char** argv)
 			clglobal->clscreen->clstencilbuffer.copy(&clglobal->clscreen->cldoublebuffer,12);
 		}
 
-		//if(mode==false) test->display(p,CENTER + AMBIENT + SHAPE + ac);
-		//else test->display(p,CENTER + AMBIENT + FLAT + ac);
-		
-		for(xlong i=10; i<40; i++)
-		{
-			hlev[i]->display(p,AMBIENT + FLAT + ZLIGHT);
-			hlev[i]->display(p,SHAPE);
-		}
+		if(mode==false) test->display(p,CENTER + AMBIENT + SHAPE + ac);
+		else test->display(p,CENTER + AMBIENT + FLAT + ac);
 
 		test->getmatrix()->unit();
 	}

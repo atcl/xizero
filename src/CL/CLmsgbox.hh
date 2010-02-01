@@ -57,10 +57,7 @@ xlong CLmsgbox::currid = 0;
 ///*
 
 ///implementation
-void CLmsgbox::draw()
-{
-	glFlush();
-}
+void CLmsgbox::draw() { } //! noncritical
 
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
@@ -84,23 +81,25 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	xlong winwidth = 20+(9*msglen[maxline]);
 	xlong winheight = 40+(msglines*15);
 	if(winwidth<200) { winwidth = 200; }
-	if(winwidth>400) { winwidth = 400; }
+	if(winwidth>600) { winwidth = 600; }
 	if(winheight<100) { winheight = 100; }
-	if(winheight>200) { winheight = 200; }
+	if(winheight>250) { winheight = 250; }
 	
-	glutInitWindowPosition(10,10);
 	glutInitWindowSize(winwidth,winheight);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
+	glutInitWindowPosition(10,10);
 	currid = glutCreateWindow(title);
 	glutMouseFunc(CLwindow::setmouse);
 	glutKeyboardFunc(CLwindow::setkeydn);
-	glutDisplayFunc(draw);
-	//~ glMatrixMode(GL_PROJECTION);
-	//~ glLoadIdentity();
-	//~ gluOrtho2D(0,winwidth,0,winheight);
-	//~ glutSetWindow(currid);
-	//~ glClear(GL_COLOR_BUFFER_BIT);
-	//~ glFlush();
+	glutDisplayFunc(this->draw);
+	
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0,winwidth,0,winheight);
+	
+	while(true)
+	{
+		glutSetWindow(currid);
 		
 		//draw background
 		glColor3f(0.7,0.7,0.7);
@@ -142,9 +141,9 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15,'O');
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15,'K');
 		//*
-	
-	while(true)
-	{
+		
+		glFlush();
+		
 		glutMainLoopEvent();
 
 		if(clwindow->getinkey()==SPACE) { break; };
@@ -161,15 +160,7 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	return 1;
 }
 
-xlong CLmsgbox::alertbox(const xchar* title,xlong value) //! noncritical
-{
-	//prepare message
-	xchar* message = clstring->toascii(value);
-	xlong msglen = clstring->length(message);
-	
-	delete message;
-	return 1;
-}
+xlong CLmsgbox::alertbox(const xchar* title,xlong value) { msgbox(title,clstring->toascii(value)); } //! noncritical
 ///*
 
 #endif
