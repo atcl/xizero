@@ -135,7 +135,7 @@ xlong CLenemy::collision() //! critical
 	xlong bc = clgame->boundary(tposition,*boundingbox[1][0],1);
 	tposition.y += *mark;
 
-	if(bc==0) { visible = 1; }
+	if(bc!=0) { visible = 1; }
 	//*
 	
 	return r;

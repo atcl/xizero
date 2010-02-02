@@ -47,11 +47,12 @@ class CLgame : public CLbase<CLgame,1>
 	public:
 		void setboundaries(xlong bx1=0,xlong by1=0,xlong bx2=XRES,xlong by2=YRES);
 		template<class clvector>bool boundary(const clvector& p,xlong mark=0);
-		template<class clvector>bool boundary(const clvector& p,const CLbox& bb,bool c=0);
+		template<class clvector>xlong boundary(const clvector& p,const CLbox& bb,bool c=0);
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision2d(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
-		template<class clvector>bool terrain(CLobject** ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd);
+		template<class clvector>CLlvector terrainangle(const clvector& p,const CLbox* bb,const CLobject** t);
+		template<class clvector>bool terraincollision(const clvector& p,const CLbox* bb,const CLobject** t);
 };
 
 CLmath* CLgame::clmath = CLmath::instance();
@@ -73,15 +74,11 @@ void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2) //! noncriti
 template<class clvector>
 bool CLgame::boundary(const clvector& p,xlong mark) //! critical
 {
-	//check if p id inside screen boundaries
-	if( (p.x > boundaryx1) && (p.x < boundaryx2) && ( (p.y-mark) > boundaryy1) && ( (p.y-mark) < boundaryy2) ) return 0;
-	//*
-	
-	return 1;
+	return ( (p.x<boundaryx1) && (p.x<boundaryx2) && ( (p.y-mark)>boundaryy1) && ( (p.y-mark)<boundaryy2) );
 }
 
 template<class clvector>
-bool CLgame::boundary(const clvector& p,const CLbox& bb,bool c) //! critical
+xlong CLgame::boundary(const clvector& p,const CLbox& bb,bool c) //! critical
 {
 	switch(c)
 	{
@@ -293,10 +290,8 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n) 
 }
 
 template<class clvector>
-bool CLgame::terrain(CLobject** ll,const CLbox* bb,const CLbox* ob,const clvector& p,const clvector& l,float& xa,float& ya,float& zd) //! critical
+CLlvector CLgame::terrainangle(const clvector& p,const CLbox* bb,const CLobject** t) //! critical
 {
-	//! this is still a big constrution site! Especially the not working calculation of the x and y angle !
-	
 	//calc levelposition of current bounding box
 	CLlvector p1( (p.x + bb->c[0].x), (p.y - bb->c[0].y), (p.z + bb->c[0].z) );
 	CLlvector p2( (p.x + bb->c[1].x), (p.y - bb->c[1].y), (p.z + bb->c[1].z) );
@@ -304,66 +299,25 @@ bool CLgame::terrain(CLobject** ll,const CLbox* bb,const CLbox* ob,const clvecto
 	CLlvector p4( (p.x + bb->c[3].x), (p.y - bb->c[3].y), (p.z + bb->c[3].z) );
 	//*
 	
-	//calc levelposition of last bounding box
-	CLlvector l1( (l.x + ob->c[0].x), (l.y - ob->c[0].y), (l.z + ob->c[0].z) );
-	CLlvector l2( (l.x + ob->c[1].x), (l.y - ob->c[1].y), (l.z + ob->c[1].z) );
-	CLlvector l3( (l.x + ob->c[2].x), (l.y - ob->c[2].y), (l.z + ob->c[2].z) );
-	CLlvector l4( (l.x + ob->c[3].x), (l.y - ob->c[3].y), (l.z + ob->c[3].z) );
-	//*
+	CLlvector r;
 	
-	//calc zlevel of current bounding box corners in levellandscape
-	float n1 = (*ll)[ (p1.y * XRES) + p1.x ];
-	float n2 = (*ll)[ (p2.y * XRES) + p2.x ];
-	float n3 = (*ll)[ (p3.y * XRES) + p3.x ];
-	float n4 = (*ll)[ (p4.y * XRES) + p4.x ];
-	//*
-	
-	//calc zlevel of last bounding box corners in levellandscape
-	float o1 = (*ll)[ (l1.y * XRES) + l1.x ];
-	float o2 = (*ll)[ (l2.y * XRES) + l2.x ];
-	float o3 = (*ll)[ (l3.y * XRES) + l3.x ];
-	float o4 = (*ll)[ (l4.y * XRES) + l4.x ];
-	//*
-
-	//check if zlevel from current bbox corners differ more than 3
-	xlong r = 0; //this is the return value
-	if( n1 < o1-3 ) r = 1;
-	if( n2 < o2-3 ) r = 1;
-	if( n3 < o3-3 ) r = 1;
-	if( n4 < o4-3 ) r = 1;
-	//*
-	
-	//calc z difference in bbox center between current and last
-	//if(r==0) //activate when working correctly
-	zd = (n1+n2+n3+n4)/4;
-	//*
-	
-	CLfvector unitx = CLfvector(1,0,0);
-	CLfvector unity = CLfvector(0,1,0);
-	
-	//calc new ground touching box with normal
-	CLfvector na = CLfvector((-p1.x+p4.x),(-p1.y+p4.y),(n4+n3-n2-n1)/2);
-	CLfvector nb = CLfvector((-p1.x+p2.x),(-p1.y+p2.y),(n1+n4-n2-n3)/2);
-	CLfvector nn = (na*nb);
-	//*
-	
-	//calc old ground touching box with normal
-	CLfvector oa = CLfvector((-l1.x+l4.x),(-l1.y+l4.y),(l4.z+l3.z-l2.z-l1.z)/2);
-	CLfvector oc = CLfvector((-l1.x+l2.x),(-l1.y+l2.y),(l1.z+l4.z-l2.z-l3.z)/2);
-	CLfvector oo = (oa*oc);
-	//*
-	
-	//calc x and y angle
-	xa = 0; //-(nn%unitx) + (oo%unitx);
-	ya = 0; //(nn%unity) - (oo%unity);
-	//*
-	
-	//adjust angles depending on z values
-	//~ if(nn.z < oo.z) xa = -xa; //replace by xa*=CLmath::sign(nx.z-lx.z)?
-	//~ if(nn.z < oo.z) ya = -ya; //replace by ya*=CLmath::sign(nx.z-lx.z)?
-	//*
-
 	return r;
+}
+///*
+
+template<class clvector>
+bool CLgame::terraincollision(const clvector& p,const CLbox* bb,const CLobject** t) //! critical
+{
+	//calc levelposition of current bounding box
+	CLlvector p1( (p.x + bb->c[0].x), (p.y - bb->c[0].y), (p.z + bb->c[0].z) );
+	CLlvector p2( (p.x + bb->c[1].x), (p.y - bb->c[1].y), (p.z + bb->c[1].z) );
+	CLlvector p3( (p.x + bb->c[2].x), (p.y - bb->c[2].y), (p.z + bb->c[2].z) );
+	CLlvector p4( (p.x + bb->c[3].x), (p.y - bb->c[3].y), (p.z + bb->c[3].z) );
+	//*
+	
+	
+	
+	return 0;
 }
 ///*
 
