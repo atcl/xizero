@@ -8,7 +8,9 @@
 int main()
 {
 	//init sequence
-	clglobal = CLsetup();
+	CLglobal* clglobal = CLglobal::instance(); 
+	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
+	clglobal->clwindow->setcursor(cursor);
 	cldata = new CLar(BASEDIR"xizero.dat");
 	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
 	//*

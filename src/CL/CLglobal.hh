@@ -74,6 +74,7 @@ class CLglobal : public CLbase<CLglobal,1>
 		CLapp*    clapp;
 		CLmsgbox* clmsgbox;
 		CLintro*  clintro;
+		CLmenu*   clmenu;
 };
 ///*
 
@@ -98,6 +99,7 @@ CLglobal::CLglobal() //! noncritical
 	clapp    = CLapp::instance();
 	clmsgbox = CLmsgbox::instance();
 	clintro  = CLintro::instance();
+	clmenu  = CLmenu::instance();
 }
 	
 CLglobal::~CLglobal() //! noncritical

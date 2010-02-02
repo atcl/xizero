@@ -6,8 +6,6 @@
 
 #include "CLinc.h"
 
-void xizero_cleanup() { CLgarbage(); }
-
 CLglobal* clglobal = 0;
 CLar* cldata = 0;
 xlong currlevel = 0;
@@ -75,7 +73,6 @@ void newgame()
 	//game loop
 	bool aa = 0;
 	
-	CLmenu* sysmenu = new CLmenu();
 	testlevel->start();
 	clglobal->clwindow->showfps(1);
 	while(clglobal->clwindow->run() && gamestate>0) 
@@ -134,7 +131,6 @@ void newgame()
 	
 	//crush level
 	//delete testlevel;
-	delete sysmenu;
 	//*
 	
 	clglobal->cltransitions->fadetoblack();

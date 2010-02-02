@@ -72,10 +72,6 @@
 #include "CL/CLsprites.hh"
 //*
 
-//super constructor
-#include "CL/CLsetup.hh"
-//*
-
 //global maker
 #include "CL/CLglobal.hh"
 //*

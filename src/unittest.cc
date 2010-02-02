@@ -37,10 +37,6 @@ int main(int argc, char** argv)
 	CLar* cldata = new CLar(BASEDIR"xizero.dat");
 	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
 	//*
-	
-	//init system menu
-	CLmenu* sysmenu = new CLmenu();
-	//*
 
 	//cl test section
 	
@@ -108,7 +104,7 @@ int main(int argc, char** argv)
 
 			//Control:
 			//case '^':    mode = !mode; break;
-			case 'o':    sysmenu->show();
+			case 'o':    clglobal->clmenu->show();
 			case '+':    test->reset(); ac = exp = 0; break;
 			case '-':    shadows = !shadows; break;
 			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
