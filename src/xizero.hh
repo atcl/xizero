@@ -27,7 +27,10 @@ void newgame()
 	//display intro
 	sprite* introscreen = 0;
 	introscreen = clglobal->clformat->loadras(screens->findbyname("intro000.ras"));
+	xchar* introtext = screens->findbyname("intro000.txt")->text;
+	xlong introlength = screens->findbyname("intro000.txt")->size;
 	clglobal->clgfx->drawscreen(introscreen);
+	clglobal->clgfx->drawfontstring(0,12,introtext,1,0x00FFFFFF,0,introlength);
 	clglobal->clwindow->run();
 	clglobal->clwindow->sleep(1000);
 	clglobal->clfsprogress->set(10);
@@ -136,12 +139,18 @@ void newgame()
 	clglobal->cltransitions->fadetoblack();
 	
 	sprite* overscreen = 0;
+	xchar* overtext = 0;
+	xlong overlength = 0;
+		
 	switch(gamestate)
 	{
 		//draw winner screen
 		case 0:
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gamewon.ras"));
+			overtext = screens->findbyname("gamewon.txt")->text;
+			overlength = screens->findbyname("gamewon.txt")->size;
 			clglobal->clgfx->drawscreen(overscreen);
+			clglobal->clgfx->drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
 			clglobal->clwindow->run();
 			clglobal->clwindow->sleep(11000);
 		break;
@@ -150,7 +159,10 @@ void newgame()
 		//draw looser screen
 		case -1:
 			overscreen = clglobal->clformat->loadras(screens->findbyname("gameover.ras"));
+			overtext = screens->findbyname("gameover.txt")->text;
+			overlength = screens->findbyname("gameover.txt")->size;
 			clglobal->clgfx->drawscreen(overscreen);
+			clglobal->clgfx->drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
 			clglobal->clwindow->run();
 			clglobal->clwindow->sleep(11000);
 		break;

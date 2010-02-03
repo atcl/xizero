@@ -1,7 +1,7 @@
 #!/bin/sh 
 
 echo 'packing fonts'
-ar -q 'fonts.a' 'dat/fonts/CLsegmtype.fnt' 'dat/fonts/CLlinetype.fnt' 'dat/fonts/CLmonotype.fnt' 'dat/fonts/CLteletype.fnt' 'dat/fonts/CLtermtype.fnt'>> /dev/null 2>&1
+ar -q 'fonts.a' 'dat/fonts/CLsegmtype.fnt' 'dat/fonts/CLlinetype.fnt' 'dat/fonts/CLmonotype.fnt' 'dat/fonts/CLteletype.fnt' 'dat/fonts/CLtermtype.fnt' 'dat/fonts/CLtalltype.fnt' 'dat/fonts/CLsymbtype.fnt'>> /dev/null 2>&1
 
 echo 'packing sounds'
 ar -q 'sounds.a' 'dat/sounds/mainmenu.wav' 'dat/sounds/background.wav' 'dat/sounds/tankcannon.wav' 'dat/sounds/enemcannon.wav'  >> /dev/null 2>&1

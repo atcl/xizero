@@ -94,7 +94,7 @@ class CLgfx : public CLbase<CLgfx,1>
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
 		void loadfonts(CLfile* sf);
 		xlong drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc=0) const;
-		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0) const;
+		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0,xlong s=0) const;
 		xlong getfontstringwidth(const char* a,uxlong f) const;
 		xlong getfontstringheight(const char* a,uxlong f) const;
 		sprite* savescreen() const;
@@ -943,15 +943,15 @@ void CLgfx::loadfonts(CLfile* sf) //! critical
 	fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
 	fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
 	fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),32,60);
-	//fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),32,32);
-	//fonts[6] = clformat->loadtileset(fontsa->findbyname(u8"CLsymbtype.fnt"),16,16);
+	fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),32,32);
+	fonts[6] = clformat->loadtileset(fontsa->findbyname(u8"CLsymbtype.fnt"),16,16);
 }
 
 xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc) const //! critical
 {
 	//select font
 	if(fonts==0) { return -1; }
-	if(f>4) { f = 0; }
+	if(f>6) { f = 0; }
 	CLfont* t = fonts[f];
 	//*
 	
@@ -965,7 +965,7 @@ xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlon
 	//*
 
 	//clipping against screen borders
-	if(isoff(xs,ys,xe,ye)) return -1;
+	if(isoff(xs,ys,xe,ye)) { return -1; }
 	clip(xs,ys);
 	clip(xe,ye);
 	//*
@@ -978,9 +978,9 @@ xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlon
 	//*
 
 	//drawloop
-	for(xlong i=0; i<sheight ;i++)
+	for(xlong i=0; i<sheight; i++)
 	{
-		for(xlong j=0; j<swidth ;j++)
+		for(xlong j=0; j<swidth; j++)
 		{
 			srcval = t[a]->data[linearc];
 			if(srcval == 0x00FF0000) clscreen->cldoublebuffer[xoffset+j] = fc;
@@ -995,19 +995,22 @@ xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlon
 	return rx;
 }
 
-void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc) const //! critical
+void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc,xlong s) const //! critical
 {
 	if(fonts==0) { return; }
-	xlong l = clstring->length(a);
+	if(f>6) { f = 0; }
+	if(s==0) { s = clstring->length(a); }
 	xlong t = x;
+	xlong dx = fonts[f][0]->width;
+	xlong dy = fonts[f][0]->height;
 	
-	for(xlong i=0; i<l; i++)
+	for(xlong i=0; i<s; i++)
 	{
-		if(a[i]=='\n') { t = x; y += 16; }
+		if(a[i]=='\n') { t = x; y += dy; say("11"); }
 		else
 		{
 			t = drawfontchar(t,y,a[i],f,fc,bc);
-			if(t==-1) return;
+			if(t==-1) { return; }
 		}
 	}
 }
@@ -1016,7 +1019,7 @@ xlong CLgfx::getfontstringwidth(const char* a,uxlong f) const //! critical
 {
 	//select font
 	if(fonts==0) { return 0; }
-	if(f>4) f = 0;
+	if(f>6) { f = 0; }
 	CLfont* t = fonts[f];
 	//*
 	
@@ -1034,7 +1037,7 @@ xlong CLgfx::getfontstringheight(const char* a,uxlong f) const //! critical
 {
 	//select font
 	if(fonts==0) { return 0; }
-	if(f>4) f = 0;
+	if(f>6) { f = 0; }
 	CLfont* t = fonts[f];
 	//*
 	
