@@ -75,8 +75,7 @@ class CLlevel : public CLbase<CLlevel,0>
 		
 		inline xlong extract(sprite* h,xlong y,xlong x,xlong i) { return (xlong(((uxchar*)(&h->data[(y*h->width)+x]))[i])); }
 	public:
-		CLlevel(CLfile* terrainlib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,CLfile* levelcontainer,xlong bosstype);
-		CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong level,xlong bosstype);
+		CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bosslib,xlong bosstype,xlong level);
 		~CLlevel();
 		xlong update();
 		void display();
@@ -97,7 +96,7 @@ bool  CLlevel::paused = 0;
 ///*
 
 ///implementation
-CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bosslib,xlong level,xlong bosstype) //! noncritical
+CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bosslib,xlong bosstype,xlong level) //! noncritical
 {
 	//set screen boundaries
 	clgame->setboundaries(60,0,740,600);
@@ -110,7 +109,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 	//load combined level map file
 	//******************************************************************
 	CLar* levela = new CLar(maplib);
-	sprite* h = clformat->loadras(levela->findbyname("level000.map"));
+	sprite* h = clformat->loadras(levela->getmember(0));
 	xlong width = h->width;
 	xlong height = h->height;
 	uxlong* data = h->data;
@@ -328,7 +327,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* enemylib,CLfile* playerlib,CLfile* bossl
 					epos->y = i * UNITWIDTH;
 					epos->z = -extract(h,i,j,2)/4;
 					epos->e = 0;
-					currentenemy = new CLenemy(baseenemies[type-128],epos);
+					currentenemy = new CLenemy(baseenemies[0],epos); //type-128
 					enemylist->append(currentenemy);
 				break;
 			}

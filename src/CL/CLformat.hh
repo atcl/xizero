@@ -344,8 +344,8 @@ xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 	xchar* bf = sf->text;
 	
 	//get startpositions of filenames
-	xchar* fs[6] = { 0,0,0,0,0,0 };
-	xlong fl[6] = { 0,0,0,0,0,0 };
+	xchar* fs[5] = { 0,0,0,0,0 };
+	xlong fl[5] = { 0,0,0,0,0 };
 	bool marks = 0;
 	xlong fsc = 0;
 	for(xlong i=0; i<sf->size; i++)
@@ -359,7 +359,7 @@ xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 		{
 			marks = 0;
 			fsc++;
-			if(fsc>=6) break; 
+			if(fsc>=5) break; 
 		}
 		else if(marks==1)
 		{
@@ -369,8 +369,8 @@ xchar** CLformat::loadlvl(CLfile* sf) const //! noncritical
 	//*
 	
 	//copy filenames to buffer
-	xchar** fn = new xchar*[6];
-	for(xlong j=0; j<6; j++) { fn[j] = clstring->copy(fs[j],fl[j]); }
+	xchar** fn = new xchar*[5];
+	for(xlong j=0; j<5; j++) { fn[j] = clstring->copy(fs[j],fl[j]); }
 	//*
 	
 	return fn;

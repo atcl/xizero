@@ -1006,7 +1006,7 @@ void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxl
 	
 	for(xlong i=0; i<s; i++)
 	{
-		if(a[i]=='\n') { t = x; y += dy; say("11"); }
+		if(a[i]=='\n') { t = x; y += dy; }
 		else
 		{
 			t = drawfontchar(t,y,a[i],f,fc,bc);

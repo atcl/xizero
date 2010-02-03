@@ -114,6 +114,7 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 xchar* CLstring::toascii(xlong v) const //! noncritical
 {
 	xchar* r = new xchar[12];
+	if(v==0) { r[0]='0'; r[1]=0; return r; }
 	r[0] = '-';
 	bool s = (v<0);
 	if(s) { v*=-1; }
