@@ -8,7 +8,7 @@
 int main()
 {
 	//init sequence
-	CLglobal* clglobal = CLglobal::instance(); 
+	clglobal = CLglobal::instance(); 
 	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
 	clglobal->clwindow->setcursor(cursor);
 	cldata = new CLar(BASEDIR"xizero.dat");

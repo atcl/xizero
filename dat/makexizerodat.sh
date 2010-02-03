@@ -10,7 +10,12 @@ echo 'packing intros'
 ar -q 'intro.a' 'dat/intro/atcl.ani' 'dat/intro/atcl.y3d' 'dat/intro/xi.ani' 'dat/intro/xi.y3d' 'dat/intro/zero.ani' 'dat/intro/zero.y3d' >> /dev/null 2>&1
 
 echo 'packing screens'
-ar -q 'screens.a' 'dat/screens/intro000.ras' 'dat/screens/gamewon.ras' 'dat/screens/gameover.ras' >> /dev/null 2>&1
+for file in `ls dat/screens/*.txt` ; do
+	ar -q 'screens.a' ${file%'.txt'}'.txt' >> /dev/null 2>&1
+done
+for file in `ls dat/screens/*.ras` ; do
+	ar -q 'screens.a' ${file%'.ras'}'.ras' >> /dev/null 2>&1
+done
 
 echo 'packing player'
 ar -q 'player.a' 'dat/player/player0.y3d' 'dat/player/player1.y3d' 'dat/player/player.ini' >> /dev/null 2>&1
