@@ -113,6 +113,7 @@ int main(int argc, char** argv)
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
 			case ' ':    clglobal->clsound->stop(); break;
 			case 'r':    clglobal->clsound->play(2); break;
+			case 'y':    clglobal->cltransitions->circleblend(200,300,50); break;
 			case 'i':    
 				screens = clglobal->clgfx->savescreen();
 				screenf = clglobal->clformat->saveras(screens,"screen.im32");

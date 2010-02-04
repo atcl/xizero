@@ -70,6 +70,7 @@ class CLgfx : public CLbase<CLgfx,1>
 	protected:
 		CLfont** fonts;
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
+		inline void drawclipcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		CLgfx() { fonts = 0; };
 		~CLgfx() { };
@@ -85,6 +86,7 @@ class CLgfx : public CLbase<CLgfx,1>
 		void drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xlong x4,xlong y4,uxlong c) const;
 		void drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const;
 		void drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a=0) const;
+		void drawclipcircle(xlong xc,xlong yc,xlong r,uxlong c) const;
 		void drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const;
 		void fill(xlong x,xlong y,uxlong oc,uxlong nc) const;
 		void fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const;
@@ -129,6 +131,26 @@ void CLgfx::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //
  	clscreen->cldoublebuffer[b1-a2+y] = c;
  	clscreen->cldoublebuffer[b1+a2-y] = c;
  	clscreen->cldoublebuffer[b1-a2-y] = c;
+	//*
+}
+
+void CLgfx::drawclipcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
+{
+	//precalculate linear address components (especially multiplications)
+	xlong b1 = (yc*XRES)+xc;
+ 	xlong a1 = y*XRES;
+ 	xlong a2 = x*XRES;
+	//*
+	
+	//draw the eight pixels for each (1/8) section of the circle
+ 	if( (b1+a1<XRES*YRES) && (b1+a1>0) && (xc+x<XRES) && (xc+x>0) ) { clscreen->cldoublebuffer[b1+a1+x] = c; }
+ 	if( (b1-a1<XRES*YRES) && (b1-a1>0) && (xc+x<XRES) && (xc+x>0) ) { clscreen->cldoublebuffer[b1-a1+x] = c; }
+ 	if( (b1+a1<XRES*YRES) && (b1+a1>0) && (xc-x<XRES) && (xc-x>0) ) { clscreen->cldoublebuffer[b1+a1-x] = c; }
+ 	if( (b1-a1<XRES*YRES) && (b1-a1>0) && (xc-x<XRES) && (xc-x>0) ) { clscreen->cldoublebuffer[b1-a1-x] = c; }
+ 	if( (b1+a2<XRES*YRES) && (b1+a1>0) && (xc+y<XRES) && (xc+y>0) ) { clscreen->cldoublebuffer[b1+a2+y] = c; }
+ 	if( (b1-a2<XRES*YRES) && (b1-a2>0) && (xc+y<XRES) && (xc+y>0) ) { clscreen->cldoublebuffer[b1-a2+y] = c; }
+ 	if( (b1+a2<XRES*YRES) && (b1+a2>0) && (xc-y<XRES) && (xc-y>0) ) { clscreen->cldoublebuffer[b1+a2-y] = c; }
+ 	if( (b1-a2<XRES*YRES) && (b1-a2>0) && (xc-y<XRES) && (xc-y>0) ) { clscreen->cldoublebuffer[b1-a2-y] = c; }
 	//*
 }
 
@@ -400,7 +422,7 @@ void CLgfx::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! crit
 	while(cx<=cy)
 	{
 		drawcirclepixel(xc,yc,cx,cy,c);
-		if(d<0) d += (cx<<2)+6;
+		if(d<0) { d += (cx<<2)+6; }
 		else { d += ((cx-cy)<<2)+10; cy--; }
 		cx++; 
 	}
@@ -409,6 +431,25 @@ void CLgfx::drawcircle(xlong xc,xlong yc,xlong r,uxlong c,bool a) const //! crit
 	{
 		drawcircle(xc,yc,r+1,c); //adjust color
 		drawcircle(xc,yc,r-1,c); //adjust color
+	}
+}
+
+void CLgfx::drawclipcircle(xlong xc,xlong yc,xlong r,uxlong c) const //! critical
+{
+	//center and radius clipping
+	if(isoff(xc-r,yc-r,xc+r,yc+r)) { return; }
+	//*
+	
+	xlong d = 3 - (r<<1);
+	xlong cx = 0;
+	xlong cy = r;
+
+	while(cx<=cy)
+	{
+		drawclipcirclepixel(xc,yc,cx,cy,c);
+		if(d<0) { d += (cx<<2)+6; }
+		else { d += ((cx-cy)<<2)+10; cy--; }
+		cx++; 
 	}
 }
 
@@ -466,6 +507,8 @@ void CLgfx::drawellipse(xlong xc,xlong yc,xlong r1,xlong r2,uxlong c) const //! 
 
 void CLgfx::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 {
+	if(isoff(x,y)) { return; }
+	
 	//set up fifo
 	CLfifo<CLpoint> fillfifo;
 	//*
@@ -517,6 +560,8 @@ void CLgfx::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 
 void CLgfx::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 {
+	if(isoff(x,y)) { return; }
+	
 	//set up fifo
 	CLfifo<CLpoint> fillfifo;
 	//*

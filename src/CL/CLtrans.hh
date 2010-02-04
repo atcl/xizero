@@ -48,7 +48,7 @@ class CLtransitions : public CLbase<CLtransitions,1>
 		CLtransitions() { };
 		~CLtransitions() { };
 	public:
-		void circleblend(xlong x,xlong y,xlong r,xlong t) const;
+		void circleblend(xlong x,xlong y,xlong r) const;
 		void dissolve() const;
 		void fadetoblack() const;
 };
@@ -61,12 +61,20 @@ CLscreen* CLtransitions::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
-void CLtransitions::circleblend(xlong x,xlong y,xlong r,xlong t) const //! critical
+void CLtransitions::circleblend(xlong x,xlong y,xlong r) const //! critical
 {
-	clgfx->drawcircle(x,y,r,0x00FFFFFF);
-	clgfx->fill(5,30,0,0x00FFFFFF);
-	clwindow->run();
-	clwindow->sleep(t/1000);
+	for(xlong i=YRES/2; i>r; i--)
+	{
+		clgfx->drawclipcircle(x,y,i,0x00FFFFFF);
+		clgfx->drawclipcircle(x-1,y,i+1,0x00FFFFFF);
+		clgfx->drawclipcircle(x+1,y,i+1,0x00FFFFFF);
+		clgfx->drawclipcircle(x,y-1,i+1,0x00FFFFFF);
+		clgfx->drawclipcircle(x,y+1,i+1,0x00FFFFFF);
+		//...
+		clwindow->run();
+		clwindow->sleep(5);
+	}
+	clwindow->sleep(1000);
 }
 
 void CLtransitions::dissolve() const //! critical
@@ -87,6 +95,7 @@ void CLtransitions::dissolve() const //! critical
 		clwindow->run();
 		clwindow->sleep(10);
 	}
+	//clwindow->sleep(1000);
 }
 
 void CLtransitions::fadetoblack() const //! critical
@@ -107,6 +116,7 @@ void CLtransitions::fadetoblack() const //! critical
 		clwindow->run();
 		clwindow->sleep(5);
 	}
+	//clwindow->sleep(1000);
 }
 ///*
 
