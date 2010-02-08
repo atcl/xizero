@@ -1,5 +1,5 @@
 ///license
-//atCROSSLEVEL studios 2009
+//atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license 
 ///*
 
@@ -84,7 +84,7 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	if(winwidth>600) { winwidth = 600; }
 	if(winheight<100) { winheight = 100; }
 	if(winheight>250) { winheight = 250; }
-	
+
 	glutInitWindowSize(winwidth,winheight);
 	glutInitWindowPosition(10,10);
 	currid = glutCreateWindow(title);

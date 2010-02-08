@@ -1,4 +1,4 @@
-//atCROSSLEVEL studios 2009
+//atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license
 
 #include "CLinc.h"

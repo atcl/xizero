@@ -1,5 +1,5 @@
 ///license
-//atCROSSLEVEL studios 2009
+//atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license
 ///*
 
@@ -727,254 +727,36 @@ void CLgfx::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cri
 	}
 	//*
 	
-	//! todo: implement cases
 	//draw loop
-	switch(m)
+	for(xlong i=0; i<cheight; i++)
 	{
-		case 0: //normal
-			for(xlong i=0; i<cheight; i++)
+		for(xlong j=0; j<cwidth; j++)
+		{
+			svalue = s->data[soffset];
+			switch(m)
 			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
+				case 0:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //normal
+				case 1:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //mirrored horizontal
+				case 2:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //mirrored vertical
+				case 3:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 90 degrees left
+				case 4:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 180 dgrees left
+				case 5:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 270 dgrees left
+				case 6:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 90 degrees right
+				case 7:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 180 degrees right
+				case 8:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 270 degrees right
+				case 9:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //and
+				case 10: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //or
+				case 11: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //xor
+				case 12: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //nand
+				case 13: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //nor
+				case 14: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //not
+				case 15: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //byte add
+				case 16: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //byte sub
 			}
-		break;
-		
-		case 1: //mirrored horizontal
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 2: //mirrored vertical
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 3: //rotated 90° left
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 4: //rotated 180° left
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 5: //rotated 270° left
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 6: //rotated 90° right
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 7: //rotated 180° right
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 8: //rotated 270° right
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 11: //and
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = dvalue & svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 12: //or
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = dvalue | svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 13: //xor
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = dvalue ^ svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 14: //nand
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = ~(dvalue | svalue);
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 15: //nor
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = ~(dvalue | svalue);
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 16: //not
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = ~svalue;
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 17: //byte add
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = byteadd(dvalue,svalue);
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
-		
-		case 18: //byte sub
-			for(xlong i=0; i<cheight; i++)
-			{
-				for(xlong j=0; j<cwidth; j++)
-				{
-					svalue = s->data[soffset];
-					dvalue = t->data[soffset];
-					clscreen->cldoublebuffer[doffset+j] = bytesub(dvalue,svalue);
-					soffset++;
-				}
-				soffset += cdiff;
-				doffset += XRES;
-			}
-		break;
+			soffset++;
+		}
+		soffset += cdiff;
+		doffset += XRES;
 	}
 	//*
 }

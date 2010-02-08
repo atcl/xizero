@@ -1,5 +1,5 @@
 ///license
-//atCROSSLEVEL studios
+//atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license
 ///*
 
