@@ -67,11 +67,11 @@ uxlong CLlight::lambertslaw(xlong x,xlong y) //! noncritical
 	
 	//apply lamberts law on color components
 	r = (r/(1-i) ) * ( (-i/d) + 1.0 ); //it is not d*d because the squareroot at init of d is omitted;
-	if(r<0.0) r = 0.0;                 //replace through multiplication with heaviside?
+	if(r<0.0) { r = 0.0; }             //replace through multiplication with heaviside?
 	g = (g/(1-i) ) * ( (-i/d) + 1.0 ); //it is not d*d because the squareroot at init of d is omitted;
-	if(g<0.0) g = 0.0;                 //replace through multiplication with heaviside?
+	if(g<0.0) { g = 0.0; }             //replace through multiplication with heaviside?
 	b = (b/(1-i) ) * ( (-i/d) + 1.0 ); //it is not d*d because the squareroot at init of d is omitted;
-	if(b<0.0) b = 0.0;                 //replace through multiplication with heaviside?
+	if(b<0.0) { b = 0.0; }             //replace through multiplication with heaviside?
 	//*
 	
 	//recombine

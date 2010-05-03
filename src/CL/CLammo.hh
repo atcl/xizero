@@ -23,11 +23,11 @@
  * 
  * description:	This class manages all ammo fired by entities.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	some issues when twin ammo fired, one being slower.
+ * notes:		...
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -53,11 +53,11 @@ class CLammomanager : public CLbase<CLammomanager,0>
 		static CLgame*    clgame;
 		static CLmath*    clmath;
 	protected:
-		CLammolist* ammolist;
-		CLammo** ammotype;
-		xlong ammotypecount;
-		xlong lastupdate;
-		xlong* mark;
+		CLammolist* list;
+		CLammo**    type;
+		xlong       types;
+		xlong       last;
+		xlong*      mark;
 	public:
 		CLammomanager(xlong atc,xlong* ats,xlong* m);
 		~CLammomanager();
@@ -79,21 +79,23 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
 {	
 	//set up attributes
 	mark = m;
-	ammotypecount = atc;
-	ammolist = new CLammolist();
-	ammotype = new CLammo*[atc];
+	types = atc;
+	list = new CLammolist();
+	type = new CLammo*[types];
 	//*
 	
 	//fill ammotypes
-	for(xlong i=0; i<atc; i++)
+	for(xlong i=0;i<types;i++)
 	{
-			ammotype[i] = new CLammo;
-			ammotype[i]->p = CLfvector();
-			ammotype[i]->s = CLfvector();
+			type[i] = new CLammo;
+			type[i]->p = CLfvector();
+			type[i]->s = CLfvector();
 			switch(ats[i])
 			{
-				case 0: ammotype[i]->comsprite = CLsprites::drawplasma; break;
-				case 1: ammotype[i]->comsprite = CLsprites::drawantimatter; break;
+				case 0:  type[i]->comsprite = CLsprites::drawplasma; break;
+				case 1:  type[i]->comsprite = CLsprites::drawantimatter; break;
+				
+				default: type[i]->comsprite = CLsprites::drawplasma; break;
 			}
 	}
 	//*
@@ -101,20 +103,20 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
 
 CLammomanager::~CLammomanager() //! noncritical
 {
-	delete ammolist;
-	delete[] ammotype;
+	delete list;
+	delete[] type;
 }
 
 void CLammomanager::fire(xlong at,const CLfvector& startposition,const CLfvector direction) //! critical
 {
 	//append ammolist if ammotype exists
-	if(at<ammotypecount)
+	if(at<types)
 	{
-		CLammo* currammo = new CLammo();
-		currammo->comsprite = ammotype[at]->comsprite;
-		currammo->p = startposition;
-		currammo->s = direction;
-		ammolist->append(currammo,"at" + xchar(at+30) );
+		CLammo* curr = new CLammo();
+		curr->comsprite = type[at]->comsprite;
+		curr->p = startposition;
+		curr->s = direction;
+		list->append(curr,"at" + xchar(at+30) );
 	}
 	//*
 }
@@ -123,35 +125,35 @@ void CLammomanager::update() //! critical
 {
 	xlong time = clwindow->getmilliseconds();
 	bool listfix=0;
-	CLammo* currammo = 0;
+	CLammo* curr = 0;
 	
 	//update all ammolist members
-	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
+	for(xlong i=list->setfirst(); i<list->getlength(); i+=list->setnext())
 	{
 		//place the ammolist index correctly after deleting ammo from the list
-		if(listfix) { i+=ammolist->setprev(); listfix=0; }
-		currammo = ammolist->getcurrentdata();
+		if(listfix) { i+=list->setprev(); listfix=0; }
+		curr = list->getcurrentdata();
 		//*
 		
 		//update current ammo position
-		float inter = time-lastupdate;
-		currammo->p.x += inter*currammo->s.x;
-		currammo->p.y -= inter*currammo->s.y;
-		currammo->p.z += inter*currammo->s.z;
+		float inter = time-last;		//? call here clwindow->getmilliseconds()
+		curr->p.x += inter*curr->s.x;
+		curr->p.y -= inter*curr->s.y;
+		curr->p.z += inter*curr->s.z;
 		//*
 		
 		//check if current ammo left screen
-		if(clgame->boundary(currammo->p,*mark)!=0)
+		if(clgame->boundary(curr->p,*mark)!=0)
 		{
-			ammolist->delcurrent(0);
-			listfix = ammolist->isfirst();
+			list->delcurrent(0);
+			listfix = list->isfirst();
 		}
 		//*
 	}
 	//*
 	
 	//save time
-	lastupdate = time;
+	last = time;
 	//*
 }
 
@@ -159,23 +161,23 @@ template<int I>
 void CLammomanager::collision(CLentity<I>* e) //! critical
 {
 	xlong r = 0;
-	bool listfix=0;
-	CLammo* currammo = 0;
+	bool listfix = 0;
+	CLammo* curr = 0;
 	
 	//test all ammolist members for collisions
-	for(xlong i=ammolist->setfirst(); i<ammolist->getlength(); i+=ammolist->setnext())
+	for(xlong i=list->setfirst(); i<list->getlength(); i+=list->setnext())
 	{
 		//place the ammolist index correctly after deleting ammo from the list
-		if(listfix) { i+=ammolist->setprev(); listfix=0; }
-		currammo = ammolist->getcurrentdata();
+		if(listfix) { i+=list->setprev(); listfix=0; }
+		curr = list->getcurrentdata();
 		//*
 		
 		//test the current ammo for collision with any opposite entity
-		if(e->isvisible() && clgame->collision2d(*(e->getposition()),*(e->getboundingbox()),currammo->p,clmath->delta(i))==0)
+		if(e->isvisible() && clgame->collision2d(*(e->getposition()),*(e->getboundingbox()),curr->p,clmath->delta(i))==0)
 		{
 			r++;
-			ammolist->delcurrent(0);
-			listfix = ammolist->isfirst();
+			list->delcurrent(0);
+			listfix = list->isfirst();
 		}
 		//*
 	}
@@ -188,18 +190,18 @@ void CLammomanager::collision(CLentity<I>* e) //! critical
 
 void CLammomanager::display() const //! critical
 {
-	CLammo* currammo = 0;
+	CLammo* curr = 0;
 	
 	//draw all ammo in the ammolist
-	for(xlong i=ammolist->setfirst(); i<ammolist->getlength();i+=ammolist->setnext())
+	for(xlong i=list->setfirst(); i<list->getlength();i+=list->setnext())
 	{
-		currammo = ammolist->getcurrentdata();
-		currammo->comsprite(currammo->p.x,currammo->p.y-(*mark));
+		curr = list->getcurrentdata();
+		curr->comsprite(curr->p.x,curr->p.y-(*mark));
 	}
 	//*
 }
 
-void CLammomanager::pause() { lastupdate = clwindow->getmilliseconds(); } //! noncritical
+void CLammomanager::pause() { last = clwindow->getmilliseconds(); } //! noncritical
 ///*
 
 #endif
