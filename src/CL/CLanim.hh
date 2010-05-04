@@ -22,11 +22,11 @@
  * 
  * description:	This class handles 3d animations.
  * 
- * author:	atcl
+ * author:		atcl
  * 
  * notes:	
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -82,12 +82,15 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 	else position = 0;
 	//*
 	
+	//create frames
 	xlong anipointer = 0;
 	frames = (anicsv[anipointer])/13;
 	anipointer++;
 	frame = new CLframe*[frames];
 	currframe = 0;
+	//*
 	
+	//fill frames
 	for(xlong i=0; i<frames; i++)
 	{
 		frame[i] = new CLframe;
@@ -147,6 +150,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 		
 		anipointer += 13; 
 	}
+	//*
 	
 	lastupdate = 0;
 	starttime = 0;
@@ -159,7 +163,7 @@ CLanim::~CLanim() //! noncritical
 
 xlong CLanim::update() //! critical
 {
-	if(currframe>=frames) return 0;
+	if(currframe>=frames) { return 0; }
 	
 	if(frame[currframe]->duration==0)
 	{
