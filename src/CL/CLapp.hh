@@ -10,6 +10,7 @@
 
 ///sys includes
 #include <cstdlib>
+#include <cstdio>
 ///*
 
 ///api includes
@@ -25,11 +26,11 @@
  * 
  * description:	This class manages the application itself.
  * 
- * author:	atcl
+ * author:		atcl
  * 
  * notes:	
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -41,59 +42,48 @@ class CLapp : public CLbase<CLapp,1>
 	protected:
 		const xchar* name;
 		const xchar* title;
-		xchar* icon;
+		const xchar** icon;
 		uxlong size;
-		uxlong version;
+		const xchar* version;
 		CLapp();
 		~CLapp() { };
 	public:
-		void exit(xlong r=0,const xchar* m="");
-		xchar inkey(bool b);
+		void init(char* argv[]);
+		void exit(const xlong r=0,const xchar* m="") const;
+		xchar inkey(const bool b) const;
 		const xchar* getname() const { return name; };
 		const xchar* gettitle() const { return title; };
-		xchar* geticon() const { return icon; };
+		const xchar** geticon() const { return icon; };
+		void setison(const xchar** i) { icon = i; }
 		uxlong getsize() const { return size; };
-		uxlong getversion() const { return version; };
+		const xchar* getversion() const { return version; };
 };
 ///*
 
 ///implementation
-CLapp::CLapp() : name(TITLE), title(TITLE) //! noncritical
+CLapp::CLapp() : title(TITLE), version(VERSION), icon(CLicon) //! noncritical
 {
-	//name = argv[0];
-	//size = argv[-1];
-	title = TITLE;
-	//icon = ICON;
-	version = uxchar(MAJOR<<24)+uxchar(MINOR<<16)+uxchar(BUILD<<8)+uxchar(EXTRA);
+	//icon = CLicon;
 }
 
-void CLapp::exit(xlong r,const xchar* m) //! noncritical
+void CLapp::init(char* argv[])
+{
+	name = argv[0];
+	FILE* temp = fopen(name,"rb");
+	fseek(temp,0,SEEK_END);
+	size = (ftell(temp))>>10 ;
+	tty(title); tty(" ("); tty(name); tty(") version:"); tty(version); tty(" size:"); tty(size); say("KB");
+}
+
+void CLapp::exit(const xlong r,const xchar* m) const //! noncritical
 {
 	say(m);
 	::exit(r);
 }
 
-xchar inkey(bool b) //! noncritical
+xchar CLapp::inkey(const bool b) const //! noncritical
 {
-	xchar r = 0;
-	xlong s = 0;
-	
-	if(b)
-	{
-		while(true)
-		{
-			//usleep(20000);
-			s = read(0,&r,1);
-			if(s>0) { break; }
-		}
-	}
-	else
-	{
-		s = read(0,&r,1);
-		if(s<=0) { r=0; }
-	}
-	
-	return r;
+	return xchar(getchar());
 }
 ///*
 

@@ -5,10 +5,11 @@
 #include "xizero.h"
 #include "xizero.hh"
 
-int main()
+int main(int argc,char* argv[])
 {
 	//init sequence
 	clglobal = CLglobal::instance(); 
+	clglobal->clapp->init(argv);
 	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
 	clglobal->clwindow->setcursor(cursor);
 	cldata = new CLar(BASEDIR"xizero.dat");
