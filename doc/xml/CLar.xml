@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="" istemplate="">
+	
+	<filename>CLar.hh</filename>
+	
+	<name>CLar</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLsystem.xml">CLsystem</module>
+		<module href="CLstring.xml">CLstring</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>members</name>
+		<type>CLfile**</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>filecount</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLar</name>
+		<parameter>const xchar* sf</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLar</name>
+		<parameter>CLfile* sf</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLar</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>loadar</name>
+		<returns>void</returns>
+		<parameter>CLfile* sf</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>findbyname</name>
+		<returns>CLfile*</returns>
+		<parameter>const xchar* e</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>findbyextension</name>
+		<returns>CLfile*</returns>
+		<parameter>const xchar* e</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getmember</name>
+		<returns>CLfile*</returns>
+		<parameter>const uxlong index</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getfilecount</name>
+		<returns>uxlong</returns>
+		<info></info>
+		<example></example>
+	</method>	
+	
+</class>

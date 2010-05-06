@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="" istemplate="">
+	
+	<filename>CLapp.hh</filename>
+	
+	<name>CLapp</name>
+	
+	<info></info>
+	
+	<depends>
+		<library partof="std">cstdio</library>
+		<library partof="std">cstlib</library>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>name</name>
+		<type>const xchar*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>title</name>
+		<type>const xchar*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>icon</name>
+		<type>const xchar**</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>size</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>version</name>
+		<type>const xchar*</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLapp</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLapp</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>init</name>
+		<returns>void</returns>
+		<parameter>char* argv[]</parameter>
+		<parameter></parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>exit</name>
+		<returns>void</returns>
+		<parameter>const xlong r=0</parameter>
+		<parameter>const xchar* m=""</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>inkey</name>
+		<returns>xchar</returns>
+		<parameter>const bool b</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getname</name>
+		<returns>const xchar*</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>gettitlw</name>
+		<returns>const xchar*</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>geticon</name>
+		<returns>const xchar**</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>seticon</name>
+		<returns>void</returns>
+		<parameter>const xchar** i</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getsize</name>
+		<returns>uxlong</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getversion</name>
+		<returns>const xchar*</returns>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
