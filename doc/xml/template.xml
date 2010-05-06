@@ -23,17 +23,18 @@
 		<parent href=""></parent>	
 	</derived>
 	
-	<attribute ispublic="" isstatic="">
+	<attribute ispublic="0" isstatic="0">
 		<name></name>
 		<type></type>
 		<info></info>
 	</attribute>
 	
-	<method ispublic="" isstatic="">
+	<method ispublic="1" isstatic="0">
 		<name></name>
 		<returns></returns>
 		<parameter></parameter>
 		<parameter></parameter>
+		<qualifier></qualifier>
 		<info></info>
 		<example></example>
 	</method>	

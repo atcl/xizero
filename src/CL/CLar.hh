@@ -19,11 +19,11 @@
  * 
  * description:	This class handles ar archives.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	test
+ * notes:		...
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -43,7 +43,7 @@ class CLar : public CLbase<CLar,0>
 		void loadar(CLfile* sf);
 		CLfile* findbyname(const xchar* e) const;
 		CLfile* findbyextension(const xchar* e) const;
-		CLfile* getmember(uxlong index) const;
+		CLfile* getmember(const uxlong index) const;
 		uxlong  getfilecount() const { return filecount; };
 };
 
@@ -130,10 +130,10 @@ void CLar::loadar(CLfile* sf) //! noncritical
 		for(xlong j=0; j<fc; j++) { members[j] = tindex[j]; }
 		//*
 	}
-	else { tty(__func__); say(u8"no \"!<arch>\" identifier found"); }
+	else { tty(__func__); say(u8" no \"!<arch>\" identifier found"); }
 }
 
-CLar::~CLar() { delete[] members; delete members; } //! noncritical
+CLar::~CLar() { delete[] members; } //! noncritical
 
 CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {
@@ -148,8 +148,8 @@ CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 			if(clstring->compare(&(members[h]->name[l]),e,m)!=0) { r = h; }
 		}
 		
-		if(r==-1) return 0;
-		else return members[r];
+		if(r==-1) { return 0; }
+		return members[r];
 }
 
 CLfile* CLar::findbyname(const xchar* e) const //! noncritical
@@ -158,13 +158,13 @@ CLfile* CLar::findbyname(const xchar* e) const //! noncritical
 
 		for(uxlong h=0; h<filecount; h++) { if(clstring->compare(members[h]->name,e)!=0) { r = h; } }
 		
-		if(r==-1) return 0;
-		else return members[r];
+		if(r==-1) { return 0; }
+		return members[r];
 }
 
-CLfile* CLar::getmember(uxlong index) const //! noncrtical
+CLfile* CLar::getmember(const uxlong index) const //! noncrtical
 {
-	if(index>=filecount) return 0;
+	if(index>=filecount) { return 0; }
 	return members[index];
 }
 ///*

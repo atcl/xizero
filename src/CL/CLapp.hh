@@ -28,7 +28,7 @@
  * 
  * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
  * version:		0.2
  */
@@ -54,7 +54,7 @@ class CLapp : public CLbase<CLapp,1>
 		const xchar* getname() const { return name; };
 		const xchar* gettitle() const { return title; };
 		const xchar** geticon() const { return icon; };
-		void setison(const xchar** i) { icon = i; }
+		void seticon(const xchar** i) { icon = i; }
 		uxlong getsize() const { return size; };
 		const xchar* getversion() const { return version; };
 };
@@ -71,7 +71,8 @@ void CLapp::init(char* argv[])
 	name = argv[0];
 	FILE* temp = fopen(name,"rb");
 	fseek(temp,0,SEEK_END);
-	size = (ftell(temp))>>10 ;
+	size = (ftell(temp))>>10;
+	fclose(temp);
 	tty(title); tty(" ("); tty(name); tty(") version:"); tty(version); tty(" size:"); tty(size); say("KB");
 }
 

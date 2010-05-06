@@ -59,7 +59,7 @@ class CLammomanager : public CLbase<CLammomanager,0>
 		xlong       last;
 		xlong*      mark;
 	public:
-		CLammomanager(xlong atc,xlong* ats,xlong* m);
+		CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* markptr);
 		~CLammomanager();
 		void fire(xlong ammotype,const CLfvector& startposition,const CLfvector direction);
 		void update();
@@ -75,11 +75,11 @@ CLmath*    CLammomanager::clmath    = CLmath::instance();
 ///*
 
 ///implementation
-CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
+CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* markptr) //! noncritical
 {	
 	//set up attributes
-	mark = m;
-	types = atc;
+	mark = markptr;
+	types = ammotypecount;
 	list = new CLammolist();
 	type = new CLammo*[types];
 	//*
@@ -90,7 +90,7 @@ CLammomanager::CLammomanager(xlong atc,xlong* ats,xlong* m) //! noncritical
 			type[i] = new CLammo;
 			type[i]->p = CLfvector();
 			type[i]->s = CLfvector();
-			switch(ats[i])
+			switch(ammotypelist[i])
 			{
 				case 0:  type[i]->comsprite = CLsprites::drawplasma; break;
 				case 1:  type[i]->comsprite = CLsprites::drawantimatter; break;

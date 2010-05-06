@@ -24,7 +24,7 @@
  * 
  * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
  * version:		0.2
  */
