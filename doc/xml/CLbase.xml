@@ -15,11 +15,6 @@
 		<parameter type="bool">S</parameter>
 	</template>
 	
-	<depends>
-		<module href="CLtypes.xml">CLtypes</module>
-		<module href="CLversion.xml">CLversion</module>
-	</depends>
-	
 	<attribute ispublic="0" isstatic="1">
 		<name>base</name>
 		<type>T*</type>

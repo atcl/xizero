@@ -18,16 +18,15 @@
  * 
  * description:	The universal base class of all other classes
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.2
+ * version: 	0.2
  */
 ///*
 
 ///defintions
-#define __class__ CLbase
 template<class T,bool S>
 class CLbase
 {
@@ -56,8 +55,6 @@ T* CLbase<T,S>::instance() //! noncritical
 	return base;
 	//*
 }
-
-#undef __class__
 ///*
 
 #endif
