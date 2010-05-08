@@ -25,7 +25,6 @@
 #include "CL/CLfifo.hh"
 #include "CL/CLlist.hh"
 #include "CL/CLtree.hh"
-#include "CL/CLbintree.hh"
 #include "CL/CLbuffer.hh"
 //*
 

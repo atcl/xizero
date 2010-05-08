@@ -17,11 +17,11 @@
  * 
  * description:	A tri-state bool type
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	test.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -334,15 +334,14 @@ boool boool::operator*(xlong a) const //! noncritical
 }
 //*
 
-/*
+
 //friends:
 
 //add with xlong from left
 inline boool operator+(xlong a,boool& b) //! noncritical
 {
-	CLmath* clmath;
 	boool temp;
-	temp.b = sgn(a+b.b);
+	temp.b = temp.sgn(a+b.b);
 	return temp;
 }
 //*
@@ -350,9 +349,8 @@ inline boool operator+(xlong a,boool& b) //! noncritical
 //subtract with xlong from left
 inline boool operator-(xlong a,boool& b) //! noncritical
 {
-	CLmath* clmath;
 	boool temp;
-	temp.b = sgn(a-b.b);
+	temp.b = temp.sgn(a-b.b);
 	return temp;
 }
 //*
@@ -360,9 +358,8 @@ inline boool operator-(xlong a,boool& b) //! noncritical
 //multiplicate with xlong from left
 inline boool operator*(xlong a,boool& b) //! noncritical
 {
-	CLmath* clmath;
 	boool temp;
-	temp.b = sgn(a*b.b);
+	temp.b = temp.sgn(a*b.b);
 	return temp;
 }
 //*
@@ -370,9 +367,8 @@ inline boool operator*(xlong a,boool& b) //! noncritical
 //add with bool from left
 inline boool operator+(bool a,boool& b) //! noncritical
 {
-	CLmath* clmath;
 	boool temp;
-	temp.b = sgn(xlong(a)+b.b);
+	temp.b = temp.sgn(xlong(a)+b.b);
 	return temp;
 }
 //*
@@ -380,9 +376,8 @@ inline boool operator+(bool a,boool& b) //! noncritical
 //subtract with bool from left
 inline boool operator-(bool a,boool& b) //! noncritical
 {
-	CLmath* clmath;
 	boool temp;
-	temp.b = sgn(xlong(a)-b.b);
+	temp.b = temp.sgn(xlong(a)-b.b);
 	return temp;
 }
 //*
@@ -390,13 +385,12 @@ inline boool operator-(bool a,boool& b) //! noncritical
 //multiplicate with bool from left
 inline boool operator*(bool a,boool& b) //! noncritical
 {
-	CLmath* clmath;
 	boool temp;
-	temp.b = sgn(xlong(a)*b.b);
+	temp.b = temp.sgn(xlong(a)*b.b);
 	return temp;
 }
 //*
-*/
+
 ///*
 
 #endif
