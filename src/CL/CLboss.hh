@@ -9,7 +9,7 @@
 ///*
 
 ///includes
-#include "CLentity.hh"
+#include "CLenemy.hh"
 ///*
 
 ///header
@@ -17,11 +17,11 @@
  * 
  * description:	The boss (enemy) class.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 

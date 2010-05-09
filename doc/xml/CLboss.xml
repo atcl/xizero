@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLboss</filename>
+	
+	<name>CLboss</name>
+	
+	<info></info>
+	
+	<derived>
+		<parent href="CLenemy.xml">CLenemy</parent>	
+	</derived>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLboss</name>
+		<parameter>CLfile* bossptr</parameter>
+		<parameter>xlong* m</parameter>
+		<parameter>xlong mm</parameter>
+		<parameter>CLlvector* bossp</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>	
+	
+	<method ispublic="1" isstatic="0">
+		<name>~CLboss</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+</class>
