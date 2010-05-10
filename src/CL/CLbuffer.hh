@@ -20,11 +20,11 @@
  * 
  * description:	This class handles memory buffers.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	complete assembly routines, currently max size for buffers is 2GB.
+ * notes:		complete assembly routines, currently max size for buffers is 2GB.
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -34,13 +34,15 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 {
 	private:
 		static CLdetect* cldetect;
+		
 	protected:
 		T* buffer;
 		uxlong size;
 		uxlong bsize;
 		xlong  ttype;
+		
 	public:
-		CLbuffer(uxlong s,T ival=0);
+		CLbuffer(uxlong s,T i=0);
 		CLbuffer(const CLbuffer<T>& c);
 		~CLbuffer() { delete buffer; };
 		void clear(T v=0);
@@ -57,15 +59,15 @@ CLdetect* CLbuffer<T>::cldetect = CLdetect::instance();
 
 ///implementation
 template <typename T>
-CLbuffer<T>::CLbuffer(uxlong s,T ival) //! noncritical
+CLbuffer<T>::CLbuffer(uxlong s,T i) //! noncritical
 {
 	//adjust size and allocate buffer
 	size = s + (s%4); // make sure is a multiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
 	ttype = cldetect->mmx() + cldetect->sse();
-	ttype = 1;
-	clear(ival);
+	ttype = 1; //temp!
+	clear(i);
 	//*
 }
 
@@ -76,7 +78,7 @@ CLbuffer<T>::CLbuffer(const CLbuffer<T>& c) //! noncritical
 	bsize = c.bsize;
 	buffer = new T[size];
 	ttype = cldetect->mmx() + cldetect->sse();
-	ttype = 1;
+	ttype = 1; //temp!
 	c.copy(buffer);
 }
 
@@ -182,15 +184,15 @@ void CLbuffer<T>::copy(CLbuffer<T>* dst,xlong o) const //! critical
 			
 		case 3: for(i--;i>=0;i--) { dstbuf[i] = !buffer[i]; } break; //NOT
 		
-		//~ case 4: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] & buffer[i]; } break; //AND
-		//~ 
-		//~ case 5: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] | buffer[i]; } break; //OR
-		//~ 
-		//~ case 6:	for(i--;i>=0;i--) { dstbuf[i] = !(dstbuf[i] & buffer[i]); } break; //NAND
-		//~ 
-		//~ case 7:	for(i--;i>=0;i--) { dstbuf[i] = !(dstbuf[i] | buffer[i]); } break; //NOR
-		//~ 
-		//~ case 8:	for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] ^ buffer[i]; } break; //XOR
+		case 4: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] & buffer[i]; } break; //AND
+		
+		case 5: for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] | buffer[i]; } break; //OR
+		
+		case 6:	for(i--;i>=0;i--) { dstbuf[i] = !(dstbuf[i] & buffer[i]); } break; //NAND
+		
+		case 7:	for(i--;i>=0;i--) { dstbuf[i] = !(dstbuf[i] | buffer[i]); } break; //NOR
+		
+		case 8:	for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] ^ buffer[i]; } break; //XOR
 		
 		case 9:	 for(i--;i>=0;i--) { dstbuf[i] = dstbuf[i] + buffer[i]; } break; //ADD
 		

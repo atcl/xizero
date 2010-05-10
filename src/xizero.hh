@@ -64,7 +64,6 @@ void newgame()
 		//*
 		
 		//display key bindings and init level
-		
 		const xchar* startmsg = "Use these keys:\n"
 								"Arrow Left/Right: Turn Tank\n"
 								"Arrow Forw/Backw: Drive Forw/Backw\n"
@@ -75,9 +74,10 @@ void newgame()
 								"p:                Pause game\n"
 								"^:                Exit to main menu\n"
 								"Esc:              Quit XiZero\n"
+								"#:                Activate/Deactivate Anti-Aliasing (2xFSAA RGMS)\n"
 								"After pressing OK the game will start immediately!";
 								
-		if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) { xlong tempo = 0; } //testlevel->start();
+		if(clglobal->clmsgbox->msgbox("Info",startmsg)==1) { xlong tempo = 0; }
 		//*
 		
 		//game loop
@@ -95,11 +95,8 @@ void newgame()
 			switch(input)
 			{
 				case ESC: exitgame(); break;
-				
 				case 'p': testlevel->pause(); break;
-				
 				case '#': aa = !aa;
-				
 				default: gamestate = testlevel->update(); break;
 			}
 			//*
