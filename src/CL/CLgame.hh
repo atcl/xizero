@@ -51,8 +51,7 @@ class CLgame : public CLbase<CLgame,1>
 		template<class clvector>xlong collision(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision2d(clvector& p,CLbox& bb,clvector& q,bool n=1);
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
-		template<class clvector>CLlvector terrainangle(const clvector& p,const CLbox* bb,const CLobject** t);
-		template<class clvector>bool terraincollision(const clvector& p,const CLbox* bb,const CLobject** t);
+		template<class clvector>CLfvector terraincollision(const clvector& p,const CLbox* bb,const CLobject** t,bool fwbw);
 };
 
 CLmath* CLgame::clmath = CLmath::instance();
@@ -290,8 +289,10 @@ xlong CLgame::collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n) 
 }
 
 template<class clvector>
-CLlvector CLgame::terrainangle(const clvector& p,const CLbox* bb,const CLobject** t) //! critical
+CLfvector CLgame::terraincollision(const clvector& p,const CLbox* bb,const CLobject** t,bool fwbw) //! critical
 {
+	//assuming p1,p2 is front, p3,p4 is back
+	
 	//calc levelposition of current bounding box
 	CLlvector p1( (p.x + bb->c[0].x), (p.y - bb->c[0].y), (p.z + bb->c[0].z) );
 	CLlvector p2( (p.x + bb->c[1].x), (p.y - bb->c[1].y), (p.z + bb->c[1].z) );
@@ -299,25 +300,34 @@ CLlvector CLgame::terrainangle(const clvector& p,const CLbox* bb,const CLobject*
 	CLlvector p4( (p.x + bb->c[3].x), (p.y - bb->c[3].y), (p.z + bb->c[3].z) );
 	//*
 	
-	CLlvector r;
+	//determine levelposition in terms of object rows and get normal of terrain polygon at current level position
+	xlong r1 = p1.y / 20;
+	xlong r2 = p2.y / 20;
+	xlong r3 = p3.y / 20;
+	xlong r4 = p4.y / 20;
+	
+	CLfvector* s1 = new CLfvector(p1.x,10,p1.z);
+	CLfvector* s2 = new CLfvector(p2.x,10,p2.z);
+	CLfvector* s3 = new CLfvector(p3.x,10,p3.z);
+	CLfvector* s4 = new CLfvector(p4.x,10,p4.z);
+	
+	s1 = t[r1]->getnormalat(s1);
+	s2 = t[r2]->getnormalat(s2);
+	s3 = t[r3]->getnormalat(s3);
+	s4 = t[r4]->getnormalat(s4);
+	//*
+	
+	CLlvector r(0,0,0,0); //x-angle,y-angle,z-angle,collision bool
+	
+	//calculate terrain angles
+	
+	//*
+	
+	//test for collision
+	
+	//* 
 	
 	return r;
-}
-///*
-
-template<class clvector>
-bool CLgame::terraincollision(const clvector& p,const CLbox* bb,const CLobject** t) //! critical
-{
-	//calc levelposition of current bounding box
-	CLlvector p1( (p.x + bb->c[0].x), (p.y - bb->c[0].y), (p.z + bb->c[0].z) );
-	CLlvector p2( (p.x + bb->c[1].x), (p.y - bb->c[1].y), (p.z + bb->c[1].z) );
-	CLlvector p3( (p.x + bb->c[2].x), (p.y - bb->c[2].y), (p.z + bb->c[2].z) );
-	CLlvector p4( (p.x + bb->c[3].x), (p.y - bb->c[3].y), (p.z + bb->c[3].z) );
-	//*
-	
-	
-	
-	return 0;
 }
 ///*
 

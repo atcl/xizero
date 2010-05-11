@@ -66,7 +66,7 @@ class CLobject : public CLbase<CLobject,0>
 		xlong getname() const { return name; };
 		CLfvector* getdockingpoint(xlong t,xlong i) const;
 		void translatealongnormals(float speed);
-		CLfvector getnormalofpolygonat(CLfvector* p);
+		CLfvector getnormalat(CLfvector* p);
 		CLbox* getboundingbox() const { return boundingbox; };
 		void reset();
 		void setcolor(uxlong co);
@@ -514,7 +514,7 @@ void CLobject::translatealongnormals(float speed) //! noncritical
 	//*
 }
 
-CLfvector CLobject::getnormalofpolygonat(CLfvector* p) //! critical
+CLfvector CLobject::getnormalat(CLfvector* p) //! critical
 {
 	CLfvector r = position - *p;
 	CLfvector n(0,0,0); 

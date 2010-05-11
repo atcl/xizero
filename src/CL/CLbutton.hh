@@ -24,7 +24,7 @@
  * 
  * author:		atcl
  * 
- * notes:		finish implementing.
+ * notes:		...
  * 
  * version: 	0.2
  */
