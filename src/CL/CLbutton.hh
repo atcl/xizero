@@ -13,6 +13,8 @@
 #include "CLutils.hh"
 #include "CLguibase.hh"
 #include "CLgfx.hh"
+#include "CLstring.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -20,15 +22,19 @@
  * 
  * description:	A standard gui element button
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	finish implementing.
+ * notes:		finish implementing.
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
 ///definitions
+class CLbutton;
+
+typedef CLlist<CLbutton> CLbuttonlist;
+
 class CLbutton : public CLguibase
 {
 	private:
@@ -43,23 +49,23 @@ class CLbutton : public CLguibase
 		xlong captionheight;
 		xlong captionx;
 		xlong captiony;
-		static CLlist<CLbutton>* buttonlist;
+		static CLbuttonlist* buttonlist;
 	public:
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f);
 		~CLbutton();
 		void draw() const;
+		void click() const;
 		void setaction(void(*a)()) { action = a; };
 		void setcaption(xchar* t);
 		void setvisible(bool v);
 		xchar* getcaption() const { return caption; };
-		void click();
 		static void checkclick();
 };
 
 CLstring* CLbutton::clstring = CLstring::instance();
 CLgfx*   CLbutton::clgfx   = CLgfx::instance();
 CLwindow* CLbutton::clwindow = CLwindow::instance();
-CLlist<CLbutton>* CLbutton::buttonlist = new CLlist<CLbutton>;
+CLbuttonlist* CLbutton::buttonlist = new CLbuttonlist();
 ///*
 
 ///implementation
@@ -70,8 +76,8 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	caption = clstring->copy(c);
 	captionwidth = clgfx->getfontstringwidth(caption,0) + 4;
 	captionheight = clgfx->getfontstringheight(caption,0);
-	if(w==-1 || w<captionwidth) width = captionwidth;
-	if(h==-1 || h<captionheight) height = captionheight;
+	if(w==-1 || w<captionwidth) { width = captionwidth; }
+	if(h==-1 || h<captionheight) { height = captionheight; }
 	captionx = (width - captionwidth)>>1;
 	captiony = (height - captionheight)>>1;
 	flat = f;
@@ -79,14 +85,16 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	buttonlist->append(this);
 }
 
-CLbutton::~CLbutton() { delete[] caption; } //! noncritical
+CLbutton::~CLbutton() { delete caption; } //! noncritical
 
 void CLbutton::draw() const //! critical
 {
-	if(visible==0) return;
+	if(visible==0) { return; }
 	clgfx->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	clgfx->drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
 }
+
+void CLbutton::click() const { action(); } //! critical
 
 void CLbutton::setcaption(xchar* t) //! noncritical
 {
@@ -94,8 +102,8 @@ void CLbutton::setcaption(xchar* t) //! noncritical
 	caption = clstring->copy(t);
 	captionwidth = clgfx->getfontstringwidth(t,0) + 4;
 	captionheight = clgfx->getfontstringheight(t,0);
-	if(width<captionwidth) width = captionwidth;
-	if(height<captionheight) height = captionheight;
+	if(width<captionwidth) { width = captionwidth; }
+	if(height<captionheight) { height = captionheight; }
 	captionx = (width - captionwidth)>>1;
 	captiony = (height - captionheight)>>1;
 }
@@ -114,8 +122,6 @@ void CLbutton::setvisible(bool v) //! noncritical
 		buttonlist->delcurrent();
 	}
 }
-
-void CLbutton::click() { action(); } //! critical
 
 void CLbutton::checkclick() //! critical
 {
@@ -136,7 +142,7 @@ void CLbutton::checkclick() //! critical
 			cx2 = cx1 + curr->getwidth();
 			cy1 = curr->gety();
 			cy2 = cy1 + curr->getheight();
-			if(mx>cx1 && mx<cx2 && my>cy1 && my<cy2) curr->click();  
+			if(mx>cx1 && mx<cx2 && my>cy1 && my<cy2) { curr->click(); }
 		}
 	}
 }
