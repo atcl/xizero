@@ -59,15 +59,9 @@ CLmath* CLcamera::clmath = CLmath::instance();
 ///*
 
 ///implementation
-CLcamera::CLcamera() //! noncritical
-{
-	linear = new CLmatrix(1);
-}
+CLcamera::CLcamera() { linear = new CLmatrix(1); } //! noncritical
 
-CLcamera::~CLcamera() //! noncritical
-{
-	delete linear;
-}
+CLcamera::~CLcamera() { delete linear; } //! noncritical
 
 void CLcamera::setup()
 {

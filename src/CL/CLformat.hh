@@ -75,9 +75,8 @@ xlong CLformat::readlong(xchar* f,xchar d)
 	return 0;
 }
 
-float CLformat::readfloat(xchar* f,xchar d);
+float CLformat::readfloat(xchar* f,xchar d)
 {
-
 	return 0;	
 }
 
