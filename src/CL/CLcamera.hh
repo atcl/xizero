@@ -5,7 +5,7 @@
 
 ///guard
 #ifndef HH_CLCAMERA
-#define HH_CLCAERA
+#define HH_CLCAMERA
 ///*
 
 ///includes
@@ -22,11 +22,11 @@
  * 
  * description:	UNV camera object
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -51,7 +51,7 @@ class CLcamera : public CLbase<CLcamera,1>
 	public:
 		void setroll(float r);
 		void setposition(CLfvector p);
-		void setdirection(CLfvector t);
+		void setdirection(CLfvector d);
 		
 };
 
@@ -93,9 +93,9 @@ void CLcamera::setposition(CLfvector p)
 	setup();
 }
 
-void CLcamera::setdirection(CLfvector t)
+void CLcamera::setdirection(CLfvector d)
 {
-	direction = t;
+	direction = d;
 	setup();
 }
 ///*

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLcamera.hh</filename>
+	
+	<name>CLcamera</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLmath.xml">CLmath</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>postion</name>
+		<type>CLfvector</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>direction</name>
+		<type>CLfvector</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>roll</name>
+		<type>float</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>up</name>
+		<type>CLfvector</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>fw</name>
+		<type>CLfvector</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>rg</name>
+		<type>CLfvector</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>linear</name>
+		<type>CLmatrix*</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLcamera</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLcamera</name>
+		<info>destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>setup</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name></name>
+		<returns></returns>
+		<parameter></parameter>
+		<parameter></parameter>
+		<qualifier></qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setroll</name>
+		<returns>void</returns>
+		<parameter>float r</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setposition</name>
+		<returns>void</returns>
+		<parameter>CLfvector p</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setdirection</name>
+		<returns>void</returns>
+		<parameter>CLfvector d</parameter>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
