@@ -50,6 +50,9 @@ class CLformat : public CLbase<CLformat,1>
 	protected:
 		CLformat() { };
 		~CLformat() { };
+		xlong    readlong(xchar* f,xchar d=' ');
+		float    readfloat(xchar* f,xchar d=' ');
+		xchar*   readstring(xchar* f,xchar d=' ');
 	public:
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
@@ -67,6 +70,22 @@ CLstring* CLformat::clstring = CLstring::instance();
 ///*
 
 ///implementation
+xlong CLformat::readlong(xchar* f,xchar d)
+{
+	return 0;
+}
+
+float CLformat::readfloat(xchar* f,xchar d);
+{
+
+	return 0;	
+}
+
+xchar* CLformat::readstring(xchar* f,xchar d)
+{
+	return 0;
+}
+
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
 {
 	xchar* bf = sf->text;
