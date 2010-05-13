@@ -235,8 +235,8 @@ void CLpolygon::project(xlong px,xlong py,bool c) //! critical
 	{
 		if(vpoint[x].z > 0)
 		{
-			wpoint[x].x = xlong( ( prjx * (vpoint[x].x / vpoint[x].z) ) + px );
-			wpoint[x].y = xlong( (-prjy * (vpoint[x].y / vpoint[x].z) ) + py );
+			wpoint[x].x = xlong( ( PRJX * (vpoint[x].x / vpoint[x].z) ) + px );
+			wpoint[x].y = xlong( (-PRJY * (vpoint[x].y / vpoint[x].z) ) + py );
 			wpoint[x].z = vpoint[x].z;
 		}
 		else

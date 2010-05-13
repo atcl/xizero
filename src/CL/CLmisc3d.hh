@@ -58,8 +58,8 @@ void CLmisc3d::project(clvector& v,const clvector& p) //! critical
 {
 	if(v.z > 0)
 	{
-		v.x = xlong( ( prjx * (v.x / v.z ) ) + p.x );
-		v.y = xlong( (-prjy * (v.y / v.z ) ) + p.y );
+		v.x = xlong( ( PRJX * (v.x / v.z ) ) + p.x );
+		v.y = xlong( (-PRJY * (v.y / v.z ) ) + p.y );
 		v.z = v.z;
 	}
 	else
@@ -79,8 +79,8 @@ void CLmisc3d::project2(clvector& o) //! critical
 	
 	if(o.z > 0)
 	{
-		o.x = xlong( ( prjx * (temp.x / temp.z ) ) + (XRES>>1) ); //test: (prjx * (xres>>1) / o.z)
-		o.y = xlong( ( prjy * (temp.y / temp.z ) ) + (YRES>>1) ); //test: (prjy * (yres>>1) / o.z)
+		o.x = xlong( ( PRJX * (temp.x / temp.z ) ) + (XRES>>1) ); //test: (prjx * (xres>>1) / o.z)
+		o.y = xlong( (-PRJY * (temp.y / temp.z ) ) + (YRES>>1) ); //test: (prjy * (yres>>1) / o.z)
 		o.z = o.z;
 	}
 	else

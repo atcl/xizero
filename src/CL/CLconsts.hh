@@ -13,11 +13,11 @@
  * 
  * description:	All constants used by multiple classes
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -95,8 +95,8 @@
 //*
 
 //3d engine consts
-#define prjx 80
-#define prjy 95
+#define PRJX 80
+#define PRJY 95
 //*
 ///*
 
