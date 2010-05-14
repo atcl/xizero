@@ -29,11 +29,11 @@
  * 
  * description:	This class determines the system hardware capabilities.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	finish implementing.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -62,22 +62,25 @@ class CLdetect : public CLbase<CLdetect,1>
 		static CLsystem* clsystem;
 		static CLstring* clstring;
 	protected:
-		uxlong totalram;
-		xlong pcores;
-		xlong l2c;
+		uxlong tram;
+		uxlong fram;
+		uxlong vram;
+		uxlong pcores;
+		uxlong l2c;
+		xlong psv;
 		bool havemmx;
 		bool havesse;
 		CLdetect();
 		~CLdetect() { };
 	public:
-		xlong cores() const { return pcores; };
-		xlong ram() const;
-		xlong vram() const;
-		xlong ps() const;
-		xlong l2() const;
-		
-		bool mmx() const { return havemmx; };
-		bool sse() const { return havesse; };
+		uxlong cores() const     { return pcores; }
+		uxlong totalram() const  { return tram; }
+		uxlong freeram();
+		uxlong videoram() const  { return vram; }
+		uxlong l2() const { return l2c; }
+		xlong ps() const  { return psv; }
+		bool mmx() const  { return havemmx; };
+		bool sse() const  { return havesse; };
 };
 
 CLsystem* CLdetect::clsystem = CLsystem::instance();
@@ -102,21 +105,33 @@ CLdetect::CLdetect() //! noncritical
 	//check ram
 	CLfile* mem = clsystem->getfile("/proc/meminfo");
 	xlong p = clstring->find(mem->text,"MemTotal:");
-	totalram = clstring->tolong(&(mem->text[p+9])) / 1024;
+	tram = clstring->tolong(&(mem->text[p+9])) / 1024;
+	p = clstring->find(mem->text,"MemFree:");
+	fram = clstring->tolong(&(mem->text[p+8])) / 1024;
 	//*
 	
 	//process cuid results here so vars can find way back
 	if( (c2 & MMXFLAG)!=0 ) { havemmx = 1; } else { havemmx = 0; }
 	if( (c2 & SSEFLAG)!=0 ) { havesse = 1; } else { havesse = 0; }
-	pcores = (c4>>25) * (c5 & 255); //fix!
+	pcores = (c4>>25) * (c5 & 255); //fix! and include ht
+	l2c = 0; //fix!
+	//*
+	
+	//detect vram
+	
+	//*
+	
+	//detect pixel shader
+	
 	//*
 }
 
-xlong CLdetect::ram() const { } //! noncritical
-
-xlong CLdetect::vram() const { } //! noncritical
-
-xlong CLdetect::ps() const { } //! noncritical
+uxlong CLdetect::freeram()
+{
+	CLfile* mem = clsystem->getfile("/proc/meminfo");
+	xlong p = clstring->find(mem->text,"MemFree:");
+	fram = clstring->tolong(&(mem->text[p+8])) / 1024;
+}
 ///*
 
 #endif

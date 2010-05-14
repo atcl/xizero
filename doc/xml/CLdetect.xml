@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLdetect</filename>
+	
+	<name>CLdetect</name>
+	
+	<info></info>
+	
+	
+	<depends>
+		<module href="CLsystem.xml">CLsystem</module>
+		<module href="CLstring.xml">CLstring</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>tram</name>
+		<type>uxlong</type>
+		<info>total RAM</info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>fram</name>
+		<type>uxlong</type>
+		<info>free RAM</info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>vram</name>
+		<type>uxlong</type>
+		<info>video RAM</info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>pcores</name>
+		<type>uxlong</type>
+		<info>Number of CPU Cores</info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>l2c</name>
+		<type>uxlong</type>
+		<info>L2 Cache size</info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>psv</name>
+		<type>xlong</type>
+		<info>Number of Pixel Shaders and version</info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>havemmx</name>
+		<type>bool</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>have sse</name>
+		<type>bool</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLdetect</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLdetect</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>cores</name>
+		<returns>uxlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>totalram</name>
+		<returns>uxlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>freeram</name>
+		<returns>uxlong</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>videoram</name>
+		<returns>uxlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>l2</name>
+		<returns>uxlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>ps</name>
+		<returns>xlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>	
+
+	<method ispublic="1" isstatic="0">
+		<name>mmx</name>
+		<returns>bool</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>sse</name>
+		<returns>bool</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
