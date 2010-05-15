@@ -23,11 +23,11 @@
  * 
  * description:	The enemy (entity) class.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -44,20 +44,21 @@ class CLenemy : public CLentity<1>
 		static CLwindow* clwindow;
 	protected:
 		CLprogress* hprog;
-		xlong* aiarray;
-		xlong aitype;
-		xlong aggrolevel;
-		CLbox* aggrobox;
-		void cruise();
-		void pretransform();
-		void transform();
+		xlong*      aiarray;
+		xlong       aitype;
+		xlong       aggrolevel;
+		CLbox*      aggrobox;
+		
+		void  cruise();
+		void  pretransform();
+		void  transform();
 		xlong collision();
 	public:
 		CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp=0);
 		CLenemy(CLenemy* enemyptr,CLlvector* enemyp);
 		~CLenemy();
 		template<int I>xlong update(CLentity<I>* p);
-		void displayhud();
+		void displayhud() const;
 };
 
 CLgame*   CLenemy::clgame   = CLgame::instance();
@@ -134,7 +135,7 @@ xlong CLenemy::collision() //! critical
 	tposition.y -= *mark;
 	xlong bc = clgame->boundary(tposition,*boundingbox[1][0],1);
 	tposition.y += *mark;
-
+	//terrain collision does not apply
 	if(bc!=0) { visible = 1; }
 	//*
 	
@@ -223,12 +224,9 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr) //
 
 CLenemy::~CLenemy() //! noncritical
 {
-	//delete all allocated objects
-	delete def;
-	delete[] aiarray;
+	delete aiarray;
 	delete aggrobox;
 	delete hprog;
-	//*
 }
 
 template<int I>
@@ -240,15 +238,11 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	//*
 	
 	//check if to activate
-	if(active==0 && ( (*mark)-100)<position.y) active = 1;
+	if(active==0 && ( (*mark)-100)<position.y) { active = 1; }
 	//*
 
 	//check if screen is left behind player
-	else if(active==1 && position.y>markmax )
-	{
-		active = visible = 0;
-		return 0;
-	}
+	else if(active==1 && position.y>markmax ) { return (active = visible = 0); }
 	//*
 
 	//check if destroyed
@@ -311,7 +305,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	return -1;
 }
 
-void CLenemy::displayhud() //! critical
+void CLenemy::displayhud() const //! critical
 {
 	if(active==1)
 	{
