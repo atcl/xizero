@@ -114,8 +114,9 @@ class boool
 		friend bool operator<(xlong a,boool& b)  { return (a < b.b); };
 		friend bool operator>(xlong a,boool& b)  { return (a > b.b); };
 
-		inline operator bool()  const { return bool(this->b); };		
+		inline operator bool()  const { return bool(b); };		
 		inline operator xlong() const { return b; };
+		inline operator float() const { return float(b); };
 };
 ///*
 

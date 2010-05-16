@@ -13,7 +13,6 @@
 	<depends>
 		<module href="CLgame.xml">CLgame</module>
 		<module href="CLstring.xml">CLstring</module>
-		<module href="CLwindow.xml">CLwindow</module>
 	</depends>
 	
 	<derived>

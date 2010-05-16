@@ -615,4 +615,11 @@
 		<example></example>
 	</method>
 
+	<method ispublic="1" isstatic="0">
+		<name>operator float</name>
+		<returns>float</returns>
+		<info>float conversion</info>
+		<example></example>
+	</method>
+
 </class>

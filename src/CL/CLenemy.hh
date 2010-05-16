@@ -41,7 +41,6 @@ class CLenemy : public CLentity<1>
 	private:
 		static CLgame*   clgame;
 		static CLstring* clstring;
-		static CLwindow* clwindow;
 	protected:
 		CLprogress* hprog;
 		xlong*      aiarray;
@@ -63,7 +62,6 @@ class CLenemy : public CLentity<1>
 
 CLgame*   CLenemy::clgame   = CLgame::instance();
 CLstring* CLenemy::clstring = CLstring::instance();
-CLwindow* CLenemy::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
