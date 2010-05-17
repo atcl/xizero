@@ -62,6 +62,7 @@
 
 //game classes
 #include "CL/CLenemy.hh"
+#include "CL/CLewave.hh"
 #include "CL/CLplayer.hh"
 #include "CL/CLlevel.hh"
 #include "CL/CLgame.hh"

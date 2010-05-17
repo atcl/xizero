@@ -11,13 +11,13 @@
 ///header
 /* class name:	CLewave
  * 
- * description:	
+ * description:	wave object roaming through levels 
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
  
@@ -25,14 +25,16 @@
 class CLewave : public CLentity<1>
 {
 	private:
-	
+		static CLwindow* clwindow;
 	protected:
 		bool updown;
 	public:
 		CLewave(bool ud);
 		~CLewave();
-		void update();
+		xlong update();
 };
+
+CLwindow* CLewave::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -41,7 +43,7 @@ CLewave::CLewave(bool ud) //! noncritical
 	updown = ud;
 	
 	xlong m = 1;
-	if(updown) m = -1;
+	if(updown) { m = -1; }
 	
 	rawpoly polys[9];
 	
@@ -90,18 +92,50 @@ CLewave::CLewave(bool ud) //! noncritical
 	polys[8].v[2].x = 400; polys[3].v[2].y = 0;    polys[3].v[2].z = 80;
 	polys[8].v[3].x = 400; polys[3].v[3].y = 0;    polys[3].v[3].z = 80;
 	
-	model[0] = new CLobject(poyls,9,0x00000040,0);
+	model[0] = new CLobject(polys,9,0x00000040,0);
+	
+	maxspeed = 20;
 	
 	position.x = 0;
 	position.y = 0;
 	position.z = 50;
+	
+	speed.x = 0;
+	speed.y = maxspeed;
+	speed.z = 0;
+	
+	speeddir = m;
+	
+	//set remaining entity attributes
+	visible = active = 0;
+	lastupdate = clwindow->getmilliseconds();
+	//*
 }
 
 CLewave::~CLewave() { } //! noncritical
 
-void CLewave::update() //! critical
+xlong CLewave::update() //! critical
 {
+	//check if to activate
+	if(active==0 && ( (*mark)-100)<position.y) { active = 1; }
+	//*
 	
+	if(active==1)
+	{
+		xlong time = clwindow->getmilliseconds();
+		
+		//update position
+		float inter = time-lastupdate;
+		tposition.x = position.x - (inter*speed.x);
+		tposition.y = position.y + (inter*speed.y);
+		tposition.z = position.z - (inter*speed.z);
+		lastupdate = time;	
+		//*
+		
+	}
+	else { lastupdate = clwindow->getmilliseconds(); }
+	
+	return -1;
 }
 ///*
 

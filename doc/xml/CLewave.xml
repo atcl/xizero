@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLewave</filename>
+	
+	<name>CLewave.hh</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLwindow.xml">CLwindow</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLentity.xml">CLentity<1></parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>updown</name>
+		<type>bool</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLewave</name>
+		<parameter>bool ud</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>	
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLewave</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>update</name>
+		<returns>xlong</returns>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

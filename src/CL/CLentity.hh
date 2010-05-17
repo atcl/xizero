@@ -94,6 +94,7 @@ class CLentity : public CLbase<CLentity<I>,0>
 	public:
 		CLentity(CLfile* entitya,xlong* markptr,xlong mm);
 		CLentity(CLentity* entityptr);
+		CLentity() { }
 		virtual ~CLentity();
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
