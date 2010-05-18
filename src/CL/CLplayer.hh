@@ -209,7 +209,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 	{
 		//deactivate and start explosion
 		active = -1;
-		expl[0]->first(0);
+		expl[0]->first();
 		//*
 	}
 	//*

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLexplosion.hh</filename>
+	
+	<name>CLexplosion</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLwindow.xml">CLwindow</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>object</name>
+		<type>CLobject*</type>
+		<info></info>
+	</attribute>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>starttime</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>lastupdate</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>interval</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>step</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>transdir</name>
+		<type>float</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>type</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLexplosion</name>
+		<parameter>CLobject* o</parameter>
+		<parameter>xlong t</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLeplosion</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>first</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>next</name>
+		<returns>xlong</returns>
+		<info></info>
+		<example></example>
+	</method>	
+	
+</class>

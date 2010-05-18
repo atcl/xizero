@@ -248,7 +248,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	{
 		//deactivate and start explosion
 		active = -1;
-		expl[0]->first(1);
+		expl[0]->first();
 		//*
 	}
 	//*

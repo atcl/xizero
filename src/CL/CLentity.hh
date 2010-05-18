@@ -182,7 +182,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 		//*
 		
 		//create explosion
-		expl[i] = new CLexplosion(model[i]);
+		expl[i] = new CLexplosion(model[i],I);
 		//*
 	}
 	//*
@@ -260,7 +260,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 		//*
 		
 		//create explosion
-		expl[i] = new CLexplosion(model[i]);
+		expl[i] = new CLexplosion(model[i],I);
 		//*
 	}
 	//*

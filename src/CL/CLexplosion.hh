@@ -22,11 +22,11 @@
  * 
  * description:	This class manages explosions of 3d objects.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -41,8 +41,6 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		static CLwindow* clwindow;
 	protected:
 		CLobject* object;
-		CLfvector a;
-		CLfvector b;
 		xlong starttime;
 		xlong lastupdate;
 		xlong interval;
@@ -50,9 +48,9 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		float transdir;
 		xlong type;
 	public:
-		CLexplosion(CLobject* o);
-		~CLexplosion() { };
-		void first(bool t);
+		CLexplosion(CLobject* o,xlong t);
+		~CLexplosion() { delete object; };
+		void first();
 		xlong next();
 };
 
@@ -60,25 +58,26 @@ CLwindow* CLexplosion::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
-CLexplosion::CLexplosion(CLobject* o) //! noncritical
+CLexplosion::CLexplosion(CLobject* o,xlong t) //! noncritical
 {
 	//set up attributes
 	object = o;
 	step = 0;
 	interval = 30;
 	transdir = 1.1f;
+	type = t;
 	//*
 }
 
-void CLexplosion::first(bool t) //! noncritical
+void CLexplosion::first() //! noncritical
 {
 	//set up explosion matrix
-	a = CLfvector(1,0.5,1);
-	b = CLfvector(0.5,1,0.5);
+	CLfvector a = CLfvector(1,0.5,1);
+	CLfvector b = CLfvector(0.5,1,0.5);
 	object->getmatrix()->dyadic(a,b);
 	//*
 	
-	type = t;
+	
 	if(type) { object->partupdate(); }
 	starttime = lastupdate = clwindow->getmilliseconds(); 
 }
@@ -101,7 +100,7 @@ xlong CLexplosion::next() //! critical
 		break;
 		//*
 		
-		//other dimension explosion (crumple object, then grow, then shring to zero)
+		//other-dimension explosion (crumple object, then grow, then shrink to zero)
 		case 1:
 			//phase 1:
 			if(temp < starttime + 200) { object->translatealongnormals( 1 + ( (temp-lastupdate)/2000 ) ); }
