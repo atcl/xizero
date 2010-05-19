@@ -18,55 +18,47 @@
  * 
  * description:	A first-in-first-out type
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
 ///definitions
-template<class member>
+template<class T>
 struct fifomember
 {
-	member*     data;
+	T*          data;
 	fifomember* prev;
 };
 
-template<class member>
-class CLfifo : public CLbase<CLfifo<member>,0>
+template<class T>
+class CLfifo : public CLbase<CLfifo<T>,0>
 {
 	protected:
-		fifomember<member>* head;
-		fifomember<member>* tail;
+		fifomember<T>* head;
+		fifomember<T>* tail;
 		xlong length;
-		member** que;
+		T** que;
 	public:
-		CLfifo();
+		CLfifo() { length = 0; };
 		~CLfifo() { };
-		void in(member* f);
-		member* out();
 		xlong getlength() const { return length; };
-		void clear();
 		bool isempty() const { return (length==0); };
+		void in(T* f);
+		T* out();
+		void clear();
 };
 ///*
 
 ///implementation
-template<class member>
-CLfifo<member>::CLfifo() //! noncritical
-{
-	//init empty fifo que
-	length = 0;
-	//*
-}
-
-template<class member>
-void CLfifo<member>::in(member* f) //! critical
+template<class T>
+void CLfifo<T>::in(T* f) //! critical
 {
 	//create empty fifo member
-	fifomember<member>* t = new fifomember<member>;
+	fifomember<T>* t = new fifomember<T>;
 	//*
 
 	//place first fifo member
@@ -76,8 +68,7 @@ void CLfifo<member>::in(member* f) //! critical
 	//place default fifo member
 	else
 	{
-		head->prev = t;
-		head = t;
+		head->prev = head = t;
 	}
 	//*
 
@@ -89,8 +80,8 @@ void CLfifo<member>::in(member* f) //! critical
 	//*
 }
 
-template<class member>
-member* CLfifo<member>::out() //! critical
+template<class T>
+T* CLfifo<T>::out() //! critical
 {
 	//is fifo empty
 	if(length == 0) { return 0; }
@@ -108,20 +99,20 @@ member* CLfifo<member>::out() //! critical
 	else
 	{
 		length--;
-		member* t = tail->data;
+		T* t = tail->data;
 		tail  = tail->prev;
 		return t;
 	}
 	//*
 }
 
-template<class member>
-void CLfifo<member>::clear() //! critical
+template<class T>
+void CLfifo<T>::clear() //! critical
 {
 	//clear complete fifo que
 	for(uxlong i=0; i<length; i++)
 	{
-		fifomember<member>* t = tail;
+		fifomember<T>* t = tail;
 		tail = tail->prev;
 		delete t;
 		length--;

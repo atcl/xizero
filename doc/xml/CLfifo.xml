@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="1">
+	
+	<filename>CLfifo.hh</filename>
+	
+	<name>CLfifo</name>
+	
+	<info></info>
+	
+	<template>
+		<parameter>class T</parameter>
+	</template>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>head</name>
+		<type>fifomember&lt;T&gt;*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>tail</name>
+		<type>fifomember&lt;T&gt;*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>length</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>que</name>
+		<type>T**</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLfifo</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLfifo</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getlength</name>
+		<returns>xlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>isempty</name>
+		<returns>bool</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>in</name>
+		<returns>void</returns>
+		<parameter>T* f</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>out</name>
+		<returns>T*</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>clear</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
