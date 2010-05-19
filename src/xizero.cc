@@ -8,8 +8,7 @@
 int main(int argc,char* argv[])
 {
 	//init sequence
-	clglobal = CLglobal::instance(); 
-	clglobal->clapp->init(argv);
+	clglobal = new CLglobal(argv[0]);
 	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
 	clglobal->clwindow->setcursor(cursor);
 	cldata = new CLar(BASEDIR"xizero.dat");
@@ -34,7 +33,8 @@ int main(int argc,char* argv[])
 	}
 	//*
 
-	//no way leads here, but anyhow:	
+	//no way leads here, but anyhow:
+	delete clglobal;
 	return 0;
 	//*
 }

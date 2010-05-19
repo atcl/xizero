@@ -55,8 +55,8 @@ class CLsound : public CLbase<CLsound,1>
 		ALuint alsource;
 		ALuint alwav;
 		CLsound();
-		~CLsound();
 	public:
+		~CLsound();
 		bool preload(CLar* aa);
 		bool play(xlong i,bool l=0,bool o=0);
 		bool play(CLfile* f,bool l=0,bool o=0);

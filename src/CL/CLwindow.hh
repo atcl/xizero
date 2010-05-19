@@ -128,10 +128,7 @@ void CLwindow::setkeydn(uxchar key,xlong x,xlong y) //! noncritical
 	//if(syskey!=0 && key==syskey) { sysmenu(); }
 }
 
-void CLwindow::setkeyup(uxchar key,xlong x,xlong y) //! noncritical
-{
-	if(turbo==key) { turbo = 0; }
-}
+void CLwindow::setkeyup(uxchar key,xlong x,xlong y) { if(turbo==key) { turbo = 0; } } //! noncritical
 
 void CLwindow::setspecdn(xlong key,xlong x,xlong y) //! noncritical
 {
@@ -192,7 +189,7 @@ CLwindow::CLwindow() //! noncritical
 	printfps = 0;
 	
 	xlong argc = 1;
-    xchar *argv[] = { "xizero",NULL };
+    xchar *argv[] = { NAME,NULL };
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);

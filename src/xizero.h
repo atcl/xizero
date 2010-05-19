@@ -5,6 +5,7 @@
 
 ///declarations
 #define TITLE "atCROSSLEVEL's XiZero"
+#define NAME  "xizero"
 
 #define XRES 800
 #define YRES 600

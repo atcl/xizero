@@ -34,8 +34,8 @@ class CLbase
 		static T* base;
 		static uxlong version;
 	protected:
-		 CLbase() { }; 
-		 CLbase(const CLbase&) { };	
+		CLbase() { }; 
+		CLbase(const CLbase&) { };	
 	public:
 		virtual ~CLbase() { };
    		static T* instance();

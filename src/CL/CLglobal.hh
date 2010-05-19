@@ -10,24 +10,8 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLbase.hh"
-#include "CLscreen.hh"
-#include "CLwindow.hh"
-#include "CLsystem.hh"
-#include "CLformat.hh"
-#include "CLmath.hh"
-#include "CLgame.hh"
-#include "CLmisc3d.hh"
-#include "CLfsprog.hh"
-#include "CLdetect.hh"
-#include "CLgfx.hh"
-#include "CLtrans.hh"
-#include "CLsound.hh"
 #include "CLid.hh"
-#include "CLstring.hh"
-#include "CLapp.hh"
 #include "CLmsgbox.hh"
-#include "CLintro.hh"
 ///*
 
 ///header
@@ -44,18 +28,31 @@
 ///*
 
 ///declarations
-
+class CLscreen;
+class CLwindow;
+class CLsystem;
+class CLformat;
+class CLmath;
+class CLgame;
+class CLmisc3d;
+class CLfsprogress;
+class CLdetect;
+class CLgfx;
+class CLtransitions;
+class CLid;
+class CLstring;
+class CLapp;
+class CLmsgbox;
+class CLintro;
+class CLsound;
 ///*
 
 ///definitions
-class CLglobal : public CLbase<CLglobal,1>
+class CLglobal
 {
-	friend class CLbase<CLglobal,1>; 
-	
-	protected:
-		CLglobal();
-		~CLglobal();
 	public:
+		CLglobal(xchar* argv);
+		~CLglobal();
 		CLscreen* clscreen;		
 		CLwindow* clwindow;
 		CLsystem* clsystem;
@@ -79,32 +76,32 @@ class CLglobal : public CLbase<CLglobal,1>
 ///*
 
 ///implementation
-CLglobal::CLglobal() //! noncritical
+CLglobal::CLglobal(xchar* argv) //! noncritical
 {
-	clscreen = CLscreen::instance();
-	clwindow = CLwindow::instance();
-	clsystem = CLsystem::instance();
-	clformat = CLformat::instance();
-	clmath   = CLmath::instance();
-	clgame   = CLgame::instance();
-	clmisc3d = CLmisc3d::instance();
-	cldetect = CLdetect::instance();
-	clfsprogress = CLfsprogress::instance();
-	clgfx    = CLgfx::instance();
+	clscreen      = CLscreen::instance();
+	clwindow      = CLwindow::instance();
+	clsystem      = CLsystem::instance();
+	clformat      = CLformat::instance();
+	clmath        = CLmath::instance();
+	clgame        = CLgame::instance();
+	clmisc3d      = CLmisc3d::instance();
+	cldetect      = CLdetect::instance();
+	clfsprogress  = CLfsprogress::instance();
+	clgfx         = CLgfx::instance();
 	cltransitions = CLtransitions::instance();
-	clsound  = CLsound::instance();
-	clsprites = CLsprites::instance();
-	clid     = CLid::instance();
-	clstring = CLstring::instance();
-	clapp    = CLapp::instance();
-	clmsgbox = CLmsgbox::instance();
-	clintro  = CLintro::instance();
-	clmenu  = CLmenu::instance();
+	clsound       = CLsound::instance();
+	clsprites     = CLsprites::instance();
+	clid          = CLid::instance();
+	clstring      = CLstring::instance();
+	clapp         = CLapp::instance();
+	clmsgbox      = CLmsgbox::instance();
+	clintro       = CLintro::instance();
+	clmenu        = CLmenu::instance();
 }
 	
 CLglobal::~CLglobal() //! noncritical
 {
-	
+	delete clsound;
 }
 ///*
 
