@@ -39,8 +39,10 @@ class CLstring : public CLbase<CLstring,1>
 		xchar* copy(const xchar* s,xlong l=0) const;
 		xchar* concat(const xchar* a,const xchar* b) const;
 		xlong length(const xchar* s) const;
+		xlong scan(const xchar* s) const;
 		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
 		xlong tolong(const xchar* s) const;
+		float tofloat(const xchar* s) const;
 		xchar* toascii(xlong v) const;
 		xlong linecount(const xchar* s) const;
 		xlong find(const xchar* s,const xchar* f,xlong p=0) const;
@@ -79,6 +81,13 @@ xlong CLstring::length(const xchar* s) const //! critical
 	return l;
 }
 
+xlong CLstring::scan(const xchar* s) const //! critical
+{
+	xlong p = 0;
+	while(s[p]!=' ' || s[p]!='\n' || s[p]!=0) { p++; }
+	return p;
+}
+
 xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncritical
 {
 	uxlong sl = length(s);
@@ -109,6 +118,29 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 	}
 	r *= u;
 	return r;
+}
+
+float CLstring::tofloat(const xchar* s) const //! critical
+{
+	//~ xlong i = 0;
+	//~ xlong j = 0;
+	//~ xlong r = 0;
+	//~ xlong t = 1;
+	//~ xlong u = 1;
+	//~ 
+	//~ while(s[i]==' ') { i++; }
+	//~ if(s[i]=='-') { u = -1; i++; }
+	//~ j = i;
+	//~ while(s[j]>='0' && s[j]<='9') { j++; }
+	//~ j -= i;
+	//~ for(; j>0; j--,i++)
+	//~ {
+		//~ for(xlong k=1; k<j; k++) t *= 10;
+		//~ r += (s[i]-'0') * t;
+		//~ t = 1;
+	//~ }
+	//~ r *= u;
+	//~ return r;
 }
 
 xchar* CLstring::toascii(xlong v) const //! noncritical

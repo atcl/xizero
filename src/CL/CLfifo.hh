@@ -66,10 +66,7 @@ void CLfifo<T>::in(T* f) //! critical
 	//
 	
 	//place default fifo member
-	else
-	{
-		head->prev = head = t;
-	}
+	else { head->prev = head = t; }
 	//*
 
 	//set other fifo member attributes

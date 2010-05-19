@@ -50,9 +50,9 @@ class CLformat : public CLbase<CLformat,1>
 	protected:
 		CLformat() { };
 		~CLformat() { };
-		xlong    readlong(xchar* f,xchar d=' ');
-		float    readfloat(xchar* f,xchar d=' ');
-		xchar*   readstring(xchar* f,xchar d=' ');
+		xchar*   readlong(xchar* f,xlong& r,xchar d=' ');
+		xchar*   readfloat(xchar* f,float& r,xchar d=' ');
+		xchar*   readstring(xchar* f,xchar*& r,xchar d=' ');
 	public:
 		xlong*   loadcsv(CLfile* sf,xchar sep=',') const;
 		xchar**  loadmap(CLfile* sf,xlong subconst,xchar rc,xlong rv) const;
@@ -70,19 +70,25 @@ CLstring* CLformat::clstring = CLstring::instance();
 ///*
 
 ///implementation
-xlong CLformat::readlong(xchar* f,xchar d)
+xchar* CLformat::readlong(xchar* f,xlong& r,xchar d)
 {
-	return 0;
+	xlong p = clstring->scan(f);
+	r = clstring->tolong(f);
+	return &f[p];
 }
 
-float CLformat::readfloat(xchar* f,xchar d)
+xchar* CLformat::readfloat(xchar* f,float& r,xchar d)
 {
-	return 0;	
+	xlong p = clstring->scan(f);
+	r = clstring->tofloat(f);
+	return &f[p];	
 }
 
-xchar* CLformat::readstring(xchar* f,xchar d)
+xchar* CLformat::readstring(xchar* f,xchar*& r,xchar d)
 {
-	return 0;
+	xlong p = clstring->scan(f);
+	r = clstring->copy(f,p);
+	return &f[p];
 }
 
 xlong* CLformat::loadcsv(CLfile* sf,xchar sep) const //! noncritical
