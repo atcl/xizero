@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLfixed.hh</filename>
+	
+	<name>CLfixed</name>
+	
+	<info>16:16 fixed point union</info>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>i</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>p</name>
+		<type>xshush</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>fixed</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>fixed</name>
+		<parameter>xlong a</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>fixed</name>
+		<parameter>xshort a</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>fixed</name>
+		<parameter>float a</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>fixed&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>xshort&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-</name>
+		<returns>fixed</returns>
+		<qualifier>inline</qualifier>
+		<info>unary minus operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;&lt;</name>
+		<returns>fixed</returns>
+		<parameter>xlong a</parameter>
+		<qualifier>inline</qualifier>
+		<info>left-shift operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;&gt;</name>
+		<returns>fixed</returns>
+		<parameter>xlong a</parameter>
+		<qualifier>inline</qualifier>
+		<info>right-shift operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator++</name>
+		<returns>fixed&amp;</returns>
+		<qualifier>inline</qualifier>
+		<info>increment operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator--</name>
+		<returns>fixed&amp;</returns>
+		<qualifier>inline</qualifier>
+		<info>decrement operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignemnt addition operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment subtraction operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment multiplication operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator/=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment division operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>xhsort&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignemnt addition operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment subtraction operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment multiplication operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator/=</name>
+		<returns>fixed&amp;</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline</qualifier>
+		<info>assignment division operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+</name>
+		<returns>fixed</returns>
+		<parameter>fied&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>addition operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-</name>
+		<returns>fixed</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>subtraction operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*</name>
+		<returns>fixed</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>multiplication operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator/</name>
+		<returns>fixed</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>division operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>addition operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>subtraction operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>multiplication operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator/</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>division operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>addition operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>subtraction operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>multiplication operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator/</name>
+		<returns>fixed</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>division operator</info>
+		<example></example>
+	</method>
+		
+	<method ispublic="1" isstatic="0">
+		<name>operator==</name>
+		<returns>bool</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator!=</name>
+		<returns>bool</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>not-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;=</name>
+		<returns>bool</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>less-or-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;=</name>
+		<returns>bool</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>greater-or-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;</name>
+		<returns>bool</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>less operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;</name>
+		<returns>bool</returns>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>greater operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator==</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator!=</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>not-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;=</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>less-or-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;=</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>greater-or-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>less operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<qualifier>inline,const</qualifier>
+		<info>greater operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator==</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator!=</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>not-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;=</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>less-or-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;=</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>greater-or-equal operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&lt;</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>less operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator&gt;</name>
+		<returns>bool</returns>
+		<parameter>xshort&amp;</parameter>
+		<parameter>fixed&amp;</parameter>
+		<qualifier>friend</qualifier>
+		<info>greater operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator xshort</name>
+		<returns>xshort</returns>
+		<qualifier>const</qualifier>
+		<info>xshort conversion operator</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator float</name>
+		<returns>float</returns>
+		<qualifier>const</qualifier>
+		<info>float conversion operator</info>
+		<example></example>
+	</method>
+
+</class>
