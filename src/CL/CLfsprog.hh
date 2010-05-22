@@ -19,11 +19,11 @@
  * 
  * description:	A full screen half transparent progress bar.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	test more.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -35,7 +35,7 @@ class CLfsprogress : public CLbase<CLfsprogress,1>
 	private:
 		static CLscreen* clscreen;
 	protected:
-		xlong pprogress;
+		xlong pprogress; //0-100 
 		xlong rprogress;
 		uxlong pcolor;
 		CLfsprogress();

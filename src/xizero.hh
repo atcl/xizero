@@ -69,7 +69,7 @@ void newgame()
 								"Arrow Forw/Backw: Drive Forw/Backw\n"
 								"a,d:              Turn Tower\n"
 								"w:                Reset Tower\n"
-								"Left Ctrl:        Fire Chassis Weapon\n"
+								"0:                Fire Chassis Weapon\n"
 								"Space:            Fire Tower Weapon\n"
 								"p:                Pause game\n"
 								"^:                Exit to main menu\n"
