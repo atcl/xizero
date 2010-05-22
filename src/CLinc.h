@@ -43,6 +43,7 @@
 
 //gui classes
 #include "CL/CLwindow.hh"
+#include "CL/CLmsgbox.hh"
 #include "CL/CLguibase.hh"
 #include "CL/CLlabel.hh"
 #include "CL/CLbutton.hh"

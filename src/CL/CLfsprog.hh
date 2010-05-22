@@ -35,7 +35,7 @@ class CLfsprogress : public CLbase<CLfsprogress,1>
 	private:
 		static CLscreen* clscreen;
 	protected:
-		xlong pprogress; //0-100 
+		xlong pprogress; //0-100 (%)
 		xlong rprogress;
 		uxlong pcolor;
 		CLfsprogress();

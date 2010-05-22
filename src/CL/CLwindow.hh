@@ -17,7 +17,6 @@
 #include "CLtypes.hh"
 #include "CLresource.hh"
 #include "CLformat.hh"
-#include "CLapp.hh"
 #include "CLbase.hh"
 #include "CLscreen.hh"
 ///*
@@ -43,7 +42,6 @@ class CLwindow : public CLbase<CLwindow,1>
 	
 	private:
 		static CLformat* clformat;
-		static CLapp*    clapp;
 		static CLgfx*    clgfx;
 		static CLscreen* clscreen;
 	protected:
@@ -92,7 +90,6 @@ class CLwindow : public CLbase<CLwindow,1>
 };
 
 CLformat* CLwindow::clformat = CLformat::instance();
-CLapp*    CLwindow::clapp    = CLapp::instance();
 CLgfx*    CLwindow::clgfx    = CLgfx::instance();
 CLscreen* CLwindow::clscreen = CLscreen::instance();
 uxchar CLwindow::syskey = 0;

@@ -11,7 +11,6 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLid.hh"
-#include "CLmsgbox.hh"
 ///*
 
 ///header
@@ -45,6 +44,8 @@ class CLapp;
 class CLmsgbox;
 class CLintro;
 class CLsound;
+class CLsprites;
+class CLmenu;
 ///*
 
 ///definitions

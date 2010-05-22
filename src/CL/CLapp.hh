@@ -52,7 +52,7 @@ class CLapp : public CLbase<CLapp,1>
 		CLapp();
 		~CLapp() { };
 	public:
-		void exit(const xlong r=0,const xchar* m="") const;
+		void exit(const xlong r=0,const xchar* m="",CLglobal* g=0) const;
 		xchar inkey(const bool b) const { return xchar(getchar()); };
 		const xchar* gettitle() const { return title; };
 		const xchar** geticon() const { return icon; };
@@ -72,10 +72,10 @@ CLapp::CLapp() : title(TITLE), version(VERSION), icon(CLicon), exename(NAME) //!
 	tty(title); tty(" ("); tty(exename); tty(") version:"); tty(version); tty(" size:"); tty(size); say("KB");
 }
 
-void CLapp::exit(const xlong r,const xchar* m) const //! noncritical
+void CLapp::exit(const xlong r,const xchar* m,CLglobal* g) const //! noncritical
 {
 	say(m);
-	
+	if(g!=0) { delete g; }
 	::exit(r);
 }
 ///*

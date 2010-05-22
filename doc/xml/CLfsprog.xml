@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="1" istemplate="0">
+	
+	<filename>CLfsprog.hh</filename>
+	
+	<name>CLfsprogress</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLscreen.xml">CLscreen</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>pprogress</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>rprogress</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>pcolor</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLfsprogress</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLfsprogress</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>draw</name>
+		<returns>void</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>set</name>
+		<returns>void</returns>
+		<parameter>xlong p</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>add</name>
+		<returns>void</returns>
+		<parameter>xlong a</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>reset</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>get</name>
+		<returns>xlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
