@@ -228,6 +228,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	CLfile* entityaifile = entitya->findbyextension(u8".csv");
 	if(entityaifile!=0) csv = clformat->loadcsv(entityaifile);
 	//*
+	
+	//delete entitya
 }
 
 template<int I>

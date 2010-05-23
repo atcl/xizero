@@ -22,7 +22,7 @@
  * 
  * author:		atcl
  * 
- * notes:		fix terrain collision + transformation.
+ * notes:		complete terrain collision + transformation.
  * 
  * version: 	0.2
  */

@@ -8,7 +8,7 @@ CLglobal* clglobal;
 int main(int argc, char** argv)
 {
 	//init API
-	clglobal = CLglobal::instance(); 
+	clglobal = new CLglobal(argv[0]); 
 	//*
 	
 	//set command line arguments
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 	//*
 	
 	//main loop variables
-	CLexplosion* ex = new CLexplosion(test);
+	CLexplosion* ex = new CLexplosion(test,1);
 	bool mode = 1;
 	bool shadows = 0;
 	short ac = 0;
@@ -107,7 +107,7 @@ int main(int argc, char** argv)
 			case 'o':    clglobal->clmenu->show();
 			case '+':    test->reset(); ac = exp = 0; break;
 			case '-':    shadows = !shadows; break;
-			case '#':    if(exp==0) { exp=1; ex->first(1); } ex->next(); break;
+			case '#':    if(exp==0) { exp=1; ex->first(); } ex->next(); break;
 			case '.':    test->translatealongnormals(1.1); break;
 			case ',':    test->translatealongnormals(-1.1); break;
 			case '<':    if(ac==0) ac = ANTICY; else ac = 0; break;
