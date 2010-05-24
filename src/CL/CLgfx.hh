@@ -26,11 +26,11 @@
  * 
  * description:	standard 2d graphics routines.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	add clipping and complete implementing.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -62,7 +62,7 @@ class CLgfx : public CLbase<CLgfx,1>
 	friend class CLbase<CLgfx,1>;
 	
 	private:
-		static CLmath* clmath;
+		static CLmath*   clmath;
 		static CLscreen* clscreen;
 		static CLformat* clformat;
 		static CLstring* clstring;
@@ -94,7 +94,7 @@ class CLgfx : public CLbase<CLgfx,1>
 		void drawspriterotated(xlong x,xlong y,sprite* s,xlong w) const;
 		void drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
-		void loadfonts(CLfile* sf);
+		void loadfonts(CLfile* f);
 		xlong drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc=0) const;
 		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0,xlong s=0) const;
 		xlong getfontstringwidth(const char* a,uxlong f) const;
@@ -208,14 +208,12 @@ void CLgfx::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! c
 
 void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical
 {
-	//! todo: if(a) then anti-aliased line
-	
 	if( (x1==x2 && y1==y2) || isoff(x1,y1,x2,y2)) { return; }
 	clip(x1,y1);
 	clip(x2,y2);
 
 	xlong s = xlong(x1==x2) - xlong(y1==y2);
-	if(aa) s = 2;
+	if(aa) { s = 2; }
 	xlong a = 0;
 	xlong b = 0;
 	xlong dx = x2 - x1;
@@ -333,7 +331,7 @@ void CLgfx::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlon
 	xlong doffset = ((y2-y1)*XRES);
 	xlong diff    = x2-x1;
 	uxlong c3     = c2;
-	if(f) c3 = 0x00FFFFFF - c2;
+	if(f) { c3 = 0x00FFFFFF - c2; }
 
 	for(xlong i=y1; i<=y2; i++)
 	{
@@ -623,7 +621,7 @@ void CLgfx::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 	//*
 
 	//clipping against screen borders
-	if(isoff(xs,ys,xe,ye)) return;
+	if(isoff(xs,ys,xe,ye)) { return; }
 	clip(xs,ys);
 	clip(xe,ye);
 	//*
@@ -761,10 +759,10 @@ void CLgfx::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cri
 	//*
 }
 
-void CLgfx::loadfonts(CLfile* sf) //! critical
+void CLgfx::loadfonts(CLfile* f) //! critical
 {
 	fonts = new CLfont*[8];
-	CLar* fontsa = new CLar(sf);
+	CLar* fontsa = new CLar(f);
 	fonts[0] = clformat->loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
 	fonts[1] = clformat->loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
 	fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
@@ -895,7 +893,7 @@ void CLgfx::drawscreen(sprite* s) const //! critical
 	if(s->width==XRES && s->height==YRES)
 	{
 		//draw loop
-		for(xlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) clscreen->cldoublebuffer[i] = s->data[i]; }
+		for(xlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) { clscreen->cldoublebuffer[i] = s->data[i]; } }
 		//*
 	}
 	//*
@@ -957,15 +955,15 @@ uxlong CLgfx::blendcolors(uxlong c1,uxlong c2,xlong m) const //! critical
 	
 	switch(m)
 	{
-		case 0: r = c1; break; //normal
-		case 1: r = c1 & c2; break; //and
-		case 2: r = c1 | c2; break; //or	
-		case 3: r = c1 ^ c2; break; //xor
-		case 4: r = ~(c1 & c2); break; //nand
-		case 5: r = ~(c1 | c2); break; //nor
-		case 6: r = ~c1; break; //not
-		case 7: r = byteadd(c1,c2); break; //add
-		case 8: r = bytesub(c1,c2); break; //sub
+		case 0:  r = c1; break; //normal
+		case 1:  r = c1 & c2; break; //and
+		case 2:  r = c1 | c2; break; //or	
+		case 3:  r = c1 ^ c2; break; //xor
+		case 4:  r = ~(c1 & c2); break; //nand
+		case 5:  r = ~(c1 | c2); break; //nor
+		case 6:  r = ~c1; break; //not
+		case 7:  r = byteadd(c1,c2); break; //add
+		case 8:  r = bytesub(c1,c2); break; //sub
 		default: r = c1; break;
 	}
 	

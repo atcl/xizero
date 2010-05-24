@@ -45,7 +45,7 @@ class CLvoxels : public CLbase<CLid,0>
 		CLvoxel** voxel;
 		
 		CLvoxel** getbyvisiblenormal(CLvoxel** v);
-		CLvoxel*  getbyvidiblez(CLvoxel** v)
+		CLvoxel*  getbyvisiblez(CLvoxel** v)
 	public:
 		CLvoxel() { };
 		~CLvoxel() { };

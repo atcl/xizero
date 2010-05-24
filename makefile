@@ -11,7 +11,6 @@ LDFLAGS = -lglut -lalut
 OUTPARA = -o 
 DEBUG   = -g
 LINUX   = -DLINUX
-WIN32   = -DWIN32
 DEVELOP = -DDEV
 RELEASE = -DREL
 
@@ -69,9 +68,6 @@ data:
 unit:
 	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
 	$(STRIP) $(TARGET2)
-	
-win32:
-	$(CC) $(O0FLAGS) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(WIN32)
 
 clean:
 	$(RM) $(TARGET1)
