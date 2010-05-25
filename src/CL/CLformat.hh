@@ -44,9 +44,10 @@ typedef std::map <const xchar*,const xchar*,cmpstr> xmap;
 class CLformat : public CLbase<CLformat,1>
 {
 	friend class CLbase<CLformat,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLstring* clstring;
+		static CLstring& clstring;
 	protected:
 		CLformat() { };
 		~CLformat() { };
@@ -65,29 +66,29 @@ class CLformat : public CLbase<CLformat,1>
 		CLfile*  saveras(sprite* s,const xchar* n="test.ras") const;
 };
 
-CLstring* CLformat::clstring = CLstring::instance();
+CLstring& CLformat::clstring = CLstring::instance();
 ///*
 
 ///implementation
 xlong CLformat::readlong(xchar* f,xchar*& r) const //! noncritical
 {
-	xlong p = clstring->scan(f);
+	xlong p = clstring.scan(f);
 	r = &f[p];
-	return clstring->tolong(f);
+	return clstring.tolong(f);
 }
 
 float CLformat::readfloat(xchar* f,xchar*& r) const //! noncritical
 {
-	xlong p = clstring->scan(f);
+	xlong p = clstring.scan(f);
 	r = &f[p];
-	return clstring->tofloat(f);
+	return clstring.tofloat(f);
 }
 
 xchar* CLformat::readstring(xchar* f,xchar*& r) const //! noncritical
 {
-	xlong p = clstring->scan(f);
+	xlong p = clstring.scan(f);
 	r = &f[p];
-	return clstring->copy(f,p);
+	return clstring.copy(f,p);
 }
 
 xlong* CLformat::loadcsv(CLfile* f,xchar s) const //! noncritical
@@ -95,7 +96,7 @@ xlong* CLformat::loadcsv(CLfile* f,xchar s) const //! noncritical
 	xchar* bf = f->text;
 	
 	//get linecount
-	xlong lc = clstring->linecount(bf);
+	xlong lc = clstring.linecount(bf);
 	//*
 
 	//get comma count
@@ -118,7 +119,7 @@ xlong* CLformat::loadcsv(CLfile* f,xchar s) const //! noncritical
 	cc = 0;
 	while(tvc<=vc && cc<f->size)
 	{
-		r[tvc] = clstring->tolong(&bf[cc]);
+		r[tvc] = clstring.tolong(&bf[cc]);
 		tvc++;
 		while(bf[cc]!=s && bf[cc]!='\n' && cc<f->size) { cc++; }
 		cc++;
@@ -140,7 +141,7 @@ sprite* CLformat::loadras(CLfile* f) const //! noncritical
 	xlong height = endian(lf[2]);
 	xlong depth = endian(lf[3]);
 	if(depth!=32 && depth!=24) return 0; //only 24bpp and 32bpp!
-	xlong length = endian(lf[4]);
+	//xlong length = endian(lf[4]);
 	xlong type = endian(lf[5]);
 	if(type!=0 && type!=1 && type!=2) return 0; //only types: old, standard and rle are supported
 	if(endian(lf[6])!=0) return 0; //color maps are not supported
@@ -152,7 +153,7 @@ sprite* CLformat::loadras(CLfile* f) const //! noncritical
 	xlong dataindex = 0;
 	xlong size = width * height;
 	xlong fullsize = size<<2;
-	xlong bytedepth = depth>>3;
+	//xlong bytedepth = depth>>3;
 	uxchar temp = 0;
 	
 	sprite* r = new sprite;
@@ -247,10 +248,10 @@ sprite* CLformat::loadxpm(const xchar* x[]) const //! noncritical
 	uxlong xpm_ptr = 0;
 	
 	//read width,height,colors and chars per pixel
-	uxlong width = clstring->tolong(&x[0][xpm_ptr]);  xpm_ptr++; while( (x[0][xpm_ptr]) !=' ') { xpm_ptr++; }
-	uxlong height = clstring->tolong(&x[0][xpm_ptr]); xpm_ptr++; while( (x[0][xpm_ptr]) !=' ') { xpm_ptr++; }
-	uxlong colors = clstring->tolong(&x[0][xpm_ptr]); xpm_ptr++; while( (x[0][xpm_ptr]) !=' ') { xpm_ptr++; }
-	uxlong charpp = clstring->tolong(&x[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
+	uxlong width = clstring.tolong(&x[0][xpm_ptr]);  xpm_ptr++; while( (x[0][xpm_ptr]) !=' ') { xpm_ptr++; }
+	uxlong height = clstring.tolong(&x[0][xpm_ptr]); xpm_ptr++; while( (x[0][xpm_ptr]) !=' ') { xpm_ptr++; }
+	uxlong colors = clstring.tolong(&x[0][xpm_ptr]); xpm_ptr++; while( (x[0][xpm_ptr]) !=' ') { xpm_ptr++; }
+	uxlong charpp = clstring.tolong(&x[0][xpm_ptr]); //this will work only for 1 char per pixel!!!
 	if(charpp!=1) { return 0; }
 	//*
 	
@@ -270,7 +271,7 @@ sprite* CLformat::loadxpm(const xchar* x[]) const //! noncritical
 	uxlong ctable[256];
 	uxchar cindex = 0;
 	uxlong currcol = 0;
-	for(xlong i=1; i<colors; i++)
+	for(uxlong i=1; i<colors; i++)
 	{
 		xpm_ptr = 0;
 		cindex = x[i][0];
@@ -279,7 +280,7 @@ sprite* CLformat::loadxpm(const xchar* x[]) const //! noncritical
 		if(x[i][xpm_ptr]!='c' && x[i][xpm_ptr]!='C') { return 0; }
 		xpm_ptr++; while( (x[i][xpm_ptr]) !=' ') { xpm_ptr++; }
 		xpm_ptr++;
-		if(x[i][xpm_ptr]=='#') { xpm_ptr++; ctable[cindex] = clstring->hex(&(x[i][xpm_ptr])); }
+		if(x[i][xpm_ptr]=='#') { xpm_ptr++; ctable[cindex] = clstring.hex(&(x[i][xpm_ptr])); }
 		else if( (x[i][xpm_ptr]=='N' || x[i][xpm_ptr]=='n') && (x[i][xpm_ptr+1]=='o' && x[i][xpm_ptr+2]=='n' && x[i][xpm_ptr+3]=='e') ) { ctable[cindex] = 0xFF000000; }
 		else return 0;
 	}
@@ -353,7 +354,7 @@ xchar** CLformat::loadlvl(CLfile* f) const //! noncritical
 	
 	//copy filenames to buffer
 	xchar** fn = new xchar*[5];
-	for(xlong j=0; j<5; j++) { fn[j] = clstring->copy(fs[j],fl[j]); }
+	for(xlong j=0; j<5; j++) { fn[j] = clstring.copy(fs[j],fl[j]); }
 	//*
 	
 	return fn;
@@ -366,7 +367,7 @@ xmap* CLformat::loadini(CLfile* f) const //! noncritical
 	xchar* bf = f->text;
 
 	//get linecount
-	xlong lc = clstring->linecount(bf);
+	xlong lc = clstring.linecount(bf);
 	//*
 	
 	xlong cc = 0;
@@ -385,7 +386,7 @@ xmap* CLformat::loadini(CLfile* f) const //! noncritical
 				prestop++;
 				cc++;
 			}
-			prevalue = clstring->copy(&(bf[prestart]),prestop-prestart);
+			prevalue = clstring.copy(&(bf[prestart]),prestop-prestart);
 			//*
 
 			//equal sign
@@ -408,7 +409,7 @@ xmap* CLformat::loadini(CLfile* f) const //! noncritical
 				poststart++;
 				poststop--;
 			}
-			postvalue = clstring->copy(&(bf[poststart]),poststop-poststart);
+			postvalue = clstring.copy(&(bf[poststart]),poststop-poststart);
 			//*
 				
 			//map values in xmap
@@ -426,7 +427,7 @@ xmap* CLformat::loadini(CLfile* f) const //! noncritical
 CLfile* CLformat::saveras(sprite* s,const xchar* n) const //! noncritical
 {
 	CLfile* r = new CLfile;
-	r->name = clstring->copy(n);
+	r->name = clstring.copy(n);
 	r->lsize = (s->size) + 8;
 	r->size = (r->lsize) * 4;
 	r->text = new xchar[(r->size)];

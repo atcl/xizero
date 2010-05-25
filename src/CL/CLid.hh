@@ -34,6 +34,7 @@
 class CLid : public CLbase<CLid,1>
 {
 	friend class CLbase<CLid,1>;
+	friend class CLglobal;
 	
 	protected:
 		static uxlong lastid;

@@ -12,6 +12,7 @@
 #include "CLtypes.hh"
 #include "CLbase.hh"
 #include "CLbuffer.hh"
+#include "CLvector.hh"
 ///*
 
 ///header
@@ -31,6 +32,7 @@
 class CLscreen : public CLbase<CLscreen,1>
 {
 	friend class CLbase<CLscreen,1>;
+	friend class CLglobal;
 
 	protected:
 		uxlong bytewidth;
@@ -46,6 +48,10 @@ class CLscreen : public CLbase<CLscreen,1>
 		CLubuffer stencilbuffer;
 		CLfbuffer zbuffer;
 		//CLubuffer clabuffer;
+		CLfvector light;
+		CLfvector plane;
+		CLfvector slight;
+		static uxlong nolight;
 		CLscreen();
 		~CLscreen() { };
 	public:
@@ -61,11 +67,17 @@ class CLscreen : public CLbase<CLscreen,1>
 		CLubuffer& clframebuffer;
 		CLubuffer& clstencilbuffer;
 		CLfbuffer& clzbuffer;
+		CLfvector& cllight;
+		CLfvector& clplane;
+		CLfvector& clslight;
+		uxlong& clnolight;
 };
+
+uxlong CLscreen::nolight = 0x00303030;
 ///*
 
 ///implementation
-CLscreen::CLscreen() : doublebuffer((XRES*YRES),0), framebuffer((XRES*YRES),0), stencilbuffer((XRES*YRES),0), zbuffer((XRES*YRES),ZRES), cldoublebuffer(doublebuffer), clframebuffer(framebuffer), clstencilbuffer(stencilbuffer), clzbuffer(zbuffer)
+CLscreen::CLscreen() : doublebuffer((XRES*YRES),0), framebuffer((XRES*YRES),0), stencilbuffer((XRES*YRES),0), zbuffer((XRES*YRES),ZRES), cldoublebuffer(doublebuffer), clframebuffer(framebuffer), clstencilbuffer(stencilbuffer), clzbuffer(zbuffer), light(1,1,1), plane(0,0.1,1), slight(0,0.4,1.1), cllight(light), clplane(plane), clslight(slight), clnolight(nolight)
 {
 	bytewidth = XRES<<2;
 	byteheight = YRES<<2;

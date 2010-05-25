@@ -8,25 +8,26 @@
 int main(int argc,char* argv[])
 {
 	//init sequence
-	clglobal = new CLglobal(argv[0]);
-	sprite* cursor = clglobal->clformat->loadxpm(CLxzcursor);
-	clglobal->clwindow->setcursor(cursor);
+	CLglobal clglobal(argv[0]);
+	sprite* cursor = clglobal.clformat.loadxpm(CLxzcursor);
+	clglobal.clwindow.setcursor(cursor);
 	cldata = new CLar(BASEDIR"xizero.dat");
-	clglobal->clgfx->loadfonts(cldata->findbyname("fonts.a"));
+	clglobal.clgfx.loadfonts(cldata->findbyname("fonts.a"));
+	global = &clglobal;
 	//*
 
 	//intros
-	clglobal->clintro->atcrosslevel(cldata->findbyname("intro.a"));
-	clglobal->clintro->xizero(cldata->findbyname("intro.a"));
+	clglobal.clintro.atcrosslevel(cldata->findbyname("intro.a"));
+	clglobal.clintro.xizero(cldata->findbyname("intro.a"));
 	//*
 	
 	//mainmenu
-	sprite* xzmenuback = clglobal->clgfx->savescreen();
+	sprite* xzmenuback = clglobal.clgfx.savescreen();
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);
-	clglobal->clwindow->showcursor(1);
-	while(clglobal->clwindow->run())
+	clglobal.clwindow.showcursor(1);
+	while(clglobal.clwindow.run())
 	{
 		CLbutton::checkclick();
 		xzmainmenu->draw();
@@ -34,7 +35,6 @@ int main(int argc,char* argv[])
 	//*
 
 	//no way leads here, but anyhow:
-	delete clglobal;
 	return 0;
 	//*
 }

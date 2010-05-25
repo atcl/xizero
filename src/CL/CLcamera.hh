@@ -36,7 +36,7 @@ class CLcamera : public CLbase<CLcamera,1>
 	friend class CLbase<CLcamera,1>;
 	
 	private:
-		static CLmath* clmath;
+		static CLmath& clmath;
 	protected:
 		CLfvector position;
 		CLfvector direction;
@@ -55,7 +55,7 @@ class CLcamera : public CLbase<CLcamera,1>
 		
 };
 
-CLmath* CLcamera::clmath = CLmath::instance();
+CLmath& CLcamera::clmath = CLmath::instance();
 ///*
 
 ///implementation
@@ -75,8 +75,8 @@ void CLcamera::setup()
 
 void CLcamera::setroll(float r)
 {
-	up.x = clmath->sin(r);
-	up.y = - clmath->cos(r);
+	up.x = clmath.sin(r);
+	up.y = - clmath.cos(r);
 	up.z = 0;
 	setup();
 }

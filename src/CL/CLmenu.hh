@@ -42,11 +42,12 @@
 class CLmenu : public CLbase<CLmenu,1>
 {
 	friend class CLbase<CLmenu,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLformat* clformat;
-		static CLwindow* clwindow;
-		static CLgfx*    clgfx;
+		static CLformat& clformat;
+		static CLwindow& clwindow;
+		static CLgfx&    clgfx;
 	protected:
 		uxchar    syskey;
 		sprite*   icon;
@@ -62,16 +63,16 @@ class CLmenu : public CLbase<CLmenu,1>
 		uxchar getsyskey() const { return syskey; };
 };
 
-CLformat* CLmenu::clformat = CLformat::instance();
-CLwindow* CLmenu::clwindow = CLwindow::instance();
-CLgfx*    CLmenu::clgfx    = CLgfx::instance();
+CLformat& CLmenu::clformat = CLformat::instance();
+CLwindow& CLmenu::clwindow = CLwindow::instance();
+CLgfx&    CLmenu::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
 CLmenu::CLmenu() //! noncritical
 {
 	syskey = '^';
-	icon = clformat->loadxpm(CLicon);
+	icon = clformat.loadxpm(CLicon);
 	title = new CLlabel(0,0,XRES,20,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",0);
 	exit = new CLbutton(780,1,18,18,0,0x00C0C0C0,0,&bye,"X",1);
 	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,&nfo,"Info",1);
@@ -81,7 +82,7 @@ CLmenu::CLmenu() //! noncritical
 	info->setvisible(0);
 	about->setvisible(0);
 	
-	clwindow->setsyskey(syskey,&wrapper);
+	clwindow.setsyskey(syskey,&wrapper);
 }
 
 CLmenu::~CLmenu() //! noncritical
@@ -97,38 +98,38 @@ CLmenu::~CLmenu() //! noncritical
 void CLmenu::show() //! noncritical
 {
 	//save background
-	sprite* back = clgfx->savescreen();
+	sprite* back = clgfx.savescreen();
 	//*
 	
 	//activate mouse cursor and activate buttons
-	clwindow->showcursor(1);
+	clwindow.showcursor(1);
 	exit->setvisible(1);
 	info->setvisible(1);
 	about->setvisible(1);
 	//*
 	
-	while(clwindow->run())
+	while(clwindow.run())
 	{
-		if(clwindow->getinkey()==SPACE) { break; }
+		if(clwindow.getinkey()==SPACE) { break; }
 		CLbutton::checkclick();
-		clgfx->drawscreen(back);
+		clgfx.drawscreen(back);
 		title->draw();
-		clgfx->drawsprite(2,2,icon);
+		clgfx.drawsprite(2,2,icon);
 		exit->draw();
-		clgfx->drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
+		clgfx.drawrectangle(0,20,XRES,40,0x00C0C0C0,1);
 		info->draw();
 		about->draw();
 	}
 	
 	//activate mouse cursor and activate buttons
-	clwindow->showcursor(0);
+	clwindow.showcursor(0);
 	exit->setvisible(0);
 	info->setvisible(0);
 	about->setvisible(0);
 	//*
 }
 
-void CLmenu::wrapper() { CLmenu::instance()->show(); } //!noncritical
+void CLmenu::wrapper() { CLmenu::instance().show(); } //!noncritical
 ///*
 
 #endif

@@ -38,7 +38,7 @@ class CLbase
 		CLbase(const CLbase&) { };	
 	public:
 		virtual ~CLbase() { };
-   		static T* instance();
+   		static T& instance();
 		static uxlong getversion() { return version; };
 };
 
@@ -48,11 +48,11 @@ template<class T,bool S> uxlong CLbase<T,S>::version = CLversion;
 
 ///implementation
 template<class T,bool S>
-T* CLbase<T,S>::instance() //! noncritical
+T& CLbase<T,S>::instance() //! noncritical
 {
 	//check if existing and singleton, if not create
 	if(base==0 && S==1) { base = new T(); }
-	return base;
+	return *base;
 	//*
 }
 ///*

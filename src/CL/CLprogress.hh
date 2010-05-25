@@ -32,9 +32,9 @@
 class CLprogress : public CLguibase
 {
 	private:
-		static CLstring* clstring;
-		static CLgfx*    clgfx;
-		static CLmath*   clmath;
+		static CLstring& clstring;
+		static CLgfx&    clgfx;
+		static CLmath&   clmath;
 	protected:
 		float progress;
 		xlong start;
@@ -59,9 +59,9 @@ class CLprogress : public CLguibase
 		xlong getprogress() const { return progress; };
 };
 
-CLstring* CLprogress::clstring = CLstring::instance();
-CLgfx*    CLprogress::clgfx    = CLgfx::instance();
-CLmath*   CLprogress::clmath   = CLmath::instance();
+CLstring& CLprogress::clstring = CLstring::instance();
+CLgfx&    CLprogress::clgfx    = CLgfx::instance();
+CLmath&   CLprogress::clmath   = CLmath::instance();
 ///*
 
 ///implementation
@@ -75,7 +75,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	float temp = clmath->absolute(end-start);
+	float temp = clmath.absolute(end-start);
 	float temp2 = (width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -92,7 +92,7 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end = e; }
 	else { start = e; end = s; }
 	
-	float temp = float(clmath->absolute(end-start));
+	float temp = float(clmath.absolute(end-start));
 	float temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit = temp2 / temp;
 	pprogress = xlong(punit * progress);
@@ -115,7 +115,7 @@ void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end = e; }
 	else { start = e; end = s; }
 	
-	float temp = float(clmath->absolute(end-start));
+	float temp = float(clmath.absolute(end-start));
 	float temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit = temp2 / temp;
 	pprogress = xlong(punit * progress);
@@ -126,17 +126,17 @@ void CLprogress::draw() const //! noncritical
 	if(visible==0) return;
 
 	//draw enclosing frame
-	clgfx->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
+	clgfx.drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
 	//*
 
 	switch(horver)
 	{
 		//draw horizontal progress
-		case 0: clgfx->drawrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor,1); break;
+		case 0: clgfx.drawrectangle(posx+1,posy+1,posx+pprogress-1,posy+height-1,pcolor,1); break;
 		//*
 		
 		//draw vertical progress
-		case 1: clgfx->drawrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor,1); break;
+		case 1: clgfx.drawrectangle(posx+1,posy+height-pprogress+1,posx+width-1,posy+height-1,pcolor,1); break;
 		//*
 	}
 }
@@ -144,7 +144,7 @@ void CLprogress::draw() const //! noncritical
 void CLprogress::setstart(xlong s) //! noncritical
 {
 	start = s;
-	xlong temp = float(clmath->absolute(end-start));
+	xlong temp = float(clmath.absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -153,7 +153,7 @@ void CLprogress::setstart(xlong s) //! noncritical
 void CLprogress::setend(xlong e) //! noncritical
 {
 	end = e;
-	xlong temp = float(clmath->absolute(end-start));
+	xlong temp = float(clmath.absolute(end-start));
 	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
 	punit =  temp2 / temp;
 	pprogress = punit * progress;
@@ -161,17 +161,17 @@ void CLprogress::setend(xlong e) //! noncritical
 
 void CLprogress::setprogress(xlong p) //! noncritical
 {
-	if(p>end) progress = end;
-	else if(p<start) progress = start;
-	else progress = p;
+	if(p>end) { progress = end; }
+	else if(p<start) { progress = start; }
+	else { progress = p; }
 	pprogress = punit * progress;
 }
 
 void CLprogress::addprogress(xlong a) //! noncritical
 {
-	if(progress+a>end) progress = end;
-	else if(progress+a<start) progress = start;
-	else progress += a;
+	if(progress+a>end) { progress = end; }
+	else if(progress+a<start) { progress = start; }
+	else { progress += a; }
 	pprogress = punit * progress;
 }
 ///*

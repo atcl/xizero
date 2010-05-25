@@ -33,10 +33,11 @@
 class CLmisc3d : public CLbase<CLmisc3d,1>
 {
 	friend class CLbase<CLmisc3d,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLgfx*    clgfx;
-		static CLscreen* clscreen;
+		static CLgfx&    clgfx;
+		static CLscreen& clscreen;
 	protected:
 		CLmisc3d() { };
 		~CLmisc3d() { };
@@ -48,8 +49,8 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
 
-CLgfx*    CLmisc3d::clgfx    = CLgfx::instance();
-CLscreen* CLmisc3d::clscreen = CLscreen::instance();
+CLgfx&    CLmisc3d::clgfx    = CLgfx::instance();
+CLscreen& CLmisc3d::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -98,7 +99,7 @@ void CLmisc3d::draw3dpixel(clvector& p,uxlong c) //! critical
 		xlong nx = xlong( ( 80 * p.x) / p.z) + (XRES>>1);
 		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
 
-		clscreen->cldoublebuffer[(ny*XRES)+nx] = c;
+		clscreen.cldoublebuffer[(ny*XRES)+nx] = c;
 	}
 	//*
 }
@@ -113,7 +114,7 @@ void CLmisc3d::draw3dline(clvector& p,clvector& q,uxlong c,bool aa) //! critical
 		xlong ny = xlong( (-95 * p.y) / p.z) + (YRES>>1);
 		xlong ox = xlong( ( 80 * q.x) / q.z) + (XRES>>1);
 		xlong oy = xlong( (-95 * q.y) / q.z) + (YRES>>1);
-		clgfx->drawline(nx,ny,ox,oy,c,aa);
+		clgfx.drawline(nx,ny,ox,oy,c,aa);
 	}
 	//*
 }
@@ -122,7 +123,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis) //! critical
 {
 	xlong z = 0;
 
-	if(zb==0) { zb = &clscreen->clzbuffer; }
+	if(zb==0) { zb = &clscreen.clzbuffer; }
 
 	xlong ii = 0;
 	xlong tt = 0;
@@ -133,7 +134,7 @@ void CLmisc3d::drawzbuffer(CLfbuffer* zb,xlong srcdis) //! critical
 		{
 			tt = ii + j;
 			z = xlong((*zb)[tt+srcdis])<<2 ;
-			clscreen->cldoublebuffer[tt] = z;
+			clscreen.cldoublebuffer[tt] = z;
 		}
 		
 		ii += XRES;

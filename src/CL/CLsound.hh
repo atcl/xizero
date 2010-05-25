@@ -42,7 +42,7 @@ class CLsound : public CLbase<CLsound,1>
 	friend class CLbase<CLsound,1>;
 	
 	private:
-		static CLstring* clstring;
+		static CLstring& clstring;
 	protected:
 		ALfloat	alpos[3];
 		ALfloat	alvel[3];
@@ -64,7 +64,7 @@ class CLsound : public CLbase<CLsound,1>
 		void pause();
 };
 
-CLstring* CLsound::clstring = CLstring::instance();
+CLstring& CLsound::clstring = CLstring::instance();
 ///*
 
 ///implementation
@@ -74,7 +74,7 @@ CLsound::CLsound() //! noncritical
 	numsrc = 0;
 	names = 0;
 	
-	ALuint alwavs = 0;
+	//ALuint alwavs = 0;
 	
 	//Init
 	alutInit(0,0);
@@ -131,7 +131,7 @@ bool CLsound::preload(CLar* aa) //! noncritical
 	for(xlong i=0; i<numbuf; i++)
 	{
 		curr = aa->getmember(i);
-		names[i] = clstring->copy(curr->name);
+		names[i] = clstring.copy(curr->name);
 		
 		aldata = static_cast<void*>(curr->data);
 		alwavs[i] = alutCreateBufferFromFileImage(aldata,curr->size);
@@ -149,7 +149,7 @@ bool CLsound::play(xlong i,bool l,bool o) //! noncritical
 {
 	//set up 3d sound for source??? alSourcefv ?
 	
-	if(numbuf==0) return 0;
+	if(numbuf==0) { return 0; }
 	if(l) { alSourcei(alsources[i],AL_LOOPING,AL_TRUE); }
 	alSourcePlay(alsources[i]);
 	

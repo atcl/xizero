@@ -56,7 +56,7 @@ template<typename T>
 struct CLvector : public CLvectorbase<T,CLvector<T> >
 {
 	private:
-		static CLmath* clmath;
+		static CLmath& clmath;
 	public:
 	T x;
 	T y;
@@ -91,7 +91,7 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 				void print() const;							//console output	
 };
 
-template<typename T>CLmath* CLvector<T>::clmath = CLmath::instance();
+template<typename T>CLmath& CLvector<T>::clmath = CLmath::instance();
 ///*
 
 ///implementation
@@ -139,7 +139,7 @@ CLvector<T> CLvector<T>::cross(const CLvector<T>& a) const //! critical
 template<typename T>
 T CLvector<T>::operator!() const //! critical
 {
-	return clmath->sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) );
+	return clmath.sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) );
 }
 //*
 
@@ -235,10 +235,10 @@ template<typename T>
 T CLvector<T>::operator%(const CLvector& a) //! critical
 {
 	float c =        ( (this->x * a.x)     + (this->y * a.y)     + (this->z * a.z) ) /
-		(clmath->sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
-		 clmath->sqrt(     (a.x * a.x)     +     (a.y * a.y)     +     (a.z * a.z) ) );
+		(clmath.sqrt( (this->x * this->x) + (this->y * this->y) + (this->z * this->z) ) * 
+		 clmath.sqrt(     (a.x * a.x)     +     (a.y * a.y)     +     (a.z * a.z) ) );
 
-	return(clmath->arccos(c));
+	return(clmath.arccos(c));
 }
 //*
 

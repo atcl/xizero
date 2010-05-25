@@ -31,6 +31,7 @@
 class CLstring : public CLbase<CLstring,1>
 {
 	friend class CLbase<CLstring,1>;
+	friend class CLglobal;
 	
 	protected:
 		CLstring() { };
@@ -93,7 +94,7 @@ xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncri
 	uxlong sl = length(s);
 	uxlong tl = length(t);
 	uxlong i = 0;
-	while(i<sl && i<tl && (i<n ^ n==0) ) { if(s[i]!=t[i]) { i=0; break; } i++; }
+	while( (i<sl) && (i<tl) && (i<n ^ n==0) ) { if(s[i]!=t[i]) { i=0; break; } i++; }
 	return i;
 }
 

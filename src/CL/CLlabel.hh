@@ -31,8 +31,8 @@
 class CLlabel : public CLguibase
 {
 	private:
-		static CLstring* clstring;
-		static CLgfx*    clgfx;
+		static CLstring& clstring;
+		static CLgfx&    clgfx;
 	protected:
 		xchar* text;
 		bool  frame;
@@ -48,8 +48,8 @@ class CLlabel : public CLguibase
 		xchar* gettext() const { return text; };
 };
 
-CLstring* CLlabel::clstring = CLstring::instance();
-CLgfx*    CLlabel::clgfx    = CLgfx::instance();
+CLstring& CLlabel::clstring = CLstring::instance();
+CLgfx&    CLlabel::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
@@ -58,9 +58,9 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	frame = f;
 	if(!f) rcolor = bcolor;
 	
-	text = clstring->copy(t);
-	textwidth = clgfx->getfontstringwidth(text,0) + 4;
-	textheight = clgfx->getfontstringheight(text,0);
+	text = clstring.copy(t);
+	textwidth = clgfx.getfontstringwidth(text,0) + 4;
+	textheight = clgfx.getfontstringheight(text,0);
 	if(w==-1 || w<textwidth) width = textwidth;
 	if(h==-1 || h<textheight) height = textheight;
 	textx = (width - textwidth)>>1;
@@ -70,18 +70,18 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 void CLlabel::draw() const //! noncritical
 {
 	if(visible==0) return;
-	clgfx->drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
-	clgfx->drawfontstring(posx+textx,posy+texty,text,0,fcolor,bcolor);
+	clgfx.drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
+	clgfx.drawfontstring(posx+textx,posy+texty,text,0,fcolor,bcolor);
 }
 
 void CLlabel::settext(const xchar* t) //! noncritical
 {
 	delete text;
-	text = clstring->copy(t);
-	textwidth = clgfx->getfontstringwidth(text,0) + 4;
-	textheight = clgfx->getfontstringheight(text,0);
-	if(width<textwidth) width = textwidth;
-	if(height<textheight) height = textheight;
+	text = clstring.copy(t);
+	textwidth = clgfx.getfontstringwidth(text,0) + 4;
+	textheight = clgfx.getfontstringheight(text,0);
+	if(width<textwidth) { width = textwidth; }
+	if(height<textheight) { height = textheight; }
 	textx = (width - textwidth)>>1;
 	texty = (height - textheight)>>1;
 }

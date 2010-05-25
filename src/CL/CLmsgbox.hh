@@ -37,10 +37,11 @@
 class CLmsgbox : public CLbase<CLmsgbox,1>
 {
 	friend class CLbase<CLmsgbox,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLstring* clstring;
-		static CLwindow* clwindow;
+		static CLstring& clstring;
+		static CLwindow& clwindow;
 	protected:
 		CLmsgbox() { };
 		~CLmsgbox() { };
@@ -51,8 +52,8 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 		xlong alertbox(const xchar* title,xlong message);
 };
 
-CLstring* CLmsgbox::clstring = CLstring::instance();
-CLwindow* CLmsgbox::clwindow = CLwindow::instance();
+CLstring& CLmsgbox::clstring = CLstring::instance();
+CLwindow& CLmsgbox::clwindow = CLwindow::instance();
 xlong CLmsgbox::currid = 0;
 ///*
 
@@ -64,8 +65,8 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	//set for 9x15 font
 	
 	//prepare message
-	xlong msglines = clstring->linecount(message);
-	xlong msglength = clstring->length(message);
+	xlong msglines = clstring.linecount(message);
+	xlong msglength = clstring.length(message);
 	xlong* msgpos = new xlong[msglines];
 	xlong* msglen = new xlong[msglines];
 	xlong npos = 0;
@@ -146,13 +147,13 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 		
 		glutMainLoopEvent();
 
-		if(clwindow->getinkey()==SPACE) { break; };
-		if(clwindow->getmouselb()==1)
+		if(clwindow.getinkey()==SPACE) { break; };
+		if(clwindow.getmouselb()==1)
 		{
-			if(clwindow->getmousex()>(winwidth/2)-50 &&
-			   clwindow->getmousex()<(winwidth/2)+50 &&
-			   clwindow->getmousey()>winheight-25 &&
-			   clwindow->getmousey()<winheight-5) { break; }
+			if(clwindow.getmousex()>(winwidth/2)-50 &&
+			   clwindow.getmousex()<(winwidth/2)+50 &&
+			   clwindow.getmousey()>winheight-25 &&
+			   clwindow.getmousey()<winheight-5) { break; }
 		}
 	}
 	
@@ -160,7 +161,7 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	return 1;
 }
 
-xlong CLmsgbox::alertbox(const xchar* title,xlong value) { msgbox(title,clstring->toascii(value)); } //! noncritical
+xlong CLmsgbox::alertbox(const xchar* title,xlong value) { msgbox(title,clstring.toascii(value)); } //! noncritical
 ///*
 
 #endif

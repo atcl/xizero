@@ -31,12 +31,16 @@
  */
 ///*
 
+///declarations
+class CLglobal;
+///*
+
 ///definitions
 class CLmainmenu : public CLbase<CLmainmenu,0>
 {
 	private:
-		static CLstring* clstring;
-		static CLgfx*    clgfx;
+		static CLstring& clstring;
+		static CLgfx&    clgfx;
 	protected:
 		sprite* background;
 		CLbutton** button;
@@ -50,8 +54,8 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 		void setback(sprite* s) { background = s; };
 };
 
-CLstring* CLmainmenu::clstring = CLstring::instance();
-CLgfx*   CLmainmenu::clgfx    = CLgfx::instance();
+CLstring& CLmainmenu::clstring = CLstring::instance();
+CLgfx&    CLmainmenu::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
@@ -65,17 +69,17 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	xlong temp = 0;
 	
 	//determine max button caption length
-	xlong mbl = clstring->length(bt[0]);
+	xlong mbl = clstring.length(bt[0]);
 	xlong mbli = 0;
 	for(xlong i=1; i<bc; i++)
 	{
-		temp = clstring->length(bt[i]);
+		temp = clstring.length(bt[i]);
 		if(temp>mbl) { mbli = i; mbl = temp; }
 	}
 	//*
 	
 	//determine button positions
-	temp = clgfx->getfontstringwidth(bt[mbli],0);
+	temp = clgfx.getfontstringwidth(bt[mbli],0);
 	xlong bw = temp + 4;
 	if(bw<XRES>>2) bw = XRES>>2;
 	xlong bx = (XRES>>1) - (bw>>1);
@@ -89,17 +93,17 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//*
 	
 	//determine header position
-	temp = clgfx->getfontstringwidth(hl,0) + 4;
+	temp = clgfx.getfontstringwidth(hl,0) + 4;
 	xlong hx = (XRES>>1) - (temp>>1);
 	xlong hw = temp;
 	xlong hy = 20;
 	//*
 	
 	//determine footer position
-	temp = clgfx->getfontstringwidth(fl,0) + 4;
+	temp = clgfx.getfontstringwidth(fl,0) + 4;
 	xlong fx = XRES - temp - 16;
 	xlong fw = temp;
-	xlong fh = clgfx->getfontstringheight(fl,0) + 4;
+	xlong fh = clgfx.getfontstringheight(fl,0) + 4;
 	xlong fy = YRES - fh; 
 	//*
 	
@@ -123,7 +127,7 @@ CLmainmenu::~CLmainmenu()
 
 void CLmainmenu::draw() const //! critical
 {
-	clgfx->drawscreen(background);
+	clgfx.drawscreen(background);
 	header->draw();
 	for(xlong i=0; i<buttoncount; i++) { button[i]->draw(); }
 	footer->draw();

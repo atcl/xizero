@@ -38,6 +38,7 @@
 class CLsystem : public CLbase<CLsystem,1>
 {
 	friend class CLbase<CLsystem,1>;
+	friend class CLglobal;
 	
 	protected:
 		CLsystem() { };
@@ -148,7 +149,7 @@ bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) //! noncritic
 	FILE* of;
 	
 	//if file exist and overwrite not set return
-	if(of = fopen(fn,"rb") ) 
+	if( (of=fopen(fn,"rb")) ) 
 	{
 		fclose(of);
 		if(!ow)	return 0;
@@ -175,7 +176,7 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	FILE* of;
 	
 	//if file exist and overwrite not set return
-	if(of = fopen(fn,"rb") ) 
+	if( (of=fopen(fn,"rb")) ) 
 	{
 		fclose(of);
 		if(!ow)	return 0;

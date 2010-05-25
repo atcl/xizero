@@ -33,7 +33,7 @@
 class CLmatrix : public CLbase<CLmatrix,0>
 {
 	private:
-		static CLmath* clmath;
+		static CLmath& clmath;
 	protected:
 		float m[4][4];
 		float t[4][4];
@@ -63,7 +63,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		CLmatrix& operator=(const CLmatrix& c);
 };
 
-CLmath* CLmatrix::clmath = CLmath::instance();
+CLmath& CLmatrix::clmath = CLmath::instance();
 ///*
 
 ///implementation
@@ -112,8 +112,8 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
 {
 	if(x!=0) 
 	{
-		float sinx = clmath->sin(x);
-		float cosx = clmath->cos(x);
+		float sinx = clmath.sin(x);
+		float cosx = clmath.cos(x);
 		t[0][0] = 1;	t[0][1] = 0;	t[0][2] = 0;	t[0][3] = 0;
 		t[1][0] = 0;	t[1][1] = cosx;	t[1][2] =-sinx;	t[1][3] = 0;
 		t[2][0] = 0;	t[2][1] = sinx;	t[2][2] = cosx;	t[2][3] = 0;
@@ -123,8 +123,8 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
 
 	if(y!=0)
 	{
-		float siny = clmath->sin(y);
-		float cosy = clmath->cos(y);
+		float siny = clmath.sin(y);
+		float cosy = clmath.cos(y);
 		t[0][0] = cosy;	t[0][1] = 0;	t[0][2] = siny;	t[0][3] = 0;
 		t[1][0] = 0;	t[1][1] = 1;	t[1][2] = 0;	t[1][3] = 0;
 		t[2][0] =-siny;	t[2][1] = 0;	t[2][2] = cosy;	t[2][3] = 0;
@@ -134,8 +134,8 @@ void CLmatrix::rotate(xlong x,xlong y,xlong z) //! noncritical
 
 	if(z!=0)
 	{
-		float sinz = clmath->sin(z);
-		float cosz = clmath->cos(z);
+		float sinz = clmath.sin(z);
+		float cosz = clmath.cos(z);
 		t[0][0] = cosz;	t[0][1] =-sinz;	t[0][2] = 0;	t[0][3] = 0;
 		t[1][0] = sinz;	t[1][1] = cosz;	t[1][2] = 0;	t[1][3] = 0;
 		t[2][0] = 0;	t[2][1] = 0;	t[2][2] = 1;	t[2][3] = 0;

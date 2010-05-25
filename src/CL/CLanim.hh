@@ -42,10 +42,10 @@ struct CLframe
 class CLanim : public CLbase<CLanim,0>
 {
 	private:
-		static CLwindow* clwindow;
-		static CLformat* clformat;
-		static CLmath*   clmath;
-		static CLscreen* clscreen;
+		static CLwindow& clwindow;
+		static CLformat& clformat;
+		static CLmath&   clmath;
+		static CLscreen& clscreen;
 	protected:
 		CLobject* object;
 		xlong*   anicsv;
@@ -65,10 +65,10 @@ class CLanim : public CLbase<CLanim,0>
 		CLfvector& getposition() { return position; };
 };
 
-CLwindow* CLanim::clwindow = CLwindow::instance();
-CLformat* CLanim::clformat = CLformat::instance();
-CLmath*   CLanim::clmath   = CLmath::instance();
-CLscreen* CLanim::clscreen = CLscreen::instance();
+CLwindow& CLanim::clwindow = CLwindow::instance();
+CLformat& CLanim::clformat = CLformat::instance();
+CLmath&   CLanim::clmath   = CLmath::instance();
+CLscreen& CLanim::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -76,7 +76,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 {	
 	//set up attributes
 	object = obj;
-	anicsv = clformat->loadcsv(ani,',');
+	anicsv = clformat.loadcsv(ani,',');
 	loop = l;
 	if(p!=0) { position = *p; }
 	else position = 0;
@@ -182,11 +182,11 @@ xlong CLanim::update() //! critical
 	else
 	{
 		//is first run in this frame
-		if(starttime==0) lastupdate = starttime = clwindow->getmilliseconds();
+		if(starttime==0) lastupdate = starttime = clwindow.getmilliseconds();
 		//*
 		
 		//determine time
-		float curr_time = float(clwindow->getmilliseconds());
+		float curr_time = float(clwindow.getmilliseconds());
 		float time_diff = float(curr_time - lastupdate);
 		//*
 		
@@ -218,7 +218,7 @@ xlong CLanim::update() //! critical
 				
 		//translate
 		if(!(frame[currframe]->curr[3]==0 && frame[currframe]->curr[4]==0 && frame[currframe]->curr[5]==0 ))
-			{ object->getmatrix()->translate(clmath->round(frame[currframe]->curr[3]),clmath->round(frame[currframe]->curr[4]),clmath->round(frame[currframe]->curr[5])); }
+			{ object->getmatrix()->translate(clmath.round(frame[currframe]->curr[3]),clmath.round(frame[currframe]->curr[4]),clmath.round(frame[currframe]->curr[5])); }
 		//*
 				
 		//rotate around x
@@ -227,7 +227,7 @@ xlong CLanim::update() //! critical
 			if(frame[currframe]->curr[6] < 1) { frame[currframe]->comm[6] += frame[currframe]->curr[6]; }
 			else { frame[currframe]->comm[6] = frame[currframe]->curr[6]; }
 			
-			if( clmath->round(frame[currframe]->comm[6]) != 0)
+			if( clmath.round(frame[currframe]->comm[6]) != 0)
 			{
 				object->getmatrix()->rotate(xlong(frame[currframe]->comm[6]),0,0);
 				frame[currframe]->comm[6] -= xlong(frame[currframe]->comm[6]);
@@ -241,7 +241,7 @@ xlong CLanim::update() //! critical
 			if(frame[currframe]->curr[7] < 1) { frame[currframe]->comm[7] += frame[currframe]->curr[7]; }
 			else { frame[currframe]->comm[7] = frame[currframe]->curr[7]; }
 			
-			if( clmath->round(frame[currframe]->comm[7]) != 0)
+			if( clmath.round(frame[currframe]->comm[7]) != 0)
 			{
 				object->getmatrix()->rotate(0,xlong(frame[currframe]->comm[7]),0);
 				frame[currframe]->comm[7] -= xlong(frame[currframe]->comm[7]);
@@ -255,7 +255,7 @@ xlong CLanim::update() //! critical
 			if(frame[currframe]->curr[8] < 1) { frame[currframe]->comm[8] += frame[currframe]->curr[8]; }
 			else { frame[currframe]->comm[8] = frame[currframe]->curr[8]; }
 			
-			if( clmath->round(frame[currframe]->comm[8]) != 0)
+			if( clmath.round(frame[currframe]->comm[8]) != 0)
 			{
 				object->getmatrix()->rotate(0,0,xlong(frame[currframe]->comm[8]));
 				frame[currframe]->comm[8] -= xlong(frame[currframe]->comm[8]);
@@ -299,8 +299,8 @@ xlong CLanim::run() //! critical
 	//in example intro animations
 	
 	//clear buffers
-	clscreen->cldoublebuffer.clear(0);
-	clscreen->clzbuffer.clear(ZRES);
+	clscreen.cldoublebuffer.clear(0);
+	clscreen.clzbuffer.clear(ZRES);
 	//*
 	
 	//update animation

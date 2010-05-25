@@ -36,12 +36,13 @@
 class CLintro : public CLbase<CLintro,1>
 {
 	friend class CLbase<CLintro,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLgfx*    clgfx;
-		static CLwindow* clwindow;
-		static CLsystem* clsystem;
-		static CLscreen* clscreen;
+		static CLgfx&    clgfx;
+		static CLwindow& clwindow;
+		static CLsystem& clsystem;
+		static CLscreen& clscreen;
 	protected:
 		CLintro() { };
 		~CLintro() { };
@@ -51,10 +52,10 @@ class CLintro : public CLbase<CLintro,1>
 		void torus(CLfile* s) const;
 };
 
-CLgfx *   CLintro::clgfx    = CLgfx::instance();
-CLwindow* CLintro::clwindow = CLwindow::instance();
-CLsystem* CLintro::clsystem = CLsystem::instance();
-CLscreen* CLintro::clscreen = CLscreen::instance();
+CLgfx&    CLintro::clgfx    = CLgfx::instance();
+CLwindow& CLintro::clwindow = CLwindow::instance();
+CLsystem& CLintro::clsystem = CLsystem::instance();
+CLscreen& CLintro::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
@@ -76,23 +77,23 @@ void CLintro::atcrosslevel(CLfile* s) const //! noncritical
 	
 	//prepare name string
 	const xchar* title = "atCROSSLEVEL";
-	xlong w = clgfx->getfontstringwidth(title,4);
+	xlong w = clgfx.getfontstringwidth(title,4);
 	xlong x = (XRES - w)/2;
 	//*
 	
 	//run animation
 	bool skip = 0;
-	while(clwindow->run())
+	while(clwindow.run())
 	{
-		if(clwindow->getinkey()==SPACE) { skip = 1; break; }
+		if(clwindow.getinkey()==SPACE) { skip = 1; break; }
 		if(atcl_intro->run()==0) { break; }
 	}
 	
 	if(skip==0)
 	{
-		clgfx->drawfontstring(x,100,title,4,0x00800000);
-		clwindow->run();
-		clwindow->sleep(4000);
+		clgfx.drawfontstring(x,100,title,4,0x00800000);
+		clwindow.run();
+		clwindow.sleep(4000);
 	}
 	//*
 }
@@ -121,11 +122,11 @@ void CLintro::xizero(CLfile* s) const //! noncritical
 	xlong r = 0;
 	CLlvector position;
 	position = 0;
-	while(clwindow->run())
+	while(clwindow.run())
 	{
 		//clear buffers
-		clscreen->cldoublebuffer.clear(0);
-		clscreen->clzbuffer.clear(ZRES);
+		clscreen.cldoublebuffer.clear(0);
+		clscreen.clzbuffer.clear(ZRES);
 		//*
 		
 		//update animation

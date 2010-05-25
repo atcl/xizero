@@ -30,7 +30,7 @@
 class CLlight : public CLbase<CLlight,0>
 {
 	private:
-		static CLgfx* clgfx;
+		static CLgfx& clgfx;
 	protected:
 		xlong radius;
 		uxlong color;
@@ -42,7 +42,7 @@ class CLlight : public CLbase<CLlight,0>
 		void draw(xlong x,xlong y); 
 };
 
-CLgfx* CLlight::clgfx = CLgfx::instance();
+CLgfx& CLlight::clgfx = CLgfx::instance();
 ///*
 
 ///implementation
@@ -106,7 +106,7 @@ CLlight::CLlight(xlong r,uxlong c) //! noncritical
 
 CLlight::~CLlight() { delete mask; }
 
-void CLlight::draw(xlong x,xlong y) { clgfx->putsprite(x-radius,y-radius,mask,0,0); } //! noncritical
+void CLlight::draw(xlong x,xlong y) { clgfx.putsprite(x-radius,y-radius,mask,0,0); } //! noncritical
 ///*
 
  #endif

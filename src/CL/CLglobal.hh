@@ -34,94 +34,85 @@ class CLformat;
 class CLmath;
 class CLgame;
 class CLmisc3d;
-class CLfsprogress;
+class CLfsprog;
 class CLdetect;
 class CLgfx;
-class CLtransitions;
+class CLtrans;
 class CLid;
 class CLstring;
 class CLapp;
 class CLmsgbox;
 class CLintro;
 class CLsound;
-class CLsprites;
+class CLcomspr;
 class CLmenu;
 ///*
 
 ///definitions
 class CLglobal
 {
+	private:
+		CLscreen screen;		
+		CLwindow window;
+		CLsystem system;
+		CLformat format;
+		CLmath   math;
+		CLgame   game;
+		CLmisc3d misc3d;
+		CLdetect detect;
+		CLfsprog fsprog;
+		CLgfx    gfx;
+		CLtrans  trans;
+		CLsound  sound;
+		CLcomspr comspr;
+		CLid     id;
+		CLstring string;
+		CLapp    app;
+		CLmsgbox msgbox;
+		CLintro  intro;
+		CLmenu   menu;
 	public:
 		CLglobal(xchar* argv);
-		~CLglobal();
-		CLscreen* clscreen;		
-		CLwindow* clwindow;
-		CLsystem* clsystem;
-		CLformat* clformat;
-		CLmath*   clmath;
-		CLgame*   clgame;
-		CLmisc3d* clmisc3d;
-		CLdetect* cldetect;
-		CLfsprogress* clfsprogress;
-		CLgfx*    clgfx;
-		CLtransitions* cltransitions;
-		CLsound*  clsound;
-		CLsprites* clsprites;
-		CLid*     clid;
-		CLstring* clstring;
-		CLapp*    clapp;
-		CLmsgbox* clmsgbox;
-		CLintro*  clintro;
-		CLmenu*   clmenu;
+		~CLglobal() { };
+		CLscreen& clscreen;
+		CLwindow& clwindow;
+		CLsystem& clsystem;
+		CLformat& clformat;
+		CLmath&   clmath;
+		CLgame&   clgame;
+		CLmisc3d& clmisc3d;
+		CLdetect& cldetect;
+		CLfsprog& clfsprog;
+		CLgfx&    clgfx;
+		CLtrans&  cltrans;
+		CLsound&  clsound;
+		CLcomspr& clcomspr;
+		CLid&     clid;
+		CLstring& clstring;
+		CLapp&    clapp;
+		CLmsgbox& clmsgbox;
+		CLintro&  clintro;
+		CLmenu&   clmenu;
 };
 ///*
 
 ///implementation
-CLglobal::CLglobal(xchar* argv) //! noncritical
-{
-	clscreen      = CLscreen::instance();
-	clwindow      = CLwindow::instance();
-	clsystem      = CLsystem::instance();
-	clformat      = CLformat::instance();
-	clmath        = CLmath::instance();
-	clgame        = CLgame::instance();
-	clmisc3d      = CLmisc3d::instance();
-	cldetect      = CLdetect::instance();
-	clfsprogress  = CLfsprogress::instance();
-	clgfx         = CLgfx::instance();
-	cltransitions = CLtransitions::instance();
-	clsound       = CLsound::instance();
-	clsprites     = CLsprites::instance();
-	clid          = CLid::instance();
-	clstring      = CLstring::instance();
-	clapp         = CLapp::instance();
-	clmsgbox      = CLmsgbox::instance();
-	clintro       = CLintro::instance();
-	clmenu        = CLmenu::instance();
-}
-	
-CLglobal::~CLglobal() //! noncritical
-{
-	//~ delete clscreen;
-	//~ delete clwindow;
-	//~ delete clsystem;
-	//~ delete clformat;
-	//~ delete clmath;
-	//~ delete clgame;
-	//~ delete clmisc3d;
-	//~ delete cldetect;
-	//~ delete clfsprogress;
-	//~ delete clgfx;
-	//~ delete cltransitions;
-	//~ delete clsound;
-	//~ delete clsprites;
-	//~ delete clid;
-	//~ delete clstring;
-	//~ delete clapp;
-	//~ delete clmsgbox;
-	//~ delete clintro;
-	//~ delete clmenu;
-}
+CLglobal::CLglobal(xchar* argv) : screen(CLscreen::instance()), window(CLwindow::instance()), system(CLsystem::instance()),
+								  format(CLformat::instance()), math(CLmath::instance()),     game(CLgame::instance()),
+								  misc3d(CLmisc3d::instance()), detect(CLdetect::instance()), fsprog(CLfsprog::instance()),
+								  gfx(CLgfx::instance()),       trans(CLtrans::instance()),   sound(CLsound::instance()),
+								  comspr(CLcomspr::instance()), id(CLid::instance()),         string(CLstring::instance()),
+								  app(CLapp::instance()),       msgbox(CLmsgbox::instance()), intro(CLintro::instance()),
+								  menu(CLmenu::instance()),
+								  
+								  clscreen(screen), clwindow(window), clsystem(system),
+								  clformat(format), clmath(math),     clgame(game),
+								  clmisc3d(misc3d), cldetect(detect), clfsprog(fsprog),
+								  clgfx(gfx),       cltrans(trans),   clsound(sound),
+								  clcomspr(comspr), clid(id),         clstring(string),
+								  clapp(app),       clmsgbox(msgbox), clintro(intro),
+								  clmenu(menu) { } //! noncritical
+
 ///*
 
 #endif

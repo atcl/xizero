@@ -48,11 +48,11 @@ typedef CLlist<CLenemy> CLenemylist;
 class CLlevel : public CLbase<CLlevel,0>
 {
 	private:
-		static CLgame*   clgame;
-		static CLformat* clformat;
-		static CLstring* clstring;
-		static CLscreen* clscreen;
-		static CLsystem* clsystem; //temp!
+		static CLgame&   clgame;
+		static CLformat& clformat;
+		static CLstring& clstring;
+		static CLscreen& clscreen;
+		static CLsystem& clsystem; //temp!
 	protected:
 		CLobject**   levelmap;
 		CLplayer*    player;
@@ -86,11 +86,11 @@ class CLlevel : public CLbase<CLlevel,0>
 		CLplayer* getplayer() const { return player; };
 };
 
-CLgame*   CLlevel::clgame   = CLgame::instance();
-CLformat* CLlevel::clformat = CLformat::instance();
-CLstring* CLlevel::clstring = CLstring::instance();
-CLscreen* CLlevel::clscreen = CLscreen::instance();
-CLsystem* CLlevel::clsystem = CLsystem::instance();
+CLgame&   CLlevel::clgame   = CLgame::instance();
+CLformat& CLlevel::clformat = CLformat::instance();
+CLstring& CLlevel::clstring = CLstring::instance();
+CLscreen& CLlevel::clscreen = CLscreen::instance();
+CLsystem& CLlevel::clsystem = CLsystem::instance();
 xlong CLlevel::floorheight = 100;
 bool  CLlevel::paused = 0;
 ///*
@@ -99,7 +99,7 @@ bool  CLlevel::paused = 0;
 CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bosslib,xlong bosstype,xlong level) //! noncritical
 {
 	//set screen boundaries
-	clgame->setboundaries(60,0,740,600);
+	clgame.setboundaries(60,0,740,600);
 	//*
 
 	//game is not paused from beginning
@@ -109,7 +109,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 	//load combined level map file
 	//******************************************************************
 	CLar* levela = new CLar(maplib);
-	sprite* h = clformat->loadras(levela->getmember(0));
+	sprite* h = clformat.loadras(levela->getmember(0));
 	xlong width = h->width;
 	xlong height = h->height;
 	uxlong* data = h->data;
@@ -127,7 +127,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 	stripemark = stripemarkmax;
 	striperest = 0;
 	
-	if(stripemark < 0) err(__FILE__,__func__,u8"Level too short");
+	if(stripemark < 0) { err(__FILE__,__func__,u8"Level too short"); }
 	playerscreenylevel = 3*(YRES>>2);
 	//******************************************************************
 	
@@ -429,7 +429,7 @@ void CLlevel::display() //! critical
 	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->display(1); }
 	boss->display(1);
 	
-	clscreen->clstencilbuffer.copy(&clscreen->cldoublebuffer,12);
+	clscreen.clstencilbuffer.copy(&(clscreen.cldoublebuffer),12);
 	//*
 
 	//display enitities

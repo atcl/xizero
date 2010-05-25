@@ -60,19 +60,20 @@ struct CLpoint
 class CLgfx : public CLbase<CLgfx,1>
 {
 	friend class CLbase<CLgfx,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLmath*   clmath;
-		static CLscreen* clscreen;
-		static CLformat* clformat;
-		static CLstring* clstring;
-		static CLsystem* clsystem;
+		static CLmath&   clmath;
+		static CLscreen& clscreen;
+		static CLformat& clformat;
+		static CLstring& clstring;
+		static CLsystem& clsystem;
 	protected:
-		CLfont** fonts;
+		static CLfont** fonts;
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawclipcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
-		CLgfx() { fonts = 0; };
+		CLgfx() { };
 		~CLgfx() { };
 	public:
 		uxlong readpixel(xlong x,xlong y) const;
@@ -95,7 +96,7 @@ class CLgfx : public CLbase<CLgfx,1>
 		void drawspriteanimated(xlong x,xlong y,sprite** s,xlong i) const;
 		void putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const;
 		void loadfonts(CLfile* f);
-		xlong drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc=0) const;
+		xlong drawfontchar(xlong x,xlong y,const uxlong a,uxlong f,uxlong fc,uxlong bc=0) const;
 		void drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxlong bc=0,xlong s=0) const;
 		xlong getfontstringwidth(const char* a,uxlong f) const;
 		xlong getfontstringheight(const char* a,uxlong f) const;
@@ -106,11 +107,13 @@ class CLgfx : public CLbase<CLgfx,1>
 		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;	
 };
 
-CLmath*   CLgfx::clmath   = CLmath::instance();
-CLscreen* CLgfx::clscreen = CLscreen::instance();
-CLformat* CLgfx::clformat = CLformat::instance();
-CLstring* CLgfx::clstring = CLstring::instance();
-CLsystem* CLgfx::clsystem = CLsystem::instance();
+CLmath&   CLgfx::clmath   = CLmath::instance();
+CLscreen& CLgfx::clscreen = CLscreen::instance();
+CLformat& CLgfx::clformat = CLformat::instance();
+CLstring& CLgfx::clstring = CLstring::instance();
+CLsystem& CLgfx::clsystem = CLsystem::instance();
+
+CLfont** CLgfx::fonts = 0;
 ///*
 
 ///implementation
@@ -123,14 +126,14 @@ void CLgfx::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //
 	//*
 	
 	//draw the eight pixels for each (1/8) section of the circle
- 	clscreen->cldoublebuffer[b1+a1+x] = c;
- 	clscreen->cldoublebuffer[b1-a1+x] = c;
- 	clscreen->cldoublebuffer[b1+a1-x] = c;
- 	clscreen->cldoublebuffer[b1-a1-x] = c;
- 	clscreen->cldoublebuffer[b1+a2+y] = c;
- 	clscreen->cldoublebuffer[b1-a2+y] = c;
- 	clscreen->cldoublebuffer[b1+a2-y] = c;
- 	clscreen->cldoublebuffer[b1-a2-y] = c;
+ 	clscreen.cldoublebuffer[b1+a1+x] = c;
+ 	clscreen.cldoublebuffer[b1-a1+x] = c;
+ 	clscreen.cldoublebuffer[b1+a1-x] = c;
+ 	clscreen.cldoublebuffer[b1-a1-x] = c;
+ 	clscreen.cldoublebuffer[b1+a2+y] = c;
+ 	clscreen.cldoublebuffer[b1-a2+y] = c;
+ 	clscreen.cldoublebuffer[b1+a2-y] = c;
+ 	clscreen.cldoublebuffer[b1-a2-y] = c;
 	//*
 }
 
@@ -143,14 +146,14 @@ void CLgfx::drawclipcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) cons
 	//*
 	
 	//draw the eight pixels for each (1/8) section of the circle
- 	if( (b1+a1<XRES*YRES) && (b1+a1>0) && (xc+x<XRES) && (xc+x>0) ) { clscreen->cldoublebuffer[b1+a1+x] = c; }
- 	if( (b1-a1<XRES*YRES) && (b1-a1>0) && (xc+x<XRES) && (xc+x>0) ) { clscreen->cldoublebuffer[b1-a1+x] = c; }
- 	if( (b1+a1<XRES*YRES) && (b1+a1>0) && (xc-x<XRES) && (xc-x>0) ) { clscreen->cldoublebuffer[b1+a1-x] = c; }
- 	if( (b1-a1<XRES*YRES) && (b1-a1>0) && (xc-x<XRES) && (xc-x>0) ) { clscreen->cldoublebuffer[b1-a1-x] = c; }
- 	if( (b1+a2<XRES*YRES) && (b1+a1>0) && (xc+y<XRES) && (xc+y>0) ) { clscreen->cldoublebuffer[b1+a2+y] = c; }
- 	if( (b1-a2<XRES*YRES) && (b1-a2>0) && (xc+y<XRES) && (xc+y>0) ) { clscreen->cldoublebuffer[b1-a2+y] = c; }
- 	if( (b1+a2<XRES*YRES) && (b1+a2>0) && (xc-y<XRES) && (xc-y>0) ) { clscreen->cldoublebuffer[b1+a2-y] = c; }
- 	if( (b1-a2<XRES*YRES) && (b1-a2>0) && (xc-y<XRES) && (xc-y>0) ) { clscreen->cldoublebuffer[b1-a2-y] = c; }
+ 	if( (b1+a1<XRES*YRES) && (b1+a1>0) && (xc+x<XRES) && (xc+x>0) ) { clscreen.cldoublebuffer[b1+a1+x] = c; }
+ 	if( (b1-a1<XRES*YRES) && (b1-a1>0) && (xc+x<XRES) && (xc+x>0) ) { clscreen.cldoublebuffer[b1-a1+x] = c; }
+ 	if( (b1+a1<XRES*YRES) && (b1+a1>0) && (xc-x<XRES) && (xc-x>0) ) { clscreen.cldoublebuffer[b1+a1-x] = c; }
+ 	if( (b1-a1<XRES*YRES) && (b1-a1>0) && (xc-x<XRES) && (xc-x>0) ) { clscreen.cldoublebuffer[b1-a1-x] = c; }
+ 	if( (b1+a2<XRES*YRES) && (b1+a1>0) && (xc+y<XRES) && (xc+y>0) ) { clscreen.cldoublebuffer[b1+a2+y] = c; }
+ 	if( (b1-a2<XRES*YRES) && (b1-a2>0) && (xc+y<XRES) && (xc+y>0) ) { clscreen.cldoublebuffer[b1-a2+y] = c; }
+ 	if( (b1+a2<XRES*YRES) && (b1+a2>0) && (xc-y<XRES) && (xc-y>0) ) { clscreen.cldoublebuffer[b1+a2-y] = c; }
+ 	if( (b1-a2<XRES*YRES) && (b1-a2>0) && (xc-y<XRES) && (xc-y>0) ) { clscreen.cldoublebuffer[b1-a2-y] = c; }
 	//*
 }
 
@@ -162,28 +165,28 @@ void CLgfx::drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const /
 	//*
 
 	//draw the four pixels for each (1/4) section of the ellipse
-	clscreen->cldoublebuffer[a+x+b] = c;
-	clscreen->cldoublebuffer[a-x+b] = c;
-	clscreen->cldoublebuffer[a-x-b] = c;
-	clscreen->cldoublebuffer[a+x-b] = c;
+	clscreen.cldoublebuffer[a+x+b] = c;
+	clscreen.cldoublebuffer[a-x+b] = c;
+	clscreen.cldoublebuffer[a-x-b] = c;
+	clscreen.cldoublebuffer[a+x-b] = c;
 	//*
 }
 
 uxlong CLgfx::readpixel(xlong x,xlong y) const //! critical
 {
 	if(isoff(x,y)) { return -1; }
-	return (clscreen->cldoublebuffer[(y*XRES)+x]);
+	return (clscreen.cldoublebuffer[(y*XRES)+x]);
 }
 
 void CLgfx::drawpixel(xlong x,xlong y,uxlong c,bool b) const //! critical
 {
 	if(isoff(x,y)) { return; }
-	clscreen->cldoublebuffer[(y*XRES)+x] = c;
+	clscreen.cldoublebuffer[(y*XRES)+x] = c;
 	if(b)
 	{
-		clscreen->cldoublebuffer[(y*XRES)+x+1] = c;
-		clscreen->cldoublebuffer[((y+1)*XRES)+x] = c;
-		clscreen->cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
+		clscreen.cldoublebuffer[(y*XRES)+x+1] = c;
+		clscreen.cldoublebuffer[((y+1)*XRES)+x] = c;
+		clscreen.cldoublebuffer[((y+1)*XRES)+(x+1)] = c;
 	}
 }
 
@@ -196,14 +199,14 @@ void CLgfx::drawpixeldirect(uxlong* b,xlong x,xlong y,uxlong c) const //! critic
 void CLgfx::copypixel(xlong x1,xlong y1,xlong x2,xlong y2) const //! critical
 {
 	if(isoff(x1,x2)||isoff(x2,y2)) { return; }
-	clscreen->cldoublebuffer[(y1*XRES)+x1] = clscreen->cldoublebuffer[(y2*XRES)+x2];
+	clscreen.cldoublebuffer[(y1*XRES)+x1] = clscreen.cldoublebuffer[(y2*XRES)+x2];
 }
 
 void CLgfx::drawblpixel(xlong x,xlong y,uxlong c1,uxlong c2,xlong i) const //! critical
 {
 	if(isoff(x,y)) { return; }
-	//else if(clsystem->getmilliseconds()%i<0) { clscreen->cldoublebuffer[(y*XRES)+x] = c1; }
-	//else { clscreen->cldoublebuffer[(y*XRES)+x] = c2; }
+	//else if(clsystem.getmilliseconds()%i<0) { clscreen.cldoublebuffer[(y*XRES)+x] = c1; }
+	//else { clscreen.cldoublebuffer[(y*XRES)+x] = c2; }
 }
 
 void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const //! critical
@@ -231,7 +234,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			b = y2;
 			if(a>b) { swap(&a,&b); }
 			offset = (a*XRES)+x1;
-			for(xlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset] = c; offset+=XRES; }
+			for(xlong i=a; i<=b; i++) { clscreen.cldoublebuffer[offset] = c; offset+=XRES; }
 		break;
 		
 		case -1:
@@ -239,7 +242,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			b = x2;
 			if(a>b) { swap(&a,&b); }
 			offset = (y1*XRES);
-			for(xlong i=a; i<=b; i++) { clscreen->cldoublebuffer[offset+i] = c; }
+			for(xlong i=a; i<=b; i++) { clscreen.cldoublebuffer[offset+i] = c; }
 		break;
 		
 		case 0:
@@ -254,7 +257,7 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 
 			for(xlong i=0; i<len; i++)
 			{
-				clscreen->cldoublebuffer[offset] = c;
+				clscreen.cldoublebuffer[offset] = c;
 				offset += xs;
 				e += dy;
 				if(e >= dx) { e -= dx; offset += ys; }
@@ -279,17 +282,17 @@ void CLgfx::drawline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c,bool aa) const
 			//aa as in xiaolin wu
 			for(xlong i=0; i<len; i++)
 			{
-				tcolor.dd = clscreen->cldoublebuffer[offset-xs];
+				tcolor.dd = clscreen.cldoublebuffer[offset-xs];
 				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
 				tcolor.db[2] = (tcolor.db[2] + ccolor.db[2])>>1;
 				tcolor.db[3] = (tcolor.db[3] + ccolor.db[3])>>1;	
-				clscreen->cldoublebuffer[offset-xs] = tcolor.dd;
-				clscreen->cldoublebuffer[offset] = c;
-				tcolor.dd = clscreen->cldoublebuffer[offset+xs];
+				clscreen.cldoublebuffer[offset-xs] = tcolor.dd;
+				clscreen.cldoublebuffer[offset] = c;
+				tcolor.dd = clscreen.cldoublebuffer[offset+xs];
 				tcolor.db[1] = (tcolor.db[1] + ccolor.db[1])>>1;
 				tcolor.db[2] = (tcolor.db[2] + ccolor.db[2])>>1;
 				tcolor.db[3] = (tcolor.db[3] + ccolor.db[3])>>1;	
-				clscreen->cldoublebuffer[offset+xs] = tcolor.dd;
+				clscreen.cldoublebuffer[offset+xs] = tcolor.dd;
 				offset += xs;
 				e += dy;
 				if(e >= dx) { e -= dx; offset += ys; }
@@ -335,21 +338,21 @@ void CLgfx::drawguirectangle(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c1,uxlon
 
 	for(xlong i=y1; i<=y2; i++)
 	{
-		clscreen->cldoublebuffer[offset1] = c3;
+		clscreen.cldoublebuffer[offset1] = c3;
 		offset1++;
 		for(xlong j=x1+1; j<x2; j++)
 		{
-			clscreen->cldoublebuffer[offset1] = c1;
+			clscreen.cldoublebuffer[offset1] = c1;
 			offset1++;
 		}
-		clscreen->cldoublebuffer[offset1] = c2;
+		clscreen.cldoublebuffer[offset1] = c2;
 		offset1 += XRES - diff;
 	}
 
 	for(xlong k=x1; k<x2; k++)
 	{
-		clscreen->cldoublebuffer[offset2] = c3;
-		clscreen->cldoublebuffer[offset2+doffset] = c2;
+		clscreen.cldoublebuffer[offset2] = c3;
+		clscreen.cldoublebuffer[offset2+doffset] = c2;
 		offset2++;
 	}
 }
@@ -367,7 +370,7 @@ void CLgfx::drawpolygon(xlong x1,xlong y1,xlong x2,xlong y2,xlong x3,xlong y3,xl
 void CLgfx::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const //! critical
 {
 	//angle preparations
-	xlong as = clmath->sign(a);
+	xlong as = clmath.sign(a);
 	a = a%180;
 	//*
 	
@@ -380,8 +383,8 @@ void CLgfx::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const 
 	float aby = ((-y1 + y2) / 2);
 	float abx2 = abx * abx; 
 	float aby2 = aby * aby;
-	float tana = clmath->tan(90-(a/2));
-	float hx = clmath->sqrt( (aby2 / abx2) * (tana * tana * (abx2 + aby2) ) );
+	float tana = clmath.tan(90-(a/2));
+	float hx = clmath.sqrt( (aby2 / abx2) * (tana * tana * (abx2 + aby2) ) );
 	float hy = -(abx / aby) * hx;
 	xlong x3 = xlong(x1 + abx + as*hx);
 	xlong y3 = xlong(y1 + aby + as*hy);
@@ -402,7 +405,7 @@ void CLgfx::drawarc(xlong x1,xlong y1,xlong x2,xlong y2,xlong a,uxlong c) const 
 		o = t*t; 
 		x = xlong(m * x1 + n * x3 + o * x2);
 		y = xlong(m * y1 + n * y3 + o * y2);
-		clscreen->cldoublebuffer[(y*XRES)+x] = c;
+		clscreen.cldoublebuffer[(y*XRES)+x] = c;
 	}
 	//*
 }
@@ -533,7 +536,7 @@ void CLgfx::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 		if( temp->x>=0 && temp->x<XRES && temp->y>=0 && temp->y<YRES && readpixel(temp->x,temp->y)==oc )
 		{
 			//fill the pixel with the new color
-			clscreen->cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
+			clscreen.cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -586,7 +589,7 @@ void CLgfx::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 		if( temp->x>=0 && temp->x<XRES && temp->y>=0 && temp->y<YRES && readpixel(temp->x,temp->y)!=fc )
 		{
 			//fill the pixel with the new color
-			clscreen->cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
+			clscreen.cldoublebuffer[((temp->y)*XRES)+(temp->x)] = nc;
 			//*
 			
 			//enque the four surrounding pixel
@@ -643,8 +646,8 @@ void CLgfx::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 		{
 			svalue = s->data[soffset];
 			istrans = svalue & 0xFF000000;
-			if(istrans != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue;
-			//clscreen->cldoublebuffer[doffset+j] = ((xlong(istrans!=0xFF000000)--) & svalue) + ((xlong(istrans==0xFF000000)--) & clscreen->cldoublebuffer[doffset+j])
+			if(istrans != 0xFF000000) { clscreen.cldoublebuffer[doffset+j] = svalue; }
+			//clscreen.cldoublebuffer[doffset+j] = ((xlong(istrans!=0xFF000000)--) & svalue) + ((xlong(istrans==0xFF000000)--) & clscreen.cldoublebuffer[doffset+j])
 			soffset++;
 		}
 		soffset += cdiff;
@@ -655,8 +658,8 @@ void CLgfx::drawsprite(xlong x,xlong y,sprite* s) const //! critical
 
 void CLgfx::drawspriterotated(xlong x,xlong y,sprite* s,xlong w) const //! critical
 {
-	float a = -clmath->tan(w/2);
-	float b = clmath->sin(w);
+	float a = -clmath.tan(w/2);
+	float b = clmath.sin(w);
 	float c = a;
 	
 	float t00 = 1+(a*b);
@@ -667,13 +670,13 @@ void CLgfx::drawspriterotated(xlong x,xlong y,sprite* s,xlong w) const //! criti
 	xlong f = 0;
 	xlong g = 0;
 	
-	for(xlong u=0; u<s->height; u++)
+	for(uxlong u=0; u<s->height; u++)
 	{
-		for(xlong v=0; v<s->width; v++)
+		for(uxlong v=0; v<s->width; v++)
 		{
 			f = (v*t00)+(u*t01);
 			g = (v*t10)+(u*t11);
-			clscreen->cldoublebuffer[g*XRES+f] = s->data[u*s->width+v];
+			clscreen.cldoublebuffer[(x+g)*XRES+(f+y)] = s->data[u*s->width+v];
 		}
 	}
 }
@@ -707,16 +710,16 @@ void CLgfx::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cri
 	xlong doffset = (ys * XRES) + xs;
 	xlong soffset = 0;
 	uxlong svalue = 0;
-	uxlong dvalue = 0;
+	//uxlong dvalue = 0;
 	//*
 
 	//set combinee
 	xlong tdiff = 0;
 	uxlong* tbuffer = 0;
-	if(t=0)
+	if(t==0)
 	{
 		tdiff = XRES;
-		tbuffer = clscreen->cldoublebuffer.getbuffer();
+		tbuffer = clscreen.cldoublebuffer.getbuffer();
 	}
 	else
 	{
@@ -733,23 +736,23 @@ void CLgfx::putsprite(xlong x,xlong y,sprite* s,sprite* t,xlong m) const //! cri
 			svalue = s->data[soffset];
 			switch(m)
 			{
-				case 0:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //normal
-				case 1:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //mirrored horizontal
-				case 2:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //mirrored vertical
-				case 3:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 90 degrees left
-				case 4:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 180 dgrees left
-				case 5:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 270 dgrees left
-				case 6:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 90 degrees right
-				case 7:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 180 degrees right
-				case 8:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //rotate 270 degrees right
-				case 9:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //and
-				case 10: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //or
-				case 11: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //xor
-				case 12: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //nand
-				case 13: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //nor
-				case 14: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //not
-				case 15: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //byte add
-				case 16: if( (svalue & 0xFF000000) != 0xFF000000) clscreen->cldoublebuffer[doffset+j] = svalue; break; //byte sub
+				case 0:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //normal
+				case 1:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //mirrored horizontal
+				case 2:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //mirrored vertical
+				case 3:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //rotate 90 degrees left
+				case 4:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //rotate 180 dgrees left
+				case 5:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //rotate 270 dgrees left
+				case 6:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //rotate 90 degrees right
+				case 7:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //rotate 180 degrees right
+				case 8:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //rotate 270 degrees right
+				case 9:  if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //and
+				case 10: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //or
+				case 11: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //xor
+				case 12: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //nand
+				case 13: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //nor
+				case 14: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //not
+				case 15: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //byte add
+				case 16: if( (svalue & 0xFF000000) != 0xFF000000) clscreen.cldoublebuffer[doffset+j] = svalue; break; //byte sub
 			}
 			soffset++;
 		}
@@ -763,19 +766,19 @@ void CLgfx::loadfonts(CLfile* f) //! critical
 {
 	fonts = new CLfont*[8];
 	CLar* fontsa = new CLar(f);
-	fonts[0] = clformat->loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
-	fonts[1] = clformat->loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
-	fonts[2] = clformat->loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
-	fonts[3] = clformat->loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
-	fonts[4] = clformat->loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),32,60);
-	fonts[5] = clformat->loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),32,32);
-	fonts[6] = clformat->loadtileset(fontsa->findbyname(u8"CLsymbtype.fnt"),16,16);
+	fonts[0] = clformat.loadtileset(fontsa->findbyname(u8"CLmonotype.fnt"),16,16);
+	fonts[1] = clformat.loadtileset(fontsa->findbyname(u8"CLteletype.fnt"),16,16);
+	fonts[2] = clformat.loadtileset(fontsa->findbyname(u8"CLlinetype.fnt"),16,16);
+	fonts[3] = clformat.loadtileset(fontsa->findbyname(u8"CLtermtype.fnt"),16,16);
+	fonts[4] = clformat.loadtileset(fontsa->findbyname(u8"CLsegmtype.fnt"),32,60);
+	fonts[5] = clformat.loadtileset(fontsa->findbyname(u8"CLtalltype.fnt"),32,32);
+	fonts[6] = clformat.loadtileset(fontsa->findbyname(u8"CLsymbtype.fnt"),16,16);
 }
 
-xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlong bc) const //! critical
+xlong CLgfx::drawfontchar(xlong x,xlong y,const uxlong a,uxlong f,uxlong fc,uxlong bc) const //! critical
 {
 	//select font
-	if(fonts==0) { return -1; }
+	if( (fonts==0) || (a>255) ) { return -1; }
 	if(f>6) { f = 0; }
 	CLfont* t = fonts[f];
 	//*
@@ -808,8 +811,8 @@ xlong CLgfx::drawfontchar(xlong x,xlong y,const xchar a,uxlong f,uxlong fc,uxlon
 		for(xlong j=0; j<swidth; j++)
 		{
 			srcval = t[a]->data[linearc];
-			if(srcval == 0x00FF0000) clscreen->cldoublebuffer[xoffset+j] = fc;
-			else if(bc!=0 && srcval == 0x00FFFFFF) clscreen->cldoublebuffer[xoffset+j] = bc;
+			if(srcval == 0x00FF0000) clscreen.cldoublebuffer[xoffset+j] = fc;
+			else if(bc!=0 && srcval == 0x00FFFFFF) clscreen.cldoublebuffer[xoffset+j] = bc;
 			if(i==0 && srcval != 0x00000000) rx++;
 			linearc++;
 		}
@@ -824,9 +827,9 @@ void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxl
 {
 	if(fonts==0) { return; }
 	if(f>6) { f = 0; }
-	if(s==0) { s = clstring->length(a); }
+	if(s==0) { s = clstring.length(a); }
 	xlong t = x;
-	xlong dx = fonts[f][0]->width;
+	//xlong dx = fonts[f][0]->width;
 	xlong dy = fonts[f][0]->height;
 	
 	for(xlong i=0; i<s; i++)
@@ -848,12 +851,12 @@ xlong CLgfx::getfontstringwidth(const char* a,uxlong f) const //! critical
 	CLfont* t = fonts[f];
 	//*
 	
-	xlong l = clstring->length(a);
+	xlong l = clstring.length(a);
 	xlong r = 0;
-	uxlong srcoff = 0;
+	//uxlong srcoff = 0;
 	
 	for(xlong i=0; i<l; i++)
-	{ for(xlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
+	{ for(uxlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
 	
 	return r;
 }
@@ -866,7 +869,7 @@ xlong CLgfx::getfontstringheight(const char* a,uxlong f) const //! critical
 	CLfont* t = fonts[f];
 	//*
 	
-	xlong l = clstring->length(a);
+	xlong l = clstring.length(a);
 	xlong r = t[0]->height;
 	
 	for(xlong i=0; i<l; i++) { if(a[i]=='\n') r += t[i]->height; }
@@ -882,7 +885,7 @@ sprite* CLgfx::savescreen() const //! critical
 	r->size = (XRES*YRES);
 	r->data = new uxlong[(r->size)];
 	
-	for(xlong i=0; i<r->size; i++) { r->data[i] = clscreen->cldoublebuffer[i]; }
+	for(uxlong i=0; i<r->size; i++) { r->data[i] = clscreen.cldoublebuffer[i]; }
 	
 	return r;
 }
@@ -893,7 +896,7 @@ void CLgfx::drawscreen(sprite* s) const //! critical
 	if(s->width==XRES && s->height==YRES)
 	{
 		//draw loop
-		for(xlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) { clscreen->cldoublebuffer[i] = s->data[i]; } }
+		for(uxlong i=0; i<s->size; i++) { if( (s->data[i] & 0xFF000000) != 0xFF) { clscreen.cldoublebuffer[i] = s->data[i]; } }
 		//*
 	}
 	//*

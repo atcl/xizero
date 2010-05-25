@@ -33,7 +33,7 @@ template <typename T>
 class CLbuffer : public CLbase<CLbuffer<T>,0>
 {
 	private:
-		static CLdetect* cldetect;
+		static CLdetect& cldetect;
 		
 	protected:
 		T* buffer;
@@ -43,7 +43,6 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 		
 	public:
 		CLbuffer(uxlong s,T i=0);
-		CLbuffer(const CLbuffer<T>& c);
 		~CLbuffer() { delete buffer; };
 		void clear(T v=0);
 		void copy(CLbuffer<T>* dst,xlong o=0) const;
@@ -54,7 +53,7 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 };
 
 template <typename T>
-CLdetect* CLbuffer<T>::cldetect = CLdetect::instance();
+CLdetect& CLbuffer<T>::cldetect = CLdetect::instance();
 ///*
 
 ///implementation
@@ -65,21 +64,10 @@ CLbuffer<T>::CLbuffer(uxlong s,T i) //! noncritical
 	size = s + (s%4); // make sure is a multiple of 16byte
 	bsize = size<<2;
 	buffer = new T[size];
-	ttype = cldetect->mmx() + cldetect->sse();
+	ttype = cldetect.mmx() + cldetect.sse();
 	ttype = 1; //temp!
 	clear(i);
 	//*
-}
-
-template <typename T>
-CLbuffer<T>::CLbuffer(const CLbuffer<T>& c) //! noncritical
-{
-	size = c.size;
-	bsize = c.bsize;
-	buffer = new T[size];
-	ttype = cldetect->mmx() + cldetect->sse();
-	ttype = 1; //temp!
-	c.copy(buffer);
 }
 
 template <typename T>

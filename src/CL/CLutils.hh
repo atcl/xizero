@@ -91,10 +91,10 @@ uxlong inline byteadd(uxlong a,uxlong b)
 {
 	doubleword xa = { a };
 	doubleword xb = { b };
-	xb.db[0] = xa.db[0] + xb.db[0]; xb.db[0] = (uxchar(xb.db[0]<xa.db[0]))-1 | xb.db[0];
-	xb.db[1] = xa.db[1] + xb.db[1]; xb.db[1] = (uxchar(xb.db[1]<xa.db[1]))-1 | xb.db[1];
-	xb.db[2] = xa.db[2] + xb.db[2]; xb.db[2] = (uxchar(xb.db[2]<xa.db[2]))-1 | xb.db[2];
-	xb.db[3] = xa.db[3] + xb.db[3]; xb.db[3] = (uxchar(xb.db[3]<xa.db[3]))-1 | xb.db[3];
+	xb.db[0] = xa.db[0] + xb.db[0]; xb.db[0] = ((uxchar(xb.db[0]<xa.db[0]))-1) | xb.db[0];
+	xb.db[1] = xa.db[1] + xb.db[1]; xb.db[1] = ((uxchar(xb.db[1]<xa.db[1]))-1) | xb.db[1];
+	xb.db[2] = xa.db[2] + xb.db[2]; xb.db[2] = ((uxchar(xb.db[2]<xa.db[2]))-1) | xb.db[2];
+	xb.db[3] = xa.db[3] + xb.db[3]; xb.db[3] = ((uxchar(xb.db[3]<xa.db[3]))-1) | xb.db[3];
 	return xb.dd;
 }
 
@@ -102,10 +102,10 @@ uxlong inline bytesub(uxlong a,uxlong b)
 {
 	doubleword xa = { a };
 	doubleword xb = { b };
-	xb.db[0] = xa.db[0] - xb.db[0]; xb.db[0] = (uxchar(xb.db[0]>xa.db[0]))-1 & xb.db[0];
-	xb.db[1] = xa.db[1] - xb.db[1]; xb.db[1] = (uxchar(xb.db[1]>xa.db[1]))-1 & xb.db[1];
-	xb.db[2] = xa.db[2] - xb.db[2]; xb.db[2] = (uxchar(xb.db[2]>xa.db[2]))-1 & xb.db[2];
-	xb.db[3] = xa.db[3] - xb.db[3]; xb.db[3] = (uxchar(xb.db[3]>xa.db[3]))-1 & xb.db[3];
+	xb.db[0] = xa.db[0] - xb.db[0]; xb.db[0] = ((uxchar(xb.db[0]>xa.db[0]))-1) & xb.db[0];
+	xb.db[1] = xa.db[1] - xb.db[1]; xb.db[1] = ((uxchar(xb.db[1]>xa.db[1]))-1) & xb.db[1];
+	xb.db[2] = xa.db[2] - xb.db[2]; xb.db[2] = ((uxchar(xb.db[2]>xa.db[2]))-1) & xb.db[2];
+	xb.db[3] = xa.db[3] - xb.db[3]; xb.db[3] = ((uxchar(xb.db[3]>xa.db[3]))-1) & xb.db[3];
 	return xb.dd;
 }
 

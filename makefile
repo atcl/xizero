@@ -1,12 +1,12 @@
-# Makefile
+#!/bin/make
 
 # Compile Flags
 CC      = g++
 WWFLAGS = -Wno-multichar -Wno-write-strings -Wno-pragmas
-WAFLAGS = -Wall
+WAFLAGS = -Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses
 O0FLAGS = -O0
 O2FLAGS = -O2
-OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
+OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time --param inline-unit-growth=200 --param large-function-growth=300
 LDFLAGS = -lglut -lalut 
 OUTPARA = -o 
 DEBUG   = -g
@@ -28,8 +28,9 @@ TARGET3 = utl/clbuilder
 TARGET4 = utl/asciimissile
 GAMEDAT = xizero.dat
 
-# Strip
+# Other
 STRIP   = strip -s -R .comment -R .gnu.version
+CPPCH   = cppcheck -a -v -s
 
 # File Operations
 RM      = rm
@@ -49,8 +50,12 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 # Compile:
 default:
 	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
-	$(STRIP) $(TARGET1)
-	$(XZDAT) 
+	#$(STRIP) $(TARGET1)
+	$(XZDAT)
+	
+none:
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
+	$(CPPCH) $(SOURCE1)
 
 install:
 	$(MK) $(BINDST)

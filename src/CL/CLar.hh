@@ -31,8 +31,8 @@
 class CLar : public CLbase<CLar,0>
 {
 	private:
-		static CLsystem* clsystem;
-		static CLstring* clstring; 
+		static CLsystem& clsystem;
+		static CLstring& clstring; 
 	protected:
 		CLfile** members;
 		uxlong   filecount;
@@ -47,14 +47,14 @@ class CLar : public CLbase<CLar,0>
 		uxlong  getfilecount() const { return filecount; };
 };
 
-CLsystem* CLar::clsystem = CLsystem::instance();
-CLstring* CLar::clstring = CLstring::instance();
+CLsystem& CLar::clsystem = CLsystem::instance();
+CLstring& CLar::clstring = CLstring::instance();
 ///*
 
 ///implementation
 CLar::CLar(CLfile* sf) { loadar(sf); } //! noncritical
 
-CLar::CLar(const xchar* sf) { loadar(clsystem->getfile(sf)); } //! noncritical
+CLar::CLar(const xchar* sf) { loadar(clsystem.getfile(sf)); } //! noncritical
 
 void CLar::loadar(CLfile* sf) //! noncritical
 {
@@ -67,26 +67,25 @@ void CLar::loadar(CLfile* sf) //! noncritical
 	//*
 
 	//check for "magic-string"
-	if( clstring->compare(bf,u8"!<arch>",6) != 0 )
+	if( clstring.compare(bf,u8"!<arch>",6) != 0 )
 	{
 		//init variables
 		xlong bc = 8;
 		xlong fc = 0;
 		xchar* fn;
 		xlong fs = 0;
-		xlong ts[10];
 		//*
 
 		//for each member do
 		do
 		{
 			//read member header
-			fn = clstring->copy(&bf[bc],16);	//member filename
-			bc += 48;					//no necessary information here, so skip
+			fn = clstring.copy(&bf[bc],16);	//member filename
+			bc += 48;						//no necessary information here, so skip
 			//*
 			
 			//decode filesize of current ar member
-			fs = clstring->tolong(&bf[bc]);
+			fs = clstring.tolong(&bf[bc]);
 			bc+=12; //goto end of header
 			//*
 
@@ -107,7 +106,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			tindex[fc] = new CLfile;
 			tindex[fc]->size = fs;
 			tindex[fc]->lsize = fs2;
-			tindex[fc]->name = clstring->copy(&fn[0],16);
+			tindex[fc]->name = clstring.copy(&fn[0],16);
 			tindex[fc]->data = tb;
 			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
 			//*
@@ -139,13 +138,13 @@ CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
 		xlong l = 0;
-		xlong m = clstring->length(e);
+		xlong m = clstring.length(e);
 		
 		for(uxlong h=0; h<filecount; h++)
 		{
 			while(members[h]->name[l]!='/') { l++; }
 			l-=m;
-			if(clstring->compare(&(members[h]->name[l]),e,m)!=0) { r = h; }
+			if(clstring.compare(&(members[h]->name[l]),e,m)!=0) { r = h; }
 		}
 		
 		if(r==-1) { return 0; }
@@ -156,7 +155,7 @@ CLfile* CLar::findbyname(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
 
-		for(uxlong h=0; h<filecount; h++) { if(clstring->compare(members[h]->name,e)!=0) { r = h; } }
+		for(uxlong h=0; h<filecount; h++) { if(clstring.compare(members[h]->name,e)!=0) { r = h; } }
 		
 		if(r==-1) { return 0; }
 		return members[r];

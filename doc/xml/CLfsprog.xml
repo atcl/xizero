@@ -6,7 +6,7 @@
 	
 	<filename>CLfsprog.hh</filename>
 	
-	<name>CLfsprogress</name>
+	<name>CLfsprog</name>
 	
 	<info></info>
 	
@@ -37,13 +37,13 @@
 	</attribute>
 	
 	<method ispublic="0" isstatic="0">
-		<name>CLfsprogress</name>
+		<name>CLfsprog</name>
 		<info>Constructor</info>
 		<example></example>
 	</method>
 
 	<method ispublic="0" isstatic="0">
-		<name>~CLfsprogress</name>
+		<name>~CLfsprog</name>
 		<info>Destructor</info>
 		<example></example>
 	</method>

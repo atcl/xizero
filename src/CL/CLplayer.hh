@@ -42,9 +42,9 @@ typedef CLlist<CLenemy> CLenemylist;
 class CLplayer : public CLentity<2>
 {
 	private:
-		static CLgame*   clgame;
-		static CLmath*   clmath;
-		static CLwindow* clwindow;
+		static CLgame&   clgame;
+		static CLmath&   clmath;
+		static CLwindow& clwindow;
 	protected:
 		CLprogress* hprog;
 		CLprogress* sprog;
@@ -60,9 +60,9 @@ class CLplayer : public CLentity<2>
 		void displayhud();
 };
 
-CLgame*   CLplayer::clgame   = CLgame::instance();
-CLmath*   CLplayer::clmath   = CLmath::instance();
-CLwindow* CLplayer::clwindow = CLwindow::instance();
+CLgame&   CLplayer::clgame   = CLgame::instance();
+CLmath&   CLplayer::clmath   = CLmath::instance();
+CLwindow& CLplayer::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -117,7 +117,7 @@ xlong CLplayer::collision(CLobject** ll) //! critical
 
 	//screen boundary collision test
 	tposition.y -= *mark;
-	xlong bc = clgame->boundary(tposition,*boundingbox[1][0]);
+	xlong bc = clgame.boundary(tposition,*boundingbox[1][0]);
 	tposition.y += *mark;
 
 	if(bc!=0)
@@ -143,7 +143,7 @@ xlong CLplayer::collision(CLobject** ll) //! critical
 	//*
 	
 	//adjust z position
-	if(clmath->absolute(zdiff)>1) { tposition.z = zdiff-12; }
+	if(clmath.absolute(zdiff)>1) { tposition.z = zdiff-12; }
 	//*	
 	
 	//adjust rotation around x and y axis
@@ -222,7 +222,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 		//*
 		
 		//init variables
-		xlong time = clwindow->getmilliseconds();
+		xlong time = clwindow.getmilliseconds();
 		model[0]->getmatrix()->unit();
 		model[1]->getmatrix()->unit();
 		bool what = 0;
@@ -238,7 +238,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 		}
 		//*
 
-		switch(clwindow->getinkey())
+		switch(clwindow.getinkey())
 		{
 			case UP: //stop backward driving and drive forward
 				//~ if(gear==-1) { gear=0; setspeed(); }
@@ -253,7 +253,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 			break; //*
 		}
 
-		switch(clwindow->getturbo())
+		switch(clwindow.getturbo())
 		{
 			case LEFT: //arrow left -> turn left
 				tempangle = 3;
@@ -288,7 +288,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 			case 'w': //w -> reset tower
 			if( (angles[1].z - angles[0].z) >  180) { angles[1].z -= 360; } 
 			if( (angles[1].z - angles[0].z) < -180) { angles[1].z += 360; }
-			tempangle = clmath->sign(angles[0].z-angles[1].z) * 5;
+			tempangle = clmath.sign(angles[0].z-angles[1].z) * 5;
 			model[1]->getmatrix()->rotate(0,0,tempangle);
 			pretransform(1);
 			what=1;
@@ -376,9 +376,9 @@ void CLplayer::showbox() //! noncritical
 	d.y -= boundingbox[1][0]->c[3].y;
 	d.z += boundingbox[1][0]->c[3].z;
 	
-	CLgfx::instance()->drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
-	CLgfx::instance()->drawpixel(d.x,d.y,0,1);
-	CLgfx::instance()->drawpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0,1);
+	CLgfx::instance().drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
+	CLgfx::instance().drawpixel(d.x,d.y,0,1);
+	CLgfx::instance().drawpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0,1);
 }
 //*
 

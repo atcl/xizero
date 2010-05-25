@@ -57,10 +57,11 @@
 class CLdetect : public CLbase<CLdetect,1>
 {
 	friend class CLbase<CLdetect,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLsystem* clsystem;
-		static CLstring* clstring;
+		static CLsystem& clsystem;
+		static CLstring& clstring;
 	protected:
 		uxlong tram;
 		uxlong fram;
@@ -83,8 +84,8 @@ class CLdetect : public CLbase<CLdetect,1>
 		bool sse() const  { return havesse; };
 };
 
-CLsystem* CLdetect::clsystem = CLsystem::instance();
-CLstring* CLdetect::clstring = CLstring::instance();
+CLsystem& CLdetect::clsystem = CLsystem::instance();
+CLstring& CLdetect::clstring = CLstring::instance();
 ///*
 
 ///implementation
@@ -103,11 +104,11 @@ CLdetect::CLdetect() //! noncritical
 	//*
 	
 	//check ram
-	CLfile* mem = clsystem->getfile("/proc/meminfo");
-	xlong p = clstring->find(mem->text,"MemTotal:");
-	tram = clstring->tolong(&(mem->text[p+9])) / 1024;
-	p = clstring->find(mem->text,"MemFree:");
-	fram = clstring->tolong(&(mem->text[p+8])) / 1024;
+	CLfile* mem = clsystem.getfile("/proc/meminfo");
+	xlong p = clstring.find(mem->text,"MemTotal:");
+	tram = clstring.tolong(&(mem->text[p+9])) / 1024;
+	p = clstring.find(mem->text,"MemFree:");
+	fram = clstring.tolong(&(mem->text[p+8])) / 1024;
 	//*
 	
 	//process cuid results here so vars can find way back
@@ -128,9 +129,9 @@ CLdetect::CLdetect() //! noncritical
 
 uxlong CLdetect::freeram()
 {
-	CLfile* mem = clsystem->getfile("/proc/meminfo");
-	xlong p = clstring->find(mem->text,"MemFree:");
-	fram = clstring->tolong(&(mem->text[p+8])) / 1024;
+	CLfile* mem = clsystem.getfile("/proc/meminfo");
+	xlong p = clstring.find(mem->text,"MemFree:");
+	fram = clstring.tolong(&(mem->text[p+8])) / 1024;
 }
 ///*
 

@@ -48,10 +48,9 @@ typedef CLlist<CLammo> CLammolist;
 class CLammomanager : public CLbase<CLammomanager,0>
 {
 	private:
-		static CLsprites* clsprites;
-		static CLwindow*  clwindow;
-		static CLgame*    clgame;
-		static CLmath*    clmath;
+		static CLwindow&  clwindow;
+		static CLgame&    clgame;
+		static CLmath&    clmath;
 	protected:
 		CLammolist* list;
 		CLammo**    type;
@@ -68,10 +67,9 @@ class CLammomanager : public CLbase<CLammomanager,0>
 		void pause();
 };
 
-CLsprites* CLammomanager::clsprites = CLsprites::instance();
-CLwindow*  CLammomanager::clwindow  = CLwindow::instance();
-CLgame*    CLammomanager::clgame    = CLgame::instance();
-CLmath*    CLammomanager::clmath    = CLmath::instance();
+CLwindow&  CLammomanager::clwindow  = CLwindow::instance();
+CLgame&    CLammomanager::clgame    = CLgame::instance();
+CLmath&    CLammomanager::clmath    = CLmath::instance();
 ///*
 
 ///implementation
@@ -92,10 +90,10 @@ CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* mark
 			type[i]->s = CLfvector();
 			switch(ammotypelist[i])
 			{
-				case 0:  type[i]->comsprite = CLsprites::drawplasma; break;
-				case 1:  type[i]->comsprite = CLsprites::drawantimatter; break;
+				case 0:  type[i]->comsprite = CLcomspr::drawplasma; break;
+				case 1:  type[i]->comsprite = CLcomspr::drawantimatter; break;
 				
-				default: type[i]->comsprite = CLsprites::drawplasma; break;
+				default: type[i]->comsprite = CLcomspr::drawplasma; break;
 			}
 	}
 	//*
@@ -123,7 +121,7 @@ void CLammomanager::fire(xlong at,const CLfvector& startposition,const CLfvector
 
 void CLammomanager::update() //! critical
 {
-	xlong time = clwindow->getmilliseconds();
+	xlong time = clwindow.getmilliseconds();
 	bool listfix=0;
 	CLammo* curr = 0;
 	
@@ -143,7 +141,7 @@ void CLammomanager::update() //! critical
 		//*
 		
 		//check if current ammo left screen
-		if(clgame->boundary(curr->p,*mark)!=0)
+		if(clgame.boundary(curr->p,*mark)!=0)
 		{
 			list->delcurrent(0);
 			listfix = list->isfirst();
@@ -173,7 +171,7 @@ void CLammomanager::collision(CLentity<I>* e) //! critical
 		//*
 		
 		//test the current ammo for collision with any opposite entity
-		if(e->isvisible() && clgame->collision2d(*(e->getposition()),*(e->getboundingbox()),curr->p,clmath->delta(i))==0)
+		if(e->isvisible() && clgame.collision2d(*(e->getposition()),*(e->getboundingbox()),curr->p,clmath.delta(i))==0)
 		{
 			r++;
 			list->delcurrent(0);
@@ -184,7 +182,7 @@ void CLammomanager::collision(CLentity<I>* e) //! critical
 	//*
 	
 	//if hit opposing entity let it know
-	if(r!=0) e->hit(r);
+	if(r!=0) { e->hit(r); }
 	//*
 }
 
@@ -201,7 +199,7 @@ void CLammomanager::display() const //! critical
 	//*
 }
 
-void CLammomanager::pause() { last = clwindow->getmilliseconds(); } //! noncritical
+void CLammomanager::pause() { last = clwindow.getmilliseconds(); } //! noncritical
 ///*
 
 #endif

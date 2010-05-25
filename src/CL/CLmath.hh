@@ -38,6 +38,7 @@
 class CLmath : public CLbase<CLmath,1>
 {
 	friend class CLbase<CLmath,1>;
+	friend class CLglobal;
 	
 	private:
 	
@@ -164,7 +165,7 @@ template<typename T>
 T CLmath::heaviside(T x) const { return T(x>0); } //! noncritical
 
 template<>
-xlong CLmath::absolute<xlong>(xlong x) const { return (xlong(x>0)-1 ^ x) + xlong(x<0); } //! noncritical
+xlong CLmath::absolute<xlong>(xlong x) const { return ((xlong(x>0)-1) ^ x) + xlong(x<0); } //! noncritical
 
 template<>
 float CLmath::absolute<float>(float x) const //! noncritical
@@ -293,12 +294,12 @@ float CLmath::tan(xlong x) const //! noncritical
 
 xlong CLmath::arcsin(float x) const //! critical
 { 
-	
+	return x; //! todo
 }
 
 xlong CLmath::arccos(float x) const //! critical
 {
-	
+	return x; //! todo
 }
 
 xlong CLmath::arctan(float x) const //! critical

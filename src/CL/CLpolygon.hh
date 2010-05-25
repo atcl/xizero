@@ -16,7 +16,6 @@
 #include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLbuffer.hh"
-#include "CLglobals.hh"
 #include "CLutils.hh"
 ///*
 
@@ -43,8 +42,8 @@ struct screenside
 class CLpolygon : CLbase<CLpolygon,0>
 {
 	private:
-		static CLmath*   clmath;
-		static CLscreen* clscreen;
+		static CLmath&   clmath;
+		static CLscreen& clscreen;
 	protected:
 		static xlong pointcount;
 		static float shadezscale;
@@ -94,8 +93,9 @@ class CLpolygon : CLbase<CLpolygon,0>
 		bool isinside(CLfvector* p) const;
 };
 
-CLmath*   CLpolygon::clmath   = CLmath::instance();
-CLscreen* CLpolygon::clscreen = CLscreen::instance();
+CLmath&   CLpolygon::clmath   = CLmath::instance();
+CLscreen& CLpolygon::clscreen = CLscreen::instance();
+
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
 CLfvector* CLpolygon::vpoint = new CLfvector[8];
@@ -126,7 +126,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! criti
 
 	for(xlong i=0; i<length; i++)
 	{
-		clscreen->cldoublebuffer[offset] = c;
+		clscreen.cldoublebuffer[offset] = c;
 		offset += xs;
 		e += dy;
 		if(e >= dx)
@@ -398,8 +398,8 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight) //! critical
 {
 	doubleword argb = { 0 };
 
-	float t = (normal * cllight) / ( !normal * !cllight );
-	t = clmath->absolute(t);
+	float t = (normal * clscreen.cllight) / ( !normal * !clscreen.cllight );
+	t = clmath.absolute(t);
 	
 	if(t > 1) { t = 1; }
 
@@ -407,7 +407,7 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight) //! critical
 	if(t<0.1)
 	{
 		if(ambient) { ambientlighting = 25; }
-		else { shade = nolight; return; }
+		else { shade = clscreen.clnolight; return; }
 	}
 
 	uxchar zlevellighting = 0; 
@@ -499,10 +499,10 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 			case 0:
 				while(length > 0)
 				{
-					if(actz < clscreen->clzbuffer[offset] || (actz==clscreen->clzbuffer[offset] &&normal.z<0) )
+					if(actz < clscreen.clzbuffer[offset] || (actz==clscreen.clzbuffer[offset] &&normal.z<0) )
 					{
-						clscreen->cldoublebuffer[offset] = shade;
-						clscreen->clzbuffer[offset] = actz;
+						clscreen.cldoublebuffer[offset] = shade;
+						clscreen.clzbuffer[offset] = actz;
 					}
 					
 					offset++;
@@ -516,7 +516,7 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 			case 1:
 				while(length > 0)
 				{
-					clscreen->clstencilbuffer[offset] = scolor;
+					clscreen.clstencilbuffer[offset] = scolor;
 					
 					offset++;
 					length--;

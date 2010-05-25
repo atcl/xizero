@@ -42,6 +42,7 @@ class CLglobal;
 class CLapp : public CLbase<CLapp,1>
 {
 	friend class CLbase<CLapp,1>;
+	friend class CLglobal;
 	
 	protected:
 		const xchar* title;
@@ -52,7 +53,7 @@ class CLapp : public CLbase<CLapp,1>
 		CLapp();
 		~CLapp() { };
 	public:
-		void exit(const xlong r=0,const xchar* m="",CLglobal* g=0) const;
+		void exit(const xlong r=0,const xchar* m="") const;
 		xchar inkey(const bool b) const { return xchar(getchar()); };
 		const xchar* gettitle() const { return title; };
 		const xchar** geticon() const { return icon; };
@@ -72,10 +73,9 @@ CLapp::CLapp() : title(TITLE), version(VERSION), icon(CLicon), exename(NAME) //!
 	tty(title); tty(" ("); tty(exename); tty(") version:"); tty(version); tty(" size:"); tty(size); say("KB");
 }
 
-void CLapp::exit(const xlong r,const xchar* m,CLglobal* g) const //! noncritical
+void CLapp::exit(const xlong r,const xchar* m) const //! noncritical
 {
 	say(m);
-	if(g!=0) { delete g; }
 	::exit(r);
 }
 ///*

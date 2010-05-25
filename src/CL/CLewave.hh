@@ -25,7 +25,7 @@
 class CLewave : public CLentity<1>
 {
 	private:
-		static CLwindow* clwindow;
+		static CLwindow& clwindow;
 	protected:
 		bool updown;
 	public:
@@ -34,7 +34,7 @@ class CLewave : public CLentity<1>
 		xlong update();
 };
 
-CLwindow* CLewave::clwindow = CLwindow::instance();
+CLwindow& CLewave::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -108,7 +108,7 @@ CLewave::CLewave(bool ud) //! noncritical
 	
 	//set remaining entity attributes
 	visible = active = 0;
-	lastupdate = clwindow->getmilliseconds();
+	lastupdate = clwindow.getmilliseconds();
 	//*
 }
 
@@ -122,7 +122,7 @@ xlong CLewave::update() //! critical
 	
 	if(active==1)
 	{
-		xlong time = clwindow->getmilliseconds();
+		xlong time = clwindow.getmilliseconds();
 		
 		//update position
 		float inter = time-lastupdate;
@@ -133,7 +133,7 @@ xlong CLewave::update() //! critical
 		//*
 		
 	}
-	else { lastupdate = clwindow->getmilliseconds(); }
+	else { lastupdate = clwindow.getmilliseconds(); }
 	
 	return -1;
 }

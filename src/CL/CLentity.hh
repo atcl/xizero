@@ -46,10 +46,10 @@ template<int I>
 class CLentity : public CLbase<CLentity<I>,0>
 {
 	private:
-		static CLmisc3d* clmisc3d;
-		static CLformat* clformat;
-		static CLstring* clstring;
-		static CLwindow* clwindow;
+		static CLmisc3d& clmisc3d;
+		static CLformat& clformat;
+		static CLstring& clstring;
+		static CLwindow& clwindow;
 	protected:
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -109,10 +109,10 @@ class CLentity : public CLbase<CLentity<I>,0>
 		void pause();
 };
 
-template<int I>CLmisc3d* CLentity<I>::clmisc3d = CLmisc3d::instance();
-template<int I>CLformat* CLentity<I>::clformat = CLformat::instance();
-template<int I>CLstring* CLentity<I>::clstring = CLstring::instance();
-template<int I>CLwindow* CLentity<I>::clwindow = CLwindow::instance();
+template<int I>CLmisc3d& CLentity<I>::clmisc3d = CLmisc3d::instance();
+template<int I>CLformat& CLentity<I>::clformat = CLformat::instance();
+template<int I>CLstring& CLentity<I>::clstring = CLstring::instance();
+template<int I>CLwindow& CLentity<I>::clwindow = CLwindow::instance();
 ///*
 
 ///implementations
@@ -138,7 +138,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 	startposition.x = ammodocking->x;
 	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;
-	clmisc3d->project(startposition,position);
+	clmisc3d.project(startposition,position);
 	ammoman->fire(at,startposition,targetdirection);
 	//clsound->play(sndfire);
 }
@@ -190,22 +190,22 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	//find and load definition (*.ini)
 	CLfile* entitydefinitionfile = entitya->findbyextension(u8".ini");
 	if(entitydefinitionfile==0) err(__FILE__,__func__,u8"no entity definition found");
-	def = clformat->loadini(entitydefinitionfile);
+	def = clformat.loadini(entitydefinitionfile);
 	//*
 	
 	//load entity attributes
-	maxspeed    = clstring->tolong((*def)[u8"speed"]);
-	healthmax   = health = clstring->tolong((*def)[u8"health"]);
-	shieldmax   = shield = clstring->tolong((*def)[u8"shield"]);
-	shieldrate	= clstring->tolong((*def)[u8"shieldrate"]);
-	armor		= clstring->tolong((*def)[u8"armor"]);
-	ammomounts	= clstring->tolong((*def)[u8"ammomounts"]);
-	points		= 10; //CLstring->tolong((*def)["points"]);
+	maxspeed    = clstring.tolong((*def)[u8"speed"]);
+	healthmax   = health = clstring.tolong((*def)[u8"health"]);
+	shieldmax   = shield = clstring.tolong((*def)[u8"shield"]);
+	shieldrate	= clstring.tolong((*def)[u8"shieldrate"]);
+	armor		= clstring.tolong((*def)[u8"armor"]);
+	ammomounts	= clstring.tolong((*def)[u8"ammomounts"]);
+	points		= 10; //CLstring.tolong((*def)["points"]);
 	//*
 	
 	//set remaining entity attributes
 	speeddir = speed = gear = visible = active = 0;
-	shieldupdate = lastupdate = clwindow->getmilliseconds();
+	shieldupdate = lastupdate = clwindow.getmilliseconds();
 	//*
 	
 	//load ammo types and create ammo manager
@@ -216,8 +216,8 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	fireupdate = new xlong[ammomounts];
 	for(xlong j=0; j<ammomounts; j++)
 	{
-		ammotype[j] = clstring->tolong((*def)[ammoext[j]]);
-		firerate[j] = clstring->tolong((*def)[fireext[j]]);
+		ammotype[j] = clstring.tolong((*def)[ammoext[j]]);
+		firerate[j] = clstring.tolong((*def)[fireext[j]]);
 		fireupdate[j] = lastupdate;
 	}
 	ammoman = new CLammomanager(ammomounts,ammotype,mark);
@@ -226,7 +226,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	//load csv if present (*.csv)
 	csv = 0;
 	CLfile* entityaifile = entitya->findbyextension(u8".csv");
-	if(entityaifile!=0) csv = clformat->loadcsv(entityaifile);
+	if(entityaifile!=0) csv = clformat.loadcsv(entityaifile);
 	//*
 	
 	//delete entitya
@@ -283,7 +283,7 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	
 	//set remaining entity attributes
 	speeddir = speed = gear = visible = active = 0;
-	shieldupdate = lastupdate = clwindow->getmilliseconds();
+	shieldupdate = lastupdate = clwindow.getmilliseconds();
 	//*
 	
 	//load ammo types and create ammo manager
@@ -356,14 +356,14 @@ void CLentity<I>::hit(xlong h) //! critical
 template<int I>
 void CLentity<I>::start() //! noncritical
 {
-	xlong currtime = shieldupdate = lastupdate = clwindow->getmilliseconds();
+	xlong currtime = shieldupdate = lastupdate = clwindow.getmilliseconds();
 	for(xlong i=0; i<ammomounts; i++) { fireupdate[i] = currtime; }
 } 
 
 template<int I>
 void CLentity<I>::pause() //! noncritical
 {
-	xlong currtime = shieldupdate = lastupdate = clwindow->getmilliseconds();
+	xlong currtime = shieldupdate = lastupdate = clwindow.getmilliseconds();
 	for(xlong i=0; i<ammomounts; i++) { fireupdate[i] = currtime; }
 	ammoman->pause();
 }

@@ -39,8 +39,8 @@
 class CLenemy : public CLentity<1>
 {
 	private:
-		static CLgame*   clgame;
-		static CLstring* clstring;
+		static CLgame&   clgame;
+		static CLstring& clstring;
 	protected:
 		CLprogress* hprog;
 		xlong*      aiarray;
@@ -60,8 +60,8 @@ class CLenemy : public CLentity<1>
 		void displayhud() const;
 };
 
-CLgame*   CLenemy::clgame   = CLgame::instance();
-CLstring* CLenemy::clstring = CLstring::instance();
+CLgame&   CLenemy::clgame   = CLgame::instance();
+CLstring& CLenemy::clstring = CLstring::instance();
 ///*
 
 ///implementation
@@ -88,15 +88,15 @@ void CLenemy::cruise() //! critical
 		break;
 		
 		case 4: //oscillate
-			if(speed.x==0) speed.x = -maxspeed/20;
-			if(position.x<=200 && speed.x==maxspeed/20) speed.x = -maxspeed/20;
-			if(position.x>=600 && speed.x==-maxspeed/20) speed.x = maxspeed/20;
+			if(speed.x==0) { speed.x = -maxspeed/20; }
+			if(position.x<=200 && speed.x==maxspeed/20) { speed.x = -maxspeed/20; }
+			if(position.x>=600 && speed.x==-maxspeed/20) { speed.x = maxspeed/20; }
 		break;
 		
 		case 5: //oscillate following
-			if(speed.x==0) speed.x = -maxspeed/20;
-			if(position.x<=200 && speed.x==maxspeed/20) speed.x = -maxspeed/20;
-			if(position.x>=600 && speed.x==-maxspeed/20) speed.x = maxspeed/20;
+			if(speed.x==0) { speed.x = -maxspeed/20; }
+			if(position.x<=200 && speed.x==maxspeed/20) { speed.x = -maxspeed/20; }
+			if(position.x>=600 && speed.x==-maxspeed/20) { speed.x = maxspeed/20; }
 		break;
 	}		
 	//*
@@ -131,7 +131,7 @@ xlong CLenemy::collision() //! critical
 
 	//screen boundary collision test
 	tposition.y -= *mark;
-	xlong bc = clgame->boundary(tposition,*boundingbox[1][0],1);
+	xlong bc = clgame.boundary(tposition,*boundingbox[1][0],1);
 	tposition.y += *mark;
 	//terrain collision does not apply
 	if(bc!=0) { visible = 1; }
@@ -171,7 +171,7 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<
 	//*
 	
 	//set enemy specific attributes
-	points = clstring->tolong((*def)[u8"points"]);
+	points = clstring.tolong((*def)[u8"points"]);
 	speeddir.y  = maxspeed/20;
 	direction[0].y = -1;
 	//*
@@ -259,14 +259,14 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	
 	if(active==1)
 	{
-		xlong time = clwindow->getmilliseconds();
+		xlong time = clwindow.getmilliseconds();
 
 		model[0]->getmatrix()->unit();
 		
 		cruise();
 		
 		//fire at player?
-		xlong fc = clgame->collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
+		xlong fc = clgame.collision(position,*aggrobox,*(p->getposition()),*(p->getboundingbox()),1);
 		if( fc != 0 )
 		{
 			if(time >= fireupdate[0] + firerate[0])
@@ -298,7 +298,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 		//*
 	}
 	else if(active==-1) { if(expl[0]->next()==1) return points; }
-	else { lastupdate = clwindow->getmilliseconds(); }
+	else { lastupdate = clwindow.getmilliseconds(); }
 	
 	return -1;
 }

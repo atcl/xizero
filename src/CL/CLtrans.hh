@@ -21,7 +21,7 @@
 ///*
 
 ///header
-/* class name:	CLtranstions
+/* class name:	CLtrans
  * 
  * description:	some screen transitions
  * 
@@ -34,50 +34,51 @@
 ///*
 
 ///definitions
-class CLtransitions : public CLbase<CLtransitions,1>
+class CLtrans : public CLbase<CLtrans,1>
 {
-	friend class CLbase<CLtransitions,1>;
+	friend class CLbase<CLtrans,1>;
+	friend class CLglobal;
 	
 	private:
-		static CLwindow* clwindow;
-		static CLsystem* clsystem;
-		static CLmath*   clmath;
-		static CLgfx*    clgfx;
-		static CLscreen* clscreen;
+		static CLwindow& clwindow;
+		static CLsystem& clsystem;
+		static CLmath&   clmath;
+		static CLgfx&    clgfx;
+		static CLscreen& clscreen;
 	protected:
-		CLtransitions() { };
-		~CLtransitions() { };
+		CLtrans() { };
+		~CLtrans() { };
 	public:
 		void circleblend(xlong x,xlong y,xlong r) const;
 		void dissolve() const;
 		void fadetoblack() const;
 };
 
-CLwindow* CLtransitions::clwindow = CLwindow::instance();
-CLsystem* CLtransitions::clsystem = CLsystem::instance();
-CLmath*   CLtransitions::clmath   = CLmath::instance();
-CLgfx*    CLtransitions::clgfx    = CLgfx::instance();
-CLscreen* CLtransitions::clscreen = CLscreen::instance();
+CLwindow& CLtrans::clwindow = CLwindow::instance();
+CLsystem& CLtrans::clsystem = CLsystem::instance();
+CLmath&   CLtrans::clmath   = CLmath::instance();
+CLgfx&    CLtrans::clgfx    = CLgfx::instance();
+CLscreen& CLtrans::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
-void CLtransitions::circleblend(xlong x,xlong y,xlong r) const //! critical
+void CLtrans::circleblend(xlong x,xlong y,xlong r) const //! critical
 {
 	for(xlong i=YRES/2; i>r; i--)
 	{
-		clgfx->drawclipcircle(x,y,i,0x00FFFFFF);
-		clgfx->drawclipcircle(x-1,y,i+1,0x00FFFFFF);
-		clgfx->drawclipcircle(x+1,y,i+1,0x00FFFFFF);
-		clgfx->drawclipcircle(x,y-1,i+1,0x00FFFFFF);
-		clgfx->drawclipcircle(x,y+1,i+1,0x00FFFFFF);
+		clgfx.drawclipcircle(x,y,i,0x00FFFFFF);
+		clgfx.drawclipcircle(x-1,y,i+1,0x00FFFFFF);
+		clgfx.drawclipcircle(x+1,y,i+1,0x00FFFFFF);
+		clgfx.drawclipcircle(x,y-1,i+1,0x00FFFFFF);
+		clgfx.drawclipcircle(x,y+1,i+1,0x00FFFFFF);
 		//...
-		clwindow->run();
-		clwindow->sleep(5);
+		clwindow.run();
+		clwindow.sleep(5);
 	}
-	clwindow->sleep(1000);
+	clwindow.sleep(1000);
 }
 
-void CLtransitions::dissolve() const //! critical
+void CLtrans::dissolve() const //! critical
 {
 	xlong rx = 0;
 	xlong ry = 0;
@@ -87,18 +88,18 @@ void CLtransitions::dissolve() const //! critical
 	{
 		for(xlong j=0; j<1000; j++)
 		{
-			rx = clmath->random(800);
-			ry = clmath->random(600);
-			c = clmath->random(-1);
-			clgfx->drawpixel(rx,ry,c,1);
+			rx = clmath.random(800);
+			ry = clmath.random(600);
+			c = clmath.random(-1);
+			clgfx.drawpixel(rx,ry,c,1);
 		}
-		clwindow->run();
-		clwindow->sleep(10);
+		clwindow.run();
+		clwindow.sleep(10);
 	}
-	//clwindow->sleep(1000);
+	//clwindow.sleep(1000);
 }
 
-void CLtransitions::fadetoblack() const //! critical
+void CLtrans::fadetoblack() const //! critical
 {
 	doubleword comp = { 0 };
 	
@@ -106,17 +107,17 @@ void CLtransitions::fadetoblack() const //! critical
 	{		
 		for(xlong j=0; j<(XRES*YRES); j++)
 		{
-			comp.dd = clscreen->cldoublebuffer[j];
+			comp.dd = clscreen.cldoublebuffer[j];
 			if(comp.db[0] > 0) comp.db[0]--;
 			if(comp.db[1] > 0) comp.db[1]--;
 			if(comp.db[2] > 0) comp.db[2]--;
 			if(comp.db[3] > 0) comp.db[3]--;
-			clscreen->cldoublebuffer[j] = comp.dd;
+			clscreen.cldoublebuffer[j] = comp.dd;
 		}
-		clwindow->run();
-		clwindow->sleep(5);
+		clwindow.run();
+		clwindow.sleep(5);
 	}
-	//clwindow->sleep(1000);
+	//clwindow.sleep(1000);
 }
 ///*
 

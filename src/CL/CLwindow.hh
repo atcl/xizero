@@ -38,12 +38,13 @@
 class CLwindow : public CLbase<CLwindow,1>
 {
 	friend class CLbase<CLwindow,1>;
+	friend class CLglobal;
 	friend class CLmsgbox;
 	
 	private:
-		static CLformat* clformat;
-		static CLgfx*    clgfx;
-		static CLscreen* clscreen;
+		static CLformat& clformat;
+		static CLgfx&    clgfx;
+		static CLscreen& clscreen;
 	protected:
 		static bool drawcursor;
 		static sprite* cursor;
@@ -89,9 +90,9 @@ class CLwindow : public CLbase<CLwindow,1>
 		xlong getfps();
 };
 
-CLformat* CLwindow::clformat = CLformat::instance();
-CLgfx*    CLwindow::clgfx    = CLgfx::instance();
-CLscreen* CLwindow::clscreen = CLscreen::instance();
+CLformat& CLwindow::clformat = CLformat::instance();
+CLgfx&    CLwindow::clgfx    = CLgfx::instance();
+CLscreen& CLwindow::clscreen = CLscreen::instance();
 uxchar CLwindow::syskey = 0;
 xlong CLwindow::keydn = 0;
 xlong CLwindow::turbo = 0;
@@ -99,7 +100,7 @@ xlong CLwindow::mousex = 0;
 xlong CLwindow::mousey = 0;
 xlong CLwindow::mouselb = 0;	
 xlong CLwindow::mouserb = 0;
-uxlong* CLwindow::framebuffer = clscreen->cldoublebuffer.getbuffer();
+uxlong* CLwindow::framebuffer = clscreen.cldoublebuffer.getbuffer();
 sprite* CLwindow::cursor = 0;
 bool CLwindow::drawcursor = 0;
 ///*
@@ -228,7 +229,7 @@ CLwindow::CLwindow() //! noncritical
 
 void CLwindow::draw() //! noncritical
 {
-	if(cursor!=0 && drawcursor==1) { clgfx->drawsprite(mousex,mousey,cursor); }
+	if(cursor!=0 && drawcursor==1) { clgfx.drawsprite(mousex,mousey,cursor); }
 	glRasterPos2i(-1,1);
 	glPixelZoom(1.0,-1.0);
 	glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer); 

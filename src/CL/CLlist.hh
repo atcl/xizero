@@ -239,7 +239,7 @@ void CLlist<member>::smash() //! noncritical
 {
 	//delete all list members data
 	current = first;
-	while(current!=last);
+	while(current!=last)
 	{
 		//delete current->data;
 		setnext();

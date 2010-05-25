@@ -15,7 +15,7 @@
 ///*
 
 ///header
-/* class name:	CLfsprogress
+/* class name:	CLfsprog
  * 
  * description:	A full screen half transparent progress bar.
  * 
@@ -28,18 +28,19 @@
 ///*
 
 ///definitions
-class CLfsprogress : public CLbase<CLfsprogress,1>
+class CLfsprog : public CLbase<CLfsprog,1>
 {
-	friend class CLbase<CLfsprogress,1>;
-		
+	friend class CLbase<CLfsprog,1>;
+	friend class CLglobal;
+	
 	private:
-		static CLscreen* clscreen;
+		static CLscreen& clscreen;
 	protected:
 		xlong pprogress; //0-100 (%)
 		xlong rprogress;
 		uxlong pcolor;
-		CLfsprogress();
-		~CLfsprogress() { };
+		CLfsprog();
+		~CLfsprog() { };
 	public:
 		void draw() const;
 		void set(xlong p);
@@ -48,13 +49,13 @@ class CLfsprogress : public CLbase<CLfsprogress,1>
 		xlong get() const { return pprogress; };
 };
 
-CLscreen* CLfsprogress::clscreen = CLscreen::instance();
+CLscreen& CLfsprog::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
-CLfsprogress::CLfsprogress() { pprogress = rprogress = 0; pcolor = 0x00FF0000;} //! noncritical
+CLfsprog::CLfsprog() { pprogress = rprogress = 0; pcolor = 0x00FF0000;} //! noncritical
 
-void CLfsprogress::draw() const //! critical
+void CLfsprog::draw() const //! critical
 {
 	//draw full screen progress bar
 	if(pprogress!=0)
@@ -64,13 +65,13 @@ void CLfsprogress::draw() const //! critical
 		
 		for(xlong i=0; i<YRES; i++,offset+=diff)
 		{
-			for(xlong j=0; j<rprogress; j++,offset++) { clscreen->cldoublebuffer[offset] = clscreen->cldoublebuffer[offset] & pcolor; }
+			for(xlong j=0; j<rprogress; j++,offset++) { clscreen.cldoublebuffer[offset] = clscreen.cldoublebuffer[offset] & pcolor; }
 		}
 	}
 	//*
 }
 
-void CLfsprogress::set(xlong p) //! noncritical
+void CLfsprog::set(xlong p) //! noncritical
 {
 	//set full screen progress bar to given value
 	if(p>100) { pprogress = 100; rprogress = XRES; }
@@ -79,7 +80,7 @@ void CLfsprogress::set(xlong p) //! noncritical
 	//*
 }
 
-void CLfsprogress::add(xlong a) //! noncritical
+void CLfsprog::add(xlong a) //! noncritical
 {
 	//add given value to progress of full screen progress bar
 	if( (pprogress+a)>100) { pprogress = 100; rprogress = XRES; }
@@ -88,7 +89,7 @@ void CLfsprogress::add(xlong a) //! noncritical
 	//*
 }
 
-void CLfsprogress::reset() { pprogress = rprogress = 0; } //! noncritical
+void CLfsprog::reset() { pprogress = rprogress = 0; } //! noncritical
 ///*
 
 #endif

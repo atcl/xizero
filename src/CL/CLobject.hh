@@ -41,6 +41,7 @@ struct CLbox { CLfvector c[8]; }; //c[0-3] bottom, c[4-7] top
 class CLobject : public CLbase<CLobject,0>
 {
 	private:
+		static CLscreen& clscreen;
 	protected:
 		static CLmatrix* shadow;
 		CLpolygon** polyptr;
@@ -74,7 +75,9 @@ class CLobject : public CLbase<CLobject,0>
 		CLmatrix* getmatrix() const { return linear; };
 };
 
-CLmatrix* CLobject::shadow = new CLmatrix(clslight,clplane);
+CLscreen& CLobject::clscreen = CLscreen::instance();
+
+CLmatrix* CLobject::shadow = new CLmatrix(clscreen.clslight,clscreen.clplane);
 ///*
 
 ///implementation
