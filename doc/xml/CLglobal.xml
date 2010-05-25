@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLglobal.hh</filename>
+	
+	<name>CLglobal</name>
+	
+	<info></info>
+	
+	<attribute ispublic="1" isstatic="0">
+		<name>clscreen</name>
+		<type>CLscreen*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clwindow</name>
+		<type>CLwindow*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clsystem</name>
+		<type>CLsystem*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clformat</name>
+		<type>CLformat*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clmath</name>
+		<type>CLmath*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clmisc3d</name>
+		<type>CLmisc3d*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>cldetect</name>
+		<type>CLdetect*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clfsprogress</name>
+		<type>CLfsprogress*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clgfx</name>
+		<type>CLgfx*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>cltransitions</name>
+		<type>CLtransitions*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clsound</name>
+		<type>CLsound*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clsprites</name>
+		<type>CLsprites*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clid</name>
+		<type>CLid*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clstring</name>
+		<type>CLstring*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clapp</name>
+		<type>CLapp*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clmsgbox</name>
+		<type>CLmsgbox*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clintro</name>
+		<type>CLintro*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>clmenu</name>
+		<type>CLmenu*</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLglobal</name>
+		<parameter>xchar* argv</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLglobal</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+	
+</class>

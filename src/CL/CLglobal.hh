@@ -18,11 +18,11 @@
  * 
  * description:	base class containing all singletons and global variables.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		make all ptr members const
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -102,7 +102,25 @@ CLglobal::CLglobal(xchar* argv) //! noncritical
 	
 CLglobal::~CLglobal() //! noncritical
 {
-	delete clsound;
+	//~ delete clscreen;
+	//~ delete clwindow;
+	//~ delete clsystem;
+	//~ delete clformat;
+	//~ delete clmath;
+	//~ delete clgame;
+	//~ delete clmisc3d;
+	//~ delete cldetect;
+	//~ delete clfsprogress;
+	//~ delete clgfx;
+	//~ delete cltransitions;
+	//~ delete clsound;
+	//~ delete clsprites;
+	//~ delete clid;
+	//~ delete clstring;
+	//~ delete clapp;
+	//~ delete clmsgbox;
+	//~ delete clintro;
+	//~ delete clmenu;
 }
 ///*
 
