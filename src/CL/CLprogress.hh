@@ -106,7 +106,14 @@ CLprogress::CLprogress() : CLguibase(0,0,0,0) //! noncritical
 
 void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
 {
-	basereset(px,py,w,h,f,fc,bc,rc);
+	posx = px;
+	posy = py;
+	width = w;
+	height = h;
+	fcolor = fc;
+	bcolor = bc;
+	rcolor = rc;
+	flat = f;
 	
 	progress = p;
 	horver = hv;

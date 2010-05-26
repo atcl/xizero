@@ -19,11 +19,11 @@
  * 
  * description:	base class for all gui elements.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -31,19 +31,17 @@
 class CLguibase : public CLbase<CLguibase,0>
 {
 	protected:
-		xlong posx;
-		xlong posy;
-		xlong width;
-		xlong height;
+		xlong  posx;
+		xlong  posy;
+		xlong  width;
+		xlong  height;
 		uxlong fcolor;
 		uxlong bcolor;
 		uxlong rcolor;
-		bool flat;
-		bool visible;
-		void basereset(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
+		bool   flat;
+		bool   visible;
 	public:
 		CLguibase(xlong px,xlong py,xlong w,xlong h,bool f=0,uxlong fc=CLguifront,uxlong bc=CLguiback,uxlong rc=CLguiframe);
-		CLguibase(const CLguibase& c);
 		virtual ~CLguibase() { };
 		virtual void draw() { };
 		void setwidth(xlong w) { width = w; };
@@ -76,31 +74,6 @@ CLguibase::CLguibase(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong b
 	rcolor = rc;
 	flat = f;
 	visible = 1;
-}
-
-CLguibase::CLguibase(const CLguibase& c) : CLbase<CLguibase,0>(c)
-{
-	posx = c.posx;
-	posy = c.posy;
-	width = c.width;
-	height = c.height;
-	fcolor = c.fcolor;
-	bcolor = c.bcolor;
-	rcolor = c.rcolor;
-	flat = c.flat;
-	visible = c.visible;
-}
-
-void CLguibase::basereset(xlong px,xlong py,xlong w,xlong h,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
-{
-	posx = px;
-	posy = py;
-	width = w;
-	height = h;
-	fcolor = fc;
-	bcolor = bc;
-	rcolor = rc;
-	flat = f;
 }
 ///*
 
