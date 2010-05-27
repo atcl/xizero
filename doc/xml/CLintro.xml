@@ -4,62 +4,57 @@
 
 <class static="1" istemplate="0">
 	
-	<filename>CLid.hh</filename>
+	<filename>CLintro.hh</filename>
 	
-	<name>CLid</name>
+	<name>CLintro</name>
 	
 	<info></info>
 	
+	<depends>
+		<module href="clgfx.xml">CLgfx</module>
+		<module href="clwindow.xml">CLwindow</module>
+		<module href="clscreen.xml">CLscreen</module>
+		<module href="clsystem.xml">CLsystem</module>
+	</depends>
+	
 	<derived>
-		<parent href="CLbase.xml">CLbase</parent>	
+		<parent href="clbase.xml">CLbase</parent>	
 	</derived>
 	
-	<attribute ispublic="0" isstatic="1">
-		<name>lastid</name>
-		<type>uxlong</type>
-		<info></info>
-	</attribute>
-
-	<attribute ispublic="0" isstatic="1">
-		<name>crc32</name>
-		<type>uxlong</type>
-		<info></info>
-	</attribute>
-	
 	<method ispublic="0" isstatic="0">
-		<name>CLid</name>
+		<name>CLintro</name>
 		<info>Constructor</info>
 		<example></example>
 	</method>
 
 	<method ispublic="0" isstatic="0">
-		<name>~CLid</name>
+		<name>~CLintro</name>
 		<info>Destructor</info>
 		<example></example>
 	</method>
 
 	<method ispublic="1" isstatic="0">
-		<name></name>
-		<returns></returns>
-		<parameter></parameter>
-		<parameter></parameter>
-		<qualifier></qualifier>
-		<info></info>
-		<example></example>
-	</method>
-
-	<method ispublic="1" isstatic="0">
-		<name>generateid</name>
-		<returns>uxlong</returns>
+		<name>atcrosslevel</name>
+		<returns>void</returns>
+		<parameter>CLfile* s</parameter>
 		<qualifier>const</qualifier>
 		<info></info>
 		<example></example>
 	</method>
 
 	<method ispublic="1" isstatic="0">
-		<name>checkcrc</name>
-		<returns>bool</returns>
-		<parameter>uxlong c</parameter>
+		<name>xizero</name>
+		<returns>void</returns>
+		<parameter>CLfile* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>torus</name>
+		<returns>void</returns>
+		<parameter>CLfile* s</parameter>
 		<qualifier>const</qualifier>
 		<info></info>
 		<example></example>

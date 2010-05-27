@@ -24,11 +24,11 @@
  * 
  * description:	Holds atcrosslevel and xizero intro animations
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	implement xizero intro
+ * notes:		implement torus animation
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 

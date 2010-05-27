@@ -96,7 +96,7 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0,winwidth,0,winheight);
+	//gluOrtho2D(0,winwidth,0,winheight);
 	
 	while(true)
 	{
