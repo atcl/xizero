@@ -4,3 +4,4 @@ git commit -a -m"$1"
 git push 
 git push github master
 git push origin2 master
+#curl -u atcl:yourpassword -d status="Your Message Here" http://twitter.com/statuses/update.xml

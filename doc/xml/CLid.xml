@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="1" istemplate="0">
+	
+	<filename>CLid.hh</filename>
+	
+	<name>CLid</name>
+	
+	<info></info>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="1">
+		<name>lastid</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="1">
+		<name>crc32</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLid</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLid</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name></name>
+		<returns></returns>
+		<parameter></parameter>
+		<parameter></parameter>
+		<qualifier></qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>generateid</name>
+		<returns>uxlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>checkcrc</name>
+		<returns>bool</returns>
+		<parameter>uxlong c</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

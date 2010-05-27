@@ -18,11 +18,11 @@
  * 
  * description:	This class checks ids and crcs.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	test.
+ * notes:		test
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -43,8 +43,8 @@ class CLid : public CLbase<CLid,1>
 		~CLid() { };
 	public:
 		uxlong generateid();
-		uxlong generatecrc(xchar* d,xlong l);
-		bool checkcrc(uxlong c);
+		uxlong generatecrc(xchar* d,xlong l) const;
+		bool checkcrc(uxlong c) const;
 };
 
 uxlong CLid::lastid = 0;
@@ -58,7 +58,7 @@ uxlong CLid::generateid() //! noncritical
 	return lastid;
 }
 
-uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
+uxlong CLid::generatecrc(xchar* d,xlong l) const //! noncritical
 {
 	uxlong r = 0;
 	uxchar o = 0;
@@ -87,12 +87,12 @@ uxlong CLid::generatecrc(xchar* d,xlong l) //! noncritical
 	return r;
 }
 
-bool CLid::checkcrc(uxlong c) //! noncritical
+bool CLid::checkcrc(uxlong c) const //! noncritical
 {
 	uxlong t = c / crc32;
 
-	if(t==0) return true;
-	else return false;
+	if(t==0) { return true; }
+	else { return false; }
 }
 ///*
 
