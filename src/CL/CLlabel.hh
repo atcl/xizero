@@ -19,11 +19,11 @@
  * 
  * description:	A standard gui element label
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	finish implementing.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -42,7 +42,7 @@ class CLlabel : public CLguibase
 		xlong texty;
 	public:
 		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f);
-		~CLlabel() { };
+		~CLlabel() { delete text; };
 		void draw() const;
 		void settext(const xchar* t);
 		xchar* gettext() const { return text; };
@@ -56,20 +56,19 @@ CLgfx&    CLlabel::clgfx    = CLgfx::instance();
 CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) : CLguibase(px,py,w,h,0,fc,bc,rc) //! noncritical
 {
 	frame = f;
-	if(!f) rcolor = bcolor;
-	
+	if(!f) { rcolor = bcolor; }
 	text = clstring.copy(t);
 	textwidth = clgfx.getfontstringwidth(text,0) + 4;
 	textheight = clgfx.getfontstringheight(text,0);
-	if(w==-1 || w<textwidth) width = textwidth;
-	if(h==-1 || h<textheight) height = textheight;
+	if(w==-1 || w<textwidth) { width = textwidth; }
+	if(h==-1 || h<textheight) { height = textheight; }
 	textx = (width - textwidth)>>1;
 	texty = (height - textheight)>>1;
 }
 
 void CLlabel::draw() const //! noncritical
 {
-	if(visible==0) return;
+	if(visible==0) { return; }
 	clgfx.drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,flat);
 	clgfx.drawfontstring(posx+textx,posy+texty,text,0,fcolor,bcolor);
 }
