@@ -12,7 +12,6 @@
 #include "CLtypes.hh"
 #include "CLbase.hh"
 #include "CLbuffer.hh"
-#include "CLsystem.hh"
 #include "CLmath.hh"
 #include "CLar.hh"
 #include "CLformat.hh"
@@ -30,11 +29,11 @@
  * 
  * description:	This class manages the complete game inside a level
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -52,7 +51,6 @@ class CLlevel : public CLbase<CLlevel,0>
 		static CLformat& clformat;
 		static CLstring& clstring;
 		static CLscreen& clscreen;
-		static CLsystem& clsystem; //temp!
 	protected:
 		CLobject**   levelmap;
 		CLplayer*    player;
@@ -69,18 +67,18 @@ class CLlevel : public CLbase<CLlevel,0>
 		xlong stripemarkmin;
 		xlong stripemark;
 		xlong striperest;
+		static xlong playerscreenylevel;
 		static xlong floorheight;
-		xlong playerscreenylevel;
 		static bool paused;
 		
-		inline xlong extract(sprite* h,xlong y,xlong x,xlong i) { return (xlong(((uxchar*)(&h->data[(y*h->width)+x]))[i])); }
+		inline xlong extract(sprite* h,xlong y,xlong x,xlong i) const { return (xlong(((uxchar*)(&h->data[(y*h->width)+x]))[i])); }
 	public:
 		CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bosslib,xlong bosstype,xlong level);
 		~CLlevel();
 		xlong update();
-		void display();
+		void display() const;
 		void setmark(xlong m);
-		void start();
+		void start() const;
 		static void pause();
 		xlong getmark() const { return levelmark; };
 		CLplayer* getplayer() const { return player; };
@@ -90,9 +88,9 @@ CLgame&   CLlevel::clgame   = CLgame::instance();
 CLformat& CLlevel::clformat = CLformat::instance();
 CLstring& CLlevel::clstring = CLstring::instance();
 CLscreen& CLlevel::clscreen = CLscreen::instance();
-CLsystem& CLlevel::clsystem = CLsystem::instance();
-xlong CLlevel::floorheight = 100;
-bool  CLlevel::paused = 0;
+xlong     CLlevel::playerscreenylevel = 3*(YRES>>2);
+xlong     CLlevel::floorheight = 100;
+bool      CLlevel::paused = 0;
 ///*
 
 ///implementation
@@ -128,7 +126,6 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 	striperest = 0;
 	
 	if(stripemark < 0) { err(__FILE__,__func__,u8"Level too short"); }
-	playerscreenylevel = 3*(YRES>>2);
 	//******************************************************************
 	
 	//load heightmap
@@ -143,7 +140,6 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 	
 	for(xlong i=0; i<height-1; i++)
 	{
-	
 		//generate stripe horizontally
 		for(xlong j=0; j<width-1; j++)
 		{			
@@ -365,9 +361,8 @@ xlong CLlevel::update() //! critical
 	}
 	//*
 	
-	xlong isdead = 0;
-	
 	//update player
+	xlong isdead = 0;
 	isdead = player->update(levelmap,enemylist,boss);
 	if(isdead != -1) { return -1; }
 	//*
@@ -409,7 +404,7 @@ xlong CLlevel::update() //! critical
 	return 1;
 }
 
-void CLlevel::display() //! critical
+void CLlevel::display() const //! critical
 {
 	//render terrain
 	CLlvector p(400,300-striperest,100);
@@ -452,14 +447,14 @@ void CLlevel::setmark(xlong m) //! noncritical
 	striperest = levelmark % UNITHEIGHT;
 }
 
-void CLlevel::pause() { paused = !paused; } //! noncritical
-
-void CLlevel::start() //! noncritical
+void CLlevel::start() const //! noncritical
 {
 	player->start();
 	for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->start(); }
 	boss->start();
 }
+
+void CLlevel::pause() { paused = !paused; } //! noncritical
 ///*
 
 #endif
