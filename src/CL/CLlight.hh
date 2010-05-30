@@ -18,11 +18,11 @@
  * 
  * description:	A class managing point light sources
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	implement
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -35,20 +35,20 @@ class CLlight : public CLbase<CLlight,0>
 		xlong radius;
 		uxlong color;
 		sprite* mask;
-		inline uxlong lambertslaw(xlong x,xlong y);
+		inline uxlong lambertslaw(xlong x,xlong y) const;
 	public:
 		CLlight(xlong r,uxlong c);
-		~CLlight();
-		void draw(xlong x,xlong y); 
+		~CLlight() { delete mask; };
+		void draw(xlong x,xlong y) const; 
 };
 
 CLgfx& CLlight::clgfx = CLgfx::instance();
 ///*
 
 ///implementation
-uxlong CLlight::lambertslaw(xlong x,xlong y) //! noncritical
+uxlong CLlight::lambertslaw(xlong x,xlong y) const //! noncritical
 {
-	if(x==0 && y==0) return color;
+	if(x==0 && y==0) { return color; }
 	
 	//precalc intensity square
 	float i = float(radius*radius);
@@ -97,16 +97,11 @@ CLlight::CLlight(xlong r,uxlong c) //! noncritical
 	xlong diff = r;
 	for(xlong i=0; i<length; i++)
 	{
-		for(xlong j=0; j<length; j++)
-		{
-			mask->data[(i*mask->width)+j] = lambertslaw(j-diff,i-diff);	
-		}
+		for(xlong j=0; j<length; j++) { mask->data[(i*mask->width)+j] = lambertslaw(j-diff,i-diff); }
 	}
 }
 
-CLlight::~CLlight() { delete mask; }
-
-void CLlight::draw(xlong x,xlong y) { clgfx.putsprite(x-radius,y-radius,mask,0,0); } //! noncritical
+void CLlight::draw(xlong x,xlong y) const { clgfx.putsprite(x-radius,y-radius,mask,0,0); } //! noncritical
 ///*
 
  #endif

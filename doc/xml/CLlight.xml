@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLlight.hh</filename>
+	
+	<name>CLlight</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLgfx.xml">CLgfx</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>radius</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>color</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>mask</name>
+		<type>sprite*</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>lambertslaw</name>
+		<returns>uxlong</returns>
+		<parameter>xlong x</parameter>
+		<parameter>xlong y</parameter>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLlight</name>
+		<parameter>xlong r</parameter>
+		<parameter>uxlong c</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLlight</name>>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>draw</name>
+		<returns>void</returns>
+		<parameter>xlong x</parameter>
+		<parameter>xlong y</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
