@@ -4,9 +4,8 @@
 CC      = g++
 WWFLAGS = -Wno-multichar -Wno-write-strings -Wno-pragmas
 WAFLAGS = -Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses
-O0FLAGS = -O0
 O2FLAGS = -O2
-OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time --param inline-unit-growth=200 --param large-function-growth=300
+OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time --param inline-unit-growth=200 --param large-function-growth=300 -pipe
 LDFLAGS = -lglut -lalut 
 OUTPARA = -o 
 DEBUG   = -g
@@ -43,7 +42,10 @@ DATDST  = /usr/share/xizero
 DOCDST  = /usr/doc/xizero   #remove for deb?
 
 # Options to test:
-CPU     = -mmmx
+MMX     = -mmmx
+SSE     = -mssse3 -mfpmath=sse
+ATOM0   = -march=core2 -mtune=generic 
+ATOM1   = -march=atom -mtune=atom #GC 4.5 only
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
 #
 
