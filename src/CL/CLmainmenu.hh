@@ -23,16 +23,12 @@
  * 
  * description:	This class creates a typical game main menu
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
-///*
-
-///declarations
-class CLglobal;
 ///*
 
 ///definitions
@@ -85,10 +81,7 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	xlong bx = (XRES>>1) - (bw>>1);
 	xlong* by = new xlong[bc];
 	xlong bh = ((YRES - (YRES>>2))/bc);
-	for(xlong j=0; j<bc; j++)
-	{
-		by[j] = (YRES>>2) + j*bh;
-	}
+	for(xlong j=0; j<bc; j++) { by[j] = (YRES>>2) + j*bh; }
 	bh -= 8;
 	//*
 	
@@ -108,10 +101,7 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 	//*
 	
 	button = new CLbutton*[bc]; 
-	for(xlong k=0; k<bc; k++)
-	{
-		button[k] = new CLbutton(bx,by[k],bw,bh,0x00FFFFFF,0x00808080,0x00808080,a[k],bt[k],0);
-	}
+	for(xlong k=0; k<bc; k++) { button[k] = new CLbutton(bx,by[k],bw,bh,0x00FFFFFF,0x00808080,0x00808080,a[k],bt[k],0); }
 	
 	header = new CLlabel(hx,hy,hw,-1,0x00FF0000,0xFF000000,0xFF000000,hl,0);
 	footer = new CLlabel(fx,fy,fw,fh,0x00FFFFFF,0xFF000000,0xFF000000,fl,0);

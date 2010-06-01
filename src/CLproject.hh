@@ -13,12 +13,6 @@
 	#define u8 
 #endif
 
-#ifdef WIN32 
-	#define INTEL
-#else //ifdef LINUX
-	#define ATT
-#endif 
-
 #ifdef REL
 	#define BASEDIR "/usr/share/xizero/"
 #else //ifded DEV

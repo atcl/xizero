@@ -34,13 +34,11 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 {
 	private:
 		static CLdetect& cldetect;
-		
 	protected:
 		T* buffer;
 		uxlong size;
 		uxlong bsize;
 		xlong  ttype;
-		
 	public:
 		CLbuffer(uxlong s,T i=0);
 		~CLbuffer() { delete buffer; };

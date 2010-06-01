@@ -48,6 +48,14 @@
 		<type>const xchar*</type>
 		<info></info>
 	</attribute>
+
+	<method ispublic="0" isstatic="0">
+		<name>setexename</name>
+		<returns>void</returns>
+		<parameter>const char* n</parameter>
+		<info></info>
+		<example></example>
+	</method>
 	
 	<method ispublic="0" isstatic="0">
 		<name>CLapp</name>
@@ -58,15 +66,6 @@
 	<method ispublic="0" isstatic="0">
 		<name>~CLapp</name>
 		<info>Destructor</info>
-		<example></example>
-	</method>
-
-	<method ispublic="1" isstatic="0">
-		<name>init</name>
-		<returns>void</returns>
-		<parameter>char* argv[]</parameter>
-		<parameter></parameter>
-		<info></info>
 		<example></example>
 	</method>
 

@@ -104,11 +104,12 @@ CLdetect::CLdetect() //! noncritical
 	//*
 	
 	//check ram
-	//CLfile* mem = clsystem.getfile("/proc/meminfo");
-	//xlong p = clstring.find(mem->text,"MemTotal:");
-	//tram = clstring.tolong(&(mem->text[p+9])) / 1024;
+	CLfile* mem = clsystem.getfile("/proc/meminfo");
+	xlong p = clstring.find(mem->text,"MemTotal:");
+	tram = clstring.tolong(&(mem->text[p+9])) / 1024;
 	//p = clstring.find(mem->text,"MemFree:");
 	//fram = clstring.tolong(&(mem->text[p+8])) / 1024;
+	say(tram);
 	//*
 	
 	//process cuid results here so vars can find way back
@@ -116,6 +117,10 @@ CLdetect::CLdetect() //! noncritical
 	//if( (c2 & SSEFLAG)!=0 ) { havesse = 1; } else { havesse = 0; }
 	//pcores = (c4>>25) * (c5 & 255); //fix! and include ht
 	//l2c = 0; //fix!
+	
+	havemmx = 0;
+	havesse = 0;
+	pcores = 1;
 	//*
 	
 	//detect vram

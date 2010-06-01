@@ -20,7 +20,7 @@
  * 
  * author:		atcl
  * 
- * notes:		make all ptr members const
+ * notes:		...
  * 
  * version: 	0.2
  */

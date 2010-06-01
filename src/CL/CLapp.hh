@@ -34,10 +34,6 @@
  */
 ///*
 
-///declarations
-class CLglobal;
-///*
-
 ///definitions
 class CLapp : public CLbase<CLapp,1>
 {
