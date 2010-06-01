@@ -19,11 +19,11 @@
  * 
  * description:	A double-linked-list type
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -55,8 +55,7 @@ class CLlist : public CLbase<CLlist<member>,0>
 		xlong delcurrent(bool smash=0); //test smash option
 		bool seekdata(member* s);
 		member* findbyname(const xchar* n); //for xml?
-		void clear();
-		void smash(); //test
+		void clear(bool smash=0);
 		
 		xlong setfirst();
 		xlong setlast();
@@ -64,9 +63,7 @@ class CLlist : public CLbase<CLlist<member>,0>
 		xlong setnext();
 		bool islast() const { return (current==last); };
 		bool isfirst() const { return (current==first); };
-		
 		void exchangesort(bool updown);
-		
 		void print() const;
 };
 ///*
@@ -225,26 +222,24 @@ bool CLlist<member>::seekdata(member* s) //! critical
 }
 
 template<class member>
-void CLlist<member>::clear() //! noncritical
+void CLlist<member>::clear(bool smash) //! noncritical
 {
+	//smash list
+	if(smash==1)
+	{
+		setfirst();
+			while(islast())
+			{
+				//delete current->data; //problems!
+				setnext();
+				delete current->prev;
+			}
+	}
+	//*
+	
 	//clear list
-	//smash();
 	length = 0;
 	current = first = last = 0;
-	//*
-}
-
-template<class member>
-void CLlist<member>::smash() //! noncritical
-{
-	//delete all list members data
-	current = first;
-	while(current!=last)
-	{
-		//delete current->data;
-		setnext();
-		delete current->prev;
-	}
 	//*
 }
 
@@ -341,9 +336,7 @@ void CLlist<member>::print() const //! noncritical
 {
 	//print all list members names
 	setfirst();
-
 	say(u8"|");
-
 	while(!islast())
 	{
 		tty(u8"+");

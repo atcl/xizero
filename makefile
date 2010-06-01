@@ -45,13 +45,13 @@ DOCDST  = /usr/doc/xizero   #remove for deb?
 MMX     = -mmmx
 SSE     = -mssse3 -mfpmath=sse
 ATOM0   = -march=core2 -mtune=generic 
-ATOM1   = -march=atom -mtune=atom #GC 4.5 only
+ATOM1   = -march=atom -mtune=atom #GCC >=4.5 only
 ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
 #
 
 # Compile:
 default:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
+	$(CC) $(O2FLAGS) $(OPT) $(SSE) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
 	#$(STRIP) $(TARGET1)
 	$(XZDAT)
 	
