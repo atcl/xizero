@@ -52,6 +52,7 @@ class CLapp : public CLbase<CLapp,1>
 		const xchar* version;
 		CLapp();
 		~CLapp() { };
+		void setexename(const xchar* n) { exename = n; }
 	public:
 		void exit(const xlong r=0,const xchar* m="") const;
 		xchar inkey(const bool b) const { return xchar(getchar()); };

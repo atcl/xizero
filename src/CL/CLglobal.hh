@@ -111,7 +111,7 @@ CLglobal::CLglobal(xchar* argv) : screen(CLscreen::instance()), window(CLwindow:
 								  clgfx(gfx),       cltrans(trans),   clsound(sound),
 								  clcomspr(comspr), clid(id),         clstring(string),
 								  clapp(app),       clmsgbox(msgbox), clintro(intro),
-								  clmenu(menu) { } //! noncritical
+								  clmenu(menu) { clapp.setexename(argv); } //! noncritical
 
 ///*
 
