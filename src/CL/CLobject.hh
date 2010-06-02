@@ -332,7 +332,7 @@ CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
 	dockcount = 0;
 	polyptr = new CLpolygon*[polycount];
 	
-	for(xlong i=0; i<c; i++) { polyptr[i] = new CLpolygon(p[i].v[0],p[i].v[1],p[i].v[2],p[i].v[3],co,sc); }
+	for(xlong i=0;i<polycount;i++) { polyptr[i] = new CLpolygon(p[i].v[0],p[i].v[1],p[i].v[2],p[i].v[3],co,sc); }
 }
 
 CLobject::CLobject(CLobject* obj) //! noncritical
@@ -350,7 +350,6 @@ CLobject::CLobject(CLobject* obj) //! noncritical
 	name = obj->name;
 	
 	for(xlong i=0; i<polycount; i++) { polyptr[i] = new CLpolygon(*(obj->polyptr[i])); }
-	
 	for(xlong j=0; j<dockcount; j++) { dockptr[j] = new CLfvector(*(obj->dockptr[j])); }
 }
 
