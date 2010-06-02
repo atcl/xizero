@@ -63,17 +63,17 @@ class CLgfx : public CLbase<CLgfx,1>
 	friend class CLglobal;
 	
 	private:
-		static CLmath&   clmath;
-		static CLscreen& clscreen;
-		static CLformat& clformat;
-		static CLstring& clstring;
-		static CLsystem& clsystem;
+		CLmath&   clmath;
+		CLscreen& clscreen;
+		CLformat& clformat;
+		CLstring& clstring;
+		CLsystem& clsystem;
 	protected:
-		static CLfont** fonts;
+		static CLfont** fonts; //has to be static!!!
 		inline void drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawclipcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
 		inline void drawellipsepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const;
-		CLgfx() { };
+		CLgfx();
 		~CLgfx() { };
 	public:
 		uxlong readpixel(xlong x,xlong y) const;
@@ -107,16 +107,15 @@ class CLgfx : public CLbase<CLgfx,1>
 		uxlong* getgradient(uxlong s,uxlong e,xlong i) const;	
 };
 
-CLmath&   CLgfx::clmath   = CLmath::instance();
-CLscreen& CLgfx::clscreen = CLscreen::instance();
-CLformat& CLgfx::clformat = CLformat::instance();
-CLstring& CLgfx::clstring = CLstring::instance();
-CLsystem& CLgfx::clsystem = CLsystem::instance();
-
 CLfont** CLgfx::fonts = 0;
 ///*
 
 ///implementation
+CLgfx::CLgfx() //!noncritical
+: clmath(CLmath::instance()), clscreen(CLscreen::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clsystem(CLsystem::instance())
+{ }
+
+
 void CLgfx::drawcirclepixel(xlong xc,xlong yc,xlong x,xlong y,uxlong c) const //! critical
 {
 	//precalculate linear address components (especially multiplications)

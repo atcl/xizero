@@ -31,8 +31,8 @@
 class CLar : public CLbase<CLar,0>
 {
 	private:
-		static CLsystem& clsystem;
-		static CLstring& clstring; 
+		CLsystem& clsystem;
+		CLstring& clstring; 
 	protected:
 		CLfile** members;
 		uxlong   filecount;
@@ -46,15 +46,16 @@ class CLar : public CLbase<CLar,0>
 		CLfile* getmember(const uxlong index) const;
 		uxlong  getfilecount() const { return filecount; };
 };
-
-CLsystem& CLar::clsystem = CLsystem::instance();
-CLstring& CLar::clstring = CLstring::instance();
 ///*
 
 ///implementation
-CLar::CLar(CLfile* sf) { loadar(sf); } //! noncritical
+CLar::CLar(CLfile* sf)  //! noncritical
+: clsystem(CLsystem::instance()), clstring(CLstring::instance())
+{ loadar(sf); }
 
-CLar::CLar(const xchar* sf) { loadar(clsystem.getfile(sf)); } //! noncritical
+CLar::CLar(const xchar* sf)  //! noncritical
+: clsystem(CLsystem::instance()), clstring(CLstring::instance())
+{ loadar(clsystem.getfile(sf)); }
 
 void CLar::loadar(CLfile* sf) //! noncritical
 {

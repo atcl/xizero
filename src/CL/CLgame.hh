@@ -35,7 +35,7 @@ class CLgame : public CLbase<CLgame,1>
 	friend class CLglobal;
 	
 	private:
-		static CLmath& clmath;
+		CLmath& clmath;
 	protected:
 		xlong boundx1;
 		xlong boundx2;
@@ -54,12 +54,12 @@ class CLgame : public CLbase<CLgame,1>
 		template<class clvector>xlong collision(clvector& p1,CLbox& bb1,clvector& p2,CLbox& bb2,bool n=1);
 		template<class clvector>CLfvector terraincollision(const clvector& p,const CLbox* bb,const CLobject** t,bool fwbw);
 };
-
-CLmath& CLgame::clmath = CLmath::instance();
 ///*
 
 ///implementation
-CLgame::CLgame() { boundx1 = boundy1 = 0; boundx2 = XRES; boundy2 = YRES; } //! noncritical
+CLgame::CLgame() //! noncritical
+: clmath(CLmath::instance())
+{ boundx1 = boundy1 = 0; boundx2 = XRES; boundy2 = YRES; }
 
 void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2) //! noncritical
 {

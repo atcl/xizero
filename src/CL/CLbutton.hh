@@ -38,9 +38,9 @@ typedef CLlist<CLbutton> CLbuttonlist;
 class CLbutton : public CLguibase
 {
 	private:
-		static CLstring& clstring;
-		static CLgfx&    clgfx;
-		static CLwindow& clwindow;
+		CLstring& clstring;
+		CLgfx&    clgfx;
+		CLwindow& clwindow;
 	protected:
 		void (*action)();
 		xchar* caption;
@@ -59,20 +59,16 @@ class CLbutton : public CLguibase
 		void setcaption(xchar* t);
 		void setvisible(bool v);
 		xchar* getcaption() const { return caption; };
-		static void checkclick();
+		static void checkclick(bool lb,xlong mx,xlong my);
 };
-
-CLstring&     CLbutton::clstring   = CLstring::instance();
-CLgfx&        CLbutton::clgfx      = CLgfx::instance();
-CLwindow&     CLbutton::clwindow   = CLwindow::instance();
 CLbuttonlist* CLbutton::buttonlist = new CLbuttonlist();
 ///*
 
 ///implementation
-CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f) : CLguibase(px,py,w,h,f,fc,bc,rc) //! noncritical
+CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f) //! noncritical
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clwindow(CLwindow::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
 {
 	action = a;
-	
 	caption = clstring.copy(c);
 	captionwidth = clgfx.getfontstringwidth(caption,0) + 4;
 	captionheight = clgfx.getfontstringheight(caption,0);
@@ -81,7 +77,6 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	captionx = (width - captionwidth)>>1;
 	captiony = (height - captionheight)>>1;
 	flat = f;
-	
 	buttonlist->append(this);
 }
 
@@ -123,12 +118,10 @@ void CLbutton::setvisible(bool v) //! noncritical
 	}
 }
 
-void CLbutton::checkclick() //! critical
+void CLbutton::checkclick(bool lb,xlong mx,xlong my) //! critical
 {
-	if(clwindow.getmouselb()!=0)
+	if(lb!=0)
 	{
-		xlong mx = clwindow.getmousex();
-		xlong my = clwindow.getmousey();
 		CLbutton* curr = 0;
 		xlong cx1 = 0;
 		xlong cy1 = 0;

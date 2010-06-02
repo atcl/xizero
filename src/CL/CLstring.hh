@@ -18,11 +18,11 @@
  * 
  * description:	Handles (c-)strings
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	finish implementing.
+ * notes:		tofloat
  * 
- * version: 0.2
+ * version:		 0.2
  */
 ///*
 

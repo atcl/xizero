@@ -25,7 +25,7 @@
 class CLewave : public CLentity<1>
 {
 	private:
-		static CLwindow& clwindow;
+		CLwindow& clwindow;
 	protected:
 		bool updown;
 	public:
@@ -33,12 +33,11 @@ class CLewave : public CLentity<1>
 		~CLewave();
 		xlong update();
 };
-
-CLwindow& CLewave::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
 CLewave::CLewave(bool ud) //! noncritical
+: clwindow(CLwindow::instance())
 {
 	updown = ud;
 	

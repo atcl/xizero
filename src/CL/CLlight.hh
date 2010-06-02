@@ -30,7 +30,7 @@
 class CLlight : public CLbase<CLlight,0>
 {
 	private:
-		static CLgfx& clgfx;
+		CLgfx& clgfx;
 	protected:
 		xlong radius;
 		uxlong color;
@@ -41,8 +41,6 @@ class CLlight : public CLbase<CLlight,0>
 		~CLlight() { delete mask; };
 		void draw(xlong x,xlong y) const; 
 };
-
-CLgfx& CLlight::clgfx = CLgfx::instance();
 ///*
 
 ///implementation
@@ -84,6 +82,7 @@ uxlong CLlight::lambertslaw(xlong x,xlong y) const //! noncritical
 }
 
 CLlight::CLlight(xlong r,uxlong c) //! noncritical
+: clgfx(CLgfx::instance())
 {
 	radius = r;
 	color = c;

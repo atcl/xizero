@@ -39,8 +39,9 @@
 class CLenemy : public CLentity<1>
 {
 	private:
-		static CLgame&   clgame;
-		static CLstring& clstring;
+		CLgame&   clgame;
+		CLstring& clstring;
+		CLwindow& clwindow;
 	protected:
 		CLprogress* hprog;
 		xlong*      aiarray;
@@ -59,9 +60,6 @@ class CLenemy : public CLentity<1>
 		template<int I>xlong update(CLentity<I>* p);
 		void displayhud() const;
 };
-
-CLgame&   CLenemy::clgame   = CLgame::instance();
-CLstring& CLenemy::clstring = CLstring::instance();
 ///*
 
 ///implementation
@@ -140,7 +138,8 @@ xlong CLenemy::collision() //! critical
 	return r;
 }
 
-CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<1>(enemya,m,mm) //! noncritical
+CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp)  //! noncritical
+: clgame(CLgame::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance()), CLentity<1>(enemya,m,mm)
 {
 	//set entity type
 	type = 1;
@@ -181,7 +180,8 @@ CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp) : CLentity<
 	//*
 }
 
-CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) : CLentity<1>(enemyptr) //! noncritical
+CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) //! noncritical
+: clgame(CLgame::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance()), CLentity<1>(enemyptr)
 {
 	//set and adjust (start) position to floating X pixel above ground
 	position.x = enemyp->x;

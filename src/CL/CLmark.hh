@@ -22,11 +22,11 @@
  * 
  * description:	This class manages all floor markings.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -42,10 +42,7 @@ typedef CLlist<CLmark> CLmarklist;
 class CLmarkmanager : public CLbase<CLmarkmanager,0>
 {
 	private:
-		static CLsprites* clsprites;
-		static CLsystem*  clsystem;
-		static CLgame*    clgame;
-		static CLmath*    clmath;
+		CLmath&   clmath;
 	protected:
 		CLmarklist* marklist;
 		CLmark** marktype;
@@ -60,11 +57,6 @@ class CLmarkmanager : public CLbase<CLmarkmanager,0>
 		void display() const;
 		void pause();
 };
-
-CLsprites* CLammomanager::clsprites = CLsprites::instance();
-CLsystem*  CLammomanager::clsystem  = CLsystem::instance();
-CLgame*    CLammomanager::clgame    = CLgame::instance();
-CLmath*    CLammomanager::clmath    = CLmath::instance();
 ///*
 
 ///implementation

@@ -42,10 +42,10 @@ struct CLframe
 class CLanim : public CLbase<CLanim,0>
 {
 	private:
-		static CLwindow& clwindow;
-		static CLformat& clformat;
-		static CLmath&   clmath;
-		static CLscreen& clscreen;
+		CLwindow& clwindow;
+		CLformat& clformat;
+		CLmath&   clmath;
+		CLscreen& clscreen;
 	protected:
 		CLobject* object;
 		xlong*   anicsv;
@@ -64,15 +64,11 @@ class CLanim : public CLbase<CLanim,0>
 		void setposition(CLfvector& p) { position = p; };
 		CLfvector& getposition() { return position; };
 };
-
-CLwindow& CLanim::clwindow = CLwindow::instance();
-CLformat& CLanim::clformat = CLformat::instance();
-CLmath&   CLanim::clmath   = CLmath::instance();
-CLscreen& CLanim::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
+: clwindow(CLwindow::instance()), clformat(CLformat::instance()),clmath(CLmath::instance()),clscreen(CLscreen::instance())
 {	
 	//set up attributes
 	object = obj;

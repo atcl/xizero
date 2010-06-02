@@ -33,7 +33,7 @@
 class CLmatrix : public CLbase<CLmatrix,0>
 {
 	private:
-		static CLmath& clmath;
+		CLmath& clmath;
 	protected:
 		float m[4][4];
 		float t[4][4];
@@ -62,8 +62,6 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		
 		CLmatrix& operator=(const CLmatrix& c);
 };
-
-CLmath& CLmatrix::clmath = CLmath::instance();
 ///*
 
 ///implementation
@@ -98,12 +96,14 @@ void CLmatrix::multiplicate() //! supercritical
 }
 
 CLmatrix::CLmatrix(bool i) //! noncritical
+: clmath(CLmath::instance())
 {
 	if(i==false) clear(0);
 	if(i==true) unit();
 }
 
 CLmatrix::CLmatrix(const CLfvector& l,const CLfvector& p) //! noncritical
+: clmath(CLmath::instance())
 {
 	shadow(l,p);
 }

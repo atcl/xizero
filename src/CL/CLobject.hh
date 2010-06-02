@@ -41,7 +41,7 @@ struct CLbox { CLfvector c[8]; }; //c[0-3] bottom, c[4-7] top
 class CLobject : public CLbase<CLobject,0>
 {
 	private:
-		static CLscreen& clscreen;
+		CLscreen& clscreen;
 	protected:
 		static CLmatrix* shadow;
 		CLpolygon** polyptr;
@@ -75,14 +75,14 @@ class CLobject : public CLbase<CLobject,0>
 		CLmatrix* getmatrix() const { return linear; };
 };
 
-CLscreen& CLobject::clscreen = CLscreen::instance();
-
-CLmatrix* CLobject::shadow = new CLmatrix(clscreen.clslight,clscreen.clplane);
+CLmatrix* CLobject::shadow = 0;
 ///*
 
 ///implementation
 CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
+: clscreen(CLscreen::instance())
 {	
+	if(shadow==0) { shadow = new CLmatrix(clscreen.clslight,clscreen.clplane); }
 	linear = new CLmatrix(1);
 	
 	//init bounding box
@@ -317,7 +317,9 @@ CLobject::CLobject(CLfile* fileptr,bool zs) //! noncritical
 }
 
 CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
+: clscreen(CLscreen::instance())
 {
+	if(shadow==0) { shadow = new CLmatrix(clscreen.clslight,clscreen.clplane); }
 	linear = new CLmatrix(1);
 	
 	//init bounding box
@@ -334,7 +336,9 @@ CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
 }
 
 CLobject::CLobject(CLobject* obj) //! noncritical
+: clscreen(CLscreen::instance())
 {
+	if(shadow==0) { shadow = new CLmatrix(clscreen.clslight,clscreen.clplane); }
 	linear = new CLmatrix(1);
 	
 	polycount = obj->polycount;

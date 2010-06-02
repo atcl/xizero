@@ -31,8 +31,8 @@
 class CLlabel : public CLguibase
 {
 	private:
-		static CLstring& clstring;
-		static CLgfx&    clgfx;
+		CLstring& clstring;
+		CLgfx&    clgfx;
 	protected:
 		xchar* text;
 		bool  frame;
@@ -47,13 +47,11 @@ class CLlabel : public CLguibase
 		void settext(const xchar* t);
 		xchar* gettext() const { return text; };
 };
-
-CLstring& CLlabel::clstring = CLstring::instance();
-CLgfx&    CLlabel::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
-CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) : CLguibase(px,py,w,h,0,fc,bc,rc) //! noncritical
+CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) //! noncritical
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), CLguibase(px,py,w,h,0,fc,bc,rc) 
 {
 	frame = f;
 	if(!f) { rcolor = bcolor; }

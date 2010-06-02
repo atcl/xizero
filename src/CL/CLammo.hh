@@ -11,6 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLbase.hh"
+#include "CLbuffer.hh"
 #include "CLwindow.hh"
 #include "CLlist.hh"
 #include "CLsprites.hh"
@@ -38,7 +39,7 @@ template<int I> class CLentity;
 ///definitions
 struct CLammo
 {
-	void(*comsprite)(xlong x,xlong y);
+	void(*comsprite)(CLubuffer& db,xlong x,xlong y);
 	CLfvector p;
 	CLfvector s;
 };
@@ -48,9 +49,10 @@ typedef CLlist<CLammo> CLammolist;
 class CLammomanager : public CLbase<CLammomanager,0>
 {
 	private:
-		static CLwindow&  clwindow;
-		static CLgame&    clgame;
-		static CLmath&    clmath;
+		CLscreen&  clscreen;
+		CLwindow&  clwindow;
+		CLgame&    clgame;
+		CLmath&    clmath;
 	protected:
 		CLammolist* list;
 		CLammo**    type;
@@ -66,14 +68,11 @@ class CLammomanager : public CLbase<CLammomanager,0>
 		void display() const;
 		void pause();
 };
-
-CLwindow&  CLammomanager::clwindow  = CLwindow::instance();
-CLgame&    CLammomanager::clgame    = CLgame::instance();
-CLmath&    CLammomanager::clmath    = CLmath::instance();
 ///*
 
 ///implementation
 CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* markptr) //! noncritical
+: clscreen(CLscreen::instance()), clwindow(CLwindow::instance()), clgame(CLgame::instance()), clmath(CLmath::instance())
 {	
 	//set up attributes
 	mark = markptr;
@@ -194,7 +193,7 @@ void CLammomanager::display() const //! critical
 	for(xlong i=list->setfirst(); i<list->getlength();i+=list->setnext())
 	{
 		curr = list->getcurrentdata();
-		curr->comsprite(curr->p.x,curr->p.y-(*mark));
+		curr->comsprite(clscreen.cldoublebuffer,curr->p.x,curr->p.y-(*mark));
 	}
 	//*
 }

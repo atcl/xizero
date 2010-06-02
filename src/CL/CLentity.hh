@@ -46,10 +46,10 @@ template<int I>
 class CLentity : public CLbase<CLentity<I>,0>
 {
 	private:
-		static CLmisc3d& clmisc3d;
-		static CLformat& clformat;
-		static CLstring& clstring;
-		static CLwindow& clwindow;
+		CLmisc3d& clmisc3d;
+		CLformat& clformat;
+		CLstring& clstring;
+		CLwindow& clwindow;
 	protected:
 		CLammomanager* ammoman;
 		CLobject* model[I];
@@ -94,7 +94,7 @@ class CLentity : public CLbase<CLentity<I>,0>
 	public:
 		CLentity(CLfile* entitya,xlong* markptr,xlong mm);
 		CLentity(CLentity* entityptr);
-		CLentity() { }
+		CLentity();
 		virtual ~CLentity();
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
@@ -108,11 +108,6 @@ class CLentity : public CLbase<CLentity<I>,0>
 		void start();
 		void pause();
 };
-
-template<int I>CLmisc3d& CLentity<I>::clmisc3d = CLmisc3d::instance();
-template<int I>CLformat& CLentity<I>::clformat = CLformat::instance();
-template<int I>CLstring& CLentity<I>::clstring = CLstring::instance();
-template<int I>CLwindow& CLentity<I>::clwindow = CLwindow::instance();
 ///*
 
 ///implementations
@@ -145,6 +140,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 
 template<int I>
 CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
+: clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
 {	
 	//set mark pointer from level
 	mark = markptr;
@@ -234,6 +230,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 
 template<int I>
 CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
+: clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
 {
 	//set mark pointer from level
 	mark = entityptr->mark;
@@ -296,6 +293,11 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 	
 	csv = entityptr->csv;
 }
+
+template<int I>
+CLentity<I>::CLentity() 
+: clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
+{ }
 
 template<int I>
 CLentity<I>::~CLentity<I>() //! noncritical

@@ -36,10 +36,10 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 	friend class CLglobal;
 	
 	private:
-		static CLgfx&    clgfx;
-		static CLscreen& clscreen;
+		CLgfx&    clgfx;
+		CLscreen& clscreen;
 	protected:
-		CLmisc3d() { };
+		CLmisc3d();
 		~CLmisc3d() { };
 	public:
 		template<class clvector>void project(clvector& v,const clvector& p);
@@ -48,12 +48,13 @@ class CLmisc3d : public CLbase<CLmisc3d,1>
 		template<class clvector>void draw3dline(clvector& p,clvector& q,uxlong c,bool aa);
 		void drawzbuffer(CLfbuffer* zb=0,xlong srcdis=0);
 };
-
-CLgfx&    CLmisc3d::clgfx    = CLgfx::instance();
-CLscreen& CLmisc3d::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
+CLmisc3d::CLmisc3d() //! nonciritcal
+: clgfx(CLgfx::instance()), clscreen(CLscreen::instance())
+{ }
+
 template<class clvector>
 void CLmisc3d::project(clvector& v,const clvector& p) //! critical
 {

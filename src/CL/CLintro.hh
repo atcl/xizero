@@ -39,26 +39,25 @@ class CLintro : public CLbase<CLintro,1>
 	friend class CLglobal;
 	
 	private:
-		static CLgfx&    clgfx;
-		static CLwindow& clwindow;
-		static CLsystem& clsystem;
-		static CLscreen& clscreen;
+		CLgfx&    clgfx;
+		CLwindow& clwindow;
+		CLsystem& clsystem;
+		CLscreen& clscreen;
 	protected:
-		CLintro() { };
+		CLintro();
 		~CLintro() { };
 	public:
 		void atcrosslevel(CLfile* s) const;
 		void xizero(CLfile* s) const;
 		void torus(CLfile* s) const;
 };
-
-CLgfx&    CLintro::clgfx    = CLgfx::instance();
-CLwindow& CLintro::clwindow = CLwindow::instance();
-CLsystem& CLintro::clsystem = CLsystem::instance();
-CLscreen& CLintro::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
+CLintro::CLintro() //! noncritical
+: clgfx(CLgfx::instance()), clwindow(CLwindow::instance()), clsystem(CLsystem::instance()), clscreen(CLscreen::instance())
+{ }
+
 void CLintro::atcrosslevel(CLfile* s) const //! noncritical
 {
 	//load atcrosslevel model

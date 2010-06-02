@@ -47,10 +47,10 @@ typedef CLlist<CLenemy> CLenemylist;
 class CLlevel : public CLbase<CLlevel,0>
 {
 	private:
-		static CLgame&   clgame;
-		static CLformat& clformat;
-		static CLstring& clstring;
-		static CLscreen& clscreen;
+		CLgame&   clgame;
+		CLformat& clformat;
+		CLstring& clstring;
+		CLscreen& clscreen;
 	protected:
 		CLobject**   levelmap;
 		CLplayer*    player;
@@ -83,11 +83,6 @@ class CLlevel : public CLbase<CLlevel,0>
 		xlong getmark() const { return levelmark; };
 		CLplayer* getplayer() const { return player; };
 };
-
-CLgame&   CLlevel::clgame   = CLgame::instance();
-CLformat& CLlevel::clformat = CLformat::instance();
-CLstring& CLlevel::clstring = CLstring::instance();
-CLscreen& CLlevel::clscreen = CLscreen::instance();
 xlong     CLlevel::playerscreenylevel = 3*(YRES>>2);
 xlong     CLlevel::floorheight = 100;
 bool      CLlevel::paused = 0;
@@ -95,6 +90,7 @@ bool      CLlevel::paused = 0;
 
 ///implementation
 CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bosslib,xlong bosstype,xlong level) //! noncritical
+: clgame(CLgame::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clscreen(CLscreen::instance())
 {
 	//set screen boundaries
 	clgame.setboundaries(60,0,740,600);

@@ -33,7 +33,7 @@ template <typename T>
 class CLbuffer : public CLbase<CLbuffer<T>,0>
 {
 	private:
-		static CLdetect& cldetect;
+		CLdetect& cldetect;
 	protected:
 		T* buffer;
 		uxlong size;
@@ -49,14 +49,12 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 		T* getbuffer() const { return buffer; };
 		T& operator[](uxlong i);
 };
-
-template <typename T>
-CLdetect& CLbuffer<T>::cldetect = CLdetect::instance();
 ///*
 
 ///implementation
 template <typename T>
 CLbuffer<T>::CLbuffer(uxlong s,T i) //! noncritical
+: cldetect(CLdetect::instance())
 {
 	//adjust size and allocate buffer
 	size = s + (s%4); // make sure is a multiple of 16byte

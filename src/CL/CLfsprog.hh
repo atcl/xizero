@@ -34,7 +34,7 @@ class CLfsprog : public CLbase<CLfsprog,1>
 	friend class CLglobal;
 	
 	private:
-		static CLscreen& clscreen;
+		CLscreen& clscreen;
 	protected:
 		xlong pprogress; //0-100 (%)
 		xlong rprogress;
@@ -48,12 +48,12 @@ class CLfsprog : public CLbase<CLfsprog,1>
 		void reset();
 		xlong get() const { return pprogress; };
 };
-
-CLscreen& CLfsprog::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
-CLfsprog::CLfsprog() { pprogress = rprogress = 0; pcolor = 0x00FF0000;} //! noncritical
+CLfsprog::CLfsprog() //! noncritical
+: clscreen(CLscreen::instance())
+{ pprogress = rprogress = 0; pcolor = 0x00FF0000;}
 
 void CLfsprog::draw() const //! critical
 {

@@ -42,7 +42,7 @@ class CLsound : public CLbase<CLsound,1>
 	friend class CLbase<CLsound,1>;
 	
 	private:
-		static CLstring& clstring;
+		CLstring& clstring;
 	protected:
 		ALfloat	alpos[3];
 		ALfloat	alvel[3];
@@ -63,12 +63,11 @@ class CLsound : public CLbase<CLsound,1>
 		void stop();
 		void pause();
 };
-
-CLstring& CLsound::clstring = CLstring::instance();
 ///*
 
 ///implementation
 CLsound::CLsound() //! noncritical
+: clstring(CLstring::instance())
 {
 	numbuf = 0;
 	numsrc = 0;

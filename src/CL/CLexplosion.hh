@@ -38,7 +38,7 @@
 class CLexplosion : public CLbase<CLexplosion,0>
 {
 	private:
-		static CLwindow& clwindow;
+		CLwindow& clwindow;
 	protected:
 		CLobject* object;
 		xlong starttime;
@@ -53,12 +53,11 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		void first();
 		xlong next();
 };
-
-CLwindow& CLexplosion::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
 CLexplosion::CLexplosion(CLobject* o,xlong t) //! noncritical
+: clwindow(CLwindow::instance())
 {
 	//set up attributes
 	object = o;

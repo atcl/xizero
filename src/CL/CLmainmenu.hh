@@ -35,8 +35,8 @@
 class CLmainmenu : public CLbase<CLmainmenu,0>
 {
 	private:
-		static CLstring& clstring;
-		static CLgfx&    clgfx;
+		CLstring& clstring;
+		CLgfx&    clgfx;
 	protected:
 		sprite* background;
 		CLbutton** button;
@@ -49,13 +49,11 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 		void draw() const;
 		void setback(sprite* s) { background = s; };
 };
-
-CLstring& CLmainmenu::clstring = CLstring::instance();
-CLgfx&    CLmainmenu::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
 CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc) //! noncritical
+: clstring(CLstring::instance()), clgfx(CLgfx::instance())
 {
 	//set attributes
 	background = bg;

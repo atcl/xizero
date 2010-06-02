@@ -42,8 +42,8 @@ struct screenside
 class CLpolygon : CLbase<CLpolygon,0>
 {
 	private:
-		static CLmath&   clmath;
-		static CLscreen& clscreen;
+		CLmath&   clmath;
+		CLscreen& clscreen;
 	protected:
 		static xlong pointcount;
 		static float shadezscale;
@@ -92,10 +92,6 @@ class CLpolygon : CLbase<CLpolygon,0>
 		CLfvector getnormal() const { return normal; };
 		bool isinside(CLfvector* p) const;
 };
-
-CLmath&   CLpolygon::clmath   = CLmath::instance();
-CLscreen& CLpolygon::clscreen = CLscreen::instance();
-
 xlong CLpolygon::pointcount = 4;
 float CLpolygon::shadezscale = 128/100;
 CLfvector* CLpolygon::vpoint = new CLfvector[8];
@@ -544,6 +540,7 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 }
 
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc) //! noncritical
+: clmath(CLmath::instance()), clscreen(CLscreen::instance())
 {	
 	//set colors and pointcount
 	rcolor = color = co;
@@ -563,7 +560,8 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 	//*
 }
 
-CLpolygon::CLpolygon(const CLpolygon& c) : CLbase<CLpolygon,0>(c)
+CLpolygon::CLpolygon(const CLpolygon& c) //! noncritical
+: clmath(CLmath::instance()), clscreen(CLscreen::instance()), CLbase<CLpolygon,0>(c)
 {
 	color  = c.color;
 	rcolor = c.rcolor;

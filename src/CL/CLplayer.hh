@@ -42,9 +42,9 @@ typedef CLlist<CLenemy> CLenemylist;
 class CLplayer : public CLentity<2>
 {
 	private:
-		static CLgame&   clgame;
-		static CLmath&   clmath;
-		static CLwindow& clwindow;
+		CLgame&   clgame;
+		CLmath&   clmath;
+		CLwindow& clwindow;
 	protected:
 		CLprogress* hprog;
 		CLprogress* sprog;
@@ -59,10 +59,6 @@ class CLplayer : public CLentity<2>
 		void showbox();
 		void displayhud();
 };
-
-CLgame&   CLplayer::clgame   = CLgame::instance();
-CLmath&   CLplayer::clmath   = CLmath::instance();
-CLwindow& CLplayer::clwindow = CLwindow::instance();
 ///*
 
 ///implementation
@@ -154,7 +150,8 @@ xlong CLplayer::collision(CLobject** ll) //! critical
 	return r;
 }
 
-CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts) : CLentity<2>(playera,m,mm) //! noncritical
+CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts) //! noncritical
+: clgame(CLgame::instance()), clmath(CLmath::instance()), clwindow(CLwindow::instance()), CLentity<2>(playera,m,mm) 
 {
 	//set entity type
 	type = 0;

@@ -36,7 +36,7 @@ class CLcamera : public CLbase<CLcamera,1>
 	friend class CLbase<CLcamera,1>;
 	
 	private:
-		static CLmath& clmath;
+		CLmath& clmath;
 	protected:
 		CLfvector position;
 		CLfvector direction;
@@ -54,12 +54,12 @@ class CLcamera : public CLbase<CLcamera,1>
 		void setdirection(CLfvector d);
 		
 };
-
-CLmath& CLcamera::clmath = CLmath::instance();
 ///*
 
 ///implementation
-CLcamera::CLcamera() { linear = new CLmatrix(1); } //! noncritical
+CLcamera::CLcamera() //! noncritical
+: clmath(CLmath::instance())
+{ linear = new CLmatrix(1); } 
 
 CLcamera::~CLcamera() { delete linear; } //! noncritical
 

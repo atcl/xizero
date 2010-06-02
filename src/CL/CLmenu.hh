@@ -45,9 +45,9 @@ class CLmenu : public CLbase<CLmenu,1>
 	friend class CLglobal;
 	
 	private:
-		static CLformat& clformat;
-		static CLwindow& clwindow;
-		static CLgfx&    clgfx;
+		CLformat& clformat;
+		CLwindow& clwindow;
+		CLgfx&    clgfx;
 	protected:
 		uxchar    syskey;
 		sprite*   icon;
@@ -62,14 +62,11 @@ class CLmenu : public CLbase<CLmenu,1>
 		static void wrapper();
 		uxchar getsyskey() const { return syskey; };
 };
-
-CLformat& CLmenu::clformat = CLformat::instance();
-CLwindow& CLmenu::clwindow = CLwindow::instance();
-CLgfx&    CLmenu::clgfx    = CLgfx::instance();
 ///*
 
 ///implementation
 CLmenu::CLmenu() //! noncritical
+: clformat(CLformat::instance()), clwindow(CLwindow::instance()), clgfx(CLgfx::instance())
 {
 	syskey = '^';
 	icon = clformat.loadxpm(CLicon);
@@ -111,7 +108,7 @@ void CLmenu::show() //! noncritical
 	while(clwindow.run())
 	{
 		if(clwindow.getinkey()==SPACE) { break; }
-		CLbutton::checkclick();
+		CLbutton::checkclick(clwindow.getmouselb(),clwindow.getmousex(),clwindow.getmousey());
 		clgfx.drawscreen(back);
 		title->draw();
 		clgfx.drawsprite(2,2,icon);

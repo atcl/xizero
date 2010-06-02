@@ -40,28 +40,25 @@ class CLtrans : public CLbase<CLtrans,1>
 	friend class CLglobal;
 	
 	private:
-		static CLwindow& clwindow;
-		static CLsystem& clsystem;
-		static CLmath&   clmath;
-		static CLgfx&    clgfx;
-		static CLscreen& clscreen;
+		CLwindow& clwindow;
+		CLmath&   clmath;
+		CLgfx&    clgfx;
+		CLscreen& clscreen;
 	protected:
-		CLtrans() { };
+		CLtrans();
 		~CLtrans() { };
 	public:
 		void circleblend(xlong x,xlong y,xlong r) const;
 		void dissolve() const;
 		void fadetoblack() const;
 };
-
-CLwindow& CLtrans::clwindow = CLwindow::instance();
-CLsystem& CLtrans::clsystem = CLsystem::instance();
-CLmath&   CLtrans::clmath   = CLmath::instance();
-CLgfx&    CLtrans::clgfx    = CLgfx::instance();
-CLscreen& CLtrans::clscreen = CLscreen::instance();
 ///*
 
 ///implementation
+CLtrans::CLtrans() //! noncritical
+: clwindow(CLwindow::instance()), clmath(CLmath::instance()), clgfx(CLgfx::instance()), clscreen(CLscreen::instance())
+{ }
+
 void CLtrans::circleblend(xlong x,xlong y,xlong r) const //! critical
 {
 	for(xlong i=YRES/2; i>r; i--)

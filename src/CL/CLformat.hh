@@ -47,9 +47,9 @@ class CLformat : public CLbase<CLformat,1>
 	friend class CLglobal;
 	
 	private:
-		static CLstring& clstring;
+		CLstring& clstring;
 	protected:
-		CLformat() { };
+		CLformat() : clstring(CLstring::instance()) { };
 		~CLformat() { };
 		xlong  readlong(xchar* f,xchar*& r) const;
 		float   readfloat(xchar* f,xchar*& r) const;
@@ -65,8 +65,6 @@ class CLformat : public CLbase<CLformat,1>
 		
 		CLfile*  saveras(sprite* s,const xchar* n="test.ras") const;
 };
-
-CLstring& CLformat::clstring = CLstring::instance();
 ///*
 
 ///implementation

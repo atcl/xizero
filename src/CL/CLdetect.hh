@@ -60,8 +60,8 @@ class CLdetect : public CLbase<CLdetect,1>
 	friend class CLglobal;
 	
 	private:
-		static CLsystem& clsystem;
-		static CLstring& clstring;
+		CLsystem& clsystem;
+		CLstring& clstring;
 	protected:
 		uxlong tram;
 		uxlong fram;
@@ -83,33 +83,31 @@ class CLdetect : public CLbase<CLdetect,1>
 		bool mmx() const  { return havemmx; };
 		bool sse() const  { return havesse; };
 };
-
-CLsystem& CLdetect::clsystem = CLsystem::instance();
-CLstring& CLdetect::clstring = CLstring::instance();
 ///*
 
 ///implementation
 CLdetect::CLdetect() //! noncritical
+: clsystem(CLsystem::instance()), clstring(CLstring::instance())
 {
 	//issue cpuid
-	xlong c1 = 0;
-	xlong c2 = 0;
-	xlong c3 = 0;
-	xlong c4 = 0;
-	xlong c5 = 0;
-	__asm__ __volatile__ ("cpuid; nop;":"=d"(c2):"a"(0x00000001));
-	__asm__ __volatile__ ("cpuid":"=c"(c3):"a"(0x80000001));
-	__asm__ __volatile__ ("cpuid":"=a"(c4):"a"(0x00000004));
-	__asm__ __volatile__ ("cpuid":"=c"(c5):"a"(0x80000008));
+	//~ xlong c1 = 0;
+	//~ xlong c2 = 0;
+	//~ xlong c3 = 0;
+	//~ xlong c4 = 0;
+	//~ xlong c5 = 0;
+	//~ __asm__ __volatile__ ("cpuid; nop;":"=d"(c2):"a"(0x00000001));
+	//~ __asm__ __volatile__ ("cpuid":"=c"(c3):"a"(0x80000001));
+	//~ __asm__ __volatile__ ("cpuid":"=a"(c4):"a"(0x00000004));
+	//~ __asm__ __volatile__ ("cpuid":"=c"(c5):"a"(0x80000008));
 	//*
 	
 	//check ram
-	CLfile* mem = clsystem.getfile("/proc/meminfo");
-	xlong p = clstring.find(mem->text,"MemTotal:");
-	tram = clstring.tolong(&(mem->text[p+9])) / 1024;
+	//CLfile* mem = clsystem.getfile("/proc/meminfo");
+	//xlong p = clstring.find(mem->text,"MemTotal:");
+	//tram = clstring.tolong(&(mem->text[p+9])) / 1024;
 	//p = clstring.find(mem->text,"MemFree:");
 	//fram = clstring.tolong(&(mem->text[p+8])) / 1024;
-	say(tram);
+	//say(tram);
 	//*
 	
 	//process cuid results here so vars can find way back

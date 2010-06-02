@@ -32,9 +32,9 @@
 class CLprogress : public CLguibase
 {
 	private:
-		static CLstring& clstring;
-		static CLgfx&    clgfx;
-		static CLmath&   clmath;
+		CLstring& clstring;
+		CLgfx&    clgfx;
+		CLmath&   clmath;
 	protected:
 		float progress;
 		xlong start;
@@ -58,14 +58,11 @@ class CLprogress : public CLguibase
 		xlong getend() const { return end; };
 		xlong getprogress() const { return progress; };
 };
-
-CLstring& CLprogress::clstring = CLstring::instance();
-CLgfx&    CLprogress::clgfx    = CLgfx::instance();
-CLmath&   CLprogress::clmath   = CLmath::instance();
 ///*
 
 ///implementation
-CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) : CLguibase(px,py,w,h,f,fc,bc,rc) //! noncritical
+CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
 {
 	//set up attributes
 	progress = p;
@@ -82,7 +79,8 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	//*
 }
 
-CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv) : CLguibase(px,py,w,h) //! noncritical
+CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv)  //! noncritical
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h)
 {
 	//set up attributes
 	progress = p;
@@ -99,7 +97,8 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	//*
 }
 
-CLprogress::CLprogress() : CLguibase(0,0,0,0) //! noncritical
+CLprogress::CLprogress() //! noncritical
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(0,0,0,0)
 {
 	start = end = progress = pcolor = horver = pprogress = punit = 0;
 }

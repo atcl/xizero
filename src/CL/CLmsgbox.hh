@@ -40,10 +40,10 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 	friend class CLglobal;
 	
 	private:
-		static CLstring& clstring;
-		static CLwindow& clwindow;
+		CLstring& clstring;
+		CLwindow& clwindow;
 	protected:
-		CLmsgbox() { };
+		CLmsgbox();
 		~CLmsgbox() { };
 		static xlong currid;
 		static void draw();
@@ -51,13 +51,14 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 		xlong msgbox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);
 };
-
-CLstring& CLmsgbox::clstring = CLstring::instance();
-CLwindow& CLmsgbox::clwindow = CLwindow::instance();
 xlong CLmsgbox::currid = 0;
 ///*
 
 ///implementation
+CLmsgbox::CLmsgbox() //! noncritical
+: clstring(CLstring::instance()), clwindow(CLwindow::instance())
+{ }
+
 void CLmsgbox::draw() { } //! noncritical
 
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
