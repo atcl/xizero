@@ -100,8 +100,8 @@ CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* mark
 
 CLammomanager::~CLammomanager() //! noncritical
 {
-	delete list;
-	delete[] type;
+	//delete list;
+	//delete[] type;
 }
 
 void CLammomanager::fire(xlong at,const CLfvector& startposition,const CLfvector direction) //! critical

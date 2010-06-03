@@ -331,7 +331,6 @@ CLobject::CLobject(rawpoly* p,xlong c,uxlong co,uxlong sc) //! noncritical
 	polycount = c;
 	dockcount = 0;
 	polyptr = new CLpolygon*[polycount];
-	
 	for(xlong i=0;i<polycount;i++) { polyptr[i] = new CLpolygon(p[i].v[0],p[i].v[1],p[i].v[2],p[i].v[3],co,sc); }
 }
 
@@ -355,8 +354,11 @@ CLobject::CLobject(CLobject* obj) //! noncritical
 
 CLobject::~CLobject() //! noncritical
 {
-	delete boundingbox;
-	delete rboundingbox;
+	//~ delete shadow;
+	//~ delete linear;
+	//~ delete[] polyptr;
+	//~ delete boundingbox;
+	//~ delete rboundingbox;
 }
 
 void CLobject::update() //! noncritical

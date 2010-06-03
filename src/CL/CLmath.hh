@@ -152,11 +152,11 @@ CLmath::CLmath() //! noncritical
 
 CLmath::~CLmath() //! noncritical
 {
-	delete[] clsin;
-	delete[] clcos;
-	delete[] cltan;
-	delete[] clarcsin;
-	delete[] clarccos;
+	//~ delete[] clsin;
+	//~ delete[] clcos;
+	//~ delete[] cltan;
+	//~ delete[] clarcsin;
+	//~ delete[] clarccos;
 }
 
 xlong CLmath::sign(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  } //! noncritical

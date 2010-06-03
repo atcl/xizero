@@ -80,7 +80,7 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	buttonlist->append(this);
 }
 
-CLbutton::~CLbutton() { delete caption; } //! noncritical
+CLbutton::~CLbutton() { /*delete caption;*/ } //! noncritical
 
 void CLbutton::draw() const //! critical
 {
@@ -93,7 +93,6 @@ void CLbutton::click() const { action(); } //! critical
 
 void CLbutton::setcaption(xchar* t) //! noncritical
 {
-	delete caption;
 	caption = clstring.copy(t);
 	captionwidth = clgfx.getfontstringwidth(t,0) + 4;
 	captionheight = clgfx.getfontstringheight(t,0);

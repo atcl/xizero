@@ -64,7 +64,7 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 	//check if file exists
 	if( !( of = fopen(fn,"rb") ) ) 
 	{
-		delete re;
+		//delete re;
 		tty(__func__);
 		say(fn);
 		return 0;

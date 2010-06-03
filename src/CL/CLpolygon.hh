@@ -79,7 +79,6 @@ class CLpolygon : CLbase<CLpolygon,0>
 		inline xlong circledec(xlong x,xlong pc) const;
 	public:
 		CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc);
-		CLpolygon(const CLpolygon& c);
 		~CLpolygon() { };
 		void update(CLmatrix* m,bool i=0);
 		void partupdate(CLmatrix* m);
@@ -558,31 +557,6 @@ CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,co
 	//calc normals
 	normal = rnormal = CLfvector((points[1]-points[0]) * (points[2]-points[0]));
 	//*
-}
-
-CLpolygon::CLpolygon(const CLpolygon& c) //! noncritical
-: clmath(CLmath::instance()), clscreen(CLscreen::instance()), CLbase<CLpolygon,0>(c)
-{
-	color  = c.color;
-	rcolor = c.rcolor;
-	scolor = c.scolor;
-	cpointcount = c.cpointcount;
-	
-	pointr[0] = c.pointr[0];
-	pointr[1] = c.pointr[1];
-	pointr[2] = c.pointr[2];
-	pointr[3] = c.pointr[3];
-	points[0] = c.points[0];
-	points[1] = c.points[1];
-	points[2] = c.points[2];
-	points[3] = c.points[3];
-	pointt[0] = c.pointt[0];
-	pointt[1] = c.pointt[1];
-	pointt[2] = c.pointt[2];
-	pointt[3] = c.pointt[3];
-	
-	normal = c.normal;
-	rnormal = c.rnormal;
 }
 
 void CLpolygon::display(const CLlvector& p,xshort flags) //! critical

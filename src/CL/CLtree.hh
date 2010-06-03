@@ -90,7 +90,7 @@ CLtree<member>::CLtree() //! noncritical
 }
 
 template<class member>
-CLtree<member>::~CLtree() { delete rootnode; } //! noncritical
+CLtree<member>::~CLtree() { /*delete rootnode;*/ } //! noncritical
 
 template<class member>
 void CLtree<member>::adddata(member* d) { current->data = d; } //! noncritical
@@ -116,7 +116,7 @@ void CLtree<member>::delchild(xlong i) //! noncritical
 {
 	if(i >= current->childcount)
 	{
-		delete current->child[i-1]->next;
+		//delete current->child[i-1]->next;
 		current->child[i-1]->next = current->child[i-1];
 	}
 }

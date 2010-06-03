@@ -222,9 +222,9 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) //! noncritical
 
 CLenemy::~CLenemy() //! noncritical
 {
-	delete aiarray;
-	delete aggrobox;
-	delete hprog;
+	//delete aiarray;
+	//delete aggrobox;
+	//delete hprog;
 }
 
 template<int I>

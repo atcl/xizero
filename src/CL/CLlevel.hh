@@ -133,7 +133,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 	xlong hordiff[4];
 	xlong verdiff[4];
 	bool  unbalanced = 0;
-	
+
 	for(xlong i=0; i<height-1; i++)
 	{
 		//generate stripe horizontally
@@ -253,7 +253,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 		//*
 		
 		//generate object
-		levelmap[i] = new CLobject(grid,curr,0xFFFFFFFF,0x000000FF);
+		levelmap[i] = new CLobject(grid,curr,0xFFFFFFFF,0x000000FF); //crash in here
 		//*
 		
 		//reset for next stripe
@@ -261,7 +261,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 		//* 			
 	}
 	
-	delete[] grid;
+	//delete[] grid;
 	//******************************************************************
 	
 	
@@ -340,9 +340,9 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 
 CLlevel::~CLlevel() //! noncritical
 {
-	delete player;
-	delete enemylist;
-	delete boss;
+	//delete player;
+	//delete enemylist;
+	//delete boss;
 }
 
 xlong CLlevel::update() //! critical

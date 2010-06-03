@@ -183,9 +183,9 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pt
 
 CLplayer::~CLplayer() //! noncritical
 {
-	delete def;
-	delete hprog;
-	delete sprog;
+	//~ delete def;
+	//~ delete hprog;
+	//~ delete sprog;
 }
 
 xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! critical

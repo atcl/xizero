@@ -38,7 +38,7 @@ class CLlight : public CLbase<CLlight,0>
 		inline uxlong lambertslaw(xlong x,xlong y) const;
 	public:
 		CLlight(xlong r,uxlong c);
-		~CLlight() { delete mask; };
+		~CLlight() { /*delete mask;*/ };
 		void draw(xlong x,xlong y) const; 
 };
 ///*

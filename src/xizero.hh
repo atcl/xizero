@@ -46,9 +46,9 @@ void newgame()
 		clglobal.clfsprog.draw();
 		clglobal.clwindow.run();
 		//*
-		
+
 		//load and init level
-		xchar** lfn = clglobal.clformat.loadlvl(lvls->getmember(currlevel));
+		xchar** lfn = clglobal.clformat.loadlvl(lvls->getmember(currlevel)); //crash in here
 		CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),0,currlevel);
 		clglobal.clfsprog.set(100);
 		clglobal.clfsprog.draw();

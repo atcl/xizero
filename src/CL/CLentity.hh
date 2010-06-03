@@ -302,18 +302,18 @@ CLentity<I>::CLentity()
 template<int I>
 CLentity<I>::~CLentity<I>() //! noncritical
 {
-	delete def;
-	delete ammoman; 
-	delete ammotype;
-	delete firerate;
-	delete fireupdate;
-	
-	for(xlong i=0; i<I; i++)
-	{
-		delete model[i];
-		delete expl[i];
-		delete boundingbox[1][i];
-	}
+	//~ delete def;
+	//~ delete ammoman; 
+	//~ delete ammotype;
+	//~ delete firerate;
+	//~ delete fireupdate;
+	//~ 
+	//~ for(xlong i=0; i<I; i++)
+	//~ {
+		//~ delete model[i];
+		//~ delete expl[i];
+		//~ delete boundingbox[1][i];
+	//~ }
 }
 
 template<int I>

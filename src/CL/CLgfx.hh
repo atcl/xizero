@@ -552,7 +552,7 @@ void CLgfx::fill(xlong x,xlong y,uxlong oc,uxlong nc) const //! critical
 		//*
 		
 		//kill the point
-		delete temp;
+		//delete temp;
 		//*
 	}
 	//*
@@ -605,7 +605,7 @@ void CLgfx::fillframe(xlong x,xlong y,uxlong fc,uxlong nc) const //! critical
 		//*
 		
 		//kill the point
-		delete temp;
+		//delete temp;
 		//*
 	}
 	//*

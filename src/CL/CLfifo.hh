@@ -111,7 +111,7 @@ void CLfifo<T>::clear() //! critical
 	{
 		fifomember<T>* t = tail;
 		tail = tail->prev;
-		delete t;
+		//delete t;
 		length--;
 	}
 	//*

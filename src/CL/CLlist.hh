@@ -87,10 +87,10 @@ CLlist<member>::~CLlist() //! noncritical
 	
 	//delete list members iteratively
 	current = last;
-	while(length!=0) { delcurrent(); }
-	delete current;
-	delete first;
-	delete last;
+	//~ while(length!=0) { delcurrent(); }
+	//~ delete current;
+	//~ delete first;
+	//~ delete last;
 	//*
 }
 
@@ -160,7 +160,7 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 	//delete very (l)only element in list
 	if(current==last && current==first)
 	{
-		delete current;
+		//delete current;
 		current = 0;
 		first = 0;
 		last = 0;
@@ -171,7 +171,7 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 	else if(current==last)
 	{
 		setprev();
-		delete current->next;
+		//delete current->next;
 		current->next = current;
 		last = current;
 	}
@@ -181,7 +181,7 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 	else if(current==first)
 	{
 		setnext();
-		delete current->prev;
+		//delete current->prev;
 		current->prev = current;
 		first = current;
 	}
@@ -193,7 +193,7 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 		listmember* tempnext = current->next;
 		listmember* tempprev = current->prev;
 		setnext();
-		delete current->prev;
+		//delete current->prev;
 		current->prev = tempprev;
 		setprev();
 		current->next = tempnext;
@@ -232,7 +232,7 @@ void CLlist<member>::clear(bool smash) //! noncritical
 			{
 				//delete current->data; //problems!
 				setnext();
-				delete current->prev;
+				//delete current->prev;
 			}
 	}
 	//*

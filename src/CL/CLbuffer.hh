@@ -41,7 +41,7 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 		xlong  ttype;
 	public:
 		CLbuffer(uxlong s,T i=0);
-		~CLbuffer() { delete buffer; };
+		~CLbuffer() { /*delete buffer;*/ };
 		void clear(T v=0);
 		void copy(CLbuffer<T>* dst,xlong o=0) const;
 		uxlong getsize() const { return size; };

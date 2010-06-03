@@ -85,11 +85,11 @@ CLmenu::CLmenu() //! noncritical
 CLmenu::~CLmenu() //! noncritical
 {
 	//clwindow->setsyskey();
-	delete icon;
-	delete title;
-	delete exit;
-	delete info;
-	delete about;	
+	//~ delete icon;
+	//~ delete title;
+	//~ delete exit;
+	//~ delete info;
+	//~ delete about;	
 }
 
 void CLmenu::show() //! noncritical

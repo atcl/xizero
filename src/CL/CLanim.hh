@@ -154,7 +154,7 @@ CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
 
 CLanim::~CLanim() //! noncritical
 { 
-	delete[] frame;
+	//delete[] frame;
 }
 
 xlong CLanim::update() //! critical
