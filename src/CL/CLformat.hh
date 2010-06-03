@@ -216,7 +216,7 @@ sprite* CLformat::loadras(CLfile* f) const //! noncritical
 					pixelindex++;
 				}		
 						
-				data[pixelindex] = bf[dataindex];
+				data[pixelindex] = bf[dataindex]; //! invalid write here
 				pixelindex++;
 				dataindex++;
 			}

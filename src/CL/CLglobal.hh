@@ -27,91 +27,121 @@
 ///*
 
 ///declarations
-class CLscreen;
-class CLwindow;
-class CLsystem;
-class CLformat;
-class CLmath;
-class CLgame;
-class CLmisc3d;
-class CLfsprog;
-class CLdetect;
-class CLgfx;
-class CLtrans;
-class CLid;
-class CLstring;
 class CLapp;
-class CLmsgbox;
-class CLintro;
-class CLsound;
+class CLid;
+class CLmath;
+class CLscreen;
 class CLcomspr;
+class CLstring;
+class CLsystem;
+class CLcamera;
+class CLdetect;
+class CLformat;
+class CLfsprog;
+class CLgame;
+class CLsound;
+class CLgfx;
+class CLmisc3d;
+class CLwindow;
+class CLintro;
 class CLmenu;
+class CLmsgbox;
+class CLtrans;
 ///*
 
 ///definitions
 class CLglobal
 {
 	private:
-		CLscreen screen;		
-		CLwindow window;
-		CLsystem system;
-		CLformat format;
-		CLmath   math;
-		CLgame   game;
-		CLmisc3d misc3d;
-		CLdetect detect;
-		CLfsprog fsprog;
-		CLgfx    gfx;
-		CLtrans  trans;
-		CLsound  sound;
-		CLcomspr comspr;
-		CLid     id;
-		CLstring string;
 		CLapp    app;
-		CLmsgbox msgbox;
+		CLid     id;
+		CLmath   math;
+		CLscreen screen;
+		CLcomspr comspr;
+		CLstring string;
+		CLsystem system;
+		//CLcamera camera;
+		CLdetect detect;
+		CLformat format;
+		CLfsprog fsprog;
+		CLgame   game;
+		CLsound  sound;
+		CLgfx    gfx;
+		CLmisc3d misc3d;
+		CLwindow window;
 		CLintro  intro;
 		CLmenu   menu;
+		CLmsgbox msgbox;	
+		CLtrans  trans;
 	public:
 		CLglobal(xchar* argv);
 		~CLglobal() { };
-		CLscreen& clscreen;
-		CLwindow& clwindow;
-		CLsystem& clsystem;
-		CLformat& clformat;
-		CLmath&   clmath;
-		CLgame&   clgame;
-		CLmisc3d& clmisc3d;
-		CLdetect& cldetect;
-		CLfsprog& clfsprog;
-		CLgfx&    clgfx;
-		CLtrans&  cltrans;
-		CLsound&  clsound;
-		CLcomspr& clcomspr;
-		CLid&     clid;
-		CLstring& clstring;
 		CLapp&    clapp;
-		CLmsgbox& clmsgbox;
+		CLid&     clid;
+		CLmath&   clmath;
+		CLscreen& clscreen;
+		CLcomspr& clcomspr;
+		CLstring& clstring;
+		CLsystem& clsystem;
+		//CLcamera& clcamera
+		CLdetect& cldetect;
+		CLformat& clformat;
+		CLfsprog& clfsprog;
+		CLgame&   clgame;
+		CLsound&  clsound;
+		CLgfx&    clgfx;
+		CLmisc3d& clmisc3d;
+		CLwindow& clwindow;
 		CLintro&  clintro;
 		CLmenu&   clmenu;
+		CLmsgbox& clmsgbox;
+		CLtrans&  cltrans;
 };
 ///*
 
 ///implementation
-CLglobal::CLglobal(xchar* argv) : screen(CLscreen::instance()), window(CLwindow::instance()), system(CLsystem::instance()),
-								  format(CLformat::instance()), math(CLmath::instance()),     game(CLgame::instance()),
-								  misc3d(CLmisc3d::instance()), detect(CLdetect::instance()), fsprog(CLfsprog::instance()),
-								  gfx(CLgfx::instance()),       trans(CLtrans::instance()),   sound(CLsound::instance()),
-								  comspr(CLcomspr::instance()), id(CLid::instance()),         string(CLstring::instance()),
-								  app(CLapp::instance()),       msgbox(CLmsgbox::instance()), intro(CLintro::instance()),
-								  menu(CLmenu::instance()),
-								  
-								  clscreen(screen), clwindow(window), clsystem(system),
-								  clformat(format), clmath(math),     clgame(game),
-								  clmisc3d(misc3d), cldetect(detect), clfsprog(fsprog),
-								  clgfx(gfx),       cltrans(trans),   clsound(sound),
-								  clcomspr(comspr), clid(id),         clstring(string),
-								  clapp(app),       clmsgbox(msgbox), clintro(intro),
-								  clmenu(menu) { clapp.setexename(argv); } //! noncritical
+CLglobal::CLglobal(xchar* argv) :	app(CLapp::instance()), 
+									id(CLid::instance()),
+									math(CLmath::instance()),
+									screen(CLscreen::instance()),
+									comspr(CLcomspr::instance()),
+									string(CLstring::instance()),
+									system(CLsystem::instance()),
+									//camera(CLcamera::instance()),
+									detect(CLdetect::instance()),
+									format(CLformat::instance()),
+									fsprog(CLfsprog::instance()),
+									game(CLgame::instance()),
+									sound(CLsound::instance()),
+									gfx(CLgfx::instance()),
+									misc3d(CLmisc3d::instance()),
+									window(CLwindow::instance()),
+									intro(CLintro::instance()),
+									menu(CLmenu::instance()),
+									msgbox(CLmsgbox::instance()),
+									trans(CLtrans::instance()),
+									
+									clapp(app),
+									clid(id),
+									clmath(math),
+									clscreen(screen),
+									clcomspr(comspr),
+									clstring(string),
+									clsystem(system),
+									//clcamera(camera),
+									cldetect(detect),
+									clformat(format),
+									clfsprog(fsprog),
+									clgame(game),
+									clsound(sound),
+									clgfx(gfx),
+									clmisc3d(misc3d),
+									clwindow(window),
+									clintro(intro),
+									clmenu(menu),
+									clmsgbox(msgbox),
+									cltrans(trans)
+{ clapp.setexename(argv); } //! noncritical
 
 ///*
 

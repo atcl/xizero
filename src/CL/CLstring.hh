@@ -57,9 +57,9 @@ class CLstring : public CLbase<CLstring,1>
 ///implementation
 xchar* CLstring::copy(const xchar* s,xlong l) const //! critical
 {
-	if(l==0) { while (s[l]) { l++; } }
+	if(l==0) { while(s[l]!=0) { l++; } }
 	xchar* r = new xchar[l+1];
-	for(xlong i=0; i<l; i++) { r[i] = s[i]; }
+	for(xlong i=0;i<l;i++) { r[i] = s[i]; } //! invalid read of 1 here!
 	r[l] = 0;
 	return r;
 }
@@ -78,7 +78,7 @@ xchar* CLstring::concat(const xchar* a,const xchar* b) const //!noncritical
 xlong CLstring::length(const xchar* s) const //! critical
 {
 	xlong l = 0;
-	while (s[l]) { l++; }
+	while(s[l]!=0) { l++; } //! !!!!!!! uninit here !!!!!!!! ????
 	return l;
 }
 
@@ -94,7 +94,7 @@ xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncri
 	uxlong sl = length(s);
 	uxlong tl = length(t);
 	uxlong i = 0;
-	while( (i<sl) && (i<tl) && (i<n ^ n==0) ) { if(s[i]!=t[i]) { i=0; break; } i++; }
+	while( (i<sl) && (i<tl) && (i<n ^ n==0) ) { if(s[i]!=t[i]) { i=0; break; } i++; } //! n!=0 ????
 	return i;
 }
 
@@ -106,10 +106,10 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 	xlong t = 1;
 	xlong u = 1;
 	
-	while(s[i]==' ') { i++; }
+	while(s[i]==' ') { i++; } //! invalid read of 1 here!
 	if(s[i]=='-') { u = -1; i++; }
 	j = i;
-	while(s[j]>='0' && s[j]<='9') { j++; }
+	while(s[j]>='0' && s[j]<='9') { j++; } //! invalid read of 1 here!
 	j -= i;
 	for(; j>0; j--,i++)
 	{

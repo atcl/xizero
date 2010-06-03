@@ -68,17 +68,18 @@ void CLar::loadar(CLfile* sf) //! noncritical
 	//*
 
 	//check for "magic-string"
-	if( clstring.compare(bf,u8"!<arch>",6) != 0 )
+	if(clstring.compare(bf,"!<arch>",7)!=0)
 	{
 		//init variables
 		xlong bc = 8;
 		xlong fc = 0;
-		xchar* fn;
+		xchar* fn = 0;
 		xlong fs = 0;
 		//*
 
+		//! this do loop produxes illegal mem read and writes
 		//for each member do
-		do
+		while(tsize>0)
 		{
 			//read member header
 			fn = clstring.copy(&bf[bc],16);	//member filename
@@ -99,7 +100,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			//*
 
 			//fill array
-			for(xlong i=0; i<fs2; i++) { tb[i] = bf2[i]; }
+			for(xlong i=0; i<fs2; i++) { tb[i] = bf2[i]; } //! invalid read of size 4 here
 			bc += fs;
 			//*
 
@@ -117,8 +118,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			tsize -= (fs+60); //subtract reading size from global size
 			fc++; //increment filecount
 			//*
-
-		} while( tsize > 0 );
+		}
 		//*
 
 		//create arfile
@@ -155,9 +155,7 @@ CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 CLfile* CLar::findbyname(const xchar* e) const //! noncritical
 {
 		xlong r = -1;
-
-		for(uxlong h=0; h<filecount; h++) { if(clstring.compare(members[h]->name,e)!=0) { r = h; } }
-		
+		for(uxlong h=0;h<filecount;h++) { if(clstring.compare(members[h]->name,e)!=0) { r = h; } }
 		if(r==-1) { return 0; }
 		return members[r];
 }

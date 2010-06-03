@@ -73,7 +73,7 @@ void CLbuffer<T>::clear(T v) //! critical
 	xlong purev = (reinterpret_cast<xlong*>(&v))[0];
 	xlong* pack = new xlong[4];
 	pack[0] = pack[1] = pack[2] = pack[3] = purev;
-	register xlong i = size;
+	register xlong i = size-1;
 
 	//x86 SSE1 assembly clear 
 	if(ttype==3)
