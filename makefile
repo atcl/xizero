@@ -30,6 +30,7 @@ GAMEDAT = xizero.dat
 # Other
 STRIP   = strip -s -R .comment -R .gnu.version
 CPPCH   = cppcheck -a -v -s
+GRIND   = valgrind -v --tool=memcheck --leak-check=full --track-origins=yes -v appname 2>&1 | tee valgrind.txt
 
 # File Operations
 RM      = rm
@@ -59,6 +60,7 @@ default:
 none:
 	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
 	$(CPPCH) $(SOURCE1)
+	$(GRIND)
 
 install:
 	$(MK) $(BINDST)
