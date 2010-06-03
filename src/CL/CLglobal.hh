@@ -100,7 +100,7 @@ class CLglobal
 ///*
 
 ///implementation
-CLglobal::CLglobal(xchar* argv) :	app(CLapp::instance()), 
+CLglobal::CLglobal(xchar* argv) :	app(CLapp::instance()), //! noncritical
 									id(CLid::instance()),
 									math(CLmath::instance()),
 									screen(CLscreen::instance()),
@@ -141,7 +141,7 @@ CLglobal::CLglobal(xchar* argv) :	app(CLapp::instance()),
 									clmenu(menu),
 									clmsgbox(msgbox),
 									cltrans(trans)
-{ clapp.setexename(argv); } //! noncritical
+{ clapp.setexename(argv); }
 
 ///*
 
