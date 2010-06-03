@@ -18,11 +18,10 @@ int main(int argc,char* argv[])
 
 	//intros
 	clglobal.clintro.atcrosslevel(cldata->findbyname("intro.a"));
-	clglobal.clintro.xizero(cldata->findbyname("intro.a"));
+	sprite* xzmenuback = clglobal.clintro.xizero(cldata->findbyname("intro.a"),1);
 	//*
 	
 	//mainmenu
-	sprite* xzmenuback = clglobal.clgfx.savescreen();
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
 	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);

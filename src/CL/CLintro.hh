@@ -47,9 +47,9 @@ class CLintro : public CLbase<CLintro,1>
 		CLintro();
 		~CLintro() { };
 	public:
-		void atcrosslevel(CLfile* s) const;
-		void xizero(CLfile* s) const;
-		void torus(CLfile* s) const;
+		sprite* atcrosslevel(CLfile* f,bool s=0) const;
+		sprite* xizero(CLfile* f,bool s=0) const;
+		sprite* torus(CLfile* f,bool s=0) const;
 };
 ///*
 
@@ -58,10 +58,10 @@ CLintro::CLintro() //! noncritical
 : clgfx(CLgfx::instance()), clwindow(CLwindow::instance()), clsystem(CLsystem::instance()), clscreen(CLscreen::instance())
 { }
 
-void CLintro::atcrosslevel(CLfile* s) const //! noncritical
+sprite* CLintro::atcrosslevel(CLfile* f,bool s) const //! noncritical
 {
 	//load atcrosslevel model
-	CLar* introar = new CLar(s);
+	CLar* introar = new CLar(f);
 	CLfile *cf = introar->findbyname(u8"atcl.y3d");
 	CLobject* atcl_obj = new CLobject(cf,0);
 	//*
@@ -95,12 +95,14 @@ void CLintro::atcrosslevel(CLfile* s) const //! noncritical
 		clwindow.sleep(4000);
 	}
 	//*
+	
+	if(s!=0) { clgfx.savescreen(); } else { return 0; }
 }
 
-void CLintro::xizero(CLfile* s) const //! noncritical
+sprite* CLintro::xizero(CLfile* f,bool s) const //! noncritical
 {
 	//load atcrosslevel model
-	CLar* introar = new CLar(s);
+	CLar* introar = new CLar(f);
 	CLfile* fxi = introar->findbyname(u8"xi.y3d");
 	CLobject* oxi = new CLobject(fxi,0);
 	CLfile* fzero = introar->findbyname(u8"zero.y3d");
@@ -140,9 +142,11 @@ void CLintro::xizero(CLfile* s) const //! noncritical
 		if(r==0) break;
 	}
 	//*
+	
+	if(s!=0) { clgfx.savescreen(); } else { return 0; }
 }
 
-void CLintro::torus(CLfile* s) const
+sprite* CLintro::torus(CLfile* f,bool s) const
 {
 	//build torus
 	
