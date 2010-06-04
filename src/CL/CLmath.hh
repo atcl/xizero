@@ -18,11 +18,11 @@
  * 
  * description:	A math library with assembly support
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	implement own arccos,arcsin
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -55,7 +55,7 @@ class CLmath : public CLbase<CLmath,1>
 		CLmath();
 		~CLmath();
 	public:
-		xlong sign(xlong x) const;
+		template<typename T> T sign(T x) const;
 		template<typename T> T heaviside(T x) const;
 		template<typename T> T delta(T x) const;
 		template<typename T> T absolute(T x) const;
@@ -90,7 +90,7 @@ CLmath::CLmath() //! noncritical
 	fxpi = 355.0/113.0;
 	//*
 	
-	//calc pi //very bad convergence!!!
+	//calc pi (arctan method) //very bad convergence!!!
 	clpi = 1;
 	float h = 3;
 	float altsign = -1.0;
@@ -159,35 +159,36 @@ CLmath::~CLmath() //! noncritical
 	//~ delete[] clarccos;
 }
 
-xlong CLmath::sign(xlong x) const { return xlong(x!=0) | (xlong(x>=0)-1);  } //! noncritical
+template<typename T>
+T CLmath::sign(T x) const { return T(x>0) - T(x<0);  } //! critical
 
 template<typename T>
 T CLmath::heaviside(T x) const { return T(x>0); } //! noncritical
 
 template<>
-xlong CLmath::absolute<xlong>(xlong x) const { return ((xlong(x>0)-1) ^ x) + xlong(x<0); } //! noncritical
+xlong CLmath::absolute<xlong>(xlong x) const { return ((xlong(x>0)-1) ^ x) + xlong(x<0); } //! critical
 
 template<>
-float CLmath::absolute<float>(float x) const //! noncritical
+float CLmath::absolute<float>(float x) const //! critical
 {
-	__asm__ __volatile__ ("andl $0x7FFFFFFF,%%eax;" : "=a"(x) : "a"(x) );
-	return x;
+	xlong c = (*(xlong*) &x) & 0x7FFFFFFF;
+	return *(float*)&c;
 }
 
 template<typename T>
-T CLmath::delta(T x) const { return (x==0); } //! noncritical
+T CLmath::delta(T x) const { return (x==0); } //! critical
 
 template<typename T>
-T CLmath::min(T a,T b) const { return ((a<b) ? a : b); } //! noncritical
+T CLmath::min(T a,T b) const { return ((a<b) ? a : b); } //! critical
 
 template<typename T>
-T CLmath::max(T a,T b) const { return ((a>b) ? a : b); } //! noncritical
+T CLmath::max(T a,T b) const { return ((a>b) ? a : b); } //! critical
 
 template<>
-xlong CLmath::min(xlong a,xlong b) const { return (a + ( ((b-a)>>31) & (b-a) )); } //! noncritical
+xlong CLmath::min(xlong a,xlong b) const { return (a + ( ((b-a)>>31) & (b-a) )); } //! critical
 
 template<>
-xlong CLmath::max(xlong a,xlong b) const { return (a - ( ((a-b)>>31) & (a-b) )); } //! noncritical
+xlong CLmath::max(xlong a,xlong b) const { return (a - ( ((a-b)>>31) & (a-b) )); } //! critical
 
 template<typename T>
 T CLmath::round(T x) const { return ( (x - T(xlong(x))) > 0.5) ? T(xlong(x)+xlong(x>0)) : T(xlong(x)-xlong(x<0)); } //! noncritical
@@ -198,29 +199,23 @@ T CLmath::roundup(T x) const { return T(xlong(x)+xlong(x>0 && (x - T(xlong(x))!=
 template<typename T>
 T CLmath::rounddown(T x) const { return T(xlong(x)); } //! noncritical
 
-template<typename T>
-T CLmath::sqrt(T x) const //! critical
+template<>
+xlong CLmath::sqrt<xlong>(xlong x) const //! critical
 {
-	if(x<=0) return 0;
-
-	T num = x;
-	T tmp = (x + 1) >> 1;
-
+	if(x<=0) { return 0; }
+	xlong num = x;
+	xlong tmp = (x + 1) >> 1;
 	for(int i=15;i>0;i--) { tmp = ((num/tmp) + tmp) >> 1; }
-
 	return tmp;
 }
 
-template<>
-float CLmath::sqrt<float>(float x) const //! critical
+template<typename T>
+T CLmath::sqrt(T x) const //! critical
 {
-	if(x<=0) return 0;
-
-	float num = x;
-	float tmp = (x + 1)/2;
-
+	if(x<=0) { return 0; }
+	T num = x;
+	T tmp = (x + 1)/2;
 	for(int i=15;i>0;i--) { tmp = ((num/tmp) + tmp)/2; }
-
 	return tmp;
 }
 
@@ -272,34 +267,34 @@ float CLmath::pi() const { return fxpi; }
 
 float CLmath::sin(xlong x) const //! noncritical
 {
-	if(x < 0) x -= 180;
-	x = absolute(x);
-	x %= 360;
+	if(x < 0) { x -= 180; }
+	x = absolute(x) % 360;
 	return clsin[x];
 }
 
 float CLmath::cos(xlong x) const //! noncritical
 {
-	x = absolute(x)%360;
+	x = absolute(x) % 360;
 	return clcos[x];
 }
 
 float CLmath::tan(xlong x) const //! noncritical
 {
-	if(x < 0) x -= 180;
-	x = absolute(x);
-	x %= 360;
+	if(x < 0) { x -= 180; }
+	x = absolute(x) % 360;
 	return cltan[x];
 }
 
-xlong CLmath::arcsin(float x) const //! critical
-{ 
-	return x; //! todo
+xlong CLmath::arcsin(float x) const //! noncritical
+{
+	if(x<-1 || x>1) { x = sign(x); }
+	return clarcsin[xlong(x*100.0)];
 }
 
-xlong CLmath::arccos(float x) const //! critical
+xlong CLmath::arccos(float x) const //! noncritical
 {
-	return x; //! todo
+	if(x<-1 || x>1) { x = sign(x); }
+	return clarccos[xlong(100.0*x)];
 }
 
 xlong CLmath::arctan(float x) const //! critical
@@ -316,13 +311,11 @@ xlong CLmath::arctan(float x) const //! critical
 	return xlong(r);
 }
 
-float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const //! critical
+float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k) const //! noncritical
 {
 	float tk = t0;
 	float xk = x0;
-
 	for(int i=1;i<=k;i++) { xk = xk + (h * f(tk,xk) ); }
-	
 	return xk;
 }
 
