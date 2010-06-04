@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLmatrix.hh</filename>
+	
+	<name>CLmatrix</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLmath.xml">CLmath</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>m</name>
+		<type>float[4][4]</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>t</name>
+		<type>float[4][4]</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>multiplicate</name>
+		<returns>void</returns>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLmatrix</name>
+		<parameter>bool i</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLmatrix</name>
+		<parameter>const CLfvector&amp; l</parameter>
+		<parameter>const CLfvector&amp; p</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLmatrix</name>>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>rotate</name>
+		<returns>void</returns>
+		<parameter>xlong x</parameter>
+		<parameter>xlong y</parameter>
+		<parameter>xlong z</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>translate</name>
+		<returns>void</returns>
+		<parameter>float x</parameter>
+		<parameter>float y</parameter>
+		<parameter>float y</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>scale</name>
+		<returns>void</returns>
+		<parameter>float x</parameter>
+		<parameter>float y</parameter>
+		<parameter>float z</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>aspectscale</name>
+		<returns>void</returns>
+		<parameter>float x</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>superscale</name>
+		<returns>void</returns>
+		<parameter>float x</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>reflect</name>
+		<returns>void</returns>
+		<parameter>bool x=0</parameter>
+		<parameter>bool y=0</parameter>
+		<parameter>bool z=0</parameter>>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>transform</name>
+		<returns>clvector</returns>
+		<parameter>const clvector&amp; t</parameter>
+		<qualifier>template&lt;class clvector&gt;,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>clear</name>
+		<returns>void</returns>
+		<parameter>float i</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>unit</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>transpose</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>dyadic</name>
+		<returns>void</returns>
+		<parameter>const clvector&amp; a</parameter>
+		<parameter>const clvector&amp; b</parameter>
+		<qualifier>template&lt;class clvector&gt;</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>shadow</name>
+		<returns>void</returns>
+		<parameter>const clvector&amp; l</parameter>
+		<parameter>const clvector&amp; p</parameter>
+		<qualifier>template&lt;class clvector&gt;</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>project</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>trace</name>
+		<returns>float</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>set</name>
+		<returns>void</returns>
+		<parameter>const clvector&amp; a</parameter>
+		<parameter>const clvector&amp; b</parameter>
+		<parameter>const clvector&amp; c</parameter>
+		<parameter>const clvector&amp; d</parameter>
+		<qualifier>template&lt;class clvector&gt;</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>print</name>
+		<returns>void</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator=</name>
+		<returns>CLmatrix&amp;</returns>
+		<parameter>const CLmatrix&amp; c</parameter>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

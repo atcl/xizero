@@ -41,6 +41,7 @@ class CLcamera : public CLbase<CLcamera,1>
 		CLfvector position;
 		CLfvector direction;
 		float     roll;
+		CLfvector zo;
 		CLfvector up;
 		CLfvector fw;
 		CLfvector rg;
@@ -65,15 +66,16 @@ CLcamera::~CLcamera() { /*delete linear;*/ } //! noncritical
 
 void CLcamera::setup()
 {
+	zo = CLfvector(0,0,0,1);
 	fw = direction - position;
 	rg = CLfvector(up * fw);
 	rg *= (!rg);
 	up = CLfvector(rg * fw);
-	linear->set(rg.x,rg.y,rg.z,0,up.x,up.y,up.z,0,fw.x,fw.y,fw.z,0,0,0,0,1);
+	linear->set(rg,up,fw,zo);
 	linear->translate(position.x,position.y,position.z);
 }
 
-void CLcamera::setroll(float r)
+void CLcamera::setroll(float r) //! noncritical
 {
 	up.x = clmath.sin(r);
 	up.y = - clmath.cos(r);
@@ -81,13 +83,13 @@ void CLcamera::setroll(float r)
 	setup();
 }
 
-void CLcamera::setposition(CLfvector p)
+void CLcamera::setposition(CLfvector p) //! noncritical
 {
 	position = p;
 	setup();
 }
 
-void CLcamera::setdirection(CLfvector d)
+void CLcamera::setdirection(CLfvector d) //! noncritical
 {
 	direction = d;
 	setup();
