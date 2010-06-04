@@ -87,7 +87,7 @@ CLmath::CLmath() //! noncritical
 	seed = SEED;
 	
 	//precalucalte pi approximation
-	fxpi = 355/113;
+	fxpi = 355.0/113.0;
 	//*
 	
 	//calc pi //very bad convergence!!!

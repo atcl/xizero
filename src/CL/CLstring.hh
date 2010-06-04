@@ -41,7 +41,7 @@ class CLstring : public CLbase<CLstring,1>
 		xchar* concat(const xchar* a,const xchar* b) const;
 		xlong length(const xchar* s) const;
 		xlong scan(const xchar* s) const;
-		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
+		xlong compare(const xchar* s,const xchar* t,uxlong n) const;
 		xlong tolong(const xchar* s) const;
 		float tofloat(const xchar* s) const;
 		xchar* toascii(xlong v) const;
@@ -57,7 +57,7 @@ class CLstring : public CLbase<CLstring,1>
 ///implementation
 xchar* CLstring::copy(const xchar* s,xlong l) const //! critical
 {
-	if(l==0) { while(s[l]!=0) { l++; } }
+	if(l==0) { l = length(s); }
 	xchar* r = new xchar[l+1];
 	for(xlong i=0;i<l;i++) { r[i] = s[i]; } //! invalid read of 1 here!
 	r[l] = 0;
@@ -89,7 +89,7 @@ xlong CLstring::scan(const xchar* s) const //! critical
 	return p;
 }
 
-xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncritical
+xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n=0) const //! noncritical
 {
 	uxlong sl = length(s);
 	uxlong tl = length(t);
@@ -107,6 +107,7 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 	xlong u = 1;
 	
 	while(s[i]==' ') { i++; } //! invalid read of 1 here!
+	if(s[i]==0)   { return 0; }
 	if(s[i]=='-') { u = -1; i++; }
 	j = i;
 	while(s[j]>='0' && s[j]<='9') { j++; } //! invalid read of 1 here!
@@ -168,7 +169,7 @@ xlong CLstring::linecount(const xchar* s) const //! noncritical
 {
 	xlong c = 1;
 	xlong l = length(s);
-	for(xlong i=0; i<l; i++) { if( s[i] == '\n' ) c++; }
+	for(xlong i=0;i<l;i++) { if( s[i] == '\n' ) { c++; } }
 	return c;
 }
 

@@ -185,7 +185,7 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 	
 	//find and load definition (*.ini)
 	CLfile* entitydefinitionfile = entitya->findbyextension(u8".ini");
-	if(entitydefinitionfile==0) err(__FILE__,__func__,u8"no entity definition found");
+	if(entitydefinitionfile==0) { err(__FILE__,__func__,u8"no entity definition found"); }
 	def = clformat.loadini(entitydefinitionfile);
 	//*
 	

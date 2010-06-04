@@ -55,7 +55,7 @@ class CLformat : public CLbase<CLformat,1>
 		float   readfloat(xchar* f,xchar*& r) const;
 		xchar*   readstring(xchar* f,xchar*& r) const;
 	public:
-		xlong*   loadcsv(CLfile* f,xchar s=',') const;
+		xlong*   loadcsv(CLfile* f,xchar s) const;
 		sprite*  loadras(CLfile* f) const;
 		sprite*  loadxpm(const xchar* x[]) const;
 		sprite*  loadxpm(const xchar* x) const;
@@ -63,7 +63,7 @@ class CLformat : public CLbase<CLformat,1>
 		xchar**  loadlvl(CLfile* f) const;
 		xmap*    loadini(CLfile* f) const;
 		
-		CLfile*  saveras(sprite* s,const xchar* n="test.ras") const;
+		CLfile*  saveras(sprite* s,const xchar* n) const;
 };
 ///*
 
@@ -89,7 +89,7 @@ xchar* CLformat::readstring(xchar* f,xchar*& r) const //! noncritical
 	return clstring.copy(f,p);
 }
 
-xlong* CLformat::loadcsv(CLfile* f,xchar s) const //! noncritical
+xlong* CLformat::loadcsv(CLfile* f,xchar s=',') const //! noncritical
 {
 	xchar* bf = f->text;
 	
@@ -422,7 +422,7 @@ xmap* CLformat::loadini(CLfile* f) const //! noncritical
 	return r;
 }
 
-CLfile* CLformat::saveras(sprite* s,const xchar* n) const //! noncritical
+CLfile* CLformat::saveras(sprite* s,const xchar* n="test.ras") const //! noncritical
 {
 	CLfile* r = new CLfile;
 	r->name = clstring.copy(n);

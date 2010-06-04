@@ -92,15 +92,14 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			//*
 
 			//create xlong array for current ar member
-			xlong fs2 = fs>>2;
-			if(fs%4!=0) fs2++;
-			fs2++;
-			xlong* tb = new xlong[fs2];
+			xlong  fs2 = (fs>>2) + (fs%4!=0) + 1;
+			xlong* tb2 = new xlong[fs2];
+			xchar* tb  = static_cast<xchar*>(static_cast<void*>(&tb2[0]));
 			xlong* bf2 = static_cast<xlong*>(static_cast<void*>(&bf[bc]));
 			//*
 
 			//fill array
-			for(xlong i=0; i<fs2; i++) { tb[i] = bf2[i]; } //! invalid read of size 4 here
+			for(xlong i=0;i<fs2;i++) { tb2[i] = bf2[i]; } //! invalid read of size 4 here
 			bc += fs;
 			//*
 
@@ -109,13 +108,13 @@ void CLar::loadar(CLfile* sf) //! noncritical
 			tindex[fc]->size = fs;
 			tindex[fc]->lsize = fs2;
 			tindex[fc]->name = clstring.copy(&fn[0],16);
-			tindex[fc]->data = tb;
-			tindex[fc]->text = static_cast<xchar*>(static_cast<void*>(&tb[0]));
+			tindex[fc]->data = tb2;
+			tindex[fc]->text = tb;
 			//*
 
 			//adjust global ar variables
-			if(fs%2!=0) { bc++; tsize--; }
-			tsize -= (fs+60); //subtract reading size from global size
+			bc += (fs%2!=0); //increment source ptr if filesize is odd
+			tsize -= (fs+60) + (fs%2!=0); //subtract reading size from global size and an extra byte if filesize is odd
 			fc++; //increment filecount
 			//*
 		}
