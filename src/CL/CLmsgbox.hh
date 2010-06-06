@@ -92,11 +92,11 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	currid = glutCreateWindow(title);
 	glutMouseFunc(CLwindow::setmouse);
 	glutKeyboardFunc(CLwindow::setkeydn);
-	glutDisplayFunc(this->draw);
+	//glutDisplayFunc(this->draw);
 	
-	glClear(GL_COLOR_BUFFER_BIT);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	//glClear(GL_COLOR_BUFFER_BIT);
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
 	//gluOrtho2D(0,winwidth,0,winheight);
 	
 	while(true)
