@@ -30,11 +30,11 @@
  * 
  * description:	Ingame menu bar
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -74,7 +74,8 @@ CLmenu::CLmenu() //! noncritical
 	exit = new CLbutton(780,1,18,18,0,0x00C0C0C0,0,&bye,"X",1);
 	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,&nfo,"Info",1);
 	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,&nfo,"About",1);
-	
+
+	title->setvisible(0);
 	exit->setvisible(0);
 	info->setvisible(0);
 	about->setvisible(0);
@@ -100,6 +101,7 @@ void CLmenu::show() //! noncritical
 	
 	//activate mouse cursor and activate buttons
 	clwindow.showcursor(1);
+	title->setvisible(1);
 	exit->setvisible(1);
 	info->setvisible(1);
 	about->setvisible(1);
@@ -120,6 +122,7 @@ void CLmenu::show() //! noncritical
 	
 	//activate mouse cursor and activate buttons
 	clwindow.showcursor(0);
+	title->setvisible(0);
 	exit->setvisible(0);
 	info->setvisible(0);
 	about->setvisible(0);

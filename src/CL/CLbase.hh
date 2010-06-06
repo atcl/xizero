@@ -11,6 +11,7 @@
 ///api includes
 #include "CLtypes.hh"
 #include "CLversion.hh"
+#include "CLutils.hh"
 ///*
 
 ///header
@@ -50,8 +51,9 @@ template<class T,bool S> uxlong CLbase<T,S>::version = CLversion;
 template<class T,bool S>
 T& CLbase<T,S>::instance() //! noncritical
 {
-	//check if existing and singleton, if not create
+	//check if not existing and singleton, if so create
 	if(base==0 && S==1) { base = new T(); }
+	//if(base==0) { say("base = 0 !!!"); }
 	return *base;
 	//*
 }
