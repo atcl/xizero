@@ -160,7 +160,7 @@ sprite* CLformat::loadras(CLfile* f) const //! noncritical
 	r->height = height;
 	r->index = 0;
 	r->count = 1;
-	uxchar* data = new uxchar[fullsize];
+	uxchar* data = new uxchar[fullsize+1]; //+1 to not cause illegal write; investigate in 0.3!
 	r->data = static_cast<uxlong*>(static_cast<void*>(&data[0]));
 	
 	if(type==2)

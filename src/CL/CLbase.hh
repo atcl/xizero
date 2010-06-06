@@ -53,7 +53,6 @@ T& CLbase<T,S>::instance() //! noncritical
 {
 	//check if not existing and singleton, if so create
 	if(base==0 && S==1) { base = new T(); }
-	//if(base==0) { say("base = 0 !!!"); }
 	return *base;
 	//*
 }
