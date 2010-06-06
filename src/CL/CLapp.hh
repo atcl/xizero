@@ -44,8 +44,8 @@ class CLapp : public CLbase<CLapp,1>
 		const xchar* title;
 		const xchar** icon;
 		const xchar* exename;
-		uxlong size;
 		const xchar* version;
+		uxlong size;
 		CLapp();
 		~CLapp() { };
 		void setexename(const xchar* n) { exename = n; }

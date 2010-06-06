@@ -58,9 +58,9 @@ class CLammomanager : public CLbase<CLammomanager,0>
 		CLammo**    type;
 		xlong       types;
 		xlong       last;
-		xlong*      mark;
+		const xlong& mark;
 	public:
-		CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* markptr);
+		CLammomanager(xlong ammotypecount,xlong* ammotypelist,const xlong& markref);
 		~CLammomanager();
 		void fire(xlong ammotype,const CLfvector& startposition,const CLfvector direction);
 		void update();
@@ -71,11 +71,10 @@ class CLammomanager : public CLbase<CLammomanager,0>
 ///*
 
 ///implementation
-CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* markptr) //! noncritical
-: clscreen(CLscreen::instance()), clwindow(CLwindow::instance()), clgame(CLgame::instance()), clmath(CLmath::instance())
+CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,const xlong& markref) : mark(markref), //! noncritical
+ clscreen(CLscreen::instance()), clwindow(CLwindow::instance()), clgame(CLgame::instance()), clmath(CLmath::instance())
 {	
 	//set up attributes
-	mark = markptr;
 	types = ammotypecount;
 	list = new CLammolist();
 	type = new CLammo*[types];
@@ -100,8 +99,8 @@ CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,xlong* mark
 
 CLammomanager::~CLammomanager() //! noncritical
 {
-	//delete list;
-	//delete[] type;
+	delete list;
+	delete[] type;
 }
 
 void CLammomanager::fire(xlong at,const CLfvector& startposition,const CLfvector direction) //! critical
@@ -140,7 +139,7 @@ void CLammomanager::update() //! critical
 		//*
 		
 		//check if current ammo left screen
-		if(clgame.boundary(curr->p,*mark)!=0)
+		if(clgame.boundary(curr->p,mark)!=0)
 		{
 			list->delcurrent(0);
 			listfix = list->isfirst();
@@ -193,7 +192,7 @@ void CLammomanager::display() const //! critical
 	for(xlong i=list->setfirst(); i<list->getlength();i+=list->setnext())
 	{
 		curr = list->getcurrentdata();
-		curr->comsprite(clscreen.cldoublebuffer,curr->p.x,curr->p.y-(*mark));
+		curr->comsprite(clscreen.cldoublebuffer,curr->p.x,curr->p.y-mark);
 	}
 	//*
 }

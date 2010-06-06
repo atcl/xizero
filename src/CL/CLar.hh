@@ -132,7 +132,7 @@ void CLar::loadar(CLfile* sf) //! noncritical
 	else { tty(__func__); say(u8" no \"!<arch>\" identifier found"); }
 }
 
-CLar::~CLar() { /*delete[] members;*/ } //! noncritical
+CLar::~CLar() { delete[] members; } //! noncritical
 
 CLfile* CLar::findbyextension(const xchar* e) const //! noncritical
 {

@@ -29,15 +29,15 @@ class CLewave : public CLentity<1>
 	protected:
 		bool updown;
 	public:
-		CLewave(bool ud);
+		CLewave(bool ud,const xlong& markref,xlong mm);
 		~CLewave();
 		xlong update();
 };
 ///*
 
 ///implementation
-CLewave::CLewave(bool ud) //! noncritical
-: clwindow(CLwindow::instance())
+CLewave::CLewave(bool ud,const xlong& markref,xlong mm) : CLentity<1>(markref,mm), //! noncritical
+  clwindow(CLwindow::instance())
 {
 	updown = ud;
 	
@@ -116,7 +116,7 @@ CLewave::~CLewave() { } //! noncritical
 xlong CLewave::update() //! critical
 {
 	//check if to activate
-	if(active==0 && ( (*mark)-100)<position.y) { active = 1; }
+	if(active==0 && (mark-100)<position.y) { active = 1; }
 	//*
 	
 	if(active==1)

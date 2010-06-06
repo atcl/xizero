@@ -354,11 +354,11 @@ CLobject::CLobject(CLobject* obj) //! noncritical
 
 CLobject::~CLobject() //! noncritical
 {
-	//~ delete shadow;
-	//~ delete linear;
-	//~ delete[] polyptr;
-	//~ delete boundingbox;
-	//~ delete rboundingbox;
+	delete linear;
+	delete[] polyptr;
+	delete[] dockptr;
+	delete boundingbox;
+	delete rboundingbox;
 }
 
 void CLobject::update() //! noncritical

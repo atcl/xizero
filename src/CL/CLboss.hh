@@ -29,13 +29,13 @@
 class CLboss : public CLenemy
 {
 	public:
-		CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp);
+		CLboss(CLfile* bossptr,const xlong& m,xlong mm,CLlvector* bossp);
 		~CLboss() { }
 };
 ///*
 
 ///implementation
-CLboss::CLboss(CLfile* bossptr,xlong* m,xlong mm,CLlvector* bossp) : CLenemy(bossptr,m,mm,bossp) //! noncritical
+CLboss::CLboss(CLfile* bossptr,const xlong& m,xlong mm,CLlvector* bossp) : CLenemy(bossptr,m,mm,bossp) //! noncritical
 { 
 	//set entity type
 	type = 2;

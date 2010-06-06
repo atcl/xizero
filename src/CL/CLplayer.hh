@@ -52,7 +52,7 @@ class CLplayer : public CLentity<2>
 		void transform(bool m);
 		xlong collision(CLobject** ll);	
 	public:
-		CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts=0);
+		CLplayer(CLfile* playera,const xlong& m,xlong mm,CLlvector* playerp,xlong pts=0);
 		~CLplayer();
 		xlong update(CLobject** ll,CLenemylist* enemies,CLboss* boss);
 		void addpoints(xlong p);
@@ -112,9 +112,9 @@ xlong CLplayer::collision(CLobject** ll) //! critical
 	xlong r = 0;
 
 	//screen boundary collision test
-	tposition.y -= *mark;
+	tposition.y -= mark;
 	xlong bc = clgame.boundary(tposition,*boundingbox[1][0]);
-	tposition.y += *mark;
+	tposition.y += mark;
 
 	if(bc!=0)
 	{
@@ -150,7 +150,7 @@ xlong CLplayer::collision(CLobject** ll) //! critical
 	return r;
 }
 
-CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pts) //! noncritical
+CLplayer::CLplayer(CLfile* playera,const xlong& m,xlong mm,CLlvector* playerp,xlong pts) //! noncritical
 : clgame(CLgame::instance()), clmath(CLmath::instance()), clwindow(CLwindow::instance()), CLentity<2>(playera,m,mm) 
 {
 	//set entity type
@@ -183,9 +183,8 @@ CLplayer::CLplayer(CLfile* playera,xlong* m,xlong mm,CLlvector* playerp,xlong pt
 
 CLplayer::~CLplayer() //! noncritical
 {
-	//~ delete def;
-	//~ delete hprog;
-	//~ delete sprog;
+	delete hprog;
+	delete sprog;
 }
 
 xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! critical
@@ -353,7 +352,7 @@ void CLplayer::showbox() //! noncritical
 {
 	CLfvector bposition;
 	bposition.x = position.x;
-	bposition.y = position.y - *mark;
+	bposition.y = position.y - mark;
 	bposition.z = position.z;
 	
 	CLfvector a = bposition;

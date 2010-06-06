@@ -107,10 +107,10 @@ CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const
 		
 CLmainmenu::~CLmainmenu()
 {
-	//~ delete background;
-	//~ for(xlong i=0; i<buttoncount; i++) { delete button[i]; } 
-	//~ delete header;
-	//~ delete footer;
+	delete background;
+	delete[] button;
+	delete header;
+	delete footer;
 }
 
 void CLmainmenu::draw() const //! critical

@@ -152,11 +152,11 @@ CLmath::CLmath() //! noncritical
 
 CLmath::~CLmath() //! noncritical
 {
-	//~ delete[] clsin;
-	//~ delete[] clcos;
-	//~ delete[] cltan;
-	//~ delete[] clarcsin;
-	//~ delete[] clarccos;
+	delete[] clsin;
+	delete[] clcos;
+	delete[] cltan;
+	delete[] clarcsin;
+	delete[] clarccos;
 }
 
 template<typename T>

@@ -87,10 +87,10 @@ CLlist<member>::~CLlist() //! noncritical
 	
 	//delete list members iteratively
 	current = last;
-	//~ while(length!=0) { delcurrent(); }
-	//~ delete current;
-	//~ delete first;
-	//~ delete last;
+	while(length!=0) { delcurrent(); }
+	delete current;
+	delete first;
+	delete last;
 	//*
 }
 

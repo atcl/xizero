@@ -42,7 +42,7 @@ class CLlabel : public CLguibase
 		xlong texty;
 	public:
 		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f);
-		~CLlabel() { /*delete text;*/ };
+		~CLlabel() { delete text; };
 		void draw() const;
 		void settext(const xchar* t);
 		xchar* gettext() const { return text; };

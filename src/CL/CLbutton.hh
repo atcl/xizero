@@ -80,7 +80,7 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	buttonlist->append(this);
 }
 
-CLbutton::~CLbutton() { /*delete caption;*/ } //! noncritical
+CLbutton::~CLbutton() { delete caption; } //! noncritical
 
 void CLbutton::draw() const //! critical
 {

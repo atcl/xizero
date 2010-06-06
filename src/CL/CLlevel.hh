@@ -273,7 +273,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 	CLar* enemiesa = new CLar(enemylib);
 	xlong differentenemies = enemiesa->getfilecount();
 	CLenemy** baseenemies = new CLenemy*[differentenemies];
-	for(uxlong k=0; k<differentenemies; k++) { baseenemies[k] = new CLenemy(enemiesa->getmember(k),&levelmark,levelheight+10); }
+	for(uxlong k=0; k<differentenemies; k++) { baseenemies[k] = new CLenemy(enemiesa->getmember(k),levelmark,levelheight+10); }
 	
 	CLlvector* ppos = new CLlvector(0,0,0,-1);
 	CLlvector* epos = new CLlvector(0,0,0,-1);
@@ -299,7 +299,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 						ppos->y = i * UNITWIDTH;
 						ppos->z = -extract(h,i,j,2)/4;;
 						ppos->e = 0;
-						player = new CLplayer(playerlib,&levelmark,levelheight+10,ppos);
+						player = new CLplayer(playerlib,levelmark,levelheight+10,ppos);
 					}
 				break;
 				
@@ -310,7 +310,7 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 						bpos->y = i * UNITWIDTH;
 						bpos->z = -extract(h,i,j,2)/4;
 						bpos->e = 0;
-						boss = new CLboss(bossa->getmember(bosstype),&levelmark,levelheight+10,bpos);
+						boss = new CLboss(bossa->getmember(bosstype),levelmark,levelheight+10,bpos);
 					}
 				break;
 				
@@ -340,9 +340,10 @@ CLlevel::CLlevel(CLfile* maplib,CLfile* playerlib,CLfile* enemylib,CLfile* bossl
 
 CLlevel::~CLlevel() //! noncritical
 {
-	//delete player;
-	//delete enemylist;
-	//delete boss;
+	delete levelmap;
+	delete player;
+	delete enemylist;
+	delete boss;
 }
 
 xlong CLlevel::update() //! critical

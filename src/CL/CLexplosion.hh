@@ -49,7 +49,7 @@ class CLexplosion : public CLbase<CLexplosion,0>
 		xlong type;
 	public:
 		CLexplosion(CLobject* o,xlong t);
-		~CLexplosion() { /*delete object;*/ };
+		~CLexplosion() { delete object; };
 		void first();
 		xlong next();
 };

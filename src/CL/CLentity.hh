@@ -65,7 +65,7 @@ class CLentity : public CLbase<CLentity<I>,0>
 		CLfvector speeddir;
 		CLlvector angles[I];
 		xlong type;
-		xlong* mark;
+		const xlong& mark;
 		xlong markmax;
 		boool gear;
 		float maxspeed;
@@ -92,9 +92,9 @@ class CLentity : public CLbase<CLentity<I>,0>
 		//virtual void transform() = 0;
 		//virtual xlong collision() = 0;
 	public:
-		CLentity(CLfile* entitya,xlong* markptr,xlong mm);
+		CLentity(CLfile* entitya,const xlong& markref,xlong mm);
+		CLentity(const xlong& markref,xlong mm);
 		CLentity(CLentity* entityptr);
-		CLentity();
 		virtual ~CLentity();
 		//virtual xlong update() = 0;
 		void display(xlong modelorshadow=0);
@@ -139,11 +139,10 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 }
 
 template<int I>
-CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
-: clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
+CLentity<I>::CLentity(CLfile* ea,const xlong& markref,xlong mm) : mark(markref), //! noncritical
+  clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
 {	
 	//set mark pointer from level
-	mark = markptr;
 	markmax = mm;
 	//*
 	
@@ -229,11 +228,10 @@ CLentity<I>::CLentity(CLfile* ea,xlong* markptr,xlong mm) //! noncritical
 }
 
 template<int I>
-CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
-: clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
+CLentity<I>::CLentity(CLentity* entityptr) : mark(entityptr->mark), //! noncritical
+  clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
 {
 	//set mark pointer from level
-	mark = entityptr->mark;
 	markmax = entityptr->markmax;
 	//*
 	
@@ -295,25 +293,32 @@ CLentity<I>::CLentity(CLentity* entityptr) //! noncritical
 }
 
 template<int I>
-CLentity<I>::CLentity() 
-: clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
-{ }
+CLentity<I>::CLentity(const xlong& markref,xlong mm) : mark(markref), //! noncritical
+  clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
+{
+	//set mark pointer from level
+	markmax = mm;
+	//*
+	
+	//...
+}
 
 template<int I>
 CLentity<I>::~CLentity<I>() //! noncritical
 {
-	//~ delete def;
-	//~ delete ammoman; 
-	//~ delete ammotype;
-	//~ delete firerate;
-	//~ delete fireupdate;
-	//~ 
-	//~ for(xlong i=0; i<I; i++)
-	//~ {
-		//~ delete model[i];
-		//~ delete expl[i];
-		//~ delete boundingbox[1][i];
-	//~ }
+	delete def;
+	delete csv;
+	delete ammoman; 
+	delete ammotype;
+	delete firerate;
+	delete fireupdate;
+	
+	for(xlong i=0; i<I; i++)
+	{
+		delete model[i];
+		delete expl[i];
+		delete boundingbox[1][i];
+	}
 }
 
 template<int I>
@@ -321,7 +326,7 @@ void CLentity<I>::display(xlong modelorshadow) //! critical
 {
 	//set screen position
 	sposition.x = position.x;
-	sposition.y = position.y - *mark;
+	sposition.y = position.y - mark;
 	sposition.z = position.z;
 	//CLmisc3d::project2(sposition); //fix point projections
 	//*

@@ -54,7 +54,7 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 # Compile:
 default:
 	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
-	#$(STRIP) $(TARGET1)
+	$(STRIP) $(TARGET1)
 	$(XZDAT)
 	
 none:

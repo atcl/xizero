@@ -44,7 +44,7 @@ class CLfifo : public CLbase<CLfifo<T>,0>
 		T** que;
 	public:
 		CLfifo() { length = 0; };
-		~CLfifo() { };
+		~CLfifo() { delete[] que; };
 		xlong getlength() const { return length; };
 		bool isempty() const { return (length==0); };
 		void in(T* f);

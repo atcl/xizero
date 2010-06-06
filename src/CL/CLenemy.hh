@@ -54,7 +54,7 @@ class CLenemy : public CLentity<1>
 		void  transform();
 		xlong collision();
 	public:
-		CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp=0);
+		CLenemy(CLfile* enemya,const xlong& m,xlong mm,CLlvector* enemyp=0);
 		CLenemy(CLenemy* enemyptr,CLlvector* enemyp);
 		~CLenemy();
 		template<int I>xlong update(CLentity<I>* p);
@@ -128,9 +128,9 @@ xlong CLenemy::collision() //! critical
 	xlong r = 0;
 
 	//screen boundary collision test
-	tposition.y -= *mark;
+	tposition.y -= mark;
 	xlong bc = clgame.boundary(tposition,*boundingbox[1][0],1);
-	tposition.y += *mark;
+	tposition.y += mark;
 	//terrain collision does not apply
 	if(bc!=0) { visible = 1; }
 	//*
@@ -138,7 +138,7 @@ xlong CLenemy::collision() //! critical
 	return r;
 }
 
-CLenemy::CLenemy(CLfile* enemya,xlong* m,xlong mm,CLlvector* enemyp)  //! noncritical
+CLenemy::CLenemy(CLfile* enemya,const xlong& m,xlong mm,CLlvector* enemyp)  //! noncritical
 : clgame(CLgame::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance()), CLentity<1>(enemya,m,mm)
 {
 	//set entity type
@@ -222,9 +222,9 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) //! noncritical
 
 CLenemy::~CLenemy() //! noncritical
 {
-	//delete aiarray;
-	//delete aggrobox;
-	//delete hprog;
+	delete aiarray;
+	delete aggrobox;
+	delete hprog;
 }
 
 template<int I>
@@ -236,7 +236,7 @@ xlong CLenemy::update(CLentity<I>* p) //! critical
 	//*
 	
 	//check if to activate
-	if(active==0 && ( (*mark)-100)<position.y) { active = 1; }
+	if(active==0 && (mark-100)<position.y) { active = 1; }
 	//*
 
 	//check if screen is left behind player
@@ -310,7 +310,7 @@ void CLenemy::displayhud() const //! critical
 		//draw enemy's healthbar
 		xlong tempx = (boundingbox[0][0]->c[0].x + boundingbox[0][0]->c[1].x) / 2;
 		hprog->setx(tempx + sposition.x - (hprog->getwidth()>>1));
-		hprog->sety(position.y - *mark - 25);
+		hprog->sety(position.y - mark - 25);
 		hprog->draw();
 		//*
 	}

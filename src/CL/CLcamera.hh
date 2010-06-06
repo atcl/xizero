@@ -47,7 +47,7 @@ class CLcamera : public CLbase<CLcamera,1>
 		CLfvector rg;
 		CLmatrix* linear;
 		CLcamera();
-		~CLcamera();
+		~CLcamera()  { delete linear; };
 		void setup();
 	public:
 		void setroll(float r);
@@ -61,8 +61,6 @@ class CLcamera : public CLbase<CLcamera,1>
 CLcamera::CLcamera() //! noncritical
 : clmath(CLmath::instance())
 { linear = new CLmatrix(1); } 
-
-CLcamera::~CLcamera() { /*delete linear;*/ } //! noncritical
 
 void CLcamera::setup()
 {
