@@ -58,6 +58,7 @@ class CLwindow : public CLbase<CLwindow,1>
 		static xlong mouserb;
 		static uxchar syskey;
 		static void (*sysmenu)();
+		xlong  winid;
 		uxlong frame;
 		uxlong time;
 		uxlong timebase;
@@ -194,8 +195,8 @@ CLwindow::CLwindow() //! noncritical
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE); 
-	glutCreateWindow(TITLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE); 
+	winid = glutCreateWindow(TITLE);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutMouseFunc(setmouse);
 	glutPassiveMotionFunc(setmotion);
@@ -205,6 +206,7 @@ CLwindow::CLwindow() //! noncritical
 	glutSpecialUpFunc(setspecup);
 	glutJoystickFunc(setgpad,500);
 	glutDisplayFunc(draw);
+	glutIdleFunc(0);
 	//speed up gldrawpixels:
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
@@ -236,7 +238,7 @@ void CLwindow::draw() //! noncritical
 	glRasterPos2i(-1,1);
 	glPixelZoom(1.0,-1.0);
 	glDrawPixels(XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer); 
-	glFlush();
+	glutSwapBuffers();
 }
 
 bool CLwindow::run() { glutMainLoopEvent(); draw(); idle(); return 1; } //! noncritical

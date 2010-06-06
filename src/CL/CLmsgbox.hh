@@ -45,13 +45,12 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 	protected:
 		CLmsgbox();
 		~CLmsgbox() { };
-		static xlong currid;
+		xlong currid;
 		static void draw();
 	public:
 		xlong msgbox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);
 };
-xlong CLmsgbox::currid = 0;
 ///*
 
 ///implementation
@@ -59,7 +58,11 @@ CLmsgbox::CLmsgbox() //! noncritical
 : clstring(CLstring::instance()), clwindow(CLwindow::instance())
 { }
 
-void CLmsgbox::draw() { } //! noncritical
+void CLmsgbox::draw() //! noncritical
+{ 
+
+	
+}
 
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
@@ -94,10 +97,10 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	glutKeyboardFunc(CLwindow::setkeydn);
 	//glutDisplayFunc(this->draw);
 	
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-	//gluOrtho2D(0,winwidth,0,winheight);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0,winwidth,0,winheight,-1,1);
 	
 	while(true)
 	{
@@ -144,7 +147,7 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15,'K');
 		//*
 		
-		glFlush();
+		glutSwapBuffers();
 		
 		glutMainLoopEvent();
 
@@ -158,11 +161,12 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 		}
 	}
 	
+	glutSetWindow(clwindow.winid);
 	glutDestroyWindow(currid);
 	return 1;
 }
 
-xlong CLmsgbox::alertbox(const xchar* title,xlong value) { msgbox(title,clstring.toascii(value)); } //! noncritical
+xlong CLmsgbox::alertbox(const xchar* title,xlong value) { return msgbox(title,clstring.toascii(value)); } //! noncritical
 ///*
 
 #endif
