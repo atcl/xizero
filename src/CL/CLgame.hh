@@ -13,6 +13,7 @@
 #include "CLbase.hh"
 #include "CLstruct.hh"
 #include "CLmisc3d.hh"
+#include "CLobject.hh"
 ///*
 
 ///header

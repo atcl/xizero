@@ -8,6 +8,12 @@
 #define HH_CLTYPES
 ///*
 
+//Compiler check for unicode extension
+#if __GNUC__ <= 4 && __GNUC_MINOR__ < 5
+	#define u8 
+#endif
+//*
+
 ///includes
 #include <inttypes.h>
 ///*

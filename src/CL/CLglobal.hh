@@ -8,9 +8,50 @@
 #define HH_CLGLOBALS
 ///*
 
-///includes
+///common includes
 #include "CLtypes.hh"
+#include "CLconsts.hh"
+#include "CLstruct.hh"
+#include "CLbase.hh"
+#include "CLutils.hh"
+///*
+
+///singleton includes
+#include "CLapp.hh"
 #include "CLid.hh"
+#include "CLmath.hh"
+#include "CLscreen.hh"
+#include "CLsprites.hh"
+#include "CLstring.hh"
+#include "CLsystem.hh"
+#include "CLcamera.hh"
+#include "CLdetect.hh"
+#include "CLformat.hh"
+#include "CLfsprog.hh"
+#include "CLgame.hh"
+#include "CLsound.hh"
+#include "CLmisc3d.hh"
+#include "CLgfx.hh"
+#include "CLwindow.hh"
+#include "CLintro.hh"
+#include "CLmenu.hh"
+#include "CLmsgbox.hh"
+#include "CLtrans.hh"
+///*
+
+///dynamic includes
+#include "CLfixed.hh"
+#include "CLboool.hh"
+#include "CLvector.hh"
+#include "CLfifo.hh"
+#include "CLlist.hh"
+#include "CLtree.hh"
+#include "CLbuffer.hh"
+#include "CLar.hh"
+#include "CLmainmenu.hh"
+#include "CLlight.hh"
+#include "CLlevel.hh"
+#include "CLgame.hh"
 ///*
 
 ///header
@@ -24,29 +65,6 @@
  * 
  * version: 	0.2
  */
-///*
-
-///declarations
-class CLapp;
-class CLid;
-class CLmath;
-class CLscreen;
-class CLcomspr;
-class CLstring;
-class CLsystem;
-class CLcamera;
-class CLdetect;
-class CLformat;
-class CLfsprog;
-class CLgame;
-class CLsound;
-class CLgfx;
-class CLmisc3d;
-class CLwindow;
-class CLintro;
-class CLmenu;
-class CLmsgbox;
-class CLtrans;
 ///*
 
 ///definitions

@@ -17,6 +17,7 @@
 #include "CLformat.hh"
 #include "CLgfx.hh"
 #include "CLbase.hh"
+#include "CLanim.hh"
 ///*
 
 ///header

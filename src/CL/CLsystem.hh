@@ -44,18 +44,19 @@ class CLsystem : public CLbase<CLsystem,1>
 		CLsystem() { };
 		~CLsystem() { };
 	public:
-		CLfile* getfile(const xchar* fn);
-		bool    appendfile(const xchar* fn,xlong* b,xlong s);
-		bool    appendfile(const xchar* fn,xchar* b,xlong s);
-		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0);
-		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0);
-		bool    writefile(CLfile* f,bool ow=0);
-		xlong   system(const xchar* c);
+		CLfile* getfile(const xchar* fn) const;
+		bool    existsfile(const xchar* fn) const;
+		bool    appendfile(const xchar* fn,xlong* b,xlong s) const;
+		bool    appendfile(const xchar* fn,xchar* b,xlong s) const;
+		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0) const;
+		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0) const;
+		bool    writefile(CLfile* f,bool ow=0) const;
+		xlong   system(const xchar* c) const;
 };
 ///*
 
 ///implementation
-CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
+CLfile* CLsystem::getfile(const xchar* fn) const //! noncritical
 {
 	CLfile* re = new CLfile;
 
@@ -106,7 +107,7 @@ CLfile* CLsystem::getfile(const xchar* fn) //! noncritical
 	return re;
 }
 
-bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s) //! noncritical
+bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s) const //! noncritical
 {
 	FILE* of;
 	
@@ -125,12 +126,19 @@ bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s) //! noncritical
 	return 1;
 }
 
-bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s) //! noncritical
+bool CLsystem::existsfile(const xchar* fn) const //! noncritical
+{
+	FILE* cf;
+	if( (cf = fopen(fn,"r"))!=0 ) { fclose(cf); return 1; }
+	return 0;
+}
+
+bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s) const //! noncritical
 {
 	FILE* of;
 	
 	//open for appending
-	if( (of = fopen(fn,"a")) == 0 ) return 0;
+	if( (of = fopen(fn,"a")) == 0 ) { return 0; }
 	//*
 	
 	//write sequential data to file
@@ -144,7 +152,7 @@ bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s) //! noncritical
 	return 1;
 }
 
-bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) //! noncritical
+bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) const //! noncritical
 {
 	FILE* of;
 	
@@ -157,7 +165,7 @@ bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) //! noncritic
 	//*
 	
 	//open for (over-)writing
-	if( (of = fopen(fn,"wb")) == 0 ) return 0;
+	if( (of = fopen(fn,"wb")) == 0 ) { return 0; }
 	//*
 	
 	//write binary data to file
@@ -171,7 +179,7 @@ bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) //! noncritic
 	return 1;
 }
 
-bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritical
+bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) const //! noncritical
 {
 	FILE* of;
 	
@@ -184,7 +192,7 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	//*
 	
 	//open for (over-)writing
-	if( (of = fopen(fn,"wb")) == 0 ) return 0;
+	if( (of = fopen(fn,"wb")) == 0 ) { return 0; }
 	//*
 	
 	//write sequential data to file
@@ -198,7 +206,7 @@ bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) //! noncritic
 	return 1;
 }
 
-bool CLsystem::writefile(CLfile* f,bool ow) //! noncritical
+bool CLsystem::writefile(CLfile* f,bool ow) const //! noncritical
 {
 	FILE* of;
 	
@@ -217,7 +225,7 @@ bool CLsystem::writefile(CLfile* f,bool ow) //! noncritical
 	return 1;
 }
 
-xlong CLsystem::system(const xchar* c) { return ::system(c); } //! noncritical
+xlong CLsystem::system(const xchar* c) const { return ::system(c); } //! noncritical
 ///*
 
 #endif

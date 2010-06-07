@@ -9,9 +9,7 @@ OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-
 LDFLAGS = -lglut -lalut 
 OUTPARA = -o 
 DEBUG   = -g
-LINUX   = -DLINUX
-DEVELOP = -DDEV
-RELEASE = -DREL
+DEFINE  = -DXRES=800 -DYRES=600 -DZRES=400 -DTITLE='"atCROSSLEVELs XiZero"' -DNAME='"xizero"' -DVERSION='"0.2"'
 
 # Data Assembler
 XZDAT   = dat/makexizerodat.sh
@@ -53,7 +51,7 @@ ALI     = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=
 
 # Compile:
 default:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) $(DEBUG) #change to RELEASE
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG) $(DEFINE)
 	$(STRIP) $(TARGET1)
 	$(XZDAT)
 	

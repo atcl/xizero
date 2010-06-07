@@ -26,6 +26,7 @@
 #include "CLbase.hh"
 #include "CLsound.hh"
 #include "CLwindow.hh"
+#include "CLprogress.hh"
 ///*
 
 ///headers

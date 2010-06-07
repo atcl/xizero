@@ -15,6 +15,7 @@
 #include "CLbuffer.hh"
 #include "CLvector.hh"
 #include "CLmath.hh"
+#include "CLmatrix.hh"
 ///*
 
 ///header

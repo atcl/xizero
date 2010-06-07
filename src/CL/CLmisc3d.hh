@@ -14,6 +14,7 @@
 #include "CLbase.hh"
 #include "CLbuffer.hh"
 #include "CLvector.hh"
+#include "CLgfx.hh"
 ///*
 
 ///header

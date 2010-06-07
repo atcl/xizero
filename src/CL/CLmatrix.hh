@@ -10,6 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
+#include "CLconsts.hh"
 #include "CLbase.hh"
 #include "CLvector.hh"
 #include "CLmath.hh"

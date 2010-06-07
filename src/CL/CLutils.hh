@@ -17,6 +17,7 @@
 ///idp includes
 #include "CLtypes.hh"
 #include "CLversion.hh"
+#include "CLstruct.hh"
 ///*
 
 ///header

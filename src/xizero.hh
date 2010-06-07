@@ -3,7 +3,7 @@
 #ifndef HH_XIZERO
 #define HH_XIZERO
 
-#include "CLinc.h"
+#include "CL/CLglobal.hh"
 
 CLar* cldata = 0;
 

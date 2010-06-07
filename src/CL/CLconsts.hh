@@ -97,6 +97,12 @@
 //3d engine consts
 #define PRJX 80
 #define PRJY 95
+#define XMIN 1
+#define XMAX (XRES-1)
+#define YMIN 1
+#define YMAX (YRES-1)
+#define ZMIN 1
+#define ZMAX (ZRES-1)
 //*
 ///*
 
