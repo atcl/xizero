@@ -23,13 +23,13 @@
 ///header
 /* class name:	CLmsgbox
  * 
- * description:	
+ * description:	message- and alert-box class
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...	
  * 
- * version: 0.1
+ * version: 	0.1
  */
 ///*
 

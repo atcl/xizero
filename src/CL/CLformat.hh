@@ -51,8 +51,8 @@ class CLformat : public CLbase<CLformat,1>
 	protected:
 		CLformat() : clstring(CLstring::instance()) { };
 		~CLformat() { };
-		xlong  readlong(xchar* f,xchar*& r) const;
-		float   readfloat(xchar* f,xchar*& r) const;
+		xlong    readlong(xchar* f,xchar*& r) const;
+		float    readfloat(xchar* f,xchar*& r) const;
 		xchar*   readstring(xchar* f,xchar*& r) const;
 	public:
 		xlong*   loadcsv(CLfile* f,xchar s) const;

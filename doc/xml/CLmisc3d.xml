@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="1" istemplate="0">
+	
+	<filename>CLmisc3d.hh</filename>
+	
+	<name>CLmisc3d</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLgfx.xml">CLgfx</module>
+		<module href="CLscreen.xml">CLscreen</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLmisc3d</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLmisc3d</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>project</name>
+		<returns>void</returns>
+		<parameter>clvector&amp; v</parameter>
+		<parameter>const clvector&amp; p</parameter>
+		<qualifier>template&lt;class clvector&gt;,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>project2</name>
+		<returns>void</returns>
+		<parameter>clvector&amp; o</parameter>
+		<qualifier>template&lt;class clvector&gt;,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>draw3dpixel</name>
+		<returns>void</returns>
+		<parameter>clvector&amp; p</parameter>
+		<parameter>uxlong c</parameter>
+		<qualifier>template&lt;class clvector&gt;,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>draw3dline</name>
+		<returns>void</returns>
+		<parameter>clvector&amp; p</parameter>
+		<parameter>clvector&amp; q</parameter>
+		<parameter>uxlong c</parameter>
+		<parameter>bool aa</parameter>
+		<qualifier>template&lt;class clvector&gt;,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>drawzbuffer</name>
+		<returns>void</returns>
+		<parameter>CLfbuffer* zb=0</parameter>
+		<parameter>xlong srcdis=0</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>
