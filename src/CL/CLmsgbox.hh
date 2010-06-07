@@ -46,7 +46,6 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 		CLmsgbox();
 		~CLmsgbox() { };
 		xlong currid;
-		static void draw();
 	public:
 		xlong msgbox(const xchar* title,const xchar* message);
 		xlong alertbox(const xchar* title,xlong message);
@@ -57,12 +56,6 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 CLmsgbox::CLmsgbox() //! noncritical
 : clstring(CLstring::instance()), clwindow(CLwindow::instance())
 { }
-
-void CLmsgbox::draw() //! noncritical
-{ 
-
-	
-}
 
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {
@@ -89,13 +82,13 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 	if(winwidth>600) { winwidth = 600; }
 	if(winheight<100) { winheight = 100; }
 	if(winheight>250) { winheight = 250; }
-
+	//*
+	
 	glutInitWindowSize(winwidth,winheight);
 	glutInitWindowPosition(10,10);
 	currid = glutCreateWindow(title);
 	glutMouseFunc(CLwindow::setmouse);
 	glutKeyboardFunc(CLwindow::setkeydn);
-	//glutDisplayFunc(this->draw);
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);

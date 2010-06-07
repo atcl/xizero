@@ -18,11 +18,11 @@
  * 
  * description:	This class manages xml parameter files.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.1
  */
 ///*
 
@@ -30,28 +30,31 @@
 class CLparafile : CLbase<CLparafile,0>
 {
 	private:
-	
+		CLformat& clformat;
 	protected:
-	
+		xchar** name;
+		void**  value;
 	public:
 		CLparafile();
 		~CLparafile();
-		get(const xchar name,xlong value);
+		void* get(const xchar name);
 };
 ///*
 
 ///implementation
 CLparafile::CLparafile() //! noncritical
+: clformat(CLformat::instance())
 {
 	
 }
 
 CLparafile::~CLparafile() //! noncritical
 {
-	
+	delete[] name;
+	delete[] value;
 }
 
-CLparafile::get(const xchar name,xlong value) //! noncritical
+void* CLparafile::get(const xchar name) //! noncritical
 {
 	
 }

@@ -26,13 +26,13 @@
 ///header
 /* class name:	CLsound
  * 
- * description:	Plays wave files
+ * description:	Plays wav files
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	make more flexible.
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.1
  */
 ///*
 

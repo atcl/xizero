@@ -17,7 +17,7 @@
 ///header
 /* class name:	CLvoxel
  * 
- * description:	
+ * description:	fast voxel class
  * 
  * author:		atcl
  * 
