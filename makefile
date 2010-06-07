@@ -3,10 +3,10 @@
 # Compile Flags
 CC      = g++
 WWFLAGS = -Wno-multichar -Wno-write-strings -Wno-pragmas
-WAFLAGS = -Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses
+WAFLAGS = -Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++
 O2FLAGS = -O2
 OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
-LDFLAGS = -lglut -lalut 
+LDFLAGS = -lglut -lalut -lXpm
 OUTPARA = -o 
 DEBUG   = -g
 DEFINE  = -DXRES=800 -DYRES=600 -DZRES=400 -DTITLE='"atCROSSLEVELs XiZero"' -DNAME='"xizero"' -DVERSION='"0.2"'
@@ -56,7 +56,7 @@ default:
 	$(XZDAT)
 	
 none:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP)
+	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS) $(DEBUG) $(DEFINE)
 	$(CPPCH) $(SOURCE1)
 	$(GRIND)
 
@@ -66,15 +66,11 @@ install:
 	$(MK) $(DATDST)
 	$(CP) $(GAMEDAT) $(DATDST)
 
-local:
-	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEVELOP) -Wall -Wextra -Weffc++
-	$(STRIP) $(TARGET1)
-	
 data:
 	$(XZDAT)
 
 unit:
-	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(LINUX) $(DEBUG)
+	$(CC) $(O2FLAGS) $(OUTPARA) $(TARGET2) $(SOURCE2) $(LDFLAGS) $(WWFLAGS) $(DEBUG) $(DEFINE)
 	$(STRIP) $(TARGET2)
 
 clean:

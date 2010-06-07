@@ -12,11 +12,6 @@ export MAIN_DIALOG='
 		<button>
 			<label>Run Xizero</label>
 			<action>./xizero&</action>
-		</button>
-
-		<button>
-			<label>Run Xizero (Sound)</label>
-			<action>#aoss ./xizero&</action>
 		</button>	
 		
 		<button>

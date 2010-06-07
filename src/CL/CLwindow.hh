@@ -11,6 +11,7 @@
 ///sys includes
 #include <GL/gl.h>
 #include <GL/freeglut.h>
+#include <X11/xpm.h>
 ///*
 
 ///api includes
@@ -227,6 +228,20 @@ CLwindow::CLwindow() //! noncritical
 	glPixelTransferi(GL_BLUE_BIAS, 0);
 	glPixelTransferi(GL_ALPHA_SCALE, 1);
 	glPixelTransferi(GL_ALPHA_BIAS, 0);
+	
+	//icon
+	//~ Pixmap image;
+	//~ Pixmap shape;
+	//~ XWMHints* win_hints;
+	//~ Display* display = XOpenDisplay(":0.0");
+	//~ XpmCreatePixmapFromData(display,DefaultRootWindow(display),CLicon2,&image,&shape,0);
+	//~ win_hints = XAllocWMHints();
+	//~ win_hints->flags = IconPixmapHint|IconMaskHint;
+	//~ win_hints->icon_pixmap = image;
+	//~ win_hints->icon_mask = shape;
+	//~ XSetWMHints(display,DefaultRootWindow(display),win_hints);
+	//*
+	
 	//*
 	glClear(GL_COLOR_BUFFER_BIT);
 	glFlush();

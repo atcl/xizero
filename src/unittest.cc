@@ -1,7 +1,7 @@
 //atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license 
 
-#include "CLinc.h"
+#include "CL/CLglobal.hh"
 
 int main(int argc, char** argv)
 {
@@ -32,7 +32,9 @@ int main(int argc, char** argv)
 	//*
 
 	//load datafile
-	CLar* cldata = new CLar(BASEDIR"xizero.dat");
+	CLar* cldata;
+	if(clglobal.clsystem.existsfile("xizero.dat")==1) { cldata = new CLar("xizero.dat"); }
+	else { cldata = new CLar("/usr/share/xizero/xizero.dat"); }
 	clglobal.clgfx.loadfonts(cldata->findbyname("fonts.a"));
 	//*
 
