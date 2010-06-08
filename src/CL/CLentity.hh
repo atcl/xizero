@@ -130,7 +130,7 @@ void CLentity<I>::fire(xlong at,xlong d,xlong i,xlong tz,xlong m) //! critical
 	CLfvector startposition = position;
 	CLfvector targetdirection = direction[m];
 	//targetdirection.z = -startposition.z + tz;
-	CLfvector* ammodocking  = model[m]->getdockingpoint(d,i);
+	CLfvector* ammodocking  = model[m]->getdock(d,i);
 	startposition.x = ammodocking->x;
 	startposition.y = ammodocking->y;
 	startposition.z += ammodocking->z;

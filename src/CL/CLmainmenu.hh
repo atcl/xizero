@@ -44,7 +44,7 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 		CLlabel* header;
 		CLlabel* footer;
 	public:
-		CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc);
+		CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(void*,void*),const xchar* hl,const xchar* fl,uxlong fc);
 		~CLmainmenu();
 		void draw() const;
 		void setback(sprite* s) { background = s; };
@@ -52,7 +52,7 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 ///*
 
 ///implementation
-CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(),const xchar* hl,const xchar* fl,uxlong fc) //! noncritical
+CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(void*,void*),const xchar* hl,const xchar* fl,uxlong fc) //! noncritical
 : clstring(CLstring::instance()), clgfx(CLgfx::instance())
 {
 	//set attributes

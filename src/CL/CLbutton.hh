@@ -43,7 +43,7 @@ class CLbutton : public CLguibase
 		CLgfx&    clgfx;
 		CLwindow& clwindow;
 	protected:
-		void (*action)();
+		void (*action)(void*,void*);
 		xchar* caption;
 		bool flat;
 		xlong captionwidth;
@@ -52,11 +52,11 @@ class CLbutton : public CLguibase
 		xlong captiony;
 		static CLbuttonlist* buttonlist;
 	public:
-		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f);
+		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(void*,void*),const xchar *c,bool f);
 		~CLbutton();
 		void draw() const;
-		void click() const;
-		void setaction(void(*a)()) { action = a; };
+		void click(void* c=0,void* d=0) const;
+		void setaction(void(*a)(void*,void*)) { action = a; };
 		void setcaption(xchar* t);
 		void setvisible(bool v);
 		xchar* getcaption() const { return caption; };
@@ -66,7 +66,7 @@ CLbuttonlist* CLbutton::buttonlist = new CLbuttonlist();
 ///*
 
 ///implementation
-CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(),const xchar *c,bool f) //! noncritical
+CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(void*,void*),const xchar *c,bool f) //! noncritical
 : clstring(CLstring::instance()), clgfx(CLgfx::instance()), clwindow(CLwindow::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
 {
 	action = a;
@@ -90,7 +90,7 @@ void CLbutton::draw() const //! critical
 	clgfx.drawfontstring(posx+captionx,posy+captiony,caption,0,fcolor,bcolor);
 }
 
-void CLbutton::click() const { action(); } //! critical
+void CLbutton::click(void* c,void* d) const { action(c,d); } //! critical
 
 void CLbutton::setcaption(xchar* t) //! noncritical
 {

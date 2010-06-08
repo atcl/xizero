@@ -5,6 +5,8 @@
 
 int main(int argc,char* argv[])
 {
+	CLar* cldata = 0;
+	
 	//init sequence
 	CLglobal clglobal(argv[0]);
 	sprite* cursor = clglobal.clformat.loadxpm(CLxzcursor);
@@ -12,7 +14,6 @@ int main(int argc,char* argv[])
 	if(clglobal.clsystem.existsfile("xizero.dat")==1) { cldata = new CLar("xizero.dat"); }
 	else { cldata = new CLar("/usr/share/xizero/xizero.dat"); }
 	clglobal.clgfx.loadfonts(cldata->findbyname("fonts.a"));
-	global = &clglobal;
 	//*
 
 	//intros
@@ -22,7 +23,7 @@ int main(int argc,char* argv[])
 	
 	//mainmenu
 	const xchar* xzmenubuttons[] = { "New Game","Load Game","Options","Exit Game" };
-	void (*xzmenuactions[])() = { newgame,loadgame,options,exitgame };
+	void (*xzmenuactions[])(void*,void*) = { newgame,loadgame,options,exitgame };
 	CLmainmenu* xzmainmenu = new CLmainmenu(xzmenuback,4,xzmenubuttons,xzmenuactions,"Xi Zero","Version "VERSION,0x00FFFFFF);
 	clglobal.clwindow.showcursor(1);
 	while(clglobal.clwindow.run())

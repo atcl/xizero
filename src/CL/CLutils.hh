@@ -44,6 +44,7 @@ bool inline eof(xchar c);										//test if is DOS end of file character
 void inline err(const xchar* c,const xchar* f,const xchar* m);	//console output error "in,at,with"
 void inline bye();												//force program exit
 void inline nfo();												//console output of id string
+void inline ver();												//version output
 xlong inline lt(const xchar* a,const xchar* b);					//compare cstrings
 uxlong inline endian(uxlong l);									//invert endianess
 uxlong inline byteadd(uxlong a,uxlong b);
@@ -71,7 +72,9 @@ void inline err(const xchar* c,const xchar* f,const xchar* m) { std::cout << "ER
 
 void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } 
 
-void inline nfo() { std::cout << u8"atCROSSLEVEL's XiZero Version " << (CLversion>>24) << "." << ((CLversion<<8)>>24) << "." << ((CLversion<<16)>>24) << "." << ((CLversion<<24)>>24) << std::endl; }
+void inline nfo() { std::cout << u8"atCROSSLEVEL's XiZero Version " << VERSION << std::endl; }
+
+void inline ver() { std::cout << u8"Version: " << (CLversion>>24) << "." << ((CLversion<<8)>>24) << "." << ((CLversion<<16)>>24) << "." << ((CLversion<<24)>>24) << std::endl; }
 
 xlong inline lt(const xchar* a,const xchar* b)
 {

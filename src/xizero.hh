@@ -5,22 +5,19 @@
 
 #include "CL/CLglobal.hh"
 
-CLar* cldata = 0;
+void exitgame(void* c,void* d) { CLglobal clglobal = *(static_cast<CLglobal*>(c)); clglobal.clapp.exit(0,"xizero says: bye"); }
 
-CLglobal* global = 0;
-
-void exitgame() { global->clapp.exit(0,"xizero says: bye"); }
-
-void newgame()
+void newgame(void* c,void* d)
 {
-	global->clwindow.showcursor(0);
+	CLglobal clglobal = *(static_cast<CLglobal*>(c));
+	clglobal.clwindow.showcursor(0);
 	
 	//open full screen images archive
 	CLar* screens = new CLar(cldata->findbyname("screens.a"));
 	//*
 	
 	//fullscreen loading bar
-	global->clfsprog.reset();
+	clglobal.clfsprog.reset();
 	//*
 	
 	CLar* lvls = new CLar(cldata->findbyname("levels.a"));
@@ -32,27 +29,27 @@ void newgame()
 	{
 		//display intro
 		sprite* introscreen = 0;
-		xchar* extras = global->clstring.concat(global->clstring.toascii(currlevel),".ras");
-		xchar* exttxt = global->clstring.concat(global->clstring.toascii(currlevel),".txt");
-		introscreen = global->clformat.loadras(screens->findbyextension(extras));
+		xchar* extras = clglobal.clstring.concat(clglobal.clstring.toascii(currlevel),".ras");
+		xchar* exttxt = clglobal.clstring.concat(clglobal.clstring.toascii(currlevel),".txt");
+		introscreen = clglobal.clformat.loadras(screens->findbyextension(extras));
 		xchar* introtext = screens->findbyextension(exttxt)->text;
 		xlong introlength = screens->findbyextension(exttxt)->size;
-		global->clgfx.drawscreen(introscreen);
-		global->clgfx.drawfontstring(0,12,introtext,1,0x00FFFFFF,0,introlength);
-		global->clwindow.run();
-		global->clwindow.sleep(1000);
-		global->clfsprog.set(10);
-		global->clfsprog.draw();
-		global->clwindow.run();
+		clglobal.clgfx.drawscreen(introscreen);
+		clglobal.clgfx.drawfontstring(0,12,introtext,1,0x00FFFFFF,0,introlength);
+		clglobal.clwindow.run();
+		clglobal.clwindow.sleep(1000);
+		clglobal.clfsprog.set(10);
+		clglobal.clfsprog.draw();
+		clglobal.clwindow.run();
 		//*
 
 		//load and init level
-		xchar** lfn = global->clformat.loadlvl(lvls->getmember(currlevel)); //crash in here
+		xchar** lfn = clglobal.clformat.loadlvl(lvls->getmember(currlevel)); //crash in here
 		CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),0,currlevel);
-		global->clfsprog.set(100);
-		global->clfsprog.draw();
-		global->clwindow.run();
-		global->clwindow.sleep(1000);
+		clglobal.clfsprog.set(100);
+		clglobal.clfsprog.draw();
+		clglobal.clwindow.run();
+		clglobal.clwindow.sleep(1000);
 		//*
 		
 		//game loop variables
@@ -77,42 +74,42 @@ void newgame()
 								"#:                Activate/Deactivate Anti-Aliasing (2xFSAA RGMS)\n"
 								"After pressing OK the game will start immediately!";
 								
-		if(global->clmsgbox.msgbox("Info",startmsg)==1) { xlong tempo = 0; }
+		if(clglobal.clmsgbox.msgbox("Info",startmsg)==1) { xlong tempo = 0; }
 		//*
 		
 		//game loop
 		bool aa = 0;
 		
 		testlevel->start();
-		global->clwindow.showfps(1);
-		while(global->clwindow.run() && gamestate>0) 
+		clglobal.clwindow.showfps(1);
+		while(clglobal.clwindow.run() && gamestate>0) 
 		{
 			//check input
-			input = global->clwindow.getinkey(1);
+			input = clglobal.clwindow.getinkey(1);
 			//*
 
 			//grab system keys and update level
 			switch(input)
 			{
-				case ESC: exitgame(); break;
+				case ESC: exitgame(c,d); break;
 				case 'p': testlevel->pause(); break;
 				case '#': aa = !aa;
 				default: gamestate = testlevel->update(); break;
 			}
 			//*
 
-			global->clscreen.cldoublebuffer.clear();
-			global->clscreen.clstencilbuffer.clear();
-			global->clscreen.clzbuffer.clear(ZRES);
+			clglobal.clscreen.cldoublebuffer.clear();
+			clglobal.clscreen.clstencilbuffer.clear();
+			clglobal.clscreen.clzbuffer.clear(ZRES);
 			testlevel->display();
 
 			if(aa)
 			{
-				global->clscreen.cldoublebuffer.copy(&(global->clscreen.clframebuffer),2);
-				global->clscreen.clframebuffer.copy(&(global->clscreen.cldoublebuffer),1);
+				clglobal.clscreen.cldoublebuffer.copy(&(clglobal.clscreen.clframebuffer),2);
+				clglobal.clscreen.clframebuffer.copy(&(clglobal.clscreen.cldoublebuffer),1);
 			}
 		}
-		global->clwindow.showfps(0);
+		clglobal.clwindow.showfps(0);
 		//*
 		
 		//crush level
@@ -121,7 +118,7 @@ void newgame()
 		//*
 		
 		currlevel++;
-		global->cltrans.fadetoblack();
+		clglobal.cltrans.fadetoblack();
 	}
 	
 	sprite* overscreen = 0;
@@ -132,33 +129,33 @@ void newgame()
 	{
 		//draw winner screen
 		case 0:
-			overscreen = global->clformat.loadras(screens->findbyname("gamewon.ras"));
+			overscreen = clglobal.clformat.loadras(screens->findbyname("gamewon.ras"));
 			overtext = screens->findbyname("gamewon.txt")->text;
 			overlength = screens->findbyname("gamewon.txt")->size;
-			global->clgfx.drawscreen(overscreen);
-			global->clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
-			global->clwindow.run();
-			global->clwindow.sleep(9000);
+			clglobal.clgfx.drawscreen(overscreen);
+			clglobal.clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
+			clglobal.clwindow.run();
+			clglobal.clwindow.sleep(9000);
 		break;
 		//*
 		
 		//draw looser screen
 		default:
-			overscreen = global->clformat.loadras(screens->findbyname("gameover.ras"));
+			overscreen = clglobal.clformat.loadras(screens->findbyname("gameover.ras"));
 			overtext = screens->findbyname("gameover.txt")->text;
 			overlength = screens->findbyname("gameover.txt")->size;
-			global->clgfx.drawscreen(overscreen);
-			global->clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
-			global->clwindow.run();
-			global->clwindow.sleep(9000);
+			clglobal.clgfx.drawscreen(overscreen);
+			clglobal.clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
+			clglobal.clwindow.run();
+			clglobal.clwindow.sleep(9000);
 		break;
 		//*
 	}
 	
-	global->cltrans.dissolve();
+	clglobal.cltrans.dissolve();
 	
-	global->clwindow.showcursor(0);
-	global->clwindow.showcursor(1);
+	clglobal.clwindow.showcursor(0);
+	clglobal.clwindow.showcursor(1);
 	
 	//~ delete screens;
 	//~ screens = 0;
@@ -169,7 +166,7 @@ void newgame()
 }
 
 
-void loadgame() { say("not available yet"); }
-void options() { say("not available yet"); }
+void loadgame(void* c,void* d) { say("not available yet"); }
+void options(void* c,void* d) { say("not available yet"); }
 
 #endif

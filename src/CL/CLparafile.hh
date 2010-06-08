@@ -22,7 +22,7 @@
  * 
  * notes:		...
  * 
- * version: 	0.1
+ * version: 	0.2
  */
 ///*
 
@@ -30,19 +30,19 @@
 class CLparafile : CLbase<CLparafile,0>
 {
 	private:
-		CLformat& clformat;
+
 	protected:
 		xchar** name;
 		void**  value;
 	public:
-		CLparafile();
+		CLparafile(CLfile* f);
 		~CLparafile();
-		void* get(const xchar name);
+		void* get(const xchar* name,bool t) const;
 };
 ///*
 
 ///implementation
-CLparafile::CLparafile() //! noncritical
+CLparafile::CLparafile(CLfile* f) //! noncritical
 : clformat(CLformat::instance())
 {
 	
@@ -54,7 +54,7 @@ CLparafile::~CLparafile() //! noncritical
 	delete[] value;
 }
 
-void* CLparafile::get(const xchar name) //! noncritical
+void* CLparafile::get(const xchar* name,bool t) const //! noncritical
 {
 	
 }
