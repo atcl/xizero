@@ -116,7 +116,8 @@ void newgame()
 		//*
 		
 		//crush level
-		//delete testlevel;
+		//~ delete testlevel;
+		//~ testlevel = 0;
 		//*
 		
 		currlevel++;
@@ -137,7 +138,7 @@ void newgame()
 			global->clgfx.drawscreen(overscreen);
 			global->clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
 			global->clwindow.run();
-			global->clwindow.sleep(11000);
+			global->clwindow.sleep(9000);
 		break;
 		//*
 		
@@ -149,7 +150,7 @@ void newgame()
 			global->clgfx.drawscreen(overscreen);
 			global->clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
 			global->clwindow.run();
-			global->clwindow.sleep(11000);
+			global->clwindow.sleep(9000);
 		break;
 		//*
 	}
@@ -160,8 +161,9 @@ void newgame()
 	global->clwindow.showcursor(1);
 	
 	//~ delete screens;
+	//~ screens = 0;
 	//~ delete lvls;
-	//~ delete testlevel; 
+	//~ lvls = 0;
 	
 	return;
 }

@@ -29,7 +29,7 @@
  * 
  * notes:		...	
  * 
- * version: 	0.1
+ * version: 	0.2
  */
 ///*
 
@@ -48,7 +48,8 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 		xlong currid;
 	public:
 		xlong msgbox(const xchar* title,const xchar* message);
-		xlong alertbox(const xchar* title,xlong message);
+		xlong alertbox(const xchar* title,xlong value);
+		xlong yesnobox(const xchar* title,const xchar* message);
 };
 ///*
 
@@ -160,6 +161,11 @@ xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 }
 
 xlong CLmsgbox::alertbox(const xchar* title,xlong value) { return msgbox(title,clstring.toascii(value)); } //! noncritical
+
+xlong CLmsgbox::yesnobox(const xchar* title,const xchar* message) //! noncritical
+{
+	
+}
 ///*
 
 #endif
