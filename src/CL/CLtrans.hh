@@ -91,9 +91,8 @@ void CLtrans::dissolve() const //! critical
 			clgfx.drawpixel(rx,ry,c,1);
 		}
 		clwindow.run();
-		clwindow.sleep(10);
+		clwindow.sleep(8);
 	}
-	//clwindow.sleep(1000);
 }
 
 void CLtrans::fadetoblack() const //! critical
@@ -114,7 +113,6 @@ void CLtrans::fadetoblack() const //! critical
 		clwindow.run();
 		clwindow.sleep(5);
 	}
-	//clwindow.sleep(1000);
 }
 ///*
 

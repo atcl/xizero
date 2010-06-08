@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLparafile.hh</filename>
+	
+	<name>CLparafile</name>
+	
+	<info></info>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>name</name>
+		<type>xchar**</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>value</name>
+		<type>void**</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLparafile</name>
+		<parameter>CLfile* f</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLparafile</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>get</name>
+		<returns>void*</returns>
+		<parameter>const xchar* name</parameter>
+		<parameter>bool t</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

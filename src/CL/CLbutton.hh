@@ -60,7 +60,7 @@ class CLbutton : public CLguibase
 		void setcaption(xchar* t);
 		void setvisible(bool v);
 		xchar* getcaption() const { return caption; };
-		static void checkclick(bool lb,xlong mx,xlong my);
+		static void checkclick(bool lb,xlong mx,xlong my,void* c=0,void* d=0);
 };
 CLbuttonlist* CLbutton::buttonlist = new CLbuttonlist();
 ///*
@@ -118,7 +118,7 @@ void CLbutton::setvisible(bool v) //! noncritical
 	}
 }
 
-void CLbutton::checkclick(bool lb,xlong mx,xlong my) //! critical
+void CLbutton::checkclick(bool lb,xlong mx,xlong my,void* c,void* d) //! critical
 {
 	if(lb!=0)
 	{
@@ -135,7 +135,7 @@ void CLbutton::checkclick(bool lb,xlong mx,xlong my) //! critical
 			cx2 = cx1 + curr->getwidth();
 			cy1 = curr->gety();
 			cy2 = cy1 + curr->getheight();
-			if(mx>cx1 && mx<cx2 && my>cy1 && my<cy2) { curr->click(); }
+			if(mx>cx1 && mx<cx2 && my>cy1 && my<cy2) { curr->click(c,d); }
 		}
 	}
 }

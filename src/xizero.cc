@@ -28,7 +28,7 @@ int main(int argc,char* argv[])
 	clglobal.clwindow.showcursor(1);
 	while(clglobal.clwindow.run())
 	{
-		CLbutton::checkclick(clglobal.clwindow.getmouselb(),clglobal.clwindow.getmousex(),clglobal.clwindow.getmousey());
+		CLbutton::checkclick(clglobal.clwindow.getmouselb(),clglobal.clwindow.getmousex(),clglobal.clwindow.getmousey(),&clglobal,cldata);
 		xzmainmenu->draw();
 	}
 	//*

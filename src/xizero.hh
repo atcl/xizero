@@ -5,11 +5,13 @@
 
 #include "CL/CLglobal.hh"
 
-void exitgame(void* c,void* d) { CLglobal clglobal = *(static_cast<CLglobal*>(c)); clglobal.clapp.exit(0,"xizero says: bye"); }
+void exitgame(void* c,void* d) { CLglobal& clglobal = *(static_cast<CLglobal*>(c)); clglobal.clapp.exit(0,"xizero says: bye"); }
 
 void newgame(void* c,void* d)
 {
-	CLglobal clglobal = *(static_cast<CLglobal*>(c));
+	CLglobal& clglobal = *(static_cast<CLglobal*>(c));
+	CLar* cldata = static_cast<CLar*>(d);
+	
 	clglobal.clwindow.showcursor(0);
 	
 	//open full screen images archive
@@ -93,6 +95,7 @@ void newgame(void* c,void* d)
 			{
 				case ESC: exitgame(c,d); break;
 				case 'p': testlevel->pause(); break;
+				case '$': gamestate = 0; break;
 				case '#': aa = !aa;
 				default: gamestate = testlevel->update(); break;
 			}
@@ -135,7 +138,7 @@ void newgame(void* c,void* d)
 			clglobal.clgfx.drawscreen(overscreen);
 			clglobal.clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
 			clglobal.clwindow.run();
-			clglobal.clwindow.sleep(9000);
+			clglobal.clwindow.sleep(7000);
 		break;
 		//*
 		
@@ -147,7 +150,7 @@ void newgame(void* c,void* d)
 			clglobal.clgfx.drawscreen(overscreen);
 			clglobal.clgfx.drawfontstring(0,12,overtext,1,0x00FFFFFF,0,overlength);
 			clglobal.clwindow.run();
-			clglobal.clwindow.sleep(9000);
+			clglobal.clwindow.sleep(7000);
 		break;
 		//*
 	}
