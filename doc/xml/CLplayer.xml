@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLplayer.hh</filename>
+	
+	<name>CLplayer</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLgame.xml">CLgame</module>
+		<module href="CLmath.xml">CLmath</module>
+		<module href="CLwindow.xml">CLwindow</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLentity.xml">CLentity</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>hprog</name>
+		<type>CLprogress*</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>sprog</name>
+		<type>CLprogress*</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>pretransform</name>
+		<returns>void</returns>
+		<parameter>bool m</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>transform</name>
+		<returns>void</returns>
+		<parameter>bool m</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>collision</name>
+		<returns>xlong</returns>
+		<parameter>CLobject** ll</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLplayer</name>
+		<parameter>CLfile* playera</parameter>
+		<parameter>const xlong&amp; m</parameter>
+		<parameter>xlong mm</parameter>
+		<parameter>CLlvector* playerp</parameter>
+		<parameter>xlong pts=0</parameter>
+		<qualifier></qualifier>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLplayer</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>update</name>
+		<returns>xlong</returns>
+		<parameter>CLobject** ll</parameter>
+		<parameter>CLenemylist* enemies</parameter>
+		<parameter>CLboss* boss</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>addpoints</name>
+		<returns>void</returns>
+		<parameter>xlong p</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>displayhud</name>
+		<returns>void</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

@@ -26,11 +26,11 @@
  * 
  * description:	The player (entity) class.
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -56,8 +56,7 @@ class CLplayer : public CLentity<2>
 		~CLplayer();
 		xlong update(CLobject** ll,CLenemylist* enemies,CLboss* boss);
 		void addpoints(xlong p);
-		void showbox();
-		void displayhud();
+		void displayhud() const;
 };
 ///*
 
@@ -282,12 +281,12 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 			break; //*
 			
 			case 'w': //w -> reset tower
-			if( (angles[1].z - angles[0].z) >  180) { angles[1].z -= 360; } 
-			if( (angles[1].z - angles[0].z) < -180) { angles[1].z += 360; }
-			tempangle = clmath.sign(angles[0].z-angles[1].z) * 5;
-			model[1]->getmatrix()->rotate(0,0,tempangle);
-			pretransform(1);
-			what=1;
+				if( (angles[1].z - angles[0].z) >  180) { angles[1].z -= 360; } 
+				if( (angles[1].z - angles[0].z) < -180) { angles[1].z += 360; }
+				tempangle = clmath.sign(angles[0].z-angles[1].z) * 5;
+				model[1]->getmatrix()->rotate(0,0,tempangle);
+				pretransform(1);
+				what=1;
 			break; //*
 
 			
@@ -331,7 +330,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 		{	
 			transform(what);
 			if(what==0) { angles[0].z = (angles[0].z + tempangle)%360; angles[1].z = (tempangle + angles[1].z)%360; }
-			else angles[1].z = (tempangle + angles[1].z)%360;
+			else { angles[1].z = (tempangle + angles[1].z)%360; }
 			position = tposition;
 		}
 		//*
@@ -347,38 +346,7 @@ xlong CLplayer::update(CLobject** ll,CLenemylist* enemies,CLboss* boss) //! crit
 
 void CLplayer::addpoints(xlong p) {	points += p; }  //! noncritical
 
-//for debug only:
-void CLplayer::showbox() //! noncritical
-{
-	CLfvector bposition;
-	bposition.x = position.x;
-	bposition.y = position.y - mark;
-	bposition.z = position.z;
-	
-	CLfvector a = bposition;
-	CLfvector b = bposition;
-	CLfvector c = bposition;
-	CLfvector d = bposition;
-	a.x += boundingbox[1][0]->c[0].x;
-	a.y -= boundingbox[1][0]->c[0].y;
-	a.z += boundingbox[1][0]->c[0].z;
-	b.x += boundingbox[1][0]->c[1].x;
-	b.y -= boundingbox[1][0]->c[1].y;
-	b.z += boundingbox[1][0]->c[1].z;
-	c.x += boundingbox[1][0]->c[2].x;
-	c.y -= boundingbox[1][0]->c[2].y;
-	c.z += boundingbox[1][0]->c[2].z;
-	d.x += boundingbox[1][0]->c[3].x;
-	d.y -= boundingbox[1][0]->c[3].y;
-	d.z += boundingbox[1][0]->c[3].z;
-	
-	CLgfx::instance().drawpolygon( a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,0x00FFFFFF );
-	CLgfx::instance().drawpixel(d.x,d.y,0,1);
-	CLgfx::instance().drawpixel( (a.x+b.x+c.x+d.x)/4,(a.y+b.y+c.y+d.y)/4,0,1);
-}
-//*
-
-void CLplayer::displayhud() //! noncritical
+void CLplayer::displayhud() const //! noncritical
 {
 	hprog->draw();
 	sprog->draw();
