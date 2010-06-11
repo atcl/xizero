@@ -52,6 +52,7 @@
 #include "CLlight.hh"
 #include "CLlevel.hh"
 #include "CLgame.hh"
+#include "CLvoxels.hh"
 ///*
 
 ///header

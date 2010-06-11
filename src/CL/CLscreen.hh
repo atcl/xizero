@@ -48,6 +48,7 @@ class CLscreen : public CLbase<CLscreen,1>
 		CLubuffer stencilbuffer;
 		CLfbuffer zbuffer;
 		//CLubuffer clabuffer;
+		CLfvector view;
 		CLfvector light;
 		CLfvector plane;
 		CLfvector slight;
@@ -55,18 +56,19 @@ class CLscreen : public CLbase<CLscreen,1>
 		CLscreen();
 		~CLscreen() { };
 	public:
-		uxlong getbytewidth() const { return bytewidth; };
-		uxlong getbyteheight() const { return byteheight; };
-		uxlong getbytedepth() const { return bytedepth; };
-		uxlong getbytesize() const { return bytesize; };
-		uxlong getpixelwidth() const { return pixelwidth; };
-		uxlong getpixelheight() const { return pixelheight; };
-		uxlong getpixeldepth() const { return pixeldepth; };
-		uxlong getpixelsize() const { return pixelsize; };
+		uxlong& clbytewidth;
+		uxlong& clbyteheight;
+		uxlong& clbytedepth;
+		uxlong& clbytesize;
+		uxlong& clpixelwidth;
+		uxlong& clpixelheight;
+		uxlong& clpixeldepth;
+		uxlong& clpixelsize;
 		CLubuffer& cldoublebuffer;
 		CLubuffer& clframebuffer;
 		CLubuffer& clstencilbuffer;
 		CLfbuffer& clzbuffer;
+		CLfvector& clview;
 		CLfvector& cllight;
 		CLfvector& clplane;
 		CLfvector& clslight;
@@ -77,17 +79,40 @@ uxlong CLscreen::nolight = 0x00303030;
 ///*
 
 ///implementation
-CLscreen::CLscreen() : doublebuffer((XRES*YRES),0), framebuffer((XRES*YRES),0), stencilbuffer((XRES*YRES),0), zbuffer((XRES*YRES),ZRES), cldoublebuffer(doublebuffer), clframebuffer(framebuffer), clstencilbuffer(stencilbuffer), clzbuffer(zbuffer), light(1,1,1), plane(0,0.1,1), slight(0,0.4,1.1), cllight(light), clplane(plane), clslight(slight), clnolight(nolight)
-{
-	bytewidth = XRES<<2;
-	byteheight = YRES<<2;
-	bytedepth = 4;
-	bytesize = (XRES*YRES)<<2;
-	pixelwidth = XRES;
-	pixelheight = YRES;
-	pixeldepth = ZRES;
-	pixelsize = XRES*YRES;
-}
+CLscreen::CLscreen() :	doublebuffer((XRES*YRES),0),
+						framebuffer((XRES*YRES),0),
+						stencilbuffer((XRES*YRES),0),
+						zbuffer((XRES*YRES),ZRES),
+						cldoublebuffer(doublebuffer),
+						clframebuffer(framebuffer),
+						clstencilbuffer(stencilbuffer),
+						clzbuffer(zbuffer),
+						view(0,0,1),
+						light(1,1,1),
+						plane(0,0.1,1),
+						slight(0,0.4,1.1),
+						clview(view),
+						cllight(light),
+						clplane(plane),
+						clslight(slight),
+						clnolight(nolight),
+						bytewidth(XRES<<2),
+						byteheight(YRES<<2),
+						bytedepth(4),
+						bytesize((XRES*YRES)<<2),
+						pixelwidth(XRES),
+						pixelheight(YRES),
+						pixeldepth(ZRES),
+						pixelsize(XRES*YRES),
+						clbytewidth(bytewidth),
+						clbyteheight(byteheight),
+						clbytedepth(bytedepth),
+						clbytesize(bytesize),
+						clpixelwidth(pixelwidth),
+						clpixelheight(pixelheight),
+						clpixeldepth(pixeldepth),
+						clpixelsize(pixelsize)
+{ }
 ///*
 
 #endif
