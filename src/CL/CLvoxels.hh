@@ -140,6 +140,9 @@ void CLvobj::display(CLlvector p,xshort flags) ///! critical
 	uxlong l = 0;
 	uxlong s = 0;
 	
+	ngroup* g = 0;
+	CLvoxel* v = 0;
+	
 	for(xlong i=0;i<ngroups;i++)
 	{
 		if(clscreen.clview * n[i].normal<0)
