@@ -63,17 +63,17 @@ class CLpolygon : CLbase<CLpolygon,0>
 		CLfvector normal;
 		CLfvector rnormal;
 
-		void polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c);
+		void polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const;
 		template<class clvector> inline clvector getzplanecoords(const clvector& a,const clvector& b,float pz) const;
 		template<class clvector> inline clvector getxplanecoords(const clvector& a,const clvector& b,float px) const;
 		template<class clvector> inline clvector getyplanecoords(const clvector& a,const clvector& b,float py) const;
 		void zclipping();
 		void project(xlong px=0,xlong py=0,bool c=0);
 		void xyclipping();
-		bool visible();
-		void shape();
+		bool visible() const;
+		void shape() const;
 		void flatshade(float pz,bool ambient,bool zlight);
-		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s);
+		template<class clvector>void setside(const clvector& b,const clvector& e,screenside *s) const;
 		void rasterize(xlong shadow,CLfbuffer* t=0); //too slow!!!
 		inline xlong circleinc(xlong x,xlong pc) const;
 		inline xlong circledec(xlong x,xlong pc) const;
@@ -100,7 +100,7 @@ screenside* CLpolygon::rightside = new screenside[YRES];
 ///*
 
 ///implementation
-void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) //! critical
+void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const //! critical
 {
 	if(x1==x2 && y1==y2) { return; }
 
@@ -365,19 +365,19 @@ void CLpolygon::xyclipping() //! noncritical
 	//*
 }
 
-bool CLpolygon::visible() //! noncritical
+bool CLpolygon::visible() const //! noncritical
 {
 	//calc z component of cross product of two edges (with one comon corner)
 	xlong f = xlong(((wpoint[cpointcount-1].x - wpoint[0].x) * (wpoint[1].y - wpoint[0].y)) - ((wpoint[cpointcount-1].y - wpoint[0].y) * (wpoint[1].x - wpoint[0].x)));
 	//? replace by real cross product
 	//*
 
-	//poly is visible if z component of cross product is below zero (below one to rule out rundng erros)
+	//poly is visible if z component of cross product is below zero (below one to rule out rounding errors)
 	return( (f < 1) ? 1 : 0 );
 	//*
 }
 
-void CLpolygon::shape() //! noncritical
+void CLpolygon::shape() const //! noncritical
 {
 	//draw wireframe of polygon
 	xlong x = 0;
@@ -417,7 +417,7 @@ void CLpolygon::flatshade(float pz,bool ambient,bool zlight) //! critical
 }
 
 template<class clvector>
-void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s) //! critical
+void CLpolygon::setside(const clvector& b, const clvector& e, screenside *s) const //! critical
 {
 	xlong length = xlong(e.y - b.y);
 	if(length<=0) { return; }
@@ -512,7 +512,6 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 				while(length > 0)
 				{
 					clscreen.clstencilbuffer[offset] = scolor;
-					
 					offset++;
 					length--;
 				}
