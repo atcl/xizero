@@ -41,7 +41,7 @@ class CLlabel : public CLguibase
 		xlong textx;
 		xlong texty;
 	public:
-		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f);
+		CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f,bool s=0);
 		~CLlabel() { delete text; };
 		void draw() const;
 		void settext(const xchar* t);
@@ -50,7 +50,7 @@ class CLlabel : public CLguibase
 ///*
 
 ///implementation
-CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f) //! noncritical
+CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,const xchar* t,bool f,bool s) //! noncritical
 : clstring(CLstring::instance()), clgfx(CLgfx::instance()), CLguibase(px,py,w,h,0,fc,bc,rc) 
 {
 	frame = f;
@@ -58,6 +58,8 @@ CLlabel::CLlabel(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc
 	text = clstring.copy(t);
 	textwidth = clgfx.getfontstringwidth(text,0) + 4;
 	textheight = clgfx.getfontstringheight(text,0);
+	width = w;
+	height = h;
 	if(w==-1 || w<textwidth) { width = textwidth; }
 	if(h==-1 || h<textheight) { height = textheight; }
 	textx = (width - textwidth)>>1;

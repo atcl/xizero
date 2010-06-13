@@ -94,6 +94,7 @@ void newgame(void* c,void* d)
 			switch(input)
 			{
 				case ESC: exitgame(c,d); break;
+				case '^': testlevel->pause(); CLmenu::wrapper(); testlevel->pause(); break; //temp!!
 				case 'p': testlevel->pause(); break;
 				case '$': gamestate = 0; break;
 				case '#': aa = !aa;

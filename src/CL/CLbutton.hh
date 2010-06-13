@@ -51,11 +51,11 @@ class CLbutton : public CLguibase
 		xlong captionx;
 		xlong captiony;
 		static CLbuttonlist* buttonlist;
+		void click(void* c=0,void* d=0) const;
 	public:
 		CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(void*,void*),const xchar *c,bool f);
 		~CLbutton();
 		void draw() const;
-		void click(void* c=0,void* d=0) const;
 		void setaction(void(*a)(void*,void*)) { action = a; };
 		void setcaption(xchar* t);
 		void setvisible(bool v);
@@ -73,6 +73,8 @@ CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong 
 	caption = clstring.copy(c);
 	captionwidth = clgfx.getfontstringwidth(caption,0) + 4;
 	captionheight = clgfx.getfontstringheight(caption,0);
+	width = w;
+	height = h;
 	if(w==-1 || w<captionwidth) { width = captionwidth; }
 	if(h==-1 || h<captionheight) { height = captionheight; }
 	captionx = (width - captionwidth)>>1;

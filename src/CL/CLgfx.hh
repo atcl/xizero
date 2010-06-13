@@ -845,17 +845,20 @@ void CLgfx::drawfontstring(xlong x,xlong y,const xchar* a,uxlong f,uxlong fc,uxl
 xlong CLgfx::getfontstringwidth(const char* a,uxlong f) const //! critical
 {
 	//select font
-	if(fonts==0) { return 0; }
 	if(f>6) { f = 0; }
-	CLfont* t = fonts[f];
+	xlong w = SYSFONTWIDTH;
 	//*
 	
 	xlong l = clstring.length(a);
 	xlong r = 0;
 	//uxlong srcoff = 0;
-	
-	for(xlong i=0; i<l; i++)
-	{ for(uxlong j=0; j<t[i]->width; j++) { if(t[i]->data[j] != 0x00000000) { r++; } } }
+	if(fonts!=0)
+	{
+		w = fonts[f][0]->width;
+		for(xlong i=0; i<l; i++)
+		{ for(uxlong j=0; j<w; j++) { if(fonts[f][i]->data[j]!=0x00000000) { r++; } } }
+	}
+	else { r = l*w; }
 	
 	return r;
 }
@@ -863,15 +866,15 @@ xlong CLgfx::getfontstringwidth(const char* a,uxlong f) const //! critical
 xlong CLgfx::getfontstringheight(const char* a,uxlong f) const //! critical
 {
 	//select font
-	if(fonts==0) { return 0; }
 	if(f>6) { f = 0; }
-	CLfont* t = fonts[f];
+	xlong h = SYSFONTHEIGHT;
+	if(fonts!=0) { h = fonts[f][0]->height; }
 	//*
 	
 	xlong l = clstring.length(a);
-	xlong r = t[0]->height;
+	xlong r = h;
 	
-	for(xlong i=0; i<l; i++) { if(a[i]=='\n') r += t[i]->height; }
+	for(xlong i=0; i<l; i++) { if(a[i]=='\n') { r += h; } }
 	
 	return r;
 }

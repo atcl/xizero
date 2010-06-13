@@ -45,6 +45,11 @@
 #define CLguiframe 0x00000000
 //*
 
+//default ss font
+#define SYSFONTWIDTH  16
+#define SYSFONTHEIGHT 16
+//*
+
 //render flags
 #define CENTER  0b0000000010000000 //center object on screen
 #define FLAT    0b0000000001000000 //use flatshading

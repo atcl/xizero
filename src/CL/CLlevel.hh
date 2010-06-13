@@ -69,7 +69,7 @@ class CLlevel : public CLbase<CLlevel,0>
 		xlong striperest;
 		static xlong playerscreenylevel;
 		static xlong floorheight;
-		static bool paused;
+		bool paused;
 		
 		inline xlong extract(sprite* h,xlong y,xlong x,xlong i) const { return (xlong(((uxchar*)(&h->data[(y*h->width)+x]))[i])); }
 	public:
@@ -79,13 +79,12 @@ class CLlevel : public CLbase<CLlevel,0>
 		void display() const;
 		void setmark(xlong m);
 		void start() const;
-		static void pause();
+		void pause();
 		xlong getmark() const { return levelmark; };
 		CLplayer* getplayer() const { return player; };
 };
 xlong     CLlevel::playerscreenylevel = 3*(YRES>>2);
 xlong     CLlevel::floorheight = 100;
-bool      CLlevel::paused = 0;
 ///*
 
 ///implementation
@@ -349,19 +348,13 @@ CLlevel::~CLlevel() //! noncritical
 xlong CLlevel::update() //! critical
 {
 	//check if game paused
-	if(paused)
-	{
-		player->pause();
-		for(xlong i=enemylist->setfirst(); i<enemylist->getlength(); i+=enemylist->setnext()) { enemylist->getcurrentdata()->pause(); }
-		boss->pause();
-		return 1;
-	}
+	if(paused==1) { return 1; }
 	//*
 	
 	//update player
 	xlong isdead = 0;
 	isdead = player->update(levelmap,enemylist,boss);
-	if(isdead != -1) { return -1; }
+	if(isdead!=-1) { return -1; }
 	//*
 
 	//update enemies
@@ -451,7 +444,11 @@ void CLlevel::start() const //! noncritical
 	boss->start();
 }
 
-void CLlevel::pause() { paused = !paused; } //! noncritical
+void CLlevel::pause() //! noncritical
+{
+	paused = !paused;
+	if(paused==0) { start(); }
+} 
 ///*
 
 #endif

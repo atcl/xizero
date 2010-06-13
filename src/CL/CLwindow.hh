@@ -57,8 +57,6 @@ class CLwindow : public CLbase<CLwindow,1>
 		static xlong mousey;
 		static xlong mouselb;	
 		static xlong mouserb;
-		static uxchar syskey;
-		static void (*sysmenu)();
 		xlong  winid;
 		uxlong frame;
 		uxlong time;
@@ -87,13 +85,11 @@ class CLwindow : public CLbase<CLwindow,1>
 		xlong getmousey() const { return mousey; };
 		xlong getmouselb() const { return mouselb; };
 		xlong getmouserb() const { return mouserb; };
-		void setsyskey(uxchar k=0,void (*m)()=0);
 		xlong getmilliseconds() const { return glutGet(GLUT_ELAPSED_TIME); };
 		void sleep(xlong ms) const;
 		xlong getfps();
 };
 
-uxchar CLwindow::syskey = 0;
 xlong CLwindow::keydn = 0;
 xlong CLwindow::turbo = 0;
 xlong CLwindow::mousex = 0;
@@ -121,11 +117,7 @@ void CLwindow::setmotion(xlong x,xlong y) //! noncritical
 	mousey = y;
 }
 
-void CLwindow::setkeydn(uxchar key,xlong x,xlong y) //! noncritical
-{
-	turbo = keydn = key;
-	//if(syskey!=0 && key==syskey) { sysmenu(); }
-}
+void CLwindow::setkeydn(uxchar key,xlong x,xlong y) { turbo = keydn = key; } //! noncritical
 
 void CLwindow::setkeyup(uxchar key,xlong x,xlong y) { if(turbo==key) { turbo = 0; } } //! noncritical
 
@@ -257,8 +249,6 @@ void CLwindow::draw() //! noncritical
 }
 
 bool CLwindow::run() { glutMainLoopEvent(); draw(); idle(); return 1; } //! noncritical
-
-void CLwindow::setsyskey(uxchar k,void (*m)()) { syskey = k; /*sysmenu = m;*/ } //! noncritical
 
 void CLwindow::sleep(xlong ms) const //! noncritical
 {

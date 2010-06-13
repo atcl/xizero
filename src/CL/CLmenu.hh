@@ -22,7 +22,7 @@
 #include "CLlabel.hh"
 #include "CLbutton.hh"
 #include "CLgfx.hh"
-#include "CLsystem.hh"
+#include "CLwindow.hh"
 ///*
 
 ///header
@@ -49,7 +49,6 @@ class CLmenu : public CLbase<CLmenu,1>
 		CLwindow& clwindow;
 		CLgfx&    clgfx;
 	protected:
-		uxchar    syskey;
 		sprite*   icon;
 		CLlabel*  title;
 		CLbutton* exit;
@@ -63,7 +62,6 @@ class CLmenu : public CLbase<CLmenu,1>
 	public:
 		void show();
 		static void wrapper();
-		uxchar getsyskey() const { return syskey; };
 };
 ///*
 
@@ -71,24 +69,20 @@ class CLmenu : public CLbase<CLmenu,1>
 CLmenu::CLmenu() //! noncritical
 : clformat(CLformat::instance()), clwindow(CLwindow::instance()), clgfx(CLgfx::instance())
 {
-	syskey = '^';
 	icon = clformat.loadxpm(CLicon);
 	title = new CLlabel(0,0,XRES,20,0x00FFFFFF,0x00FF0000,0x00800000,"atCROSSLEVEL's XiZero",0);
 	exit = new CLbutton(780,1,18,18,0,0x00C0C0C0,0,&exiting,"X",1);
-	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,&infoing,"Info",1);
-	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,&versing,"About",1);
+	info = new CLbutton(2,21,100,18,0,0x00C0C0C0,0,&infoing,"Info",0);
+	about = new CLbutton(102,21,100,18,0,0x00C0C0C0,0,&versing,"About",0);
 
 	title->setvisible(0);
 	exit->setvisible(0);
 	info->setvisible(0);
 	about->setvisible(0);
-	
-	clwindow.setsyskey(syskey,&wrapper);
 }
 
 CLmenu::~CLmenu() //! noncritical
 {
-	clwindow.setsyskey();
 	delete icon;
 	delete title;
 	delete exit;
@@ -112,7 +106,7 @@ void CLmenu::show() //! noncritical
 	
 	while(clwindow.run())
 	{
-		if(clwindow.getinkey()==SPACE) { break; }
+		if(clwindow.getinkey(1)==SPACE) { break; }
 		CLbutton::checkclick(clwindow.getmouselb(),clwindow.getmousex(),clwindow.getmousey());
 		clgfx.drawscreen(back);
 		title->draw();

@@ -359,9 +359,9 @@ void CLentity<I>::start() //! noncritical
 template<int I>
 void CLentity<I>::pause() //! noncritical
 {
-	xlong currtime = shieldupdate = lastupdate = clwindow.getmilliseconds();
-	for(xlong i=0; i<ammomounts; i++) { fireupdate[i] = currtime; }
-	ammoman->pause();
+	//~ xlong currtime = shieldupdate = lastupdate = clwindow.getmilliseconds();
+	//~ for(xlong i=0; i<ammomounts; i++) { fireupdate[i] = currtime; }
+	//~ ammoman->pause();
 }
 ///*
 
