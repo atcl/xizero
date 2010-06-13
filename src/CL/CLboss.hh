@@ -47,7 +47,8 @@ CLboss::CLboss(CLfile* bossptr,const xlong& m,xlong mm,CLlvector* bossp) : CLene
 	//*
 
 	//set health bar width and height
-	hprog->reset(0,0,80,20,health+shield,0,health+shield,0x0000FF00,0,1,0,0x00C0C0C0,0x00C0C0C0);
+	hprog->setwidth(80);
+	hprog->setheight(20);
 	//*	
 }
 ///*

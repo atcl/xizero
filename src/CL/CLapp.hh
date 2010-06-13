@@ -42,9 +42,9 @@ class CLapp : public CLbase<CLapp,1>
 	
 	protected:
 		const xchar* title;
-		const xchar** icon;
 		const xchar* exename;
 		const xchar* version;
+		xchar** icon;
 		uxlong size;
 		CLapp();
 		~CLapp() { };
@@ -53,8 +53,8 @@ class CLapp : public CLbase<CLapp,1>
 		void exit(const xlong r=0,const xchar* m="") const;
 		xchar inkey(const bool b) const { return xchar(getchar()); };
 		const xchar* gettitle() const { return title; };
-		const xchar** geticon() const { return icon; };
-		void seticon(const xchar** i) { icon = i; }
+		char** geticon() const { return icon; };
+		void seticon(xchar** i) { icon = i; }
 		uxlong getsize() const { return size; };
 		const xchar* getversion() const { return version; };
 };

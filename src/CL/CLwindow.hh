@@ -234,7 +234,7 @@ CLwindow::CLwindow() //! noncritical
 	//~ Pixmap shape;
 	//~ XWMHints* win_hints;
 	//~ Display* display = XOpenDisplay(":0.0");
-	//~ XpmCreatePixmapFromData(display,DefaultRootWindow(display),CLicon2,&image,&shape,0);
+	//~ XpmCreatePixmapFromData(display,DefaultRootWindow(display),CLicon,&image,&shape,0);
 	//~ win_hints = XAllocWMHints();
 	//~ win_hints->flags = IconPixmapHint|IconMaskHint;
 	//~ win_hints->icon_pixmap = image;

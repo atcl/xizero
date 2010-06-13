@@ -94,7 +94,6 @@ class CLentity : public CLbase<CLentity<I>,0>
 		//virtual xlong collision() = 0;
 	public:
 		CLentity(CLfile* entitya,const xlong& markref,xlong mm);
-		CLentity(const xlong& markref,xlong mm);
 		CLentity(CLentity* entityptr);
 		virtual ~CLentity();
 		//virtual xlong update() = 0;
@@ -291,17 +290,6 @@ CLentity<I>::CLentity(CLentity* entityptr) : mark(entityptr->mark), //! noncriti
 	//*
 	
 	csv = entityptr->csv;
-}
-
-template<int I>
-CLentity<I>::CLentity(const xlong& markref,xlong mm) : mark(markref), //! noncritical
-  clmisc3d(CLmisc3d::instance()), clformat(CLformat::instance()), clstring(CLstring::instance()), clwindow(CLwindow::instance())
-{
-	//set mark pointer from level
-	markmax = mm;
-	//*
-	
-	//...
 }
 
 template<int I>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="0">
+	
+	<filename>CLprogress.hh</filename>
+	
+	<name>CLprogress</name>
+	
+	<info></info>
+	
+	<depends>
+		<module href="CLmath.xml">CLmath</module>
+		<module href="CLstring.xml">CLstring</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLguibase.xml">CLguibase</parent>	
+	</derived>
+	
+	<attribute ispublic="0" isstatic="0">
+		<name>progress</name>
+		<type>float</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>start</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>end</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>pprogress</name>
+		<type>xlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>punit</name>
+		<type>float</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>pcolor</name>
+		<type>uxlong</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="0" isstatic="0">
+		<name>horver</name>
+		<type>bool</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="0" isstatic="0">
+		<name>cpunit</name>
+		<returns>float</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLprogress</name>
+		<parameter>xlong px</parameter>
+		<parameter>xlong py</parameter>
+		<parameter>xlong w</parameter>
+		<parameter>xlong h</parameter>
+		<parameter>xlong p</parameter>
+		<parameter>xlong s</parameter>
+		<parameter>xlong e</parameter>
+		<parameter>uxlong pc</parameter>
+		<parameter>bool hv</parameter>
+		<parameter>bool f</parameter>
+		<parameter>uxlong fc</parameter>
+		<parameter>uxlong bc</parameter>
+		<parameter>uxlong rc</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>~CLprogress</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>draw</name>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setwidth</name>
+		<returns>void</returns>
+		<parameter>xlong w</parameter>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setheight</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setstart</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setend</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>setprogress</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>addprogress</name>
+		<returns>void</returns>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getstart</name>
+		<returns>xlong</returns>
+		<qualifier>void</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>getend</name>
+		<returns>void</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>	
+
+	<method ispublic="1" isstatic="0">
+		<name>getprogress</name>
+		<returns>xlong</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

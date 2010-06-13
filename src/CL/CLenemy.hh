@@ -176,7 +176,7 @@ CLenemy::CLenemy(CLfile* enemya,const xlong& m,xlong mm,CLlvector* enemyp)  //! 
 	//*
 	
 	//create progress bar
-	hprog = new CLprogress(0,0,40,10,health+shield,0,health+shield,0x00FF0000,1,1,0,0,0);
+	hprog = new CLprogress(0,0,40,10,health+shield,0,health+shield,0x0000FF00,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*
 }
 
@@ -215,8 +215,7 @@ CLenemy::CLenemy(CLenemy* enemyptr,CLlvector* enemyp) //! noncritical
 	//*	
 	
 	//create progress bar
-	hprog = new CLprogress(*(enemyptr->hprog));
-	hprog->reset(0,0,40,10,health+shield,0,health+shield,0x0000FF00,0,1,0,0x00C0C0C0,0x00C0C0C0);
+	hprog = new CLprogress(0,0,40,10,health+shield,0,health+shield,0x0000FF00,0,1,0,0x00C0C0C0,0x00C0C0C0);
 	//*
 }
 

@@ -57,8 +57,7 @@ class CLformat : public CLbase<CLformat,1>
 	public:
 		xlong*   loadcsv(CLfile* f,xchar s) const;
 		sprite*  loadras(CLfile* f) const;
-		sprite*  loadxpm(const xchar* x[]) const;
-		sprite*  loadxpm(const xchar* x) const;
+		sprite*  loadxpm(xchar* x[]) const;
 		sprite** loadtileset(CLfile* f,xlong w,xlong h) const;
 		xchar**  loadlvl(CLfile* f) const;
 		xmap*    loadini(CLfile* f) const;
@@ -241,7 +240,7 @@ sprite* CLformat::loadras(CLfile* f) const //! noncritical
 	return r;
 }
 
-sprite* CLformat::loadxpm(const xchar* x[]) const //! noncritical
+sprite* CLformat::loadxpm(xchar* x[]) const //! noncritical
 {
 	uxlong xpm_ptr = 0;
 	

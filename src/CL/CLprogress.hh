@@ -13,6 +13,7 @@
 #include "CLbase.hh"
 #include "CLguibase.hh"
 #include "CLgfx.hh"
+#include "CLmath.hh"
 ///*
 
 ///header
@@ -20,11 +21,11 @@
  * 
  * description:	A standard gui element progress bar
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -32,7 +33,6 @@
 class CLprogress : public CLguibase
 {
 	private:
-		CLstring& clstring;
 		CLgfx&    clgfx;
 		CLmath&   clmath;
 	protected:
@@ -43,13 +43,13 @@ class CLprogress : public CLguibase
 		float punit;
 		uxlong pcolor;
 		bool  horver;
+		inline float cpunit() const;
 	public:
 		CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc);
-		CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv);
-		CLprogress();
 		~CLprogress() { };
-		void reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc);
 		void draw() const;
+		void setwidth(xlong w);
+		void setheight(xlong h);
 		void setstart(xlong s);
 		void setend(xlong e);
 		void setprogress(xlong p);
@@ -61,8 +61,15 @@ class CLprogress : public CLguibase
 ///*
 
 ///implementation
+inline float CLprogress::cpunit() const //! noncritical
+{
+	float t1 = clmath.absolute(end-start);
+	float t2 = width*xlong(!horver) + height*xlong(horver);
+	return (t2 / t1);
+}
+
 CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
-: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
+: clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
 {
 	//set up attributes
 	progress = p;
@@ -72,64 +79,14 @@ CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	
-	float temp = clmath.absolute(end-start);
-	float temp2 = (width*xlong(!horver)) + (height*xlong(horver));
-	punit =  temp2 / temp;
+	punit =  cpunit();
 	pprogress = punit * progress;
 	//*
 }
 
-CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv)  //! noncritical
-: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h)
-{
-	//set up attributes
-	progress = p;
-	horver = hv;
-	pcolor = pc;
-	
-	if(e>=s) { start = s; end = e; }
-	else { start = e; end = s; }
-	
-	float temp = float(clmath.absolute(end-start));
-	float temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
-	punit = temp2 / temp;
-	pprogress = xlong(punit * progress);
-	//*
-}
-
-CLprogress::CLprogress() //! noncritical
-: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(0,0,0,0)
-{
-	start = end = progress = pcolor = horver = pprogress = punit = 0;
-}
-
-void CLprogress::reset(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,xlong f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
-{
-	posx = px;
-	posy = py;
-	width = w;
-	height = h;
-	fcolor = fc;
-	bcolor = bc;
-	rcolor = rc;
-	flat = f;
-	
-	progress = p;
-	horver = hv;
-	pcolor = pc;
-	
-	if(e>=s) { start = s; end = e; }
-	else { start = e; end = s; }
-	
-	float temp = float(clmath.absolute(end-start));
-	float temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
-	punit = temp2 / temp;
-	pprogress = xlong(punit * progress);
-}
-
 void CLprogress::draw() const //! noncritical
 {
-	if(visible==0) return;
+	if(visible==0) { return; }
 
 	//draw enclosing frame
 	clgfx.drawguirectangle(posx,posy,posx+width,posy+height,bcolor,rcolor,!flat);
@@ -147,21 +104,31 @@ void CLprogress::draw() const //! noncritical
 	}
 }
 
+void CLprogress::setwidth(xlong w) //! noncritical
+{
+	width = w;
+	punit =  cpunit();
+	pprogress = punit * progress;
+}
+
+void CLprogress::setheight(xlong h) //! noncritical
+{
+	height = h;
+	punit =  cpunit();
+	pprogress = punit * progress;
+}
+
 void CLprogress::setstart(xlong s) //! noncritical
 {
 	start = s;
-	xlong temp = float(clmath.absolute(end-start));
-	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
-	punit =  temp2 / temp;
+	punit =  cpunit();
 	pprogress = punit * progress;
 }
 
 void CLprogress::setend(xlong e) //! noncritical
 {
 	end = e;
-	xlong temp = float(clmath.absolute(end-start));
-	xlong temp2 = float(width*xlong(!horver)) + (height*xlong(horver));
-	punit =  temp2 / temp;
+	punit =  cpunit();
 	pprogress = punit * progress;
 }
 
