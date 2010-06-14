@@ -39,7 +39,7 @@ template<int I> class CLentity;
 ///definitions
 struct CLammo
 {
-	void(*comsprite)(xlong x,xlong y);
+	void (*comsprite)(xlong x,xlong y);
 	CLfvector p;
 	CLfvector s;
 };
@@ -53,6 +53,7 @@ class CLammomanager : public CLbase<CLammomanager,0>
 		CLwindow&  clwindow;
 		CLgame&    clgame;
 		CLmath&    clmath;
+		CLcomspr&  clcomspr;
 	protected:
 		CLammolist* list;
 		CLammo**    type;
@@ -72,7 +73,7 @@ class CLammomanager : public CLbase<CLammomanager,0>
 
 ///implementation
 CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,const xlong& markref) : mark(markref), //! noncritical
- clscreen(CLscreen::instance()), clwindow(CLwindow::instance()), clgame(CLgame::instance()), clmath(CLmath::instance())
+ clscreen(CLscreen::instance()), clwindow(CLwindow::instance()), clgame(CLgame::instance()), clmath(CLmath::instance()), clcomspr(CLcomspr::instance())
 {	
 	//set up attributes
 	types = ammotypecount;

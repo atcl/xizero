@@ -21,7 +21,7 @@
  * 
  * author:		atcl
  * 
- * notes:		...
+ * notes:		make non static
  * 
  * version: 	0.2
  */
