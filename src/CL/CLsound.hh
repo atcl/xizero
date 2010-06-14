@@ -32,7 +32,7 @@
  * 
  * notes:		...
  * 
- * version: 	0.1
+ * version: 	0.2
  */
 ///*
 
@@ -40,6 +40,7 @@
 class CLsound : public CLbase<CLsound,1>
 {
 	friend class CLbase<CLsound,1>;
+	friend class CLglobal;
 	
 	private:
 		CLstring& clstring;
@@ -55,8 +56,8 @@ class CLsound : public CLbase<CLsound,1>
 		ALuint alsource;
 		ALuint alwav;
 		CLsound();
-	public:
 		~CLsound();
+	public:
 		bool preload(CLar* aa);
 		bool play(xlong i,bool l=0,bool o=0);
 		bool play(CLfile* f,bool l=0,bool o=0);
@@ -97,15 +98,12 @@ CLsound::CLsound() //! noncritical
 	//*
 }
 
-CLsound::~CLsound()
+CLsound::~CLsound() ///! noncritical
 {
-	//release buffers and sources
+	//release buffers and sources and exit
 	alDeleteSources(1,&alsource);
 	if(numsrc!=0) { alDeleteSources(numsrc,alsources); }
 	if(numbuf!=0) { alDeleteBuffers(numbuf,alwavs); }
-	//*
-
-	//exit
 	alutExit();
 	//*
 }

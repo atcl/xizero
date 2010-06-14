@@ -161,7 +161,6 @@ CLglobal::CLglobal(xchar* argv) :	app(CLapp::instance()), //! noncritical
 									clmsgbox(msgbox),
 									cltrans(trans)
 { clapp.setexename(argv); }
-
 ///*
 
 #endif
