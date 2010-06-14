@@ -13,6 +13,7 @@ int main(int argc,char* argv[])
 	CLar* cldata = 0;
 	
 	//init sequence
+	tty("Loading: ");
 	CLglobal clglobal(argv[0]);
 	sprite* cursor = clglobal.clformat.loadxpm(CLxzcursor);
 	clglobal.clwindow.setcursor(cursor);

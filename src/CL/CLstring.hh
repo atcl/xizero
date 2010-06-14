@@ -124,25 +124,41 @@ xlong CLstring::tolong(const xchar* s) const //! critical
 
 float CLstring::tofloat(const xchar* s) const //! critical
 {
-	//~ xlong i = 0;
-	//~ xlong j = 0;
-	//~ xlong r = 0;
-	//~ xlong t = 1;
-	//~ xlong u = 1;
-	//~ 
-	//~ while(s[i]==' ') { i++; }
-	//~ if(s[i]=='-') { u = -1; i++; }
-	//~ j = i;
-	//~ while(s[j]>='0' && s[j]<='9') { j++; }
-	//~ j -= i;
-	//~ for(; j>0; j--,i++)
-	//~ {
-		//~ for(xlong k=1; k<j; k++) t *= 10;
-		//~ r += (s[i]-'0') * t;
-		//~ t = 1;
-	//~ }
-	//~ r *= u;
-	//~ return r;
+	xlong i = 0;
+	xlong j = 0;
+	xlong r = 0;
+	xlong t = 1;
+	xlong u = 1;
+	float y = 0.0;
+	
+	while(s[i]==' ') { i++; }
+	if(s[i]=='-') { u = -1; i++; }
+	j = i;
+	while(s[j]>='0' && s[j]<='9') { j++; }
+	for(j-=i; j>0; j--,i++)
+	{
+		t = 1;
+		for(xlong k=1; k<j; k++) { t *= 10; }
+		r += (s[i]-'0') * t;
+	}
+	r *= u;
+
+	if(s[i]=='.')
+	{
+		i++;
+		j = i;
+		while(s[j]>='0' && s[j]<='9') { j++; }
+		
+		t = 1;
+		for(j-=i; j>0; j--,i++)
+		{
+			t *= 10;
+			y += float(s[i]-'0') / float(t);
+		}
+	}
+
+	y += float(r); //ist irgendwie nur long nicht float!!?!?
+	return y;
 }
 
 xchar* CLstring::toascii(xlong v) const //! noncritical

@@ -65,13 +65,17 @@ class CLapp : public CLbase<CLapp,1>
 ///implementation
 
 void CLapp::setexename(const xchar* n)
-{ 
-	exename = n;
-	FILE* temp = fopen(exename,"rb");
-	fseek(temp,0,SEEK_END);
-	size = (ftell(temp))>>10;
-	fclose(temp);
-	tty(title); tty(" ("); tty(exename); tty(") version:"); tty(version); tty(" size:"); tty(size); say("KB");
+{
+	if(n!=0)
+	{
+		exename = n;
+		FILE* temp = fopen(exename,"rb");
+		fseek(temp,0,SEEK_END);
+		size = (ftell(temp))>>10;
+		fclose(temp);
+		tty(title); tty(" ("); tty(exename); tty(") version:"); tty(version); tty(" size:"); tty(size); say("KB");
+	}
+	else { exename = ""; }
 }
 
 void CLapp::exit(const xlong r,const xchar* m) const //! noncritical
