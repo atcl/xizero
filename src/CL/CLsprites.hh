@@ -19,11 +19,11 @@
  * 
  * description:	Draws compiled sprites
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -37,18 +37,20 @@ class CLcomspr : public CLbase<CLcomspr,1>
 		CLcomspr() { };
 		~CLcomspr() { };
 	public:
-		static void drawantimatter(CLubuffer& db,xlong x,xlong y);
-		static void drawplasma(CLubuffer& db,xlong x,xlong y);
-		static void drawtracks(CLubuffer& db,xlong x,xlong y,xlong d);
+		static void drawantimatter(xlong x,xlong y);
+		static void drawplasma(xlong x,xlong y);
+		static void drawtracks(xlong x,xlong y,xlong d);
 };
 ///*
 
 ///implementation
-void CLcomspr::drawantimatter(CLubuffer& db,xlong x,xlong y) //! critical
+void CLcomspr::drawantimatter(xlong x,xlong y) //! critical
 {
 	//is on screen
-	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) return;
+	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) { return; }
 	//*
+	
+	CLubuffer& db = CLscreen::instance().cldoublebuffer;
 	
 	//calc offsets
 	xlong l1 = ((y-2)*XRES)+(x-1);
@@ -110,11 +112,13 @@ void CLcomspr::drawantimatter(CLubuffer& db,xlong x,xlong y) //! critical
 	//*
 }
 
-void CLcomspr::drawplasma(CLubuffer& db,xlong x,xlong y) //! critical
+void CLcomspr::drawplasma(xlong x,xlong y) //! critical
 {
 	//is on screen
-	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) return;
+	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) { return; }
 	//*
+	
+	CLubuffer& db = CLscreen::instance().cldoublebuffer;
 	
 	//calc offsets
 	xlong l1 = ((y-2)*XRES)+(x-1);
@@ -176,10 +180,18 @@ void CLcomspr::drawplasma(CLubuffer& db,xlong x,xlong y) //! critical
 	//*
 }
 
-void CLcomspr::drawtracks(CLubuffer& db,xlong x,xlong y,xlong d)
+void CLcomspr::drawtracks(xlong x,xlong y,xlong d) //! critical
 {
+	//mit liste die alle sichtbaren behält?
+	
+	//is on screen
+	if( (x-2)<0 || (x+2)>=XRES || (y-2)<0 || (y+2)>=YRES) { return; }
+	//*
+	
 	xlong dd = ((d-7)/15)%24;
 	if(dd<0) { dd*=-1; }
+	
+	CLubuffer& db = CLscreen::instance().cldoublebuffer;
 
 	//calc offsets
 	xlong l1 = ((y-2)*XRES)+(x-1);

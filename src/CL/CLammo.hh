@@ -39,7 +39,7 @@ template<int I> class CLentity;
 ///definitions
 struct CLammo
 {
-	void(*comsprite)(CLubuffer& db,xlong x,xlong y);
+	void(*comsprite)(xlong x,xlong y);
 	CLfvector p;
 	CLfvector s;
 };
@@ -192,7 +192,7 @@ void CLammomanager::display() const //! critical
 	for(xlong i=list->setfirst(); i<list->getlength();i+=list->setnext())
 	{
 		curr = list->getcurrentdata();
-		curr->comsprite(clscreen.cldoublebuffer,curr->p.x,curr->p.y-mark);
+		curr->comsprite(curr->p.x,curr->p.y-mark);
 	}
 	//*
 }
