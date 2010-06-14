@@ -43,6 +43,7 @@ class CLwindow : public CLbase<CLwindow,1>
 	friend class CLmsgbox;
 	
 	private:
+		CLapp&    clapp;
 		CLformat& clformat;
 		CLgfx&    clgfx;
 		CLscreen& clscreen;
@@ -172,7 +173,7 @@ void CLwindow::idle() //! critical
 }
 
 CLwindow::CLwindow() //! noncritical
-: clformat(CLformat::instance()), clgfx(CLgfx::instance()), clscreen(CLscreen::instance())
+: clapp(CLapp::instance()), clformat(CLformat::instance()), clgfx(CLgfx::instance()), clscreen(CLscreen::instance())
 {	
 	framebuffer = clscreen.cldoublebuffer.getbuffer();
 	gfx = &clgfx;
@@ -184,7 +185,7 @@ CLwindow::CLwindow() //! noncritical
 	printfps = 0;
 	
 	xlong argc = 1;
-    xchar *argv[] = { NAME,NULL };
+    xchar *argv[] = { const_cast<xchar*>(clapp.getexename()),NULL };
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
 	glutInitWindowSize(XRES,YRES);

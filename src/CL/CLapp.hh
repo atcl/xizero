@@ -46,23 +46,27 @@ class CLapp : public CLbase<CLapp,1>
 		const xchar* version;
 		xchar** icon;
 		uxlong size;
-		CLapp();
+		CLapp() : title(TITLE), version(VERSION), icon(CLicon) { };
 		~CLapp() { };
-		void setexename(const xchar* n) { exename = n; }
+		void setexename(const xchar* n);
 	public:
 		void exit(const xlong r=0,const xchar* m="") const;
 		xchar inkey(const bool b) const { return xchar(getchar()); };
+		const xchar* getexename() const { return exename; };
 		const xchar* gettitle() const { return title; };
-		char** geticon() const { return icon; };
+		const xchar* getversion() const { return version; };
+		xchar** geticon() const { return icon; };
 		void seticon(xchar** i) { icon = i; }
 		uxlong getsize() const { return size; };
-		const xchar* getversion() const { return version; };
+		
 };
 ///*
 
 ///implementation
-CLapp::CLapp() : title(TITLE), version(VERSION), icon(CLicon), exename(NAME) //! noncritical
-{
+
+void CLapp::setexename(const xchar* n)
+{ 
+	exename = n;
 	FILE* temp = fopen(exename,"rb");
 	fseek(temp,0,SEEK_END);
 	size = (ftell(temp))>>10;

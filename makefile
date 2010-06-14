@@ -9,7 +9,7 @@ OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-
 LDFLAGS = -lglut -lalut -lXpm
 OUTPARA = -o 
 DEBUG   = -g
-DEFINE  = -DXRES=800 -DYRES=600 -DZRES=400 -DTITLE='"atCROSSLEVELs XiZero"' -DNAME='"xizero"' -DVERSION='"0.2"'
+DEFINE  = -DXRES=800 -DYRES=600 -DZRES=400 -DTITLE='"atCROSSLEVELs XiZero"' -DVERSION='"0.2"'
 
 # Data Assembler
 XZDAT   = dat/makexizerodat.sh
