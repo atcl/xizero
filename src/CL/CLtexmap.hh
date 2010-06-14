@@ -18,11 +18,11 @@
  * 
  * description:	handles, maps and draws textures
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	finish implementing.
+ * notes:		finish implementing.
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 

@@ -25,32 +25,35 @@
  * 
  * description:	A rainbow of useful routines
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	enclose in namespace?
+ * notes:		enclose in namespace?
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
 ///definitions
-inline bool isoff(xlong x,xlong y);								//check if point is off screen
-inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2);			//check if rectangle s off screen
-inline void clip(xlong& x,xlong& y);							//clip point against screen borders
-template<typename T>void inline tty(const T c);					//console output without lineend
-template<typename T>void inline say(const T c);					//console output with lineend
-void inline eol();												//output line end character to console
-bool inline eof(xchar c);										//test if is DOS end of file character
-void inline err(const xchar* c,const xchar* f,const xchar* m);	//console output error "in,at,with"
-void inline bye();												//force program exit
-void inline nfo();												//console output of id string
-void inline ver();												//version output
-xlong inline lt(const xchar* a,const xchar* b);					//compare cstrings
-uxlong inline endian(uxlong l);									//invert endianess
-uxlong inline byteadd(uxlong a,uxlong b);
-uxlong inline bytesub(uxlong a,uxlong b);
-template<typename T>void inline swap(T* a,T* b);				//swap two 32bit vars with XOR trick
-void inline prefetch(void* hint);								//prefetch memory at hint
+//namespace CLutils
+//{
+	inline bool isoff(xlong x,xlong y);								//check if point is off screen
+	inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2);			//check if rectangle s off screen
+	inline void clip(xlong& x,xlong& y);							//clip point against screen borders
+	template<typename T>void inline tty(const T c);					//console output without lineend
+	template<typename T>void inline say(const T c);					//console output with lineend
+	void inline eol();												//output line end character to console
+	bool inline eof(xchar c);										//test if is DOS end of file character
+	void inline err(const xchar* c,const xchar* f,const xchar* m);	//console output error "in,at,with"
+	void inline bye();												//force program exit
+	void inline nfo();												//console output of id string
+	void inline ver();												//version output
+	xlong inline lt(const xchar* a,const xchar* b);					//compare cstrings
+	uxlong inline endian(uxlong l);									//invert endianess
+	uxlong inline byteadd(uxlong a,uxlong b);
+	uxlong inline bytesub(uxlong a,uxlong b);
+	template<typename T>void inline swap(T* a,T* b);				//swap two 32bit vars with XOR trick
+	void inline prefetch(void* hint);								//prefetch memory at hint
+//}
 ///*
 
 ///implementation

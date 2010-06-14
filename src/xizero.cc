@@ -1,8 +1,13 @@
+///license
 //atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license
+///*
 
+///includes
 #include "xizero.hh"
+///*
 
+///mplementation
 int main(int argc,char* argv[])
 {
 	CLar* cldata = 0;
@@ -37,4 +42,5 @@ int main(int argc,char* argv[])
 	return 0;
 	//*
 }
+///*
 

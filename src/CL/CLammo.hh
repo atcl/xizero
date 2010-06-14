@@ -34,12 +34,14 @@
 
 ///declarations
 template<int I> class CLentity; 
+
+typedef  void (CLcomspr::*comsprite)(xlong x,xlong y);
 ///*
 
 ///definitions
 struct CLammo
 {
-	void (*comsprite)(xlong x,xlong y);
+	comsprite m;
 	CLfvector p;
 	CLfvector s;
 };
@@ -89,10 +91,10 @@ CLammomanager::CLammomanager(xlong ammotypecount,xlong* ammotypelist,const xlong
 			type[i]->s = CLfvector();
 			switch(ammotypelist[i])
 			{
-				case 0:  type[i]->comsprite = CLcomspr::drawplasma; break;
-				case 1:  type[i]->comsprite = CLcomspr::drawantimatter; break;
+				case 0:  type[i]->m = &CLcomspr::drawplasma; break;
+				case 1:  type[i]->m = &CLcomspr::drawantimatter; break;
 				
-				default: type[i]->comsprite = CLcomspr::drawplasma; break;
+				default: type[i]->m = &CLcomspr::drawplasma; break;
 			}
 	}
 	//*
@@ -110,7 +112,7 @@ void CLammomanager::fire(xlong at,const CLfvector& startposition,const CLfvector
 	if(at<types)
 	{
 		CLammo* curr = new CLammo();
-		curr->comsprite = type[at]->comsprite;
+		curr->m = type[at]->m;
 		curr->p = startposition;
 		curr->s = direction;
 		list->append(curr,"at" + xchar(at+30) );
@@ -193,7 +195,7 @@ void CLammomanager::display() const //! critical
 	for(xlong i=list->setfirst(); i<list->getlength();i+=list->setnext())
 	{
 		curr = list->getcurrentdata();
-		curr->comsprite(curr->p.x,curr->p.y-mark);
+		(clcomspr.*curr->m)(curr->p.x,curr->p.y-mark);
 	}
 	//*
 }

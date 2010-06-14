@@ -1,10 +1,25 @@
+///license
 //atCROSSLEVEL studios 2009,2010
 //licensed under zlib/libpng license
+///*
+
+///guard
 #ifndef HH_XIZERO
 #define HH_XIZERO
+///*
 
+///includes
 #include "CL/CLglobal.hh"
+///*
 
+///definitions
+void exitgame(void* c,void* d);
+void newgame(void* c,void* d);
+void loadgame(void* c,void* d);
+void options(void* c,void* d);
+///*
+
+///implementation
 void exitgame(void* c,void* d) { CLglobal& clglobal = *(static_cast<CLglobal*>(c)); clglobal.clapp.exit(0,"xizero says: bye"); }
 
 void newgame(void* c,void* d)
@@ -169,8 +184,8 @@ void newgame(void* c,void* d)
 	return;
 }
 
-
 void loadgame(void* c,void* d) { say("not available yet"); }
 void options(void* c,void* d) { say("not available yet"); }
+///*
 
 #endif

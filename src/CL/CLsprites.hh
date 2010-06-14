@@ -21,7 +21,7 @@
  * 
  * author:		atcl
  * 
- * notes:		make non static
+ * notes:		...
  * 
  * version: 	0.2
  */
@@ -33,13 +33,15 @@ class CLcomspr : public CLbase<CLcomspr,1>
 	friend class CLbase<CLcomspr,1>;
 	friend class CLglobal;
 	
+	private:
+		CLscreen& clscreen;
 	protected:
-		CLcomspr() { };
+		CLcomspr() : clscreen(CLscreen::instance()) { };
 		~CLcomspr() { };
 	public:
-		static void drawantimatter(xlong x,xlong y);
-		static void drawplasma(xlong x,xlong y);
-		static void drawtracks(xlong x,xlong y,xlong d);
+		void drawantimatter(xlong x,xlong y);
+		void drawplasma(xlong x,xlong y);
+		void drawtracks(xlong x,xlong y,xlong d);
 };
 ///*
 
@@ -50,7 +52,7 @@ void CLcomspr::drawantimatter(xlong x,xlong y) //! critical
 	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) { return; }
 	//*
 	
-	CLubuffer& db = CLscreen::instance().cldoublebuffer;
+	uxlong* db = clscreen.cldoublebuffer.getbuffer();
 	
 	//calc offsets
 	xlong l1 = ((y-2)*XRES)+(x-1);
@@ -118,7 +120,7 @@ void CLcomspr::drawplasma(xlong x,xlong y) //! critical
 	if( (x-2)<0 || (x+3)>=XRES || (y-2)<0 || (y+3)>=YRES) { return; }
 	//*
 	
-	CLubuffer& db = CLscreen::instance().cldoublebuffer;
+	uxlong* db = clscreen.cldoublebuffer.getbuffer();
 	
 	//calc offsets
 	xlong l1 = ((y-2)*XRES)+(x-1);
@@ -191,7 +193,7 @@ void CLcomspr::drawtracks(xlong x,xlong y,xlong d) //! critical
 	xlong dd = ((d-7)/15)%24;
 	if(dd<0) { dd*=-1; }
 	
-	CLubuffer& db = CLscreen::instance().cldoublebuffer;
+	uxlong* db = clscreen.cldoublebuffer.getbuffer();
 
 	//calc offsets
 	xlong l1 = ((y-2)*XRES)+(x-1);
