@@ -18,13 +18,13 @@
 ///header
 /* class name:	CLscreen
  * 
- * description:
+ * description: provides all resolution and buffer variables 
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.2
  */
 ///*
 
@@ -47,12 +47,12 @@ class CLscreen : public CLbase<CLscreen,1>
 		CLubuffer framebuffer;
 		CLubuffer stencilbuffer;
 		CLfbuffer zbuffer;
-		//CLubuffer clabuffer;
+		//CLubuffer clabuffer; //use for anti-aliasing
 		CLfvector view;
 		CLfvector light;
 		CLfvector plane;
 		CLfvector slight;
-		static uxlong nolight;
+		uxlong nolight;
 		CLscreen();
 		~CLscreen() { };
 	public:
@@ -74,8 +74,6 @@ class CLscreen : public CLbase<CLscreen,1>
 		CLfvector& clslight;
 		uxlong& clnolight;
 };
-
-uxlong CLscreen::nolight = 0x00303030;
 ///*
 
 ///implementation
@@ -91,6 +89,7 @@ CLscreen::CLscreen() :	doublebuffer((XRES*YRES),0),
 						light(1,1,1),
 						plane(0,0.1,1),
 						slight(0,0.4,1.1),
+						nolight(0x00303030),
 						clview(view),
 						cllight(light),
 						clplane(plane),
@@ -112,7 +111,7 @@ CLscreen::CLscreen() :	doublebuffer((XRES*YRES),0),
 						clpixelheight(pixelheight),
 						clpixeldepth(pixeldepth),
 						clpixelsize(pixelsize)
-{ }
+{ } ///! noncritical
 ///*
 
 #endif
