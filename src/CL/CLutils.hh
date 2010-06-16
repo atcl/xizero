@@ -16,7 +16,6 @@
 
 ///idp includes
 #include "CLtypes.hh"
-#include "CLversion.hh"
 #include "CLstruct.hh"
 ///*
 
@@ -51,7 +50,6 @@
 	uxlong inline endian(uxlong l);									//invert endianess
 	uxlong inline byteadd(uxlong a,uxlong b);
 	uxlong inline bytesub(uxlong a,uxlong b);
-	template<typename T>void inline swap(T* a,T* b);				//swap two 32bit vars with XOR trick
 	void inline prefetch(void* hint);								//prefetch memory at hint
 //}
 ///*
@@ -115,8 +113,6 @@ uxlong inline bytesub(uxlong a,uxlong b)
 	xb.db[3] = xa.db[3] - xb.db[3]; xb.db[3] = ((uxchar(xb.db[3]>xa.db[3]))-1) & xb.db[3];
 	return xb.dd;
 }
-
-template<typename T>void inline swap(T* a,T* b) { if(a==b) { return; } *a^=*b; *b^=*a; *a^=*b; }
 
 void inline prefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); }
 ///*

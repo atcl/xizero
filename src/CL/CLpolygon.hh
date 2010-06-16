@@ -114,7 +114,7 @@ void CLpolygon::polyline(xlong x1,xlong y1,xlong x2,xlong y2,uxlong c) const //!
 
 	if(dx<0) { dx = -dx; xs = -xs; }
 	if(dy<0) { dy = -dy; ys = -ys; }
-	if(dy>dx) { swap(&dx,&dy); swap(&xs,&ys); }
+	if(dy>dx) { dx^=dy^=dx^=dy; xs^=ys^=xs^=ys; }
 
 	length = dx+1;
 	e = dy;

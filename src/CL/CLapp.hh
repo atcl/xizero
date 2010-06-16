@@ -15,7 +15,6 @@
 
 ///api includes
 #include "CLtypes.hh"
-#include "CLversion.hh"
 #include "CLresource.hh"
 #include "CLutils.hh"
 #include "CLbase.hh"

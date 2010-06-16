@@ -19,6 +19,10 @@
 ///*
 
 ///declarations
+#define CLversion 0x00020000 
+///*
+
+///declarations
 //32bit types
 typedef char		 xchar;
 typedef uint8_t		uxchar;
