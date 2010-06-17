@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="1" istemplate="0">
+	
+	<filename>CLstring.hh</filename>
+	
+	<name>CLstring</name>
+	
+	<info></info>
+	
+	<derived>
+		<parent href="CLbase.xml">CLbase</parent>	
+	</derived>
+	
+	<method ispublic="0" isstatic="0">
+		<name>CLstring</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="0" isstatic="0">
+		<name>~CLstring</name>
+		<info>Destructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>copy</name>
+		<returns>xchar*</returns>
+		<parameter>const xchar* s</parameter>
+		<parameter>xlong l=0</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>concat</name>
+		<returns>xchar*</returns>
+		<parameter>const xchar* a</parameter>
+		<parameter>const xchar* b</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>length</name>
+		<returns>xlong</returns>
+		<parameter>const xchar* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>scan</name>
+		<returns>xlong</returns>
+		<parameter>const xchar* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>compare</name>
+		<returns>xlong</returns>
+		<parameter>const xchar* s</parameter>
+		<parameter>const xchar* t</parameter>
+		<parameter>uxlong n</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>tolong</name>
+		<returns>xlong</returns>
+		<parameter>const xchar* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>tofloat</name>
+		<returns>float</returns>
+		<parameter>const xchar* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>toascii</name>
+		<returns>xchar*</returns>
+		<parameter>xlong v</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>linecount</name>
+		<returns>xlong</returns>
+		<parameter>const xchar* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>find</name>
+		<returns>xlong</returns>
+		<parameter>const xchar* s</parameter>
+		<parameter>const xchar* f</parameter>
+		<parameter>xlong p</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>hex</name>
+		<returns>uxlong</returns>
+		<parameter>const xchar* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>linecount</name>
+		<returns>xlong</returns>
+		<parameter>CLfile* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>find</name>
+		<returns>xlong</returns>
+		<parameter>CLfile* s</parameter>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

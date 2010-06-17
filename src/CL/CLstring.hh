@@ -20,14 +20,13 @@
  * 
  * author:		atcl
  * 
- * notes:		tofloat
+ * notes:		...
  * 
- * version:		 0.2
+ * version:		0.2
  */
 ///*
 
 ///definitions
-#define __class__ CLstring
 class CLstring : public CLbase<CLstring,1>
 {
 	friend class CLbase<CLstring,1>;
@@ -59,7 +58,7 @@ xchar* CLstring::copy(const xchar* s,xlong l) const //! critical
 {
 	if(l==0) { l = length(s); }
 	xchar* r = new xchar[l+1];
-	for(xlong i=0;i<l;i++) { r[i] = s[i]; } //! invalid read of 1 here!
+	for(xlong i=0;i<l;i++) { r[i] = s[i]; }
 	r[l] = 0;
 	return r;
 }
@@ -128,11 +127,11 @@ float CLstring::tofloat(const xchar* s) const //! critical
 	xlong j = 0;
 	xlong r = 0;
 	xlong t = 1;
-	xlong u = 1;
+	float u = 1.0;
 	float y = 0.0;
 	
 	while(s[i]==' ') { i++; }
-	if(s[i]=='-') { u = -1; i++; }
+	if(s[i]=='-') { u = -1.0; i++; }
 	j = i;
 	while(s[j]>='0' && s[j]<='9') { j++; }
 	for(j-=i; j>0; j--,i++)
@@ -141,7 +140,6 @@ float CLstring::tofloat(const xchar* s) const //! critical
 		for(xlong k=1; k<j; k++) { t *= 10; }
 		r += (s[i]-'0') * t;
 	}
-	r *= u;
 
 	if(s[i]=='.')
 	{
@@ -157,7 +155,7 @@ float CLstring::tofloat(const xchar* s) const //! critical
 		}
 	}
 
-	y += float(r); //ist irgendwie nur long nicht float!!?!?
+	y = u*(y+float(r));
 	return y;
 }
 
@@ -185,7 +183,7 @@ xlong CLstring::linecount(const xchar* s) const //! noncritical
 {
 	xlong c = 1;
 	xlong l = length(s);
-	for(xlong i=0;i<l;i++) { if( s[i] == '\n' ) { c++; } }
+	for(xlong i=0;i<l;i++) { if(s[i]=='\n') { c++; } }
 	return c;
 }
 
@@ -227,6 +225,5 @@ uxlong CLstring::hex(const xchar* s) const //!  noncritical
 }
 ///*
 
-#undef __class__
 #endif
 
