@@ -131,12 +131,10 @@ void newgame(void* c,void* d)
 		clglobal.clwindow.showfps(0);
 		//*
 		
-		//crush level
-		//~ delete testlevel;
-		//~ testlevel = 0;
-		//*
-		
+		clglobal.clwindow.sleep(1000);
 		currlevel++;
+		CLfvector* p = testlevel->getplayer()->getposition();
+		clglobal.cltrans.circleblend(p->x,p->y,75);
 		clglobal.cltrans.fadetoblack();
 	}
 	

@@ -25,11 +25,11 @@
  * 
  * description:	some screen transitions
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:
+ * notes:		...
  * 
- * version: 0.1
+ * version:		0.2
  */
 ///*
 
@@ -61,18 +61,30 @@ CLtrans::CLtrans() //! noncritical
 
 void CLtrans::circleblend(xlong x,xlong y,xlong r) const //! critical
 {
-	for(xlong i=YRES/2; i>r; i--)
+	sprite mask;
+	mask.width = XRES;
+	mask.height = YRES;
+	mask.size = XRES*YRES;
+	mask.data = new uxlong[XRES*YRES];
+	
+	xlong tx = 0;
+	xlong ty = 0;
+	xlong le = 0;
+	
+	for(xlong i=0; i<YRES; i++)
 	{
-		clgfx.drawclipcircle(x,y,i,0x00FFFFFF);
-		clgfx.drawclipcircle(x-1,y,i+1,0x00FFFFFF);
-		clgfx.drawclipcircle(x+1,y,i+1,0x00FFFFFF);
-		clgfx.drawclipcircle(x,y-1,i+1,0x00FFFFFF);
-		clgfx.drawclipcircle(x,y+1,i+1,0x00FFFFFF);
-		//...
-		clwindow.run();
-		clwindow.sleep(5);
+		for(xlong j=0; j<XRES; j++)
+		{
+			tx = -x+j;
+			ty = -y+i;
+			le = clmath.sqrt(tx*tx+ty*ty);
+			if(le<=r) { mask.data[i*XRES+j] = clscreen.cldoublebuffer[i*XRES+j]; }
+		}
 	}
-	clwindow.sleep(1000);
+	
+	clgfx.drawscreen(&mask);
+	clwindow.run();
+	clwindow.sleep(3000);
 }
 
 void CLtrans::dissolve() const //! critical
@@ -101,7 +113,7 @@ void CLtrans::fadetoblack() const //! critical
 	
 	for(xlong i=0; i<256; i++)
 	{		
-		for(xlong j=0; j<(XRES*YRES); j++)
+		for(xlong j=0; j<clscreen.clpixelsize; j++)
 		{
 			comp.dd = clscreen.cldoublebuffer[j];
 			if(comp.db[0] > 0) comp.db[0]--;

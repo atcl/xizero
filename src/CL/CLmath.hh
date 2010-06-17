@@ -327,6 +327,7 @@ xlong CLmath::random(uxlong range) //! noncritical
 	seed ^= (seed>>21);
 	seed ^= (seed<<4);
 	return seed % range;
+	//add ror / rol ?
 	//*
 }
 ///*
