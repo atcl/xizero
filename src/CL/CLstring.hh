@@ -40,7 +40,7 @@ class CLstring : public CLbase<CLstring,1>
 		xchar* concat(const xchar* a,const xchar* b) const;
 		xlong length(const xchar* s) const;
 		xlong scan(const xchar* s) const;
-		xlong compare(const xchar* s,const xchar* t,uxlong n) const;
+		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
 		xlong tolong(const xchar* s) const;
 		float tofloat(const xchar* s) const;
 		xchar* toascii(xlong v) const;
@@ -88,7 +88,7 @@ xlong CLstring::scan(const xchar* s) const //! critical
 	return p;
 }
 
-xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n=0) const //! noncritical
+xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncritical
 {
 	uxlong sl = length(s);
 	uxlong tl = length(t);
