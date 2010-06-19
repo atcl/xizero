@@ -5,8 +5,7 @@
 4. Laser Type Ammo
 5. asciimissile minigame
 6. uxlong color -> CLcolor
-7. list (ammo) problem
-8. Loadras,Loadini,Loadcsv rewrite
-9. xml handling
-10.float to fixed
-11.sse matrix multiplication + transform
+7. Loadras,Loadini,Loadcsv rewrite
+8. xml handling
+9. float to fixed
+10.sse matrix multiplication + transform

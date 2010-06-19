@@ -6,7 +6,7 @@ WWFLAGS = -Wno-multichar -Wno-write-strings -Wno-pragmas
 WAFLAGS = -Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++
 O2FLAGS = -O2
 OPT     = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
-LDFLAGS = -lglut -lalut -lXpm
+LDFLAGS = -lglut -lalut #-lXpm
 OUTPARA = -o 
 DEBUG   = -g
 DEFINE  = -DXRES=800 -DYRES=600 -DZRES=400 -DTITLE='"atCROSSLEVELs XiZero"' -DVERSION='"0.2"'

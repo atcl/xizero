@@ -62,7 +62,7 @@ void newgame(void* c,void* d)
 
 		//load and init level
 		xchar** lfn = clglobal.clformat.loadlvl(lvls->getmember(currlevel)); //crash in here
-		CLlevel* testlevel = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),0,currlevel);
+		CLlevel* level = new CLlevel(cldata->findbyname(lfn[1]),cldata->findbyname(lfn[2]),cldata->findbyname(lfn[3]),cldata->findbyname(lfn[4]),0,currlevel);
 		clglobal.clfsprog.set(100);
 		clglobal.clfsprog.draw();
 		clglobal.clwindow.run();
@@ -97,7 +97,7 @@ void newgame(void* c,void* d)
 		//game loop
 		bool aa = 0;
 		
-		testlevel->start();
+		level->start();
 		clglobal.clwindow.showfps(1);
 		while(clglobal.clwindow.run() && gamestate>0) 
 		{
@@ -109,18 +109,18 @@ void newgame(void* c,void* d)
 			switch(input)
 			{
 				case ESC: exitgame(c,d); break;
-				case '^': testlevel->pause(); CLmenu::wrapper(); testlevel->pause(); break; //temp!!
-				case 'p': testlevel->pause(); break;
+				case '^': level->pause(); CLmenu::wrapper(); level->pause(); break; //temp!!
+				case 'p': level->pause(); break;
 				case '$': gamestate = 0; break;
 				case '#': aa = !aa;
-				default: gamestate = testlevel->update(); break;
+				default: gamestate = level->update(); break;
 			}
 			//*
 
 			clglobal.clscreen.cldoublebuffer.clear();
 			clglobal.clscreen.clstencilbuffer.clear();
 			clglobal.clscreen.clzbuffer.clear(ZRES);
-			testlevel->display();
+			level->display();
 
 			if(aa)
 			{
@@ -133,8 +133,8 @@ void newgame(void* c,void* d)
 		
 		clglobal.clwindow.sleep(1000);
 		currlevel++;
-		CLfvector* p = testlevel->getplayer()->getposition();
-		clglobal.cltrans.circleblend(p->x,p->y,75);
+		CLfvector* p = level->getplayer()->getposition();
+		clglobal.cltrans.circleblend(p->x,p->y,80);
 		clglobal.cltrans.fadetoblack();
 	}
 	

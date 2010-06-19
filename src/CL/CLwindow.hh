@@ -184,7 +184,7 @@ CLwindow::CLwindow() //! noncritical
 	fps = 0;
 	printfps = 0;
 	
-	xlong argc = 1;
+	xlong argc = 0;
     xchar *argv[] = { const_cast<xchar*>(clapp.getexename()),NULL };
 	glutInit(&argc,argv);
 	glutInitWindowPosition(5,5);
