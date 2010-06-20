@@ -11,7 +11,7 @@
 ///sys includes
 #include <GL/gl.h>
 #include <GL/freeglut.h>
-#include <X11/xpm.h>
+//#include <X11/xpm.h>
 ///*
 
 ///api includes
@@ -27,11 +27,11 @@
  * 
  * description:	very basic Xwindow with doublebuffer and msgbox
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		...
  * 
- * version: 0.1
+ * version: 	0.1
  */
 ///*
 

@@ -38,53 +38,55 @@
 	inline bool isoff(xlong x,xlong y);								//check if point is off screen
 	inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2);			//check if rectangle s off screen
 	inline void clip(xlong& x,xlong& y);							//clip point against screen borders
-	template<typename T>void inline tty(const T c);					//console output without lineend
-	template<typename T>void inline say(const T c);					//console output with lineend
-	void inline eol();												//output line end character to console
-	bool inline eof(xchar c);										//test if is DOS end of file character
-	void inline err(const xchar* c,const xchar* f,const xchar* m);	//console output error "in,at,with"
-	void inline bye();												//force program exit
-	void inline nfo();												//console output of id string
-	void inline ver();												//version output
-	xlong inline lt(const xchar* a,const xchar* b);					//compare cstrings
-	uxlong inline endian(uxlong l);									//invert endianess
-	uxlong inline byteadd(uxlong a,uxlong b);
-	uxlong inline bytesub(uxlong a,uxlong b);
-	void inline prefetch(void* hint);								//prefetch memory at hint
+	template<typename T>inline void tty(const T c);					//console output without lineend
+	template<typename T>inline void say(const T c);					//console output with lineend
+	inline void eol();												//output line end character to console
+	inline bool eof(xchar c);										//test if is DOS end of file character
+	inline void err(const xchar* c,const xchar* f,const xchar* m);	//console output error "in,at,with"
+	inline void bye();												//force program exit
+	inline void nfo();												//console output of id string
+	inline void ver();												//version output
+	inline xlong lt(const xchar* a,const xchar* b);					//compare cstrings
+	inline uxlong endian(uxlong l);									//invert endianess
+	inline uxlong byteadd(uxlong a,uxlong b);
+	inline uxlong bytesub(uxlong a,uxlong b);
+	inline uxlong ror(uxlong x);									//rotate right
+	inline uxlong rol(uxlong x);									//rotate left
+	inline void prefetch(void* hint);								//prefetch memory at hint
 //}
 ///*
 
 ///implementation
-inline bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); } 
+bool isoff(xlong x,xlong y) { return (x<0 || x>=XRES || y<0 || y>=YRES); } 
 
-inline bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<0) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); } 
+bool isoff(xlong x1,xlong y1,xlong x2,xlong y2) { return ( (x1<0&&x2<0) || (x1>=XRES&&x2>=XRES) || (y1<0&&y2<0) || (y1>=YRES&&y2>=YRES) ); } 
 
-inline void clip(xlong& x,xlong& y) { if(x<0) x=0; if(x>=XRES) x=XRES-1; if(y<0) y=0; if(y>=YRES) y=YRES-1; } 
+void clip(xlong& x,xlong& y) { if(x<0) { x=0; } if(x>=XRES) { x=XRES-1; } if(y<0) { y=0; } if(y>=YRES) { y=YRES-1; } } 
 
-template<typename T>void inline tty(const T c) { std::cout << std::setprecision(4) << c; } 
+template<typename T>void tty(const T c) { std::cout << std::setprecision(4) << c; } 
 
-template<typename T>void inline say(const T c) { std::cout << std::setprecision(4) << c << std::endl; } 
+template<typename T>void say(const T c) { std::cout << std::setprecision(4) << c << std::endl; } 
 
-void inline eol() { std::cout << std::endl; }
+void eol() { std::cout << std::endl; }
 
-bool inline eof(xchar c) { return (c==0x1A); }
+bool eof(xchar c) { return (c==0x1A); }
 
-void inline err(const xchar* c,const xchar* f,const xchar* m) { std::cout << "ERROR in " << c << " at " << f << " with: " << m << std::endl; }
+void err(const xchar* c,const xchar* f,const xchar* m) { std::cout << "ERROR in " << c << " at " << f << " with: " << m << std::endl; }
 
-void inline bye() { std::cout << u8"bye" << std::endl; ::exit(0); } 
+void bye() { std::cout << u8"bye" << std::endl; ::exit(0); } 
 
-void inline nfo() { std::cout << u8"atCROSSLEVEL's XiZero Version " << VERSION << std::endl; }
+void nfo() { std::cout << u8"atCROSSLEVEL's XiZero Version " << VERSION << std::endl; }
 
-void inline ver() { std::cout << u8"Version: " << (CLversion>>24) << "." << ((CLversion<<8)>>24) << "." << ((CLversion<<16)>>24) << "." << ((CLversion<<24)>>24) << std::endl; }
+void ver() { std::cout << u8"Version: " << (CLversion>>24) << "." << ((CLversion<<8)>>24) << "." << ((CLversion<<16)>>24) << "." << ((CLversion<<24)>>24) << std::endl; }
 
-xlong inline lt(const xchar* a,const xchar* b)
+xlong lt(const xchar* a,const xchar* b)
 {
 	xlong i = 0;
 	while(a[i]!=0 && b[i]!=0 && a[i]==b[i]) { i++; }
 	return xlong(a[i]-b[i]);
 }
 
-uxlong inline endian(uxlong l)
+uxlong endian(uxlong l)
 {
 	doubleword tl = { l };
 	tl.db[0] ^= tl.db[3] ^= tl.db[0] ^= tl.db[3];
@@ -92,7 +94,7 @@ uxlong inline endian(uxlong l)
 	return tl.dd;
 }
 
-uxlong inline byteadd(uxlong a,uxlong b)
+uxlong byteadd(uxlong a,uxlong b)
 {
 	doubleword xa = { a };
 	doubleword xb = { b };
@@ -103,7 +105,7 @@ uxlong inline byteadd(uxlong a,uxlong b)
 	return xb.dd;
 }
 
-uxlong inline bytesub(uxlong a,uxlong b)
+uxlong bytesub(uxlong a,uxlong b)
 {
 	doubleword xa = { a };
 	doubleword xb = { b };
@@ -114,7 +116,11 @@ uxlong inline bytesub(uxlong a,uxlong b)
 	return xb.dd;
 }
 
-void inline prefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); }
+uxlong ror(uxlong x,xlong i) { return (x>>i)|(x<<(sizeof(uxlong)-i)); }
+
+uxlong rol(uxlong x,xlong i) { return (x<<i)|(x>>(sizeof(uxlong)-i)); }
+
+void prefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); }
 ///*
 
 #endif

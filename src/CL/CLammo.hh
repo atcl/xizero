@@ -158,14 +158,13 @@ void CLammomanager::update() //! critical
 }
 
 template<int I>
-void CLammomanager::collision(CLentity<I>* e) //! critical
+void CLammomanager::collision(CLentity<I>* e) //! critical //fix!!!
 {
 	xlong r = 0;
 	CLammo* curr = 0;
-	
-	xlong l=list->getlength();
+
 	//test all ammolist members for collisions
-	for(xlong i=list->setfirst(); i<l; i+=list->setnext())
+	for(xlong i=list->setfirst(); i<list->getlength(); i+=list->setnext())
 	{
 		curr = list->getcurrentdata();
 		

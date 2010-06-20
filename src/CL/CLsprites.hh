@@ -118,12 +118,14 @@ void CLcomspr::drawtracks(xlong x,xlong y,xlong d) //! critical
 	xlong l2 = l1 + XRES - 1;
 	xlong l3 = l2 + XRES;
 	xlong l4 = l3 + XRES;
+	xlong l5 = l4 + XRES;
+	xlong l6 = l5 + XRES;
 	//*
 
 	switch(dd)
 	{
 		case 0:
-		case 12: //draw
+		case 12: //draw horizontal
 			db[l1++]=0x00804000; db[l1++]=0x00804000; db[l1++]=0x00804000; db[l1]=0x00804000;
 			db[l2++]=0x00800000; db[l2++]=0x00800000; db[l2++]=0x00800000; db[l2]=0x00800000;
 			db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3]=0x00800000;
@@ -131,7 +133,7 @@ void CLcomspr::drawtracks(xlong x,xlong y,xlong d) //! critical
 		break;
 		
 		case 6:
-		case 18: //draw 
+		case 18: //draw vertical
 			db[l1++]=0x00804000; db[l1++]=0x00800000; db[l1++]=0x00800000; db[l1]=0x00804000;
 			db[l2++]=0x00804000; db[l2++]=0x00800000; db[l2++]=0x00800000; db[l2]=0x00804000;
 			db[l3++]=0x00804000; db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3]=0x00804000;
@@ -140,12 +142,22 @@ void CLcomspr::drawtracks(xlong x,xlong y,xlong d) //! critical
 
 		case 1:
 		case 7:
-		case 19:
+		case 19: //draw 
+			db[l1++]=0x00804000; db[l1++]=0x00804000;
+			db[l2++]=0x00800000; db[l2++]=0x00800000; db[l2++]=0x00804000; db[l2]=0x00804000;
+			db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3]=0x00800000;
+			db[l4++]=0x00804000; db[l4++]=0x00804000; db[l4++]=0x00800000; db[l4]=0x00800000;
+										  l5++; l5++; db[l5++]=0x00804000; db[l5]=0x00804000;
 		break;
 		
 		case 2:
 		case 8:
-		case 20:
+		case 20: //draw
+										  l1++; l1++; db[l1++]=0x00804000; db[l1]=0x00804000;
+			db[l2++]=0x00800000; db[l2++]=0x00800000; db[l2++]=0x00804000; db[l2]=0x00804000;
+			db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3++]=0x00800000; db[l3]=0x00800000;
+			db[l4++]=0x00804000; db[l4++]=0x00804000; db[l4++]=0x00800000; db[l4]=0x00800000;
+			db[l5++]=0x00804000; db[l5]=0x00804000;
 		break;
 		
 		case 3:

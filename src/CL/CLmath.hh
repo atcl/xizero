@@ -11,6 +11,7 @@
 ///includes
 #include "CLtypes.hh"
 #include "CLbase.hh"
+#include "CLutils.hh"
 ///*
 
 ///header
@@ -322,12 +323,10 @@ float CLmath::odeeuler(float(*f)(float,float),float x0,float t0,float h,xlong k)
 xlong CLmath::random(uxlong range) //! noncritical
 {
 	//xor-shift random number generator
-	seed++;
 	seed ^= (seed<<15);
 	seed ^= (seed>>21);
 	seed ^= (seed<<4);
 	return seed % range;
-	//add ror / rol ?
 	//*
 }
 ///*
