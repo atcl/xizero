@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<?xml-stylesheet href="CLstyle.xsl" type="text/xsl" ?>
+
+<class static="0" istemplate="1">
+	
+	<filename>CLvector.hh</filename>
+	
+	<name>CLvector</name>
+	
+	<info></info>
+	
+	<template>
+		<parameter>typename T</parameter>
+	</template>
+	
+	<depends>
+		<module href="CLmath.xml">CLmath</module>
+	</depends>
+	
+	<derived>
+		<parent href="CLvector.xml">CLvectorbase</parent>	
+	</derived>
+	
+	<attribute ispublic="1" isstatic="0">
+		<name>x</name>
+		<type>T</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>y</name>
+		<type>T</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>z</name>
+		<type>T</type>
+		<info></info>
+	</attribute>
+
+	<attribute ispublic="1" isstatic="0">
+		<name>e</name>
+		<type>T</type>
+		<info></info>
+	</attribute>
+	
+	<method ispublic="1" isstatic="0">
+		<name>CLvector</name>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>CLvector</name>
+		<parameter>T tx</parameter>
+		<parameter>T ty</parameter>
+		<parameter>T tz</parameter>
+		<parameter>T te=0</parameter>
+		<info>Constructor</info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+</name>
+		<returns>CLvector</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-</name>
+		<returns>CLvector</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-</name>
+		<returns>CLvector</returns>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*</name>
+		<returns>CLvector</returns>
+		<parameter>T c</parameter>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*</name>
+		<returns>CLvector&lt;S&gt;</returns>
+		<parameter>S c</parameter>
+		<parameter>CLvector&lt;S&gt;&amp; a</parameter>
+		<qualifier>template&lt;typename S&gt;,friend</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator%</name>
+		<returns>CLvector</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator/</name>
+		<returns>T</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator!</name>
+		<returns>T</returns>
+		<qualifier>inline,const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator+=</name>
+		<returns>CLvector&amp;</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator-=</name>
+		<returns>CLvector&amp;</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator*=</name>
+		<returns>CLvector&amp;</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator=</name>
+		<returns>CLvector&amp;</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator=</name>
+		<returns>CLvector&amp;</returns>
+		<parameter>T c</parameter>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator CLvector&lt;float&gt;()</name>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator CLvector&lt;xlong&gt;()</name>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>operator^</name>
+		<returns>T</returns>
+		<parameter>const CLvector&amp; a</parameter>
+		<qualifier>inline</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+
+	<method ispublic="1" isstatic="0">
+		<name>print</name>
+		<returns>void</returns>
+		<qualifier>const</qualifier>
+		<info></info>
+		<example></example>
+	</method>
+	
+</class>

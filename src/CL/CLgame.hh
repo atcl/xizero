@@ -181,8 +181,8 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n) //! critical
 	//*
 
 	//float intersections[6][2];
-	//~ if(n)
-	//~ {
+	if(n)
+	{
 		//calc slopes
 		slopes[0] = -a1+a2;
 		slopes[1] = -a1+a4;
@@ -198,7 +198,7 @@ xlong CLgame::collision2d(clvector& p,CLbox& bb,clvector& q,bool n) //! critical
 		inters[3][0] = a1.y + ( -a1.x / slopes[1].x ) * slopes[1].y;
 		inters[3][1] = a2.y + ( -a2.x / slopes[1].x ) * slopes[1].y;
 		//*
-	//~ }
+	}
 	
 	//calc intersections at q
 	float inters2[4];

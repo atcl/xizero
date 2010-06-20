@@ -41,6 +41,7 @@ typedef  void (CLcomspr::*comsprite)(xlong x,xlong y);
 ///definitions
 struct CLammo
 {
+	bool      f;
 	comsprite m;
 	CLfvector p;
 	CLfvector s;
@@ -168,10 +169,11 @@ void CLammomanager::collision(CLentity<I>* e) //! critical
 	{
 		curr = list->getcurrentdata();
 		
-		//test the current ammo for collision with any opposite entity
+		//test the current ammo for collision with given opposite entity
 		if(e->isvisible() && clgame.collision2d(*(e->getposition()),*(e->getboundingbox()),curr->p,clmath.delta(i))==0)
 		{
 			r++;
+			if(list->isfirst()) { i--; }
 			list->delcurrent(0);
 		}
 		//*

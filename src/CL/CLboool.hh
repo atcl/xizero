@@ -29,9 +29,9 @@
 class boool
 {
 	private:
-		xlong b;
 		inline xlong sgn(xlong x) const { return xlong(x>0) - xlong(x<0); };
-		
+	protected:
+		xlong b;
 	public:
 		boool() { this->b=0; };
 		boool(boool& a) { this->b=a.b; };

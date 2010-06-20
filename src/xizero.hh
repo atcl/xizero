@@ -134,7 +134,7 @@ void newgame(void* c,void* d)
 		clglobal.clwindow.sleep(1000);
 		currlevel++;
 		CLfvector* p = level->getplayer()->getposition();
-		clglobal.cltrans.circleblend(p->x,p->y,80);
+		clglobal.cltrans.circleblend(p->x,p->y-level->getmark(),80);
 		clglobal.cltrans.fadetoblack();
 	}
 	

@@ -44,7 +44,6 @@ class CLlist : public CLbase<CLlist<member>,0>
 		listmember* first;
 		listmember* last;
 		xlong length;
-		bool listfix;
 	public:
 		CLlist();
 		~CLlist();
@@ -74,7 +73,7 @@ template<class member>
 CLlist<member>::CLlist() //! noncritical
 {
 	//initialize empty list
-	listfix = length = 0;
+	length = 0;
 	current = first = last = 0;
 	//*
 }
@@ -153,8 +152,6 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 	if(length==0) { return 0; }
 	//*
 
-	listfix = 0;
-
 	//if smash delete current members data pointer
 	member* temp = current->data;
 	//! if(smash) delete temp; //!test
@@ -187,7 +184,6 @@ xlong CLlist<member>::delcurrent(bool smash) //! noncritical
 		//delete current->prev;
 		current->prev = current;
 		first = current;
-		listfix = 1;
 	}
 	//*
 	
@@ -251,7 +247,6 @@ template<class member>
 xlong CLlist<member>::setfirst() //! noncritical
 {
 	//set current to first member
-	listfix = 0;
 	current = first;
 	return 0;
 	//*
@@ -261,7 +256,6 @@ template<class member>
 xlong CLlist<member>::setlast() //! noncritical
 {
 	//set current to last
-	listfix = 0;
 	current = last;
 	return length;
 	//*
@@ -271,7 +265,7 @@ template<class member>
 xlong CLlist<member>::setnext() //! noncritical
 {
 	//set next member from current
-	if(length==0 || listfix==1) { listfix=0; return 0; }
+	if(length==0) { return 0; }
 	current = current->next;
 	return 1;
 	//*
@@ -282,7 +276,6 @@ xlong CLlist<member>::setprev() //! noncritical
 {
 	//set previous member from current
 	if(length==0) { return 0; }
-	listfix = 0;
 	current = current->prev;
 	return -1;
 	//*
