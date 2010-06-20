@@ -10,9 +10,7 @@
 
 ///includes
 #include "CLtypes.hh"
-#include "CLstructs.hh"
 #include "CLbase.hh"
-#include "CLsystem.hh"
 #include "CLxml.hh"
 #include "CLlabel.hh"
 #include "CLbutton.hh"
@@ -24,11 +22,11 @@
  * 
  * description:	
  * 
- * author:	atcl
+ * author:		atcl
  * 
- * notes:	
+ * notes:		implement
  * 
- * version: 0.1
+ * version: 	0.1
  */
 ///*
 
@@ -37,19 +35,16 @@ class CLxmlgui : public CLbase<CLxmlgui,0>
 {
 	protected:
 		CLxml data;
-		xchar* title;
 	public:
-		CLxmlgui(CLfile* fileptr);
+		CLxmlgui(CLfile* f);
 		~CLxmlgui();
-		
 		void draw();
 		void handle();
-		void show(bool s);
 };
 ///*
 
 ///implementation
-CLxmlgui::CLxmlgui(CLfile fileptr) //! noncritical
+CLxmlgui::CLxmlgui(CLfile* f) : data(f) //! noncritical
 {
 	
 }
@@ -65,11 +60,6 @@ void CLxmlgui::draw() //! noncritical
 }
 
 void CLxmlgui::handle() //! noncritical
-{
-	
-}
-
-void CLxmlgui::show() //! noncritical
 {
 	
 }

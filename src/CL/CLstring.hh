@@ -39,7 +39,7 @@ class CLstring : public CLbase<CLstring,1>
 		xchar* copy(const xchar* s,xlong l=0) const;
 		xchar* concat(const xchar* a,const xchar* b) const;
 		xlong length(const xchar* s) const;
-		xlong scan(const xchar* s) const;
+		xlong scan(const xchar* s,xchar v=' ',xchar w='\n') const;
 		xlong compare(const xchar* s,const xchar* t,uxlong n=0) const;
 		xlong tolong(const xchar* s) const;
 		float tofloat(const xchar* s) const;
@@ -81,10 +81,10 @@ xlong CLstring::length(const xchar* s) const //! critical
 	return l;
 }
 
-xlong CLstring::scan(const xchar* s) const //! critical
+xlong CLstring::scan(const xchar* s,xchar v,xchar w) const //! critical
 {
 	xlong p = 0;
-	while(s[p]!=' ' || s[p]!='\n' || s[p]!=0) { p++; }
+	while(s[p]!=v || s[p]!=w || s[p]!=0) { p++; }
 	return p;
 }
 

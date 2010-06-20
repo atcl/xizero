@@ -40,7 +40,6 @@ class CLtree : public CLbase<CLtree<member>,0>
 			node* lastchild;
 			xlong  childs;
 			member*  data;
-			const xchar* name;
 			
 			//~node() //todo!
 		};
@@ -54,7 +53,7 @@ class CLtree : public CLbase<CLtree<member>,0>
 		void setroot() { current = rootnode; };
 		bool isroot() const { return (current==rootnode); };
 		
-		void addchild(member* d,const xchar* n="");
+		void addchild(member* d);
 		void delchild(xlong i);
 		bool setchild(xlong i);
 		bool setchild(const xchar* n);
@@ -86,17 +85,13 @@ template<class member>
 CLtree<member>::CLtree() //! noncritical
 {
 	rootnode = new node;
-	rootnode->parent = rootnode;
+	current =  rootnode->prev = rootnode->next = rootnode->parent = rootnode;
 	rootnode->childcount = 0;
 	rootnode->data = 0;
-	rootnode->name = "ROOT";
-	rootnode->next = rootnode;
-	rootnode->prev = rootnode;
-	current = rootnode;
 }
 
 template<class member>
-void CLtree<member>::addchild(member* d,const xchar* n) //! noncritical
+void CLtree<member>::addchild(member* d) //! noncritical
 {
 	node* newnode = new node;
 	newnode->parent = current;
@@ -106,7 +101,6 @@ void CLtree<member>::addchild(member* d,const xchar* n) //! noncritical
 	newnode->child = 0;
 	newnode->childs = 0;
 	newnode->data = d;
-	newnode->name = n;
 	current->childs++;
 }
 
@@ -156,27 +150,11 @@ bool CLtree<member>::setchild(xlong i) //! noncritical
 }
 
 template<class member>
-bool CLtree<member>::setchild(const xchar* n) //! noncritical
-{
-	xlong l = 0;
-	while(n[l]!=0) { l++; }
-	
-	current = current->child[0];
-	for(xlong j=0;j<current->childs;j++)
-	{ 
-		const xchar* m = current->getname();
-		for(xlong k=0;k<l;k++) { if(m[k]!=n[k]) { break; } else if(k=l-1 && m[k]==n[k]) { return 1; } }
-		setnextsibling();
-	}
-	
-	return 0;
-}
-
-template<class member>
 void CLtree<member>::print(xlong d) //! noncritical
 {
 	setroot();
-	if(current->name!="") { for(xlong j=0;j<d;j++) { tty("+"); } say(current->name); } else { say("X"); }
+	for(xlong j=0;j<d;j++) { tty("+"); }
+	say("X");
 	setfirstchild();
 	for(uxlong i=0;i<current->parent->childs;i++)
 	{

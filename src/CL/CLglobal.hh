@@ -53,6 +53,8 @@
 #include "CLlevel.hh"
 #include "CLgame.hh"
 #include "CLvoxels.hh"
+#include "CLxml.hh"
+//#include "CLxmlgui.hh"
 ///*
 
 ///header
