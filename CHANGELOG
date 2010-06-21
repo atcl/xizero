@@ -1,1 +1,23 @@
- 
+XiZero Changelog
+================
+
+
+Changes from 0.1 to 0.2
+-----------------------
+
++ dependency changed from fltk to (free)glut
++ audio dependency alut added
++ used image format changed from tga to ras
++ level map format changed from ascii to ras heightmap
++ xpm icons added
++ msgbox'es added
++ anti-aliased mode added
++ improved hardware detection
++ code size reduction
++ hundereds of bugs fixed
++ better commenting of classes
++ no more global variables
++ common base class with singleton optional capability
++ a lot of code restructuring
++ added a manpage
++ better desktop integration

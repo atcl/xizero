@@ -24,6 +24,10 @@ TARGET2 = unittest
 TARGET3 = utl/clbuilder
 TARGET4 = utl/asciimissile
 GAMEDAT = xizero.dat
+DOCDAT  = doc/man/xizero.1
+DESKTOP = bin/xizero.desktop
+ICONDAT = bin/xizero.xpm
+
 
 # Other
 STRIP   = strip -s -R .comment -R .gnu.version
@@ -38,7 +42,8 @@ CP      = cp
 # Targetfolders
 BINDST  = /usr/games
 DATDST  = /usr/share/xizero
-DOCDST  = /usr/doc/xizero   #remove for deb?
+DOCDST  = /usr/man/man1   #remove for deb?
+DSKDST  = /usr/share/applications
 
 # Options to test:
 INLINE  = --param inline-unit-growth=200 --param large-function-growth=300 -pipe
@@ -65,6 +70,9 @@ install:
 	$(CP) $(TARGET1) $(BINDST)
 	$(MK) $(DATDST)
 	$(CP) $(GAMEDAT) $(DATDST)
+	$(CP) $(DOCDAT) $(DOCDST)
+	$(CP) $(DESKTOP) $(DSKDST)
+	$(CP) $(ICONDAT) $(DATDST)
 
 data:
 	$(XZDAT)
