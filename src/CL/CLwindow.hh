@@ -25,13 +25,13 @@
 ///header
 /* class name:	CLwindow
  * 
- * description:	very basic Xwindow with doublebuffer and msgbox
+ * description:	very basic window with doublebuffering
  * 
  * author:		atcl
  * 
  * notes:		...
  * 
- * version: 	0.1
+ * version: 	0.2
  */
 ///*
 
@@ -88,7 +88,6 @@ class CLwindow : public CLbase<CLwindow,1>
 		xlong getmouserb() const { return mouserb; };
 		xlong getmilliseconds() const { return glutGet(GLUT_ELAPSED_TIME); };
 		void sleep(xlong ms) const;
-		xlong getfps();
 };
 
 xlong CLwindow::keydn = 0;
