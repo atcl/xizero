@@ -12,6 +12,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdlib.h>
+#include <cstring>
 ///*
 
 ///idp includes
@@ -53,7 +54,12 @@
 	inline uxlong ror(uxlong x);									//rotate right
 	inline uxlong rol(uxlong x);									//rotate left
 	inline void prefetch(void* hint);								//prefetch memory at hint
+	inline xchar* copy(const xchar* s);								//copy const to non-const string
 //}
+///*
+
+///macros
+#define __CLASS__ strtok(copy(__PRETTY_FUNCTION__),"::")
 ///*
 
 ///implementation
@@ -121,6 +127,8 @@ uxlong ror(uxlong x,xlong i) { return (x>>i)|(x<<(sizeof(uxlong)-i)); }
 uxlong rol(uxlong x,xlong i) { return (x<<i)|(x>>(sizeof(uxlong)-i)); }
 
 void prefetch(void* hint) { __asm__ __volatile__ ("prefetch %%0": :"r"(hint) ); }
+
+xchar* copy(const xchar* s) { xchar* t = new xchar[strlen(s)+1]; for(xlong i=0;i<strlen(s)+1;i++) { t[i] = s[i]; } return t; }
 ///*
 
 #endif

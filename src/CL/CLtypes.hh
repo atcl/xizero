@@ -16,6 +16,7 @@
 
 ///includes
 #include <inttypes.h>
+#include <cstring>
 ///*
 
 ///declarations
