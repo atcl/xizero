@@ -70,11 +70,8 @@ void newgame(void* c,void* d)
 		//*
 		
 		//game loop variables
-		gamestate = 1;
-		xlong mode = 1;
-		xlong displacement = 0;
 		uxchar input = 0;
-		uxchar turbo = 0;
+		bool aa = 0;
 		//*
 		
 		//display key bindings and init level
@@ -91,12 +88,10 @@ void newgame(void* c,void* d)
 								"#:                Activate/Deactivate Anti-Aliasing (2xFSAA RGMS)\n"
 								"After pressing OK the game will start immediately!";
 								
-		if(clglobal.clmsgbox.msgbox("Info",startmsg)==1) { xlong tempo = 0; }
+		gamestate = clglobal.clmsgbox.msgbox("Info",startmsg); //gamestate initialized with 1! Just a freaky way of doing it.
 		//*
 		
 		//game loop
-		bool aa = 0;
-		
 		level->start();
 		clglobal.clwindow.showfps(1);
 		while(clglobal.clwindow.run() && gamestate>0) 

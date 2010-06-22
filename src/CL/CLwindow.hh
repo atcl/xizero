@@ -177,11 +177,7 @@ CLwindow::CLwindow() //! noncritical
 	framebuffer = clscreen.cldoublebuffer.getbuffer();
 	gfx = &clgfx;
 	
-	frame = 0;
-	time = 0;
-	timebase = 0;
-	fps = 0;
-	printfps = 0;
+	printfps = frame = time = timebase = fps = 0;
 	
 	xlong argc = 0;
     xchar *argv[] = { const_cast<xchar*>(clapp.getexename()),NULL };

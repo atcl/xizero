@@ -16,14 +16,6 @@
 #include "CLbase.hh"
 ///*
 
-///os-dep
-#ifdef WIN32
-
-#else //ifdef LINUX
-	
-#endif
-///*
-
 ///header
 /* class name:	CLdetect
  * 

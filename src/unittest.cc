@@ -159,7 +159,6 @@ int main(int argc, char** argv)
 	//*
 
 	//exit sequence
-	//~ CLsound::exit();
 	return 0;
 	//***
 }

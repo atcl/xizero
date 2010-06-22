@@ -162,17 +162,19 @@ void CLammomanager::collision(CLentity<I>* e) //! critical //fix!!!
 {
 	xlong r = 0;
 	CLammo* curr = 0;
+	bool t = 0;
 
 	//test all ammolist members for collisions
 	for(xlong i=list->setfirst(); i<list->getlength(); i+=list->setnext())
 	{
+		if(t==1) { t=0; list->setprev(); }
 		curr = list->getcurrentdata();
 		
 		//test the current ammo for collision with given opposite entity
-		if(e->isvisible() && clgame.collision2d(*(e->getposition()),*(e->getboundingbox()),curr->p,clmath.delta(i))==0)
+		if(e->isvisible() && clgame.collision2d(*(e->getposition()),*(e->getboundingbox()),curr->p,(i==0))==0)
 		{
 			r++;
-			if(list->isfirst()) { i--; }
+			if(list->isfirst()) { t=1; }
 			list->delcurrent(0);
 		}
 		//*

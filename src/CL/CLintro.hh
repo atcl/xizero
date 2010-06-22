@@ -97,7 +97,7 @@ sprite* CLintro::atcrosslevel(CLfile* f,bool s) const //! noncritical
 	}
 	//*
 	
-	if(s!=0) { clgfx.savescreen(); } else { return 0; }
+	if(s!=0) { return clgfx.savescreen(); } else { return 0; }
 }
 
 sprite* CLintro::xizero(CLfile* f,bool s) const //! noncritical
@@ -144,7 +144,7 @@ sprite* CLintro::xizero(CLfile* f,bool s) const //! noncritical
 	}
 	//*
 	
-	if(s!=0) { clgfx.savescreen(); } else { return 0; }
+	if(s!=0) { return clgfx.savescreen(); } else { return 0; }
 }
 
 sprite* CLintro::torus(CLfile* f,bool s) const

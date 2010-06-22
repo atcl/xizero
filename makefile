@@ -63,7 +63,7 @@ default:
 none:
 	$(CC) $(O2FLAGS) $(OPT) $(OUTPARA) $(TARGET1) $(SOURCE1) $(LDFLAGS) $(WAFLAGS) $(WWFLAGS) $(DEBUG) $(DEFINE)
 	$(CPPCH) $(SOURCE1)
-	$(GRIND)
+	#$(GRIND)
 
 install:
 	$(MK) $(BINDST)
