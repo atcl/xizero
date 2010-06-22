@@ -1,0 +1,41 @@
+XiZero 0.2
+==========
+
+Install:
+--------
+To install XiZero run:
+1. $ make
+2. $ sudo make install
+
+Dependencies:
+-------------
+1. libfreeglut3-dev (>=2.4)
+2. libalut-dev (>=1.1)
+
+Usage:
+------
+1. $ xizero
+
+Changelog:
+----------
+See file CHANGELOG
+
+Bugs:
+-----
+Please report any bugs to https://bugs.launchpad.net/xizero
+
+Warning:
+--------
+This project is still in alpha stage. Don't expect it to work (correctly).
+
+License:
+--------
+zlib/libpng (see LICENSE)
+
+Contact:
+--------
+bugs@atcrosslevel.de
+
+http://www.atcrosslevel.de
+
+

@@ -86,7 +86,7 @@ CLtree<member>::CLtree() //! noncritical
 {
 	rootnode = new node;
 	current =  rootnode->prev = rootnode->next = rootnode->parent = rootnode;
-	rootnode->childcount = 0;
+	rootnode->childs = 0;
 	rootnode->data = 0;
 }
 

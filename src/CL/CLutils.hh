@@ -57,7 +57,7 @@
 ///*
 
 ///macros
-#define __CLASS__ strtok(copy(__PRETTY_FUNCTION__),"::")
+#define __CLASS__ strtok((char*)(strtok(::copy(__PRETTY_FUNCTION__)," ")==0),":")
 ///*
 
 ///implementation
