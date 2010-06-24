@@ -23,7 +23,7 @@
  * 
  * author:		atcl
  * 
- * notes:		complete assembly routines, currently max size for buffers is 2GB.
+ * notes:		complete assembly routines, currently max size for buffers is 2GB. Improve asm impl.
  * 
  * version: 	0.2
  */

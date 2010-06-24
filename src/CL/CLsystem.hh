@@ -46,11 +46,9 @@ class CLsystem : public CLbase<CLsystem,1>
 	public:
 		CLfile* getfile(const xchar* fn) const;
 		bool    existsfile(const xchar* fn) const;
-		bool    appendfile(const xchar* fn,xlong* b,xlong s) const;
-		bool    appendfile(const xchar* fn,xchar* b,xlong s) const;
-		bool    writefile(const xchar* fn,xlong* b,xlong s,bool ow=0) const;
-		bool    writefile(const xchar* fn,xchar* b,xlong s,bool ow=0) const;
 		bool    writefile(CLfile* f,bool ow=0) const;
+		template<typename T>bool writefile(const xchar* fn,T* b,xlong s,bool ow=0) const;
+		template<typename T>bool appendfile(const xchar* fn,T* b,xlong s) const;
 		xlong   system(const xchar* c) const;
 };
 ///*
@@ -107,103 +105,11 @@ CLfile* CLsystem::getfile(const xchar* fn) const //! noncritical
 	return re;
 }
 
-bool CLsystem::appendfile(const xchar* fn,xlong* b,xlong s) const //! noncritical
-{
-	FILE* of;
-	
-	//open for appending
-	if( (of = fopen(fn,"ab")) == 0 ) return 0;
-	//*
-	
-	//write binary data to file
-	fwrite(b,4,s,of);
-	//*
-	
-	//close file
-	fclose(of);
-	//*
-	
-	return 1;
-}
-
 bool CLsystem::existsfile(const xchar* fn) const //! noncritical
 {
 	FILE* cf;
 	if( (cf = fopen(fn,"r"))!=0 ) { fclose(cf); return 1; }
 	return 0;
-}
-
-bool CLsystem::appendfile(const xchar* fn,xchar* b,xlong s) const //! noncritical
-{
-	FILE* of;
-	
-	//open for appending
-	if( (of = fopen(fn,"a")) == 0 ) { return 0; }
-	//*
-	
-	//write sequential data to file
-	fwrite(b,1,s,of);
-	//*
-	
-	//close file
-	fclose(of);
-	//*
-	
-	return 1;
-}
-
-bool CLsystem::writefile(const xchar* fn,xlong* b,xlong s,bool ow) const //! noncritical
-{
-	FILE* of;
-	
-	//if file exist and overwrite not set return
-	if( (of=fopen(fn,"rb")) ) 
-	{
-		fclose(of);
-		if(!ow)	return 0;
-	}
-	//*
-	
-	//open for (over-)writing
-	if( (of = fopen(fn,"wb")) == 0 ) { return 0; }
-	//*
-	
-	//write binary data to file
-	fwrite(b,4,s,of);
-	//*
-	
-	//close file
-	fclose(of);
-	//*
-	
-	return 1;
-}
-
-bool CLsystem::writefile(const xchar* fn,xchar* b,xlong s,bool ow) const //! noncritical
-{
-	FILE* of;
-	
-	//if file exist and overwrite not set return
-	if( (of=fopen(fn,"rb")) ) 
-	{
-		fclose(of);
-		if(!ow)	return 0;
-	}
-	//*
-	
-	//open for (over-)writing
-	if( (of = fopen(fn,"wb")) == 0 ) { return 0; }
-	//*
-	
-	//write sequential data to file
-	fwrite(b,1,s,of);
-	//*
-	
-	//close file
-	fclose(of);
-	//*
-	
-	return 1;
 }
 
 bool CLsystem::writefile(CLfile* f,bool ow) const //! noncritical
@@ -219,6 +125,36 @@ bool CLsystem::writefile(CLfile* f,bool ow) const //! noncritical
 	//open for (over-)writing
 	of = fopen(f->name,"wb");
 	fwrite(f->text,1,f->size,of);
+	fclose(of);
+	//*
+	
+	return 1;
+}
+
+template<typename T>
+bool CLsystem::appendfile(const xchar* fn,T* b,xlong s) const //! noncritical
+{
+	FILE* of;
+	if( (of = fopen(fn,"ab")) == 0 ) { return 0; }
+	fwrite(b,sizeof(T),s,of);
+	fclose(of);
+	return 1;
+}
+
+template<typename T>
+bool CLsystem::writefile(const xchar* fn,T* b,xlong s,bool ow) const //! noncritical
+{
+	FILE* of;
+	
+	//if file exist and overwrite not set return
+	of = fopen(fn,"rb");
+	if(of && !ow) { fclose(of); return 0; } 
+	fclose(of);
+	//*
+	
+	//open for (over-)writing
+	if( (of = fopen(fn,"wb")) == 0 ) { return 0; }
+	fwrite(b,sizeof(T),s,of);
 	fclose(of);
 	//*
 	

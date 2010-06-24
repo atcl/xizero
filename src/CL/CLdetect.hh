@@ -94,12 +94,12 @@ CLdetect::CLdetect() //! noncritical
 	//*
 	
 	//check ram
-	//CLfile* mem = clsystem.getfile("/proc/meminfo");
-	//xlong p = clstring.find(mem->text,"MemTotal:");
-	//tram = clstring.tolong(&(mem->text[p+9])) / 1024;
-	//p = clstring.find(mem->text,"MemFree:");
-	//fram = clstring.tolong(&(mem->text[p+8])) / 1024;
-	//say(tram);
+	xlong p = 0;
+	CLfile* mem = clsystem.getfile("/proc/meminfo");
+	p = clstring.find(mem->text,"MemTotal:");
+	tram = clstring.tolong(&(mem->text[p+9])) / 1024;
+	p = clstring.find(mem->text,"MemFree:");
+	fram = clstring.tolong(&(mem->text[p+8])) / 1024;
 	//*
 	
 	//process cuid results here so vars can find way back

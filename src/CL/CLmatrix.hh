@@ -50,6 +50,7 @@ class CLmatrix : public CLbase<CLmatrix,0>
 		void superscale(float x);
 		void reflect(bool x=0,bool y=0,bool z=0);
 		template<class clvector>clvector transform(const clvector& t) const;
+		template<class clvector>clvector fasttransform(const clvector& t) const;
 		void clear(float i);
 		void zero();
 		void unit();
@@ -206,6 +207,14 @@ clvector CLmatrix::transform(const clvector& t) const //! critical
 	r.x = (m[0][0] * float(t.x) + m[0][1] * float(t.y) + m[0][2] * float(t.z) + m[0][3]);
 	r.y = (m[1][0] * float(t.x) + m[1][1] * float(t.y) + m[1][2] * float(t.z) + m[1][3]);
 	r.z = (m[2][0] * float(t.x) + m[2][1] * float(t.y) + m[2][2] * float(t.z) + m[2][3]);
+	return r;
+}
+
+template<class clvector>
+clvector CLmatrix::fasttransform(const clvector& t) const //! critical
+{
+	clvector r;
+	//in sse
 	return r;
 }
 
