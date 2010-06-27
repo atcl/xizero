@@ -45,12 +45,12 @@ class CLapp : public CLbase<CLapp,1>
 		const xchar* version;
 		xchar** icon;
 		uxlong size;
-		CLapp() : title(TITLE), version(VERSION), icon(CLicon) {  };
+		CLapp() : title(TITLE), version(VERSION), icon(CLicon), exename(0), size(0) { };
 		~CLapp() { };
 		void setexename(const xchar* n);
 	public:
 		void exit(const xlong r=0,const xchar* m="") const;
-		xchar inkey(const bool b) const { return xchar(getchar()); };
+		xchar inkey() const { return xchar(getchar()); };
 		const xchar* getexename() const { return exename; };
 		const xchar* gettitle() const { return title; };
 		const xchar* getversion() const { return version; };

@@ -55,8 +55,7 @@ class CLmsgbox : public CLbase<CLmsgbox,1>
 
 ///implementation
 CLmsgbox::CLmsgbox() //! noncritical
-: clstring(CLstring::instance()), clwindow(CLwindow::instance())
-{ }
+: clstring(CLstring::instance()), clwindow(CLwindow::instance()), currid(0) { }
 
 xlong CLmsgbox::msgbox(const xchar* title,const xchar* message) //! noncritical
 {

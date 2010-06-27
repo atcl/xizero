@@ -68,12 +68,8 @@ class CLsound : public CLbase<CLsound,1>
 
 ///implementation
 CLsound::CLsound() //! noncritical
-: clstring(CLstring::instance())
+: clstring(CLstring::instance()), numbuf(0),numsrc(0),names(0)
 {
-	numbuf = 0;
-	numsrc = 0;
-	names = 0;
-	
 	//ALuint alwavs = 0;
 	
 	//Init
@@ -144,12 +140,10 @@ bool CLsound::preload(CLar* aa) //! noncritical
 
 bool CLsound::play(xlong i,bool l,bool o) //! noncritical
 {
-	//set up 3d sound for source??? alSourcefv ?
-	
 	if(numbuf==0) { return 0; }
-	if(l) { alSourcei(alsources[i],AL_LOOPING,AL_TRUE); }
+	if(l==1) { alSourcei(alsources[i],AL_LOOPING,AL_TRUE); }
+	if(o==1 && l==0) { /*set fade out*/ }
 	alSourcePlay(alsources[i]);
-	
 	return 1;
 }
 

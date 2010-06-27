@@ -53,6 +53,7 @@
 	inline uxlong bytesub(uxlong a,uxlong b);
 	inline void prefetch(void* hint);								//prefetch memory at hint
 	inline xchar* copy(const xchar* s);								//copy const to non-const string
+	template<typename T>inline void swap(T& a,T& b);				//swap values
 //}
 ///*
 

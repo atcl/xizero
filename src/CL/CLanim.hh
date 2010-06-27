@@ -68,12 +68,11 @@ class CLanim : public CLbase<CLanim,0>
 
 ///implementation
 CLanim::CLanim(CLobject* obj,CLfile* ani,bool l,CLfvector* p) //! noncritical
-: clwindow(CLwindow::instance()), clformat(CLformat::instance()),clmath(CLmath::instance()),clscreen(CLscreen::instance())
+: clwindow(CLwindow::instance()), clformat(CLformat::instance()),clmath(CLmath::instance()),clscreen(CLscreen::instance()), loop(l)
 {	
 	//set up attributes
 	object = obj;
 	anicsv = clformat.loadcsv(ani,',');
-	loop = l;
 	if(p!=0) { position = *p; }
 	else position = 0;
 	//*

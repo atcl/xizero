@@ -56,7 +56,6 @@ class CLdetect : public CLbase<CLdetect,1>
 		CLstring& clstring;
 	protected:
 		uxlong tram;
-		uxlong fram;
 		uxlong vram;
 		uxlong pcores;
 		uxlong l2c;
@@ -98,8 +97,6 @@ CLdetect::CLdetect() //! noncritical
 	CLfile* mem = clsystem.getfile("/proc/meminfo");
 	p = clstring.find(mem->text,"MemTotal:");
 	tram = clstring.tolong(&(mem->text[p+9])) / 1024;
-	p = clstring.find(mem->text,"MemFree:");
-	fram = clstring.tolong(&(mem->text[p+8])) / 1024;
 	//*
 	
 	//process cuid results here so vars can find way back
@@ -126,7 +123,7 @@ uxlong CLdetect::freeram()
 {
 	CLfile* mem = clsystem.getfile("/proc/meminfo");
 	xlong p = clstring.find(mem->text,"MemFree:");
-	fram = clstring.tolong(&(mem->text[p+8])) / 1024;
+	return clstring.tolong(&(mem->text[p+8])) / 1024;
 }
 ///*
 

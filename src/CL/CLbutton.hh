@@ -67,19 +67,15 @@ CLbuttonlist* CLbutton::buttonlist = new CLbuttonlist();
 
 ///implementation
 CLbutton::CLbutton(xlong px,xlong py,xlong w,xlong h,uxlong fc,uxlong bc,uxlong rc,void(*a)(void*,void*),const xchar *c,bool f) //! noncritical
-: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clwindow(CLwindow::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), clwindow(CLwindow::instance()), CLguibase(px,py,w,h,f,fc,bc,rc), action(a),flat(f)
 {
-	action = a;
 	caption = clstring.copy(c);
 	captionwidth = clgfx.getfontstringwidth(caption,0) + 4;
 	captionheight = clgfx.getfontstringheight(caption,0);
-	width = w;
-	height = h;
 	if(w==-1 || w<captionwidth) { width = captionwidth; }
 	if(h==-1 || h<captionheight) { height = captionheight; }
 	captionx = (width - captionwidth)>>1;
 	captiony = (height - captionheight)>>1;
-	flat = f;
 	buttonlist->append(this);
 }
 

@@ -450,8 +450,8 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 	//find top and bottom vertex
 	for(x=1; x<cpointcount; x++)
 	{
-		if(xlong(wpoint[top].y) > xlong(wpoint[x].y)) top = x;
-		if(xlong(wpoint[bot].y) < xlong(wpoint[x].y)) bot = x;
+		if(xlong(wpoint[top].y) > xlong(wpoint[x].y)) { top = x; }
+		if(xlong(wpoint[bot].y) < xlong(wpoint[x].y)) { bot = x; }
 	}
 	//*
 
@@ -538,14 +538,8 @@ void CLpolygon::rasterize(xlong shadow,CLfbuffer* t) //! critical
 }
 
 CLpolygon::CLpolygon(const CLlvector& a,const CLlvector& b,const CLlvector& c,const CLlvector& d,uxlong co,uxlong sc) //! noncritical
-: clmath(CLmath::instance()), clscreen(CLscreen::instance())
+: clmath(CLmath::instance()), clscreen(CLscreen::instance()), color(co),rcolor(co),scolor(sc),cpointcount(4)
 {	
-	//set colors and pointcount
-	rcolor = color = co;
-	scolor = sc;
-	cpointcount = 4;
-	//*
-
 	//set poly vertices
 	points[0] = pointr[0] = pointt[0] = a;
 	points[1] = pointr[1] = pointt[1] = b;

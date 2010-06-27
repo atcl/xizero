@@ -42,6 +42,7 @@ class CLbuffer : public CLbase<CLbuffer<T>,0>
 		xlong  ttype;
 	public:
 		CLbuffer(uxlong s,T i=0);
+		CLbuffer(const CLbuffer& b);
 		~CLbuffer() { delete buffer; };
 		void clear(T v=0);
 		void copy(CLbuffer<T>* dst,xlong o=0) const;
@@ -64,6 +65,20 @@ CLbuffer<T>::CLbuffer(uxlong s,T i) //! noncritical
 	ttype = cldetect.mmx() + cldetect.sse();
 	ttype = 1; //temp!
 	clear(i);
+	//*
+}
+
+template <typename T>
+CLbuffer<T>::CLbuffer(const CLbuffer& b) //! noncritical
+: cldetect(CLdetect::instance())
+{
+	//copy constructor
+	size = b.size;
+	bsize = size<<2;
+	buffer = new T[size];
+	ttype = cldetect.mmx() + cldetect.sse();
+	ttype = 1; //temp
+	for(int i=size-1;i>=0;i--) { buffer[i] = b.buffer[i]; }
 	//*
 }
 

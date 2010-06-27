@@ -64,6 +64,7 @@ struct CLvector : public CLvectorbase<T,CLvector<T> >
 
 		CLvector() { x=y=z=e=0; }
 		CLvector(T tx,T ty,T tz,T te=0) : x(tx) , y(ty) , z(tz), e(te) {  } 
+		~CLvector() { }
 
 		inline CLvector  operator+(const CLvector& a) const;	//vector addition
 		inline CLvector  operator-(const CLvector& a) const;	//vector subtraction

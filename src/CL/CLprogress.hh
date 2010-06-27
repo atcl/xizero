@@ -69,13 +69,9 @@ inline float CLprogress::cpunit() const //! noncritical
 }
 
 CLprogress::CLprogress(xlong px,xlong py,xlong w,xlong h,xlong p,xlong s,xlong e,uxlong pc,bool hv,bool f,uxlong fc,uxlong bc,uxlong rc) //! noncritical
-: clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h,f,fc,bc,rc)
+: clgfx(CLgfx::instance()), clmath(CLmath::instance()), CLguibase(px,py,w,h,f,fc,bc,rc), progress(p),horver(hv),pcolor(pc)
 {
 	//set up attributes
-	progress = p;
-	horver = hv;
-	pcolor = pc;
-	
 	if(e>=s) { start = s; end  = e; }
 	else { start = e; end  = s; }
 	

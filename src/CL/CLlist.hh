@@ -70,13 +70,7 @@ class CLlist : public CLbase<CLlist<member>,0>
 
 ///implementation
 template<class member>
-CLlist<member>::CLlist() //! noncritical
-{
-	//initialize empty list
-	length = 0;
-	current = first = last = 0;
-	//*
-}
+CLlist<member>::CLlist() : length(0),current(0),first(0),last(0) { } //! noncritical
 
 template<class member>
 CLlist<member>::~CLlist() //! noncritical

@@ -59,8 +59,7 @@ class CLgame : public CLbase<CLgame,1>
 
 ///implementation
 CLgame::CLgame() //! noncritical
-: clmath(CLmath::instance())
-{ boundx1 = boundy1 = 0; boundx2 = XRES; boundy2 = YRES; }
+: clmath(CLmath::instance()), boundx1(0),boundy1(0),boundx2(XRES),boundy2(YRES) {  }
 
 void CLgame::setboundaries(xlong bx1,xlong by1,xlong bx2,xlong by2) //! noncritical
 {

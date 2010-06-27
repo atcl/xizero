@@ -57,16 +57,7 @@ class CLexplosion : public CLbase<CLexplosion,0>
 
 ///implementation
 CLexplosion::CLexplosion(CLobject* o,xlong t) //! noncritical
-: clwindow(CLwindow::instance())
-{
-	//set up attributes
-	object = o;
-	step = 0;
-	interval = 30;
-	transdir = 1.1f;
-	type = t;
-	//*
-}
+: clwindow(CLwindow::instance()), object(o),step(0),interval(30),transdir(1.1),type(t) { }
 
 void CLexplosion::first() //! noncritical
 {

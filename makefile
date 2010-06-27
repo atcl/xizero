@@ -5,8 +5,7 @@ NX = xizero
 NU = unittest
 
 CC = g++
-O2 = -O2
-OP = -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
+OP = -O2 -fsingle-precision-constant -ffast-math -fomit-frame-pointer -funroll-loops -floop-optimize -funit-at-a-time
 WW = -Wno-multichar -Wno-write-strings -Wno-pragmas
 WA = -Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++
 OU = -o
@@ -49,17 +48,17 @@ AL = -falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32
 
 # Compile:
 default:
-	$(CC) $(O2) $(OP) $(OU) $(NX) $(SX) $(LD) $(WW) $(DF) $(DB)
+	$(CC) $(OP) $(OU) $(NX) $(SX) $(LD) $(WW) $(DF) $(DB)
 	$(ST) $(NX)
 	$(XD)
 	
 unit:
-	$(CC) $(O2) $(OP) $(OU) $(NU) $(SU) $(LD) $(WW) $(DF) $(DB)
+	$(CC) $(OP) $(OU) $(NU) $(SU) $(LD) $(WW) $(DF) $(DB)
 	$(ST) $(NU)
 	
 none:
-	$(CC) $(O2) $(OP) $(OX) $(SX) $(LD) $(WA) $(WW) $(DF) $(DB)
-	#$(CH) $(SX)
+	#$(CC)  $(OP) $(OX) $(SX) $(LD) $(WA) $(WW) $(DF) $(DB)
+	$(CH) $(SX)
 	#$(GR)
 
 install:

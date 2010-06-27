@@ -45,7 +45,6 @@ class CLmath : public CLbase<CLmath,1>
 	
 	protected:
 		xlong seed;
-		float  fxpi;
 		float  clpi;
 		float* clsin;
 		float* clcos;
@@ -83,25 +82,23 @@ class CLmath : public CLbase<CLmath,1>
 ///*
 
 ///implementation
-CLmath::CLmath() //! noncritical
+CLmath::CLmath() : seed(SEED) //! noncritical
 {
-	seed = SEED;
-	
 	//precalucalte pi approximation
-	fxpi = 355.0/113.0;
+	clpi = 355.0/113.0;
 	//*
 	
-	//calc pi (arctan method) //very bad convergence!!!
-	clpi = 1;
-	float h = 3;
-	float altsign = -1.0;
-	for(uxlong i=0; i<10000; i++)
-	{
-		clpi += altsign / h;
-		h += 2;
-		altsign *= -1;
-	}
-	clpi *= 4;
+	//calc pi (arctan method) (very bad convergence!!!)
+	//~ clpi = 1;
+	//~ float h = 3;
+	//~ float altsign = -1.0;
+	//~ for(uxlong i=0; i<10000; i++)
+	//~ {
+		//~ clpi += altsign / h;
+		//~ h += 2;
+		//~ altsign *= -1;
+	//~ }
+	//~ clpi *= 4;
 	//*
 	
 	//calc arcsin/arccos
@@ -130,9 +127,10 @@ CLmath::CLmath() //! noncritical
 	clsin = new float[360];
 	clcos = new float[360];
 	cltan = new float[360];
+	float asign = -1.0;
 	for(uxlong i=0; i<360; i++)
 	{
-		altsign = -1.0;
+		asign = -1.0;
 		ii = i * DEG2RAD;
 		clsin[i] = ii;
 		clcos[i] = 1;
@@ -140,9 +138,9 @@ CLmath::CLmath() //! noncritical
 		l = 3;
 		for(uxlong j=0; j<6; j++)
 		{
-			clcos[i] += altsign * power(ii,k) / factorial(k);
-			clsin[i] += altsign * power(ii,l) / factorial(l);
-			altsign *= -1.0;
+			clcos[i] += asign * power(ii,k) / factorial(k);
+			clsin[i] += asign * power(ii,l) / factorial(l);
+			asign *= -1.0;
 			k+=2;
 			l+=2;
 		}
@@ -221,7 +219,7 @@ T CLmath::sqrt(T x) const //! critical
 }
 
 template<typename T>
-T CLmath::deg2rad(T d) const { return float(fxpi*d); } //! noncritical
+T CLmath::deg2rad(T d) const { return float(clpi*d); } //! noncritical
 
 template<typename T>
 T CLmath::power(T b,xlong e) const //! critical
@@ -264,7 +262,7 @@ T CLmath::doublefactorial(T f) const //! critical
 	return r;
 }
 
-float CLmath::pi() const { return fxpi; }
+float CLmath::pi() const { return clpi; }
 
 float CLmath::sin(xlong x) const //! noncritical
 {

@@ -52,8 +52,7 @@ class CLfsprog : public CLbase<CLfsprog,1>
 
 ///implementation
 CLfsprog::CLfsprog() //! noncritical
-: clscreen(CLscreen::instance())
-{ pprogress = rprogress = 0; pcolor = 0x00FF0000;}
+: clscreen(CLscreen::instance()), pprogress(0),rprogress(0),pcolor(0x00FF0000) { }
 
 void CLfsprog::draw() const //! critical
 {

@@ -82,10 +82,8 @@ uxlong CLlight::lambertslaw(xlong x,xlong y) const //! noncritical
 }
 
 CLlight::CLlight(xlong r,uxlong c) //! noncritical
-: clgfx(CLgfx::instance())
+: clgfx(CLgfx::instance()), radius(r),color(c)
 {
-	radius = r;
-	color = c;
 	xlong length = (r<<1)+1;
 	mask = new sprite;
 	mask->height = mask->width = length;

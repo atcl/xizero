@@ -93,7 +93,7 @@ xlong CLstring::compare(const xchar* s,const xchar* t,uxlong n) const //! noncri
 	uxlong sl = length(s);
 	uxlong tl = length(t);
 	uxlong i = 0;
-	while( (i<sl) && (i<tl) && (i<n ^ n==0) ) { if(s[i]!=t[i]) { i=0; break; } i++; } //! n!=0 ????
+	while( (i<sl) && (i<tl) && ( (i<n) ^ (n==0) ) ) { if(s[i]!=t[i]) { i=0; break; } i++; } //! n!=0 ????
 	return i;
 }
 

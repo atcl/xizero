@@ -53,12 +53,9 @@ class CLmainmenu : public CLbase<CLmainmenu,0>
 
 ///implementation
 CLmainmenu::CLmainmenu(sprite* bg,xlong bc,const xchar* bt[],void (*a[])(void*,void*),const xchar* hl,const xchar* fl,uxlong fc) //! noncritical
-: clstring(CLstring::instance()), clgfx(CLgfx::instance())
+: clstring(CLstring::instance()), clgfx(CLgfx::instance()), background(bg),buttoncount(bc)
 {
-	//set attributes
-	background = bg;
-	buttoncount = bc;
-	//*
+	//use fc foreground color!!
 	
 	xlong temp = 0;
 	
