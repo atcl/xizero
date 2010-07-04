@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <string>
 
 struct vec
 {
@@ -10,12 +9,13 @@ struct vec
 	int z;
 };
 
-struct nor
+bool operator==(vec a,vec b) //check for colinearity!
 {
-	int c;
-	vox* v;
-	vec n;
-};
+	int p = (a.x*b.x + a.y*b.y + a.z*b.z) * (a.x*b.x + a.y*b.y + a.z*b.z);
+	int q = (a.x*a.x + a.y*a.y + a.z*a.z) * (b.x*b.x + b.y*b.y + b.z*b.z);
+	if(p==q) { return 1; }
+	return 0;
+}
 
 struct vox
 {
@@ -25,7 +25,13 @@ struct vox
 	int z;
 };
 
-vox* raster(const vec& a,const vec& b,const vec& c,const vec& d,unsigned int s,int& t,vec& n)
+struct nor
+{
+	std::vector<vox> v;
+	vec n;
+};
+
+std::vector<vox> raster(const vec& a,const vec& b,const vec& c,const vec& d,unsigned int s,int& t,vec& n)
 {
 	int i = 0;
 
@@ -122,82 +128,95 @@ vox* raster(const vec& a,const vec& b,const vec& c,const vec& d,unsigned int s,i
 	return r;
 }
 
-int main()
+int main(int argc,char** argv)
 {
+	//evaluate command line arguments
+	bool g = 0;
+	if(argc>0 && argv[1]=="-g") { g = 1; }
+	//*
+
+	//vector of normal structures nor
+	std::vector<nor> ngroup;
+	std::vector<nor> ngroupiter;
+	//*
+
+	//enter object name
 	char* name;
-	int ngroups;
-	int voxels;
-	unsigned int scolor;
+	cout << "Enter object name: "; cin  >> name;
+	//*
 
-	cout << "Enter object name: "
-	cin  >> name;
+	//enter polygon count
+	int polys = 0;
+	cout << "Enter number of polygons: "; cin  >> polys;
+	//*
 
-	cout << "Enter number of polygons: "
-	cin  >> ngroups;
+	//enter color for all polygon faces
+	unsigned int gc = 0;
+	if(g) { cout << "Enter polygon color: "; cin >> hex >> sc; }
+	//*
 
-	nor* n = new nor[ngroups];
+	//enter objects shadow color
+	unsigned int sc = 0;
+	cout << "Enter shadow color: "; cin >> hex >> sc;
+	//*
 
-	unsingned int tc = 0;
+	//enter polygons
 	vec v[4] = { {0},{0},{0},{0} };
-
-	for(int i=0;i<ngroups;i++)
+	std::vector<vox> voxels;
+	for(int i=0;i<polys;i++)
 	{
-		cout << "Enter polygon color: "
-		cin  >> hex >> tc;
-		cout << "Enter 1st vertex X: "
-		cin  >> hex >> v[0].x;
-		cout << "Enter 1st vertex Y: "
-		cin  >> hex >> v[0].y;
-		cout << "Enter 1st vertex Z: "
-		cin  >> hex >> v[0].z;
-		cout << "Enter 2nd vertex X: "
-		cin  >> hex >> v[1].x;
-		cout << "Enter 2nd vertex Y: "
-		cin  >> hex >> v[1].y;
-		cout << "Enter 2nd vertex Z: "
-		cin  >> hex >> v[1].z;
-		cout << "Enter 3rd vertex X: "
-		cin  >> hex >> v[2].x;
-		cout << "Enter 3rd vertex Y: "
-		cin  >> hex >> v[2].y;
-		cout << "Enter 3rd vertex Z: "
-		cin  >> hex >> v[2].z;
-		cout << "Enter 4th vertex X: "
-		cin  >> hex >> v[3].x;
-		cout << "Enter 4th vertex Y: "
-		cin  >> hex >> v[3].y;
-		cout << "Enter 4th vertex Z: "
-		cin  >> hex >> v[4].z;
+		cout << "Polygon (" << i << "):" << std::endl;
 
-		n[i].v = raster(v[0],v[1],v[2],v[3],tc,n[i].c,n[i].n);
-		cout << "Polygon voxeled successful." << std::endl;
+		if(g) { cout << "Enter polygon color: "; cin  >> hex >> gc; }
+		cout << "Enter 1st vertex X: "; cin  >> v[0].x;
+		cout << "Enter 1st vertex Y: "; cin  >> v[0].y;
+		cout << "Enter 1st vertex Z: "; cin  >> v[0].z;
+		cout << "Enter 2nd vertex X: "; cin  >> v[1].x;
+		cout << "Enter 2nd vertex Y: "; cin  >> v[1].y;
+		cout << "Enter 2nd vertex Z: "; cin  >> v[1].z;
+		cout << "Enter 3rd vertex X: "; cin  >> v[2].x;
+		cout << "Enter 3rd vertex Y: "; cin  >> v[2].y;
+		cout << "Enter 3rd vertex Z: "; cin  >> v[2].z;
+		cout << "Enter 4th vertex X: "; cin  >> v[3].x;
+		cout << "Enter 4th vertex Y: "; cin  >> v[3].y;
+		cout << "Enter 4th vertex Z: "; cin  >> v[4].z;
+
+		normal = normal(v[0],v[1],v[2],v[3]);
+		voxels = raster(v[0],v[1],v[2],v[3],gc,n[i].c,n[i].n);
+		//check if normal group exists
+		//push back all voxels to new or exisitng normal group		
+		voxels.clear();
+		cout << "Voxeling successful." << std::endl;
 	}
+	//*
 
+	//write to file
 	FILE* f;
 	f = fopen(name,"wb");
 	char* header[8] = "<CLVX>10";
 	fwrite(header,8,1,f);
-	fwrite(&ngroups,sizeof(ngroup),1,f);
-	fwrite(&scolor,sizeof(scolor),1,f);
+	fwrite(&ngroup.size(),4,1,f);
+	fwrite(&sc,4,1,f);
 
-	for(int i=0;i<ngroups;i++)
+	std::vector<vox>::iterator voxeliter;
+	for(ngroupiter=ngroup.begin();ngroupiter!=ngroup.end();ngroupiter++)
 	{
-		fwrite(&n[i].c,4,1,f);
-		fwrite(&n[i].x,4,1,f);
-		fwrite(&n[i].y,4,1,f);
-		fwrite(&n[i].z,4,1,f);
-		for(int j=0;j<n[i].c;j++)
+		fwrite(&(*ngroupiter).v.size(),4,1,f);
+		fwrite(&(*ngroupiter).x,4,1,f);
+		fwrite(&(*ngroupiter).y,4,1,f);
+		fwrite(&(*ngroupiter).z,4,1,f);
+		for(voxeliter=(*ngroupiter).v.begin();voxeliter!=(*ngroupiter).v.end();voxeliter++)
 		{
-			fwrite(&n[i].v[j].c,4,1,f);
-			fwrite(&n[i].v[j].x,4,1,f);
-			fwrite(&n[i].v[j].y,4,1,f);
-			fwrite(&n[i].v[j].z,4,1,f);	
+			fwrite(&(*voxeliter).c,4,1,f);
+			fwrite(&(*voxeliter).x,4,1,f);
+			fwrite(&(*voxeliter).y,4,1,f);
+			fwrite(&(*voxeliter).z,4,1,f);
 		}
 	}
-
 	cout << name << " saved succesfully!" << std::endl;
+	//*
 
+	//exit
 	return 0;
+	//*
 }
-
-
