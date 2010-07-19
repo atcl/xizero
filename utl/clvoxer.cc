@@ -33,99 +33,7 @@ struct nor
 
 std::vector<vox> raster(const vec& a,const vec& b,const vec& c,const vec& d,unsigned int s,int& t,vec& n)
 {
-	int i = 0;
-
-	//extend for z!!!
-
-	//tri 1
-	int minx = a.x * (a.x<b.x && a.x<c.x) + b.x * (b.x<a.x && b.x<c.x) + c.x * (c.x<a.x && c.x<b.x);
-	int maxx = a.x * (a.x>b.x && a.x>c.x) + b.x * (b.x>a.x && b.x>c.x) + c.x * (c.x>a.x && c.x>b.x);
-	int miny = a.y * (a.y<b.y && a.y<c.y) + b.y * (b.y<a.y && b.y<c.y) + c.y * (c.y<a.y && c.y<b.y);
-	int maxy = a.y * (a.y>b.y && a.y>c.y) + b.y * (b.y>a.y && b.y>c.y) + c.y * (c.y>a.y && c.y>b.y);
-
-	for(int y = miny; y < maxy; y++)
-    	{
-		for(int x = minx; x < maxx; x++)
-        	{
-			if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) > 0 &&
-           		<< (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) > 0 &&
-           		<< (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) > 0)
-			{
-				i++;
-			}
-		}
-	}
-	//*
-
-	//tri 2
-	int minx = a.x * (a.x<c.x && a.x<d.x) + c.x * (c.x<a.x && c.x<d.x) + d.x * (d.x<a.x && d.x<c.x);
-	int maxx = a.x * (a.x>c.x && a.x>d.x) + c.x * (c.x>a.x && c.x>d.x) + d.x * (d.x>a.x && d.x>c.x);
-	int miny = a.y * (a.y<c.y && a.y<d.y) + c.y * (c.y<a.y && c.y<d.y) + d.y * (d.y<a.y && d.y<c.y);
-	int maxy = a.y * (a.y>c.y && a.y>d.y) + c.y * (c.y>a.y && c.y>d.y) + d.y * (d.y>a.y && d.y>c.y);
-
-	for(int y = miny; y < maxy; y++)
-    	{
-		for(int x = minx; x < maxx; x++)
-        	{
-			if((a.x - c.x) * (y - a.y) - (a.y - c.y) * (x - a.x) > 0 &&
-           		<< (c.x - d.x) * (y - c.y) - (c.y - d.y) * (x - c.x) > 0 &&
-           		<< (d.x - a.x) * (y - d.y) - (d.y - a.y) * (x - d.x) > 0)
-			{
-				i++;
-			}
-		}
-	}
-	//*
-
-	vox* r = new vox[i];
-	i = 0;
-
-	//tri 1
-	for(int y = miny; y < maxy; y++)
-    	{
-		for(int x = minx; x < maxx; x++)
-        	{
-			if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) > 0 &&
-           		<< (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) > 0 &&
-           		<< (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) > 0)
-			{
-				r[i].x = x;
-				r[i].y = y;
-				r[i].z = z;
-				r[i].c = s;
-				i++;	
-			}
-		}
-	}
-	//*
-
-	//tri 2
-	for(int y = miny; y < maxy; y++)
-    	{
-		for(int x = minx; x < maxx; x++)
-        	{
-			if((a.x - c.x) * (y - a.y) - (a.y - c.y) * (x - a.x) > 0 &&
-           		<< (c.x - d.x) * (y - c.y) - (c.y - d.y) * (x - c.x) > 0 &&
-           		<< (d.x - a.x) * (y - d.y) - (d.y - a.y) * (x - d.x) > 0)
-			{
-				r[i].x = x;
-				r[i].y = y;
-				r[i].z = z;
-				r[i].c = s;
-				i++;	
-			}
-		}
-	}
-	//*
-
-	vec m = { -a.x+b.x,-a.y+b.y,-a.z+b.z }
-	vec n = { -a.x+d.x,-a.y+d.y,-a.z+d.z }
-
-	n.x = (m.y*n.z - m.z*n.y);
-	n.y = (m.z*n.x - m.x*n.z);
-	n.z = (m.x*n.y - m.y*n.x);
-	t = i;
-	return r;
+	//todo!!!
 }
 
 int main(int argc,char** argv)
@@ -137,7 +45,7 @@ int main(int argc,char** argv)
 
 	//vector of normal structures nor
 	std::vector<nor> ngroup;
-	std::vector<nor> ngroupiter;
+	std::vector<nor>::iterator ngroupiter;
 	//*
 
 	//enter object name
@@ -152,7 +60,7 @@ int main(int argc,char** argv)
 
 	//enter color for all polygon faces
 	unsigned int gc = 0;
-	if(g) { cout << "Enter polygon color: "; cin >> hex >> sc; }
+	if(g) { cout << "Enter polygon color: "; cin >> hex >> gc; }
 	//*
 
 	//enter objects shadow color
@@ -163,11 +71,14 @@ int main(int argc,char** argv)
 	//enter polygons
 	vec v[4] = { {0},{0},{0},{0} };
 	std::vector<vox> voxels;
+	std::vector<nor> currn;
+	nor temp;
+	bool nex = 0;
 	for(int i=0;i<polys;i++)
 	{
 		cout << "Polygon (" << i << "):" << std::endl;
 
-		if(g) { cout << "Enter polygon color: "; cin  >> hex >> gc; }
+		if(!g) { cout << "Enter polygon color: "; cin  >> hex >> gc; }
 		cout << "Enter 1st vertex X: "; cin  >> v[0].x;
 		cout << "Enter 1st vertex Y: "; cin  >> v[0].y;
 		cout << "Enter 1st vertex Z: "; cin  >> v[0].z;
@@ -184,7 +95,12 @@ int main(int argc,char** argv)
 		normal = normal(v[0],v[1],v[2],v[3]);
 		voxels = raster(v[0],v[1],v[2],v[3],gc,n[i].c,n[i].n);
 		//check if normal group exists
-		//push back all voxels to new or exisitng normal group		
+		for(ngroupiter=ngroup.begin();ngroupiter!=ngroup.end();ngroupiter++) { if(*ngroupiter.n==normal) { nex = 1; currn = *ngroupiter; } }
+		//push back all voxels to new or exisitng normal group
+		if(nex==1) { currn.v.insert(currn.v.end(), voxels.begin(), voxels.end()); }
+		else { temp.n = normal; temp.v = voxels; ngroup.pushback(temp); }
+		//reset for next polygon
+		nex = 0;
 		voxels.clear();
 		cout << "Voxeling successful." << std::endl;
 	}
