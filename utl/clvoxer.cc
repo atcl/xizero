@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 #include <iomanip>
 #include <vector>
@@ -8,14 +9,6 @@ struct vec
 	int y;
 	int z;
 };
-
-bool operator==(vec a,vec b) //check for colinearity!
-{
-	int p = (a.x*b.x + a.y*b.y + a.z*b.z) * (a.x*b.x + a.y*b.y + a.z*b.z);
-	int q = (a.x*a.x + a.y*a.y + a.z*a.z) * (b.x*b.x + b.y*b.y + b.z*b.z);
-	if(p==q) { return 1; }
-	return 0;
-}
 
 struct vox
 {
@@ -31,16 +24,85 @@ struct nor
 	vec n;
 };
 
-std::vector<vox> raster(const vec& a,const vec& b,const vec& c,const vec& d,unsigned int s,int& t,vec& n)
+bool operator==(vec a,vec b) //check for colinearity!
 {
-	//todo!!!
+	if( (a.x*b.x + a.y*b.y + a.z*b.z) == 0) { return 1; }
+	return 0;
+}
+
+int min(int a,int b,int c)
+{
+	if(a<=b && a<=c) { return a; }
+	if(b<=a && b<=c) { return b; }
+	if(c<=a && c<=b) { return c; }
+}
+
+int max(int a,int b,int c)
+{
+	if(a>=b && a>=c) { return a; }
+	if(b>=a && b>=c) { return b; }
+	if(c>=a && c>=b) { return c; }
+}
+
+vec normal(vec a,vec b)
+{
+	vec r;
+
+	return r;
+}
+
+std::vector<vox> raster(const vec& a,const vec& b,const vec& c,unsigned int s)
+{
+	//bounding cube
+	int minx = min(a.x,b.x,c.x);
+	int maxx = max(a.x,b.x,c.x); 
+	int miny = min(a.y,b.y,c.y); 
+	int maxy = max(a.y,b.y,c.y); 
+	int minz = min(a.z,b.z,c.z); 
+	int maxz = max(a.z,b.z,c.z);
+	//*
+
+	//return vector
+	std::vector<vox> r;
+	vox temp;
+	//
+
+	//raster
+	for(int z=minz;z<maxz;z++)
+	{
+		for(int y=miny;y<maxy;y++)
+		{
+			for(int x=minx;x<maxz;x++)
+			{
+				//3d half space function
+				if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) > 0 &&
+            			   (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) > 0 &&
+            			   (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) > 0 &&
+
+				   (a.y - b.y) * (z - a.z) - (a.z - b.z) * (y - a.y) > 0 &&
+            			   (b.y - c.y) * (z - b.z) - (b.z - c.z) * (y - b.y) > 0 &&
+            			   (c.y - a.y) * (z - c.z) - (c.z - a.z) * (y - c.y) > 0)
+				//*
+
+				temp.x = x;
+				temp.y = y;
+				temp.z = z;
+				temp.c = s;
+				r.push_back(temp);
+			}
+		}
+	}
+	//*
+
+	return r;
 }
 
 int main(int argc,char** argv)
 {
 	//evaluate command line arguments
-	bool g = 0;
-	if(argc>0 && argv[1]=="-g") { g = 1; }
+	char* input;
+	if(argc<2) { std::cout << "no input file" << std::endl; return 0; }
+	input = argv[1];
 	//*
 
 	//vector of normal structures nor
@@ -48,88 +110,65 @@ int main(int argc,char** argv)
 	std::vector<nor>::iterator ngroupiter;
 	//*
 
-	//enter object name
-	char* name;
-	cout << "Enter object name: "; cin  >> name;
-	//*
+	char magic[4];
+	char name[4];
+	int polys;
+	unsigned int scolor;
+	unsigned int vcolor; 
+	
+	FILE* f = fopen(input,"r");
+	fscanf(f,"%s,%s,%i,%i\n",&magic,&name,&polys,&scolor);
 
-	//enter polygon count
-	int polys = 0;
-	cout << "Enter number of polygons: "; cin  >> polys;
-	//*
-
-	//enter color for all polygon faces
-	unsigned int gc = 0;
-	if(g) { cout << "Enter polygon color: "; cin >> hex >> gc; }
-	//*
-
-	//enter objects shadow color
-	unsigned int sc = 0;
-	cout << "Enter shadow color: "; cin >> hex >> sc;
-	//*
-
-	//enter polygons
+	//read polys polygons
 	vec v[4] = { {0},{0},{0},{0} };
+	vec n;
 	std::vector<vox> voxels;
-	std::vector<nor> currn;
 	nor temp;
+	nor curr;
 	bool nex = 0;
 	for(int i=0;i<polys;i++)
 	{
-		cout << "Polygon (" << i << "):" << std::endl;
+		//polygon input
+		fscanf(f,"%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i,%i\n",&vcolor,&v[0].x,&v[0].y,&v[0].z,&v[1].x,&v[1].y,&v[1].z,&v[2].x,&v[2].y,&v[2].z,&v[3].x,&v[3].y,&v[3].z); 
+		//*
 
-		if(!g) { cout << "Enter polygon color: "; cin  >> hex >> gc; }
-		cout << "Enter 1st vertex X: "; cin  >> v[0].x;
-		cout << "Enter 1st vertex Y: "; cin  >> v[0].y;
-		cout << "Enter 1st vertex Z: "; cin  >> v[0].z;
-		cout << "Enter 2nd vertex X: "; cin  >> v[1].x;
-		cout << "Enter 2nd vertex Y: "; cin  >> v[1].y;
-		cout << "Enter 2nd vertex Z: "; cin  >> v[1].z;
-		cout << "Enter 3rd vertex X: "; cin  >> v[2].x;
-		cout << "Enter 3rd vertex Y: "; cin  >> v[2].y;
-		cout << "Enter 3rd vertex Z: "; cin  >> v[2].z;
-		cout << "Enter 4th vertex X: "; cin  >> v[3].x;
-		cout << "Enter 4th vertex Y: "; cin  >> v[3].y;
-		cout << "Enter 4th vertex Z: "; cin  >> v[4].z;
+		//vertex processing
+		temp.n = normal(v[0],v[1]);
+		temp.v = raster(v[0],v[1],v[2],vcolor);
+		//add 2nd tri
+		//*
 
-		normal = normal(v[0],v[1],v[2],v[3]);
-		voxels = raster(v[0],v[1],v[2],v[3],gc,n[i].c,n[i].n);
 		//check if normal group exists
-		for(ngroupiter=ngroup.begin();ngroupiter!=ngroup.end();ngroupiter++) { if(*ngroupiter.n==normal) { nex = 1; currn = *ngroupiter; } }
+		for(ngroupiter=ngroup.begin();ngroupiter!=ngroup.end();ngroupiter++) { if(ngroupiter->n==n) { nex = 1; curr = *ngroupiter; } }
+		
 		//push back all voxels to new or exisitng normal group
-		if(nex==1) { currn.v.insert(currn.v.end(), voxels.begin(), voxels.end()); }
-		else { temp.n = normal; temp.v = voxels; ngroup.pushback(temp); }
+		if(nex==1) { curr.v.insert(curr.v.end(), temp.v.begin(), temp.v.end()); }
+		else { ngroup.push_back(temp); }
+		
 		//reset for next polygon
 		nex = 0;
 		voxels.clear();
-		cout << "Voxeling successful." << std::endl;
 	}
 	//*
 
+	fclose(f);
+
+
 	//write to file
-	FILE* f;
-	f = fopen(name,"wb");
-	char* header[8] = "<CLVX>10";
-	fwrite(header,8,1,f);
-	fwrite(&ngroup.size(),4,1,f);
-	fwrite(&sc,4,1,f);
+	f = fopen(name,"w");
+	fprintf(f,"CLVX,%s,%i,%i\n",name,ngroup.size(),scolor);
 
 	std::vector<vox>::iterator voxeliter;
 	for(ngroupiter=ngroup.begin();ngroupiter!=ngroup.end();ngroupiter++)
 	{
-		fwrite(&(*ngroupiter).v.size(),4,1,f);
-		fwrite(&(*ngroupiter).x,4,1,f);
-		fwrite(&(*ngroupiter).y,4,1,f);
-		fwrite(&(*ngroupiter).z,4,1,f);
-		for(voxeliter=(*ngroupiter).v.begin();voxeliter!=(*ngroupiter).v.end();voxeliter++)
+		fprintf(f,"%i,%i,%i,%i\n",ngroupiter->v.size(),ngroupiter->n.x,ngroupiter->n.y,ngroupiter->n.z);
+		for(voxeliter=ngroupiter->v.begin();voxeliter!=ngroupiter->v.end();voxeliter++)
 		{
-			fwrite(&(*voxeliter).c,4,1,f);
-			fwrite(&(*voxeliter).x,4,1,f);
-			fwrite(&(*voxeliter).y,4,1,f);
-			fwrite(&(*voxeliter).z,4,1,f);
+			fprintf(f,"%i,%i,%i,%i\n",voxeliter->c,voxeliter->x,voxeliter->y,voxeliter->z);
 		}
 	}
-	cout << name << " saved succesfully!" << std::endl;
+	fclose(f);
+	std::cout << name << "succesful!" << std::endl;
 	//*
 
 	//exit
