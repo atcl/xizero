@@ -1,41 +1,78 @@
-XiZero 0.2
-==========
+= XiZero =
 
-Install:
---------
-To install XiZero run:
-1. $ make
-2. $ sudo make install
+== Version: ==
 
-Dependencies:
--------------
-1. libfreeglut3-dev (>=2.4)
-2. libalut-dev (>=1.1)
+0.1.0
 
-Usage:
-------
-1. $ xizero
+== Install: ==
 
-Changelog:
-----------
-See file CHANGELOG
+./smmn
+./smmn install #requires root 
 
-Bugs:
------
-Please report any bugs to https://bugs.launchpad.net/xizero
+== Dependencies: ==
 
-Warning:
---------
-This project is still in alpha stage. Don't expect it to work (correctly).
+- xsltproc
+- glfw
+- glfw-dev
 
-License:
---------
-zlib/libpng (see LICENSE)
+== Usage: ==
 
-Contact:
---------
-bugs@atcrosslevel.de
+``xz``		#gui launcher
+``xizero``	#start game
+``unit``	#model viewer
+``saver``	#benchmark and screensaver
 
-http://www.atcrosslevel.de
+== Changelog: ==
 
 
+== Features: ==
+
+=== Major: ===
+
+- Software Rasterizer
+- 32bit Z-Buffer
+- Flatshading
+- Blinn Shadows
+- 2x FSAA + FSMB + FXAA
+
+=== Minor: ===
+
+- Cordic Fixed Point Math
+- 
+-
+-
+
+== Bugs: ==
+
+
+
+== Warning: ==
+
+XiZero is still in ALPHA stage, so do not expect it to work error- and bug-free.
+
+== License: ==
+
+Copyright (c) 2011 atcrosslevel studios
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+    claim that you wrote the original software. If you use this software
+    in a product, an acknowledgment in the product documentation would be
+    appreciated but is not required.
+
+    2. Altered source versions must be plainly marked as such, and must not be
+    misrepresented as being the original software.
+
+    3. This notice may not be removed or altered from any source
+    distribution.
+
+== Contact: ==
+
+christian.himpe@atcrosslevel.de
