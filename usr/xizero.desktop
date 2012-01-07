@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.1
+Name=xizero
+GenericName=Game
+Comment=XiZero Vertical Scroller
+Icon=xizero.xpm
+Exec=/usr/games/xizero
+Path=~/.xizero
+Terminal=No
+Category=Game;ArcadeGame;3DGraphics

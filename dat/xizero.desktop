@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=0.1
+Name=xizero
+GenericName=Game
+Comment=XiZero Vertical Scrolling Shoot'em Up
+Icon=/usr/share/xizero/xizero.xpm
+Exec=/usr/games/xizero
+Path=/usr/bin/xizero
+Terminal=No
+Category=Game;ArcadeGame;3DGraphics

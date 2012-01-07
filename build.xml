@@ -1,0 +1,89 @@
+<project>
+	<rule>
+		<name>default</name>
+		<path>
+			<source></source>
+			<include></include>
+			<library></library>
+		</path>
+		<sources>
+			<source>xizero.cc</source>
+		</sources>
+		<libs>
+			<lib>GL</lib>
+			<lib>glfw</lib>
+		</libs>
+		<defines>
+			<define>XRES=800</define>
+			<define>YRES=600</define>
+		</defines>
+		<flags>
+			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
+			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
+			<flag>-march=atom -mtune=atom -m32</flag>
+			<!--flag>-s</flag--><!--strip debug symbols-->
+		</flags>
+		<binary>
+			<name>xizero</name>
+			<type>exe</type>
+		</binary>
+		<message>Done</message>
+		<!--action>strip -s -R .comment -R .gnu.version xizero</action-->
+	</rule>
+
+	<rule>
+		<name>unit</name>
+		<sources>
+			<source>unit.cc</source>
+		</sources>
+		<libs>
+			<lib>GL</lib>
+			<lib>glfw</lib>
+		</libs>
+		<defines>
+			<define>XRES=800</define>
+			<define>YRES=600</define>
+			<!--define>ALWAYS</define-->
+		</defines>
+		<flags>
+			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
+			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
+			<flag>-march=atom -mtune=atom -m32</flag>
+			<!--flag>-mtune=i486 -march=i486 -m32</flag-->
+			<!--flag>-msse -mpfpmath=sse</flag-->
+			<!--flag>-fprefetch-loop-arrays</flag-->
+			<!--flag>-Wl,-file-alignment 4096</flag-->
+			<flag>-g</flag>
+		</flags>
+		<binary>
+			<name>unit</name>
+			<type>exe</type>
+		</binary>
+	</rule>
+
+	<rule>
+		<name>test</name>
+		<sources>
+			<source>xizero.cc</source>
+		</sources>
+		<libs>
+			<lib>GL</lib>
+			<lib>glfw</lib>
+		</libs>
+		<defines>
+			<define>XRES=800</define>
+			<define>YRES=600</define>
+		</defines>
+		<flags>
+			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
+			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
+			<flag>-march=atom -mtune=atom -m32</flag>
+			<flag>-Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++ -pedantic</flag>
+		</flags>
+		<binary>
+			<name>test</name>
+			<type>exe</type>
+		</binary>
+		<action>cppcheck -a -v -s xizero.cc</action>
+	</rule>
+</project> 

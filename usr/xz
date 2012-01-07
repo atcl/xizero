@@ -1,0 +1,25 @@
+#! /usr/bin/gtkdialog -e
+
+export MAIN_DIALOG='
+<window title="XiZero"> 
+
+	<vbox>
+
+		<pixmap>
+			<input file>lc.png</input>
+		</pixmap>
+
+		<button>
+			<label>Run Xizero</label>
+			<action>xizero&</action>
+		</button>	
+		
+		<button>
+			<label>Exit</label>
+		</button>
+	
+	</vbox>
+
+</window>
+'
+
