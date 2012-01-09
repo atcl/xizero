@@ -177,6 +177,11 @@ level::~level()
 
 long level::update(long k)
 {
+	if(UNLIKELY(k==ESCAPE))
+	{
+		//pause entities
+		//show gui 
+	}
 	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }
