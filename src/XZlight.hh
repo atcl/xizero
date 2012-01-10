@@ -17,15 +17,15 @@
 class light
 {
 	private:
-		long  _radius;
-		long  _color;
-		tile* _mask;
+		long _radius;
+		long _color;
+		tile _mask;
 
 		long lambert(long x,long y) const;
-		void init();
+		void init(bool i=0);
 	public:
 		light(long r,long c) : _radius(r), _color(c) { init(); }
-		~light() { delete _mask; }
+		~light() { delete _mask.data; }
 		INLINE void draw(long x,long y) const;
 		INLINE void color(long c);
 		INLINE void radius(long r);
@@ -48,41 +48,40 @@ long light::lambert(long x,long y) const
 	return c.d;
 }
 
-void light::init()
+void light::init(bool i)
 {
-	const long dim = (_radius<<1)+1;
-	long* data = new long[dim*dim];
-	_mask = new tile;
-	_mask->width = dim;
-	_mask->height = dim;
-	_mask->data = data;
-	
-	for(long i=0,t=0;i<dim;++i)
+	if(i!=0)
 	{
-		for(long j=0;j<dim;++j,++t)
+		const long dim = (_radius<<1)+1;
+		_mask.width = _mask.height = dim;
+		delete _mask.data;
+		_mask.data = new long[dim*dim];
+	}
+
+	for(long i=0,t=0;i<_mask.width;++i)
+	{
+		for(long j=0;j<_mask.width;++j,++t)
 		{
-			data[t] = lambert(j-_radius,i-_radius);
+			_mask.data[t] = lambert(j-_radius,i-_radius);
 		}
 	}
 }
 
 void light::draw(long x,long y) const
 {
-	gfx::sprite(*_mask,x-_radius,y-_radius);
+	gfx::sprite(_mask,x-_radius,y-_radius);
 }
 
 void light::color(long c)
 {
 	_color = c;
-	delete _mask;
 	init();
 }
 
 void light::radius(long r)
 {
 	_radius = r;
-	delete _mask;
-	init();
+	init(1);
 }
 ///*
 

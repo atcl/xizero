@@ -42,9 +42,9 @@ class screen
 		long   _key[2];
 		long*  _framebuffer;
 		
-		static void cb_key(int k,int a);
-		static void cb_mouseb(int b,int a);
-		static void cb_mousep(int x,int y);
+		/*INLINE*/ static void cb_key(int k,int a);
+		/*INLINE*/ static void cb_mouseb(int b,int a);
+		/*INLINE*/ static void cb_mousep(int x,int y);
 	public:
 		screen();
 		~screen();
@@ -58,11 +58,11 @@ class screen
 		INLINE bool mousel() const { return _mouse[0]; }
 		INLINE bool mouser() const { return _mouse[1]; }
 
-		static buffer back;
-		static buffer depth;
-		static buffer stencil;
-		static buffer accum;	//for FSAA and FSMB
-		static buffer inter;	//for user interfaces
+		static buffer back;	//System Memory Double Buffer
+		static buffer depth;	//Z-Buffer
+		static buffer stencil;	//Stencil (Shadow) Buffer
+		static buffer accum;	//Accumulation Buffer for FSAA/FXAA and FSMB
+		static buffer inter;	//Mask Buffer for user interfaces
 };
 
 screen* screen::_instance = 0;

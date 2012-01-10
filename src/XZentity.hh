@@ -35,6 +35,7 @@ class entity
 		static fmatrix rp;
 		static fmatrix rm;
 		static list _ammo;
+
 		object* _model[2];
 		fvector _position;
 		fvector _direction;

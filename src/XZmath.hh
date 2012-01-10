@@ -30,7 +30,7 @@ namespace math
 	/*OK*/        long sqr(unsigned long x) { long r=0; long t=0; for(ulong i=15;i!=0;--i) { t=(r+(1<<i))<<i; r=set(r|(2<<i),r,x>=t); x=set(x-t,x,x>=t); } return r>>1; } //HOTFN 
 	/*OK*/        long rnd(unsigned long x) { static long seed=SEED; ++seed; seed^=(seed<<15); seed^=(seed>>21); seed^=(seed<<4); return seed%x; }
 	       INLINE void swp(long& x,long& y) { x^=y^=x^=y; }
-	       INLINE void swp(void* x,void* y);
+	       INLINE void swp(void* x,void* y) { ; }
 	       INLINE long ndn(long x) { packed y = { x }; y.b[0]^=y.b[3]^=y.b[0]^=y.b[3]; y.b[1]^=y.b[2]^=y.b[1]^=y.b[2]; return y.d; }
 }
 ///*

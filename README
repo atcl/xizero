@@ -12,12 +12,12 @@
 == Dependencies: ==
 
 - xsltproc
+- gl
 - glfw
 - glfw-dev
 
 == Usage: ==
 
-``xz``		#gui launcher
 ``xizero``	#start game
 ``unit``	#model viewer
 ``saver``	#benchmark and screensaver
@@ -76,3 +76,4 @@ freely, subject to the following restrictions:
 == Contact: ==
 
 christian.himpe@atcrosslevel.de
+
