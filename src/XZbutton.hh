@@ -46,8 +46,8 @@ button::button(char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,lon
 	_text(string::copy(x)),
 	_action(a),
 	_depth(d),
-	_textleft((math::max(w-font::width(x,SYSFONT),0))>>1),
-	_texttop((math::max(h-font::height(x,SYSFONT),0))>>1)
+	_textleft( (math::max(w-font::width(x,SYSFONT),0))>>1 ),
+	_texttop( (math::max(h-font::height(x,SYSFONT),0))>>1 )
 {
 	_bl.append(this);
 }

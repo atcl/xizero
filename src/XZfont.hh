@@ -14,6 +14,7 @@
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"
+#include "XZsystem.hh"
 ///*
 
 ///declarations
@@ -30,6 +31,7 @@ namespace font
 	INLINE void init(const char* x,long i);
 	       long draw(long x,long y,char a,long c,long b,long t);
 	       void draw(long x,long y,const char* a,long c,long b,long t);
+	       long width(char x,long t);
 	       long width(const char* x,long t);
 	INLINE long height(const char* x,long t);
 	INLINE long height(long t);
@@ -47,7 +49,7 @@ long font::draw(long x,long y,char a,long c,long b,long t)
 	const long h = f[t]->height;
 	const long w = f[t]->width-h;
 	const long d = XRES - h;
-	long s = a*h;
+	long s = h*a;
 	long o = y*XRES+x;
 	long r = 0;
 
@@ -80,16 +82,36 @@ void font::draw(long x,long y,const char* a,long c,long b,long t)
 	}
 }
 
+long font::width(char x,long t)
+{
+	const long h = f[t]->height;
+	long s = h*x;
+	long r = 0;
+
+	for(ulong j=0;j<h;++j,++s)
+	{
+		r+=(f[t]->data[s]!=BLACK);
+	}
+	return r-1;
+}
+
 long font::width(const char* x,long t)
 {
 	char** b = string::split(x,'\n');
-	const long c = string::count(x,'\n');
-	long r = string::length(b[0]);
-	for(ulong i=1;i<c;++i)
+	const long c = string::count(x,'\n')+1;
+	long r = 0;
+	for(ulong i=0;i<c;++i)
 	{
-		r = math::max(string::length(b[i]),string::length(b[i-1]));
+		const long l = string::length(b[i]);
+		long s = 0;
+		for(ulong j=0;j<l;++j)
+		{
+			s += width(b[i][j],t);
+		}
+		r = math::max(r,s);
 	}
-	return r*f[t]->height;
+
+	return r;
 }
 
 long font::height(const char* x,long t)
