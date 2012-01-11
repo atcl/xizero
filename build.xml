@@ -53,7 +53,7 @@
 			<!--flag>-msse -mpfpmath=sse</flag-->
 			<!--flag>-fprefetch-loop-arrays</flag-->
 			<!--flag>-Wl,-file-alignment 4096</flag-->
-			<flag>-g</flag>
+			<flag>-g -std=gnu++0x</flag>
 		</flags>
 		<binary>
 			<name>unit</name>

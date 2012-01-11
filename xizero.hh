@@ -92,7 +92,7 @@ long menu()
 		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED,SYSFONT);
 		b_close.draw();
 		b_about.draw();
-		gfx::sprite(*cur,win->mousex(),win->mousey());
+		//gfx::sprite(*cur,win->mousex(),win->mousey());
 	}
 	//*
 }
@@ -115,10 +115,10 @@ long mainmenu()
 	//*
 
 	//enlist buttons
-	button b_start("Start",&start,0,XRES>>2,YRES>>3,(XRES-(XRES>>2))>>1,200,SYSCOL,WHITE,SYSCOL,1);
-	button b_load("Load",&load,0,XRES>>2,YRES>>3,(XRES-(XRES>>2))>>1,280,SYSCOL,WHITE,SYSCOL,1);
-	button b_about("About",&about,0,XRES>>2,YRES>>3,(XRES-(XRES>>2))>>1,360,SYSCOL,WHITE,SYSCOL,1);
-	button b_leave("Exit",&leave,0,XRES>>2,YRES>>3,(XRES-(XRES>>2))>>1,440,SYSCOL,WHITE,SYSCOL,1);
+	button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	button b_load("Load",&load,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	button b_about("About",&about,0,(XRES-(XRES>>2))>>1,360,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	button b_leave("Exit",&leave,0,(XRES-(XRES>>2))>>1,440,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	//*
 
 	//draw menu
@@ -133,8 +133,8 @@ long mainmenu()
 		b_load.draw();
 		b_about.draw();
 		b_leave.draw();
-		font::draw(XRES-64,YRES-16,"Version: "VERSION,WHITE,TRANS,SYSFONT);
-		gfx::sprite(*cur,win->mousex(),win->mousey());
+		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS,SYSFONT);
+		//gfx::sprite(*cur,win->mousex(),win->mousey());
 	}
 	//*
 

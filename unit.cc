@@ -93,7 +93,7 @@ int main(int argc,char** argv)
 
 	//unit-test screen + buffer
 	screen* win = screen::instance();
-
+mainmenu();
 	while(win->run())
 	{
 		screen::back.set(WHITE);

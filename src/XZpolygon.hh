@@ -58,7 +58,7 @@ class polygon
 		/*OK*/ INLINE void  shape() const;
 		long  flat(long pz,long f) const;
 		/*OK*/ void  project(const lvector& p);
-		void  raster(bool s) const /*HOTFN*/; //based on "Daily Code Gem"
+		void  raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem"
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,long c,long s);
 		/*OK*/ ~polygon() { ; };

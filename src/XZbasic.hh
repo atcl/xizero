@@ -75,9 +75,15 @@
 #define LPNK    0x00FF80FF
 #define LYELLOW 0x0080FFFF
 #define WHITE   0x00FFFFFF
+
 #define SYSCOL  0x00C0C0C0
 #define TRANS   0xFF000000
 #define DRED    0x00000080
+#define DGREEN  0x00008000
+#define DBLUE   0x00800000
+#define ORANGE  0x008000FF
+#define SKY     0x00FF8000
+#define VIOLET  0x00FF0080
 
 typedef const char*   cstr;
 typedef unsigned char uchar;
