@@ -81,7 +81,7 @@
 #define DRED    0x00000080
 #define DGREEN  0x00008000
 #define DBLUE   0x00800000
-#define ORANGE  0x008000FF
+#define ORANGE  0x000080FF
 #define SKY     0x00FF8000
 #define VIOLET  0x00FF0080
 

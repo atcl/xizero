@@ -58,7 +58,7 @@ long font::draw(long x,long y,char a,long c,long b,long t)
 		for(ulong j=0;j<h;++j,++o,++s)
 		{
 			const long e = f[t]->data[s];
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&b!=TRANS);
+			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
 	}
