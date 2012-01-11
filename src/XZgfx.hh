@@ -210,7 +210,7 @@ void gfx::sprite(const tile& t,long x,long y)
 		for(ulong j=0;j<t.width;++j,++o,++s)
 		{
 			const packed c = { t.data[s] };
-			screen::back[o] = c.d; //math::set(c.d,screen::back[o],c.b[0]==0xFF); 
+			screen::back[o] = math::set(c.d,screen::back[o],c.b[0]==0xFF); 
 		}
 	}
 

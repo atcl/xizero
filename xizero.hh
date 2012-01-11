@@ -110,10 +110,6 @@ long intro()
 
 long mainmenu()
 {
-	//load background graphic
-	//tile* back = format::ras(system::ldf("dat/back.ras"));
-	//*
-
 	//enlist buttons
 	button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	button b_load("Load",&load,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
@@ -122,6 +118,7 @@ long mainmenu()
 	//*
 
 	//draw menu
+	//tile* back = format::ras(system::ldf("dat/back.ras"));
 	tile*   cur = format::xpm(cursor);
 	screen* win = screen::instance();
 	while(win->run() && button::check(win->mousex(),win->mousey(),win->mousel())==0)
@@ -134,7 +131,7 @@ long mainmenu()
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS,SYSFONT);
-		//gfx::sprite(*cur,win->mousex(),win->mousey());
+		gfx::sprite(*cur,math::max(math::min(0,win->mousex()),XRES-cur->width),math::max(math::min(0,win->mousey()),YRES-cur->height));
 	}
 	//*
 

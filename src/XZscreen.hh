@@ -38,10 +38,10 @@ class screen
 {
 	private:
 		static screen* _instance;
-		long   _mouse[4];
-		long   _key[2];
 		long*  _framebuffer;
-		
+		long   _key[2];
+		long   _mouse[4];		
+
 		/*INLINE*/ static void cb_key(int k,int a);
 		/*INLINE*/ static void cb_mouseb(int b,int a);
 		/*INLINE*/ static void cb_mousep(int x,int y);
@@ -90,7 +90,7 @@ void screen::cb_mousep(int x,int y)
 	//_instance->_mouse[3] = y;
 }
 
-screen::screen() : _framebuffer(back.pointer())
+screen::screen() : _framebuffer(back.pointer()),_mouse({0,0,0,0})
 {
 	glfwInit();
 	glfwOpenWindow(XRES,YRES,8,8,8,8,0,0,GLFW_WINDOW);

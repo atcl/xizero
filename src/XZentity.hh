@@ -245,21 +245,20 @@ long entity::update(long m)
 
 void entity::display(long m,bool t)
 {
-	if(fx::r2l(_position.y)>m)
+	guard(fx::r2l(_position.y)<m-100&&fx::r2l(_position.y)>m+YRES);
+
+	lvector p(fx::r2l(_position.x),fx::r2l(_position.y),fx::r2l(_position.z));
+	p.y -= m;
+	const long r = math::set(R_B,R_F,t);
+	_model[0]->display(p,r);
+	if(_model[1]!=0)
 	{
-		lvector p(fx::r2l(_position.x),fx::r2l(_position.y),fx::r2l(_position.z));
-		p.y -= m;
-		const long r = math::set(R_B,R_F,t);
-		_model[0]->display(p,r);
-		if(_model[1]!=0)
-		{
-			_model[1]->display(p,r);
-			//for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
-			//{
-			//	const lvector = project(_ammo.current());
-			//	compiled::ammo(ca.x,ca.y,YELLOW,RED);
-			//}
-		}
+		_model[1]->display(p,r);
+		//for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+		//{
+		//	const lvector = project(_ammo.current());
+		//	compiled::ammo(ca.x,ca.y,YELLOW,RED);
+		//}
 	}
 }
 
