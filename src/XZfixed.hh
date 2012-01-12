@@ -42,7 +42,6 @@ namespace fx
 	INLINE fixed l2f(long x)   { return x<<FX; }
 	INLINE fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
 	INLINE fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
-	INLINE fixed mod(fixed x,fixed y) { return (x%y); } //test
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 

@@ -81,9 +81,10 @@
 #define DRED    0x00000080
 #define DGREEN  0x00008000
 #define DBLUE   0x00800000
-#define ORANGE  0x000080FF
 #define SKY     0x00FF8000
 #define VIOLET  0x00FF0080
+#define ORANGE  0x000080FF
+#define OCCA    0x00008080
 
 typedef const char*   cstr;
 typedef unsigned char uchar;

@@ -85,7 +85,7 @@ level::level(const char* o)
 	//long n        = string::length(t[0]); //=LWIDTH
 
 	markmax = 4*BWIDTH;
-	markmin = mark = (l*BWIDTH)-YRES-1;
+	markmin = mark = (l*BWIDTH)-YMAX;
 
 	terrain    = new object*[l];
 	lvector* a = new lvector[LWIDTH];
@@ -186,11 +186,13 @@ long level::update(long k)
 	{
 		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }
 	}
+	long m = 0;
 	long r = 0;
 	r =  (boss->update(mark)<=0);
-	r = -(player->update(mark,k)<=0);
+	r = -(player->update(k,m)<=0);
 	mark = math::set(mark,markmin,mark<markmin);
 	mark = math::set(mark,markmax,mark>markmax);
+	mark+= math::set(m, (mark!=markmax)||(m>300) ); //?!?!
 	return r;
 }
 

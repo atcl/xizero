@@ -65,7 +65,7 @@ class entity
 		entity(const lvector& p,object* m,const info& v,long s);
 		entity(const lvector& p,object* m,const info& v);
 		~entity();
-		long update(long& m,long k);
+		long update(long k,long& m);
 		long update(long m);
 		void display(long m,bool t);
 		void pause();
@@ -144,7 +144,7 @@ entity::~entity()
 	if(_model[1]!=0) { delete _model[1]; }
 }
 
-long entity::update(long& m,long k)
+long entity::update(long k,long& m)
 {
 	static long last = 0;
 	const bool l = k^last;
@@ -213,7 +213,7 @@ long entity::update(long& m,long k)
 
 	const fixed py = _position.y;
 	_position += _direction * _direction.e;
-	m += fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y - py,_position.z))); //PRJY from polygon
+	m = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y - py,_position.z))); //PRJY from polygon
 
 	last = k;
 

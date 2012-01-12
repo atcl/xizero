@@ -104,14 +104,14 @@ long polygon::flat(long pz,long f) const
 	t = math::min(FXONE,t);
 	t = math::max(FXTNT,t);
 
-	//const char ambient = math::set(AMBIENT,f&R_A);
-	//const char nolight = math::set(NOLIGHT,f&R_N);
-	//const char zshade  = math::set(ZLIGHT*pz,f&R_Z);
+	const char ambient = math::set(AMBIENT,f&R_A);
+	const char nolight = math::set(NOLIGHT,f&R_N);
+	const char zshade  = math::set(ZLIGHT*pz,f&R_Z);
 
 	packed argb = { color };
-	argb.b[0] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) ));// + ambient + nolight + zshade));
-	argb.b[1] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) ));// + ambient + nolight + zshade));
-	argb.b[2] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) ));// + ambient + nolight + zshade));
+	argb.b[0] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) + ambient + nolight + zshade));
+	argb.b[1] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
+	argb.b[2] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
 	argb.b[3] = 0;
 
 	return argb.d;
@@ -127,7 +127,7 @@ void polygon::shape() const
 void polygon::raster(bool s) const
 {
 	const long minx = math::max(XMIN,math::min(lpoint[0].x,math::min(lpoint[1].x,lpoint[2].x)));
-	const long maxx = math::min(XMAX,math::max(lpoint[0].x,math::max(lpoint[1].x,lpoint[2].x)));
+	const long maxx = math::min(XMAX,math::max(lpoint[0].x,math::max(lpoint[1].x,lpoint[2].x)))+1; //no gap
 	const long miny = math::max(YMIN,math::min(lpoint[0].y,math::min(lpoint[1].y,lpoint[2].y)));
 	const long maxy = math::min(YMAX,math::max(lpoint[0].y,math::max(lpoint[1].y,lpoint[2].y)));
 
@@ -141,7 +141,7 @@ void polygon::raster(bool s) const
 	const long dy12 = lpoint[1].y - lpoint[2].y;
 	const long dy20 = lpoint[2].y - lpoint[0].y;
 
-	const long mixi = math::set(1,math::set(2,minx==lpoint[2].x),minx==lpoint[1].x);
+	const long mixi = math::set(1,math::set(2,minx==lpoint[2].x),minx==lpoint[1].x); //inc into max finding
 	const long maxi = math::set(1,math::set(2,maxx==lpoint[2].x),maxx==lpoint[1].x);
 	const long miyi = math::set(1,math::set(2,miny==lpoint[2].y),miny==lpoint[1].y);
 	const long mayi = math::set(1,math::set(2,maxy==lpoint[2].y),maxy==lpoint[1].y);
