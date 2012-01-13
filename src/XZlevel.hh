@@ -186,13 +186,14 @@ long level::update(long k)
 	{
 		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }
 	}
+
+	static long n = 0;
 	long m = 0;
-	long r = 0;
-	r =  (boss->update(mark)<=0);
-	r = -(player->update(k,m)<=0);
+	const long r = (boss->update(mark)<=0)-(player->update(k,m)<=0);
+	n = math::set(m+n,mark==markmax);
 	mark = math::set(mark,markmin,mark<markmin);
 	mark = math::set(mark,markmax,mark>markmax);
-	mark+= math::set(m, (mark!=markmax)||(m>300) ); //?!?!
+	mark+= math::set(m, (mark!=markmax)||(n>markmax-100) ); 
 	return r;
 }
 

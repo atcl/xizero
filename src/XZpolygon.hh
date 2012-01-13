@@ -126,10 +126,22 @@ void polygon::shape() const
 
 void polygon::raster(bool s) const
 {
-	const long minx = math::max(XMIN,math::min(lpoint[0].x,math::min(lpoint[1].x,lpoint[2].x)));
-	const long maxx = math::min(XMAX,math::max(lpoint[0].x,math::max(lpoint[1].x,lpoint[2].x)))+1; //no gap
-	const long miny = math::max(YMIN,math::min(lpoint[0].y,math::min(lpoint[1].y,lpoint[2].y)));
-	const long maxy = math::min(YMAX,math::max(lpoint[0].y,math::max(lpoint[1].y,lpoint[2].y)));
+	//determine projected minima and maxima ///!
+	const long mix01 = lpoint[1].x<lpoint[0].x;
+	const long max01 = !mix01;
+	const long miy01 = lpoint[1].y<lpoint[0].y;
+	const long may01 = !miy01;
+
+	const long mixi = math::set(2,mix01,lpoint[2].x<lpoint[mix01].x);
+	const long maxi = math::set(2,max01,lpoint[2].x>lpoint[max01].x);
+	const long miyi = math::set(2,miy01,lpoint[2].y<lpoint[miy01].y);
+	const long mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
+
+	const long minx = math::max(XMIN,lpoint[mixi].x);
+	const long maxx = math::min(XMAX,1+lpoint[maxi].x); //no gap
+	const long miny = math::max(YMIN,lpoint[miyi].y);
+	const long maxy = math::min(YMAX,lpoint[mayi].y);
+	//*
 
 	guard(maxx==minx || maxy==miny);
 
@@ -141,39 +153,25 @@ void polygon::raster(bool s) const
 	const long dy12 = lpoint[1].y - lpoint[2].y;
 	const long dy20 = lpoint[2].y - lpoint[0].y;
 
-	const long mixi = math::set(1,math::set(2,minx==lpoint[2].x),minx==lpoint[1].x); //inc into max finding
-	const long maxi = math::set(1,math::set(2,maxx==lpoint[2].x),maxx==lpoint[1].x);
-	const long miyi = math::set(1,math::set(2,miny==lpoint[2].y),miny==lpoint[1].y);
-	const long mayi = math::set(1,math::set(2,maxy==lpoint[2].y),maxy==lpoint[1].y);
-
 	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
 	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
 
-	const long c0 = (dy01 * lpoint[0].x) - (dx01 * lpoint[0].y) - ((dy01<0) || (dy01==0 && dx01>0));
-	const long c1 = (dy12 * lpoint[1].x) - (dx12 * lpoint[1].y) - ((dy12<0) || (dy12==0 && dx12>0));
-	const long c2 = (dy20 * lpoint[2].x) - (dx20 * lpoint[2].y) - ((dy20<0) || (dy20==0 && dx20>0));
-
-	long cy0 = c0 + dx01 * miny - dy01 * minx;
-	long cy1 = c1 + dx12 * miny - dy12 * minx;
-	long cy2 = c2 + dx20 * miny - dy20 * minx;
-
-	long cx0 = 0;
-	long cx1 = 0;
-	long cx2 = 0; 
+	long cy0 = (dy01*lpoint[0].x) - (dx01*lpoint[0].y) + (dx01*miny) - (dy01*minx) - ((dy01<0) || (dy01==0 && dx01>0));
+	long cy1 = (dy12*lpoint[1].x) - (dx12*lpoint[1].y) + (dx12*miny) - (dy12*minx) - ((dy12<0) || (dy12==0 && dx12>0));
+	long cy2 = (dy20*lpoint[2].x) - (dx20*lpoint[2].y) + (dx20*miny) - (dy20*minx) - ((dy20<0) || (dy20==0 && dx20>0)); 
 
 	const long st = XRES - (maxx-minx);
 	long off = miny * XRES + minx;
 
-	fixed tx = 0;
 	fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z); 
 
 	for(long y=miny;y<maxy;++y,off+=st,ty+=zy)
 	{
-		cx0 = cy0;
-		cx1 = cy1;
-		cx2 = cy2;
+		long cx0 = cy0;
+		long cx1 = cy1;
+		long cx2 = cy2;
 
-		tx = ty;
+		fixed tx = ty;
 
 		for(long x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
