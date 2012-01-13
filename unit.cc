@@ -92,16 +92,16 @@ int main(int argc,char** argv)
 	//mainmenu();
 
 	//unit-test screen + buffer
-	screen* win = screen::instance();
+	screen::init(XRES,YRES,TITLE" "VERSION);
 
-	while(win->run())
+	while(screen::run())
 	{
 		screen::back.set(WHITE);
 		screen::depth.set(fx::l2f(200));
 
 		//viewer(u,win->turbo());
 		
-		v.update(win->turbo());
+		v.update(screen::turbo());
 		v.display();
 		const long fps = system::fps();
 		if(fps!=-1) { system::say(string::cons(fps),1); }

@@ -34,67 +34,63 @@
 ///*
 
 ///definitions
-class screen
+namespace screen
 {
-	private:
-		static screen* _instance;
-		long*  _framebuffer;
-		long   _key[2];
-		long   _mouse[4];		
+	buffer back     = buffer(XRES*YRES);	//System Memory Double Buffer
+	buffer depth    = buffer(XRES*YRES);	//Z-Buffer
+	buffer stencil  = buffer(XRES*YRES);	//Stencil (Shadow) Buffer
+	buffer accum    = buffer(XRES*YRES);	//Accumulation Buffer for FSAA/FXAA and FSMB
+	buffer inter    = buffer(XRES*YRES);	//Mask Buffer for user interfaces
 
-		/*INLINE*/ static void cb_key(int k,int a);
-		/*INLINE*/ static void cb_mouseb(int b,int a);
-		/*INLINE*/ static void cb_mousep(int x,int y);
-	public:
-		screen();
-		~screen();
-		static screen* instance();
-		INLINE bool run();
-		INLINE bool key(long x) const { return _key[1]==x; }
-		INLINE long key();
-		INLINE long turbo()  const { return _key[0]; }
-		INLINE long mousex() const { return _mouse[2]; }
-		INLINE long mousey() const { return _mouse[3]; }
-		INLINE bool mousel() const { return _mouse[0]; }
-		INLINE bool mouser() const { return _mouse[1]; }
+	void init(long x,long y,const char* t);
+	bool run();
+	void exit();
 
-		static buffer back;	//System Memory Double Buffer
-		static buffer depth;	//Z-Buffer
-		static buffer stencil;	//Stencil (Shadow) Buffer
-		static buffer accum;	//Accumulation Buffer for FSAA/FXAA and FSMB
-		static buffer inter;	//Mask Buffer for user interfaces
-};
+	class input
+	{
+		static long* framebuffer;
+		static long key[2];
+		static long mouse[4];	
+		//static long joy[8];
 
-screen* screen::_instance = 0;
-buffer  screen::back      = buffer(XRES*YRES);
-buffer  screen::depth     = buffer(XRES*YRES);
-buffer  screen::stencil   = buffer(XRES*YRES);
-buffer  screen::accum     = buffer(XRES*YRES);
-buffer  screen::inter     = buffer(XRES*YRES);
+		friend void cb_key(int k,int a);
+		friend void cb_mouseb(int b,int a);
+		friend void cb_mousep(int x,int y);
+
+		friend long key();
+		friend long turbo();
+		friend long mousex();
+		friend long mousey();
+		friend long mousel();
+		friend long mouser();
+
+		friend bool run();
+	};
+
+	void cb_key(int k,int a)    { input::key[1] = input::key[0] = math::set(k,a==GLFW_PRESS); }
+	void cb_mouseb(int b,int a) { input::mouse[(b==0||b==1)+(b==1)] = (a==GLFW_PRESS); }
+	void cb_mousep(int x,int y) { input::mouse[2] = x; input::mouse[3] = y; }
+
+	INLINE long key()    { long k = input::key[1]; input::key[1] = 0; return k; }
+	INLINE long turbo()  { return input::key[0]; }
+	INLINE long mousex() { return input::mouse[2]; }
+	INLINE long mousey() { return input::mouse[3]; }
+	INLINE long mousel() { return input::mouse[0]; }
+	INLINE long mouser() { return input::mouse[1]; }
+}
 ///*
 
 ///implementation
-void screen::cb_key(int k,int a)
-{
-	_instance->_key[1] = _instance->_key[0] = math::set(k,a==GLFW_PRESS);
-}
+long* screen::input::framebuffer = back.pointer();
+long screen::input::key[2] = { 0,0 };
+long screen::input::mouse[4] = { 0,0,0,0 };
+//long screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
 
-void screen::cb_mouseb(int b,int a)
-{
-	_instance->_mouse[(b==0||b==1)+(b==1)] = (a==GLFW_PRESS);
-}
-
-void screen::cb_mousep(int x,int y)
-{
-	//_instance->_mouse[2] = x;
-	//_instance->_mouse[3] = y;
-}
-
-screen::screen() : _framebuffer(back.pointer()),_mouse({0,0,0,0})
+void screen::init(long x,long y,const char* t)
 {
 	glfwInit();
-	glfwOpenWindow(XRES,YRES,8,8,8,8,0,0,GLFW_WINDOW);
-	glfwSetWindowTitle(TITLE" "VERSION);
+	glfwOpenWindow(x,y,8,8,8,8,0,0,GLFW_WINDOW);
+	glfwSetWindowTitle(t);
 
 	glfwSetKeyCallback(&screen::cb_key);
 	glfwSetMouseButtonCallback(&screen::cb_mouseb);
@@ -109,24 +105,15 @@ screen::screen() : _framebuffer(back.pointer()),_mouse({0,0,0,0})
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,XRES,YRES,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
 }
 
-screen::~screen()
+void screen::exit()
 {
 	glfwCloseWindow();
 	glfwTerminate();
 }
 
-screen* screen::instance()
-{
-	if(_instance==0)
-	{
-		_instance = new screen();		
-	}
-	return _instance;
-}
-
 bool screen::run()
 {
-	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,_framebuffer);
+	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,input::framebuffer);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0,1.0);
 		glTexCoord2f(1.0f,0.0f); glVertex2f( 1.0,1.0);
@@ -136,13 +123,6 @@ bool screen::run()
 	glFlush();
 	glfwSwapBuffers();
 	return glfwGetWindowParam(GLFW_OPENED) && !glfwGetKey(GLFW_KEY_ESC);
-}
-
-long screen::key()
-{
-	long k = _key[1];
-	_key[1] = 0;
-	return k;
 }
 ///*
 

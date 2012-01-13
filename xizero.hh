@@ -29,6 +29,8 @@ void init()
 	font::init(system::ldf("dat/XZbig.fnt"),BIGFONT);
 	font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
 	font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
+
+	screen::init(XRES,YRES,TITLE" "VERSION);
 }
 
 long start(long l)
@@ -37,8 +39,7 @@ long start(long l)
 	//level lev();
 
 	//game loop
-	screen* win = screen::instance();
-	while(win->run())
+	while(screen::run())
 	{
 		//lev.update(win->turbo());
 		//lev.display();
@@ -83,8 +84,7 @@ long menu()
 
 	//draw menu
 	tile*   cur = format::xpm(cursor);
-	screen* win = screen::instance();
-	while(win->run() && button::check(win->mousex(),win->mousey(),win->mousel())==0)
+	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
@@ -120,8 +120,7 @@ long mainmenu()
 	//draw menu
 	//tile* back = format::ras(system::ldf("dat/back.ras"));
 	tile*   cur = format::xpm(cursor);
-	screen* win = screen::instance();
-	while(win->run() && button::check(win->mousex(),win->mousey(),win->mousel())==0)
+	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		screen::back.clear(BLACK); //temp
 		//gfx::sprite(*back,0,0);
@@ -131,7 +130,7 @@ long mainmenu()
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS,SYSFONT);
-		gfx::sprite(*cur,math::max(math::min(0,win->mousex()),XRES-cur->width),math::max(math::min(0,win->mousey()),YRES-cur->height));
+		gfx::sprite(*cur,math::max(math::min(0,screen::mousex()),XRES-cur->width),math::max(math::min(0,screen::mousey()),YRES-cur->height));
 	}
 	//*
 
