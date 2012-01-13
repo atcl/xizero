@@ -240,7 +240,7 @@ char* string::trim(const char* x,char y)
 
 char string::toup(char x)
 {
-	     return math::set('A',math::set(x-32,x,x>=97),x<65); 
+	return math::set('A',math::set(x-32,x,x>=97),x<65); 
 }
 ///*
 

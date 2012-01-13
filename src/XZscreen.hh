@@ -48,10 +48,10 @@ namespace screen
 
 	class input
 	{
-		static long* framebuffer;
-		static long key[2];
-		static long mouse[4];	
 		//static long joy[8];
+		static long mouse[4];	
+		static long key[2];
+		static long* framebuffer;
 
 		friend void cb_key(int k,int a);
 		friend void cb_mouseb(int b,int a);
@@ -81,10 +81,10 @@ namespace screen
 ///*
 
 ///implementation
-long* screen::input::framebuffer = back.pointer();
-long screen::input::key[2] = { 0,0 };
-long screen::input::mouse[4] = { 0,0,0,0 };
 //long screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
+long screen::input::mouse[4] = { 0,0,0,0 };
+long screen::input::key[2] = { 0,0 };
+long* screen::input::framebuffer = back.pointer();
 
 void screen::init(long x,long y,const char* t)
 {

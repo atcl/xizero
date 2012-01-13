@@ -99,7 +99,7 @@ int main(int argc,char** argv)
 		screen::back.set(WHITE);
 		screen::depth.set(fx::l2f(200));
 
-		//viewer(u,win->turbo());
+		//viewer(u,screen::turbo());
 		
 		v.update(screen::turbo());
 		v.display();
@@ -113,3 +113,4 @@ int main(int argc,char** argv)
 	return 0;
 }
 ///*
+
