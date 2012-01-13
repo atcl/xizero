@@ -26,10 +26,10 @@ class buffer
 		/*OK*/ INLINE long& operator[](ulong i) { return data[i]; }
 		/*OK*/ INLINE long  operator[](ulong i) const { return data[i]; }
 		/*OK*/ INLINE long* pointer() const { return data; }
-		/*OK*/ void clear(long x=0) { for(ulong i=tsize;i!=0;--i) { data[i]=x; /*PREFETCH(&data[i+1],1,1);*/ } }
-		/*OK*/ void copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; /*PREFETCH(&data[i+1],1,1); PREFETCH(&s.data[i+1],0,1);*/ } }
+		/*OK*/ void clear(long x=0) { for(ulong i=tsize;i!=0;--i) { data[i]=x; } }
+		/*OK*/ void set(long x=0); //overload clear if x86
+		/*OK*/ void copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; } }
 		       void fsaamb(const buffer& b) { for(ulong i=tsize;i!=0;--i) { ; } }
-		       void set(long x=0); //overload clear if x86
 };
 ///*
 

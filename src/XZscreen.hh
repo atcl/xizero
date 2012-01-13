@@ -105,12 +105,6 @@ void screen::init(long x,long y,const char* t)
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,XRES,YRES,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
 }
 
-void screen::exit()
-{
-	glfwCloseWindow();
-	glfwTerminate();
-}
-
 bool screen::run()
 {
 	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,input::framebuffer);
@@ -123,6 +117,12 @@ bool screen::run()
 	glFlush();
 	glfwSwapBuffers();
 	return glfwGetWindowParam(GLFW_OPENED) && !glfwGetKey(GLFW_KEY_ESC);
+}
+
+void screen::exit()
+{
+	glfwCloseWindow();
+	glfwTerminate();
 }
 ///*
 

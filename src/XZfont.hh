@@ -27,7 +27,19 @@
 ///definitions
 namespace font
 {
-	tile* f[4];
+	class type
+	{
+		static tile* f[4];
+
+		friend void init(const char* x,long i);
+		friend long draw(long x,long y,char a,long c,long b,long t);
+		friend void draw(long x,long y,const char* a,long c,long b,long t);
+		friend long width(char x,long t);
+		friend long width(const char* x,long t);
+		friend long height(const char* x,long t);
+		friend long height(long t);
+	};
+
 	INLINE void init(const char* x,long i);
 	       long draw(long x,long y,char a,long c,long b,long t);
 	       void draw(long x,long y,const char* a,long c,long b,long t);
@@ -39,15 +51,17 @@ namespace font
 ///*
 
 ///implementation
+tile* font::type::f[4] = { 0,0,0,0 };
+
 void font::init(const char* x,long i)
 {
-	f[i] = format::ras(x);
+	type::f[i] = format::ras(x);
 }
 
 long font::draw(long x,long y,char a,long c,long b,long t) 
 {
-	const long h = f[t]->height;
-	const long w = f[t]->width-h;
+	const long h = type::f[t]->height;
+	const long w = type::f[t]->width-h;
 	const long d = XRES - h;
 	long s = h*a;
 	long o = y*XRES+x;
@@ -57,7 +71,7 @@ long font::draw(long x,long y,char a,long c,long b,long t)
 	{
 		for(ulong j=0;j<h;++j,++o,++s)
 		{
-			const long e = f[t]->data[s];
+			const long e = type::f[t]->data[s];
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
@@ -73,7 +87,7 @@ void font::draw(long x,long y,const char* a,long c,long b,long t)
 	{
 		if(a[i]=='\n')
 		{
-			y += f[t]->height;
+			y += type::f[t]->height;
 		}
 		else
 		{
@@ -84,13 +98,13 @@ void font::draw(long x,long y,const char* a,long c,long b,long t)
 
 long font::width(char x,long t)
 {
-	const long h = f[t]->height;
+	const long h = type::f[t]->height;
 	long s = h*x;
 	long r = 0;
 
 	for(ulong j=0;j<h;++j,++s)
 	{
-		r+=(f[t]->data[s]!=BLACK);
+		r+=(type::f[t]->data[s]!=BLACK);
 	}
 	return r-1;
 }
@@ -116,12 +130,12 @@ long font::width(const char* x,long t)
 
 long font::height(const char* x,long t)
 {
-	return (string::count(x,'\n')+1)*f[t]->height;
+	return (string::count(x,'\n')+1)*type::f[t]->height;
 }
 
 long font::height(long t)
 {
-	return f[t]->height;
+	return type::f[t]->height;
 }
 ///*
 

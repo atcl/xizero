@@ -72,7 +72,7 @@
 #define LGREEN  0x0080FF80
 #define LCYAN   0x00FFFF80
 #define LRED    0x008080FF
-#define LPNK    0x00FF80FF
+#define LPINK   0x00FF80FF
 #define LYELLOW 0x0080FFFF
 #define WHITE   0x00FFFFFF
 
