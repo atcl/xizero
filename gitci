@@ -1,4 +1,11 @@
 #/bin/bash
 
-git commit -a -m"$1"
-git push
+if git diff-index --quiet HEAD --; then
+	echo 'nothing to commmit'
+else
+	git commit -a -m"$1"
+	git push
+fi
+
+
+
