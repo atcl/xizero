@@ -40,7 +40,7 @@ namespace format
 	/*OK*/ tile*  ras(const char* x);
 	/*OK*/ tile*  xpm(const char** x);
 	/*OK*/ info*  ini(const char* x);
-	file* ar(const char* x,long s);
+	file*  ar(const char* x,long s);
 }
 ///*
 

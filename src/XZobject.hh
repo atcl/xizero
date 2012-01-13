@@ -37,8 +37,8 @@ class object
 	public:
 		static lvector project(const lvector& p,const lvector& v);
 		/*OK*/ object(const char* o);
-		object(lvector* a,lvector* b,lvector* c,lvector* d,long x);
-		object(const object& o);
+		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,long x);
+		/*OK*/ object(const object& o);
 		~object();
 		/*OK*/ void   update();
 		/*OK*/ INLINE void display(const lvector& p,long f);

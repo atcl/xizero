@@ -11,7 +11,7 @@
 ///declarations
 #define guard(x,...) if(x) { return __VA_ARGS__; }
 
-#define ccall(c,f) switch(c) { case 1: f; case 0: ; }
+#define ccall(c,f) switch(!c) { case 0: f; case 1: ; }
 
 #define mod2(x)   x&1
 #define mod4(x)   x&4

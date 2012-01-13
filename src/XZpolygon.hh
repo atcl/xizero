@@ -126,7 +126,7 @@ void polygon::shape() const
 
 void polygon::raster(bool s) const
 {
-	//determine projected minima and maxima ///!
+	//determine projected minima and maxima
 	const long mix01 = lpoint[1].x<lpoint[0].x;
 	const long max01 = !mix01;
 	const long miy01 = lpoint[1].y<lpoint[0].y;
