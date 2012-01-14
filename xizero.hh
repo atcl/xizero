@@ -52,6 +52,7 @@ long start(long l)
 
 long start()
 {
+system::say("www",1);
 	return start(0);
 }
 
@@ -92,7 +93,7 @@ long menu()
 		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED,SYSFONT);
 		b_close.draw();
 		b_about.draw();
-		//gfx::sprite(*cur,win->mousex(),win->mousey());
+		gfx::sprite(*cur,screen::mousex(),screen::mousey());
 	}
 	//*
 }
@@ -130,7 +131,7 @@ long mainmenu()
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS,SYSFONT);
-		gfx::sprite(*cur,math::max(math::min(0,screen::mousex()),XRES-cur->width),math::max(math::min(0,screen::mousey()),YRES-cur->height));
+		gfx::sprite(*cur,math::lim(0,screen::mousex(),XRES-cur->width),math::lim(0,screen::mousey(),YRES-cur->height));
 	}
 	//*
 

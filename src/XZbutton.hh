@@ -61,11 +61,10 @@ button::~button()
 
 long button::check(long x,long y,long b)
 {
-	button* temp = 0;
-	long e = math::neg(_bl.length(),b==0);
+	const long e = math::neg(_bl.length(),b==0);
 	for(long i=_bl.first();i<e;i+=_bl.next())
 	{
-		temp = (button*)_bl.current();
+		const button* temp = (button*)_bl.current();
 		if(temp->_visible!=0 && x>temp->_left && x<temp->_left+temp->_width && y>temp->_top && y<temp->_top+temp->_height)
 		{
 			return temp->_action();

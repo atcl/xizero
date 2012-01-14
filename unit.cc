@@ -89,10 +89,10 @@ int main(int argc,char** argv)
 
 	level v(system::ldf("dat/level0.lvl"));
 
-	//mainmenu();
-
 	//unit-test screen + buffer
 	screen::init(XRES,YRES,TITLE" "VERSION);
+
+	mainmenu();
 
 	while(screen::run())
 	{
