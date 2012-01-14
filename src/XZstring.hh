@@ -133,7 +133,7 @@ long string::conh(const char* x)
 	return r;
 }
 
-char* string::cons(long x) //!
+char* string::cons(long x) //! simplify and x=0
 {
 	long i  = long(x<0);
 	x       = math::abs(x);
@@ -151,7 +151,7 @@ char* string::cons(long x) //!
 	return r;
 }
 
-char* string::conf(fixed x) //!
+char* string::conf(fixed x) //! simplify
 {
 	long i  = long(x<0);
 	long h  = i;

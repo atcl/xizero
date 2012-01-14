@@ -52,7 +52,6 @@ long start(long l)
 
 long start()
 {
-system::say("www",1);
 	return start(0);
 }
 

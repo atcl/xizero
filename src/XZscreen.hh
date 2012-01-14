@@ -68,7 +68,7 @@ namespace screen
 	};
 
 	void cb_key(int k,int a)    { input::key[1] = input::key[0] = math::set(k,a==GLFW_PRESS); }
-	void cb_mouseb(int b,int a) { input::mouse[(b==0||b==1)+(b==1)] = (a==GLFW_PRESS); }
+	void cb_mouseb(int b,int a) { input::mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
 	void cb_mousep(int x,int y) { input::mouse[2] = x; input::mouse[3] = y; }
 
 	INLINE long key()    { long k = input::key[1]; input::key[1] = 0; return k; }
