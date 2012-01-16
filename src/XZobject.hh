@@ -31,7 +31,7 @@ class object
 		box       bbox;
 		box       obox;
 		long      polys;
-		long      docks;
+		long      docks;	// 0:obj connector; 1:ammo1; 2:ammo2; 3:exhaust;
 		long      scolor;
 
 	public:
