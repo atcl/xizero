@@ -15,8 +15,6 @@
 ///definition
 namespace math
 {
-	/*OK*/ long uid() { static short c=0; return ('XZ'<<16)+(c++); }
-	/*OK*/ INLINE long clr(long x) { return x^=x; }
 	/*OK*/ INLINE long sgn(long x) { return (x>>31)|(long)(((unsigned long)-x)>>31); }
 	/*OK*/ INLINE long abs(long x) { return ((long(x>=0)-1) ^ x) | (x<0); }
 	/*OK*/ INLINE long fac(long x) { long r=1; for(ulong i=2;i<=x;++i) { r*=i; } return r; } //max x=12

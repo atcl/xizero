@@ -86,4 +86,5 @@
 		</binary>
 		<action>cppcheck -a -v -s xizero.cc</action>
 	</rule>
-</project> 
+</project>
+

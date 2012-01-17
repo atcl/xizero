@@ -45,8 +45,8 @@ class object
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
 		/*OK*/ INLINE lvector& docktype(long i) const { return dock[i]; }
-		/*OK*/ INLINE fmatrix& linear() const { return mat; }
 		/*OK*/ INLINE box& boundingbox() { return bbox; }
+		/*OK*/ INLINE fmatrix& linear() const { return mat; }
 		/*OK*/ INLINE fmatrix& shadow() { mat.shadow(polygon::plane,polygon::light); return mat; }
 		// INLINE fmatrix& dyadic() { mat.dyadic(,) }
 		/*OK*/ void   pull(long x);

@@ -92,7 +92,7 @@ int main(int argc,char** argv)
 	//unit-test screen + buffer
 	screen::init(XRES,YRES,TITLE" "VERSION);
 
-	mainmenu();
+	//mainmenu();
 
 	while(screen::run())
 	{

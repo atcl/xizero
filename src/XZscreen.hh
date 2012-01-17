@@ -71,7 +71,7 @@ namespace screen
 	void cb_mouseb(int b,int a) { input::mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
 	void cb_mousep(int x,int y) { input::mouse[2] = x; input::mouse[3] = y; }
 
-	INLINE long key()    { long k = input::key[1]; input::key[1] = 0; return k; }
+	INLINE long key()    { const long k = input::key[1]; input::key[1] = 0; return k; }
 	INLINE long turbo()  { return input::key[0]; }
 	INLINE long mousex() { return input::mouse[2]; }
 	INLINE long mousey() { return input::mouse[3]; }

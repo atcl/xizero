@@ -183,7 +183,7 @@ void gfx::rect(long x,long y,long a,long b,long c,long d,bool f,bool g)
 
 void gfx::circ(long x,long y,long r,long c)
 {
-	//guard
+	//guard(x-r<0 || x+r>XRES || y-r<0 || y+r>YRES);
 	long d  = 3 - (r<<1);
 	long cx = 0;
 	long cy = r;

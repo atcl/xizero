@@ -83,13 +83,15 @@ bool game::collision(const lvector& x,const box& y,const lvector& a,bool r)
 	//*
 
 	//calculate intersections of a
-	//! reduce double calculations
-	const fixed loc0 = a.x + (a.y - a.z) * coeff[0];
-	const fixed loc1 = a.x + (a.y - a.z) * coeff[1];
-	const fixed loc2 = a.y + (a.x - a.z) * coeff[2];
-	const fixed loc3 = a.y + (a.x - a.z) * coeff[3];
-	const fixed loc4 = a.z + (a.x - a.y) * coeff[4];
-	const fixed loc5 = a.z + (a.x - a.y) * coeff[5];
+	const fixed pre0 = a.x + (a.y - a.z);
+	const fixed loc0 = pre0 * coeff[0];
+	const fixed loc1 = pre0 * coeff[1];
+	const fixed pre1 = a.y + (a.x - a.z);
+	const fixed loc2 = pre1 * coeff[2];
+	const fixed loc3 = pre1 * coeff[3];
+	const fixed pre2 = a.z + (a.x - a.y);
+	const fixed loc4 = pre2 * coeff[4];
+	const fixed loc5 = pre2 * coeff[5];
 	//*
 
 	//check overlap
