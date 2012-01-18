@@ -15,6 +15,8 @@
 ///definitions
 namespace compiled
 {
+	const long type[2][2] = {{ RED,YELLOW },{BLUE,GREEN}};
+
 	/*OK*/ void ammo(const ulong x,const ulong y,const ulong r,const ulong c);
 	void tracks(ulong x,ulong y,ulong d);
 }

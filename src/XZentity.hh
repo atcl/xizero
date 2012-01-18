@@ -38,7 +38,8 @@ class entity
 
 		object* _model[2];
 		fvector _position;
-		fvector _direction;
+		fvector _direction[2];
+		lvector** _ammomount;
 		long _angle;
 
 		bool _active;
@@ -59,7 +60,7 @@ class entity
 		long _points;
 
 		INLINE void setup(const lvector& p,object* m,const info& v);
-		INLINE void fire(long i,bool j);
+		INLINE void fire(long h,long i);
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,long s);
@@ -80,10 +81,9 @@ list    entity::_ammo = list();
 void entity::setup(const lvector& p,object* m,const info& v)
 {
 	_model[0] = new object(*m);
-	_model[1] = 0;
 
 	_position = p;
-	_direction.set(0,FXONE,0,FXONE);
+	_direction[0].set(0,FXONE,0,FXONE);
 
 	_health = _healthmax = string::conl(v["health"]);
 	_healthrate = string::conl(v["hrate"]);
@@ -94,19 +94,29 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_firerate = string::conl(v["frate"]);
 	_points = string::conl(v["points"]);
 
+	_ammomount = new lvector*[_ammomounts];
+	const long s = (_model[1]==0);
+	for(long i=0,j=0;i<_ammomounts;++i)
+	{
+		lvector* t = _model[0]->docktype(s,i);
+		if(t==0) { t = _model[1]->docktype(s,j); j++; }
+		_ammomount[i] = t;		
+	}
+
 	_active = 0;
 	_lastupdate = system::clk();
 }
 
-void entity::fire(long i,bool j)
+void entity::fire(long h,long i)
 {
-	//...
-	//ammo cur = new ammo();
-	//_ammo.append(cur);
+	const bool j = _ammomount[i]->e;
+	ammo* cur = new ammo({{fx::f2l(_position.x)+_ammomount[i]->x,fx::f2l(_position.y)+_ammomount[i]->y,fx::f2l(_position.z)+_ammomount[i]->z,h },{_direction[j].x,_direction[j].y,_direction[j].z}});
+	_ammo.append(cur);
 }
 
 entity::entity(const lvector& p,object* m,object* n,const info& v)
 {
+	_model[1] = new object(*n);
 	setup(p,m,v);
 
 	rp.clear();
@@ -114,14 +124,15 @@ entity::entity(const lvector& p,object* m,object* n,const info& v)
 	rm.clear();
 	rm.rotatez(fx::l2f(-ROTANG));
 
-	_direction.set(0,FXMON,0,0);
+	_direction[0].set(0,FXMON,0,0);
+	_direction[1].set(0,FXMON,0,0);
 	_active = 1;
-	_model[1] = new object(*n);
 	_angle = 0;
 }
 
 entity::entity(const lvector& p,object* m,const info& v,long s)
 {
+	_model[1] = 0;
 	setup(p,m,v);
 	
 	//scale model by s
@@ -135,6 +146,7 @@ entity::entity(const lvector& p,object* m,const info& v,long s)
 
 entity::entity(const lvector& p,object* m,const info& v)
 {
+	_model[1] = 0;
 	setup(p,m,v);
 }
 
@@ -169,7 +181,7 @@ long entity::update(long k,long& m)
 			_model[0]->update();
 			_model[1]->update();
 			_model[0]->linear() = rm;
-			_direction = _model[0]->linear().transform(_direction);
+			_direction[0] = _model[0]->linear().transform(_direction[0]);
 		break;
 
 		case RIGHT:
@@ -177,42 +189,45 @@ long entity::update(long k,long& m)
 			_model[0]->update();
 			_model[1]->update();
 			_model[0]->linear() = rp;
-			_direction = _model[0]->linear().transform(_direction);
+			_direction[0] = _model[0]->linear().transform(_direction[0]);
 		break;
 
 		case UP:
-			_direction.e = math::set( fx::l2f(_direction.e>=0),_direction.e,l==1);
+			_direction[0].e = math::set( fx::l2f(_direction[0].e>=0),_direction[0].e,l==1);
 		break;
 
 		case DOWN:
-			_direction.e = math::set(-fx::l2f(_direction.e<=0),_direction.e,l==1);
+			_direction[0].e = math::set(-fx::l2f(_direction[0].e<=0),_direction[0].e,l==1);
 		break;
 
 		case 'A':
 			_model[1]->linear() = rp;
 			_model[1]->update();
 			_angle+=ROTANG;
+			_direction[1] = _model[1]->linear().transform(_direction[1]);
 		break;
 
 		case 'D':
 			_model[1]->linear() = rm;
 			_model[1]->update();
 			_angle-=ROTANG;
+			_direction[1] = _model[1]->linear().transform(_direction[1]);
 		break;
 
 		case 'W':
 			if(_angle>=0) { _model[1]->linear()=rm; } else { _model[1]->linear() = rp; }
 			_model[1]->update();
+			_direction[1] = _model[1]->linear().transform(_direction[1]);
 			_angle+=math::neg(ROTANG,_angle>=0);
 		break;
 
 		case SPACE:
-			for(long i=0;i<_ammomounts;++i) { fire(i,0); }
+			for(long i=0;i<_ammomounts;++i) { /*fire(1,i);*/ }
 		break;
 	}
 
 	const fixed py = _position.y;
-	_position += _direction * _direction.e;
+	_position += _direction[0] * _direction[0].e;
 	m = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y - py,_position.z))); //PRJY from polygon
 
 	last = k;
@@ -231,8 +246,8 @@ long entity::update(long m)
 		//	_health -= game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
 		//}
 
-		for(long i=0;i<_ammomounts;++i) { fire(i,1); }
-		_position += _direction * _direction.e;
+		for(long i=0;i<_ammomounts;++i) { /*fire(0,i);*/ }
+		_position += _direction[0] * _direction[0].e;
 	}
 
 	if(_health<0)
@@ -256,8 +271,8 @@ void entity::display(long m,bool t)
 		_model[1]->display(p,r);
 		//for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		//{
-		//	const lvector = project(_ammo.current());
-		//	compiled::ammo(ca.x,ca.y,YELLOW,RED);
+		//	const lvector cur = project(_ammo.current());
+		//	compiled::ammo(ca.x,ca.y,compiled::type[cur->e][0],compiled[cur->e][1]);
 		//}
 	}
 }

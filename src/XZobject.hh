@@ -44,10 +44,10 @@ class object
 		/*OK*/ INLINE void display(const lvector& p,long f);
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
-		/*OK*/ INLINE lvector& docktype(long i) const { return dock[i]; }
+		lvector* docktype(long i,long j) const;
 		/*OK*/ INLINE box& boundingbox() { return bbox; }
 		/*OK*/ INLINE fmatrix& linear() const { return mat; }
-		/*OK*/ INLINE fmatrix& shadow() { mat.shadow(polygon::plane,polygon::light); return mat; }
+		/*OK*/ INLINE fmatrix& shadow() const { mat.shadow(polygon::plane,polygon::light); return mat; }
 		// INLINE fmatrix& dyadic() { mat.dyadic(,) }
 		/*OK*/ void   pull(long x);
 };
@@ -268,6 +268,16 @@ void object::set()
 	}
 	obox[0] = bbox[0];
 	obox[1] = bbox[1];
+}
+
+lvector* object::docktype(long i,long j) const
+{
+	for(long k=0,l=0;k<docks;++k)
+	{
+		l += (dock[k].e==i);
+		if(l==j) { return &dock[k]; }
+	}
+	return 0;
 }
 
 void object::pull(fixed x) //translate along normals
