@@ -41,8 +41,13 @@
  
 #endif
 
-#define TITLE "XiZero"
-#define VERSION "0.1"
+#ifndef TITLE
+ #define TITLE "_"
+#endif
+
+#ifndef VERSION
+ #define VERSION "0.0"
+#endif
 
 #define XZOK 'XZOK'
 

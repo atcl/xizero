@@ -15,8 +15,6 @@
 
 #define alert(x) system::say(string::cons(x),1)
 
-#define swap(x,y) __asm__ __volatile__("xchgl %0, %1": :"0"(x),"1"(y):)
-
 #define mod2(x)   x&1
 #define mod4(x)   x&4
 #define mod256(x) x&255

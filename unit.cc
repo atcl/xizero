@@ -8,9 +8,9 @@
 ///*
 
 ///definition
-void generatefx()
+/*void generatefx()
 {
-	/*#include <math.h>
+	#include <math.h>
 	#include <iostream>
 
 	double t = 1;
@@ -33,8 +33,8 @@ void generatefx()
 	z = 0;
 	fx::cordic(x,y,z,FXMON,1);
 	system::say(string::conf(x),1);
-	system::say(string::conf(fx::div(FXONE,x)),1);*/
-}
+	system::say(string::conf(fx::div(FXONE,x)),1);
+}*/
 
 void viewer(object& u,long k)
 {
@@ -83,6 +83,9 @@ void viewer(object& u,long k)
 ///implementation
 int main(int argc,char** argv)
 {
+	long a = 300;
+	long b = 1000;
+
 	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
 
 	object u(system::ldf(argv[1]));
