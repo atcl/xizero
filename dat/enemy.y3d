@@ -1,6 +1,6 @@
-<y3dtxt>,0,32,0
+<y3dtxt>,0,32,2
 objt,1,cap,0x00000000
-sobj,32,cap,0
+sobj,32,cap,2
 posi,0,0,0
 poly,4,f1,0x00c0c0c0
 vert,0,-12,0
@@ -162,3 +162,5 @@ vert,-12,4,0
 vert,-12,-4,0
 vert,-8,-4,8
 vert,-8,4,8
+dock,1,-4,-12,0
+dock,1,4,-12,0

@@ -95,11 +95,11 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_points = string::conl(v["points"]);
 
 	_ammomount = new lvector*[_ammomounts];
-	const long s = (_model[1]==0);
+	const long s = (_model[1]!=0);
 	for(long i=0,j=0;i<_ammomounts;++i)
 	{
-		lvector* t = _model[0]->docktype(s,i);
-		if(t==0) { t = _model[1]->docktype(s,j); j++; }
+		lvector* t = _model[0]->docktype(s,i); t->e=0;
+		if(t==0) { t = _model[1]->docktype(s,j); t->e=1; j++; }
 		_ammomount[i] = t;		
 	}
 
@@ -182,6 +182,7 @@ long entity::update(long k,long& m)
 			_model[1]->update();
 			_model[0]->linear() = rm;
 			_direction[0] = _model[0]->linear().transform(_direction[0]);
+			_direction[1] = _model[0]->linear().transform(_direction[1]);
 		break;
 
 		case RIGHT:
@@ -190,6 +191,7 @@ long entity::update(long k,long& m)
 			_model[1]->update();
 			_model[0]->linear() = rp;
 			_direction[0] = _model[0]->linear().transform(_direction[0]);
+			_direction[1] = _model[0]->linear().transform(_direction[1]);
 		break;
 
 		case UP:

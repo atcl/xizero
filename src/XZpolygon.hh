@@ -69,6 +69,7 @@ class polygon
 		/*OK*/ INLINE void add(const fvector& a);
 		/*OK*/ INLINE fvector normal() const { return cnormal; }
 
+		static long counter;
 		static fvector plane;
 		static fvector light;
 };
@@ -76,6 +77,7 @@ class polygon
 
 ///implementation
 lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
+long    polygon::counter  = 0;
 fvector polygon::plane    = fvector(FXONE,FXONE,0);
 fvector polygon::light    = fvector(0,FXONE,FXONE,fvector(0,FXONE,FXONE).length());
 
@@ -215,6 +217,7 @@ void polygon::update(const fmatrix& m,bool i)
 void polygon::display(const lvector& p,long f)
 {
 	guard(isvisible()==0);
+	counter++;
 	project(p);
 
 	//switch() ?
