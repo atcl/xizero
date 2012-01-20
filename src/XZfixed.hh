@@ -63,6 +63,7 @@ namespace fx
 	INLINE fixed arcosh(fixed a)      { return artanh(div(sqr(mul(a,a)-FXONE),a)); }
 	INLINE fixed exp(fixed a)         { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return x+y; }
 	INLINE fixed log(fixed a)         { fixed x = a+FXONE; fixed y = a-FXONE; fixed z = 0; cordic(x,y,z,0,1); return z<<1; } // 0.1 < a < 9.58
+	INLINE fixed log(fixed a,fixed b) { return fx::div(log(a),log(b)); }
 	INLINE fixed pow(fixed a,fixed b) { return exp(mul(log(a),b)); }
 	INLINE fixed hvs(fixed a)         { return (FXONE - cos(a))>>1; }
 }
