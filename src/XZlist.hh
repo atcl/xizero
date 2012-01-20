@@ -122,15 +122,13 @@ void list::append(void* x,long h)
 
 void list::exchangesort(bool u) //use swap
 {
-	member* temp = 0;
-	
 	for(ulong i=1;i<_len;++i)
 	{
 		for(ulong j=(i+1);j<_len;++j)
 		{
 			if( (_cur->hash<_cur->next->hash&&u) || (_cur->hash>_cur->next->hash&&!u) )
 			{
-				temp = _cur->next;
+				member* temp = _cur->next;
 					
 				_cur->next = temp->next;
 				temp->next = _cur;

@@ -14,6 +14,7 @@
 			<lib>glfw</lib>
 		</libs>
 		<defines>
+			<define>SSE</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
 		</defines>
@@ -41,9 +42,10 @@
 			<lib>glfw</lib>
 		</libs>
 		<defines>
+			<define>SSE</define>
+			<define>ALWAYS</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
-			<!--define>ALWAYS</define-->
 		</defines>
 		<flags>
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
@@ -71,6 +73,7 @@
 			<lib>glfw</lib>
 		</libs>
 		<defines>
+			<define>SSE</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
 		</defines>

@@ -81,7 +81,6 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	bool  s = 0;
 	bool  r = 0;
 
-	//y needs to be kept in same loop
 	for(ulong i=0;i<FX;++i)
 	{
 		r = (((i-1)%3)==0)&&i!=1&&!r&&h;
@@ -93,7 +92,6 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 		i -= r;
 		t >>= !r;
 	}
-	//*
 }
 ///*
 

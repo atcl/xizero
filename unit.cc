@@ -96,8 +96,8 @@ int main(int argc,char** argv)
 
 	while(screen::run())
 	{
-		screen::back.set(WHITE);
-		screen::depth.set(fx::l2f(200));
+		screen::back.clear(WHITE);
+		screen::depth.clear(fx::l2f(200));
 
 		//viewer(u,screen::turbo());
 		

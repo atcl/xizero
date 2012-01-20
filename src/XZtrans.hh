@@ -37,7 +37,6 @@ void trans::circleblend(long x,long y,long r)
 		}
 	}
 
-
 	system::slp(3000);
 }
 
@@ -59,7 +58,7 @@ void trans::fadeout()
 		for(ulong j=0;j<XRES*YRES;++j)
 		{
 			c.d = screen::back[j];
-			//c.b[0] = math::max(0,c.b[0]--);
+			//c.b[0] = math::max(0,c.b[0]--); //no need to fade alpha byte
 			c.b[1] = math::max(0,c.b[1]--);
 			c.b[2] = math::max(0,c.b[2]--);
 			c.b[3] = math::max(0,c.b[3]--);

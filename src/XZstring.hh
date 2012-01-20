@@ -9,7 +9,6 @@
 ///*
 
 ///include
-#include <iostream>
 #include "XZfixed.hh"
 #include "XZmath.hh"
 ///*
@@ -17,9 +16,9 @@
 ///definitions
 namespace string
 {
+	/*OK*/ long   length(const char* x);
 	/*OK*/ char*  copy(const char* x,long y=0,long z=0x7FFFFFFF);
 	/*OK*/ char*  concat(const char* x,const char* y);
-	/*OK*/ long   length(const char* x);
 	/*OK*/ long   count(const char* x,char='\n');
 	/*OK*/ long   scan(const char* x,char y,char z='\n');
 	/*OK*/ long   find(const char* x,const char* y);
@@ -36,6 +35,13 @@ namespace string
 ///*
 
 ///implementation
+long string::length(const char* x)
+{
+	long r=0;
+	while(x[r]!=0) { r++; }
+	return r;
+}
+
 char* string::copy(const char* x,long y,long z)
 {
 	const long l = math::min(length(x),z);
@@ -65,13 +71,6 @@ char* string::concat(const char* x,const char* y)
 		r[i] = y[j];
 	}
 	r[++i] = 0;
-	return r;
-}
-
-long string::length(const char* x)
-{
-	long r=0;
-	while(x[r]!=0) { r++; }
 	return r;
 }
 

@@ -26,18 +26,17 @@ class buffer
 		/*OK*/ INLINE long& operator[](ulong i) { return data[i]; }
 		/*OK*/ INLINE long  operator[](ulong i) const { return data[i]; }
 		/*OK*/ INLINE long* pointer() const { return data; }
-		/*OK*/ void clear(long x=0) { for(ulong i=tsize;i!=0;--i) { data[i]=x; } }
-		/*OK*/ void set(long x=0); //overload clear if x86
+		/*OK*/ void clear(long x=0);
 		/*OK*/ void copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; } }
-		       void fsaamb(const buffer& b) { for(ulong i=tsize;i!=0;--i) { ; } }
+		       void fsaamb(const buffer& b) { for(ulong i=tsize;i!=0;--i) { /*TODO*/; } }
 };
 ///*
 
 ///implementation
-void buffer::set(long x)
+void buffer::clear(long x)
 {
-	//long val[4] = {x,x,x,x}; //doesn't work for whatever reason
-	static long* val = new long[4];
+#ifdef SSE
+	static long val[4];
 	val[0] = val[1] = val[2] = val[3] = x;
 
 	__asm__ __volatile__ (
@@ -61,7 +60,10 @@ void buffer::set(long x)
 	"movaps %%xmm7,112(%%ebx);\n"
 	"addl $128,%%ebx;\n"
 	"loop set;"
-	: :"a"(val),"b"(data),"c"(bytes):);
+	: :"a"(&val),"b"(data),"c"(bytes):);
+#else
+	for(ulong i=tsize;i!=0;--i) { data[i]=x; }
+#endif
 }
 ///*
 

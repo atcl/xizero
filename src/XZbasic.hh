@@ -9,12 +9,6 @@
 ///*
 
 ///definitions
-#define VERSION "0.1"
-
-#if __GNUC__ <= 4 && __GNUC_MINOR__ < 5
- #define u8 
-#endif
-
 #ifdef __GNUC__
 
  #define LIKELY(x)   __builtin_expect((x),1)
@@ -28,16 +22,14 @@
 
  #ifdef ALWAYS
   #define INLINE __attribute__((always_inline))
-// #elsedef NEVER
-//  #define INLINE
  #else
   #define INLINE inline
  #endif
  
 #else
 
- #define LIKELY(x)
- #define UNLIKELY(x)
+ #define LIKELY(x) x
+ #define UNLIKELY(x) x
  #define PREFETCH(x,y,z)
 
  #define FCALL
@@ -45,17 +37,12 @@
  #define CONST
  #define HOTFN
  
- #ifdef ALWAYS_INLINE
-  #define INLINE inline
-// #elsedef NEVER_INLINE
-//  #define INLINE
- #else
-  #define INLINE inline
- #endif
+ #define INLINE inline
  
 #endif
 
 #define TITLE "XiZero"
+#define VERSION "0.1"
 
 #define XZOK 'XZOK'
 
@@ -82,9 +69,8 @@
 #define DGREEN  0x00008000
 #define DBLUE   0x00800000
 #define SKY     0x00FF8000
-#define VIOLET  0x00FF0080
 #define ORANGE  0x000080FF
-#define OCCA    0x00008080
+#define OCHER   0x00008080
 
 typedef const char*   cstr;
 typedef unsigned char uchar;
@@ -93,8 +79,7 @@ typedef signed long   slong;
 
 union packed
 {
-	long  d;
-	short w[2];
+	ulong d;
 	uchar b[4];
 };
 ///*
