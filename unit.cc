@@ -103,8 +103,10 @@ int main(int argc,char** argv)
 		const long fps = system::fps();
 		if(fps!=-1)
 		{
+			system::say(string::cons(polygon::counter*fps),0); 			
+			system::say("p/s - ",0);
 			system::say(string::cons(polygon::counter),0); 
-			system::say(" @ ",0);
+			system::say("@",0);
 			system::say(string::cons(fps),1);
 		}
 	}

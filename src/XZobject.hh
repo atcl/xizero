@@ -82,7 +82,7 @@ object::object(const char* o)  //ifs temporary
 
 	const long subs = string::conl(t[i++]);
 	/*char* oid = t[i++];*/ i++;
-	long scolor = string::conl(t[i++]);
+	long scolor = string::conh(t[i++]);
 
 	long pc = 0;
 	long dc = 0;

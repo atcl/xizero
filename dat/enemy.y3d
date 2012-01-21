@@ -1,5 +1,5 @@
 <y3dtxt>,0,32,2
-objt,1,cap,0x00000000
+objt,1,cap,0x00ff0000
 sobj,32,cap,2
 posi,0,0,0
 poly,4,f1,0x00c0c0c0

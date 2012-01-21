@@ -220,9 +220,9 @@ void level::display()
 	//*
 
 	//render shadows
-	//for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
-	//boss->display(mark,1);
-	//player->display(mark,1);
+	for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
+	boss->display(mark,1);
+	player->display(mark,1);
 	//*
 
 	//render entities
