@@ -143,9 +143,9 @@ void polygon::raster(bool s) const
 	const long mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
 
 	const long minx = math::max(XMIN,lpoint[mixi].x);
-	const long maxx = math::min(XMAX,1+lpoint[maxi].x); //no gap
+	const long maxx = math::min(XMAX,1+lpoint[maxi].x); //prevent gap
 	const long miny = math::max(YMIN,lpoint[miyi].y);
-	const long maxy = math::min(YMAX,lpoint[mayi].y);
+	const long maxy = math::min(YMAX,1+lpoint[mayi].y); //prevent gap
 	//*
 
 	guard(maxx==minx || maxy==miny);
@@ -185,7 +185,7 @@ void polygon::raster(bool s) const
 			switch( math::neg(long(cx0<0 && cx1<0 && cx2<0 && ( (tx<sz) ||s==1)),s==1) )
 			{
 				case 1:  screen::depth[off] = tx;
-				case -1: screen::back[off]  = shade;
+				case -1: screen::back[off]  = shade; //math::set(shade,shade&back[off],s==1) for shadow
 			}
 
 			cx0 -= dy01;

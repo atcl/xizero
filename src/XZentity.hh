@@ -156,12 +156,13 @@ long entity::update(long k,long& m)
 {
 	static long last = 0;
 	const bool l = k^last;
-	//for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
-	//{
-	//	ammo* ca = _ammo.current();
-	//	_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-	//	ca->pos += ca->dir;
-	//}
+	for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+	{
+		ammo* ca = (ammo*)_ammo.current();
+		//_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
+		//ca->pos += ca->dir;
+		//check on screen
+	}
 
 	//destroy ani if health below zeros
 	if(_health<0)
@@ -220,7 +221,7 @@ long entity::update(long k,long& m)
 		break;
 
 		case SPACE:
-			for(long i=0;i<_ammomounts;++i) { /*fire(1,i);*/ }
+			for(long i=0;i<_ammomounts;++i) { fire(1,i); }
 		break;
 	}
 
@@ -239,10 +240,10 @@ long entity::update(long m)
 
 	if(_active!=0)
 	{
-		//for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
-		//{
+		for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+		{
 		//	_health -= game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
-		//}
+		}
 
 		for(long i=0;i<_ammomounts;++i) { /*fire(0,i);*/ }
 		_position += _direction[0] * _direction[0].e;
@@ -267,11 +268,15 @@ void entity::display(long m,bool t)
 	if(_model[1]!=0)
 	{
 		_model[1]->display(p,r);
-		//for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
-		//{
-		//	const lvector cur = project(_ammo.current());
-		//	compiled::ammo(ca.x,ca.y,compiled::type[cur->e][0],compiled[cur->e][1]);
-		//}
+		const fixed rpz = fx::div(FXONE,_position.z);
+		for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+		{
+			const lvector* cur = (lvector*)_ammo.current();
+			const long cx = fx::r2l(fx::mul(PRJY<<FX,fx::mul(_position.x-cur->x,rpz)));
+			const long cy = fx::r2l(fx::mul(PRJY<<FX,fx::mul(_position.x-cur->y,rpz)));
+			//compiled::ammo(cx,cy,compiled::type[cur->e][0],compiled::[cur->e][1]);
+			compiled::ammo(cx,cy,BLUE,YELLOW);
+		}
 	}
 }
 

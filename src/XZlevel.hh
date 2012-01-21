@@ -180,7 +180,7 @@ long level::update(long k)
 	if(UNLIKELY(k==ESCAPE))
 	{
 		//show gui 
-		//unpause al entities
+		//unpause all entities
 	}
 	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
@@ -206,7 +206,7 @@ void level::display()
 
 	//render terrain
 	const lvector p(400,300-BWIDTH-mark%BWIDTH,GROUND);
-	const fixed yd = fx::l2f(-19);
+	const fixed yd = fx::l2f(-20);
 	object::linear.clear();
 	object::linear.translate(0,fx::l2f(300),0);
 	long r = math::max((mark/BWIDTH)-3,0);
