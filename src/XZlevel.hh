@@ -182,6 +182,7 @@ long level::update(long k)
 		//show gui 
 		//unpause all entities
 	}
+
 	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }

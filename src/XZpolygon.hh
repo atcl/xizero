@@ -54,8 +54,6 @@ class polygon
 		fvector opoint[3];
 		static lvector lpoint[3];
 
-		static fmatrix shadmat() { fmatrix m; m.shadow(plane,light); return m; }
-
 		/*OK*/ INLINE bool  isvisible() const { return cnormal.z<FXMON; }
 		/*OK*/ INLINE void  shape() const;
 		long  flat(long pz,long f) const;
@@ -83,7 +81,7 @@ lvector       polygon::lpoint[] = { lvector(), lvector(), lvector() };
 long          polygon::counter  = 0;
 const fvector polygon::plane    = fvector(FXONE,FXONE,0);
 const fvector polygon::light    = fvector(0,FXONE,FXONE,fvector(0,FXONE,FXONE).length());
-const fmatrix polygon::shadow   = shadmat(); 
+const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(plane,light); return m; }(); 
 
 void polygon::project(const lvector& p)
 {

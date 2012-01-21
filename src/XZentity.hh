@@ -59,8 +59,6 @@ class entity
 
 		long _points;
 
-		INLINE static fmatrix rotmat(long a) { fmatrix m; m.rotatez(fx::l2f(a)); return m; }
-
 		INLINE void setup(const lvector& p,object* m,const info& v);
 		INLINE void fire(long h,long i);
 	public:
@@ -76,8 +74,8 @@ class entity
 ///*
 
 ///implementation
-const fmatrix entity::rp    = rotmat(ROTANG);
-const fmatrix entity::rm    = rotmat(-ROTANG);
+const fmatrix entity::rp    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }();
+const fmatrix entity::rm    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }();
 list          entity::_ammo = list();
 
 void entity::setup(const lvector& p,object* m,const info& v)
