@@ -72,18 +72,18 @@ class polygon
 		/*OK*/ INLINE fvector normal() const { return cnormal; }
 
 		static long counter;
-		static fvector plane;
-		static fvector light;
-		static fmatrix shadow;
+		static const fvector plane;
+		static const fvector light;
+		static const fmatrix shadow;
 };
 ///*
 
 ///implementation
-lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
-long    polygon::counter  = 0;
-fvector polygon::plane    = fvector(FXONE,FXONE,0);
-fvector polygon::light    = fvector(0,FXONE,FXONE,fvector(0,FXONE,FXONE).length());
-fmatrix polygon::shadow   = shadmat(); 
+lvector       polygon::lpoint[] = { lvector(), lvector(), lvector() };
+long          polygon::counter  = 0;
+const fvector polygon::plane    = fvector(FXONE,FXONE,0);
+const fvector polygon::light    = fvector(0,FXONE,FXONE,fvector(0,FXONE,FXONE).length());
+const fmatrix polygon::shadow   = shadmat(); 
 
 void polygon::project(const lvector& p)
 {
@@ -220,18 +220,28 @@ void polygon::update(const fmatrix& m,bool i)
 void polygon::display(const lvector& p,long f)
 {
 	guard(isvisible()==0);
-
-	//if shadow transform to shadow
-
 	counter++;
-	project(p);
 
-	//switch() ?
+	if( f&R_B )
+	{
+		const fvector s[3] = cpoint;
+		cpoint[0] = shadow.transform(cpoint[0]);
+		cpoint[1] = shadow.transform(cpoint[1]);
+		cpoint[2] = shadow.transform(cpoint[2]);
+		project(p);
+		cpoint[0] = s[0];
+		cpoint[1] = s[1];
+		cpoint[2] = s[2];
+		shade = scolor;
+	}
+	else
+	{
+		project(p);
+		if((f&R_S)!=0) { shape(); return; }
+		shade = color; 
+		if((f&R_F)!=0) { shade = flat(p.z,f); } 
+	}
 
-	if((f&R_S)!=0) { shape(); return; }
-	shade = color; 
-	if((f&R_F)!=0) { shade = flat(p.z,f); } 
-	shade = math::set(scolor,shade,(f&R_B)!=0); 
 	raster( f&R_B );
 }
 

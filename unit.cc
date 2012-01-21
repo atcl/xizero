@@ -83,9 +83,6 @@ void viewer(object& u,long k)
 ///implementation
 int main(int argc,char** argv)
 {
-	long a = 300;
-	long b = 1000;
-
 	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
 
 	object u(system::ldf(argv[1]));
@@ -100,11 +97,16 @@ int main(int argc,char** argv)
 	while(screen::run())
 	{
 		//viewer(u,screen::turbo());
-		
+		polygon::counter = 0;
 		v.update(screen::turbo());
 		v.display();
 		const long fps = system::fps();
-		if(fps!=-1) { system::say(string::cons(fps),1); }
+		if(fps!=-1)
+		{
+			system::say(string::cons(polygon::counter),0); 
+			system::say(" @ ",0);
+			system::say(string::cons(fps),1);
+		}
 	}
 	//*
 	
