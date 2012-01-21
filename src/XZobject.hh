@@ -24,7 +24,6 @@ typedef lvector box[2];
 class object
 {
 	private:
-		static fmatrix mat;
 		polygon** poly;
 		lvector*  dock;
 		lvector*  odock;
@@ -32,12 +31,11 @@ class object
 		box       obox;
 		long      polys;
 		long      docks;	// 0:obj connector; 1:ammo1; 2:ammo2; 3:exhaust;
-		long      scolor;
 
 	public:
 		static lvector project(const lvector& p,const lvector& v);
 		/*OK*/ object(const char* o);
-		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,long x);
+		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e);
 		/*OK*/ object(const object& o);
 		~object();
 		/*OK*/ void   update();
@@ -46,15 +44,16 @@ class object
 		/*OK*/ void   set();
 		lvector* docktype(long i,long j) const;
 		/*OK*/ INLINE box& boundingbox() { return bbox; }
-		/*OK*/ INLINE fmatrix& linear() const { return mat; }
-		/*OK*/ INLINE fmatrix& shadow() const { mat.shadow(polygon::plane,polygon::light); return mat; }
-		// INLINE fmatrix& dyadic() { mat.dyadic(,) }
+		/*OK*/ INLINE static void shadow() { linear.shadow(polygon::plane,polygon::light); }
+		// INLINE static fmatrix& dyadic() { linear.dyadic(,) }
 		/*OK*/ void   pull(long x);
+
+		static fmatrix linear;
 };
 ///*
 
 ///implementation
-fmatrix object::mat = fmatrix(FXONE);
+fmatrix object::linear = fmatrix(FXONE);
 
 lvector object::project(const lvector& p,const lvector& v)
 {
@@ -83,7 +82,7 @@ object::object(const char* o)  //ifs temporary
 
 	const long subs = string::conl(t[i++]);
 	/*char* oid = t[i++];*/ i++;
-	scolor = string::conl(t[i++]);
+	long scolor = string::conl(t[i++]);
 
 	long pc = 0;
 	long dc = 0;
@@ -152,7 +151,7 @@ object::object(const char* o)  //ifs temporary
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,long x) : poly(0),dock(0),odock(0),polys(x<<1),docks(0),scolor(BLACK)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e) : poly(0),dock(0),odock(0),polys(x<<1),docks(0)
 {
 	for(long i=0;i<x;++i)
 	{
@@ -178,19 +177,19 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,long x) : poly(0),doc
 		{
 			case -1:
 			case 0:
-				if(az!=0 || bz!=0 || cz!=0) { poly[j++] = new polygon(a[i],b[i],c[i],SYSCOL,0); }
-				if(cz!=0 || dz!=0 || az!=0) { poly[j++] = new polygon(c[i],d[i],a[i],SYSCOL,0); }
+				if(az!=0 || bz!=0 || cz!=0) { poly[j++] = new polygon(a[i],b[i],c[i],e,0); }
+				if(cz!=0 || dz!=0 || az!=0) { poly[j++] = new polygon(c[i],d[i],a[i],e,0); }
 			break;
 
 			case 1:
-				if(bz!=0 || cz!=0 || dz!=0) { poly[j++] = new polygon(b[i],c[i],d[i],SYSCOL,0); }
-				if(dz!=0 || az!=0 || bz!=0) { poly[j++] = new polygon(d[i],a[i],b[i],SYSCOL,0); }
+				if(bz!=0 || cz!=0 || dz!=0) { poly[j++] = new polygon(b[i],c[i],d[i],e,0); }
+				if(dz!=0 || az!=0 || bz!=0) { poly[j++] = new polygon(d[i],a[i],b[i],e,0); }
 			break;
 		}
 	}
 }
 
-object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks),scolor(o.scolor)
+object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks)
 {
 	poly = new polygon*[polys];
 	dock = new lvector[docks];
@@ -222,16 +221,16 @@ void object::update()
 {
 	for(long i=0;i<polys;++i)
 	{
-		poly[i]->update(mat);
+		poly[i]->update(linear);
 	}
 	for(long i=0;i<docks;++i)
 	{
 		const long t = dock[i].e;
-		dock[i] = mat.transform(dock[i]);
+		dock[i] = linear.transform(dock[i]);
 		dock[i].e = t;
 	}
-	bbox[0] = mat.transform(bbox[0]);
-	bbox[1] = mat.transform(bbox[1]);
+	bbox[0] = linear.transform(bbox[0]);
+	bbox[1] = linear.transform(bbox[1]);
 }
 
 void object::display(const lvector& p,long f)

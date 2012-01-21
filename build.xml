@@ -25,6 +25,7 @@
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<flag>-s</flag><!--strip debug symbols-->
+			<!--flag>-static</flag-->
 		</flags>
 		<binary>
 			<name>xizero</name>

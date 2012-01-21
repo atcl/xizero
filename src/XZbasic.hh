@@ -87,6 +87,15 @@ union packed
 	ulong d;
 	uchar b[4];
 };
+
+union color
+{
+	ulong c;
+	uchar a;
+	uchar r;
+	uchar g;
+	uchar b;
+};
 ///*
 
 #endif

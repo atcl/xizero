@@ -54,11 +54,13 @@ class polygon
 		fvector opoint[3];
 		static lvector lpoint[3];
 
+		static fmatrix shadmat() { fmatrix m; m.shadow(plane,light); return m; }
+
 		/*OK*/ INLINE bool  isvisible() const { return cnormal.z<FXMON; }
 		/*OK*/ INLINE void  shape() const;
 		long  flat(long pz,long f) const;
 		/*OK*/ void  project(const lvector& p);
-		void  raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem"
+		void  raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,long c,long s);
 		/*OK*/ ~polygon() { ; };
@@ -72,6 +74,7 @@ class polygon
 		static long counter;
 		static fvector plane;
 		static fvector light;
+		static fmatrix shadow;
 };
 ///*
 
@@ -80,6 +83,7 @@ lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
 long    polygon::counter  = 0;
 fvector polygon::plane    = fvector(FXONE,FXONE,0);
 fvector polygon::light    = fvector(0,FXONE,FXONE,fvector(0,FXONE,FXONE).length());
+fmatrix polygon::shadow   = shadmat(); 
 
 void polygon::project(const lvector& p)
 {
@@ -115,7 +119,6 @@ long polygon::flat(long pz,long f) const
 	argb.b[1] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
 	argb.b[2] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
 	argb.b[3] = 0;
-
 	return argb.d;
 }
 
@@ -217,6 +220,9 @@ void polygon::update(const fmatrix& m,bool i)
 void polygon::display(const lvector& p,long f)
 {
 	guard(isvisible()==0);
+
+	//if shadow transform to shadow
+
 	counter++;
 	project(p);
 

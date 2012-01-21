@@ -155,7 +155,7 @@ level::level(const char* o)
 		}
 		//*
 
-		terrain[i] = new object(a,b,c,d,k);
+		terrain[i] = new object(a,b,c,d,k,OCHER);
 	}
 	delete[] a;
 	delete[] b;
@@ -179,8 +179,8 @@ long level::update(long k)
 {
 	if(UNLIKELY(k==ESCAPE))
 	{
-		//pause entities
 		//show gui 
+		//unpause al entities
 	}
 	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
@@ -200,22 +200,22 @@ long level::update(long k)
 void level::display()
 {
 	//draw background
-	//screen::back.set(WHITE);
-	//screen::depth.set(fx::l2f(200));
+	screen::back.clear(DRED);
+	screen::depth.clear(fx::l2f(200));
 	//*
 
 	//render terrain
 	const lvector p(400,300-BWIDTH-mark%BWIDTH,GROUND);
 	const fixed yd = fx::l2f(-19);
-	terrain[0]->linear().clear();
-	terrain[0]->linear().translate(0,fx::l2f(300),0);
+	object::linear.clear();
+	object::linear.translate(0,fx::l2f(300),0);
 	long r = math::max((mark/BWIDTH)-3,0);
 	for(long i=0;i<34;++i,++r)
 	{
 		terrain[r]->update();
 		terrain[r]->display(p,R_F);
 		terrain[r]->reset();
-		terrain[r]->linear().translate(0,yd,0);
+		object::linear.translate(0,yd,0);
 	}
 	//*
 

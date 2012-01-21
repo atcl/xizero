@@ -32,8 +32,8 @@ struct ammo
 class entity
 {
 	private:
-		static fmatrix rp;
-		static fmatrix rm;
+		static const fmatrix rp;
+		static const fmatrix rm;
 		static list _ammo;
 
 		object* _model[2];
@@ -59,6 +59,8 @@ class entity
 
 		long _points;
 
+		INLINE static fmatrix rotmat(long a) { fmatrix m; m.rotatez(fx::l2f(a)); return m; }
+
 		INLINE void setup(const lvector& p,object* m,const info& v);
 		INLINE void fire(long h,long i);
 	public:
@@ -69,14 +71,14 @@ class entity
 		long update(long k,long& m);
 		long update(long m);
 		void display(long m,bool t);
-		void pause();
+		void unpause();
 };
 ///*
 
 ///implementation
-fmatrix entity::rp    = fmatrix();
-fmatrix entity::rm    = fmatrix();
-list    entity::_ammo = list();
+const fmatrix entity::rp    = rotmat(ROTANG);
+const fmatrix entity::rm    = rotmat(-ROTANG);
+list          entity::_ammo = list();
 
 void entity::setup(const lvector& p,object* m,const info& v)
 {
@@ -119,11 +121,6 @@ entity::entity(const lvector& p,object* m,object* n,const info& v)
 	_model[1] = new object(*n);
 	setup(p,m,v);
 
-	rp.clear();
-	rp.rotatez(fx::l2f(ROTANG));
-	rm.clear();
-	rm.rotatez(fx::l2f(-ROTANG));
-
 	_direction[0].set(0,FXMON,0,0);
 	_direction[1].set(0,FXMON,0,0);
 	_active = 1;
@@ -137,10 +134,9 @@ entity::entity(const lvector& p,object* m,const info& v,long s)
 	
 	//scale model by s
 	s = fx::l2f(s);
-	_model[0]->linear().clear(FXONE);
-	_model[0]->linear().scale(s,s,s);
+	object::linear.clear();
+	object::linear.scale(s,s,s);
 	_model[0]->update();
-	_model[0]->set();
 	//
 }
 
@@ -177,21 +173,21 @@ long entity::update(long k,long& m)
 	switch(k)
 	{
 		case LEFT:
-			_model[0]->linear() = rp;
+			object::linear = rp;
 			_model[0]->update();
 			_model[1]->update();
-			_model[0]->linear() = rm;
-			_direction[0] = _model[0]->linear().transform(_direction[0]);
-			_direction[1] = _model[0]->linear().transform(_direction[1]);
+			object::linear = rm;
+			_direction[0] = object::linear.transform(_direction[0]);
+			_direction[1] = object::linear.transform(_direction[1]);
 		break;
 
 		case RIGHT:
-			_model[0]->linear() = rm;
+			object::linear = rm;
 			_model[0]->update();
 			_model[1]->update();
-			_model[0]->linear() = rp;
-			_direction[0] = _model[0]->linear().transform(_direction[0]);
-			_direction[1] = _model[0]->linear().transform(_direction[1]);
+			object::linear = rp;
+			_direction[0] = object::linear.transform(_direction[0]);
+			_direction[1] = object::linear.transform(_direction[1]);
 		break;
 
 		case UP:
@@ -203,23 +199,23 @@ long entity::update(long k,long& m)
 		break;
 
 		case 'A':
-			_model[1]->linear() = rp;
+			object::linear = rp;
 			_model[1]->update();
 			_angle+=ROTANG;
-			_direction[1] = _model[1]->linear().transform(_direction[1]);
+			_direction[1] = object::linear.transform(_direction[1]);
 		break;
 
 		case 'D':
-			_model[1]->linear() = rm;
+			object::linear = rm;
 			_model[1]->update();
 			_angle-=ROTANG;
-			_direction[1] = _model[1]->linear().transform(_direction[1]);
+			_direction[1] = object::linear.transform(_direction[1]);
 		break;
 
 		case 'W':
-			if(_angle>=0) { _model[1]->linear()=rm; } else { _model[1]->linear() = rp; }
+			if(_angle>=0) { object::linear = rm; } else { object::linear = rp; }
 			_model[1]->update();
-			_direction[1] = _model[1]->linear().transform(_direction[1]);
+			_direction[1] = object::linear.transform(_direction[1]);
 			_angle+=math::neg(ROTANG,_angle>=0);
 		break;
 
@@ -279,9 +275,9 @@ void entity::display(long m,bool t)
 	}
 }
 
-void entity::pause()
+void entity::unpause()
 {
-	//...
+	_lastupdate = system::clk();
 }
 ///*
 

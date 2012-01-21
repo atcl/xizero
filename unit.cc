@@ -40,37 +40,37 @@ void viewer(object& u,long k)
 {
 		const lvector pos(400,300,100);
 		static long rc = R_F;
-		u.linear().clear(FXONE);
+		object::linear.clear();
 		switch(k)
 		{
-			case UP:     u.linear().rotatex(FXONE); break;
-			case DOWN:   u.linear().rotatex(FXMON); break;
-			case RIGHT:  u.linear().rotatey(FXONE); break;
-			case LEFT:   u.linear().rotatey(FXMON); break;
-			case PGUP:   u.linear().rotatez(FXONE); break;
-			case PGDOWN: u.linear().rotatez(FXMON); break;
+			case UP:     object::linear.rotatex(FXONE); break;
+			case DOWN:   object::linear.rotatex(FXMON); break;
+			case RIGHT:  object::linear.rotatey(FXONE); break;
+			case LEFT:   object::linear.rotatey(FXMON); break;
+			case PGUP:   object::linear.rotatez(FXONE); break;
+			case PGDOWN: object::linear.rotatez(FXMON); break;
 
-			case 'a': u.linear().translate(FXMON,0,0); break;
-			case 'd': u.linear().translate(FXONE,0,0); break;
-			case 'w': u.linear().translate(0,FXONE,0); break;
-			case 's': u.linear().translate(0,FXMON,0); break;
-			case 'q': u.linear().translate(0,0,FXONE); break;
-			case 'e': u.linear().translate(0,0,FXMON); break;
+			case 'a': object::linear.translate(FXMON,0,0); break;
+			case 'd': object::linear.translate(FXONE,0,0); break;
+			case 'w': object::linear.translate(0,FXONE,0); break;
+			case 's': object::linear.translate(0,FXMON,0); break;
+			case 'q': object::linear.translate(0,0,FXONE); break;
+			case 'e': object::linear.translate(0,0,FXMON); break;
 
-			case '1': u.linear().scale(FXONE+FXTNT,FXONE,FXONE); break;
-			case '2': u.linear().scale(FXONE-FXTNT,FXONE,FXONE); break;
-			case '3': u.linear().scale(FXONE,FXONE+FXTNT,FXONE); break;
-			case '4': u.linear().scale(FXONE,FXONE-FXTNT,FXONE); break;
-			case '5': u.linear().scale(FXONE,FXONE,FXONE+FXTNT); break;
-			case '6': u.linear().scale(FXONE,FXONE,FXONE-FXTNT); break;
+			case '1': object::linear.scale(FXONE+FXTNT,FXONE,FXONE); break;
+			case '2': object::linear.scale(FXONE-FXTNT,FXONE,FXONE); break;
+			case '3': object::linear.scale(FXONE,FXONE+FXTNT,FXONE); break;
+			case '4': object::linear.scale(FXONE,FXONE-FXTNT,FXONE); break;
+			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
+			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
 			case 'r': u.reset(); rc=R_F; break;
-			case 't': u.linear().scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
-			case 'z': u.linear().scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
+			case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
+			case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
 			case 'u': break;
 			case 'i': u.pull(FXTNT); break;
 			case 'o': u.pull(-FXTNT); break;
-			case 'p': u.shadow(); rc=R_B; break;
+			case 'p': object::shadow(); rc=R_B; break;
 			case 'l': rc=R_S; break;
 
 			case '0': menu();
@@ -99,9 +99,6 @@ int main(int argc,char** argv)
 
 	while(screen::run())
 	{
-		screen::back.clear(WHITE);
-		screen::depth.clear(fx::l2f(200));
-
 		//viewer(u,screen::turbo());
 		
 		v.update(screen::turbo());

@@ -19,7 +19,7 @@ class fmatrix
 		fixed _m[4][4];
 		/*OK*/ void multiplicate(const fixed (&n)[4][4]);
 	public:
-		/*OK*/ fmatrix(fixed x=0,fixed y=0);
+		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
 		/*OK*/ ~fmatrix() { ; };
 		/*OK*/ INLINE void rotatex(fixed x);
 		/*OK*/ INLINE void rotatey(fixed y);

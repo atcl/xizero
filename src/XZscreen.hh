@@ -48,7 +48,7 @@ namespace screen
 
 	class input
 	{
-		//static long joy[8];
+		static long joy[8];
 		static long mouse[4];	
 		static long key[2];
 		static long* framebuffer;
@@ -77,11 +77,12 @@ namespace screen
 	INLINE long mousey() { return input::mouse[3]; }
 	INLINE long mousel() { return input::mouse[0]; }
 	INLINE long mouser() { return input::mouse[1]; }
+	//INLINE long joyb(long i) { return input::joy[i]; }
 }
 ///*
 
 ///implementation
-//long screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
+long screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
 long screen::input::mouse[4] = { 0,0,0,0 };
 long screen::input::key[2] = { 0,0 };
 long* screen::input::framebuffer = back.pointer();
@@ -116,6 +117,7 @@ bool screen::run()
 	glEnd();
 	glFlush();
 	glfwSwapBuffers();
+	//check joypad buttons here
 	return glfwGetWindowParam(GLFW_OPENED) && !glfwGetKey(GLFW_KEY_ESC);
 }
 
