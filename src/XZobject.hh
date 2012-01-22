@@ -17,7 +17,7 @@
 ///*
 
 ///declarations
-typedef lvector box[2];
+typedef fvector box[2];
 ///*
 
 ///definition 
@@ -25,12 +25,12 @@ class object
 {
 	private:
 		polygon** poly;
-		lvector*  dock;
-		lvector*  odock;
+		fvector*  dock;
+		fvector*  odock;
 		box       bbox;
 		box       obox;
 		long      polys;
-		long      docks;	// 0:obj connector; 1:ammo1; 2:ammo2; 3:exhaust;
+		long      docks;	// 0:ammo1; 1:ammo2; 2:exhaust; 3:obj connector;
 
 	public:
 		static lvector project(const lvector& p,const lvector& v);
@@ -42,7 +42,7 @@ class object
 		/*OK*/ INLINE void display(const lvector& p,long f);
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
-		lvector* docktype(long i,long j) const;
+		       fvector* docktype(long i,long j) const;
 		/*OK*/ INLINE box& boundingbox() { return bbox; }
 		/*OK*/ void   pull(long x);
 
@@ -73,8 +73,8 @@ object::object(const char* o)  //ifs temporary
 	polys += 2*string::conl(t[i++]); 
 	docks = string::conl(t[i++]);
 	poly  = new polygon*[polys];
-	dock  = new lvector[docks];
-	odock = new lvector[docks];
+	dock  = new fvector[docks];
+	odock = new fvector[docks];
 
 	if(string::find(t[i++],"objt")==-1) { system::say("y3d format wrong (objt)",1); system::bye(-1); }
 
@@ -113,21 +113,21 @@ object::object(const char* o)  //ifs temporary
 
 			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor,scolor);
 
-			bbox[0].x = math::min(bbox[0].x,math::min(x[0].x,math::min(x[1].x,x[2].x)));
-			bbox[0].y = math::min(bbox[0].y,math::min(x[0].y,math::min(x[1].y,x[2].y)));
-			bbox[0].z = math::min(bbox[0].z,math::min(x[0].z,math::min(x[1].z,x[2].z)));
-			bbox[1].x = math::max(bbox[1].x,math::max(x[0].x,math::max(x[1].x,x[2].x)));
-			bbox[1].y = math::max(bbox[1].y,math::max(x[0].y,math::max(x[1].y,x[2].y)));
-			bbox[1].z = math::max(bbox[1].z,math::max(x[0].z,math::max(x[1].z,x[2].z)));
+			bbox[0].x = fx::l2f(math::min(bbox[0].x,math::min(x[0].x,math::min(x[1].x,x[2].x))));
+			bbox[0].y = fx::l2f(math::min(bbox[0].y,math::min(x[0].y,math::min(x[1].y,x[2].y))));
+			bbox[0].z = fx::l2f(math::min(bbox[0].z,math::min(x[0].z,math::min(x[1].z,x[2].z))));
+			bbox[1].x = fx::l2f(math::max(bbox[1].x,math::max(x[0].x,math::max(x[1].x,x[2].x))));
+			bbox[1].y = fx::l2f(math::max(bbox[1].y,math::max(x[0].y,math::max(x[1].y,x[2].y))));
+			bbox[1].z = fx::l2f(math::max(bbox[1].z,math::max(x[0].z,math::max(x[1].z,x[2].z))));
 
 			if(verts==4)
 			{
-				bbox[0].x = math::min(bbox[0].x,x[3].x);
-				bbox[0].y = math::min(bbox[0].y,x[3].y);
-				bbox[0].z = math::min(bbox[0].z,x[3].z);
-				bbox[1].x = math::max(bbox[1].x,x[3].x);
-				bbox[1].y = math::max(bbox[1].y,x[3].y);
-				bbox[1].z = math::max(bbox[1].z,x[3].z);
+				bbox[0].x = fx::l2f(math::min(bbox[0].x,x[3].x));
+				bbox[0].y = fx::l2f(math::min(bbox[0].y,x[3].y));
+				bbox[0].z = fx::l2f(math::min(bbox[0].z,x[3].z));
+				bbox[1].x = fx::l2f(math::max(bbox[1].x,x[3].x));
+				bbox[1].y = fx::l2f(math::max(bbox[1].y,x[3].y));
+				bbox[1].z = fx::l2f(math::max(bbox[1].z,x[3].z));
 			
 				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor,scolor);
 			}
@@ -138,7 +138,7 @@ object::object(const char* o)  //ifs temporary
 			if(string::find(t[i++],"dock")==-1) { system::say("y3d format wrong (dock)",1); system::bye(-1); }
 
 			const long type = string::conl(t[i++]);
-			dock[dc].set(string::conl(t[i]),string::conl(t[i+1]),string::conl(t[i+2]),type);
+			dock[dc].set(fx::l2f(string::conl(t[i])),fx::l2f(string::conl(t[i+1])),fx::l2f(string::conl(t[i+2])),type);
 			odock[dc] = dock[dc];
 		}
 	}
@@ -187,11 +187,11 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e) : poly
 	}
 }
 
-object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks)
+object::object(const object& o) : poly(0),dock(0),odock(0),polys(o.polys),docks(o.docks)
 {
-	poly = new polygon*[polys];
-	dock = new lvector[docks];
-	odock = new lvector[docks];
+	poly  = new polygon*[polys];
+	dock  = new fvector[docks];
+	odock = new fvector[docks];
 	
 	for(long i=0;i<polys;++i)
 	{
@@ -267,7 +267,7 @@ void object::set()
 	obox[1] = bbox[1];
 }
 
-lvector* object::docktype(long i,long j) const
+fvector* object::docktype(long i,long j) const
 {
 	for(long k=0,l=0;k<docks;++k)
 	{

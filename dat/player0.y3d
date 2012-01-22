@@ -47,7 +47,7 @@ vert,-10,-20,-8
 vert,-10,-24,0
 vert,-12,-24,0
 vert,-12,-20,0
-dock,0,0,0,8
+dock,3,0,0,8
 sobj,8,bot,0
 posi,0,0,0
 poly,4,j,0x00c0c0c0

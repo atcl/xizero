@@ -21,8 +21,8 @@
 //declarations
 struct ammo
 {
-	lvector pos;
-	lvector dir;
+	fvector pos;
+	fvector dir;
 };
 
 #define ROTANG 1
@@ -39,7 +39,7 @@ class entity
 		object* _model[2];
 		fvector _position;
 		fvector _direction[2];
-		lvector** _ammomount;
+		fvector* _ammomount;
 		long _angle;
 
 		bool _active;
@@ -56,6 +56,7 @@ class entity
 		long _ammomounts;
 		long _ammotype;
 		long _firerate;
+		long _lastfire;
 
 		long _points;
 
@@ -94,23 +95,25 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_firerate = string::conl(v["frate"]);
 	_points = string::conl(v["points"]);
 
-	_ammomount = new lvector*[_ammomounts];
+	_ammomount = new fvector[_ammomounts];
 	const long s = (_model[1]!=0);
-	for(long i=0,j=0;i<_ammomounts;++i)
+	for(long i=0,j=0;i+j<_ammomounts;++i)
 	{
-		lvector* t = _model[0]->docktype(s,i); t->e=0;
-		if(t==0) { t = _model[1]->docktype(s,j); t->e=1; j++; }
-		_ammomount[i] = t;		
+		fvector* t = _model[0]->docktype(s,i);
+		const bool mt = t==0;
+		if(mt) { t = _model[1]->docktype(s,j); j++; }
+		_ammomount[i+j] = *t;
+		_ammomount[i+j].e = mt;		
 	}
 
 	_active = 0;
-	_lastupdate = system::clk();
+	_lastupdate = _lastfire = system::clk();
 }
 
 void entity::fire(long h,long i)
 {
-	const bool j = _ammomount[i]->e;
-	ammo* cur = new ammo({{fx::f2l(_position.x)+_ammomount[i]->x,fx::f2l(_position.y)+_ammomount[i]->y,fx::f2l(_position.z)+_ammomount[i]->z,h },{fx::f2l(_direction[j].x),fx::f2l(_direction[j].y),fx::f2l(_direction[j].z)}}); 
+	const bool j = _ammomount[i].e;
+	ammo* cur = new ammo({{_position.x+_ammomount[i].x,_position.y+_ammomount[i].y,_position.z+_ammomount[i].z,h },{_direction[j].x<<1,_direction[j].y<<1,_direction[j].z<<1}}); 
 	_ammo.append(cur);
 }
 
@@ -148,6 +151,7 @@ entity::~entity()
 {
 	delete _model[0];
 	if(_model[1]!=0) { delete _model[1]; }
+	//delete ammomounts
 }
 
 long entity::update(long k,long& m)
@@ -160,7 +164,7 @@ long entity::update(long k,long& m)
 	{
 		ammo* ca = (ammo*)_ammo.current();
 		//_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		ca->pos -= ca->dir;
+		ca->pos += ca->dir;
 	}
 
 	//destroy ani if health below zeros
@@ -220,7 +224,11 @@ long entity::update(long k,long& m)
 		break;
 
 		case SPACE:
-			for(long i=0;i<_ammomounts;++i) { fire(1,i); }
+			if(curr>_lastfire)
+			{
+				for(long i=0;i<_ammomounts;++i) { fire(1,i); }
+				_lastfire = curr+_firerate;
+			}
 		break;
 	}
 
@@ -271,9 +279,9 @@ void entity::display(long m,bool t)
 		_model[1]->display(p,r);
 		for(long i=_ammo.first();i<_ammo.length()&&r==R_F;i+=_ammo.next())
 		{
-			const lvector* cur = &((ammo*)_ammo.current())->pos;
-			const long cx = cur->x;
-			const long cy = cur->y-m;
+			const fvector* cur = &((ammo*)_ammo.current())->pos;
+			const long cx = fx::r2l(cur->x);
+			const long cy = fx::r2l(cur->y)-m;
 			switch(game::onscreen(cx,cy))
 			{
 				case 0: /*delete*/ _ammo.delcurrent(); break;

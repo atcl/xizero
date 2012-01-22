@@ -54,16 +54,15 @@ class polygon
 		fvector opoint[3];
 		static lvector lpoint[3];
 
-		/*OK*/ INLINE bool  isvisible() const { return cnormal.z<FXMON; }
-		/*OK*/ INLINE void  shape() const;
-		long  flat(long pz,long f) const;
-		/*OK*/ void  project(const lvector& p);
-		void  raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem - Advanced Rasterization"
+		/*OK*/ INLINE bool isvisible() const { return cnormal.z<FXMON; }
+		/*OK*/ INLINE void shape() const;
+		/*OK*/        void project(const lvector& p) const;
+		              void flat(long pz,long f);
+		              void raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,long c,long s);
-		/*OK*/ ~polygon() { ; };
-		/*OK*/ void update(const fmatrix& m,bool i=0);
-		void display(const lvector& p,long f);
+		/*OK*/        void update(const fmatrix& m,bool i=0);
+		              void display(const lvector& p,long f);
 		/*OK*/ INLINE void reset();
 		/*OK*/ INLINE void set();
 		/*OK*/ INLINE void add(const fvector& a);
@@ -83,7 +82,7 @@ const fvector polygon::plane    = fvector(FXONE,FXONE,0);
 const fvector polygon::light    = fvector(0,FXONE,FXONE,fvector(0,FXONE,FXONE).length());
 const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(plane,light); return m; }(); 
 
-void polygon::project(const lvector& p)
+void polygon::project(const lvector& p) const
 {
 	const fixed pz = fx::l2f(p.z);
 
@@ -100,7 +99,7 @@ void polygon::project(const lvector& p)
 	lpoint[2].y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(cpoint[2].y,lpoint[2].z))) + p.y;
 }
 
-long polygon::flat(long pz,long f) const
+void polygon::flat(long pz,long f)
 {
 	fixed t = fx::mul(cnormal.e,light.e);
 	t = fx::div(cnormal.dot(light),t);
@@ -117,7 +116,7 @@ long polygon::flat(long pz,long f) const
 	argb.b[1] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
 	argb.b[2] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
 	argb.b[3] = 0;
-	return argb.d;
+	shade = argb.d;
 }
 
 void polygon::shape() const 
@@ -237,7 +236,7 @@ void polygon::display(const lvector& p,long f)
 		project(p);
 		if((f&R_S)!=0) { shape(); return; }
 		shade = color; 
-		if((f&R_F)!=0) { shade = flat(p.z,f); } 
+		if((f&R_F)!=0) { flat(p.z,f); } 
 	}
 
 	raster( f&R_B );
