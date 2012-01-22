@@ -77,10 +77,10 @@
 #define ORANGE  0x000080FF
 #define OCHER   0x00008080
 
-typedef const char*   cstr;
+typedef const char*   ccstr;
 typedef unsigned char uchar;
 typedef unsigned long ulong;
-typedef signed long   slong;
+typedef signed   long slong;
 
 union packed
 {

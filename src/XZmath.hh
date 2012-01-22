@@ -17,8 +17,6 @@ namespace math
 {
 	/*OK*/ INLINE long sgn(long x) { return (x>>31)|(long)(((unsigned long)-x)>>31); }
 	/*OK*/ INLINE long abs(long x) { return ((long(x>=0)-1) ^ x) | (x<0); }
-	/*OK*/ INLINE long fac(long x) { long r=1; for(ulong i=2;i<=x;++i) { r*=i; } return r; } //max x=12
-	       INLINE long crc(long x) { return 0b10000100110000010001110110110111^x; }
 	/*OK*/ INLINE long ndn(long x) { return ((x>>24)&0x000000ff) | ((x<<8)&0x00ff0000) | ((x>>8)&0x0000ff00) | ((x<<24)&0xff000000); }
 	/*OK*/ INLINE long avg(long x,long y) { return (x&y)+((x^y)>>1); }
 	/*OK*/ INLINE long min(long x,long y) { return y^((x^y) & -(x<y)); }

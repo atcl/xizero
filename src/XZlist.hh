@@ -35,9 +35,9 @@ class list
 		INLINE long length() const { return _len; }
 		INLINE long first() { _cur = _fir; return 0; }
 		INLINE long last() { _cur = _las; return _len; }
-		INLINE long prev() { _cur = _cur->prev; return -(_len>0); }
-		INLINE long next() { _cur = _cur->next; return  (_len>0); }
-		INLINE void* current() const { return _cur->data; }
+		INLINE long prev() { guard(_len==0,0); _cur = _cur->prev; return -1; }
+		INLINE long next() { guard(_len==0,0); _cur = _cur->next; return  1; }
+		INLINE void* current() const { guard(_len==0,0); return _cur->data; }
 		INLINE void clear() { _cur = _fir = _las = 0; _len = 0; }
 		void* delcurrent();
 		void append(void* x,long h=0);
@@ -56,7 +56,7 @@ void* list::delcurrent()
 	void* c = _cur;
 
 	//catch special cases
-	switch( (_cur==_fir) - (_cur==_las) + ((_cur!=_las && _cur!=_fir)<<1) )
+	switch( (_cur==_fir) - (_cur==_las) + ((_cur!=_las && _cur!=_fir && _las!=_fir)<<1) )
 	{
 		case -1: //del last 
 			prev();
@@ -84,7 +84,7 @@ void* list::delcurrent()
 	//*
 
 	//adjust length
-	--_len;
+	_len--;
 	//*
 
 	return c;
@@ -116,7 +116,7 @@ void list::append(void* x,long h)
 	//*
 
 	//adjust length
-	++_len;
+	_len++;
 	//*
 }
 

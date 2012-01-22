@@ -9,9 +9,7 @@
 ///*
 
 ///declarations
-#define guard(x,...) if(x) { return __VA_ARGS__; }
-
-#define ccall(c,f) switch(!c) { case 0: f; case 1: ; }
+#define guard(x,...) if(x) { return __VA_ARGS__; } //switch(!x) { case 0: return __VA_ARGS__; case 1: ; }
 
 #define alert(x) system::say(string::cons(x),1)
 

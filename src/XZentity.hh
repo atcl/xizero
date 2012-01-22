@@ -110,7 +110,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 void entity::fire(long h,long i)
 {
 	const bool j = _ammomount[i]->e;
-	ammo* cur = new ammo({{fx::f2l(_position.x)+_ammomount[i]->x,fx::f2l(_position.y)+_ammomount[i]->y,fx::f2l(_position.z)+_ammomount[i]->z,h },{_direction[j].x,_direction[j].y,_direction[j].z}});
+	ammo* cur = new ammo({{fx::f2l(_position.x)+_ammomount[i]->x,fx::f2l(_position.y)+_ammomount[i]->y,fx::f2l(_position.z)+_ammomount[i]->z,h },{fx::f2l(_direction[j].x),fx::f2l(_direction[j].y),fx::f2l(_direction[j].z)}}); 
 	_ammo.append(cur);
 }
 
@@ -160,8 +160,7 @@ long entity::update(long k,long& m)
 	{
 		ammo* ca = (ammo*)_ammo.current();
 		//_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		//ca->pos += ca->dir;
-		//check on screen
+		//ca->pos -= ca->dir;
 	}
 
 	//destroy ani if health below zeros
@@ -264,21 +263,22 @@ void entity::display(long m,bool t)
 {
 	guard(fx::r2l(_position.y)<m-100&&fx::r2l(_position.y)>m+YRES);
 
-	lvector p(fx::r2l(_position.x),fx::r2l(_position.y),fx::r2l(_position.z));
-	p.y -= m;
+	const lvector p(fx::r2l(_position.x),fx::r2l(_position.y)-m,fx::r2l(_position.z));
 	const long r = math::set(R_B,R_F,t);
 	_model[0]->display(p,r);
 	if(_model[1]!=0)
 	{
 		_model[1]->display(p,r);
-		const fixed rpz = fx::div(FXONE,_position.z);
-		for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+		for(long i=_ammo.first();i<_ammo.length()&&r==R_F;i+=_ammo.next())
 		{
-			const lvector* cur = (lvector*)_ammo.current();
-			const long cx = fx::r2l(fx::mul(PRJY<<FX,fx::mul(_position.x-cur->x,rpz)));
-			const long cy = fx::r2l(fx::mul(PRJY<<FX,fx::mul(_position.x-cur->y,rpz)));
-			//compiled::ammo(cx,cy,compiled::type[cur->e][0],compiled::[cur->e][1]);
-			compiled::ammo(cx,cy,BLUE,YELLOW);
+			const lvector* cur = &((ammo*)_ammo.current())->pos;
+			const long cx = cur->x;
+			const long cy = cur->y-m;
+			switch(game::onscreen(cx,cy))
+			{
+				case 0: /*delete*/ _ammo.delcurrent(); break;
+				case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break; //compiled::ammo(cx,cy,compiled::type[cur->e][0],compiled::[cur->e][1]); break;
+			}
 		}
 	}
 }
