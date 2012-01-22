@@ -71,6 +71,8 @@ class entity
 		long update(long m);
 		void display(long m,bool t);
 		void unpause();
+		INLINE long health() { return _health; }
+		INLINE long shield() { return _shield; }
 };
 ///*
 
@@ -166,7 +168,7 @@ long entity::update(long k,long& m)
 		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
 		//if(h!=0) { _ammo.delcurrent(); }
 		//health -= h;
-		ca->pos -= ca->dir;
+		/*if(curr>_lastupdate+ammorate)*/ ca->pos -= ca->dir;
 	}
 
 	//destroy ani if health below zeros

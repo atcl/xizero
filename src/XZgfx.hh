@@ -16,12 +16,15 @@
 ///*
 
 ///declarations
+#ifndef TILE
+#define TILE
 struct tile
 {
 	long  width;
 	long  height;
 	long* data;
 };
+#endif
 ///*
 
 ///definitions

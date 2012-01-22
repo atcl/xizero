@@ -231,6 +231,12 @@ void level::display()
 	boss->display(mark,0);
 	player->display(mark,0);
 	//*
+
+	//render gui elements
+	//for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ... }
+	//
+	//
+	//*
 }
 ///*
 
