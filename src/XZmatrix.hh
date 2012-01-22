@@ -32,6 +32,8 @@ class fmatrix
 		INLINE void shadow(const fvector& x,const fvector& y);
 		/*OK*/ INLINE fvector transform(const fvector& x) const;
 		/*OK*/ INLINE lvector transform(const lvector& x) const;
+
+		//transpose needed?
 };
 ///*
 

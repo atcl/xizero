@@ -39,7 +39,7 @@ class entity
 		object* _model[2];
 		fvector _position;
 		fvector _direction[2];
-		fvector* _ammomount;
+		fvector** _ammomount;
 		long _angle;
 
 		bool _active;
@@ -95,15 +95,15 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_firerate = string::conl(v["frate"]);
 	_points = string::conl(v["points"]);
 
-	_ammomount = new fvector[_ammomounts];
+	_ammomount = new fvector*[_ammomounts];
 	const long s = (_model[1]!=0);
 	for(long i=0,j=0;i+j<_ammomounts;++i)
 	{
 		fvector* t = _model[0]->docktype(s,i);
-		const bool mt = t==0;
-		if(mt) { t = _model[1]->docktype(s,j); j++; }
-		_ammomount[i+j] = *t;
-		_ammomount[i+j].e = mt;		
+		const bool mt = (t==0);
+		if(_model[1]!=0 && mt==1) { t = _model[1]->docktype(s,j); j++; i--; }
+		_ammomount[i+j] = t;
+		_ammomount[i+j]->z = mt;	
 	}
 
 	_active = 0;
@@ -112,8 +112,8 @@ void entity::setup(const lvector& p,object* m,const info& v)
 
 void entity::fire(long h,long i)
 {
-	const bool j = _ammomount[i].e;
-	ammo* cur = new ammo({{_position.x+_ammomount[i].x,_position.y+_ammomount[i].y,_position.z+_ammomount[i].z,h },{_direction[j].x<<1,_direction[j].y<<1,_direction[j].z<<1}}); 
+	const bool j = _ammomount[i]->z;
+	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x<<2,-(_direction[j].y<<2),0}}); 
 	_ammo.append(cur);
 }
 
@@ -164,7 +164,7 @@ long entity::update(long k,long& m)
 	{
 		ammo* ca = (ammo*)_ammo.current();
 		//_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		ca->pos += ca->dir;
+		ca->pos -= ca->dir;
 	}
 
 	//destroy ani if health below zeros
@@ -180,7 +180,6 @@ long entity::update(long k,long& m)
 			object::linear = rp;
 			_model[0]->update();
 			_model[1]->update();
-			object::linear = rm;
 			_direction[0] = object::linear.transform(_direction[0]);
 			_direction[1] = object::linear.transform(_direction[1]);
 		break;
@@ -189,17 +188,16 @@ long entity::update(long k,long& m)
 			object::linear = rm;
 			_model[0]->update();
 			_model[1]->update();
-			object::linear = rp;
 			_direction[0] = object::linear.transform(_direction[0]);
 			_direction[1] = object::linear.transform(_direction[1]);
 		break;
 
 		case UP:
-			_direction[0].e = math::set( fx::l2f(_direction[0].e>=0),_direction[0].e,l==1);
+			_direction[0].e = math::set(fx::l2f(_direction[0].e>=0),_direction[0].e,l==1);
 		break;
 
 		case DOWN:
-			_direction[0].e = math::set(-fx::l2f(_direction[0].e<=0),_direction[0].e,l==1);
+			_direction[0].e = math::set(fx::l2f(-(_direction[0].e<=0)),_direction[0].e,l==1);
 		break;
 
 		case 'A':
@@ -233,7 +231,9 @@ long entity::update(long k,long& m)
 	}
 
 	const fixed py = _position.y;
-	_position += _direction[0] * _direction[0].e;
+	_position.x -= fx::mul(_direction[0].x,_direction[0].e);
+	_position.y += fx::mul(_direction[0].y,_direction[0].e);
+	_position.z += fx::mul(_direction[0].z,_direction[0].e);
 	m = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y - py,_position.z))); //PRJY from polygon
 
 	last = k;
@@ -254,8 +254,15 @@ long entity::update(long m)
 		//	_health -= game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
 		}
 
-		for(long i=0;i<_ammomounts;++i) { /*fire(0,i);*/ }
-		_position += _direction[0] * _direction[0].e;
+		if(curr>_lastfire)
+		{
+			for(long i=0;i<_ammomounts;++i) { fire(0,i); }
+			_lastfire = curr+_firerate;
+		}
+
+		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
+		_position.y += fx::mul(_direction[0].y,_direction[0].e);
+		_position.z += fx::mul(_direction[0].z,_direction[0].e);
 	}
 
 	if(_health<0)

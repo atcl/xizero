@@ -25,13 +25,12 @@ class object
 {
 	private:
 		polygon** poly;
-		fvector*  dock;
+		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
 		fvector*  odock;
 		box       bbox;
 		box       obox;
 		long      polys;
-		long      docks;	// 0:ammo1; 1:ammo2; 2:exhaust; 3:obj connector;
-
+		long      docks;
 	public:
 		static lvector project(const lvector& p,const lvector& v);
 		/*OK*/ object(const char* o);
@@ -62,7 +61,7 @@ lvector object::project(const lvector& p,const lvector& v)
 	return r;
 }
 
-object::object(const char* o)  //ifs temporary
+object::object(const char* o)
 {
 	char** t = format::csv(o);
 	long i = 0;
@@ -269,7 +268,7 @@ void object::set()
 
 fvector* object::docktype(long i,long j) const
 {
-	for(long k=0,l=0;k<docks;++k)
+	for(long k=0,l=-1;k<docks;++k)
 	{
 		l += (dock[k].e==i);
 		if(l==j) { return &dock[k]; }
