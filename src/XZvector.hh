@@ -25,7 +25,6 @@ struct lvector
 	long z;
 	long e;
 	INLINE lvector(long a=0,long b=0,long c=0,long d=1) : x(a),y(b),z(c),e(d) { ; }
-	INLINE ~lvector() { ; }
 	INLINE lvector  operator+(const lvector& a) const { return lvector(x+a.x,y+a.y,z+a.z); }
 	INLINE lvector  operator-(const lvector& a) const { return lvector(x-a.x,y-a.y,z-a.z); }
 	INLINE lvector  operator*(long a) const { return lvector(x*a,y*a,z*a); }
@@ -50,7 +49,6 @@ struct fvector
 	fixed z;
 	fixed e;
 	INLINE fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
-	INLINE ~fvector() { ; }
 	INLINE fvector  operator+(const fvector& a) const { return fvector(x+a.x,y+a.y,z+a.z); }
 	INLINE fvector  operator-(const fvector& a) const { return fvector(x-a.x,y-a.y,z-a.z); }
 	INLINE fvector  operator*(fixed a) const { return fvector(fx::mul(x,a),fx::mul(y,a),fx::mul(z,a)); }

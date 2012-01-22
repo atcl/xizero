@@ -37,15 +37,13 @@ class object
 		/*OK*/ object(const char* o);
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e);
 		/*OK*/ object(const object& o);
-		~object();
+		       ~object();
 		/*OK*/ void   update();
 		/*OK*/ INLINE void display(const lvector& p,long f);
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
 		lvector* docktype(long i,long j) const;
 		/*OK*/ INLINE box& boundingbox() { return bbox; }
-		/*OK*/ INLINE static void shadow() { linear.shadow(polygon::plane,polygon::light); }
-		// INLINE static fmatrix& dyadic() { linear.dyadic(,) }
 		/*OK*/ void   pull(long x);
 
 		static fmatrix linear;
@@ -281,12 +279,10 @@ lvector* object::docktype(long i,long j) const
 
 void object::pull(fixed x) //translate along normals
 {
-	fvector t;
-	fixed l = 0;
 	for(long i=0;i<polys;++i)
 	{
-		t = poly[i]->normal();
-		l = t.length();
+		fvector t = poly[i]->normal();
+		const fixed l = t.length();
 		t.x = fx::mul(fx::div(t.x,l),x);
 		t.y = fx::mul(fx::div(t.y,l),x);
 		t.z = fx::mul(fx::div(t.z,l),x);

@@ -20,14 +20,13 @@ class fmatrix
 		/*OK*/ void multiplicate(const fixed (&n)[4][4]);
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
-		/*OK*/ ~fmatrix() { ; };
+		/*OK*/        void clear(fixed x=FXONE,fixed y=0);
 		/*OK*/ INLINE void rotatex(fixed x);
 		/*OK*/ INLINE void rotatey(fixed y);
 		/*OK*/ INLINE void rotatez(fixed z);
 		/*OK*/ INLINE void translate(fixed x,fixed y,fixed z);
 		/*OK*/ INLINE void scale(fixed x,fixed y,fixed z);
 		/*OK*/ INLINE fixed trace();
-		/*OK*/ void clear(fixed x=FXONE,fixed y=0);
 		void project(fixed x,fixed y,fixed z,fixed w);
 		void dyadic(const fvector& x,const fvector& y);
 		INLINE void shadow(const fvector& x,const fvector& y);
@@ -79,6 +78,12 @@ fmatrix::fmatrix(fixed x,fixed y)
 	clear(x,y);
 }
 
+void fmatrix::clear(fixed x,fixed y)
+{
+	_m[0][0] = _m[1][1] = _m[2][2] = _m[3][3] = x; 
+	_m[0][1] = _m[0][2] = _m[0][3] = _m[1][0] = _m[1][2] = _m[1][3] = _m[2][0] = _m[2][1] = _m[2][3] = _m[3][0] = _m[3][1] = _m[3][2] = y; 
+}
+
 void fmatrix::rotatex(fixed x)
 {
 	x = fx::mul(x,FXD2R);
@@ -116,14 +121,6 @@ void fmatrix::scale(fixed x,fixed y,fixed z)
 fixed fmatrix::trace()
 {
 	return _m[0][0]+_m[1][1]+_m[2][2]+_m[3][3];
-}
-
-void fmatrix::clear(fixed x,fixed y)
-{
-	_m[0][0] = x; _m[0][1] = y; _m[0][2] = y; _m[0][3] = y; 
-	_m[1][0] = y; _m[1][1] = x; _m[1][2] = y; _m[1][3] = y; 
-	_m[2][0] = y; _m[2][1] = y; _m[2][2] = x; _m[2][3] = y; 
-	_m[3][0] = y; _m[3][1] = y; _m[3][2] = y; _m[3][3] = x; 
 }
 
 void fmatrix::project(fixed x,fixed y,fixed z,fixed w) //check! 

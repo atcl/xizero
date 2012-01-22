@@ -26,7 +26,6 @@ class progress : public gui
 		const long _coeff;
 	public:
 		progress(long s,long e,bool d,long l,long t,long w,long h,long c,long b,long f,bool v);
-		~progress() { ; }
 		INLINE void set(long x)   { _prog = math::min(math::max(x,0),_end); }
 		INLINE void add(long x)   { _prog = math::min(math::max(_prog+x,0),_end); }
 		       void draw() const;

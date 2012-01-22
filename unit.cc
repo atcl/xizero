@@ -70,7 +70,7 @@ void viewer(object& u,long k)
 			case 'u': break;
 			case 'i': u.pull(FXTNT); break;
 			case 'o': u.pull(-FXTNT); break;
-			case 'p': object::shadow(); rc=R_B; break;
+			case 'p': rc=R_B; break;
 			case 'l': rc=R_S; break;
 
 			case '0': menu();

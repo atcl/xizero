@@ -30,7 +30,7 @@ class button : public gui
 		long _texttop;
 		static list _bl;
 	public:
-		button(char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v);
+		button(const char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v);
 		~button();
 
 		INLINE void action(long (*a)()) { _action = a; }
@@ -42,7 +42,7 @@ class button : public gui
 ///implementation
 list button::_bl = list();
 
-button::button(char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v) :
+button::button(const char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
 	_text(string::copy(x)),
 	_action(a),

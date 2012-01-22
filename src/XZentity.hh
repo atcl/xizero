@@ -154,6 +154,8 @@ long entity::update(long k,long& m)
 {
 	static long last = 0;
 	const bool l = k^last;
+	const long curr = system::clk();
+
 	for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 	{
 		ammo* ca = (ammo*)_ammo.current();
@@ -228,12 +230,14 @@ long entity::update(long k,long& m)
 	m = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y - py,_position.z))); //PRJY from polygon
 
 	last = k;
-
+	_lastupdate = curr;
 	return _health;
 }
 
 long entity::update(long m)
 {
+	const long curr = system::clk();
+
 	_active |= (_position.y>m || _position.y<m) && (_position.y>0);
 
 	if(_active!=0)
@@ -252,6 +256,7 @@ long entity::update(long m)
 		
 	}
 
+	_lastupdate = curr;
 	return _health;
 }
 
