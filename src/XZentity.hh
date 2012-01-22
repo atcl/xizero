@@ -160,7 +160,7 @@ long entity::update(long k,long& m)
 	{
 		ammo* ca = (ammo*)_ammo.current();
 		//_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		//ca->pos -= ca->dir;
+		ca->pos -= ca->dir;
 	}
 
 	//destroy ani if health below zeros
