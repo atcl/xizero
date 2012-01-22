@@ -163,7 +163,9 @@ long entity::update(long k,long& m)
 	for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 	{
 		ammo* ca = (ammo*)_ammo.current();
-		//_health -= game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
+		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
+		//if(h!=0) { _ammo.delcurrent(); }
+		//health -= h;
 		ca->pos -= ca->dir;
 	}
 
@@ -177,19 +179,17 @@ long entity::update(long k,long& m)
 	switch(k)
 	{
 		case LEFT:
-			object::linear = rp;
-			_model[0]->update();
-			_model[1]->update();
-			_direction[0] = object::linear.transform(_direction[0]);
-			_direction[1] = object::linear.transform(_direction[1]);
+			_model[0]->update(rp);
+			_model[1]->update(rp);
+			_direction[0] = rp.transform(_direction[0]);
+			_direction[1] = rp.transform(_direction[1]);
 		break;
 
 		case RIGHT:
-			object::linear = rm;
-			_model[0]->update();
-			_model[1]->update();
-			_direction[0] = object::linear.transform(_direction[0]);
-			_direction[1] = object::linear.transform(_direction[1]);
+			_model[0]->update(rm);
+			_model[1]->update(rm);
+			_direction[0] = rm.transform(_direction[0]);
+			_direction[1] = rm.transform(_direction[1]);
 		break;
 
 		case UP:
@@ -201,24 +201,30 @@ long entity::update(long k,long& m)
 		break;
 
 		case 'A':
-			object::linear = rp;
-			_model[1]->update();
+			_model[1]->update(rp);
 			_angle+=ROTANG;
-			_direction[1] = object::linear.transform(_direction[1]);
+			_direction[1] = rp.transform(_direction[1]);
 		break;
 
 		case 'D':
-			object::linear = rm;
-			_model[1]->update();
+			_model[1]->update(rm);
 			_angle-=ROTANG;
-			_direction[1] = object::linear.transform(_direction[1]);
+			_direction[1] = rm.transform(_direction[1]);
 		break;
 
 		case 'W':
-			if(_angle>=0) { object::linear = rm; } else { object::linear = rp; }
-			_model[1]->update();
-			_direction[1] = object::linear.transform(_direction[1]);
-			_angle+=math::neg(ROTANG,_angle>=0);
+			if(_angle>=0)
+			{ 
+				_model[1]->update(rm);
+				_direction[1] = rm.transform(_direction[1]);
+				_angle -= ROTANG;
+			}
+			else
+			{ 
+				_model[1]->update(rp);
+				_direction[1] = rp.transform(_direction[1]);
+				_angle += ROTANG;
+			}
 		break;
 
 		case SPACE:
@@ -251,7 +257,9 @@ long entity::update(long m)
 	{
 		for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		{
-		//	_health -= game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
+			//const long h = game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
+			//if(h!=0) { _ammo.delcurrent(); }
+			//health -= h;
 		}
 
 		if(curr>_lastfire)

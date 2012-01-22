@@ -37,7 +37,7 @@ class object
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e);
 		/*OK*/ object(const object& o);
 		       ~object();
-		/*OK*/ void   update();
+		/*OK*/ void   update(const fmatrix& m=object::linear);
 		/*OK*/ INLINE void display(const lvector& p,long f);
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
@@ -214,20 +214,18 @@ object::~object()
 	//delete[] poly;
 }
 
-void object::update()
+void object::update(const fmatrix& m)
 {
 	for(long i=0;i<polys;++i)
 	{
-		poly[i]->update(linear);
+		poly[i]->update(m);
 	}
 	for(long i=0;i<docks;++i)
 	{
-		const long t = dock[i].e;
-		dock[i] = linear.transform(dock[i]);
-		dock[i].e = t;
+		dock[i] = m.transform(dock[i]);
 	}
-	bbox[0] = linear.transform(bbox[0]);
-	bbox[1] = linear.transform(bbox[1]);
+	bbox[0] = m.transform(bbox[0]);
+	bbox[1] = m.transform(bbox[1]);
 }
 
 void object::display(const lvector& p,long f)
