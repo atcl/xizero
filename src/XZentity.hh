@@ -40,6 +40,7 @@ class entity
 		fvector _position;
 		fvector _direction[2];
 		fvector** _ammomount;
+		lvector _towpos;
 		long _angle;
 
 		bool _active;
@@ -115,7 +116,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 void entity::fire(long h,long i)
 {
 	const bool j = _ammomount[i]->z;
-	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x<<2,-(_direction[j].y<<2),0}}); 
+	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,fx::div(FXONE,_direction[j].length())<<2}}); 
 	_ammo.append(cur);
 }
 
@@ -124,6 +125,7 @@ entity::entity(const lvector& p,object* m,object* n,const info& v)
 	_model[1] = new object(*n);
 	setup(p,m,v);
 
+	_towpos = *_model[1]->docktype(3,0)-*_model[0]->docktype(3,0);	
 	_direction[0].set(0,FXMON,0,0);
 	_direction[1].set(0,FXMON,0,0);
 	_active = 1;
@@ -168,7 +170,7 @@ long entity::update(long k,long& m)
 		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
 		//if(h!=0) { _ammo.delcurrent(); }
 		//health -= h;
-		/*if(curr>_lastupdate+ammorate)*/ ca->pos -= ca->dir;
+		/*if(curr>_lastupdate+ammorate)*/ ca->pos -= ca->dir*ca->dir.e;
 	}
 
 	//destroy ani if health below zeros
@@ -215,7 +217,7 @@ long entity::update(long k,long& m)
 		break;
 
 		case 'W':
-			if(_angle>=0)
+			if( (_angle>=0&&_angle<=180) || (_angle<=-180&&_angle>=-360) )
 			{ 
 				_model[1]->update(rm);
 				_direction[1] = rm.transform(_direction[1]);
@@ -238,6 +240,7 @@ long entity::update(long k,long& m)
 		break;
 	}
 
+	_angle = _angle%360;
 	const fixed py = _position.y;
 	_position.x -= fx::mul(_direction[0].x,_direction[0].e);
 	_position.y += fx::mul(_direction[0].y,_direction[0].e);
@@ -293,7 +296,7 @@ void entity::display(long m,bool t)
 	_model[0]->display(p,r);
 	if(_model[1]!=0)
 	{
-		_model[1]->display(p,r);
+		_model[1]->display(p+_towpos,r);
 		for(long i=_ammo.first();i<_ammo.length()&&r==R_F;i+=_ammo.next())
 		{
 			const fvector* cur = &((ammo*)_ammo.current())->pos;
