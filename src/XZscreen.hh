@@ -118,7 +118,7 @@ bool screen::run()
 	glFlush();
 	glfwSwapBuffers();
 	//check joypad buttons here
-	return glfwGetWindowParam(GLFW_OPENED) && !glfwGetKey(GLFW_KEY_ESC);
+	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
 
 void screen::exit()

@@ -15,7 +15,7 @@ long close();
 long load();
 long about();
 INLINE long leave();
-long menu();
+void menu();
 long intro();
 long mainmenu();
 void won();
@@ -57,7 +57,7 @@ long start()
 
 long close()
 {
-	//return screen::instance()->askbox("Are you sure?");
+	return -1;
 }
 
 long load()
@@ -67,34 +67,43 @@ long load()
 
 long about()
 {
-	//screen::instance()->msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION); return 0;
+	//screen::instance()->msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
+	return 0;
 }
 
 long leave()
 {
+	//return screen::instance()->askbox("Are you sure?");
 	system::bye();
 }
 
-long menu()
+void menu()
 {
 	//enlist buttons
 	button b_close("X",&close,1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
 	button b_about("About",&about,0,2,19,50,16,BLACK,SYSCOL,SYSCOL,1);
+	button b_leave("Exit",&leave,0,52,19,50,16,BLACK,SYSCOL,SYSCOL,1);
 	//*
 
 	//draw menu
-	tile*   cur = format::xpm(cursor);
-	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
+	tile* scr = gfx::save();
+	tile* cur = format::xpm(cursor);
+	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())!=-1)
 	{
+		gfx::sprite(*scr,0,0,1);
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
 		
 		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED,SYSFONT);
 		b_close.draw();
 		b_about.draw();
+		b_leave.draw();
 		gfx::sprite(*cur,screen::mousex(),screen::mousey());
 	}
 	//*
+
+	delete cur;
+	delete scr;
 }
 
 long intro()

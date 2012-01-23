@@ -34,6 +34,7 @@ class level
 		entity* player;
 		entity* boss;
 		list enemies;
+		char** map;
 		long mark;
 		long markmin;
 		long markmax;
@@ -45,6 +46,7 @@ class level
 		~level();
 		long update(long k);
 		void display();
+		void resume();
 };
 ///*
 
@@ -81,7 +83,7 @@ level::level(const char* o)
 	ts            = (*lvl)["map"];
 	const char* m = system::ldf(ts);
 	const long l  = string::count(m,'\n');
-	char** t      = string::split(m,'\n');
+	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
 
 	markmax = 4*BWIDTH;
@@ -101,10 +103,10 @@ level::level(const char* o)
 		long v = CSHIFT;
 		for(long j=1;j<LWIDTH;++j,v+=BWIDTH)		
 		{
-			a[k].set( v,       -(BWIDTH>>1),(string::toup(t[i+1][j-1])-'A')*BHEIGHT );
-			b[k].set( v,         BWIDTH>>1, (string::toup(t[i][j-1])  -'A')*BHEIGHT );
-			c[k].set( v+BWIDTH,  BWIDTH>>1, (string::toup(t[i][j])    -'A')*BHEIGHT );
-			d[k].set( v+BWIDTH,-(BWIDTH>>1),(string::toup(t[i+1][j])  -'A')*BHEIGHT );
+			a[k].set( v,       -(BWIDTH>>1),(string::toup(map[i+1][j-1])-'A')*BHEIGHT );
+			b[k].set( v,         BWIDTH>>1, (string::toup(map[i][j-1])  -'A')*BHEIGHT );
+			c[k].set( v+BWIDTH,  BWIDTH>>1, (string::toup(map[i][j])    -'A')*BHEIGHT );
+			d[k].set( v+BWIDTH,-(BWIDTH>>1),(string::toup(map[i+1][j])  -'A')*BHEIGHT );
 
 			if(a[k].z==d[k].z && b[k].z==c[k].z)
 			{
@@ -112,8 +114,8 @@ level::level(const char* o)
 				v+=2*BWIDTH; 
 				for(;j<LWIDTH;++j,v+=BWIDTH)
 				{
-					e.set( v,  BWIDTH>>1, (string::toup(t[i][j])  -'A')*BHEIGHT );
-					f.set( v,-(BWIDTH>>1),(string::toup(t[i+1][j])-'A')*BHEIGHT );
+					e.set( v,  BWIDTH>>1, (string::toup(map[i][j])  -'A')*BHEIGHT );
+					f.set( v,-(BWIDTH>>1),(string::toup(map[i+1][j])-'A')*BHEIGHT );
 					if(c[k].z==e.z && d[k].z==f.z)
 					{
 						c[k] = e;
@@ -132,7 +134,7 @@ level::level(const char* o)
 		//load entities
 		for(long j=0;j<LWIDTH;++j)
 		{
-			switch(t[i][j] - math::set(62,t[i][j]>='a'))
+			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
 				case '!':
 					boss = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),bm,(*bi),2);
@@ -173,16 +175,11 @@ level::~level()
 	//delete boss
 	//delete player
 	//delete[] terrain
+	//delete map
 }
 
 long level::update(long k)
 {
-	if(UNLIKELY(k==ESCAPE))
-	{
-		//show gui 
-		//unpause all entities
-	}
-
 	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }
@@ -237,6 +234,13 @@ void level::display()
 	//
 	//
 	//*
+}
+
+void level::resume()
+{
+	for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->resume(); }
+	boss->resume();
+	player->resume();
 }
 ///*
 

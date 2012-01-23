@@ -70,7 +70,7 @@ class entity
 		long update(long k,long& m);
 		long update(long m);
 		void display(long m,bool t);
-		void unpause();
+		void resume();
 		INLINE long health() { return _health; }
 		INLINE long shield() { return _shield; }
 };
@@ -308,9 +308,9 @@ void entity::display(long m,bool t)
 	}
 }
 
-void entity::unpause()
+void entity::resume()
 {
-	_lastupdate = system::clk();
+	_lastfire = _lastupdate = system::clk();
 }
 ///*
 

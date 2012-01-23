@@ -96,6 +96,12 @@ int main(int argc,char** argv)
 
 	while(screen::run())
 	{
+		if(UNLIKELY(screen::key()==ESCAPE))
+		{
+			menu();
+			v.resume();
+		}
+
 		//viewer(u,screen::turbo());
 		polygon::counter = 0;
 		v.update(screen::turbo());

@@ -36,8 +36,9 @@ namespace gfx
 	/*OK*/ void line(long x,long y,long a,long b,long c,bool k=0); 
 	/*OK*/ void rect(long x,long y,long a,long b,long c,long d,bool f=0,bool g=0); 
 	/*OK*/ void circ(long x,long y,long r,long c);
-	void sprite(const tile& t,long x,long y);
+	void sprite(const tile& t,long x,long y,bool a=0);
 	void fsprog(long p,long c=RED);
+	tile* save();
 }
 ///*
 
@@ -158,8 +159,6 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			} 
 		break;
 	}
-
-	return;
 }
 
 void gfx::rect(long x,long y,long a,long b,long c,long d,bool f,bool g)
@@ -180,8 +179,6 @@ void gfx::rect(long x,long y,long a,long b,long c,long d,bool f,bool g)
 			line(x,i,a,i,d,0);
 		}
 	}
-
-	return;
 }
 
 void gfx::circ(long x,long y,long r,long c)
@@ -200,24 +197,26 @@ void gfx::circ(long x,long y,long r,long c)
 		cy = ct;
 		++cx;
 	}
-
-	return;
 }
 
-void gfx::sprite(const tile& t,long x,long y)
+void gfx::sprite(const tile& t,long x,long y,bool a)
 {
-	const long d = XRES - t.width;
+	const long xd = -XRES+x+t.width;
+	const long yd = -YRES+y+t.height;
+	const long xmax = math::set(t.width,t.width-xd,xd<=0);
+	const long ymax = math::set(t.height,t.width-yd,yd<=0);
+	const long sx = t.width - xmax;
+	const long d = XRES - xmax;
 
-	for(ulong i=0,o=y*XRES+x,s=0;i<t.height;++i,o+=d)
+	for(long i=0,o=y*XRES+x,s=0;i<ymax;++i,o+=d)
 	{
-		for(ulong j=0;j<t.width;++j,++o,++s)
+		for(long j=0;j<xmax;++j,++o,++s)
 		{
 			const packed c = { t.data[s] };
-			screen::back[o] = math::set(c.d,screen::back[o],c.b[0]==0xFF); 
+			screen::back[o] = math::set(c.d,screen::back[o],c.b[0]==0xFF||a==1); 
 		}
+		s+=sx;
 	}
-
-	return;
 }
 
 void gfx::fsprog(long p,long c)
@@ -232,8 +231,15 @@ void gfx::fsprog(long p,long c)
 			screen::back[o] &= c;
 		}
 	}
+}
 
-	return;
+tile* gfx::save()
+{
+	const long l = XRES*YRES;
+	long* d = new long[l];
+	tile* r = new tile({XRES,YRES,d});
+	for(ulong i=0;i<l;++i) { d[i] = screen::back[i]; }
+	return r;
 }
 ///*
 
