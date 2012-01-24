@@ -42,7 +42,7 @@ namespace screen
 	buffer accum    = buffer(XRES*YRES);	//Accumulation Buffer for FSAA/FXAA and FSMB
 	buffer inter    = buffer(XRES*YRES);	//Mask Buffer for user interfaces
 
-	void init(long x,long y,const char* t);
+	void init(long x,long y,const char* t,long* b=0);
 	bool run();
 	void exit();
 
@@ -52,6 +52,7 @@ namespace screen
 		static long mouse[4];	
 		static long key[2];
 		static long* framebuffer;
+		static long* counter;
 
 		friend void cb_key(int k,int a);
 		friend void cb_mouseb(int b,int a);
@@ -65,6 +66,7 @@ namespace screen
 		friend long mouser();
 
 		friend bool run();
+		friend void init(long x,long y,const char* t,long* b);
 	};
 
 	void cb_key(int k,int a)    { input::key[1] = input::key[0] = math::set(k,a==GLFW_PRESS); }
@@ -82,13 +84,15 @@ namespace screen
 ///*
 
 ///implementation
-long screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
-long screen::input::mouse[4] = { 0,0,0,0 };
-long screen::input::key[2] = { 0,0 };
+long  screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
+long  screen::input::mouse[4] = { 0,0,0,0 };
+long  screen::input::key[2] = { 0,0 };
 long* screen::input::framebuffer = back.pointer();
+long* screen::input::counter = 0;
 
-void screen::init(long x,long y,const char* t)
+void screen::init(long x,long y,const char* t,long* b)
 {
+	input::counter = b;
 	glfwInit();
 	glfwOpenWindow(x,y,8,8,8,8,0,0,GLFW_WINDOW);
 	glfwSetWindowTitle(t);
@@ -108,6 +112,7 @@ void screen::init(long x,long y,const char* t)
 
 bool screen::run()
 {
+	*input::counter = 0;
 	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,input::framebuffer);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0,1.0);

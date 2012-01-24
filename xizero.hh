@@ -20,31 +20,32 @@ long intro();
 long mainmenu();
 void won();
 void lost();
+void bench();
 ///*
 
 ///Implementation
 void init()
 {
 	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
-	font::init(system::ldf("dat/XZbig.fnt"),BIGFONT);
-	font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
-	font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
+	//font::init(system::ldf("dat/XZbig.fnt"),BIGFONT);
+	//font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
+	//font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
 
-	screen::init(XRES,YRES,TITLE" "VERSION);
+	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter);
 }
 
 long start(long l)
 {
-	//load level l
-	//level lev();
+	level v(system::ldf("dat/level0.lvl"));
 
-	//game loop
 	while(screen::run())
 	{
-		//lev.update(win->turbo());
-		//lev.display();
-		const long fps = system::fps();
-		if(fps!=-1) { system::say(string::cons(fps),1); }
+		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); v.resume(); }
+
+		v.update(screen::turbo());
+		v.display();
+
+		bench();
 	}
 
 	return 0;
@@ -154,6 +155,19 @@ void won()
 void lost()
 {
 
+}
+
+void bench()
+{
+	const long fps = system::fps();
+	if(fps!=-1)
+	{
+		system::say(string::cons(polygon::counter*fps),0); 			
+		system::say("p/s - ",0);
+		system::say(string::cons(polygon::counter),0); 
+		system::say("@",0);
+		system::say(string::cons(fps),1);
+	}
 }
 ///*
 

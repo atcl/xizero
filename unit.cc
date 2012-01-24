@@ -50,12 +50,12 @@ void viewer(object& u,long k)
 			case PGUP:   object::linear.rotatez(FXONE); break;
 			case PGDOWN: object::linear.rotatez(FXMON); break;
 
-			case 'a': object::linear.translate(FXMON,0,0); break;
-			case 'd': object::linear.translate(FXONE,0,0); break;
-			case 'w': object::linear.translate(0,FXONE,0); break;
-			case 's': object::linear.translate(0,FXMON,0); break;
-			case 'q': object::linear.translate(0,0,FXONE); break;
-			case 'e': object::linear.translate(0,0,FXMON); break;
+			case 'A': object::linear.translate(FXMON,0,0); break;
+			case 'D': object::linear.translate(FXONE,0,0); break;
+			case 'W': object::linear.translate(0,FXONE,0); break;
+			case 'S': object::linear.translate(0,FXMON,0); break;
+			case 'Q': object::linear.translate(0,0,FXONE); break;
+			case 'E': object::linear.translate(0,0,FXMON); break;
 
 			case '1': object::linear.scale(FXONE+FXTNT,FXONE,FXONE); break;
 			case '2': object::linear.scale(FXONE-FXTNT,FXONE,FXONE); break;
@@ -64,16 +64,14 @@ void viewer(object& u,long k)
 			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
 			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
-			case 'r': u.reset(); rc=R_F; break;
-			case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
-			case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
-			case 'u': break;
-			case 'i': u.pull(FXTNT); break;
-			case 'o': u.pull(-FXTNT); break;
-			case 'p': rc=R_B; break;
-			case 'l': rc=R_S; break;
-
-			case '0': menu();
+			case 'R': u.reset(); rc=R_F; break;
+			case 'T': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
+			case 'Z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
+			case 'U': break;
+			case 'I': u.pull(FXTNT); break;
+			case 'O': u.pull(-FXTNT); break;
+			case 'P': rc=R_B; break;
+			case 'L': rc=R_S; break;
 		}
 		u.update();
 		u.display(pos,rc);
@@ -83,38 +81,20 @@ void viewer(object& u,long k)
 ///implementation
 int main(int argc,char** argv)
 {
-	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
+	init();
 
 	object u(system::ldf(argv[1]));
 
-	level v(system::ldf("dat/level0.lvl"));
-
-	//unit-test screen + buffer
-	screen::init(XRES,YRES,TITLE" "VERSION);
-
-	//mainmenu();
-
 	while(screen::run())
 	{
-		if(UNLIKELY(screen::key()==ESCAPE))
-		{
-			menu();
-			v.resume();
-		}
+		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); }
 
-		//viewer(u,screen::turbo());
-		polygon::counter = 0;
-		v.update(screen::turbo());
-		v.display();
-		const long fps = system::fps();
-		if(fps!=-1)
-		{
-			system::say(string::cons(polygon::counter*fps),0); 			
-			system::say("p/s - ",0);
-			system::say(string::cons(polygon::counter),0); 
-			system::say("@",0);
-			system::say(string::cons(fps),1);
-		}
+		screen::back.clear(BLACK);
+		screen::depth.clear(fx::l2f(200));
+
+		viewer(u,screen::turbo());
+
+		bench();
 	}
 	//*
 	

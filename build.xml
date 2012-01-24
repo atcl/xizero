@@ -26,6 +26,7 @@
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<flag>-s</flag><!--strip debug symbols-->
 			<!--flag>-static</flag-->
+			<flag>-g -std=gnu++0x</flag>
 		</flags>
 		<binary>
 			<name>xizero</name>

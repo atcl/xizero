@@ -15,9 +15,10 @@
 int main(int argc,const char* argv[])
 {
 	init();
-	intro();
+	//intro();
+	mainmenu();
 
-	for(long i=mainmenu();i<LEVELS;++i)
+	for(long i=0;i<LEVELS;++i)
 	{
 		start(i);
 	}
