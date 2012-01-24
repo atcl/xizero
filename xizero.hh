@@ -10,14 +10,14 @@
 ///definition
 void init();
 long start(long l);
-INLINE long start();
-long close();
-long load();
-long about();
+long start();
+INLINE long close();
+INLINE long load();
+INLINE long about();
 INLINE long leave();
 void menu();
-long intro();
-long mainmenu();
+void intro();
+void mainmenu();
 void won();
 void lost();
 void bench();
@@ -107,7 +107,7 @@ void menu()
 	delete scr;
 }
 
-long intro()
+void intro()
 {
 	//load object
 
@@ -118,7 +118,7 @@ long intro()
 	//*
 }
 
-long mainmenu()
+void mainmenu()
 {
 	//enlist buttons
 	button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
@@ -143,8 +143,6 @@ long mainmenu()
 		gfx::sprite(*cur,math::lim(0,screen::mousex(),XRES-cur->width),math::lim(0,screen::mousey(),YRES-cur->height));
 	}
 	//*
-
-	return 0;
 }
 
 void won()
