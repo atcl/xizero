@@ -36,7 +36,12 @@ void init()
 
 long start(long l)
 {
+	//load level
+	//draw background
+	//draw text
 	level v(system::ldf("dat/level0.lvl"));
+	//draw progress
+	//*
 
 	while(screen::run())
 	{

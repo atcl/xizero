@@ -24,7 +24,7 @@
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
-			<flag>-s</flag><!--strip debug symbols-->
+			<!--flag>-s</flag--><!--strip debug symbols-->
 			<!--flag>-static</flag-->
 			<flag>-g -std=gnu++0x</flag>
 		</flags>
@@ -33,7 +33,7 @@
 			<type>exe</type>
 		</binary>
 		<message>Done</message>
-		<action>strip -s -R .comment -R .gnu.version xizero</action>
+		<!--action>strip -s -R .comment -R .gnu.version xizero</action-->
 	</rule>
 
 	<rule>

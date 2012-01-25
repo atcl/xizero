@@ -19,7 +19,7 @@ namespace game
 	/*OK*/ INLINE bool onscreen(long x,long y);
 	/*OK*/ INLINE bool collision(long x,long y,long a,long b,long c,long d);
 	/*OK*/ INLINE bool collision(long x,long y,long z,long w,long a,long b,long c,long d); 
-	bool collision(const lvector& x,const box& y,const lvector& a,bool r);
+	bool collision(const fvector& x,const box& y,const fvector& a,bool r);
 	//bool collision(const fvector& x,const box& y,const fvector& a,const box& b,bool r);
 	long angle(const fvector& y,const box& x);
 }
@@ -41,10 +41,9 @@ bool game::collision(long x,long y,long z,long w,long a,long b,long c,long d)
 	return ( (x>math::min(a,c))&&(y>math::min(b,d))&&(x<math::max(a,c))&&(y<math::max(b,d)) )||( (z>math::min(a,c))&&(w>math::min(b,d))&&(z<math::max(a,c))&&(w<math::max(b,d)) ); 
 }
 
-bool game::collision(const lvector& x,const box& y,const lvector& a,bool r)
+bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 {
 	//add position to box
-	//!fix to new box format
 	const fvector m( (x.x+y[0].x), (x.y-y[0].y), (x.z+y[0].z) );
 	const fvector n( (x.x+y[1].x), (x.y-y[0].y), (x.z+y[0].z) );
 	//fvector o( (x.x+y.v[2].x), (x.y-y.v[2].y), (x.z+y.v[2].z) ); //not needed
@@ -52,7 +51,6 @@ bool game::collision(const lvector& x,const box& y,const lvector& a,bool r)
 	//*
 
 	//if requested calcualte reusable intersections
-	//!todo: change to fixed point ops
 	static fixed inter[6][2];
 	static fixed coeff[6];
 	if(r)
@@ -60,38 +58,38 @@ bool game::collision(const lvector& x,const box& y,const lvector& a,bool r)
 		const fvector slope0 = n-m;
 		const fvector slope1 = p-m;
 
-		coeff[0] = slope0.x/(slope0.z-slope0.y);
-		coeff[1] = slope1.x/(slope1.z-slope1.y);
-		coeff[2] = slope0.y/(slope0.z-slope0.x);
-		coeff[3] = slope1.y/(slope1.z-slope1.x);
-		coeff[4] = slope0.z/(slope0.y-slope0.x);
-		coeff[5] = slope0.z/(slope1.y-slope1.x);
+		coeff[0] = fx::div(slope0.x,slope0.z-slope0.y);
+		coeff[1] = fx::div(slope1.x,slope1.z-slope1.y);
+		coeff[2] = fx::div(slope0.y,slope0.z-slope0.x);
+		coeff[3] = fx::div(slope1.y,slope1.z-slope1.x);
+		coeff[4] = fx::div(slope0.z,slope0.y-slope0.x);
+		coeff[5] = fx::div(slope0.z,slope1.y-slope1.x);
 
-		inter[0][0] = m.x + (m.y - m.z) * coeff[0];
-		inter[0][1] = p.x + (p.y - p.z) * coeff[0];
-		inter[1][0] = m.x + (m.y - m.z) * coeff[1];
-		inter[1][1] = n.x + (n.y - n.z) * coeff[1];
-		inter[2][0] = m.y + (m.x - m.z) * coeff[2];
-		inter[2][1] = p.y + (p.x - p.z) * coeff[2];
-		inter[3][0] = m.y + (m.x - m.z) * coeff[3];
-		inter[3][1] = n.y + (n.x - n.z) * coeff[3];
-		inter[4][0] = m.z + (m.x - m.y) * coeff[4];
-		inter[4][1] = p.z + (p.x - p.y) * coeff[4];
-		inter[5][0] = m.z + (m.x - m.y) * coeff[5];
-		inter[5][1] = n.z + (n.x - n.y) * coeff[5];
+		inter[0][0] = m.x + fx::mul(m.y - m.z,coeff[0]);
+		inter[0][1] = p.x + fx::mul(p.y - p.z,coeff[0]);
+		inter[1][0] = m.x + fx::mul(m.y - m.z,coeff[1]);
+		inter[1][1] = n.x + fx::mul(n.y - n.z,coeff[1]);
+		inter[2][0] = m.y + fx::mul(m.x - m.z,coeff[2]);
+		inter[2][1] = p.y + fx::mul(p.x - p.z,coeff[2]);
+		inter[3][0] = m.y + fx::mul(m.x - m.z,coeff[3]);
+		inter[3][1] = n.y + fx::mul(n.x - n.z,coeff[3]);
+		inter[4][0] = m.z + fx::mul(m.x - m.y,coeff[4]);
+		inter[4][1] = p.z + fx::mul(p.x - p.y,coeff[4]);
+		inter[5][0] = m.z + fx::mul(m.x - m.y,coeff[5]);
+		inter[5][1] = n.z + fx::mul(n.x - n.y,coeff[5]);
 	}
 	//*
 
 	//calculate intersections of a
-	const fixed pre0 = a.x + (a.y - a.z);
-	const fixed loc0 = pre0 * coeff[0];
-	const fixed loc1 = pre0 * coeff[1];
-	const fixed pre1 = a.y + (a.x - a.z);
-	const fixed loc2 = pre1 * coeff[2];
-	const fixed loc3 = pre1 * coeff[3];
-	const fixed pre2 = a.z + (a.x - a.y);
-	const fixed loc4 = pre2 * coeff[4];
-	const fixed loc5 = pre2 * coeff[5];
+	const fixed pre0 = a.x + a.y - a.z;
+	const fixed loc0 = fx::mul(pre0,coeff[0]);
+	const fixed loc1 = fx::mul(pre0,coeff[1]);
+	const fixed pre1 = a.y + a.x - a.z;
+	const fixed loc2 = fx::mul(pre1,coeff[2]);
+	const fixed loc3 = fx::mul(pre1,coeff[3]);
+	const fixed pre2 = a.z + a.x - a.y;
+	const fixed loc4 = fx::mul(pre2,coeff[4]);
+	const fixed loc5 = fx::mul(pre2,coeff[5]);
 	//*
 
 	//check overlap

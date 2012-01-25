@@ -72,8 +72,7 @@ class entity
 		long update(long m);
 		void display(long m,bool t);
 		void resume();
-		INLINE long health() { return _health; }
-		INLINE long shield() { return _shield; }
+		INLINE long addpoints(long a) { _points += a; }
 };
 ///*
 
@@ -169,7 +168,7 @@ long entity::update(long k,long& m)
 		ammo* ca = (ammo*)_ammo.current();
 		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
 		//if(h!=0) { _ammo.delcurrent(); }
-		//health -= h;
+		//_health -= h;
 		/*if(curr>_lastupdate+ammorate)*/ ca->pos -= ca->dir*ca->dir.e;
 	}
 

@@ -153,9 +153,6 @@ void polygon::raster(bool s) const
 	const long dy12 = lpoint[1].y - lpoint[2].y;
 	const long dy20 = lpoint[2].y - lpoint[0].y;
 
-	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
-	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
-
 	long cy0 = (dy01*lpoint[0].x) - (dx01*lpoint[0].y) + (dx01*miny) - (dy01*minx) - ((dy01<0) || (dy01==0 && dx01>0));
 	long cy1 = (dy12*lpoint[1].x) - (dx12*lpoint[1].y) + (dx12*miny) - (dy12*minx) - ((dy12<0) || (dy12==0 && dx12>0));
 	long cy2 = (dy20*lpoint[2].x) - (dx20*lpoint[2].y) + (dx20*miny) - (dy20*minx) - ((dy20<0) || (dy20==0 && dx20>0)); 
@@ -163,34 +160,64 @@ void polygon::raster(bool s) const
 	const long st = XRES - (maxx-minx);
 	long off = miny * XRES + minx;
 
-	fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z); 
-
-	for(long y=miny;y<maxy;++y,off+=st,ty+=zy)
+	if(s==0)
 	{
-		long cx0 = cy0;
-		long cx1 = cy1;
-		long cx2 = cy2;
+		const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
+		const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
+		fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z); 
 
-		fixed tx = ty;
-
-		for(long x=minx;x<maxx;++x,++off,tx+=zx) 
+		for(long y=miny;y<maxy;++y,off+=st,ty+=zy)
 		{
-			const fixed sz = screen::depth[off];
-		
-			switch( math::neg(long(cx0<0 && cx1<0 && cx2<0 && ( (tx<sz) ||s==1)),s==1) )
+			long cx0 = cy0;
+			long cx1 = cy1;
+			long cx2 = cy2;
+
+			fixed tx = ty;
+
+			for(long x=minx;x<maxx;++x,++off,tx+=zx) 
 			{
-				case 1:  screen::depth[off] = tx;
-				case -1: screen::back[off]  = shade; //math::set(shade,shade&back[off],s==1) for shadow
+				const fixed sz = screen::depth[off];
+		
+				if( cx0<0 && cx1<0 && cx2<0 && tx<sz )
+				{
+					screen::depth[off] = tx;
+					screen::back[off]  = shade;
+				}
+
+				cx0 -= dy01;
+				cx1 -= dy12;
+				cx2 -= dy20;
 			}
 
-			cx0 -= dy01;
-			cx1 -= dy12;
-			cx2 -= dy20;
+			cy0 += dx01;
+			cy1 += dx12;
+			cy2 += dx20;
 		}
+	}
+	else
+	{
+		for(long y=miny;y<maxy;++y,off+=st)
+		{
+			long cx0 = cy0;
+			long cx1 = cy1;
+			long cx2 = cy2;
 
-		cy0 += dx01;
-		cy1 += dx12;
-		cy2 += dx20;
+			for(long x=minx;x<maxx;++x,++off) 
+			{
+				if( cx0<0 && cx1<0 && cx2<0 )
+				{
+					screen::back[off]  = (shade+screen::back[off])>>1; 
+				}
+
+				cx0 -= dy01;
+				cx1 -= dy12;
+				cx2 -= dy20;
+			}
+
+			cy0 += dx01;
+			cy1 += dx12;
+			cy2 += dx20;
+		}
 	}
 }
 
