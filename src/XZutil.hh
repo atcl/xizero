@@ -16,6 +16,8 @@
 #define mod2(x)   x&1
 #define mod4(x)   x&4
 #define mod256(x) x&255
+#define mod360(x) 
+#define div100(x) (x>>6)+(x>>5)+(x>>2)
 ///*
 
 #endif

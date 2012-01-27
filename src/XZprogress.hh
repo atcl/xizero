@@ -15,6 +15,11 @@
 #include "XZmath.hh"
 ///*
 
+///declarations
+#define HOR 0
+#define VER 1
+///*
+
 ///definitions
 class progress : public gui
 {
@@ -22,7 +27,7 @@ class progress : public gui
 		long _start;
 		long _end;
 		long _prog;
-		bool _horver;		// 0:horizontal 1:vertical
+		bool _horver;
 		const long _coeff;
 	public:
 		progress(long s,long e,bool d,long l,long t,long w,long h,long c,long b,long f,bool v);

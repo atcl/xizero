@@ -15,6 +15,7 @@
 #include "XZlist.hh"
 #include "XZobject.hh"
 #include "XZentity.hh"
+#include "XZprogress.hh"
 ///*
 
 //declarations
@@ -30,23 +31,28 @@
 class level
 {
 	private:
-		object** terrain;
-		entity* player;
-		entity* boss;
-		list enemies;
-		char** map;
-		long mark;
-		long markmin;
-		long markmax;
+		object** terrain;		//Level Terrain Stripe
+		entity* player;			//Player Entity
+		entity* boss;			//Boss Entity
+		list enemies;			//List of Enemy Entities
+		char** map;			//Text Map of Terrain
+		long mark;			//Marker for Level Progress
+		long markmin;			//Lowest Level Position
+		long markmax;			//Highest Level Position
+		progress* pp;			//Player Health Gauge
+		progress* sp;			//Player Shield Gauge
+		progress* bp;			//Boss Gauge
+		progress* ep;			//Enemy Gauge
 
-		static long ylevel;
-		static long fheight;
+		//static long ylevel;		//
+		//static long fheight;		//
 	public:
-		level(const char* o);
-		~level();
-		long update(long k);
-		void display();
-		void resume();
+		level(const char* o);		//Constructor
+		~level();			//Destructor
+		long update(long k);		//Update All Entities
+		void display();			//Display Terrain, Shadows, Entities
+		void gauges();			//Display Gauges
+		void resume();			//Resume After Pausing
 };
 ///*
 
@@ -63,6 +69,8 @@ level::level(const char* o)
 	object* pm = new object(system::ldf(ps[0]));
 	object* pn = new object(system::ldf(ps[1]));
 	info*   pi = format::ini(system::ldf(ps[2]));
+ 	        //pp = new progress(0,,VER,10,0,20,YRES-20,GREEN,SYSCOL,WHITE,1);
+ 	        //sp = new progress(0,,VER,XRES-10,0,20,YRES-20,BLUE,SYSCOL,WHITE,1);
 	//*
 
 	//load boss
@@ -70,6 +78,7 @@ level::level(const char* o)
 	char**  bs = string::split(ts,',');
 	object* bm = new object(system::ldf(bs[0]));
 	info*   bi = format::ini(system::ldf(bs[1]));
+	        //bp = (0,,HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
 	//*
 
 	//load enemy
@@ -77,6 +86,7 @@ level::level(const char* o)
 	char**  es = string::split(ts,',');
 	object* em = new object(system::ldf(es[0]));
 	info*   ei = format::ini(system::ldf(es[1]));
+	        //ep = new progress(0,,HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
 	//*
 
 	//load map
@@ -228,11 +238,29 @@ void level::display()
 	boss->display(mark,0);
 	player->display(mark,0);
 	//*
+}
 
+void level::gauges()
+{
 	//render gui elements
-	//for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ... }
-	//
-	//
+	//for(long i=enemies.first();i<enemies.length();i+=enemies.next())
+	//{
+	//	const lvector e(((entity*)enemies.current())->data());
+	//	ep.set(e.z+e.e);
+	//	ep.left(e.x);
+	//	ep.top(e.y);
+	//	ep.draw();
+	//}
+	//const lvector b(boss->data());
+	//bp.set(b.z+b.e);
+	//bp.left(b.x);
+	//bp.top(b.y);
+	//bp.draw();
+	//const lvector p(player->data());
+	//pp.set(p.z);
+	//pp.draw();
+	//sp.set(p.e);
+	//sp.draw();
 	//*
 }
 

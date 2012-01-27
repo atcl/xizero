@@ -47,8 +47,6 @@ class entity
 		long _lastupdate;
 
 		long _health;
-		long _healthmax;
-		long _healthrate;
 		
 		long _shield;
 		long _shieldmax;
@@ -71,7 +69,8 @@ class entity
 		long update(long k,long& m);
 		long update(long m);
 		void display(long m,bool t);
-		void resume();
+		INLINE void resume();
+		INLINE lvector data(long m) const;
 		INLINE long addpoints(long a) { _points += a; }
 };
 ///*
@@ -88,8 +87,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_position = p;
 	_direction[0].set(0,FXONE,0,FXONE);
 
-	_health = _healthmax = string::conl(v["health"]);
-	_healthrate = string::conl(v["hrate"]);
+	_health = string::conl(v["health"]);
 	_shield = _shieldmax = string::conl(v["shield"]);
 	_shieldrate = string::conl(v["srate"]);
 	_ammomounts = string::conl(v["mounts"]);
@@ -308,6 +306,11 @@ void entity::display(long m,bool t)
 			}
 		}
 	}
+}
+
+lvector entity::data(long m) const
+{
+	return lvector(fx::r2l(_position.x),fx::r2l(_position.y)-m,_health,_shield);
 }
 
 void entity::resume()
