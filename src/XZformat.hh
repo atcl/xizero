@@ -275,8 +275,11 @@ file* format::ar(const char* x,long s)
 			//*
 		}
 		//*
+
+		return r;
 	}
-	else return 0;
+
+	return 0;
 }
 ///*
 

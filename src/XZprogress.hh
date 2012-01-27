@@ -44,7 +44,7 @@ progress::progress(long s,long e,bool d,long l,long t,long w,long h,long c,long 
 	_end(e),
 	_prog(0),
 	_horver(d),
-	_coeff(math::set(((w-4)<<16)/(e-s),((h-4)<<16)/(e-s),d==0))	
+	_coeff(math::set(math::set(((w-4)<<16)/(e-s+(e==s)),((h-4)<<16)/(e-s+(e==s)),d==0),e!=s))	
 { ; }
 
 void progress::draw() const

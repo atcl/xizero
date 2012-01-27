@@ -26,7 +26,7 @@ class list
 		member* _cur;
 		member* _fir;
 		member* _las;
-		long    _len;
+		ulong   _len;
 	public:
 		INLINE list() : _cur(0),_fir(0),_las(0),_len(0) { ; }
 		INLINE ~list() { /*delete cur,fir,las)*/; }

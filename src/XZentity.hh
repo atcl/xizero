@@ -71,7 +71,7 @@ class entity
 		void display(long m,bool t);
 		INLINE void resume();
 		INLINE lvector data(long m) const;
-		INLINE long addpoints(long a) { _points += a; }
+		INLINE void addpoints(long a) { _points += a; }
 };
 ///*
 

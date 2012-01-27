@@ -17,9 +17,9 @@
 class buffer
 {
 	private:
-		const ulong tsize;
-		const ulong bytes;
-		long* __restrict data;
+		const ulong tsize;	//size in typesize
+		const ulong bytes;	//size in bytes
+		long* __restrict data;	//pointer to data
 	public:
 		/*OK*/ buffer(ulong s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (long*)memalign(16,bytes); }
 		/*OK*/ ~buffer() { free(data); }

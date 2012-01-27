@@ -81,6 +81,7 @@ long leave()
 {
 	//return screen::instance()->askbox("Are you sure?");
 	system::bye();
+	return 0;
 }
 
 void menu()

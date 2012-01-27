@@ -43,9 +43,6 @@ class level
 		progress* sp;			//Player Shield Gauge
 		progress* bp;			//Boss Gauge
 		progress* ep;			//Enemy Gauge
-
-		//static long ylevel;		//
-		//static long fheight;		//
 	public:
 		level(const char* o);		//Constructor
 		~level();			//Destructor
@@ -69,8 +66,8 @@ level::level(const char* o)
 	object* pm = new object(system::ldf(ps[0]));
 	object* pn = new object(system::ldf(ps[1]));
 	info*   pi = format::ini(system::ldf(ps[2]));
- 	        //pp = new progress(0,,VER,10,0,20,YRES-20,GREEN,SYSCOL,WHITE,1);
- 	        //sp = new progress(0,,VER,XRES-10,0,20,YRES-20,BLUE,SYSCOL,WHITE,1);
+ 	        pp = new progress(0,string::conl((*pi)["health"]),VER,10,0,20,YRES-20,GREEN,SYSCOL,WHITE,1);
+ 	        sp = new progress(0,string::conl((*pi)["shield"]),VER,XRES-10,0,20,YRES-20,BLUE,SYSCOL,WHITE,1);
 	//*
 
 	//load boss
@@ -78,7 +75,7 @@ level::level(const char* o)
 	char**  bs = string::split(ts,',');
 	object* bm = new object(system::ldf(bs[0]));
 	info*   bi = format::ini(system::ldf(bs[1]));
-	        //bp = (0,,HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
+	        bp = new progress(0,string::conl((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
 	//*
 
 	//load enemy
@@ -86,7 +83,7 @@ level::level(const char* o)
 	char**  es = string::split(ts,',');
 	object* em = new object(system::ldf(es[0]));
 	info*   ei = format::ini(system::ldf(es[1]));
-	        //ep = new progress(0,,HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
+	        ep = new progress(0,string::conl((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
 	//*
 
 	//load map
@@ -182,10 +179,14 @@ level::~level()
 	//	delete enemies.current(); 
 	//	enemies.delcurrent();
 	//}
-	//delete boss
-	//delete player
+	//delete boss;
+	//delete player;
 	//delete[] terrain
 	//delete map
+	//delete pp;
+	//delete sp;
+	//delete bp;
+	//delete ep;
 }
 
 long level::update(long k)
