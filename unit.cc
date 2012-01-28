@@ -91,7 +91,8 @@ int main(int argc,char** argv)
 
 		screen::back.clear(BLACK);
 		screen::depth.clear(fx::l2f(200));
-
+//if(screen::joya()!=0) { system::say(string::cons(screen::joya()),1); }
+//if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
 		viewer(u,screen::turbo());
 
 		bench();

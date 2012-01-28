@@ -48,7 +48,7 @@ namespace screen
 
 	class input
 	{
-		static uchar joy[8];
+		static long joy[2];
 		static long mouse[4];	
 		static long key[2];
 		static long* framebuffer;
@@ -64,7 +64,8 @@ namespace screen
 		friend long mousey();
 		friend long mousel();
 		friend long mouser();
-		friend long joyb(long i);
+		friend long joya();
+		friend long joyb();
 
 		friend bool run();
 		friend void init(long x,long y,const char* t,long* b);
@@ -80,12 +81,13 @@ namespace screen
 	INLINE long mousey() { return input::mouse[3]; }
 	INLINE long mousel() { return input::mouse[0]; }
 	INLINE long mouser() { return input::mouse[1]; }
-	INLINE long joyb(long i) { return input::joy[i]; }
+	INLINE long joya()   { return input::joy[0]; }
+	INLINE long joyb()   { return input::joy[1]; }
 }
 ///*
 
 ///implementation
-uchar screen::input::joy[8] = { 0,0,0,0,0,0,0,0 };
+long  screen::input::joy[2] = { 0,0 };
 long  screen::input::mouse[4] = { 0,0,0,0 };
 long  screen::input::key[2] = { 0,0 };
 long* screen::input::framebuffer = back.pointer();
@@ -124,11 +126,15 @@ bool screen::run()
 	glFlush();
 	glfwSwapBuffers();
 	glfwGetJoystickPos(0,(float*)&input::joy[0],2);
-	input::joy[0] = (input::joy[3]==191);
-	input::joy[1] = (input::joy[3]==63);
-	input::joy[2] = (input::joy[7]==191);
-	input::joy[3] = (input::joy[7]==63);
-	glfwGetJoystickButtons(0,&input::joy[4],4);
+	input::joy[0] = math::set(1,input::joy[0],input::joy[0]==1065353216);
+	input::joy[0] = math::set(2,input::joy[0],input::joy[0]==-1082130431);
+	input::joy[0] = math::set(3,input::joy[0],input::joy[1]==1065353216);
+	input::joy[0] = math::set(4,input::joy[1]==-1082130431);
+	glfwGetJoystickButtons(0,(uchar*)&input::joy[1],4);
+	input::joy[1] = math::set(1,input::joy[1],(input::joy[1]>>24)!=0);
+	input::joy[1] = math::set(2,input::joy[1],(input::joy[1]>>16)!=0);
+	input::joy[1] = math::set(3,input::joy[1],(input::joy[1]>>8)!=0);
+	input::joy[1] = math::set(4,(input::joy[1])!=0);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
 
