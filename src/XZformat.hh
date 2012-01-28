@@ -46,11 +46,11 @@ struct tile
 ///definitions 
 namespace format
 {
-	/*OK*/ char** csv(const char* x,char y=',');
-	/*OK*/ tile*  ras(const char* x);
-	/*OK*/ tile*  xpm(const char** x);
-	/*OK*/ info*  ini(const char* x);
-	file*  ar(const char* x,long s);
+	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
+	/*OK*/ tile*  ras(const char* x);		//load sun raster image
+	/*OK*/ tile*  xpm(const char** x);		//load xpm image
+	/*OK*/ info*  ini(const char* x);		//load ini configuartion
+	file*  ar(const char* x,long s);		//load ar archive
 }
 ///*
 

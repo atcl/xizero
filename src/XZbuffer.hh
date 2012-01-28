@@ -69,7 +69,7 @@ void buffer::clear(long x)
 void buffer::fsaamb(const buffer& b)
 {
 #ifdef SSE
-
+	//TODO
 #else
 	for(ulong i=tsize;i!=0;--i) { /*TODO*/; }
 #endif

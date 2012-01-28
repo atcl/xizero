@@ -62,7 +62,7 @@ class polygon
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,long c,long s);
 		/*OK*/        void update(const fmatrix& m,bool i=0);
-		              void display(const lvector& p,long f);
+		/*OK*/        void display(const lvector& p,long f);
 		/*OK*/ INLINE void reset();
 		/*OK*/ INLINE void set();
 		/*OK*/ INLINE void add(const fvector& a);
