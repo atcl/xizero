@@ -123,7 +123,12 @@ bool screen::run()
 	glEnd();
 	glFlush();
 	glfwSwapBuffers();
-	glfwGetJoystickButtons(1,&input::joy[0],8);
+	glfwGetJoystickPos(0,(float*)&input::joy[0],2);
+	input::joy[0] = (input::joy[3]==191);
+	input::joy[1] = (input::joy[3]==63);
+	input::joy[2] = (input::joy[7]==191);
+	input::joy[3] = (input::joy[7]==63);
+	glfwGetJoystickButtons(0,&input::joy[4],4);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
 
