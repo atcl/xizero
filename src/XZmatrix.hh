@@ -28,12 +28,11 @@ class fmatrix
 		/*OK*/ INLINE void scale(fixed x,fixed y,fixed z);
 		/*OK*/ INLINE fixed trace();
 		void project(fixed x,fixed y,fixed z,fixed w);
-		void dyadic(const fvector& x,const fvector& y);
-		INLINE void shadow(const fvector& x,const fvector& y);
+		void transpose();
+		/*OK*/ void dyadic(const fvector& x,const fvector& y);
+		/*OK*/ INLINE void shadow(const fvector& x,const fvector& y);
 		/*OK*/ INLINE fvector transform(const fvector& x) const;
 		/*OK*/ INLINE lvector transform(const lvector& x) const;
-
-		//transpose needed?
 };
 ///*
 
@@ -123,6 +122,19 @@ void fmatrix::scale(fixed x,fixed y,fixed z)
 fixed fmatrix::trace()
 {
 	return _m[0][0]+_m[1][1]+_m[2][2]+_m[3][3];
+}
+
+void fmatrix::transpose()
+{
+	const fixed t1 = _m[0][1];
+	_m[0][1] = _m[1][0];
+	_m[1][0] = t1;
+	const fixed t2 = _m[0][2];
+	_m[0][2] = _m[2][0];
+	_m[2][0] = t2;
+	const fixed t3 = _m[1][2];
+	_m[1][2] = _m[2][1];
+	_m[2][1] = t3;
 }
 
 void fmatrix::project(fixed x,fixed y,fixed z,fixed w) //check! 

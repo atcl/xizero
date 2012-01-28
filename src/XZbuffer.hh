@@ -28,7 +28,7 @@ class buffer
 		/*OK*/ INLINE long* pointer() const { return data; }
 		/*OK*/ void clear(long x=0);
 		/*OK*/ void copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; } }
-		       void fsaamb(const buffer& b) { for(ulong i=tsize;i!=0;--i) { /*TODO*/; } }
+		       void fsaamb(const buffer& b);
 };
 ///*
 
@@ -63,6 +63,15 @@ void buffer::clear(long x)
 	: :"a"(&val),"b"(data),"c"(bytes):);
 #else
 	for(ulong i=tsize;i!=0;--i) { data[i]=x; }
+#endif
+}
+
+void buffer::fsaamb(const buffer& b)
+{
+#ifdef SSE
+
+#else
+	for(ulong i=tsize;i!=0;--i) { /*TODO*/; }
 #endif
 }
 ///*

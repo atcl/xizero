@@ -237,7 +237,7 @@ long entity::update(long k,long& m)
 		break;
 	}
 
-	_angle = _angle%360;
+	_angle -= math::set(360,_angle>=360);
 	const fixed py = _position.y;
 	_position.x -= fx::mul(_direction[0].x,_direction[0].e);
 	_position.y += fx::mul(_direction[0].y,_direction[0].e);

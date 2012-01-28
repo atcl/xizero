@@ -23,19 +23,18 @@
 class button : public gui
 {
 	private:
-		char* _text;
-		long (*_action)();
-		bool _depth;
-		long _textleft;
-		long _texttop;
-		static list _bl;
+		char* _text;						//Button Caption
+		long (*_action)();					//Onclick Function Pointer
+		bool _depth;						//Flat or Relief
+		const long _textleft;					//Relative Y Coordinate of Caption	
+		const long _texttop;					//Relative X Coordinate of Caption
+		static list _bl;					//List of all Buttons
 	public:
-		button(const char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v);
-		~button();
-
-		INLINE void action(long (*a)()) { _action = a; }
-		       void draw() const;
-		static long check(long x,long y,long b);
+		button(const char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v); //Constructor
+		~button();						//Destructor
+		INLINE void action(long (*a)()) { _action = a; }	//Set Action
+		       void draw() const;				//Draw Button
+		static long check(long x,long y,long b);		//Check If Button Clicked
 };
 ///*
 
