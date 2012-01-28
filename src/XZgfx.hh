@@ -79,7 +79,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			p = math::min(y,b);
 			q = math::max(y,b);
 			o = p*XRES+x;
-			for(ulong i=p;i<=q;++i)
+			for(long i=p;i<=q;++i)
 			{
 				screen::back[o] = c;
 				o += XRES;
@@ -90,7 +90,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			p = math::min(x,a);
 			q = math::max(x,a);
 			o = y*XRES+p;
-			for(ulong i=p;i<=q;++i)
+			for(long i=p;i<=q;++i)
 			{
 				screen::back[o++] = c;
 			}
@@ -113,7 +113,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			dy = math::set(p,dy,dy==dx);
 			p = dy;
 			q = dx;
-			for(ulong i=0;i<=q;++i)
+			for(long i=0;i<=q;++i)
 			{
 				screen::back[o] = c;
 				p += dy;
@@ -138,7 +138,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			dy = math::set(dy,p,dy!=dx);
 			p = dy;
 			q = dx;
-			for(ulong i=0;i<=q;++i)
+			for(long i=0;i<=q;++i)
 			{
 				u.d = screen::back[o-xs];
 				u.b[0] = 0xFF;
@@ -174,7 +174,7 @@ void gfx::rect(long x,long y,long a,long b,long c,long d,bool f,bool g)
 		++x;
 		++y;
 		--a;
-		for(ulong i=y;i<b;++i)
+		for(long i=y;i<b;++i)
 		{
 			line(x,i,a,i,d,0);
 		}
@@ -226,7 +226,7 @@ void gfx::fsprog(long p,long c)
 	const long q = -r*p + XRES;
 	for(ulong i=0,o=0;i<YRES;++i,o+=q)
 	{
-		for(ulong j=0;j<r;++j,++o)
+		for(long j=0;j<r;++j,++o)
 		{
 			screen::back[o] &= c;
 		}
@@ -238,7 +238,7 @@ tile* gfx::save()
 	const long l = XRES*YRES;
 	long* d = new long[l];
 	tile* r = new tile({XRES,YRES,d});
-	for(ulong i=0;i<l;++i) { d[i] = screen::back[i]; }
+	for(long i=0;i<l;++i) { d[i] = screen::back[i]; }
 	return r;
 }
 ///*

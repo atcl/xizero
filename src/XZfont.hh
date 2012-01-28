@@ -67,9 +67,9 @@ long font::draw(long x,long y,char a,long c,long b,long t)
 	long o = y*XRES+x;
 	long r = 0;
 
-	for(ulong i=0;i<h;++i,o+=d,s+=w)
+	for(long i=0;i<h;++i,o+=d,s+=w)
 	{
-		for(ulong j=0;j<h;++j,++o,++s)
+		for(long j=0;j<h;++j,++o,++s)
 		{
 			const long e = type::f[t]->data[s];
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
@@ -83,7 +83,7 @@ void font::draw(long x,long y,const char* a,long c,long b,long t)
 {
 	const long l = string::length(a);
 
-	for(ulong i=0;i<l;++i)
+	for(long i=0;i<l;++i)
 	{
 		if(a[i]=='\n')
 		{
@@ -102,7 +102,7 @@ long font::width(char x,long t)
 	long s = h*x;
 	long r = 0;
 
-	for(ulong j=0;j<h;++j,++s)
+	for(long j=0;j<h;++j,++s)
 	{
 		r+=(type::f[t]->data[s]!=BLACK);
 	}
@@ -114,11 +114,11 @@ long font::width(const char* x,long t)
 	char** b = string::split(x,'\n');
 	const long c = string::count(x,'\n')+1;
 	long r = 0;
-	for(ulong i=0;i<c;++i)
+	for(long i=0;i<c;++i)
 	{
 		const long l = string::length(b[i]);
 		long s = 0;
-		for(ulong j=0;j<l;++j)
+		for(long j=0;j<l;++j)
 		{
 			s += width(b[i][j],t);
 		}

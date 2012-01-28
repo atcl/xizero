@@ -50,6 +50,7 @@ long start(long l)
 		v.update(screen::turbo());
 		v.display();
 
+		v.gauges();
 		bench();
 	}
 

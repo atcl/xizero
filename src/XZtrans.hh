@@ -25,7 +25,7 @@ namespace trans
 ///*
 
 ///implementation
-void trans::circleblend(long x,long y,long r) 
+void trans::circleblend(long x,long y,long r) //fix
 {
 	for(ulong i=0;i<YRES;++i)
 	{
@@ -33,7 +33,7 @@ void trans::circleblend(long x,long y,long r)
 
 		for(ulong j=0;j<XRES;++j)
 		{
-			screen::back[i*XRES+j] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(q)<=r);	
+			if(math::sqr(q)<=r) { screen::back[i*XRES+j] = BLACK; }
 		}
 	}
 

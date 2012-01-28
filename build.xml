@@ -87,6 +87,7 @@
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<flag>-Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++ -pedantic</flag>
+			<flag>-std=gnu++0x</flag>
 		</flags>
 		<binary>
 			<name>test</name>

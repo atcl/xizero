@@ -173,7 +173,7 @@ tile* format::xpm(const char** x)
 		line = string::split(x[index++],' ');
 		if(string::find(line[2],"None")!=0)
 		{
-			color[line[0][0]] = TRANS; 
+			color[long(line[0][0])] = TRANS; 
 		}
 		if(line[2][0]=='#')
 		{
@@ -184,12 +184,12 @@ tile* format::xpm(const char** x)
 				temp -= math::set(48,(curr>=48 && curr<=57));
 				temp -= math::set(55,(curr>=65 && curr<=70));
 				temp -= math::set(87,(curr>=97 && curr<=102));
-				temp += color[line[0][0]];
+				temp += color[long(line[0][0])];
 				temp <<= 4;
-				color[line[0][0]] = temp;
+				color[long(line[0][0])] = temp;
 			}
-			color[line[0][0]] <<= 4;
-			color[line[0][0]] = math::ndn(color[line[0][0]]);
+			color[long(line[0][0])] <<= 4;
+			color[long(line[0][0])] = math::ndn(color[long(line[0][0])]);
 		}
 	}
 
@@ -197,7 +197,7 @@ tile* format::xpm(const char** x)
 	{
 		for(long j=0;j<width;++j,++o)
 		{
-			data[o] = color[x[index][j]];
+			data[o] = color[long(x[index][j])];
 		}
 	}
 

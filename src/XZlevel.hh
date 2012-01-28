@@ -66,8 +66,8 @@ level::level(const char* o)
 	object* pm = new object(system::ldf(ps[0]));
 	object* pn = new object(system::ldf(ps[1]));
 	info*   pi = format::ini(system::ldf(ps[2]));
- 	        pp = new progress(0,string::conl((*pi)["health"]),VER,10,0,20,YRES-20,GREEN,SYSCOL,WHITE,1);
- 	        sp = new progress(0,string::conl((*pi)["shield"]),VER,XRES-10,0,20,YRES-20,BLUE,SYSCOL,WHITE,1);
+ 	        pp = new progress(0,string::conl((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
+ 	        sp = new progress(0,string::conl((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
 	//*
 
 	//load boss
@@ -179,14 +179,14 @@ level::~level()
 	//	delete enemies.current(); 
 	//	enemies.delcurrent();
 	//}
-	//delete boss;
-	//delete player;
+	delete boss;
+	delete player;
 	//delete[] terrain
 	//delete map
-	//delete pp;
-	//delete sp;
-	//delete bp;
-	//delete ep;
+	delete pp;
+	delete sp;
+	delete bp;
+	delete ep;
 }
 
 long level::update(long k)
@@ -244,32 +244,36 @@ void level::display()
 void level::gauges()
 {
 	//render gui elements
-	//for(long i=enemies.first();i<enemies.length();i+=enemies.next())
-	//{
-	//	const lvector e(((entity*)enemies.current())->data());
-	//	ep.set(e.z+e.e);
-	//	ep.left(e.x);
-	//	ep.top(e.y);
-	//	ep.draw();
-	//}
-	//const lvector b(boss->data());
-	//bp.set(b.z+b.e);
-	//bp.left(b.x);
-	//bp.top(b.y);
-	//bp.draw();
-	//const lvector p(player->data());
-	//pp.set(p.z);
-	//pp.draw();
-	//sp.set(p.e);
-	//sp.draw();
+	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
+	{
+		const lvector e(((entity*)enemies.current())->data(mark));
+		ep->visible(game::onscreen(e.x,e.y));
+		ep->set(e.z+e.e);
+		ep->left(e.x-25);
+		ep->top(e.y-10);
+		ep->draw();
+	}
+	const lvector b(boss->data(mark));
+	bp->visible(game::onscreen(b.x,b.y));
+	bp->set(b.z+b.e);
+	bp->left(b.x-50);
+	bp->top(b.y-20);
+	bp->draw();
+	const lvector p(player->data(mark));
+	pp->set(p.z);
+	pp->draw();
+	sp->set(p.e);
+	sp->draw();
 	//*
 }
 
 void level::resume()
 {
+	//resume all entities
 	for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->resume(); }
 	boss->resume();
 	player->resume();
+	//*
 }
 ///*
 
