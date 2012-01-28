@@ -86,6 +86,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 
 	_position = p;
 	_direction[0].set(0,FXONE,0,FXONE);
+	_direction[1].set(0,FXONE,0,FXONE);
 
 	_health = string::conl(v["health"]);
 	_shield = _shieldmax = string::conl(v["shield"]);
@@ -133,6 +134,7 @@ entity::entity(const lvector& p,object* m,const info& v,long s)
 {
 	_model[1] = 0;
 	setup(p,m,v);
+	_direction[1].set(FXMON,0,0,FXONE);
 	
 	//scale model by s
 	s = fx::l2f(s);
@@ -270,9 +272,12 @@ long entity::update(long m)
 			_lastfire = curr+_firerate;
 		}
 
-		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
-		_position.y += fx::mul(_direction[0].y,_direction[0].e);
-		_position.z += fx::mul(_direction[0].z,_direction[0].e);
+		_position.x -= fx::mul(_direction[1].x,_direction[1].e);
+		_position.y += fx::mul(_direction[1].y,_direction[1].e);
+		_position.z += fx::mul(_direction[1].z,_direction[1].e);
+
+		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x<=100);
+		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x>=700);
 	}
 
 	if(_health<0)
