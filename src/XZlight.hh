@@ -21,7 +21,7 @@ class light
 		long _color;
 		tile _mask;
 
-		static long lambert(long x,long y);
+		long lambert(long x,long y) const;
 		void init(bool i=0);
 	public:
 		light(long r,long c) : _radius(r), _color(c) { init(); }
@@ -33,7 +33,7 @@ class light
 ///*
 
 ///implementation
-long light::lambert(long x,long y)
+long light::lambert(long x,long y) const
 {
 	const long i = _radius*_radius;
 	const long d = (x*x)+(y*y);
