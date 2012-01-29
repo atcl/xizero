@@ -17,6 +17,7 @@
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZstring.hh"
+#include "XZgame.hh"
 ///*
 
 ///definitions
@@ -65,7 +66,7 @@ long button::check(long x,long y,long b)
 	for(long i=_bl.first();i<e;i+=_bl.next())
 	{
 		const button* temp = (button*)_bl.current();
-		if(temp->_visible!=0 && x>temp->_left && x<temp->_left+temp->_width && y>temp->_top && y<temp->_top+temp->_height)
+		if(temp->_visible!=0 && game::inside(x,y,temp->_left,temp->_top,temp->_left+temp->_width,temp->_top+temp->_height)) 
 		{
 			return temp->_action();
 		}
