@@ -45,14 +45,14 @@
 class polygon
 {
 	private:
-		const long color;
-		const long scolor;
-		long shade;
-		fvector cnormal;
-		fvector onormal;
-		fvector cpoint[3];
-		fvector opoint[3];
-		static lvector lpoint[3];
+		const long color;		//Polygon Color
+		const long scolor;		//Shadow Color
+		long shade;			//Current Color Shade
+		fvector cnormal;		//Polygon Normal
+		fvector onormal;		//Backup Normal
+		fvector cpoint[3];		//Polygon Vertices
+		fvector opoint[3];		//Backup Vertices
+		static lvector lpoint[3];	//Render Vertices
 
 		/*OK*/ INLINE bool isvisible() const { return cnormal.z<FXMON; }
 		/*OK*/ INLINE void shape() const;
@@ -68,9 +68,9 @@ class polygon
 		/*OK*/ INLINE void add(const fvector& a);
 		/*OK*/ INLINE fvector normal() const { return cnormal; }
 
-		static long counter;
-		static const fvector light;
-		static const fmatrix shadow;
+		static long  counter;		//Polygon Counter
+		static const fvector light;	//Light Vector
+		static const fmatrix shadow;	//Shadow Matrix
 };
 ///*
 

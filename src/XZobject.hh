@@ -38,10 +38,10 @@ class object
 		/*OK*/ object(const object& o);
 		       ~object();
 		/*OK*/ void   update(const fmatrix& m=object::linear);
-		/*OK*/ INLINE void display(const lvector& p,long f);
+		/*OK*/ INLINE void display(const lvector& p,long f) const;
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
-		       fvector* docktype(long i,long j) const;
+		/*OK*/ fvector* docktype(long i,long j) const;
 		/*OK*/ INLINE box& boundingbox() { return bbox; }
 		/*OK*/ void   pull(long x);
 
@@ -228,7 +228,7 @@ void object::update(const fmatrix& m)
 	bbox[1] = m.transform(bbox[1]);
 }
 
-void object::display(const lvector& p,long f)
+void object::display(const lvector& p,long f) const
 {
 	for(long i=0;i<polys;++i)
 	{

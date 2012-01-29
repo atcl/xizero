@@ -33,12 +33,12 @@ namespace gfx
 	/*OK*/ INLINE void circpix(long x,long y,long l,long t,long c);			//draw circle pixel
 	/*OK*/ INLINE long pix(long x,long y) { return screen::back[(y*XRES+x)]; }	//read pixel
 	/*OK*/ INLINE void pix(long x,long y,long c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
-	/*OK*/ void line(long x,long y,long a,long b,long c,bool k=0); 			//draw linw
+	/*OK*/ void line(long x,long y,long a,long b,long c,bool k=0); 			//draw line
 	/*OK*/ void rect(long x,long y,long a,long b,long c,long d,bool f=0,bool g=0); 	//draw rectangle
 	/*OK*/ void circ(long x,long y,long r,long c);					//draw circle
-	void sprite(const tile& t,long x,long y,bool a=0);				//draw sprite
-	void fsprog(long p,long c=RED);							//draw full screen progress bar
-	tile* save();									//save current screen
+	/*OK*/ void sprite(const tile& t,long x,long y,bool a=0);			//draw sprite
+	/*OK*/ void fsprog(long p,long c=RED);						//draw full screen progress bar
+	/*OK*/ tile* save();								//save current screen
 }
 ///*
 
