@@ -66,7 +66,6 @@ namespace fx
 	INLINE fixed log(fixed a,fixed b) { return fx::div(log(a),log(b)); }
 	INLINE fixed pow(fixed a,fixed b) { return exp(mul(log(a),b)); }
 	INLINE fixed hvs(fixed a)         { return (FXONE - cos(a))>>1; }
-	INLINE fixed topsin(fixed a)      { return sin(div(FXONE,a)); }
 }
 
 ///implementation

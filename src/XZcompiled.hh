@@ -21,47 +21,29 @@ namespace compiled
 ///*
 
 ///implementation
-void compiled::ammo(const ulong x,const ulong y,const ulong r,const ulong c) //combine lines with same = ? (test)
+void compiled::ammo(const ulong x,const ulong y,const ulong r,const ulong c)
 {
 	ulong o = ((y-4)*XRES)+(x-3);
 
-	screen::back[o++] = r;
-	screen::back[o++] = r;
-	screen::back[o++] = r;
-	screen::back[o]   = r;
+	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o] = r;
 	o += XRES-4;
 	screen::back[o++] = r;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
+	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o++] = c;
 	screen::back[o]   = r;
 	o += XRES-5;
 	screen::back[o++] = r;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
+	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o++] = c;
 	screen::back[o]   = r;
 	o += XRES-5;
 	screen::back[o++] = r;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
+	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o++] = c;
 	screen::back[o]   = r;
 	o += XRES-5;
 	screen::back[o++] = r;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
-	screen::back[o++] = c;
+	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o++] = c;
 	screen::back[o]   = r;
 	o += XRES-4;
-	screen::back[o++] = r;
-	screen::back[o++] = r;
-	screen::back[o++] = r;
-	screen::back[o]   = r;
+	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o] = r;
 }
 
 void compiled::tracks(ulong x,ulong y,ulong d)

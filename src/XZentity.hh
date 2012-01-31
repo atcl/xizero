@@ -255,7 +255,7 @@ long entity::update(long m)
 {
 	const long curr = system::clk();
 
-	_active |= (_position.y>m || _position.y<m) && (_position.y>0);
+	_active |= (_position.y>m || _position.y<m) && (_position.y>0); //check!
 
 	if(_active!=0)
 	{
@@ -307,7 +307,7 @@ void entity::display(long m,bool t)
 			switch(game::onscreen(cx,cy))
 			{
 				case 0: /*delete*/ _ammo.delcurrent(); break;
-				case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break; //compiled::ammo(cx,cy,compiled::type[cur->e][0],compiled::[cur->e][1]); break;
+				case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;
 			}
 		}
 	}

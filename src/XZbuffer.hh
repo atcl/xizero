@@ -26,9 +26,9 @@ class buffer
 		/*OK*/ INLINE long& operator[](ulong i) { return data[i]; }
 		/*OK*/ INLINE long  operator[](ulong i) const { return data[i]; }
 		/*OK*/ INLINE long* pointer() const { return data; }
-		/*OK*/ void clear(long x=0);
-		/*OK*/ void copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; } }
-		       void fsaamb(const buffer& b);
+		/*OK*/        void  clear(long x=0);
+		/*OK*/        void  copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; } }
+		              void  fsaamb(const buffer& b);
 };
 ///*
 

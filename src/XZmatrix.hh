@@ -27,9 +27,9 @@ class fmatrix
 		/*OK*/ INLINE void translate(fixed x,fixed y,fixed z);
 		/*OK*/ INLINE void scale(fixed x,fixed y,fixed z);
 		/*OK*/ INLINE fixed trace();
-		void project(fixed x,fixed y,fixed z,fixed w);
-		void transpose();
-		/*OK*/ void dyadic(const fvector& x,const fvector& y);
+		              void project(fixed x,fixed y,fixed z,fixed w);
+		              void transpose();
+		/*OK*/        void dyadic(const fvector& x,const fvector& y);
 		/*OK*/ INLINE void shadow(const fvector& x,const fvector& y);
 		/*OK*/ INLINE fvector transform(const fvector& x) const;
 		/*OK*/ INLINE lvector transform(const lvector& x) const;
