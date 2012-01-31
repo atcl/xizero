@@ -27,7 +27,6 @@ namespace string
 	/*OK*/ char*  cons(long x);
 	/*OK*/ char*  conf(fixed x);
 	/*OK*/ char*  repl(const char* x,char y,char z);
-	/*OK*/ void   repl(char* x,char y,char z);
 	/*OK*/ char** split(const char* x,char y);
 	/*OK*/ char*  trim(const char* x,char y=' ');
 	/*OK*/ char   toup(char x);
@@ -38,7 +37,7 @@ namespace string
 long string::length(const char* x)
 {
 	long r=0;
-	while(x[r]!=0) { r++; }
+	while(x[r]!=0) { ++r; }
 	return r;
 }
 
@@ -193,15 +192,6 @@ char* string::repl(const char* x,char y,char z)
 	return r;
 }
 
-void string::repl(char* x,char y,char z)
-{
-	const long l = length(x);
-	for(long i=0;i<l;++i)
-	{
-		x[i] = math::set(z,x[i],x[i]==y);
-	}
-}
-
 char** string::split(const char* x,char y)
 {
 	const long c = count(x,y)+1;
@@ -231,7 +221,7 @@ char* string::trim(const char* x,char y)
 		k = x[i]!=y;
 		r[j] = math::set(x[i],r[j],k);
 		j+=k;
-		i++;
+		++i;
 	}
 	r[j] = 0;
 	return r;

@@ -58,17 +58,16 @@ namespace format
 char** format::csv(const char* x,char y)
 {
 	char* s = string::repl(x,'\n',y);
-	const long  l = string::count(s,y); 
+	const long l = string::count(s,y);
 	char** r = new char*[l];
 	r[0] = s;
 	long i = 0;
 	long j = 1;
 	while(s[i]!=0 && j<l)
 	{
-		if(s[i]==y) { r[j++] = &s[++i]; }
+		if(s[i]==y) { s[i] = 0; r[j++] = &s[++i]; }
 		i++;
 	}
-	string::repl(s,y,0);
 	return r;
 }
 
