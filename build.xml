@@ -16,6 +16,7 @@
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
+			<define>ALWAYS</define>
 			<define>SSE</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>

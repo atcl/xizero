@@ -21,18 +21,18 @@ class fmatrix
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
 		/*OK*/        void clear(fixed x=FXONE,fixed y=0);
-		/*OK*/ INLINE void rotatex(fixed x);
-		/*OK*/ INLINE void rotatey(fixed y);
-		/*OK*/ INLINE void rotatez(fixed z);
-		/*OK*/ INLINE void translate(fixed x,fixed y,fixed z);
-		/*OK*/ INLINE void scale(fixed x,fixed y,fixed z);
-		/*OK*/ INLINE fixed trace();
+		/*OK*/ inline void rotatex(fixed x);
+		/*OK*/ inline void rotatey(fixed y);
+		/*OK*/ inline void rotatez(fixed z);
+		/*OK*/ inline void translate(fixed x,fixed y,fixed z);
+		/*OK*/ inline void scale(fixed x,fixed y,fixed z);
+		/*OK*/ inline fixed trace();
 		              void project(fixed x,fixed y,fixed z,fixed w);
 		              void transpose();
 		/*OK*/        void dyadic(const fvector& x,const fvector& y);
-		/*OK*/ INLINE void shadow(const fvector& x,const fvector& y);
-		/*OK*/ INLINE fvector transform(const fvector& x) const;
-		/*OK*/ INLINE lvector transform(const lvector& x) const;
+		/*OK*/ inline void shadow(const fvector& x,const fvector& y);
+		/*OK*/ inline fvector transform(const fvector& x) const;
+		/*OK*/ inline lvector transform(const lvector& x) const;
 };
 ///*
 

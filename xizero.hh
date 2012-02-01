@@ -9,12 +9,12 @@
 
 ///definition
 void init();
-long start(long l);
-long start();
-INLINE long close();
-INLINE long load();
-INLINE long about();
-INLINE long leave();
+sint start(sint l);
+sint start();
+inline sint close();
+inline sint load();
+inline sint about();
+inline sint leave();
 void menu();
 void intro();
 void mainmenu();
@@ -34,7 +34,7 @@ void init()
 	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter);
 }
 
-long start(long l)
+sint start(sint l)
 {
 	//load level
 	//draw background
@@ -57,28 +57,28 @@ long start(long l)
 	return 0;
 }
 
-long start()
+sint start()
 {
 	return start(0);
 }
 
-long close()
+sint close()
 {
 	return -1;
 }
 
-long load()
+sint load()
 {
 	//return start(string::conl(screen::instance()->inpbox("Enter the level number you want to play (0-9):")));
 }
 
-long about()
+sint about()
 {
 	//screen::instance()->msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
 	return 0;
 }
 
-long leave()
+sint leave()
 {
 	//return screen::instance()->askbox("Are you sure?");
 	system::bye();
@@ -164,14 +164,14 @@ void lost()
 
 void bench()
 {
-	const long fps = system::fps();
-	if(fps!=-1)
+	const sint fps = system::fps();
+	if(fps!=-1) //(isatty(0)&&fps!=-1)
 	{
-		system::say(string::cons(polygon::counter*fps),0); 			
+		system::say(string::int2str(polygon::counter*fps),0); 			
 		system::say("p/s - ",0);
-		system::say(string::cons(polygon::counter),0); 
+		system::say(string::int2str(polygon::counter),0); 
 		system::say("@",0);
-		system::say(string::cons(fps),1);
+		system::say(string::int2str(fps),1);
 	}
 }
 ///*

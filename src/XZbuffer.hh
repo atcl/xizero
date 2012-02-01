@@ -17,26 +17,26 @@
 class buffer
 {
 	private:
-		const ulong tsize;	//size in typesize
-		const ulong bytes;	//size in bytes
-		long* __restrict data;	//pointer to data
+		const uint tsize;	//size in typesize
+		const uint bytes;	//size in bytes
+		sint* __restrict data;	//pointer to data
 	public:
-		/*OK*/ buffer(ulong s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (long*)memalign(16,bytes); }
+		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)memalign(16,bytes); }
 		/*OK*/ ~buffer() { free(data); }
-		/*OK*/ INLINE long& operator[](ulong i) { return data[i]; }
-		/*OK*/ INLINE long  operator[](ulong i) const { return data[i]; }
-		/*OK*/ INLINE long* pointer() const { return data; }
-		/*OK*/        void  clear(long x=0);
-		/*OK*/        void  copy(const buffer& s,ulong x) { for(ulong i=x;i!=0;--i) { data[i]=s.data[i]; } }
+		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
+		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
+		/*OK*/ inline sint* pointer() const { return data; }
+		/*OK*/        void  clear(sint x=0);
+		/*OK*/        void  copy(const buffer& s,uint x) { for(uint i=x;i!=0;--i) { data[i]=s.data[i]; } }
 		              void  fsaamb(const buffer& b);
 };
 ///*
 
 ///implementation
-void buffer::clear(long x)
+void buffer::clear(sint x)
 {
 #ifdef SSE
-	static long val[4];
+	static sint val[4];
 	val[0] = val[1] = val[2] = val[3] = x;
 
 	__asm__ __volatile__ (
@@ -62,7 +62,7 @@ void buffer::clear(long x)
 	"loop set;"
 	: :"a"(&val),"b"(data),"c"(bytes):);
 #else
-	for(ulong i=tsize;i!=0;--i) { data[i]=x; }
+	for(uint i=tsize;i!=0;--i) { data[i]=x; }
 #endif
 }
 
@@ -71,7 +71,7 @@ void buffer::fsaamb(const buffer& b)
 #ifdef SSE
 	//TODO
 #else
-	for(ulong i=tsize;i!=0;--i) { /*TODO*/; }
+	for(uint i=tsize;i!=0;--i) { /*TODO*/; }
 #endif
 }
 ///*

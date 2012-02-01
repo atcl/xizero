@@ -8,6 +8,10 @@
 #define HH_XZBASIC
 ///*
 
+///includes
+#include <stdint.h>
+///*
+
 ///definitions
 #ifdef __GNUC__
 	#define LIKELY(x)   __builtin_expect((x),1)
@@ -20,10 +24,7 @@
 	#define HOTFN __attribute__((hot))
 
 	#ifdef ALWAYS
-		#define INLINE __attribute__((always_inline))
-		//#define inline __attribute__((always_inline))
-	#else
-		#define INLINE inline
+		#define inline __attribute__((always_inline))
 	#endif
 #else
 	#define LIKELY(x) x
@@ -72,24 +73,24 @@
 #define ORANGE  0x000080FF
 #define OCHER   0x00008080
 
-typedef const char*   ccstr;
-typedef unsigned char uchar;
-typedef unsigned long ulong;
-typedef signed   long slong;
+typedef const    char* cstr;
+typedef unsigned char  byte;
+typedef uint32_t       uint;
+typedef int32_t        sint;
 
 union packed
 {
-	ulong d;
-	uchar b[4];
+	uint d;
+	byte b[4];
 };
 
 union color
 {
-	ulong c;
-	uchar a;
-	uchar r;
-	uchar g;
-	uchar b;
+	uint c;
+	byte a;
+	byte r;
+	byte g;
+	byte b;
 };
 ///*
 

@@ -36,9 +36,9 @@ class level
 		entity* boss;			//Boss Entity
 		list enemies;			//List of Enemy Entities
 		char** map;			//Text Map of Terrain
-		long mark;			//Marker for Level Progress
-		long markmin;			//Lowest Level Position
-		long markmax;			//Highest Level Position
+		sint mark;			//Marker for Level Progress
+		sint markmin;			//Lowest Level Position
+		sint markmax;			//Highest Level Position
 		progress* pp;			//Player Health Gauge
 		progress* sp;			//Player Shield Gauge
 		progress* bp;			//Boss Gauge
@@ -46,7 +46,7 @@ class level
 	public:
 		level(const char* o);		//Constructor
 		~level();			//Destructor
-		long update(long k);		//Update All Entities
+		sint update(sint k);		//Update All Entities
 		void display();			//Display Terrain, Shadows, Entities
 		void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
@@ -66,8 +66,8 @@ level::level(const char* o)
 	object* pm = new object(system::ldf(ps[0]));
 	object* pn = new object(system::ldf(ps[1]));
 	info*   pi = format::ini(system::ldf(ps[2]));
- 	        pp = new progress(0,string::conl((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
- 	        sp = new progress(0,string::conl((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
+ 	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
+ 	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
 	//*
 
 	//load boss
@@ -75,7 +75,7 @@ level::level(const char* o)
 	char**  bs = string::split(ts,',');
 	object* bm = new object(system::ldf(bs[0]));
 	info*   bi = format::ini(system::ldf(bs[1]));
-	        bp = new progress(0,string::conl((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
+	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
 	//*
 
 	//load enemy
@@ -83,13 +83,13 @@ level::level(const char* o)
 	char**  es = string::split(ts,',');
 	object* em = new object(system::ldf(es[0]));
 	info*   ei = format::ini(system::ldf(es[1]));
-	        ep = new progress(0,string::conl((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
+	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
 	//*
 
 	//load map
 	ts            = (*lvl)["map"];
 	const char* m = system::ldf(ts);
-	const long l  = string::count(m,'\n');
+	const sint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
 
@@ -104,11 +104,11 @@ level::level(const char* o)
 	lvector  e;
 	lvector  f;
 
-	for(long i=0,k=0;i<l;++i,k=0)
+	for(sint i=0,k=0;i<l;++i,k=0)
 	{
 		//load terrain stripe
-		long v = CSHIFT;
-		for(long j=1;j<LWIDTH;++j,v+=BWIDTH)		
+		sint v = CSHIFT;
+		for(sint j=1;j<LWIDTH;++j,v+=BWIDTH)		
 		{
 			a[k].set( v,       -(BWIDTH>>1),(string::toup(map[i+1][j-1])-'A')*BHEIGHT );
 			b[k].set( v,         BWIDTH>>1, (string::toup(map[i][j-1])  -'A')*BHEIGHT );
@@ -139,7 +139,7 @@ level::level(const char* o)
 		//*
 
 		//load entities
-		for(long j=0;j<LWIDTH;++j)
+		for(sint j=0;j<LWIDTH;++j)
 		{
 			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
@@ -189,16 +189,16 @@ level::~level()
 	delete ep;
 }
 
-long level::update(long k)
+sint level::update(sint k)
 {
-	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
+	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }
 	}
 
-	static long n = 0;
-	long m = 0;
-	const long r = (boss->update(mark)<=0)-(player->update(k,m)<=0);
+	static sint n = 0;
+	sint m = 0;
+	const sint r = (boss->update(mark)<=0)-(player->update(k,m)<=0);
 	n = math::set(m+n,mark==markmax);
 	mark = math::set(mark,markmin,mark<markmin);
 	mark = math::set(mark,markmax,mark>markmax);
@@ -218,8 +218,8 @@ void level::display()
 	const fixed yd = fx::l2f(-20);
 	object::linear.clear();
 	object::linear.translate(0,fx::l2f(300),0);
-	long r = math::max((mark/BWIDTH)-3,0);
-	for(long i=0;i<34;++i,++r)
+	sint r = math::max((mark/BWIDTH)-3,0);
+	for(sint i=0;i<34;++i,++r)
 	{
 		terrain[r]->update();
 		terrain[r]->display(p,R_F);
@@ -229,13 +229,13 @@ void level::display()
 	//*
 
 	//render shadows
-	for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
+	for(sint i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
 	boss->display(mark,1);
 	player->display(mark,1);
 	//*
 
 	//render entities
-	for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,0); }
+	for(sint i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,0); }
 	boss->display(mark,0);
 	player->display(mark,0);
 	//*
@@ -244,7 +244,7 @@ void level::display()
 void level::gauges()
 {
 	//render gui elements
-	for(long i=enemies.first();i<enemies.length();i+=enemies.next())
+	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		const lvector e(((entity*)enemies.current())->data(mark));
 		ep->visible(game::onscreen(e.x,e.y));
@@ -270,7 +270,7 @@ void level::gauges()
 void level::resume()
 {
 	//resume all entities
-	for(long i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->resume(); }
+	for(sint i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->resume(); }
 	boss->resume();
 	player->resume();
 	//*

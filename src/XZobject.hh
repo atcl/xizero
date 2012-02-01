@@ -9,6 +9,7 @@
 ///*
 
 ///include
+#include "XZbasic.hh"
 #include "XZformat.hh"
 #include "XZvector.hh"
 #include "XZmatrix.hh"
@@ -29,21 +30,21 @@ class object
 		fvector*  odock;
 		box       bbox;
 		box       obox;
-		long      polys;
-		long      docks;
+		sint      polys;
+		sint      docks;
 	public:
 		static lvector project(const lvector& p,const lvector& v);
 		/*OK*/ object(const char* o);
-		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e);
+		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
 		       ~object();
 		/*OK*/ void   update(const fmatrix& m=object::linear);
-		/*OK*/ INLINE void display(const lvector& p,long f) const;
+		/*OK*/ inline void display(const lvector& p,sint f) const;
 		/*OK*/ void   reset();
 		/*OK*/ void   set();
-		/*OK*/ fvector* docktype(long i,long j) const;
-		/*OK*/ INLINE box& boundingbox() { return bbox; }
-		/*OK*/ void   pull(long x);
+		/*OK*/ fvector* docktype(sint i,sint j) const;
+		/*OK*/ inline box& boundingbox() { return bbox; }
+		/*OK*/ void   pull(sint x);
 
 		static fmatrix linear;
 };
@@ -64,50 +65,50 @@ lvector object::project(const lvector& p,const lvector& v)
 object::object(const char* o)
 {
 	char** t = format::csv(o);
-	long i = 0;
+	sint i = 0;
 
 	if(string::find(t[i++],"<y3dtxt>")==-1) { system::say("y3d format wrong (head)",1); system::bye(-1); }
 
-	polys = string::conl(t[i++]); 
-	polys += 2*string::conl(t[i++]); 
-	docks = string::conl(t[i++]);
+	polys = string::str2int(t[i++]); 
+	polys += 2*string::str2int(t[i++]); 
+	docks = string::str2int(t[i++]);
 	poly  = new polygon*[polys];
 	dock  = new fvector[docks];
 	odock = new fvector[docks];
 
 	if(string::find(t[i++],"objt")==-1) { system::say("y3d format wrong (objt)",1); system::bye(-1); }
 
-	const long subs = string::conl(t[i++]);
+	const sint subs = string::str2int(t[i++]);
 	/*char* oid = t[i++];*/ i++;
-	long scolor = string::conh(t[i++]);
+	sint scolor = string::str2hex(t[i++]);
 
-	long pc = 0;
-	long dc = 0;
-	for(long j=0;j<subs;++j)
+	sint pc = 0;
+	sint dc = 0;
+	for(uint j=0;j<subs;++j)
 	{
 		if(string::find(t[i++],"sobj")==-1) { system::say("y3d format wrong (sobj)",1); system::bye(-1); }
 
-		const long p = string::conl(t[i++]);
+		const sint p = string::str2int(t[i++]);
 		/*char* sid = t[i++];*/ i++;
-		const long d = string::conl(t[i++]);
+		const sint d = string::str2int(t[i++]);
 
 		if(string::find(t[i++],"posi")==-1) { system::say("y3d format wrong (posi)",1); system::bye(-1); }
 
-		lvector pos(string::conl(t[i]),string::conl(t[i+1]),string::conl(t[i+2])); i+=3;
+		lvector pos(string::str2int(t[i]),string::str2int(t[i+1]),string::str2int(t[i+2])); i+=3;
 		lvector x[4];
-		for(long k=0;k<p;++k)
+		for(sint k=0;k<p;++k)
 		{
 			if(string::find(t[i++],"poly")==-1) { system::say("y3d format wrong (poly)",1); system::bye(-1); }
 
-			const long verts = string::conl(t[i++]);
+			const sint verts = string::str2int(t[i++]);
 			/*char* pid = t[i++];*/ i++;
-			const long tcolor = string::conh(t[i++]);
+			const sint tcolor = string::str2hex(t[i++]);
 
-			for(long l=0;l<3+(verts==4);++l,i+=3)
+			for(sint l=0;l<3+(verts==4);++l,i+=3)
 			{
 				if(string::find(t[i++],"vert")==-1) { system::say("y3d format wrong (vert)",1); system::bye(-1); }
 
-				x[l].set(pos.x+string::conl(t[i]),pos.y+string::conl(t[i+1]),pos.z+string::conl(t[i+2]));
+				x[l].set(pos.x+string::str2int(t[i]),pos.y+string::str2int(t[i+1]),pos.z+string::str2int(t[i+2]));
 			}
 
 			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor,scolor);
@@ -132,12 +133,12 @@ object::object(const char* o)
 			}
 		}
 
-		for(long k=0;k<d;++k,i+=3,++dc)
+		for(sint k=0;k<d;++k,i+=3,++dc)
 		{
 			if(string::find(t[i++],"dock")==-1) { system::say("y3d format wrong (dock)",1); system::bye(-1); }
 
-			const long type = string::conl(t[i++]);
-			dock[dc].set(fx::l2f(string::conl(t[i])),fx::l2f(string::conl(t[i+1])),fx::l2f(string::conl(t[i+2])),type);
+			const sint type = string::str2int(t[i++]);
+			dock[dc].set(fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type);
 			odock[dc] = dock[dc];
 		}
 	}
@@ -148,9 +149,9 @@ object::object(const char* o)
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e) : poly(0),dock(0),odock(0),polys(x<<1),docks(0)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),odock(0),polys(x<<1),docks(0)
 {
-	for(long i=0;i<x;++i)
+	for(sint i=0;i<x;++i)
 	{
 		polys -= (a[i].z==0 && b[i].z==0 && c[i].z==0);
 		polys -= (c[i].z==0 && d[i].z==0 && a[i].z==0);
@@ -160,14 +161,14 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,long x,long e) : poly
 
 	poly = new polygon*[polys];
 
-	for(long i=0,j=0;i<x;++i)
+	for(sint i=0,j=0;i<x;++i)
 	{
-		const long az = a[i].z;
-		const long bz = b[i].z;
-		const long cz = c[i].z;
-		const long dz = d[i].z;
+		const sint az = a[i].z;
+		const sint bz = b[i].z;
+		const sint cz = c[i].z;
+		const sint dz = d[i].z;
 
-		const long y = -(((bz>az) && (bz>cz) && (bz>dz)) || ((dz>az) && (dz>bz) && (dz>cz)) || ((az>bz) && (az>dz) && (cz>bz) && (cz>dz)) || ((dz<az) && (dz<bz) && (dz<cz)) || ((bz<az) && (bz<cz) && (bz<dz)))
+		const sint y = -(((bz>az) && (bz>cz) && (bz>dz)) || ((dz>az) && (dz>bz) && (dz>cz)) || ((az>bz) && (az>dz) && (cz>bz) && (cz>dz)) || ((dz<az) && (dz<bz) && (dz<cz)) || ((bz<az) && (bz<cz) && (bz<dz)))
 			     +  (((az>bz) && (az>cz) && (az>dz)) || ((cz>az) && (cz>bz) && (cz>dz)) || ((bz>az) && (bz>cz) && (dz>az) && (dz>cz)) || ((az<bz) && (az<cz) && (az<dz)) || ((cz<az) && (cz<bz) && (cz<dz))); 
 
 		switch(y)
@@ -192,11 +193,11 @@ object::object(const object& o) : poly(0),dock(0),odock(0),polys(o.polys),docks(
 	dock  = new fvector[docks];
 	odock = new fvector[docks];
 	
-	for(long i=0;i<polys;++i)
+	for(sint i=0;i<polys;++i)
 	{
 		poly[i] = new polygon(*o.poly[i]);
 	}
-	for(long i=0;i<docks;++i)
+	for(sint i=0;i<docks;++i)
 	{
 		dock[i] = o.dock[i];
 		odock[i] = o.odock[i];
@@ -216,11 +217,11 @@ object::~object()
 
 void object::update(const fmatrix& m)
 {
-	for(long i=0;i<polys;++i)
+	for(sint i=0;i<polys;++i)
 	{
 		poly[i]->update(m);
 	}
-	for(long i=0;i<docks;++i)
+	for(sint i=0;i<docks;++i)
 	{
 		dock[i] = m.transform(dock[i]);
 	}
@@ -228,9 +229,9 @@ void object::update(const fmatrix& m)
 	bbox[1] = m.transform(bbox[1]);
 }
 
-void object::display(const lvector& p,long f) const
+void object::display(const lvector& p,sint f) const
 {
-	for(long i=0;i<polys;++i)
+	for(sint i=0;i<polys;++i)
 	{
 		poly[i]->display(p,f);
 	}
@@ -238,11 +239,11 @@ void object::display(const lvector& p,long f) const
 
 void object::reset()
 {
-	for(long i=0;i<polys;++i)
+	for(sint i=0;i<polys;++i)
 	{
 		(*poly[i]).reset();
 	}
-	for(long i=0;i<docks;++i)
+	for(sint i=0;i<docks;++i)
 	{
 		dock[i] = odock[i];
 	}
@@ -252,11 +253,11 @@ void object::reset()
 
 void object::set()
 {
-	for(long i=0;i<polys;++i)
+	for(sint i=0;i<polys;++i)
 	{
 		(*poly[i]).set();
 	}
-	for(long i=0;i<docks;++i)
+	for(sint i=0;i<docks;++i)
 	{
 		odock[i] = dock[i];
 	}
@@ -264,9 +265,9 @@ void object::set()
 	obox[1] = bbox[1];
 }
 
-fvector* object::docktype(long i,long j) const
+fvector* object::docktype(sint i,sint j) const
 {
-	for(long k=0,l=-1;k<docks;++k)
+	for(sint k=0,l=-1;k<docks;++k)
 	{
 		l += (dock[k].e==i);
 		if(l==j) { return &dock[k]; }
@@ -276,7 +277,7 @@ fvector* object::docktype(long i,long j) const
 
 void object::pull(fixed x) //translate along normals
 {
-	for(long i=0;i<polys;++i)
+	for(sint i=0;i<polys;++i)
 	{
 		fvector t = poly[i]->normal();
 		const fixed l = t.length();

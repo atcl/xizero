@@ -25,24 +25,24 @@ class button : public gui
 {
 	private:
 		char* _text;						//Button Caption
-		long (*_action)();					//Onclick Function Pointer
+		sint (*_action)();					//Onclick Function Pointer
 		bool _depth;						//Flat or Relief
-		const long _textleft;					//Relative Y Coordinate of Caption	
-		const long _texttop;					//Relative X Coordinate of Caption
+		const sint _textleft;					//Relative Y Coordinate of Caption	
+		const sint _texttop;					//Relative X Coordinate of Caption
 		static list _bl;					//List of all Buttons
 	public:
-		button(const char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v); //Constructor
+		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
 		~button();						//Destructor
-		INLINE void action(long (*a)()) { _action = a; }	//Set Action
+		inline void action(sint (*a)()) { _action = a; }	//Set Action
 		       void draw() const;				//Draw Button
-		static long check(long x,long y,long b);		//Check If Button Clicked
+		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
 };
 ///*
 
 ///implementation
 list button::_bl = list();
 
-button::button(const char* x,long (*a)(),bool d,long l,long t,long w,long h,long c,long b,long f,bool v) :
+button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
 	_text(string::copy(x)),
 	_action(a),
@@ -60,10 +60,10 @@ button::~button()
 	delete _text;
 }
 
-long button::check(long x,long y,long b)
+sint button::check(sint x,sint y,sint b)
 {
-	const long e = math::neg(_bl.length(),b==0);
-	for(long i=_bl.first();i<e;i+=_bl.next())
+	const sint e = math::neg(_bl.length(),b==0);
+	for(sint i=_bl.first();i<e;i+=_bl.next())
 	{
 		const button* temp = (button*)_bl.current();
 		if(temp->_visible!=0 && game::inside(x,y,temp->_left,temp->_top,temp->_left+temp->_width,temp->_top+temp->_height)) 

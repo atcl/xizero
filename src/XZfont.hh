@@ -31,47 +31,47 @@ namespace font
 	{
 		static tile* f[4];
 
-		friend void init(const char* x,long i);
-		friend long draw(long x,long y,char a,long c,long b,long t);
-		friend void draw(long x,long y,const char* a,long c,long b,long t);
-		friend long width(char x,long t);
-		friend long width(const char* x,long t);
-		friend long height(const char* x,long t);
-		friend long height(long t);
+		friend void init(const char* x,sint i);
+		friend sint draw(sint x,sint y,char a,sint c,sint b,sint t);
+		friend void draw(sint x,sint y,const char* a,sint c,sint b,sint t);
+		friend sint width(char x,sint t);
+		friend sint width(const char* x,sint t);
+		friend sint height(const char* x,sint t);
+		friend sint height(sint t);
 	};
 
-	INLINE void init(const char* x,long i);
-	       long draw(long x,long y,char a,long c,long b,long t);
-	       void draw(long x,long y,const char* a,long c,long b,long t);
-	       long width(char x,long t);
-	       long width(const char* x,long t);
-	INLINE long height(const char* x,long t);
-	INLINE long height(long t);
+	inline void init(const char* x,sint i);
+	       sint draw(sint x,sint y,char a,sint c,sint b,sint t);
+	       void draw(sint x,sint y,const char* a,sint c,sint b,sint t);
+	       sint width(char x,sint t);
+	       sint width(const char* x,sint t);
+	inline sint height(const char* x,sint t);
+	inline sint height(sint t);
 }
 ///*
 
 ///implementation
 tile* font::type::f[4] = { 0,0,0,0 };
 
-void font::init(const char* x,long i)
+void font::init(const char* x,sint i)
 {
 	type::f[i] = format::ras(x);
 }
 
-long font::draw(long x,long y,char a,long c,long b,long t) 
+sint font::draw(sint x,sint y,char a,sint c,sint b,sint t) 
 {
-	const long h = type::f[t]->height;
-	const long w = type::f[t]->width-h;
-	const long d = XRES - h;
-	long s = h*a;
-	long o = y*XRES+x;
-	long r = 0;
+	const sint h = type::f[t]->height;
+	const sint w = type::f[t]->width-h;
+	const sint d = XRES - h;
+	sint s = h*a;
+	sint o = y*XRES+x;
+	sint r = 0;
 
-	for(long i=0;i<h;++i,o+=d,s+=w)
+	for(sint i=0;i<h;++i,o+=d,s+=w)
 	{
-		for(long j=0;j<h;++j,++o,++s)
+		for(sint j=0;j<h;++j,++o,++s)
 		{
-			const long e = type::f[t]->data[s];
+			const sint e = type::f[t]->data[s];
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
@@ -79,11 +79,11 @@ long font::draw(long x,long y,char a,long c,long b,long t)
 	return r-1;
 }
 
-void font::draw(long x,long y,const char* a,long c,long b,long t)
+void font::draw(sint x,sint y,const char* a,sint c,sint b,sint t)
 {
-	const long l = string::length(a);
+	const sint l = string::length(a);
 
-	for(long i=0;i<l;++i)
+	for(sint i=0;i<l;++i)
 	{
 		if(a[i]=='\n')
 		{
@@ -96,29 +96,29 @@ void font::draw(long x,long y,const char* a,long c,long b,long t)
 	}
 }
 
-long font::width(char x,long t)
+sint font::width(char x,sint t)
 {
-	const long h = type::f[t]->height;
-	long s = h*x;
-	long r = 0;
+	const sint h = type::f[t]->height;
+	sint s = h*x;
+	sint r = 0;
 
-	for(long j=0;j<h;++j,++s)
+	for(sint j=0;j<h;++j,++s)
 	{
 		r+=(type::f[t]->data[s]!=BLACK);
 	}
 	return r-1;
 }
 
-long font::width(const char* x,long t)
+sint font::width(const char* x,sint t)
 {
 	char** b = string::split(x,'\n');
-	const long c = string::count(x,'\n')+1;
-	long r = 0;
-	for(long i=0;i<c;++i)
+	const sint c = string::count(x,'\n')+1;
+	sint r = 0;
+	for(sint i=0;i<c;++i)
 	{
-		const long l = string::length(b[i]);
-		long s = 0;
-		for(long j=0;j<l;++j)
+		const sint l = string::length(b[i]);
+		sint s = 0;
+		for(sint j=0;j<l;++j)
 		{
 			s += width(b[i][j],t);
 		}
@@ -128,12 +128,12 @@ long font::width(const char* x,long t)
 	return r;
 }
 
-long font::height(const char* x,long t)
+sint font::height(const char* x,sint t)
 {
 	return (string::count(x,'\n')+1)*type::f[t]->height;
 }
 
-long font::height(long t)
+sint font::height(sint t)
 {
 	return type::f[t]->height;
 }

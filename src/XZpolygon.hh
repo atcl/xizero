@@ -45,30 +45,30 @@
 class polygon
 {
 	private:
-		const long color;		//Polygon Color
-		const long scolor;		//Shadow Color
-		long shade;			//Current Color Shade
+		const sint color;		//Polygon Color
+		const sint scolor;		//Shadow Color
+		sint shade;			//Current Color Shade
 		fvector cnormal;		//Polygon Normal
 		fvector onormal;		//Backup Normal
 		fvector cpoint[3];		//Polygon Vertices
 		fvector opoint[3];		//Backup Vertices
 		static lvector lpoint[3];	//Render Vertices
 
-		/*OK*/ INLINE bool isvisible() const { return cnormal.z<FXMON; }
-		/*OK*/ INLINE void shape() const;
+		/*OK*/ inline bool isvisible() const { return cnormal.z<FXMON; }
+		/*OK*/ inline void shape() const;
 		/*OK*/        void project(const lvector& p) const;
-		              void flat(long pz,long f);
+		              void flat(sint pz,sint f);
 		              void raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
-		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,long c,long s);
+		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s);
 		/*OK*/        void update(const fmatrix& m,bool i=0);
-		/*OK*/        void display(const lvector& p,long f);
-		/*OK*/ INLINE void reset();
-		/*OK*/ INLINE void set();
-		/*OK*/ INLINE void add(const fvector& a);
-		/*OK*/ INLINE fvector normal() const { return cnormal; }
+		/*OK*/        void display(const lvector& p,sint f);
+		/*OK*/ inline void reset();
+		/*OK*/ inline void set();
+		/*OK*/ inline void add(const fvector& a);
+		/*OK*/ inline fvector normal() const { return cnormal; }
 
-		static long  counter;		//Polygon Counter
+		static sint  counter;		//Polygon Counter
 		static const fvector light;	//Light Vector
 		static const fmatrix shadow;	//Shadow Matrix
 };
@@ -76,7 +76,7 @@ class polygon
 
 ///implementation
 lvector       polygon::lpoint[] = { lvector(), lvector(), lvector() };
-long          polygon::counter  = 0;
+sint          polygon::counter  = 0;
 const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE);
 const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(fvector(0,FXTNT,FXONE),fvector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
 
@@ -97,7 +97,7 @@ void polygon::project(const lvector& p) const
 	lpoint[2].y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(cpoint[2].y,lpoint[2].z))) + p.y;
 }
 
-void polygon::flat(long pz,long f)
+void polygon::flat(sint pz,sint f)
 {
 	fixed t = fx::mul(cnormal.e,light.e);
 	t = fx::div(cnormal.dot(light),t);
@@ -110,9 +110,9 @@ void polygon::flat(long pz,long f)
 	const char zshade  = math::set(ZLIGHT*pz,f&R_Z);
 
 	packed argb = { color };
-	argb.b[0] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) + ambient + nolight + zshade));
-	argb.b[1] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
-	argb.b[2] = (uchar)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
+	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) + ambient + nolight + zshade));
+	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
+	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
 	argb.b[3] = 0;
 	shade = argb.d;
 }
@@ -127,38 +127,38 @@ void polygon::shape() const
 void polygon::raster(bool s) const
 {
 	//determine projected minima and maxima
-	const long mix01 = lpoint[1].x<lpoint[0].x;
-	const long max01 = !mix01;
-	const long miy01 = lpoint[1].y<lpoint[0].y;
-	const long may01 = !miy01;
+	const sint mix01 = lpoint[1].x<lpoint[0].x;
+	const sint max01 = !mix01;
+	const sint miy01 = lpoint[1].y<lpoint[0].y;
+	const sint may01 = !miy01;
 
-	const long mixi = math::set(2,mix01,lpoint[2].x<lpoint[mix01].x);
-	const long maxi = math::set(2,max01,lpoint[2].x>lpoint[max01].x);
-	const long miyi = math::set(2,miy01,lpoint[2].y<lpoint[miy01].y);
-	const long mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
+	const sint mixi = math::set(2,mix01,lpoint[2].x<lpoint[mix01].x);
+	const sint maxi = math::set(2,max01,lpoint[2].x>lpoint[max01].x);
+	const sint miyi = math::set(2,miy01,lpoint[2].y<lpoint[miy01].y);
+	const sint mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
 
-	const long minx = math::max(XMIN,lpoint[mixi].x);
-	const long maxx = math::min(XMAX,1+lpoint[maxi].x); //prevent gap
-	const long miny = math::max(YMIN,lpoint[miyi].y);
-	const long maxy = math::min(YMAX,1+lpoint[mayi].y); //prevent gap
+	const sint minx = math::max(XMIN,lpoint[mixi].x);
+	const sint maxx = math::min(XMAX,1+lpoint[maxi].x); //prevent gap
+	const sint miny = math::max(YMIN,lpoint[miyi].y);
+	const sint maxy = math::min(YMAX,1+lpoint[mayi].y); //prevent gap
 	//*
 
 	guard(maxx==minx || maxy==miny);
 
-	const long dx01 = lpoint[0].x - lpoint[1].x;
-	const long dx12 = lpoint[1].x - lpoint[2].x;
-	const long dx20 = lpoint[2].x - lpoint[0].x;
+	const sint dx01 = lpoint[0].x - lpoint[1].x;
+	const sint dx12 = lpoint[1].x - lpoint[2].x;
+	const sint dx20 = lpoint[2].x - lpoint[0].x;
 
-	const long dy01 = lpoint[0].y - lpoint[1].y;
-	const long dy12 = lpoint[1].y - lpoint[2].y;
-	const long dy20 = lpoint[2].y - lpoint[0].y;
+	const sint dy01 = lpoint[0].y - lpoint[1].y;
+	const sint dy12 = lpoint[1].y - lpoint[2].y;
+	const sint dy20 = lpoint[2].y - lpoint[0].y;
 
-	long cy0 = (dy01*lpoint[0].x) - (dx01*lpoint[0].y) + (dx01*miny) - (dy01*minx) - ((dy01<0) || (dy01==0 && dx01>0));
-	long cy1 = (dy12*lpoint[1].x) - (dx12*lpoint[1].y) + (dx12*miny) - (dy12*minx) - ((dy12<0) || (dy12==0 && dx12>0));
-	long cy2 = (dy20*lpoint[2].x) - (dx20*lpoint[2].y) + (dx20*miny) - (dy20*minx) - ((dy20<0) || (dy20==0 && dx20>0)); 
+	sint cy0 = (dy01*lpoint[0].x) - (dx01*lpoint[0].y) + (dx01*miny) - (dy01*minx) - ((dy01<0) || (dy01==0 && dx01>0));
+	sint cy1 = (dy12*lpoint[1].x) - (dx12*lpoint[1].y) + (dx12*miny) - (dy12*minx) - ((dy12<0) || (dy12==0 && dx12>0));
+	sint cy2 = (dy20*lpoint[2].x) - (dx20*lpoint[2].y) + (dx20*miny) - (dy20*minx) - ((dy20<0) || (dy20==0 && dx20>0)); 
 
-	const long st = XRES - (maxx-minx);
-	long off = miny * XRES + minx;
+	const sint st = XRES - (maxx-minx);
+	sint off = miny * XRES + minx;
 
 	if(s==0)
 	{
@@ -166,15 +166,15 @@ void polygon::raster(bool s) const
 		const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
 		fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z); 
 
-		for(long y=miny;y<maxy;++y,off+=st,ty+=zy)
+		for(sint y=miny;y<maxy;++y,off+=st,ty+=zy)
 		{
-			long cx0 = cy0;
-			long cx1 = cy1;
-			long cx2 = cy2;
+			sint cx0 = cy0;
+			sint cx1 = cy1;
+			sint cx2 = cy2;
 
 			fixed tx = ty;
 
-			for(long x=minx;x<maxx;++x,++off,tx+=zx) 
+			for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 			{
 				const fixed sz = screen::depth[off];
 		
@@ -196,13 +196,13 @@ void polygon::raster(bool s) const
 	}
 	else
 	{
-		for(long y=miny;y<maxy;++y,off+=st)
+		for(sint y=miny;y<maxy;++y,off+=st)
 		{
-			long cx0 = cy0;
-			long cx1 = cy1;
-			long cx2 = cy2;
+			sint cx0 = cy0;
+			sint cx1 = cy1;
+			sint cx2 = cy2;
 
-			for(long x=minx;x<maxx;++x,++off) 
+			for(sint x=minx;x<maxx;++x,++off) 
 			{
 				if( cx0<0 && cx1<0 && cx2<0 )
 				{
@@ -221,7 +221,7 @@ void polygon::raster(bool s) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,long c,long s) : color(c), scolor(s), shade(c)
+polygon::polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s) : color(c), scolor(s), shade(c)
 {
 	opoint[0] = cpoint[0] = x;
 	opoint[1] = cpoint[1] = y;
@@ -239,7 +239,7 @@ void polygon::update(const fmatrix& m,bool i)
 	cnormal.e = cnormal.length();
 }
 
-void polygon::display(const lvector& p,long f)
+void polygon::display(const lvector& p,sint f)
 {
 	guard(isvisible()==0);
 	counter++;

@@ -20,9 +20,9 @@
 #define TILE
 struct tile
 {
-	long  width;
-	long  height;
-	long* data;
+	sint  width;
+	sint  height;
+	sint* data;
 };
 #endif
 ///*
@@ -30,24 +30,24 @@ struct tile
 ///definitions
 namespace gfx
 {
-	/*OK*/ INLINE void circpix(long x,long y,long l,long t,long c);			//draw circle pixel
-	/*OK*/ INLINE long pix(long x,long y) { return screen::back[(y*XRES+x)]; }	//read pixel
-	/*OK*/ INLINE void pix(long x,long y,long c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
-	/*OK*/ void line(long x,long y,long a,long b,long c,bool k=0); 			//draw line
-	/*OK*/ void rect(long x,long y,long a,long b,long c,long d,bool f=0,bool g=0); 	//draw rectangle
-	/*OK*/ void circ(long x,long y,long r,long c);					//draw circle
-	/*OK*/ void sprite(const tile& t,long x,long y,bool a=0);			//draw sprite
-	/*OK*/ void fsprog(long p,long c=RED);						//draw full screen progress bar
+	/*OK*/ inline void circpix(sint x,sint y,sint l,sint t,sint c);			//draw circle pixel
+	/*OK*/ inline long pix(sint x,sint y) { return screen::back[(y*XRES+x)]; }	//read pixel
+	/*OK*/ inline void pix(sint x,sint y,sint c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
+	/*OK*/ void line(sint x,sint y,sint a,sint b,sint c,bool k=0); 			//draw line
+	/*OK*/ void rect(sint x,sint y,sint a,sint b,sint c,sint d,bool f=0,bool g=0); 	//draw rectangle
+	/*OK*/ void circ(sint x,sint y,sint r,sint c);					//draw circle
+	/*OK*/ void sprite(const tile& t,sint x,sint y,bool a=0);			//draw sprite
+	/*OK*/ void fsprog(sint p,sint c=RED);						//draw full screen progress bar
 	/*OK*/ tile* save();								//save current screen
 }
 ///*
 
 ///implementation
-void gfx::circpix(long x,long y,long l,long t,long c)
+void gfx::circpix(sint x,sint y,sint l,sint t,sint c)
 {
-	const long o = (y*XRES)+x;
-	const long p = t*XRES;
-	const long q = l*XRES;
+	const sint o = (y*XRES)+x;
+	const sint p = t*XRES;
+	const sint q = l*XRES;
 	screen::back[o+p+l] = c;
 	screen::back[o-p+l] = c;
 	screen::back[o+p-l] = c;
@@ -58,18 +58,18 @@ void gfx::circpix(long x,long y,long l,long t,long c)
 	screen::back[o-q-t] = c;
 }
 
-void gfx::line(long x,long y,long a,long b,long c,bool k)
+void gfx::line(sint x,sint y,sint a,sint b,sint c,bool k)
 {
 	guard(x<0 || y<0 || x>XRES || y>YRES || a<0 || b<0 || a>XRES || b>YRES);
-	const long s = math::set(2,long(y==b)-long(x==a),k==1);
+	const sint s = math::set(2,sint(y==b)-sint(x==a),k==1);
 
-	long o = 0;
-	long p = 0;
-	long q = 0;
-	long dx = 0;
-	long dy = 0;
-	long xs = 1;
-	long ys = XRES;
+	sint o = 0;
+	sint p = 0;
+	sint q = 0;
+	sint dx = 0;
+	sint dy = 0;
+	sint xs = 1;
+	sint ys = XRES;
 	packed u = { c };
 	packed v = { c };
 
@@ -79,7 +79,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			p = math::min(y,b);
 			q = math::max(y,b);
 			o = p*XRES+x;
-			for(long i=p;i<=q;++i)
+			for(sint i=p;i<=q;++i)
 			{
 				screen::back[o] = c;
 				o += XRES;
@@ -90,7 +90,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			p = math::min(x,a);
 			q = math::max(x,a);
 			o = y*XRES+p;
-			for(long i=p;i<=q;++i)
+			for(sint i=p;i<=q;++i)
 			{
 				screen::back[o++] = c;
 			}
@@ -113,7 +113,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			dy = math::set(p,dy,dy==dx);
 			p = dy;
 			q = dx;
-			for(long i=0;i<=q;++i)
+			for(sint i=0;i<=q;++i)
 			{
 				screen::back[o] = c;
 				p += dy;
@@ -138,7 +138,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 			dy = math::set(dy,p,dy!=dx);
 			p = dy;
 			q = dx;
-			for(long i=0;i<=q;++i)
+			for(sint i=0;i<=q;++i)
 			{
 				u.d = screen::back[o-xs];
 				u.b[0] = 0xFF;
@@ -161,7 +161,7 @@ void gfx::line(long x,long y,long a,long b,long c,bool k)
 	}
 }
 
-void gfx::rect(long x,long y,long a,long b,long c,long d,bool f,bool g)
+void gfx::rect(sint x,sint y,sint a,sint b,sint c,sint d,bool f,bool g)
 {
 	line(x,y,a,y,c);
 	line(a,y,a,b,c);
@@ -174,20 +174,20 @@ void gfx::rect(long x,long y,long a,long b,long c,long d,bool f,bool g)
 		++x;
 		++y;
 		--a;
-		for(long i=y;i<b;++i)
+		for(sint i=y;i<b;++i)
 		{
 			line(x,i,a,i,d,0);
 		}
 	}
 }
 
-void gfx::circ(long x,long y,long r,long c)
+void gfx::circ(sint x,sint y,sint r,sint c)
 {
 	//guard(x-r<0 || x+r>XRES || y-r<0 || y+r>YRES);
-	long d  = 3 - (r<<1);
-	long cx = 0;
-	long cy = r;
-	long ct = 0;
+	sint d  = 3 - (r<<1);
+	sint cx = 0;
+	sint cy = r;
+	sint ct = 0;
 
 	while(cx<=cy)
 	{
@@ -199,18 +199,18 @@ void gfx::circ(long x,long y,long r,long c)
 	}
 }
 
-void gfx::sprite(const tile& t,long x,long y,bool a)
+void gfx::sprite(const tile& t,sint x,sint y,bool a)
 {
-	const long xd = -XRES+x+t.width;
-	const long yd = -YRES+y+t.height;
-	const long xmax = math::set(t.width,t.width-xd,xd<=0);
-	const long ymax = math::set(t.height,t.width-yd,yd<=0);
-	const long sx = t.width - xmax;
-	const long d = XRES - xmax;
+	const sint xd = -XRES+x+t.width;
+	const sint yd = -YRES+y+t.height;
+	const sint xmax = math::set(t.width,t.width-xd,xd<=0);
+	const sint ymax = math::set(t.height,t.width-yd,yd<=0);
+	const sint sx = t.width - xmax;
+	const sint d = XRES - xmax;
 
-	for(long i=0,o=y*XRES+x,s=0;i<ymax;++i,o+=d)
+	for(sint i=0,o=y*XRES+x,s=0;i<ymax;++i,o+=d)
 	{
-		for(long j=0;j<xmax;++j,++o,++s)
+		for(sint j=0;j<xmax;++j,++o,++s)
 		{
 			const packed c = { t.data[s] };
 			screen::back[o] = math::set(c.d,screen::back[o],c.b[0]==0xFF||a==1); 
@@ -219,14 +219,14 @@ void gfx::sprite(const tile& t,long x,long y,bool a)
 	}
 }
 
-void gfx::fsprog(long p,long c)
+void gfx::fsprog(sint p,sint c)
 {
 	p = math::min(math::max(p,100),0);
-	const long r = (XRES*p)/100;
-	const long q = -r*p + XRES;
-	for(ulong i=0,o=0;i<YRES;++i,o+=q)
+	const sint r = (XRES*p)/100;
+	const sint q = -r*p + XRES;
+	for(uint i=0,o=0;i<YRES;++i,o+=q)
 	{
-		for(long j=0;j<r;++j,++o)
+		for(sint j=0;j<r;++j,++o)
 		{
 			screen::back[o] &= c;
 		}
@@ -235,10 +235,10 @@ void gfx::fsprog(long p,long c)
 
 tile* gfx::save()
 {
-	const long l = XRES*YRES;
-	long* d = new long[l];
+	const sint l = XRES*YRES;
+	sint* d = new sint[l];
 	tile* r = new tile({XRES,YRES,d});
-	for(long i=0;i<l;++i) { d[i] = screen::back[i]; }
+	for(sint i=0;i<l;++i) { d[i] = screen::back[i]; }
 	return r;
 }
 ///*

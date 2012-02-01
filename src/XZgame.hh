@@ -9,6 +9,7 @@
 ///*
 
 ///includes
+#include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZvector.hh"
 ///*
@@ -20,20 +21,20 @@ typedef fvector box[2];
 ///definition
 namespace game
 {
-	/*OK*/ INLINE bool onscreen(long x,long y);
-	/*OK*/ INLINE bool inside(long x,long y,long a,long b,long c,long d);
+	/*OK*/ inline bool onscreen(sint x,sint y);
+	/*OK*/ inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d);
 	              bool collision(const fvector& x,const box& y,const fvector& a,bool r=1);
-	              long angle(const fvector& x,const box& y,const fvector& m);
+	              sint angle(const fvector& x,const box& y,const fvector& m);
 }
 ///*
 
 ///implementation
-bool game::onscreen(long x,long y)
+bool game::onscreen(sint x,sint y)
 {
 	return (x>0)&&(y>0)&&(x<XRES)&&(y<YRES);
 }
 
-bool game::inside(long x,long y,long a,long b,long c,long d)
+bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
 {
 	return x>math::min(a,c)&&y>math::min(b,d)&&x<math::max(a,c)&&y<math::max(b,d);
 }
@@ -79,7 +80,7 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	//*
 
 	//check overlap
-	long v = -4;
+	sint v = -4;
 	v += (loc0 > math::min(inter[0][0],inter[0][1])) && (loc0 < math::max(inter[0][0],inter[0][1]));
 	v += (loc1 > math::min(inter[1][0],inter[1][1])) && (loc1 < math::max(inter[1][0],inter[1][1]));
 	v += (loc2 > math::min(inter[2][0],inter[2][1])) && (loc2 < math::max(inter[2][0],inter[2][1]));
@@ -89,7 +90,7 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	return v;
 }
 
-long game::angle(const fvector& x,const box& y,const fvector& m)
+sint game::angle(const fvector& x,const box& y,const fvector& m)
 {
 	return 0;
 }

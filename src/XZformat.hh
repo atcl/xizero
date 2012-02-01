@@ -9,6 +9,7 @@
 ///*
 
 ///includes
+#include "XZbasic.hh"
 #include "XZutil.hh"
 #include "XZgfx.hh"
 #include "XZstring.hh"
@@ -20,25 +21,25 @@ struct info
 {
 	char** name;
 	char** value;
-	long   count;
-	char*  operator[](const char* n) const {for(long i=0;i<count;++i){if(string::find(n,name[i])==0){return value[i];}} return 0;} 
+	sint   count;
+	char*  operator[](const char* n) const {for(sint i=0;i<count;++i){if(string::find(n,name[i])==0){return value[i];}} return 0;} 
 };
 
 struct file
 {
 	char* name;
 	char* data;
-	long  size;
-	long* files;
+	sint  size;
+	sint* files;
 };
 
 #ifndef TILE
 #define TILE
 struct tile
 {
-	long  width;
-	long  height;
-	long* data;
+	sint  width;
+	sint  height;
+	sint* data;
 };
 #endif
 ///*
@@ -50,7 +51,7 @@ namespace format
 	/*OK*/ tile*  ras(const char* x);		//load sun raster image
 	/*OK*/ tile*  xpm(const char** x);		//load xpm image
 	/*OK*/ info*  ini(const char* x);		//load ini configuartion
-	file*  ar(const char* x,long s);		//load ar archive
+	file*  ar(const char* x,sint s);		//load ar archive
 }
 ///*
 
@@ -58,11 +59,11 @@ namespace format
 char** format::csv(const char* x,char y)
 {
 	char* s = string::repl(x,'\n',y);
-	const long l = string::count(s,y);
+	const sint l = string::count(s,y);
 	char** r = new char*[l];
 	r[0] = s;
-	long i = 0;
-	long j = 1;
+	sint i = 0;
+	sint j = 1;
 	while(s[i]!=0 && j<l)
 	{
 		if(s[i]==y) { s[i] = 0; r[j++] = &s[++i]; }
@@ -73,41 +74,41 @@ char** format::csv(const char* x,char y)
 
 tile* format::ras(const char* x)
 {
-	const long* head  = reinterpret_cast<const long*>(x);
-	const long magic  = math::ndn(head[0]);
-	const long width  = math::ndn(head[1]);
-	const long height = math::ndn(head[2]);
-	const long depth  = math::ndn(head[3]);
-	//const long length = math::ndn(head[4]);
-	const long type   = math::ndn(head[5]);
+	const sint* head  = reinterpret_cast<const sint*>(x);
+	const sint magic  = math::ndn(head[0]);
+	const sint width  = math::ndn(head[1]);
+	const sint height = math::ndn(head[2]);
+	const sint depth  = math::ndn(head[3]);
+	//const sint length = math::ndn(head[4]);
+	const sint type   = math::ndn(head[5]);
 	if(magic!=0x59A66A95 || (depth!=32 && depth!=24) || (type!=0 && type!=1 && type!=2) || head[6]!=0 || head[7]!=0) { return 0; }
 
-	const unsigned char* source = reinterpret_cast<const unsigned char*>(&(x[32]));
-	const long size = (width*height)<<2;
+	const byte* source = reinterpret_cast<const byte*>(&(x[32]));
+	const sint size = (width*height)<<2;
 
 	tile* r = new tile;
 	r->width = width;
 	r->height = height;
-	r->data = new long[width*height];
-	unsigned char* data = reinterpret_cast<unsigned char*>(r->data);
+	r->data = new sint[width*height];
+	byte* data = reinterpret_cast<byte*>(r->data);
 
 	if(type==2) //run-length encoded
 	{
-		long src = 0;
-		long dst = 0;
+		sint src = 0;
+		sint dst = 0;
 	
 		while(dst<size)
 		{
 			if(source[src]==0x80) //is control symbol
 			{
 				src++;
-				const unsigned char run = source[src]; src++; //run-length
+				const byte run = source[src]; src++; //run-length
 
 				if(run!=0) //default
 				{
-					const unsigned char cur = source[src]; src++; //run-value
+					const byte cur = source[src]; src++; //run-value
 
-					for(long i=0;i<run;++i)
+					for(sint i=0;i<run;++i)
 					{
 						//i += (width%2==1 && dst%(width<<2)==1);
 						data[dst] = 0;
@@ -133,9 +134,9 @@ tile* format::ras(const char* x)
 	}
 	else //uncompressed
 	{
-		long i = 0;
-		long j = 0;
-		long k = 0;
+		sint i = 0;
+		sint j = 0;
+		sint k = 0;
 		while(i<size)
 		{
 			data[i] = source[j]; i++; j++;
@@ -152,51 +153,51 @@ tile* format::ras(const char* x)
 
 tile* format::xpm(const char** x)
 {
-	long   index = 0;
+	sint   index = 0;
 	char** line  = string::split(x[index++],' ');
 
-	guard(string::conl(line[3])!=1,0);
+	guard(string::str2int(line[3])!=1,0);
 
-	const long width  = string::conl(line[0]);
-	const long height = string::conl(line[1]);
-	const long colors = string::conl(line[2]);
-	long* data = new long[width*height];
+	const sint width  = string::str2int(line[0]);
+	const sint height = string::str2int(line[1]);
+	const sint colors = string::str2int(line[2]);
+	sint* data = new sint[width*height];
 	tile* r = new tile;
 	r->width = width;
 	r->height = height;
 	r->data = data;
 
-	unsigned long* color = new unsigned long[256];
-	for(long i=0;i<colors;++i)
+	uint* color = new uint[256];
+	for(sint i=0;i<colors;++i)
 	{
 		line = string::split(x[index++],' ');
 		if(string::find(line[2],"None")!=0)
 		{
-			color[long(line[0][0])] = TRANS; 
+			color[sint(line[0][0])] = TRANS; 
 		}
 		if(line[2][0]=='#')
 		{
-			for(long j=1;j<7;++j)
+			for(sint j=1;j<7;++j)
 			{
 				const char curr = line[2][j];
-				unsigned long temp = curr;
+				uint temp = curr;
 				temp -= math::set(48,(curr>=48 && curr<=57));
 				temp -= math::set(55,(curr>=65 && curr<=70));
 				temp -= math::set(87,(curr>=97 && curr<=102));
-				temp += color[long(line[0][0])];
+				temp += color[sint(line[0][0])];
 				temp <<= 4;
-				color[long(line[0][0])] = temp;
+				color[sint(line[0][0])] = temp;
 			}
-			color[long(line[0][0])] <<= 4;
-			color[long(line[0][0])] = math::ndn(color[long(line[0][0])]);
+			color[sint(line[0][0])] <<= 4;
+			color[sint(line[0][0])] = math::ndn(color[sint(line[0][0])]);
 		}
 	}
 
-	for(long i=0,o=0;i<height;++i,++index)
+	for(sint i=0,o=0;i<height;++i,++index)
 	{
-		for(long j=0;j<width;++j,++o)
+		for(sint j=0;j<width;++j,++o)
 		{
-			data[o] = color[long(x[index][j])];
+			data[o] = color[sint(x[index][j])];
 		}
 	}
 
@@ -206,8 +207,8 @@ tile* format::xpm(const char** x)
 
 info* format::ini(const char* x) 
 {
-	const long m = string::count(x,'=');
-	const long n = string::count(x,'\n');
+	const sint m = string::count(x,'=');
+	const sint n = string::count(x,'\n');
 	char** s = string::split(x,'\n');
 	char** t;
 
@@ -216,7 +217,7 @@ info* format::ini(const char* x)
 	r->name = new char*[m];
 	r->value = new char*[m];
 
-	for(long i=0,j=0;i<n;++i)
+	for(sint i=0,j=0;i<n;++i)
 	{
 		if(string::count(s[i],'=')!=0)
 		{
@@ -230,7 +231,7 @@ info* format::ini(const char* x)
 	return r;
 }
 
-file* format::ar(const char* x,long s)
+file* format::ar(const char* x,sint s)
 {
 	//ar can contain max 127 files!!!
 	file* r = new file[128];
@@ -239,8 +240,8 @@ file* format::ar(const char* x,long s)
 	if(x[0]=='!'&&x[1]=='<'&&x[2]=='a'&&x[3]=='r'&&x[4]=='c'&&x[5]=='h'&&x[6]=='>'&&x[7]=='<')
 	{
 		//init variables
-		long  bc = 8;
-		long* fc = new long[1];
+		sint  bc = 8;
+		sint* fc = new sint[1];
 		//*
 
 		//check for illegal mem access
@@ -252,13 +253,13 @@ file* format::ar(const char* x,long s)
 			//*
 			
 			//decode filesize of current ar member
-			const long fs = string::conl(&x[bc]) + 1;
+			const sint fs = string::str2int(&x[bc]) + 1;
 			bc += 12; //goto end of header
 			//*
 
 			//create char array for current ar member
 			char* dat = new char[fs];
-			for(long i=0;i<fs;i++,bc++) { dat[i] = x[bc]; } //? invalid read of size 4 here
+			for(sint i=0;i<fs;i++,bc++) { dat[i] = x[bc]; } //? invalid read of size 4 here
 			//*
 
 			//make new armember

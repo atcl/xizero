@@ -9,21 +9,22 @@
 ///*
 
 ///includes
+#include "XZbasic.hh"
 #include "XZscreen.hh"
 ///*
 
 ///definitions
 namespace compiled
 {
-	/*OK*/ void ammo(const ulong x,const ulong y,const ulong r,const ulong c);
-	void tracks(ulong x,ulong y,ulong d);
+	/*OK*/ void ammo(const uint x,const uint y,const uint r,const uint c);
+	void tracks(uint x,uint y,uint d);
 }
 ///*
 
 ///implementation
-void compiled::ammo(const ulong x,const ulong y,const ulong r,const ulong c)
+void compiled::ammo(const uint x,const uint y,const uint r,const uint c)
 {
-	ulong o = ((y-4)*XRES)+(x-3);
+	uint o = ((y-4)*XRES)+(x-3);
 
 	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o] = r;
 	o += XRES-4;
@@ -46,7 +47,7 @@ void compiled::ammo(const ulong x,const ulong y,const ulong r,const ulong c)
 	screen::back[o++] = screen::back[o++] = screen::back[o++] = screen::back[o] = r;
 }
 
-void compiled::tracks(ulong x,ulong y,ulong d)
+void compiled::tracks(uint x,uint y,uint d)
 {
 
 }

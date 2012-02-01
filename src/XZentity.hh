@@ -41,37 +41,37 @@ class entity
 		fvector _direction[2];
 		fvector** _ammomount;
 		lvector _towpos;
-		long _angle;
+		sint _angle;
 
 		bool _active;
-		long _lastupdate;
+		sint _lastupdate;
 
-		long _health;
+		sint _health;
 		
-		long _shield;
-		long _shieldmax;
-		long _shieldrate;
+		sint _shield;
+		sint _shieldmax;
+		sint _shieldrate;
 
-		long _ammomounts;
-		long _ammotype;
-		long _firerate;
-		long _lastfire;
+		sint _ammomounts;
+		sint _ammotype;
+		sint _firerate;
+		sint _lastfire;
 
-		long _points;
+		sint _points;
 
-		INLINE void setup(const lvector& p,object* m,const info& v);
-		INLINE void fire(long h,long i);
+		inline void setup(const lvector& p,object* m,const info& v);
+		inline void fire(sint h,sint i);
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
-		entity(const lvector& p,object* m,const info& v,long s);
+		entity(const lvector& p,object* m,const info& v,sint s);
 		entity(const lvector& p,object* m,const info& v);
 		~entity();
-		long update(long k,long& m);
-		long update(long m);
-		void display(long m,bool t);
-		INLINE void resume();
-		INLINE lvector data(long m) const;
-		INLINE void addpoints(long a) { _points += a; }
+		sint update(sint k,sint& m);
+		sint update(sint m);
+		void display(sint m,bool t);
+		inline void resume();
+		inline lvector data(sint m) const;
+		inline void addpoints(sint a) { _points += a; }
 };
 ///*
 
@@ -88,17 +88,17 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_direction[0].set(0,FXONE,0,FXONE);
 	_direction[1].set(0,FXONE,0,FXONE);
 
-	_health = string::conl(v["health"]);
-	_shield = _shieldmax = string::conl(v["shield"]);
-	_shieldrate = string::conl(v["srate"]);
-	_ammomounts = string::conl(v["mounts"]);
-	_ammotype = string::conl(v["atype"]);
-	_firerate = string::conl(v["frate"]);
-	_points = string::conl(v["points"]);
+	_health = string::str2int(v["health"]);
+	_shield = _shieldmax = string::str2int(v["shield"]);
+	_shieldrate = string::str2int(v["srate"]);
+	_ammomounts = string::str2int(v["mounts"]);
+	_ammotype = string::str2int(v["atype"]);
+	_firerate = string::str2int(v["frate"]);
+	_points = string::str2int(v["points"]);
 
 	_ammomount = new fvector*[_ammomounts];
-	const long s = (_model[1]!=0);
-	for(long i=0,j=0;i+j<_ammomounts;++i)
+	const sint s = (_model[1]!=0);
+	for(sint i=0,j=0;i+j<_ammomounts;++i)
 	{
 		fvector* t = _model[0]->docktype(s,i);
 		const bool mt = (t==0);
@@ -111,7 +111,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_lastupdate = _lastfire = system::clk();
 }
 
-void entity::fire(long h,long i)
+void entity::fire(sint h,sint i)
 {
 	const bool j = _ammomount[i]->z;
 	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,fx::div(FXONE,_direction[j].length())<<2}}); 
@@ -130,7 +130,7 @@ entity::entity(const lvector& p,object* m,object* n,const info& v)
 	_angle = 0;
 }
 
-entity::entity(const lvector& p,object* m,const info& v,long s)
+entity::entity(const lvector& p,object* m,const info& v,sint s)
 {
 	_model[1] = 0;
 	setup(p,m,v);
@@ -157,13 +157,13 @@ entity::~entity()
 	//delete ammomounts
 }
 
-long entity::update(long k,long& m)
+sint entity::update(sint k,sint& m)
 {
-	static long last = 0;
+	static sint last = 0;
 	const bool l = k^last;
-	const long curr = system::clk();
+	const sint curr = system::clk();
 
-	for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+	for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 	{
 		ammo* ca = (ammo*)_ammo.current();
 		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
@@ -251,15 +251,15 @@ long entity::update(long k,long& m)
 	return _health;
 }
 
-long entity::update(long m)
+sint entity::update(sint m)
 {
-	const long curr = system::clk();
+	const sint curr = system::clk();
 
 	_active |= (_position.y>m || _position.y<m) && (_position.y>0); //check!
 
 	if(_active!=0)
 	{
-		for(long i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+		for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		{
 			//const long h = game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
 			//if(h!=0) { _ammo.delcurrent(); }
@@ -268,7 +268,7 @@ long entity::update(long m)
 
 		if(curr>_lastfire)
 		{
-			for(long i=0;i<_ammomounts;++i) { fire(0,i); }
+			for(sint i=0;i<_ammomounts;++i) { fire(0,i); }
 			_lastfire = curr+_firerate;
 		}
 
@@ -289,21 +289,21 @@ long entity::update(long m)
 	return _health;
 }
 
-void entity::display(long m,bool t)
+void entity::display(sint m,bool t)
 {
 	guard(fx::r2l(_position.y)<m-100&&fx::r2l(_position.y)>m+YRES);
 
 	const lvector p(fx::r2l(_position.x),fx::r2l(_position.y)-m,fx::r2l(_position.z));
-	const long r = math::set(R_B,R_F,t);
+	const sint r = math::set(R_B,R_F,t);
 	_model[0]->display(p,r);
 	if(_model[1]!=0)
 	{
 		_model[1]->display(p+_towpos,r);
-		for(long i=_ammo.first();i<_ammo.length()&&r==R_F;i+=_ammo.next())
+		for(sint i=_ammo.first();i<_ammo.length()&&r==R_F;i+=_ammo.next())
 		{
 			const fvector* cur = &((ammo*)_ammo.current())->pos;
-			const long cx = fx::r2l(cur->x);
-			const long cy = fx::r2l(cur->y)-m;
+			const sint cx = fx::r2l(cur->x);
+			const sint cy = fx::r2l(cur->y)-m;
 			switch(game::onscreen(cx,cy))
 			{
 				case 0: /*delete*/ _ammo.delcurrent(); break;
@@ -313,7 +313,7 @@ void entity::display(long m,bool t)
 	}
 }
 
-lvector entity::data(long m) const
+lvector entity::data(sint m) const
 {
 	return lvector(fx::r2l(_position.x),fx::r2l(_position.y)-m,_health,_shield);
 }

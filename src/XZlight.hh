@@ -9,6 +9,7 @@
 ///*
 
 ///includes
+#include "XZbasic.hh"
 #include "XZgfx.hh"
 #include "XZmath.hh"
 ///*
@@ -17,26 +18,26 @@
 class light
 {
 	private:
-		long _radius;
-		long _color;
+		sint _radius;
+		sint _color;
 		tile _mask;
 
-		long lambert(long x,long y) const;
+		sint lambert(sint x,sint y) const;
 		void init(bool i=0);
 	public:
-		light(long r,long c) : _radius(r), _color(c) { init(); }
+		light(sint r,sint c) : _radius(r), _color(c) { init(); }
 		~light() { delete _mask.data; }
-		INLINE void draw(long x,long y) const;
-		INLINE void color(long c);
-		INLINE void radius(long r);
+		inline void draw(sint x,sint y) const;
+		inline void color(sint c);
+		inline void radius(sint r);
 };
 ///*
 
 ///implementation
-long light::lambert(long x,long y) const
+sint light::lambert(sint x,sint y) const
 {
-	const long i = _radius*_radius;
-	const long d = (x*x)+(y*y);
+	const sint i = _radius*_radius;
+	const sint d = (x*x)+(y*y);
 	const fixed l = fixed(-i+d)/fixed(d*(1-i));
 	
 	packed c = { _color };
@@ -52,33 +53,33 @@ void light::init(bool i)
 {
 	if(i!=0)
 	{
-		const long dim = (_radius<<1)+1;
+		const sint dim = (_radius<<1)+1;
 		_mask.width = _mask.height = dim;
 		delete _mask.data;
-		_mask.data = new long[dim*dim];
+		_mask.data = new sint[dim*dim];
 	}
 
-	for(long i=0,t=0;i<_mask.width;++i)
+	for(sint i=0,t=0;i<_mask.width;++i)
 	{
-		for(long j=0;j<_mask.width;++j,++t)
+		for(sint j=0;j<_mask.width;++j,++t)
 		{
 			_mask.data[t] = lambert(j-_radius,i-_radius);
 		}
 	}
 }
 
-void light::draw(long x,long y) const
+void light::draw(sint x,sint y) const
 {
 	gfx::sprite(_mask,x-_radius,y-_radius);
 }
 
-void light::color(long c)
+void light::color(sint c)
 {
 	_color = c;
 	init();
 }
 
-void light::radius(long r)
+void light::radius(sint r)
 {
 	_radius = r;
 	init(1);

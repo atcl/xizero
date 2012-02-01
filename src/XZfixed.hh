@@ -32,40 +32,40 @@
 #define FXRS1 0x00000126 //0.0045
 #define FXRS2 0x00012902 //1.1602
 
-typedef long fixed;
+typedef sint fixed;
 ///*
 
 namespace fx
 {
-	INLINE long  f2l(fixed x)  { return x>>FX; }
-	INLINE long  r2l(fixed x)  { return (x+FXHLF)>>FX; }
-	INLINE fixed l2f(long x)   { return x<<FX; }
-	INLINE fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
-	INLINE fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
+	inline sint  f2l(fixed x)  { return x>>FX; }
+	inline sint  r2l(fixed x)  { return (x+FXHLF)>>FX; }
+	inline fixed l2f(sint x)   { return x<<FX; }
+	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
+	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
-	INLINE fixed round(fixed x)       { return ((x + FXHLF)>>FX)<<FX; }
-	INLINE fixed sqr(fixed x)         { return math::sqr(x)<<(FX>>1); }
-	INLINE fixed rsq(fixed x)         { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
-	INLINE fixed sin(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return y; } // |a| < 1.74
-	INLINE fixed cos(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return x; } // |a| < 1.74 
-	INLINE fixed tan(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return div(y,x); } // |a| < 1.74 
-	INLINE fixed arcsin(fixed a)      { fixed x = FXITG; fixed y = 0; fixed z = 0; cordic(x,y,z,math::abs(a),0); return math::neg(z,a<0); } // |a| < 0.98
-	INLINE fixed arccos(fixed a)      { return FXPI2 - arcsin(a); }
-	INLINE fixed arctan(fixed a)      { fixed x = FXONE; fixed y = a; fixed z = 0; cordic(x,y,z,0,0); return z; }
-	INLINE fixed sinc(fixed a)        { return div(sin(a),a); }
-	INLINE fixed sinh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return y; } // |a| < 1.13
-	INLINE fixed cosh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return x; } // |a| < 1.13
-	INLINE fixed tanh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return div(y,x); } // |a| < 1.13
-	INLINE fixed artanh(fixed a)      { fixed x = FXONE; fixed y = a; fixed z = 0; cordic(x,y,z,0,1); return z; }
-	INLINE fixed arsinh(fixed a)      { return artanh(div(a,sqr(mul(a,a)+FXONE))); }
-	INLINE fixed arcosh(fixed a)      { return artanh(div(sqr(mul(a,a)-FXONE),a)); }
-	INLINE fixed exp(fixed a)         { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return x+y; }
-	INLINE fixed log(fixed a)         { fixed x = a+FXONE; fixed y = a-FXONE; fixed z = 0; cordic(x,y,z,0,1); return z<<1; } // 0.1 < a < 9.58
-	INLINE fixed log(fixed a,fixed b) { return fx::div(log(a),log(b)); }
-	INLINE fixed pow(fixed a,fixed b) { return exp(mul(log(a),b)); }
-	INLINE fixed hvs(fixed a)         { return (FXONE - cos(a))>>1; }
+	inline fixed round(fixed x)       { return ((x + FXHLF)>>FX)<<FX; }
+	inline fixed sqr(fixed x)         { return math::sqr(x)<<(FX>>1); }
+	inline fixed rsq(fixed x)         { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
+	inline fixed sin(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return y; } // |a| < 1.74
+	inline fixed cos(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return x; } // |a| < 1.74 
+	inline fixed tan(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return div(y,x); } // |a| < 1.74 
+	inline fixed arcsin(fixed a)      { fixed x = FXITG; fixed y = 0; fixed z = 0; cordic(x,y,z,math::abs(a),0); return math::neg(z,a<0); } // |a| < 0.98
+	inline fixed arccos(fixed a)      { return FXPI2 - arcsin(a); }
+	inline fixed arctan(fixed a)      { fixed x = FXONE; fixed y = a; fixed z = 0; cordic(x,y,z,0,0); return z; }
+	inline fixed sinc(fixed a)        { return div(sin(a),a); }
+	inline fixed sinh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return y; } // |a| < 1.13
+	inline fixed cosh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return x; } // |a| < 1.13
+	inline fixed tanh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return div(y,x); } // |a| < 1.13
+	inline fixed artanh(fixed a)      { fixed x = FXONE; fixed y = a; fixed z = 0; cordic(x,y,z,0,1); return z; }
+	inline fixed arsinh(fixed a)      { return artanh(div(a,sqr(mul(a,a)+FXONE))); }
+	inline fixed arcosh(fixed a)      { return artanh(div(sqr(mul(a,a)-FXONE),a)); }
+	inline fixed exp(fixed a)         { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return x+y; }
+	inline fixed log(fixed a)         { fixed x = a+FXONE; fixed y = a-FXONE; fixed z = 0; cordic(x,y,z,0,1); return z<<1; } // 0.1 < a < 9.58
+	inline fixed log(fixed a,fixed b) { return fx::div(log(a),log(b)); }
+	inline fixed pow(fixed a,fixed b) { return exp(mul(log(a),b)); }
+	inline fixed hvs(fixed a)         { return (FXONE - cos(a))>>1; }
 }
 
 ///implementation
@@ -80,7 +80,7 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	fixed t = FXONE>>h;
 	bool  r = 0;
 
-	for(ulong i=0;i<FX;++i)
+	for(uint i=0;i<FX;++i)
 	{
 		r = (((i-1)%3)==0)&&i!=1&&!r&&h;
 		const bool  s = (v>=0 && y<v) || (v<0 && z>=0);

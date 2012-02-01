@@ -9,6 +9,7 @@
 ///*
 
 ///includes
+#include "XZbasic.hh"
 #include "XZutil.hh"
 ///*
 
@@ -21,26 +22,26 @@ class list
 			void*   data;
 			member* next;
 			member* prev;
-			long    hash;
+			sint    hash;
 		};
 		member* _cur;
 		member* _fir;
 		member* _las;
-		ulong   _len;
+		uint    _len;
 	public:
-		INLINE list() : _cur(0),_fir(0),_las(0),_len(0) { ; }
-		INLINE ~list() { /*delete cur,fir,las)*/; }
-		INLINE bool islast() const { return _cur==_las; }
-		INLINE bool isfirst() const { return _cur==_fir; }
-		INLINE long length() const { return _len; }
-		INLINE long first() { _cur = _fir; return 0; }
-		INLINE long last() { _cur = _las; return _len; }
-		INLINE long prev() { guard(_len==0,0); _cur = _cur->prev; return -1; }
-		INLINE long next() { guard(_len==0,0); _cur = _cur->next; return  1; }
-		INLINE void* current() const { guard(_len==0,0); return _cur->data; }
-		INLINE void clear() { _cur = _fir = _las = 0; _len = 0; }
+		inline list() : _cur(0),_fir(0),_las(0),_len(0) { ; }
+		inline ~list() { /*delete cur,fir,las)*/; }
+		inline bool islast() const { return _cur==_las; }
+		inline bool isfirst() const { return _cur==_fir; }
+		inline sint length() const { return _len; }
+		inline sint first() { _cur = _fir; return 0; }
+		inline sint last() { _cur = _las; return _len; }
+		inline sint prev() { guard(_len==0,0); _cur = _cur->prev; return -1; }
+		inline sint next() { guard(_len==0,0); _cur = _cur->next; return  1; }
+		inline void* current() const { guard(_len==0,0); return _cur->data; }
+		inline void clear() { _cur = _fir = _las = 0; _len = 0; }
 		void* delcurrent();
-		void append(void* x,long h=0);
+		void append(void* x,sint h=0);
 		void exchangesort(bool u);
 		bool find(void* t);
 };
@@ -90,7 +91,7 @@ void* list::delcurrent()
 	return c;
 }
 
-void list::append(void* x,long h)
+void list::append(void* x,sint h)
 {
 	//very first member
 	if(_len==0)
@@ -122,9 +123,9 @@ void list::append(void* x,long h)
 
 void list::exchangesort(bool u) //use swap
 {
-	for(ulong i=1;i<_len;++i)
+	for(uint i=1;i<_len;++i)
 	{
-		for(ulong j=(i+1);j<_len;++j)
+		for(uint j=(i+1);j<_len;++j)
 		{
 			if( (_cur->hash<_cur->next->hash&&u) || (_cur->hash>_cur->next->hash&&!u) )
 			{
@@ -144,7 +145,7 @@ bool list::find(void* t) //test
 {
 	bool r = 0;
 
-	for(ulong i=first();i<_len&&t!=_cur->data;i+=next())
+	for(uint i=first();i<_len&&t!=_cur->data;i+=next())
 	{
 		r = (t==_cur->data) || r;
 	}

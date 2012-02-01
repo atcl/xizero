@@ -24,21 +24,21 @@
 class progress : public gui
 {
 	private:
-		long _start;
-		long _end;
-		long _prog;
+		sint _start;
+		sint _end;
+		sint _prog;
 		bool _horver;
-		const long _coeff;
+		const sint _coeff;
 	public:
-		progress(long s,long e,bool d,long l,long t,long w,long h,long c,long b,long f,bool v);
-		INLINE void set(long x) { _prog = math::min(math::max(x,0),_end); }
-		INLINE void add(long x) { _prog = math::min(math::max(_prog+x,0),_end); }
+		progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v);
+		inline void set(long x) { _prog = math::min(math::max(x,0),_end); }
+		inline void add(long x) { _prog = math::min(math::max(_prog+x,0),_end); }
 		       void draw() const;
 };
 ///*
 
 ///implementation
-progress::progress(long s,long e,bool d,long l,long t,long w,long h,long c,long b,long f,bool v) :
+progress::progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
 	_start(s),
 	_end(e),
@@ -50,7 +50,7 @@ progress::progress(long s,long e,bool d,long l,long t,long w,long h,long c,long 
 void progress::draw() const
 {
 	guard(_visible==0);
-	const long p = (_prog * _coeff)>>16;
+	const sint p = (_prog * _coeff)>>16;
 	gfx::rect(_left,_top,_left+_width,_top+_height,_backcolor,_backcolor,1,0);
 	gfx::rect(_left+2,_top+2+math::set(_height-4-p,_horver==1),_left+2+math::set(p,_width-4,_horver==0),_top+_height-2,_color,_color,1); 
 }

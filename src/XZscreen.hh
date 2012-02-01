@@ -12,6 +12,7 @@
 #include <GL/gl.h>
 #include <GL/glfw.h>
 
+#include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZmath.hh"
 ///* 
@@ -42,58 +43,58 @@ namespace screen
 	buffer accum    = buffer(XRES*YRES);	//Accumulation Buffer for FSAA/FXAA and FSMB
 	buffer inter    = buffer(XRES*YRES);	//Mask Buffer for user interfaces
 
-	void init(long x,long y,const char* t,long* b=0);
+	void init(sint x,long y,const char* t,sint* b=0);
 	bool run();
 	void exit();
 
 	class input
 	{
-		static long joy[2];
-		static long mouse[4];	
-		static long key[2];
-		static long* framebuffer;
-		static long* counter;
+		static sint joy[2];
+		static sint mouse[4];	
+		static sint key[2];
+		static sint* framebuffer;
+		static sint* counter;
 
 		friend void cb_key(int k,int a);
 		friend void cb_mouseb(int b,int a);
 		friend void cb_mousep(int x,int y);
 
-		friend long key();
-		friend long turbo();
-		friend long mousex();
-		friend long mousey();
-		friend long mousel();
-		friend long mouser();
-		friend long joya();
-		friend long joyb();
+		friend sint key();
+		friend sint turbo();
+		friend sint mousex();
+		friend sint mousey();
+		friend sint mousel();
+		friend sint mouser();
+		friend sint joya();
+		friend sint joyb();
 
 		friend bool run();
-		friend void init(long x,long y,const char* t,long* b);
+		friend void init(sint x,sint y,const char* t,sint* b);
 	};
 
 	void cb_key(int k,int a)    { input::key[1] = input::key[0] = math::set(k,a==GLFW_PRESS); }
 	void cb_mouseb(int b,int a) { input::mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
 	void cb_mousep(int x,int y) { input::mouse[2] = x; input::mouse[3] = y; }
 
-	INLINE long key()    { const long k = input::key[1]; input::key[1] = 0; return k; }
-	INLINE long turbo()  { return input::key[0]; }
-	INLINE long mousex() { return input::mouse[2]; }
-	INLINE long mousey() { return input::mouse[3]; }
-	INLINE long mousel() { return input::mouse[0]; }
-	INLINE long mouser() { return input::mouse[1]; }
-	INLINE long joya()   { return input::joy[0]; }
-	INLINE long joyb()   { return input::joy[1]; }
+	inline sint key()    { const sint k = input::key[1]; input::key[1] = 0; return k; }
+	inline sint turbo()  { return input::key[0]; }
+	inline sint mousex() { return input::mouse[2]; }
+	inline sint mousey() { return input::mouse[3]; }
+	inline sint mousel() { return input::mouse[0]; }
+	inline sint mouser() { return input::mouse[1]; }
+	inline sint joya()   { return input::joy[0]; }
+	inline sint joyb()   { return input::joy[1]; }
 }
 ///*
 
 ///implementation
-long  screen::input::joy[2] = { 0,0 };
-long  screen::input::mouse[4] = { 0,0,0,0 };
-long  screen::input::key[2] = { 0,0 };
-long* screen::input::framebuffer = back.pointer();
-long* screen::input::counter = 0;
+sint  screen::input::joy[2] = { 0,0 };
+sint  screen::input::mouse[4] = { 0,0,0,0 };
+sint  screen::input::key[2] = { 0,0 };
+sint* screen::input::framebuffer = back.pointer();
+sint* screen::input::counter = 0;
 
-void screen::init(long x,long y,const char* t,long* b)
+void screen::init(sint x,sint y,const char* t,sint* b)
 {
 	input::counter = b;
 	glfwInit();
@@ -130,7 +131,7 @@ bool screen::run()
 	input::joy[0] = math::set(2,input::joy[0],input::joy[0]==-1082130431);
 	input::joy[0] = math::set(3,input::joy[0],input::joy[1]==1065353216);
 	input::joy[0] = math::set(4,input::joy[1]==-1082130431);
-	glfwGetJoystickButtons(0,(uchar*)&input::joy[1],4);
+	glfwGetJoystickButtons(0,(byte*)&input::joy[1],4);
 	input::joy[1] = math::set(1,input::joy[1],(input::joy[1]>>24)!=0);
 	input::joy[1] = math::set(2,input::joy[1],(input::joy[1]>>16)!=0);
 	input::joy[1] = math::set(3,input::joy[1],(input::joy[1]>>8)!=0);
