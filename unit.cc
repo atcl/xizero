@@ -90,6 +90,10 @@ system::say(string::int2str(1),1);
 system::say(string::int2str(0),1);
 system::say(string::int2str(-10),1);
 system::say(string::int2str(10),1);
+system::say(string::int2str(-20),1);
+system::say(string::int2str(20),1);
+system::say(string::int2str(-100),1);
+system::say(string::int2str(100),1);
 system::say(string::int2str(34567),1);
 system::say(string::int2str(-9876),1);
 

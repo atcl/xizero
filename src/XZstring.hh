@@ -110,7 +110,7 @@ sint string::find(const char* x,const char* y)
 	return r;
 }
 
-sint string::str2int(const char* x)
+sint string::str2int(const char* x) //fix space after number
 {
 	sint r = 0;
 	sint i = length(x)-1;
@@ -135,15 +135,16 @@ sint string::str2hex(const char* x)
 char* string::int2str(sint x)
 {
 	char* r = new char[16];
-	sint  i = sint(x<0);
+	sint  i = (x<0);
 	x       = math::abs(x);
-	r[0]    = math::set('-',i);
-	for(sint d=1000000000;d>0;d/=10)
+	r[0]    = math::set('-','0',i);
+	i      += (x==0);
+	for(sint d=1000000000,k=0;d>0;d/=10,i+=k)
 	{
 		const sint j = x/d;
+		k = (k+j>0);
 		x -= d*j;
 		r[i] = j+'0';
-		i += j!=0;
 	}
 	r[i] = 0;
 	return r;
