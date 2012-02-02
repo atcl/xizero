@@ -20,6 +20,7 @@
 #include "src/XZlist.hh"
 #include "src/XZmath.hh"
 #include "src/XZmatrix.hh"
+#include "src/XZmsgbox.hh"
 #include "src/XZobject.hh"
 #include "src/XZpolygon.hh"
 #include "src/XZprogress.hh"
