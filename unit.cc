@@ -85,19 +85,7 @@ int main(int argc,char** argv)
 
 	object u(system::ldf(argv[1]));
 
-system::say(string::int2str(-1),1);
-system::say(string::int2str(1),1);
-system::say(string::int2str(0),1);
-system::say(string::int2str(-10),1);
-system::say(string::int2str(10),1);
-system::say(string::int2str(-20),1);
-system::say(string::int2str(20),1);
-system::say(string::int2str(-100),1);
-system::say(string::int2str(100),1);
-system::say(string::int2str(34567),1);
-system::say(string::int2str(-9876),1);
-
-	/*while(screen::run())
+	while(screen::run())
 	{
 		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); }
 
@@ -108,7 +96,7 @@ system::say(string::int2str(-9876),1);
 		viewer(u,screen::turbo());
 
 		bench();
-	}*/
+	}
 	//*
 	
 	//generate();

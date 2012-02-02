@@ -20,7 +20,7 @@
 namespace math
 {
 	/*OK*/ inline sint sgn(sint x) { return (x>>31)|(sint)(((uint)-x)>>31); }
-	/*OK*/ inline sint abs(sint x) { return ((uint(x>=0)-1) ^ x) | (x<0); }
+	/*OK*/ inline sint abs(sint x) { sint y=x>>31; x^=y; x-=y; return x; }
 	/*OK*/ inline sint ndn(sint x) { return ((x>>24)&0x000000ff) | ((x<<8)&0x00ff0000) | ((x>>8)&0x0000ff00) | ((x<<24)&0xff000000); }
 	/*OK*/ inline sint min(sint x,sint y) { return y^((x^y) & -(x<y)); }
 	/*OK*/ inline sint max(sint x,sint y) { return x^((x^y) & -(x<y)); }
