@@ -85,6 +85,8 @@ int main(int argc,char** argv)
 
 	object u(system::ldf(argv[1]));
 
+	dialog::msgbox("Hi there!\n How are ya?\n Ha ha");
+
 	while(screen::run())
 	{
 		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); }

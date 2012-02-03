@@ -13,6 +13,7 @@
 #include "XZfont.hh"
 #include "XZbutton.hh"
 #include "XZscreen.hh"
+#include "XZicon.hh"
 ///*
 
 ///definitions
@@ -33,12 +34,14 @@ sint dialog::msgbox(const char* m)
 	button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
 
 	tile* scr = gfx::save();
+	tile* cur = format::xpm(cursor);
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		gfx::sprite(*scr,0,0,1);
-		gfx::rect(x,y,x+w,y+h,WHITE,SYSCOL,1,0);
-		font::draw(x,y,m,BLACK,WHITE,0);
+		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
+		font::draw(x+20,y+20,m,BLACK,WHITE,0);
 		bok.draw();
+		gfx::sprite(*cur,screen::mousex(),screen::mousey());
 	}
 	return 0;
 }

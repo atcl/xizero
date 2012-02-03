@@ -81,18 +81,20 @@ sint font::draw(sint x,sint y,char a,sint c,sint b,sint t)
 
 void font::draw(sint x,sint y,const char* a,sint c,sint b,sint t)
 {
-	const sint l = string::length(a);
-
-	for(sint i=0;i<l;++i)
+	const sint z = x;
+	sint i = 0;
+	while(a[i]!=0)
 	{
 		if(a[i]=='\n')
 		{
 			y += type::f[t]->height;
+			x = z-type::f[t]->height;
 		}
 		else
 		{
 			x += draw(x,y,a[i],c,b,t);
 		}
+		i++;
 	}
 }
 
