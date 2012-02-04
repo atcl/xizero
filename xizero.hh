@@ -135,7 +135,6 @@ void mainmenu()
 	//*
 
 	//draw menu
-	tile* cur = format::xpm(resource::cursor);
 	//tile* back = format::ras(system::ldf("dat/back.ras"));
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
