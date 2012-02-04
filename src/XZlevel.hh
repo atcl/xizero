@@ -220,11 +220,11 @@ void level::display()
 	object::linear.clear();
 	object::linear.translate(0,fx::l2f(300),0);
 	sint r = math::max((mark/BWIDTH)-3,0);
-	for(sint i=0;i<34;++i,++r)
+	for(uint i=0;i<34;++i,++r)
 	{
-		terrain[r]->update();
-		terrain[r]->display(p,R_F);
-		terrain[r]->reset();
+		object temp(*terrain[r]);
+		temp.update();
+		temp.display(p,R_F);
 		object::linear.translate(0,yd,0);
 	}
 	//*

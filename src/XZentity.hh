@@ -277,8 +277,8 @@ sint entity::update(sint m)
 		_position.y += fx::mul(_direction[1].y,_direction[1].e);
 		_position.z += fx::mul(_direction[1].z,_direction[1].e);
 
-		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x<=100);
-		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x>=700);
+		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x<=fx::l2f(150));
+		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x>=fx::l2f(650));
 	}
 
 	if(_health<0)

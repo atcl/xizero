@@ -28,9 +28,7 @@ class object
 	private:
 		polygon** poly;
 		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
-		fvector*  odock;
 		box       bbox;
-		box       obox;
 		sint      polys;
 		sint      docks;
 	public:
@@ -40,12 +38,10 @@ class object
 		/*OK*/ object(const object& o);
 		       ~object();
 		/*OK*/ void   update(const fmatrix& m=object::linear);
-		/*OK*/ inline void display(const lvector& p,sint f) const;
-		/*OK*/ void   reset();
-		/*OK*/ void   set();
+		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
-		/*OK*/ inline box& boundingbox() { return bbox; }
 		/*OK*/ void   pull(sint x);
+		/*OK*/ inline box& boundingbox() { return bbox; }
 
 		static fmatrix linear;
 };
@@ -63,7 +59,7 @@ lvector object::project(const lvector& p,const lvector& v)
 	return r;
 }
 
-object::object(const char* o)
+object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 {
 	char** t = format::csv(o);
 	sint i = 0;
@@ -74,8 +70,7 @@ object::object(const char* o)
 	polys += 2*string::str2int(t[i++]); 
 	docks = string::str2int(t[i++]);
 	poly  = new polygon*[polys];
-	dock  = new fvector[docks];
-	odock = new fvector[docks];
+	if(docks!=0) { dock = new fvector[docks]; }
 
 	if(string::find(t[i++],"objt")==-1) { system::say("y3d format wrong (objt)",1); system::bye(-1); }
 
@@ -140,17 +135,13 @@ object::object(const char* o)
 
 			const sint type = string::str2int(t[i++]);
 			dock[dc].set(fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type);
-			odock[dc] = dock[dc];
 		}
 	}
-
-	obox[0] = bbox[0];
-	obox[1] = bbox[1];
 
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),odock(0),polys(x<<1),docks(0)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),polys(x<<1),docks(0)
 {
 	for(sint i=0;i<x;++i)
 	{
@@ -188,11 +179,10 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 	}
 }
 
-object::object(const object& o) : poly(0),dock(0),odock(0),polys(o.polys),docks(o.docks)
+object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks)
 {
 	poly  = new polygon*[polys];
-	dock  = new fvector[docks];
-	odock = new fvector[docks];
+	if(docks!=0) { dock = new fvector[docks]; }
 	
 	for(sint i=0;i<polys;++i)
 	{
@@ -201,12 +191,9 @@ object::object(const object& o) : poly(0),dock(0),odock(0),polys(o.polys),docks(
 	for(sint i=0;i<docks;++i)
 	{
 		dock[i] = o.dock[i];
-		odock[i] = o.odock[i];
 	}
 	bbox[0] = o.bbox[0];
 	bbox[1] = o.bbox[1];
-	obox[0] = o.obox[0];
-	obox[1] = o.obox[1];
 }
 
 object::~object()
@@ -236,34 +223,6 @@ void object::display(const lvector& p,sint f) const
 	{
 		poly[i]->display(p,f);
 	}
-}
-
-void object::reset()
-{
-	for(sint i=0;i<polys;++i)
-	{
-		(*poly[i]).reset();
-	}
-	for(sint i=0;i<docks;++i)
-	{
-		dock[i] = odock[i];
-	}
-	bbox[0] = obox[0];
-	bbox[1] = obox[1];
-}
-
-void object::set()
-{
-	for(sint i=0;i<polys;++i)
-	{
-		(*poly[i]).set();
-	}
-	for(sint i=0;i<docks;++i)
-	{
-		odock[i] = dock[i];
-	}
-	obox[0] = bbox[0];
-	obox[1] = bbox[1];
 }
 
 fvector* object::docktype(sint i,sint j) const

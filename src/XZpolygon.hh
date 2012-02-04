@@ -50,9 +50,7 @@ class polygon
 		const sint scolor;		//Shadow Color
 		sint shade;			//Current Color Shade
 		fvector cnormal;		//Polygon Normal
-		fvector onormal;		//Backup Normal
 		fvector cpoint[3];		//Polygon Vertices
-		fvector opoint[3];		//Backup Vertices
 		static lvector lpoint[3];	//Render Vertices
 
 		/*OK*/ inline bool isvisible() const { return cnormal.z<FXMON; }
@@ -222,11 +220,11 @@ void polygon::raster(bool s) const
 
 polygon::polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s) : color(c), scolor(s), shade(c)
 {
-	opoint[0] = cpoint[0] = x;
-	opoint[1] = cpoint[1] = y;
-	opoint[2] = cpoint[2] = z;
-	onormal   = cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) * FXHUN;
-	onormal.e = cnormal.e = cnormal.length();
+	cpoint[0] = x;
+	cpoint[1] = y;
+	cpoint[2] = z;
+	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) * FXHUN;
+	cnormal.e = cnormal.length();
 }
 
 void polygon::update(const fmatrix& m,bool i)
@@ -271,22 +269,6 @@ void polygon::add(const fvector& a)
 	cpoint[0] += a;
 	cpoint[1] += a;
 	cpoint[2] += a;
-}
-
-void polygon::set()
-{
-	opoint[0] = cpoint[0];
-	opoint[1] = cpoint[1];
-	opoint[2] = cpoint[2];
-	onormal   = cnormal;
-}
-
-void polygon::reset()
-{
-	cpoint[0] = opoint[0];
-	cpoint[1] = opoint[1];
-	cpoint[2] = opoint[2];
-	cnormal   = onormal;
 }
 ///*
 

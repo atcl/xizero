@@ -36,7 +36,7 @@
 	system::say(string::conf(fx::div(FXONE,x)),1);
 }*/
 
-void viewer(object& u,long k)
+void viewer(object* u,long k)
 {
 		const lvector pos(400,300,100);
 		static long rc = R_F;
@@ -64,17 +64,17 @@ void viewer(object& u,long k)
 			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
 			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
-			case 'R': u.reset(); rc=R_F; break;
+			case 'R': rc=R_F; break;
 			case 'T': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
 			case 'Z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
 			case 'U': break;
-			case 'I': u.pull(FXTNT); break;
-			case 'O': u.pull(-FXTNT); break;
+			case 'I': u->pull(FXTNT); break;
+			case 'O': u->pull(-FXTNT); break;
 			case 'P': rc=R_B; break;
 			case 'L': rc=R_S; break;
 		}
-		u.update();
-		u.display(pos,rc);
+		u->update();
+		u->display(pos,rc);
 }
 ///*
 
@@ -83,9 +83,7 @@ int main(int argc,char** argv)
 {
 	init();
 
-	object u(system::ldf(argv[1]));
-
-	dialog::msgbox("Hi there!\n How are ya?\n Ha ha");
+	object* u = new object(system::ldf(argv[1]));
 
 	while(screen::run())
 	{
@@ -95,6 +93,7 @@ int main(int argc,char** argv)
 		screen::depth.clear(fx::l2f(200));
 //if(screen::joya()!=0) { system::say(string::cons(screen::joya()),1); }
 //if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
+		if(screen::turbo()=='R') { delete u; u = new object(system::ldf(argv[1])); }
 		viewer(u,screen::turbo());
 
 		bench();
