@@ -32,7 +32,6 @@ struct tile
 namespace gfx
 {
 	/*OK*/ inline void circpix(sint x,sint y,sint l,sint t,sint c);			//draw circle pixel
-	/*OK*/ inline long pix(sint x,sint y) { return screen::back[(y*XRES+x)]; }	//read pixel
 	/*OK*/ inline void pix(sint x,sint y,sint c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
 	/*OK*/ void line(sint x,sint y,sint a,sint b,sint c,bool k=0); 			//draw line
 	/*OK*/ void rect(sint x,sint y,sint a,sint b,sint c,sint d,bool f=0,bool g=0); 	//draw rectangle
@@ -223,7 +222,7 @@ void gfx::fsprog(sint p,sint c)
 {
 	p = math::min(math::max(p,100),0);
 	const sint r = (XRES*p)/100;
-	const sint q = -r*p + XRES;
+	const sint q = XRES - r*p;
 	for(uint i=0,o=0;i<YRES;++i,o+=q)
 	{
 		for(sint j=0;j<r;++j,++o)

@@ -95,7 +95,7 @@ void font::draw(sint x,sint y,const char* a,sint c,sint b,sint t)
 		{
 			x += draw(x,y,a[i],c,b,t);
 		}
-		i++;
+		++i;
 	}
 }
 

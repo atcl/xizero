@@ -130,15 +130,15 @@ fixed fmatrix::trace()
 
 void fmatrix::transpose()
 {
-	const fixed t1 = _m[0][1];
+	const fixed a = _m[0][1];
 	_m[0][1] = _m[1][0];
-	_m[1][0] = t1;
-	const fixed t2 = _m[0][2];
+	_m[1][0] = a;
+	const fixed b = _m[0][2];
 	_m[0][2] = _m[2][0];
-	_m[2][0] = t2;
-	const fixed t3 = _m[1][2];
+	_m[2][0] = b;
+	const fixed c = _m[1][2];
 	_m[1][2] = _m[2][1];
-	_m[2][1] = t3;
+	_m[2][1] = c;
 }
 
 void fmatrix::project(fixed x,fixed y,fixed z,fixed w) //check! 

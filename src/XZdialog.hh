@@ -42,9 +42,8 @@ sint dialog::msgbox(const char* m)
 		bok.draw();
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
-	return 0;
-
 	delete scr;
+	return 0;
 }
 ///*
 
