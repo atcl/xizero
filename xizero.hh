@@ -31,7 +31,7 @@ void init() //PMAIN
 	//font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
 	//font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
 
-	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter,format::xpm(cursor));
+	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter,format::xpm(resource::cursor));
 }
 
 sint start(sint l)
@@ -133,7 +133,7 @@ void mainmenu()
 	//*
 
 	//draw menu
-	tile* cur = format::xpm(cursor);
+	tile* cur = format::xpm(resource::cursor);
 	//tile* back = format::ras(system::ldf("dat/back.ras"));
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{

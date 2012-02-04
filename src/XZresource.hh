@@ -4,15 +4,15 @@
 // Icon Library
 
 ///guard
-#ifndef HXX_XZICON
-#define HXX_XZICON
+#ifndef HXX_XZRESOURCE
+#define HXX_XZRESOURCE
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
-
-
 ///definition
-static const char* icon[] =
+namespace resource
+{
+	static const char* icon[] =
 { 
 "16 16 4 1",
 "# c #FFFFFF",
@@ -37,8 +37,7 @@ static const char* icon[] =
 ".##############.",
 "................",
 };
-
-static const char* cursor[] = 
+	static const char* cursor[] = 
 {
 "32 32 5 1",
 "# c None",
@@ -80,6 +79,7 @@ static const char* cursor[] =
 "################################",
 "################################"
 };
+}
 ///*
 
 #endif

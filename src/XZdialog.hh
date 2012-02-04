@@ -1,11 +1,11 @@
 // atCROSSLEVEL 2010,2011,2012
 // licensed under zlib-license
 // XZmsgbox.hh
-// Message Box Library 
+// Dialog Library 
 
 ///guard
-#ifndef HH_XZMSGBOX
-#define HH_XZMSGBOX
+#ifndef HH_XZDIALOG
+#define HH_XZDIALOG
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -14,7 +14,6 @@
 #include "XZfont.hh"
 #include "XZbutton.hh"
 #include "XZscreen.hh"
-#include "XZicon.hh"
 ///*
 
 ///definitions
