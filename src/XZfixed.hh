@@ -22,7 +22,7 @@
 #define FXTWO 0x00020000 //2
 #define FXTNT 0x00001999 //0.1
 #define FXHUN 0x0000028F //0.01
-#define FXRES 0x00000001 //eps
+#define FXEPS 0x00000001 //eps
 #define FXPI  0x0003243F //pi
 #define FX2PI 0x0006487E //2*pi
 #define FXPI2 0x0001921F //pi/2
@@ -42,7 +42,7 @@ namespace fx
 	inline sint  r2l(fixed x) { return (x+FXHLF)>>FX; } CONST
 	inline fixed l2f(sint x)  { return x<<FX; } CONST
 	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; } CONST
-	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } CONST
+	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 

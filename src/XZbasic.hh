@@ -19,7 +19,6 @@
 	#define UNLIKELY(x) __builtin_expect((x),0)
 	#define PREFETCH(x,y,z) __builtin_prefetch(x,y,z)
 
-	#define FCALL __attribute__((fastcall))
 	#define PMAIN __attribute__((constructor)) 
 	#define CONST __attribute__((const))
 	#define HOTFN __attribute__((hot))
@@ -32,7 +31,6 @@
 	#define UNLIKELY(x) x
 	#define PREFETCH(x,y,z)
 
-	#define FCALL
 	#define PMAIN 
 	#define CONST
 	#define HOTFN

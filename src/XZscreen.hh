@@ -107,9 +107,7 @@ void screen::init(sint x,sint y,const char* t,void* c)
 	glfwSetKeyCallback(&screen::cb_key);
 	glfwSetMouseButtonCallback(&screen::cb_mouseb);
 	glfwSetMousePosCallback(&screen::cb_mousep);
-	
 	glfwSwapInterval(0);
-	//glfwDisable(GLFW_MOUSE_CURSOR);
 
 	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);

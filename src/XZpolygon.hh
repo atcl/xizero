@@ -59,7 +59,7 @@ class polygon
 		/*OK*/ inline void shape() const;
 		/*OK*/        void project(const lvector& p) const;
 		              void flat(sint pz,sint f);
-		              void raster(bool s) const /*HOTFN FCALL*/; //based on "Daily Code Gem - Advanced Rasterization"
+		              void raster(bool s) const /*HOTFN*/; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s);
 		/*OK*/        void update(const fmatrix& m,bool i=0);
@@ -78,7 +78,7 @@ class polygon
 ///implementation
 lvector       polygon::lpoint[] = { lvector(), lvector(), lvector() };
 sint          polygon::counter  = 0;
-const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE);
+const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
 const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(fvector(0,FXTNT,FXONE),fvector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
 
 void polygon::project(const lvector& p) const
@@ -102,9 +102,7 @@ void polygon::flat(sint pz,sint f)
 {
 	fixed t = fx::mul(cnormal.e,light.e);
 	t = fx::div(cnormal.dot(light),t);
-	t = math::abs(t);
-	t = math::min(FXONE,t);
-	t = math::max(FXTNT,t);
+	t = math::lim(FXTNT,math::abs(t),FXONE);
 
 	const char ambient = math::set(AMBIENT,f&R_A);
 	const char nolight = math::set(NOLIGHT,f&R_N);

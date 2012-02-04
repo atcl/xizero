@@ -60,8 +60,8 @@ class entity
 
 		sint _points;
 
-		inline void setup(const lvector& p,object* m,const info& v);
-		inline void fire(sint h,sint i);
+		void setup(const lvector& p,object* m,const info& v);
+		void fire(sint h,sint i);
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,sint s);
@@ -71,8 +71,8 @@ class entity
 		sint update(sint m);
 		void display(sint m,bool t);
 		inline void resume();
+		inline void addpoints(sint a);
 		inline lvector data(sint m) const;
-		inline void addpoints(sint a) { _points += a; }
 };
 ///*
 
@@ -314,14 +314,19 @@ void entity::display(sint m,bool t)
 	}
 }
 
-lvector entity::data(sint m) const
-{
-	return lvector(fx::r2l(_position.x),fx::r2l(_position.y)-m,_health,_shield);
-}
-
 void entity::resume()
 {
 	_lastfire = _lastupdate = system::clk();
+}
+
+void entity::addpoints(sint a)
+{
+	_points += a;
+}
+
+lvector entity::data(sint m) const
+{
+	return lvector(fx::r2l(_position.x),fx::r2l(_position.y)-m,_health,_shield);
 }
 ///*
 
