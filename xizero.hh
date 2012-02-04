@@ -8,7 +8,7 @@
 ///*
 
 ///definition
-void init();
+void init() PMAIN;
 sint start(sint l);
 sint start();
 inline sint close();
@@ -24,14 +24,14 @@ void bench();
 ///*
 
 ///Implementation
-void init() //PMAIN
+void init()
 {
 	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
 	//font::init(system::ldf("dat/XZbig.fnt"),BIGFONT);
 	//font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
 	//font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
 
-	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter,format::xpm(resource::cursor));
+	screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
 }
 
 sint start(sint l)
@@ -46,6 +46,7 @@ sint start(sint l)
 
 	while(screen::run())
 	{
+		polygon::counter = 0;
 		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); v.resume(); }
 
 		v.update(screen::turbo());
