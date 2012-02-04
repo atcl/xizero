@@ -50,9 +50,9 @@ namespace screen
 
 	class input
 	{
-		static sint joy[2];
-		static sint mouse[4];	
-		static sint key[2];
+		static sint  joy[2];
+		static sint  mouse[4];	
+		static sint  key[2];
 		static sint* framebuffer;
 		static sint* counter;
 		static void* mcursor;
@@ -79,14 +79,14 @@ namespace screen
 	void cb_mouseb(int b,int a) { input::mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
 	void cb_mousep(int x,int y) { input::mouse[2] = x; input::mouse[3] = y; }
 
-	inline sint key()    { const sint k = input::key[1]; input::key[1] = 0; return k; }
-	inline sint turbo()  { return input::key[0]; }
-	inline sint mousex() { return input::mouse[2]; }
-	inline sint mousey() { return input::mouse[3]; }
-	inline sint mousel() { return input::mouse[0]; }
-	inline sint mouser() { return input::mouse[1]; }
-	inline sint joya()   { return input::joy[0]; }
-	inline sint joyb()   { return input::joy[1]; }
+	inline sint  key()    { const sint k = input::key[1]; input::key[1] = 0; return k; }
+	inline sint  turbo()  { return input::key[0]; }
+	inline sint  mousex() { return input::mouse[2]; }
+	inline sint  mousey() { return input::mouse[3]; }
+	inline sint  mousel() { return input::mouse[0]; }
+	inline sint  mouser() { return input::mouse[1]; }
+	inline sint  joya()   { return input::joy[0]; }
+	inline sint  joyb()   { return input::joy[1]; }
 	inline void* cursor() { return input::mcursor; }
 }
 ///*

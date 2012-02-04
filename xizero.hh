@@ -37,10 +37,11 @@ void init() //PMAIN
 sint start(sint l)
 {
 	//load level
-	//draw background
-	//draw text
+	//gfx::sprite(,0,0,0);
+	//font::draw(40,40,m,WHITE,TRANS,SYSFONT);
 	level v(system::ldf("dat/level0.lvl"));
-	//draw progress
+	//gfx::fsprog(50,RED);
+	//dialog::msgbox(n);
 	//*
 
 	while(screen::run())
@@ -74,13 +75,13 @@ sint load()
 
 sint about()
 {
-	//screen::instance()->msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
+	dialog::msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
 	return 0;
 }
 
 sint leave()
 {
-	//return screen::instance()->askbox("Are you sure?");
+	//return dialog::askbox("Are you sure?");
 	system::bye();
 	return 0;
 }
@@ -152,12 +153,14 @@ void mainmenu()
 
 void won()
 {
-
+	//screen::back.clear(BLACK);
+	//font::draw(40,40,m,WHITE,TRANS,SYSFONT);
 }
 
 void lost()
 {
-
+	//screen::back.clear(BLACK);
+	//font::draw(40,40,m,WHITE,TRANS,SYSFONT);
 }
 
 void bench()

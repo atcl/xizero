@@ -20,7 +20,7 @@
 namespace dialog
 {
 	sint msgbox(const char* m);
-	sint ok() { return 1; }
+	inline sint ok() { return 1; }
 }
 ///*
 
