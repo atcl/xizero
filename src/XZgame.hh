@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZGAME
 #define HH_XZGAME
+//#pragma message "Compiling " __FILE__ "..." " TODO: 2D Collision Detection"
 ///*
 
 ///includes

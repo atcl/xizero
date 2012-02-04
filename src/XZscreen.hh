@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZSCREEN
 #define HH_XZSCREEN
+//#pragma message "Compiling " __FILE__ "..." " TODO: Joypad"
 ///*
 
 ///includes
@@ -54,6 +55,7 @@ namespace screen
 		static sint key[2];
 		static sint* framebuffer;
 		static sint* counter;
+		static void* mcursor;
 
 		friend void cb_key(int k,int a);
 		friend void cb_mouseb(int b,int a);
@@ -67,9 +69,10 @@ namespace screen
 		friend sint mouser();
 		friend sint joya();
 		friend sint joyb();
+		friend void* cursor();
 
 		friend bool run();
-		friend void init(sint x,sint y,const char* t,sint* b);
+		friend void init(sint x,sint y,const char* t,sint* b,void* c=0);
 	};
 
 	void cb_key(int k,int a)    { input::key[1] = input::key[0] = math::set(k,a==GLFW_PRESS); }
@@ -84,6 +87,7 @@ namespace screen
 	inline sint mouser() { return input::mouse[1]; }
 	inline sint joya()   { return input::joy[0]; }
 	inline sint joyb()   { return input::joy[1]; }
+	inline void* cursor() { return input::mcursor; }
 }
 ///*
 
@@ -93,10 +97,12 @@ sint  screen::input::mouse[4] = { 0,0,0,0 };
 sint  screen::input::key[2] = { 0,0 };
 sint* screen::input::framebuffer = back.pointer();
 sint* screen::input::counter = 0;
+void* screen::input::mcursor = 0;
 
-void screen::init(sint x,sint y,const char* t,sint* b)
+void screen::init(sint x,sint y,const char* t,sint* b,void* c)
 {
 	input::counter = b;
+	input::mcursor = c;
 	glfwInit();
 	glfwOpenWindow(x,y,8,8,8,8,0,0,GLFW_WINDOW);
 	glfwSetWindowTitle(t);

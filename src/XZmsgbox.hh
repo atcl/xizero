@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZMSGBOX
 #define HH_XZMSGBOX
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes
@@ -31,19 +32,20 @@ sint dialog::msgbox(const char* m)
 	const sint h = font::height(m,0)+60;
 	const sint x = (XRES-w)>>1;
 	const sint y = (YRES-h)>>1;
-	button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
+	const button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
 
 	tile* scr = gfx::save();
-	tile* cur = format::xpm(cursor);
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
 		font::draw(x+20,y+20,m,BLACK,WHITE,0);
 		bok.draw();
-		gfx::sprite(*cur,screen::mousex(),screen::mousey());
+		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	return 0;
+
+	delete scr;
 }
 ///*
 

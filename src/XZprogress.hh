@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZPROGRESS
 #define HH_XZPROGRESS
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

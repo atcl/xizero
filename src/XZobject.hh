@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZOBJECT
 #define HH_XZOBJECT
+//#pragma message "Compiling " __FILE__ "..." " TODO: Destructor"
 ///*
 
 ///include

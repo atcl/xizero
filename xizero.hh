@@ -24,14 +24,14 @@ void bench();
 ///*
 
 ///Implementation
-void init()
+void init() //PMAIN
 {
 	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
 	//font::init(system::ldf("dat/XZbig.fnt"),BIGFONT);
 	//font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
 	//font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
 
-	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter);
+	screen::init(XRES,YRES,TITLE" "VERSION,&polygon::counter,format::xpm(cursor));
 }
 
 sint start(sint l)
@@ -88,14 +88,13 @@ sint leave()
 void menu()
 {
 	//enlist buttons
-	button b_close("X",&close,1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
-	button b_about("About",&about,0,2,19,50,16,BLACK,SYSCOL,SYSCOL,1);
-	button b_leave("Exit",&leave,0,52,19,50,16,BLACK,SYSCOL,SYSCOL,1);
+	const button b_close("X",&close,1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
+	const button b_about("About",&about,0,2,19,50,16,BLACK,SYSCOL,SYSCOL,1);
+	const button b_leave("Exit",&leave,0,52,19,50,16,BLACK,SYSCOL,SYSCOL,1);
 	//*
 
 	//draw menu
 	tile* scr = gfx::save();
-	tile* cur = format::xpm(cursor);
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())!=-1)
 	{
 		gfx::sprite(*scr,0,0,1);
@@ -106,11 +105,10 @@ void menu()
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();
-		gfx::sprite(*cur,screen::mousex(),screen::mousey());
+		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	//*
 
-	delete cur;
 	delete scr;
 }
 
@@ -135,8 +133,8 @@ void mainmenu()
 	//*
 
 	//draw menu
+	tile* cur = format::xpm(cursor);
 	//tile* back = format::ras(system::ldf("dat/back.ras"));
-	tile*   cur = format::xpm(cursor);
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		screen::back.clear(BLACK); //temp
@@ -147,7 +145,7 @@ void mainmenu()
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS,SYSFONT);
-		gfx::sprite(*cur,math::lim(0,screen::mousex(),XRES-cur->width),math::lim(0,screen::mousey(),YRES-cur->height));
+		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	//*
 }

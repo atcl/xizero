@@ -6,10 +6,11 @@
 ///guard
 #ifndef HH_XZBASIC
 #define HH_XZBASIC
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes
-#include <stdint.h>
+#include <cstdint>
 ///*
 
 ///definitions

@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZPOLYGON
 #define HH_XZPOLYGON
+//#pragma message "Compiling " __FILE__ "..." " TODO: Shading, Rasterizer"
 ///*
 
 ///include

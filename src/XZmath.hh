@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZMATH
 #define HH_XZMATH
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

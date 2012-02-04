@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZLIGHT
 #define HH_XZLIGHT
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

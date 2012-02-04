@@ -6,7 +6,10 @@
 ///guard
 #ifndef HXX_XZICON
 #define HXX_XZICON
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
+
+
 
 ///definition
 static const char* icon[] =

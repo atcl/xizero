@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZFONT
 #define HH_XZFONT
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

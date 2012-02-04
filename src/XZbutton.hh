@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZBUTTON
 #define HH_XZBUTTON
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

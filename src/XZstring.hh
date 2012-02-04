@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZSTRING
 #define HH_XZSTRING
+//#pragma message "Compiling " __FILE__ "..." " TODO: fix2str"
 ///*
 
 ///include

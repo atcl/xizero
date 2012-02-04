@@ -6,10 +6,11 @@
 ///guard
 #ifndef HH_XZSYSTEM
 #define HH_XZSYSTEM
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes
-#include <unistd.h> //isatty
+//#include <unistd.h> //isatty
 #include <cstdlib> //exit,system
 #include <cstdio> //putchar,fopen,fseek,ftell,fread,fclose
 #include <ctime> //clock,CLOCKS_PER_SEC
@@ -24,7 +25,7 @@ namespace system
 {
 	/*OK*/ inline void  bye(sint x=0) { exit(x); }
 	/*OK*/ inline sint  sys(const char* x) { return ::system(x); }
-	/*OK*/ inline sint  ter() { return isatty(0); }
+	//*OK*/ inline sint  ter() { return isatty(0); }
 	/*OK*/ inline sint  clk() { return (clock()*(1024000/CLOCKS_PER_SEC))>>10; }
 	/*OK*/        void  slp(sint x) { const sint e=clock()+x*CLOCKS_PER_SEC/1000; while(clock()<e) { ; } }
 	/*OK*/        void  say(const char* x,bool y) { sint i=0; while(x[i]!=0) { putchar(x[i]); i++; } if(y) { putchar('\n'); } }

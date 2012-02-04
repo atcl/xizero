@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZLEVEL
 #define HH_XZLEVEL
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

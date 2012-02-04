@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZFORMAT
 #define HH_XZFORMAT
+//#pragma message "Compiling " __FILE__ "..." " TODO: AR archive reader"
 ///*
 
 ///includes
@@ -278,7 +279,6 @@ file* format::ar(const char* x,sint s)
 
 		return r;
 	}
-
 	return 0;
 }
 ///*

@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZGUI
 #define HH_XZGUI
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZVECTOR
 #define HH_XZVECTOR
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes

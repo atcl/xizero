@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZGFX
 #define HH_XZGFX
+//#pragma message "Compiling " __FILE__ "..." " TODO: Guards"
 ///*
 
 ///includes
@@ -187,12 +188,11 @@ void gfx::circ(sint x,sint y,sint r,sint c)
 	sint d  = 3 - (r<<1);
 	sint cx = 0;
 	sint cy = r;
-	sint ct = 0;
 
 	while(cx<=cy)
 	{
 		circpix(x,y,cx,cy,c);
-		ct = math::set(cy-1,cy,d>0);
+		const sint ct = math::set(cy-1,cy,d>0);
 		d = math::set(d+(cx<<2)+6,d+((cx-cy)<<2)+10,d<0);
 		cy = ct;
 		++cx;

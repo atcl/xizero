@@ -6,6 +6,7 @@
 ///guard
 #ifndef HH_XZENTITY
 #define HH_XZENTITY
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
 ///includes
