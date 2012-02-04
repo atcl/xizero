@@ -22,8 +22,8 @@ typedef fvector box[2];
 ///definition
 namespace game
 {
-	/*OK*/ inline bool onscreen(sint x,sint y);
-	/*OK*/ inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d);
+	/*OK*/ inline bool onscreen(sint x,sint y) CONST;
+	/*OK*/ inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d) CONST;
 	              bool collision(const fvector& x,const box& y,const fvector& a,bool r=1);
 	              sint angle(const fvector& x,const box& y,const fvector& m);
 }

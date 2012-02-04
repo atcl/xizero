@@ -82,9 +82,9 @@ sint about()
 
 sint leave()
 {
-	//return dialog::askbox("Are you sure?");
+	//if(dialog::askbox("Are you sure?")==-1) { return -1; };
+	screen::exit();
 	system::bye();
-	return 0;
 }
 
 void menu()

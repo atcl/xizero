@@ -38,11 +38,11 @@ typedef sint fixed;
 
 namespace fx
 {
-	inline sint  f2l(fixed x)  { return x>>FX; }
-	inline sint  r2l(fixed x)  { return (x+FXHLF)>>FX; }
-	inline fixed l2f(sint x)   { return x<<FX; }
-	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
-	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
+	inline sint  f2l(fixed x) { return x>>FX; } CONST
+	inline sint  r2l(fixed x) { return (x+FXHLF)>>FX; } CONST
+	inline fixed l2f(sint x)  { return x<<FX; } CONST
+	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; } CONST
+	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } CONST
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
