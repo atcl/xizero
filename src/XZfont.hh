@@ -28,18 +28,10 @@
 ///definitions
 namespace font
 {
-	class type
+	namespace
 	{
-		static tile* f[4];
-
-		friend void init(const char* x,sint i);
-		friend sint draw(sint x,sint y,char a,sint c,sint b,sint t);
-		friend void draw(sint x,sint y,const char* a,sint c,sint b,sint t);
-		friend sint width(char x,sint t);
-		friend sint width(const char* x,sint t);
-		friend sint height(const char* x,sint t);
-		friend sint height(sint t);
-	};
+		tile* f[4] = { 0,0,0,0 };
+	}
 
 	inline void init(const char* x,sint i);
 	       sint draw(sint x,sint y,char a,sint c,sint b,sint t);
@@ -52,17 +44,15 @@ namespace font
 ///*
 
 ///implementation
-tile* font::type::f[4] = { 0,0,0,0 };
-
 void font::init(const char* x,sint i)
 {
-	type::f[i] = format::ras(x);
+	f[i] = format::ras(x);
 }
 
 sint font::draw(sint x,sint y,char a,sint c,sint b,sint t) 
 {
-	const sint h = type::f[t]->height;
-	const sint w = type::f[t]->width-h;
+	const sint h = f[t]->height;
+	const sint w = f[t]->width-h;
 	const sint d = XRES - h;
 	sint s = h*a;
 	sint o = y*XRES+x;
@@ -72,7 +62,7 @@ sint font::draw(sint x,sint y,char a,sint c,sint b,sint t)
 	{
 		for(sint j=0;j<h;++j,++o,++s)
 		{
-			const sint e = type::f[t]->data[s];
+			const sint e = f[t]->data[s];
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
@@ -88,8 +78,8 @@ void font::draw(sint x,sint y,const char* a,sint c,sint b,sint t)
 	{
 		if(a[i]=='\n')
 		{
-			y += type::f[t]->height;
-			x = z-type::f[t]->height;
+			y += f[t]->height;
+			x = z-f[t]->height;
 		}
 		else
 		{
@@ -101,13 +91,13 @@ void font::draw(sint x,sint y,const char* a,sint c,sint b,sint t)
 
 sint font::width(char x,sint t)
 {
-	const sint h = type::f[t]->height;
+	const sint h = f[t]->height;
 	sint s = h*x;
 	sint r = 0;
 
 	for(sint j=0;j<h;++j,++s)
 	{
-		r+=(type::f[t]->data[s]!=BLACK);
+		r+=(f[t]->data[s]!=BLACK);
 	}
 	return r-1;
 }
@@ -133,12 +123,12 @@ sint font::width(const char* x,sint t)
 
 sint font::height(const char* x,sint t)
 {
-	return (string::count(x,'\n')+1)*type::f[t]->height;
+	return (string::count(x,'\n')+1)*f[t]->height;
 }
 
 sint font::height(sint t)
 {
-	return type::f[t]->height;
+	return f[t]->height;
 }
 ///*
 

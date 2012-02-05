@@ -44,62 +44,39 @@ namespace screen
 	buffer accum    = buffer(XRES*YRES);	//Accumulation Buffer for FSAA/FXAA and FSMB
 	buffer inter    = buffer(XRES*YRES);	//Mask Buffer for user interfaces
 
-	void init(sint x,long y,const char* t,void* c=0);
+	namespace
+	{
+		sint  joy[2] = { 0,0 };
+		sint  mouse[4] = { 0,0,0,0 };	
+		sint  keys[2] = { 0,0 };
+		sint* framebuffer = back.pointer();
+		void* mcursor = 0;
+
+		void cb_key(int k,int a)    { keys[1] = keys[0] = math::set(k,a==GLFW_PRESS); }
+		void cb_mouseb(int b,int a) { mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
+		void cb_mousep(int x,int y) { mouse[2] = x; mouse[3] = y; }
+	};
+
+	void init(sint x,sint y,const char* t,void* c=0);
 	bool run();
 	void exit();
 
-	class input
-	{
-		static sint  joy[2];
-		static sint  mouse[4];	
-		static sint  key[2];
-		static sint* framebuffer;
-		static void* mcursor;
-
-		friend void cb_key(int k,int a);
-		friend void cb_mouseb(int b,int a);
-		friend void cb_mousep(int x,int y);
-
-		friend sint key();
-		friend sint turbo();
-		friend sint mousex();
-		friend sint mousey();
-		friend sint mousel();
-		friend sint mouser();
-		friend sint joya();
-		friend sint joyb();
-		friend void* cursor();
-
-		friend bool run();
-		friend void init(sint x,sint y,const char* t,void* c);
-	};
-
-	void cb_key(int k,int a)    { input::key[1] = input::key[0] = math::set(k,a==GLFW_PRESS); }
-	void cb_mouseb(int b,int a) { input::mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
-	void cb_mousep(int x,int y) { input::mouse[2] = x; input::mouse[3] = y; }
-
-	inline sint  key()    { const sint k = input::key[1]; input::key[1] = 0; return k; }
-	inline sint  turbo()  { return input::key[0]; }
-	inline sint  mousex() { return input::mouse[2]; }
-	inline sint  mousey() { return input::mouse[3]; }
-	inline sint  mousel() { return input::mouse[0]; }
-	inline sint  mouser() { return input::mouse[1]; }
-	inline sint  joya()   { return input::joy[0]; }
-	inline sint  joyb()   { return input::joy[1]; }
-	inline void* cursor() { return input::mcursor; }
+	inline sint  key()    { const sint k = keys[1]; keys[1] = 0; return k; }
+	inline sint  turbo()  { return keys[0]; }
+	inline sint  mousex() { return mouse[2]; }
+	inline sint  mousey() { return mouse[3]; }
+	inline sint  mousel() { return mouse[0]; }
+	inline sint  mouser() { return mouse[1]; }
+	inline sint  joya()   { return joy[0]; }
+	inline sint  joyb()   { return joy[1]; }
+	inline void* cursor() { return mcursor; }
 }
 ///*
 
 ///implementation
-sint  screen::input::joy[2] = { 0,0 };
-sint  screen::input::mouse[4] = { 0,0,0,0 };
-sint  screen::input::key[2] = { 0,0 };
-sint* screen::input::framebuffer = back.pointer();
-void* screen::input::mcursor = 0;
-
 void screen::init(sint x,sint y,const char* t,void* c)
 {
-	input::mcursor = c;
+	mcursor = c;
 	glfwInit();
 	glfwOpenWindow(x,y,8,8,8,8,0,0,GLFW_WINDOW);
 	glfwSetWindowTitle(t);
@@ -117,7 +94,7 @@ void screen::init(sint x,sint y,const char* t,void* c)
 
 bool screen::run()
 {
-	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,input::framebuffer);
+	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0,1.0);
 		glTexCoord2f(1.0f,0.0f); glVertex2f( 1.0,1.0);
@@ -126,16 +103,16 @@ bool screen::run()
 	glEnd();
 	glFlush();
 	glfwSwapBuffers();
-	glfwGetJoystickPos(0,(float*)&input::joy[0],2);
-	input::joy[0] = math::set(1,input::joy[0],input::joy[0]==1065353216);
-	input::joy[0] = math::set(2,input::joy[0],input::joy[0]==-1082130431);
-	input::joy[0] = math::set(3,input::joy[0],input::joy[1]==1065353216);
-	input::joy[0] = math::set(4,input::joy[1]==-1082130431);
-	glfwGetJoystickButtons(0,(byte*)&input::joy[1],4);
-	input::joy[1] = math::set(1,input::joy[1],(input::joy[1]>>24)!=0);
-	input::joy[1] = math::set(2,input::joy[1],(input::joy[1]>>16)!=0);
-	input::joy[1] = math::set(3,input::joy[1],(input::joy[1]>>8)!=0);
-	input::joy[1] = math::set(4,(input::joy[1])!=0);
+	glfwGetJoystickPos(0,(float*)&joy[0],2);
+	joy[0] = math::set(1,joy[0],joy[0]==1065353216);
+	joy[0] = math::set(2,joy[0],joy[0]==-1082130431);
+	joy[0] = math::set(3,joy[0],joy[1]==1065353216);
+	joy[0] = math::set(4,joy[1]==-1082130431);
+	glfwGetJoystickButtons(0,(byte*)&joy[1],4);
+	joy[1] = math::set(1,joy[1],(joy[1]>>24)!=0);
+	joy[1] = math::set(2,joy[1],(joy[1]>>16)!=0);
+	joy[1] = math::set(3,joy[1],(joy[1]>>8)!=0);
+	joy[1] = math::set(4,(joy[1])!=0);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
 
