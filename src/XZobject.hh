@@ -239,12 +239,12 @@ void object::pull(fixed x) //translate along normals
 {
 	for(sint i=0;i<polys;++i)
 	{
-		fvector t = poly[i]->normal();
-		const fixed l = t.length();
-		t.x = fx::mul(fx::div(t.x,l),x);
-		t.y = fx::mul(fx::div(t.y,l),x);
-		t.z = fx::mul(fx::div(t.z,l),x);
-		poly[i]->add(t);
+		//fvector t = poly[i]->normal();
+		//const fixed l = t.length();
+		//t.x = fx::mul(fx::div(t.x,l),x);
+		//t.y = fx::mul(fx::div(t.y,l),x);
+		//t.z = fx::mul(fx::div(t.z,l),x);
+		poly[i]->pull(x);
 	}
 }
 ///*

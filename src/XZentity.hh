@@ -155,7 +155,7 @@ entity::~entity()
 {
 	delete _model[0];
 	if(_model[1]!=0) { delete _model[1]; }
-	//delete ammomounts
+	//delete[] _ammomount;
 }
 
 sint entity::update(sint k,sint& m)

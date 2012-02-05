@@ -60,12 +60,9 @@ class polygon
 		              void raster(bool s) const /*HOTFN*/; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s);
-		/*OK*/        void update(const fmatrix& m,bool i=0);
-		/*OK*/        void display(const lvector& p,sint f);
-		/*OK*/ inline void reset();
-		/*OK*/ inline void set();
-		/*OK*/ inline void add(const fvector& a);
-		/*OK*/ inline fvector normal() const { return cnormal; }
+		/*OK*/ void update(const fmatrix& m,bool i=0);
+		/*OK*/ void display(const lvector& p,sint f);
+		/*OK*/ void pull(fixed a);
 
 		static sint  counter;		//Polygon Counter
 		static const fvector light;	//Light Vector
@@ -264,11 +261,13 @@ void polygon::display(const lvector& p,sint f)
 	raster( f&R_B );
 }
 
-void polygon::add(const fvector& a)
+void polygon::pull(fixed a)
 {
-	cpoint[0] += a;
-	cpoint[1] += a;
-	cpoint[2] += a;
+	const fixed l = fx::mul(fx::div(FXONE,cnormal.length()),a);
+	const fvector m = (cnormal*l);
+	cpoint[0] += m;
+	cpoint[1] += m;
+	cpoint[2] += m;
 }
 ///*
 
