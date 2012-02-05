@@ -248,17 +248,17 @@ void level::gauges()
 	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		const lvector e(((entity*)enemies.current())->data(mark));
-		ep->visible(game::onscreen(e.x,e.y));
+		ep->visible = (game::onscreen(e.x,e.y));
+		ep->left = (e.x-25);
+		ep->top = (e.y-10);
 		ep->set(e.z+e.e);
-		ep->left(e.x-25);
-		ep->top(e.y-10);
 		ep->draw();
 	}
 	const lvector b(boss->data(mark));
-	bp->visible(game::onscreen(b.x,b.y));
+	bp->visible = (game::onscreen(b.x,b.y));
+	bp->left = (b.x-50);
+	bp->top = (b.y-20);
 	bp->set(b.z+b.e);
-	bp->left(b.x-50);
-	bp->top(b.y-20);
 	bp->draw();
 	const lvector p(player->data(mark));
 	pp->set(p.z);

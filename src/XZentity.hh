@@ -262,7 +262,7 @@ sint entity::update(sint m)
 	{
 		for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		{
-			//const long h = game::collision(_position,_model[0]->boundingbox(),_ammo.current()->pos,i==0)<<2;
+			//const long h = game::collision(_position,_model[0]->boundingbox(),(ammo*)_ammo.current()->pos,i==0)<<2;
 			//if(h!=0) { _ammo.delcurrent(); }
 			//health -= h;
 		}

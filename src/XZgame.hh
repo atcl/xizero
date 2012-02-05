@@ -37,7 +37,7 @@ bool game::onscreen(sint x,sint y)
 
 bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
 {
-	return x>math::min(a,c)&&y>math::min(b,d)&&x<math::max(a,c)&&y<math::max(b,d);
+	return (x>math::min(a,c))&&(y>math::min(b,d))&&(x<math::max(a,c))&&(y<math::max(b,d));
 }
 
 bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
@@ -57,7 +57,7 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 		const fvector slope0 = n-m;
 		const fvector slope1 = p-m;
 
-		coeff[0] = fx::div(slope0.x,slope0.y);
+		coeff[0] = fx::div(slope0.x,slope0.y); //crashes here
 		coeff[1] = fx::div(slope1.x,slope1.y);
 		coeff[2] = fx::div(slope0.y,slope0.x);
 		coeff[3] = fx::div(slope1.y,slope1.x);

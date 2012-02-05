@@ -162,13 +162,9 @@ tile* format::xpm(const char** x)
 	const sint width  = string::str2int(line[0]);
 	const sint height = string::str2int(line[1]);
 	const sint colors = string::str2int(line[2]);
-	sint* data = new sint[width*height];
-	tile* r = new tile;
-	r->width = width;
-	r->height = height;
-	r->data = data;
+	tile* r = new tile({width, height, new sint[width*height]});
 
-	uint* color = new uint[256];
+	uint* color = new uint[colors];
 	for(sint i=0;i<colors;++i)
 	{
 		line = string::split(x[index++],' ');
@@ -198,7 +194,7 @@ tile* format::xpm(const char** x)
 	{
 		for(sint j=0;j<width;++j,++o)
 		{
-			data[o] = color[sint(x[index][j])];
+			r->data[o] = color[sint(x[index][j])];
 		}
 	}
 

@@ -25,51 +25,50 @@
 class button : public gui
 {
 	private:
-		char* _text;						//Button Caption
-		sint (*_action)();					//Onclick Function Pointer
-		bool _depth;						//Flat or Relief
-		const sint _textleft;					//Relative Y Coordinate of Caption	
-		const sint _texttop;					//Relative X Coordinate of Caption
-		static list _bl;					//List of all Buttons
+		char* text;						//Button Caption
+		sint (*action)();					//Onclick Function Pointer
+		bool depth;						//Flat or Relief
+		const sint textleft;					//Relative Y Coordinate of Caption	
+		const sint texttop;					//Relative X Coordinate of Caption
+		static list bl;						//List of all Buttons
 	public:
 		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
 		~button();						//Destructor
-		inline void action(sint (*a)()) { _action = a; }	//Set Action
-		       void draw() const;				//Draw Button
+		void draw() const;					//Draw Button
 		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
 };
 ///*
 
 ///implementation
-list button::_bl = list();
+list button::bl = list();
 
 button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
-	_text(string::copy(x)),
-	_action(a),
-	_depth(d),
-	_textleft( (math::max(w-font::width(x,SYSFONT),0))>>1 ),
-	_texttop( (math::max(h-font::height(x,SYSFONT),0))>>1 )
+	text(string::copy(x)),
+	action(a),
+	depth(d),
+	textleft( (math::max(w-font::width(x,SYSFONT),0))>>1 ),
+	texttop( (math::max(h-font::height(x,SYSFONT),0))>>1 )
 {
-	_bl.append(this);
+	bl.append(this);
 }
 
 button::~button()
 {
-	_bl.find(this);
-	_bl.delcurrent();
-	delete _text;
+	bl.find(this);
+	bl.delcurrent();
+	delete text;
 }
 
 sint button::check(sint x,sint y,sint b)
 {
-	const sint e = math::neg(_bl.length(),b==0);
-	for(sint i=_bl.first();i<e;i+=_bl.next())
+	const sint e = math::neg(bl.length(),b==0);
+	for(sint i=bl.first();i<e;i+=bl.next())
 	{
-		const button* temp = (button*)_bl.current();
-		if(temp->_visible!=0 && game::inside(x,y,temp->_left,temp->_top,temp->_left+temp->_width,temp->_top+temp->_height)) 
+		const button* temp = (button*)bl.current();
+		if(temp->visible!=0 && game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) 
 		{
-			return temp->_action();
+			return temp->action();
 		}
 	}
 	return 0;
@@ -77,9 +76,9 @@ sint button::check(sint x,sint y,sint b)
 
 void button::draw() const
 {
-	guard(_visible==0);
-	gfx::rect(_left,_top,_left+_width,_top+_height,_framecolor,_backcolor,1,_depth);
-	font::draw(_left+_textleft,_top+_texttop,_text,_color,_backcolor,SYSFONT);
+	guard(visible==0);
+	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
+	font::draw(left+textleft,top+texttop,text,color,backcolor,SYSFONT);
 }
 ///*
 

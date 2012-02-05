@@ -86,7 +86,7 @@ void* list::delcurrent()
 	//*
 
 	//adjust length
-	_len--;
+	--_len;
 	//*
 
 	return c;
@@ -118,7 +118,7 @@ void list::append(void* x,sint h)
 	//*
 
 	//adjust length
-	_len++;
+	++_len;
 	//*
 }
 

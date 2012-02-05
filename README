@@ -33,12 +33,12 @@
 - 32bit Z-Buffer
 - Flatshading
 - Blinn Shadows
-- 2x FSAA + FSMB + FXAA
+- 2x FSAA/FXAA + FSMB
 
 === Minor: ===
 
 - Cordic Fixed Point Math
-- 
+- Minimal Branching
 -
 -
 
