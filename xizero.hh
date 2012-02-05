@@ -153,20 +153,20 @@ void mainmenu()
 
 void won()
 {
-	//screen::back.clear(BLACK);
-	//font::draw(40,40,m,WHITE,TRANS,SYSFONT);
+	screen::back.clear(BLACK);
+	font::draw(40,40,"You won!",WHITE,TRANS,SYSFONT);
 }
 
 void lost()
 {
-	//screen::back.clear(BLACK);
-	//font::draw(40,40,m,WHITE,TRANS,SYSFONT);
+	screen::back.clear(BLACK);
+	font::draw(40,40,"You lost!",WHITE,TRANS,SYSFONT);
 }
 
 void bench()
 {
 	const sint fps = system::fps();
-	if(fps!=-1) //(isatty(0)&&fps!=-1)
+	if(fps!=-1)
 	{
 		system::say(string::int2str(polygon::counter*fps),0); 			
 		system::say("p/s - ",0);
