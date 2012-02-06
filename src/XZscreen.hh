@@ -55,7 +55,7 @@ namespace screen
 		void cb_key(int k,int a)    { keys[1] = keys[0] = math::set(k,a==GLFW_PRESS); }
 		void cb_mouseb(int b,int a) { mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
 		void cb_mousep(int x,int y) { mouse[2] = x; mouse[3] = y; }
-	};
+	}
 
 	void init(sint x,sint y,const char* t,void* c=0);
 	bool run();

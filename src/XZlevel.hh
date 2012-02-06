@@ -200,10 +200,12 @@ sint level::update(sint k)
 	static sint n = 0;
 	sint m = 0;
 	const sint r = (boss->update(mark)<=0)-(player->update(k,m)<=0);
+
 	n = math::set(m+n,mark==markmax);
 	mark = math::set(mark,markmin,mark<markmin);
 	mark = math::set(mark,markmax,mark>markmax);
 	mark+= math::set(m, (mark!=markmax)||(n>markmax-100) ); 
+
 	return r;
 }
 

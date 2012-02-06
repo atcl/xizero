@@ -52,17 +52,17 @@ void buffer::clear(sint x)
 	"movaps %%xmm0,%%xmm6;\n"
 	"movaps %%xmm0,%%xmm7;\n"
 	"set:\n"
-	"movaps %%xmm0,(%%ebx);\n"
-	"movaps %%xmm1,16(%%ebx);\n"
-	"movaps %%xmm2,32(%%ebx);\n"
-	"movaps %%xmm3,48(%%ebx);\n"
-	"movaps %%xmm4,64(%%ebx);\n"
-	"movaps %%xmm5,80(%%ebx);\n"
-	"movaps %%xmm6,96(%%ebx);\n"
-	"movaps %%xmm7,112(%%ebx);\n"
-	"addl $128,%%ebx;\n"
+	"movaps %%xmm0,(%%edi);\n"
+	"movaps %%xmm1,16(%%edi);\n"
+	"movaps %%xmm2,32(%%edi);\n"
+	"movaps %%xmm3,48(%%edi);\n"
+	"movaps %%xmm4,64(%%edi);\n"
+	"movaps %%xmm5,80(%%edi);\n"
+	"movaps %%xmm6,96(%%edi);\n"
+	"movaps %%xmm7,112(%%edi);\n"
+	"addl $128,%%edi;\n"
 	"loop set;"
-	: :"a"(&val),"b"(data),"c"(bytes):);
+	: :"a"(&val),"D"(data),"c"(bytes):);
 #else
 	for(uint i=tsize;i!=0;--i) { data[i]=x; }
 #endif
@@ -71,9 +71,29 @@ void buffer::clear(sint x)
 void buffer::fsaamb(const buffer& b)
 {
 #ifdef SSE
-	//TODO
-#else
-	for(uint i=tsize;i!=0;--i) { /*TODO*/; }
+	__asm__ __volatile__ (
+	"subl $800,%%ecx;\n"
+	"shrl $6,%%ecx;\n"
+	"fsaa:\n"
+	"movaps (%%edi),%%xmm0;\n"
+	"movaps 16(%%edi),%%xmm1;\n"
+	"movaps 32(%%edi),%%xmm2;\n"
+	"movaps 48(%%edi),%%xmm3;\n"
+	"movaps (800+4)(%%edi),%%xmm4;\n"
+	"movaps (800+16+4)(%%edi),%%xmm5;\n"
+	"movaps (800+32+4)(%%edi),%%xmm6;\n"
+	"movaps (800+48+4)(%%edi),%%xmm7;\n"
+	"pavgb %%xmm4,%%xmm0;\n"
+	"pavgb %%xmm5,%%xmm1;\n"
+	"pavgb %%xmm6,%%xmm2;\n"
+	"pavgb %%xmm7,%%xmm3;\n"
+	"movaps %%xmm0,(%%edi);\n"
+	"movaps %%xmm1,16(%%edi);\n"
+	"movaps %%xmm2,32(%%edi);\n"
+	"movaps %%xmm3,48(%%edi);\n"
+	"addl $64,%%ebx;\n"
+	"loop fsaa;"
+	: :"S"(b.data),"D"(data),"c"(bytes):);
 #endif
 }
 ///*
