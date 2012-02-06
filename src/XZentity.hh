@@ -42,7 +42,7 @@ class entity
 		fvector _direction[2];
 		fvector** _ammomount;
 		lvector _towpos;
-		sint _angle;
+		sint    _angle;
 
 		bool _active;
 		sint _lastupdate;
@@ -67,12 +67,14 @@ class entity
 		entity(const lvector& p,object* m,const info& v,sint s);
 		entity(const lvector& p,object* m,const info& v);
 		~entity();
-		sint update(sint k,sint& m);
-		sint update(sint m);
+		sint update(sint k);
+		sint update();
 		void display(sint m,bool t);
 		inline void resume();
 		inline void addpoints(sint a);
 		inline lvector data(sint m) const;
+
+		static sint ylevel;
 };
 ///*
 
@@ -80,6 +82,7 @@ class entity
 const fmatrix entity::rp    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }();
 const fmatrix entity::rm    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }();
 list          entity::_ammo = list();
+sint          entity::ylevel = 0;
 
 void entity::setup(const lvector& p,object* m,const info& v)
 {
@@ -158,7 +161,7 @@ entity::~entity()
 	//delete[] _ammomount;
 }
 
-sint entity::update(sint k,sint& m)
+sint entity::update(sint k)
 {
 	static sint last = 0;
 	const bool l = k^last;
@@ -234,29 +237,28 @@ sint entity::update(sint k,sint& m)
 		case SPACE:
 			if(curr>_lastfire)
 			{
-				for(long i=0;i<_ammomounts;++i) { fire(1,i); }
+				for(sint i=0;i<_ammomounts;++i) { fire(1,i); }
 				_lastfire = curr+_firerate;
 			}
 		break;
 	}
-
+ 
 	_angle -= math::set(360,_angle>=360);
-	const fixed py = _position.y;
-	_position.x -= fx::mul(_direction[0].x,_direction[0].e);
-	_position.y += fx::mul(_direction[0].y,_direction[0].e);
-	_position.z += fx::mul(_direction[0].z,_direction[0].e);
-	m = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y - py,_position.z))); //PRJY from polygon
+
+	const fvector temp(_position.x-fx::mul(_direction[0].x,_direction[0].e),_position.y+fx::mul(_direction[0].y,_direction[0].e),_position.z+fx::mul(_direction[0].z,_direction[0].e)); 
+	_position = temp * FXONE; //math::set(FXONE,0,(temp.x<=0||temp.x>=XRES)||(temp.y<=0||temp.y>=m));
+	ylevel = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y,_position.z))); //PRJY from polygon
 
 	last = k;
 	_lastupdate = curr;
 	return _health;
 }
 
-sint entity::update(sint m)
+sint entity::update()
 {
 	const sint curr = system::clk();
 
-	_active |= (_position.y>m || _position.y<m) && (_position.y>0); //check!
+	_active |= 1; //(_position.y>m || _position.y<m) && (_position.y>0); //check!
 
 	if(_active!=0)
 	{

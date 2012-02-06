@@ -37,7 +37,7 @@ class level
 		entity* boss;			//Boss Entity
 		list enemies;			//List of Enemy Entities
 		char** map;			//Text Map of Terrain
-		sint mark;			//Marker for Level Progress
+		sint mark;			//Current Level Position
 		sint markmin;			//Lowest Level Position
 		sint markmax;			//Highest Level Position
 		progress* pp;			//Player Health Gauge
@@ -95,7 +95,7 @@ level::level(const char* o)
 	//long n        = string::length(t[0]); //=LWIDTH
 
 	markmax = 4*BWIDTH;
-	markmin = mark = (l*BWIDTH)-YMAX;
+	markmin = (l*BWIDTH)-YMAX;
 
 	terrain    = new object*[l];
 	lvector* a = new lvector[LWIDTH];
@@ -194,19 +194,10 @@ sint level::update(sint k)
 {
 	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
-		if(((entity*)enemies.current())->update(mark)<=0) { delete (entity*)enemies.delcurrent(); }
+		if(((entity*)enemies.current())->update()<=0) { delete (entity*)enemies.delcurrent(); }
 	}
 
-	static sint n = 0;
-	sint m = 0;
-	const sint r = (boss->update(mark)<=0)-(player->update(k,m)<=0);
-
-	n = math::set(m+n,mark==markmax);
-	mark = math::set(mark,markmin,mark<markmin);
-	mark = math::set(mark,markmax,mark>markmax);
-	mark+= math::set(m, (mark!=markmax)||(n>markmax-100) ); 
-
-	return r;
+	return (boss->update()<=0)-(player->update(k)<=0);
 }
 
 void level::display()
@@ -217,6 +208,7 @@ void level::display()
 	//*
 
 	//render terrain
+	mark = math::lim(markmax,entity::ylevel-500,markmin);
 	const lvector p(400,300-BWIDTH-mark%BWIDTH,GROUND);
 	const fixed yd = fx::l2f(-20);
 	object::linear.clear();
