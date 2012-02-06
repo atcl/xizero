@@ -72,17 +72,17 @@ void buffer::fsaamb(const buffer& b)
 {
 #ifdef SSE
 	__asm__ __volatile__ (
-	"subl $800,%%ecx;\n"
+	"subl $"STR(XRES)",%%ecx;\n"
 	"shrl $6,%%ecx;\n"
 	"fsaa:\n"
 	"movaps (%%edi),%%xmm0;\n"
 	"movaps 16(%%edi),%%xmm1;\n"
 	"movaps 32(%%edi),%%xmm2;\n"
 	"movaps 48(%%edi),%%xmm3;\n"
-	"movaps (800+4)(%%edi),%%xmm4;\n"
-	"movaps (800+16+4)(%%edi),%%xmm5;\n"
-	"movaps (800+32+4)(%%edi),%%xmm6;\n"
-	"movaps (800+48+4)(%%edi),%%xmm7;\n"
+	"movaps ("STR(XRES)"+4)(%%edi),%%xmm4;\n"
+	"movaps ("STR(XRES)"+16+4)(%%edi),%%xmm5;\n"
+	"movaps ("STR(XRES)"+32+4)(%%edi),%%xmm6;\n"
+	"movaps ("STR(XRES)"+48+4)(%%edi),%%xmm7;\n"
 	"pavgb %%xmm4,%%xmm0;\n"
 	"pavgb %%xmm5,%%xmm1;\n"
 	"pavgb %%xmm6,%%xmm2;\n"

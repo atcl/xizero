@@ -11,6 +11,9 @@
 ///declarations
 #define guard(x,...) if(x) { return __VA_ARGS__; } //switch(!x) { case 0: return __VA_ARGS__; case 1: ; }
 
+#define VAL(x) #x
+#define STR(x) VAL(x)
+
 #define alert(x) system::say(string::int2str(x),1)
 
 #define mod2(x)   x&1
