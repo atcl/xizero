@@ -75,6 +75,7 @@ class entity
 		inline lvector data(sint m) const;
 
 		static sint ylevel;
+		static fixed ymark;
 };
 ///*
 
@@ -83,6 +84,7 @@ const fmatrix entity::rp    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTAN
 const fmatrix entity::rm    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }();
 list          entity::_ammo = list();
 sint          entity::ylevel = 0;
+fixed         entity::ymark  = 0;
 
 void entity::setup(const lvector& p,object* m,const info& v)
 {
@@ -247,6 +249,7 @@ sint entity::update(sint k)
 
 	const fvector temp(_position.x-fx::mul(_direction[0].x,_direction[0].e),_position.y+fx::mul(_direction[0].y,_direction[0].e),_position.z+fx::mul(_direction[0].z,_direction[0].e)); 
 	_position = temp * FXONE; //math::set(FXONE,0,(temp.x<=0||temp.x>=XRES)||(temp.y<=0||temp.y>=m));
+	ymark  = _position.y;
 	ylevel = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y,_position.z))); //PRJY from polygon
 
 	last = k;
@@ -258,7 +261,7 @@ sint entity::update()
 {
 	const sint curr = system::clk();
 
-	_active |= 1; //(_position.y>m || _position.y<m) && (_position.y>0); //check!
+	_active = _active || ( (_position.y+fx::l2f(YRES)>ymark) && (_position.y>0) ); //check!
 
 	if(_active!=0)
 	{

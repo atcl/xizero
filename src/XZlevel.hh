@@ -208,7 +208,7 @@ void level::display()
 	//*
 
 	//render terrain
-	mark = math::lim(markmax,entity::ylevel-500,markmin);
+	mark = math::lim(markmax,entity::ylevel-450,markmin);
 	const lvector p(400,300-BWIDTH-mark%BWIDTH,GROUND);
 	const fixed yd = fx::l2f(-20);
 	object::linear.clear();

@@ -66,7 +66,7 @@ sint button::check(sint x,sint y,sint b)
 	for(sint i=bl.first();i<e;i+=bl.next())
 	{
 		const button* temp = (button*)bl.current();
-		if(temp->visible!=0 && game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) 
+		if( (temp->visible!=0) && (game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) ) 
 		{
 			return temp->action();
 		}

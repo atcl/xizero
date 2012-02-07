@@ -13,7 +13,7 @@
 #include <cstdint>
 ///*
 
-///definitions
+///declarations
 #ifdef __GNUC__
 	#define LIKELY(x)   __builtin_expect((x),1)
 	#define UNLIKELY(x) __builtin_expect((x),0)
@@ -42,6 +42,14 @@
 
 #ifndef VERSION
  #define VERSION "0.0"
+#endif
+
+#ifndef XRES
+ #define XRES 800
+#endif
+
+#ifndef YRES
+ #define YRES 600
 #endif
 
 #define XZOK 'XZOK'

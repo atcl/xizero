@@ -31,19 +31,19 @@ struct tile
 ///definitions
 namespace gfx
 {
-	/*OK*/ inline void circpix(sint x,sint y,sint l,sint t,sint c);			//draw circle pixel
-	/*OK*/ inline void pix(sint x,sint y,sint c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
-	/*OK*/ void line(sint x,sint y,sint a,sint b,sint c,bool k=0); 			//draw line
-	/*OK*/ void rect(sint x,sint y,sint a,sint b,sint c,sint d,bool f=0,bool g=0); 	//draw rectangle
-	/*OK*/ void circ(sint x,sint y,sint r,sint c);					//draw circle
+	/*OK*/ inline void circpix(sint x,sint y,sint l,sint t,uint c);			//draw circle pixel
+	/*OK*/ inline void pix(sint x,sint y,uint c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
+	/*OK*/ void line(sint x,sint y,sint a,sint b,uint c,bool k=0); 			//draw line
+	/*OK*/ void rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f=0,bool g=0); 	//draw rectangle
+	/*OK*/ void circ(sint x,sint y,sint r,uint c);					//draw circle
 	/*OK*/ void sprite(const tile& t,sint x,sint y,bool a=0);			//draw sprite
-	/*OK*/ void fsprog(sint p,sint c=RED);						//draw full screen progress bar
+	/*OK*/ void fsprog(sint p,uint c=RED);						//draw full screen progress bar
 	/*OK*/ tile* save();								//save current screen
 }
 ///*
 
 ///implementation
-void gfx::circpix(sint x,sint y,sint l,sint t,sint c)
+void gfx::circpix(sint x,sint y,sint l,sint t,uint c)
 {
 	const sint o = (y*XRES)+x;
 	const sint p = t*XRES;
@@ -58,9 +58,9 @@ void gfx::circpix(sint x,sint y,sint l,sint t,sint c)
 	screen::back[o-q-t] = c;
 }
 
-void gfx::line(sint x,sint y,sint a,sint b,sint c,bool k)
+void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 {
-	guard(x<0 || y<0 || x>XRES || y>YRES || a<0 || b<0 || a>XRES || b>YRES);
+	guard( (x<0) || (y<0) || (x>XRES) || (y>YRES) || (a<0) || (b<0) || (a>XRES) || (b>YRES) );
 	const sint s = math::set(2,sint(y==b)-sint(x==a),k==1);
 
 	sint o = 0;
@@ -161,7 +161,7 @@ void gfx::line(sint x,sint y,sint a,sint b,sint c,bool k)
 	}
 }
 
-void gfx::rect(sint x,sint y,sint a,sint b,sint c,sint d,bool f,bool g)
+void gfx::rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f,bool g)
 {
 	line(x,y,a,y,c);
 	line(a,y,a,b,c);
@@ -181,7 +181,7 @@ void gfx::rect(sint x,sint y,sint a,sint b,sint c,sint d,bool f,bool g)
 	}
 }
 
-void gfx::circ(sint x,sint y,sint r,sint c)
+void gfx::circ(sint x,sint y,sint r,uint c)
 {
 	//guard(x-r<0 || x+r>XRES || y-r<0 || y+r>YRES);
 	sint d  = 3 - (r<<1);
@@ -218,7 +218,7 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 	}
 }
 
-void gfx::fsprog(sint p,sint c)
+void gfx::fsprog(sint p,uint c)
 {
 	p = math::min(math::max(p,100),0);
 	const sint r = (XRES*p)/100;

@@ -118,7 +118,7 @@ sint string::str2int(const char* x)
 	while(x[i]==' ') { ++i; }
 	const sint j = math::set(i,-1,x[i]=='-');
 	i += j!=-1;
-	while(x[i]>='0'&&x[i]<='9')
+	while( (x[i]>='0') && (x[i]<='9') )
 	{
 		r *= 10;
 		r += (x[i]-'0');
@@ -131,10 +131,13 @@ sint string::str2int(const char* x)
 sint string::str2hex(const char* x)
 {
 	sint r = 0;
-	sint i = length(x)-1;
-	for(sint d=1;(i<8),(i>=0);--i,d<<=4)
+	sint i = 0;
+	while(x[i]==' ') { ++i; }
+	for(sint j=0;j<8;++j,++i)
 	{
-		r += math::set((x[i]-'0')*d,x[i]>='0'&&x[i]<='9') | math::set((x[i]-'a'+10)*d,x[i]>='a'&&x[i]<='f') | math::set((x[i]-'A'+10)*d,x[i]>='A'&&x[i]<='F'); 
+		r += (math::set((x[i]-'0')   ,x[i]>='0'&&x[i]<='9') 
+		   |  math::set((x[i]-'a'+10),x[i]>='a'&&x[i]<='f') 
+		   |  math::set((x[i]-'A'+10),x[i]>='A'&&x[i]<='F'))<<((7-i)<<2); 
 	}
 	return r;
 }
@@ -157,33 +160,28 @@ char* string::int2str(sint x)
 	return r;
 }
 
-char* string::fix2str(fixed x) //! simplify
+char* string::fix2str(fixed x)
 {
-	sint i  = sint(x<0);
-	sint h  = i;
+	char* r = new char[16];
+	sint  i = sint(x<0);
 	x       = math::abs(x);
-	char* r = new char[13];
-	r[0]    = math::set('-',i);
-	sint j  = 0;
-	sint k  = 0;
-	sint l  = x>>FX;
-	for(sint d=10000;d>0;l%=d,d/=10,i+=k)
+	r[0]    = math::set('-','0',i);
+	sint  l = x>>FX;
+	i      += (l==0);
+	for(sint d=10000,k=0;d>0;d/=10,i+=k)
 	{
-		j    = l/d;
-		k   |= j!=0;
+		const sint j = l/d;
+		k = (k+j>0);
+		l -= d*j;
 		r[i] = j+'0';
 	}
-	r[i] = '0';
-	i += (i==0) || (i==1&&h==1);
 	r[i++] = '.';
-
 	l = x & 0x0000FFFF;
 	for(sint d=10;d<10000000;d*=10,++i)
 	{
-		j = ((l*d)>>16)%10;
+		const sint j = ((l*d)>>FX)%10;
 		r[i] = math::set(j,j>0) +'0';
 	}
-
 	r[i] = 0;
 	return r;
 }

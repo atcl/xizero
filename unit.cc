@@ -8,6 +8,9 @@
 ///*
 
 ///definition
+
+//generate torus
+
 /*void generatefx()
 {
 	#include <math.h>

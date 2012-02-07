@@ -46,8 +46,8 @@
 class polygon
 {
 	private:
-		const sint color;		//Polygon Color
-		const sint scolor;		//Shadow Color
+		const uint color;		//Polygon Color
+		const uint scolor;		//Shadow Color
 		sint shade;			//Current Color Shade
 		fvector cnormal;		//Polygon Normal
 		fvector cpoint[3];		//Polygon Vertices
@@ -59,7 +59,7 @@ class polygon
 		              void flat(sint pz,sint f);
 		              void raster(bool s) const /*HOTFN*/; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
-		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s);
+		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,uint c,uint s);
 		/*OK*/ void update(const fmatrix& m,bool i=0);
 		/*OK*/ void display(const lvector& p,sint f);
 		/*OK*/ void pull(fixed a);
@@ -137,7 +137,7 @@ void polygon::raster(bool s) const
 	const sint maxy = math::min(YMAX,1+lpoint[mayi].y); //prevent gap
 	//*
 
-	guard(maxx==minx || maxy==miny);
+	guard( (maxx==minx) || (maxy==miny) );
 
 	const sint dx01 = lpoint[0].x - lpoint[1].x;
 	const sint dx12 = lpoint[1].x - lpoint[2].x;
@@ -172,7 +172,7 @@ void polygon::raster(bool s) const
 			{
 				const fixed sz = screen::depth[off];
 		
-				if( cx0<0 && cx1<0 && cx2<0 && tx<sz )
+				if( (cx0<0) && (cx1<0) && (cx2<0) && (tx<sz) )
 				{
 					screen::depth[off] = tx;
 					screen::back[off]  = shade;
@@ -198,7 +198,7 @@ void polygon::raster(bool s) const
 
 			for(sint x=minx;x<maxx;++x,++off) 
 			{
-				if( cx0<0 && cx1<0 && cx2<0 )
+				if( (cx0<0) && (cx1<0) && (cx2<0) )
 				{
 					screen::back[off]  = (shade+screen::back[off])>>1; 
 				}
@@ -215,7 +215,7 @@ void polygon::raster(bool s) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,sint c,sint s) : color(c), scolor(s), shade(c)
+polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c,uint s) : color(c), scolor(s), shade(c)
 {
 	cpoint[0] = x;
 	cpoint[1] = y;
@@ -236,7 +236,7 @@ void polygon::update(const fmatrix& m,bool i)
 void polygon::display(const lvector& p,sint f)
 {
 	guard(isvisible()==0);
-	counter++;
+	++counter;
 
 	if( f&R_B )
 	{

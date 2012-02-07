@@ -51,7 +51,7 @@ sint start(sint l)
 
 		v.update(screen::turbo());
 		v.display();
-
+		screen::back.fsaamb(screen::back);
 		v.gauges();
 		bench();
 	}
@@ -109,9 +109,8 @@ void menu()
 		b_leave.draw();
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
-	//*
-
 	delete scr;
+	//*
 }
 
 void intro()

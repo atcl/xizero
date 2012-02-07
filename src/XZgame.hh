@@ -32,12 +32,12 @@ namespace game
 ///implementation
 bool game::onscreen(sint x,sint y)
 {
-	return (x>0)&&(y>0)&&(x<XRES)&&(y<YRES);
+	return (x>0) && (y>0) && (x<XRES) && (y<YRES);
 }
 
 bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
 {
-	return (x>math::min(a,c))&&(y>math::min(b,d))&&(x<math::max(a,c))&&(y<math::max(b,d));
+	return (x>math::min(a,c)) && (y>math::min(b,d)) && (x<math::max(a,c)) && (y<math::max(b,d));
 }
 
 bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)

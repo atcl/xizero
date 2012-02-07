@@ -34,8 +34,8 @@ namespace font
 	}
 
 	inline void init(const char* x,sint i);
-	       sint draw(sint x,sint y,char a,sint c,sint b,sint t);
-	       void draw(sint x,sint y,const char* a,sint c,sint b,sint t);
+	       sint draw(sint x,sint y,char a,uint c,uint b,sint t);
+	       void draw(sint x,sint y,const char* a,uint c,uint b,sint t);
 	       sint width(char x,sint t);
 	       sint width(const char* x,sint t);
 	inline sint height(const char* x,sint t);
@@ -49,7 +49,7 @@ void font::init(const char* x,sint i)
 	f[i] = format::ras(x);
 }
 
-sint font::draw(sint x,sint y,char a,sint c,sint b,sint t) 
+sint font::draw(sint x,sint y,char a,uint c,uint b,sint t) 
 {
 	const sint h = f[t]->height;
 	const sint w = f[t]->width-h;
@@ -62,7 +62,7 @@ sint font::draw(sint x,sint y,char a,sint c,sint b,sint t)
 	{
 		for(sint j=0;j<h;++j,++o,++s)
 		{
-			const sint e = f[t]->data[s];
+			const uint e = f[t]->data[s];
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
@@ -70,7 +70,7 @@ sint font::draw(sint x,sint y,char a,sint c,sint b,sint t)
 	return r-1;
 }
 
-void font::draw(sint x,sint y,const char* a,sint c,sint b,sint t)
+void font::draw(sint x,sint y,const char* a,uint c,uint b,sint t)
 {
 	const sint z = x;
 	sint i = 0;

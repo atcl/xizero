@@ -21,7 +21,7 @@ class buffer
 	private:
 		const uint tsize;	//size in typesize
 		const uint bytes;	//size in bytes
-		sint* __restrict data;	//pointer to data
+		sint* data;		//pointer to data
 	public:
 		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)memalign(16,bytes); }
 		/*OK*/ ~buffer() { free(data); }
@@ -79,10 +79,10 @@ void buffer::fsaamb(const buffer& b)
 	"movaps 16(%%edi),%%xmm1;\n"
 	"movaps 32(%%edi),%%xmm2;\n"
 	"movaps 48(%%edi),%%xmm3;\n"
-	"movaps ("STR(XRES)"+4)(%%edi),%%xmm4;\n"
-	"movaps ("STR(XRES)"+16+4)(%%edi),%%xmm5;\n"
-	"movaps ("STR(XRES)"+32+4)(%%edi),%%xmm6;\n"
-	"movaps ("STR(XRES)"+48+4)(%%edi),%%xmm7;\n"
+	"movaps (3200)(%%edi),%%xmm4;\n"
+	"movaps (3216)(%%edi),%%xmm5;\n"
+	"movaps (3232)(%%edi),%%xmm6;\n"
+	"movaps (3248)(%%edi),%%xmm7;\n"
 	"pavgb %%xmm4,%%xmm0;\n"
 	"pavgb %%xmm5,%%xmm1;\n"
 	"pavgb %%xmm6,%%xmm2;\n"
@@ -91,7 +91,7 @@ void buffer::fsaamb(const buffer& b)
 	"movaps %%xmm1,16(%%edi);\n"
 	"movaps %%xmm2,32(%%edi);\n"
 	"movaps %%xmm3,48(%%edi);\n"
-	"addl $64,%%ebx;\n"
+	"addl $64,%%edi;\n"
 	"loop fsaa;"
 	: :"S"(b.data),"D"(data),"c"(bytes):);
 #endif
