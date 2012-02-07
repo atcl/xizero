@@ -261,10 +261,10 @@ sint entity::update()
 {
 	const sint curr = system::clk();
 
-	_active = _active || ( (_position.y+fx::l2f(YRES)>ymark) && (_position.y>0) ); //check!
-
-	if(_active!=0)
+	if( (_position.y>0) && (_position.y+fx::l2f(YRES)>ymark) ) //check
 	{
+		//_active = 1;
+
 		for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		{
 			//const long h = game::collision(_position,_model[0]->boundingbox(),(ammo*)_ammo.current()->pos,i==0)<<2;

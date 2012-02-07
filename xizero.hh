@@ -51,7 +51,7 @@ sint start(sint l)
 
 		v.update(screen::turbo());
 		v.display();
-		screen::back.fsaamb(screen::back);
+		//screen::back.fsaamb(screen::back);
 		v.gauges();
 		bench();
 	}
