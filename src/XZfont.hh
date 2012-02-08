@@ -52,7 +52,7 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 		for(sint j=0;j<h;++j,++o,++s)
 		{
 			const uint e = f->data[s];
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
+			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==RED&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
 	}
@@ -68,7 +68,7 @@ void font::draw(sint x,sint y,const char* a,uint c,uint b)
 		if(a[i]=='\n')
 		{
 			y += f->height;
-			x = z-f->height;
+			x = z-1;
 		}
 		else
 		{

@@ -198,7 +198,7 @@ object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks)
 
 object::~object()
 {
-	//delete[] dock;
+	delete[] dock;
 	//for(int i=0;i<polys;++i) { delete poly[i]; }
 	//delete[] poly;
 }

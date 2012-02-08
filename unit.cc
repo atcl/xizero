@@ -98,13 +98,14 @@ int main(int argc,char** argv)
 //if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
 		if(screen::turbo()=='R') { delete u; u = new object(system::ldf(argv[1])); }
 		viewer(u,screen::turbo());
-gfx::sprite(*((tile*)screen::cursor()),10,10);
+
 		bench();
 	}
 	//*
 	
 	//generate();
-	
+
+	screen::exit();
 	return 0;
 }
 ///*
