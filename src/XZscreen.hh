@@ -38,18 +38,15 @@
 ///definitions
 namespace screen
 {
-	buffer back     = buffer(XRES*YRES);	//System Memory Double Buffer
-	buffer depth    = buffer(XRES*YRES);	//Z-Buffer
-	buffer stencil  = buffer(XRES*YRES);	//Stencil (Shadow) Buffer
-	buffer accum    = buffer(XRES*YRES);	//Accumulation Buffer for FSAA/FXAA and FSMB
-	buffer inter    = buffer(XRES*YRES);	//Mask Buffer for user interfaces
+	buffer back(XRES*YRES);		//System Memory Double/Triple Buffer
+	buffer depth(XRES*YRES);	//Z-Buffer
+	buffer accum(XRES*YRES);	//Accumulation Buffer
 
 	namespace
 	{
 		sint  joy[2] = { 0,0 };
 		sint  mouse[4] = { 0,0,0,0 };	
 		sint  keys[2] = { 0,0 };
-		sint* framebuffer = back.pointer();
 		void* mcursor = 0;
 
 		void cb_key(int k,int a)    { keys[1] = keys[0] = math::set(k,a==GLFW_PRESS); }
@@ -94,7 +91,8 @@ void screen::init(sint x,sint y,const char* t,void* c)
 
 bool screen::run()
 {
-	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,framebuffer);
+	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,back.pointer());
+	back.swap(accum);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0,1.0);
 		glTexCoord2f(1.0f,0.0f); glVertex2f( 1.0,1.0);

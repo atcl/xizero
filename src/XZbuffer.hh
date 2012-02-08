@@ -30,6 +30,7 @@ class buffer
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/        void  clear(sint x=0);
 		/*OK*/        void  copy(const buffer& s,uint x) { for(uint i=x;i!=0;--i) { data[i]=s.data[i]; } }
+		/*OK*/        void  swap(buffer & b) { sint* t= b.data; b.data=data; data=t; }
 		              void  fsaamb(const buffer& b);
 };
 ///*
@@ -79,10 +80,18 @@ void buffer::fsaamb(const buffer& b)
 	"movaps 16(%%edi),%%xmm1;\n"
 	"movaps 32(%%edi),%%xmm2;\n"
 	"movaps 48(%%edi),%%xmm3;\n"
-	"movaps (3200)(%%edi),%%xmm4;\n"
-	"movaps (3216)(%%edi),%%xmm5;\n"
-	"movaps (3232)(%%edi),%%xmm6;\n"
-	"movaps (3248)(%%edi),%%xmm7;\n"
+	"movups ("STR(XRES*4)"+4)(%%edi),%%xmm4;\n"
+	"movups ("STR(XRES*4)"+20)(%%edi),%%xmm5;\n"
+	"movups ("STR(XRES*4)"+36)(%%edi),%%xmm6;\n"
+	"movups ("STR(XRES*4)"+52)(%%edi),%%xmm7;\n"
+	"pavgb %%xmm4,%%xmm0;\n"
+	"pavgb %%xmm5,%%xmm1;\n"
+	"pavgb %%xmm6,%%xmm2;\n"
+	"pavgb %%xmm7,%%xmm3;\n"
+	"movaps (%%esi),%%xmm4;\n"
+	"movaps 16(%%esi),%%xmm5;\n"
+	"movaps 32(%%esi),%%xmm6;\n"
+	"movaps 48(%%esi),%%xmm7;\n"
 	"pavgb %%xmm4,%%xmm0;\n"
 	"pavgb %%xmm5,%%xmm1;\n"
 	"pavgb %%xmm6,%%xmm2;\n"
