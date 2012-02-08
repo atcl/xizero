@@ -30,7 +30,7 @@ class buffer
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/        void  clear(sint x=0);
 		/*OK*/        void  copy(const buffer& s,uint x) { for(uint i=x;i!=0;--i) { data[i]=s.data[i]; } }
-		/*OK*/        void  swap(buffer & b) { sint* t= b.data; b.data=data; data=t; }
+		/*OK*/        void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
 		              void  fsaamb(const buffer& b);
 };
 ///*

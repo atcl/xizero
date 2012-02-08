@@ -8,7 +8,7 @@
 ///*
 
 ///definition
-void init() PMAIN;
+void init();
 sint start(sint l);
 sint start();
 inline sint close();
