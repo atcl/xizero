@@ -110,7 +110,7 @@ bool screen::run()
 	joy[1] = math::set(2,joy[1],(joy[1]>>16)!=0);
 	joy[1] = math::set(3,joy[1],(joy[1]>>8)!=0);
 	joy[1] = math::set(4,(joy[1])!=0);
-	back.swap(accum);
+	//back.swap(accum);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
 

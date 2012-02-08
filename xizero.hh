@@ -71,8 +71,7 @@ sint load()
 
 sint about()
 {
-	dialog::msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
-	return 0;
+	return dialog::msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
 }
 
 sint leave()
@@ -92,7 +91,7 @@ void menu()
 
 	//draw menu
 	tile* scr = gfx::save();
-	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())!=-1)
+	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
@@ -129,7 +128,7 @@ void mainmenu()
 	//*
 
 	//draw menu
-	//tile* back = format::ras(system::ldf("dat/back.ras"));
+	//object xizero();
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
 		screen::back.clear(BLACK);

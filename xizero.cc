@@ -22,7 +22,7 @@ int main(int argc,const char* argv[])
 	{
 		start(i);
 	}
-	
+
 	return 0;
 }
 ///*

@@ -43,7 +43,7 @@ sint dialog::msgbox(const char* m)
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	delete scr;
-	return 0;
+	return 1;
 }
 ///*
 

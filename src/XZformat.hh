@@ -14,7 +14,6 @@
 #include "XZutil.hh"
 #include "XZgfx.hh"
 #include "XZstring.hh"
-#include "XZvector.hh"
 ///*
 
 ///declarations
@@ -95,14 +94,7 @@ tile* format::xpm(const char** x)
 		{
 			for(sint j=1;j<7;++j)
 			{
-				const char curr = line[2][j];
-				uint temp = curr;
-				temp -= math::set(48,(curr>=48 && curr<=57));
-				temp -= math::set(55,(curr>=65 && curr<=70));
-				temp -= math::set(87,(curr>=97 && curr<=102));
-				temp += color[sint(line[0][0])];
-				temp <<= 4;
-				color[sint(line[0][0])] = temp;
+				color[sint(line[0][0])] = string::str2hex(line[2]);
 			}
 			color[sint(line[0][0])] <<= 4;
 			color[sint(line[0][0])] = math::ndn(color[sint(line[0][0])]);
