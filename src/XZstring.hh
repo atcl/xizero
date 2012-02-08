@@ -133,7 +133,7 @@ sint string::str2hex(const char* x)
 	sint r = 0;
 	sint i = 0;
 	while(x[i]==' ') { ++i; }
-	for(sint j=0;j<8;++j,++i)
+	for(sint j=0;j<8&&x[i]!=0;++j,++i)
 	{
 		r += (math::set((x[i]-'0')   ,x[i]>='0'&&x[i]<='9') 
 		   |  math::set((x[i]-'a'+10),x[i]>='a'&&x[i]<='f') 

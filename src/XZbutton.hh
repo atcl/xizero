@@ -47,8 +47,8 @@ button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint
 	text(string::copy(x)),
 	action(a),
 	depth(d),
-	textleft( (math::max(w-font::width(x,SYSFONT),0))>>1 ),
-	texttop( (math::max(h-font::height(x,SYSFONT),0))>>1 )
+	textleft( (math::max(w-font::width(x),0))>>1 ),
+	texttop( (math::max(h-font::height(x),0))>>1 )
 {
 	bl.append(this);
 }
@@ -78,7 +78,7 @@ void button::draw() const
 {
 	guard(visible==0);
 	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
-	font::draw(left+textleft,top+texttop,text,color,backcolor,SYSFONT);
+	font::draw(left+textleft,top+texttop,text,color,backcolor);
 }
 ///*
 

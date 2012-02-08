@@ -49,10 +49,8 @@ struct tile
 namespace format
 {
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
-	/*OK*/ tile*  ras(const char* x);		//load sun raster image
 	/*OK*/ tile*  xpm(const char** x);		//load xpm image
 	/*OK*/ info*  ini(const char* x);		//load ini configuartion
-	file*  ar(const char* x,sint s);		//load ar archive
 }
 ///*
 
@@ -70,85 +68,6 @@ char** format::csv(const char* x,char y)
 		if(s[i]==y) { s[i] = 0; r[j++] = &s[++i]; }
 		i++;
 	}
-	return r;
-}
-
-tile* format::ras(const char* x)
-{
-	const sint* head  = reinterpret_cast<const sint*>(x);
-	const sint magic  = math::ndn(head[0]);
-	const sint width  = math::ndn(head[1]);
-	const sint height = math::ndn(head[2]);
-	const sint depth  = math::ndn(head[3]);
-	//const sint length = math::ndn(head[4]);
-	const sint type   = math::ndn(head[5]);
-	if(magic!=0x59A66A95 || (depth!=32 && depth!=24) || (type!=0 && type!=1 && type!=2) || head[6]!=0 || head[7]!=0) { return 0; }
-
-	const byte* source = reinterpret_cast<const byte*>(&(x[32]));
-	const sint size = (width*height)<<2;
-
-	tile* r = new tile;
-	r->width = width;
-	r->height = height;
-	r->data = new sint[width*height];
-	byte* data = reinterpret_cast<byte*>(r->data);
-
-	if(type==2) //run-length encoded
-	{
-		sint src = 0;
-		sint dst = 0;
-	
-		while(dst<size)
-		{
-			if(source[src]==0x80) //is control symbol
-			{
-				src++;
-				const byte run = source[src]; src++; //run-length
-
-				if(run!=0) //default
-				{
-					const byte cur = source[src]; src++; //run-value
-
-					for(sint i=0;i<run;++i)
-					{
-						//i += (width%2==1 && dst%(width<<2)==1);
-						data[dst] = 0;
-						dst += (depth==24 && (dst%4)==3);
-						data[dst] = cur; dst++;
-					}
-					dst++;
-				}
-				else //color byte equals control symbol
-				{
-					data[dst] = 0;
-					dst += (depth==24 && (dst%4)==3);
-					data[dst] = 0x80; dst++; 
-				}
-			}
-			else //uncompressed byte
-			{
-				data[dst] = 0;
-				dst += (depth==24 && (dst%4)==3);
-				data[dst] = source[src]; src++; dst++;
-			}
-		}
-	}
-	else //uncompressed
-	{
-		sint i = 0;
-		sint j = 0;
-		sint k = 0;
-		while(i<size)
-		{
-			data[i] = source[j]; i++; j++;
-			data[i] = source[j]; i++; j++;
-			data[i] = source[j]; i++; j++;
-			data[i] = 0; i++; 
-			j += ((width%2)==1 && k==width-1);
-			k = math::set(0,k+1,k==width-1);	
-		}
-	}
-
 	return r;
 }
 
@@ -228,55 +147,6 @@ info* format::ini(const char* x)
 	return r;
 }
 
-file* format::ar(const char* x,sint s)
-{
-	//ar can contain max 127 files!!!
-	file* r = new file[128];
-
-	//check for "magic-string"
-	if(x[0]=='!'&&x[1]=='<'&&x[2]=='a'&&x[3]=='r'&&x[4]=='c'&&x[5]=='h'&&x[6]=='>'&&x[7]=='<')
-	{
-		//init variables
-		sint  bc = 8;
-		sint* fc = new sint[1];
-		//*
-
-		//check for illegal mem access
-		while(bc<s)
-		{
-			//read member header
-			char* fn = string::copy(&x[bc],16);	//member filename
-			bc += 48;	//no necessary information here, so skip
-			//*
-			
-			//decode filesize of current ar member
-			const sint fs = string::str2int(&x[bc]) + 1;
-			bc += 12; //goto end of header
-			//*
-
-			//create char array for current ar member
-			char* dat = new char[fs];
-			for(sint i=0;i<fs;i++,bc++) { dat[i] = x[bc]; } //? invalid read of size 4 here
-			//*
-
-			//make new armember
-			r[*fc].name = fn;
-			r[*fc].data = dat;
-			r[*fc].size = fs;
-			r[*fc].files = fc;
-			//*
-
-			//adjust global ar variables
-			bc += (fs&1)!=0; //increment source ptr if filesize is odd
-			(*fc)++; //increment filecount
-			//*
-		}
-		//*
-
-		return r;
-	}
-	return 0;
-}
 ///*
 
 #endif

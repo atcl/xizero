@@ -26,11 +26,6 @@ void bench();
 ///Implementation
 void init()
 {
-	font::init(system::ldf("dat/XZsys.fnt"),SYSFONT);
-	//font::init(system::ldf("dat/XZbig.fnt"),BIGFONT);
-	//font::init(system::ldf("dat/XZseg.fnt"),SEGFONT);
-	//font::init(system::ldf("dat/XZsym.fnt"),SYMFONT);
-
 	screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
 }
 
@@ -103,7 +98,7 @@ void menu()
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
 		
-		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED,SYSFONT);
+		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED);
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();
@@ -137,14 +132,13 @@ void mainmenu()
 	//tile* back = format::ras(system::ldf("dat/back.ras"));
 	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
 	{
-		screen::back.clear(BLACK); //temp
-		//gfx::sprite(*back,0,0);
-		//font::draw(100,20,"Xi Zero",WHITE,TRANS,BIGFONT);
+		screen::back.clear(BLACK);
+		//draw menu object
 		b_start.draw();
 		b_load.draw();
 		b_about.draw();
 		b_leave.draw();
-		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS,SYSFONT);
+		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS);
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	//*
@@ -153,13 +147,13 @@ void mainmenu()
 void won()
 {
 	screen::back.clear(BLACK);
-	font::draw(40,40,"You won!",WHITE,TRANS,SYSFONT);
+	font::draw(40,40,"You won.",WHITE,TRANS);
 }
 
 void lost()
 {
 	screen::back.clear(BLACK);
-	font::draw(40,40,"You lost!",WHITE,TRANS,SYSFONT);
+	font::draw(40,40,"You lost.",WHITE,TRANS);
 }
 
 void bench()

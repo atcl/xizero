@@ -38,9 +38,9 @@
 ///definitions
 namespace screen
 {
-	buffer back(XRES*YRES);		//System Memory Double/Triple Buffer
+	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
-	buffer accum(XRES*YRES);	//Accumulation Buffer
+	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
 	namespace
 	{
@@ -92,7 +92,6 @@ void screen::init(sint x,sint y,const char* t,void* c)
 bool screen::run()
 {
 	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,back.pointer());
-	back.swap(accum);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0,1.0);
 		glTexCoord2f(1.0f,0.0f); glVertex2f( 1.0,1.0);
@@ -111,6 +110,7 @@ bool screen::run()
 	joy[1] = math::set(2,joy[1],(joy[1]>>16)!=0);
 	joy[1] = math::set(3,joy[1],(joy[1]>>8)!=0);
 	joy[1] = math::set(4,(joy[1])!=0);
+	back.swap(accum);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
 

@@ -27,8 +27,8 @@ namespace dialog
 ///implementation
 sint dialog::msgbox(const char* m)
 {
-	const sint w = font::width(m,0)+40;
-	const sint h = font::height(m,0)+60;
+	const sint w = font::width(m)+40;
+	const sint h = font::height(m)+60;
 	const sint x = (XRES-w)>>1;
 	const sint y = (YRES-h)>>1;
 	const button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
@@ -38,7 +38,7 @@ sint dialog::msgbox(const char* m)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
-		font::draw(x+20,y+20,m,BLACK,WHITE,0);
+		font::draw(x+20,y+20,m,BLACK,WHITE);
 		bok.draw();
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}

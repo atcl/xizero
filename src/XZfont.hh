@@ -15,14 +15,7 @@
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"
-#include "XZsystem.hh"
-///*
-
-///declarations
-#define SYSFONT 0
-#define BIGFONT 1
-#define SEGFONT 2
-#define SYMFONT 3
+#include "XZresource.hh"
 ///*
 
 ///definitions
@@ -30,29 +23,25 @@ namespace font
 {
 	namespace
 	{
-		tile* f[4] = { 0,0,0,0 };
+		tile* f = format::xpm(resource::font);
 	}
 
-	inline void init(const char* x,sint i);
-	       sint draw(sint x,sint y,char a,uint c,uint b,sint t);
-	       void draw(sint x,sint y,const char* a,uint c,uint b,sint t);
-	       sint width(char x,sint t);
-	       sint width(const char* x,sint t);
-	inline sint height(const char* x,sint t);
-	inline sint height(sint t);
+	       sint draw(sint x,sint y,char a,uint c,uint b);
+	       void draw(sint x,sint y,const char* a,uint c,uint b);
+	       sint width(char x);
+	       sint width(const char* x);
+	inline sint height(const char* x);
+	inline sint height();
+	inline char map(char a);
 }
 ///*
 
 ///implementation
-void font::init(const char* x,sint i)
+sint font::draw(sint x,sint y,char a,uint c,uint b) 
 {
-	f[i] = format::ras(x);
-}
-
-sint font::draw(sint x,sint y,char a,uint c,uint b,sint t) 
-{
-	const sint h = f[t]->height;
-	const sint w = f[t]->width-h;
+	a = map(a);
+	const sint h = f->height;
+	const sint w = f->width-h;
 	const sint d = XRES - h;
 	sint s = h*a;
 	sint o = y*XRES+x;
@@ -62,7 +51,7 @@ sint font::draw(sint x,sint y,char a,uint c,uint b,sint t)
 	{
 		for(sint j=0;j<h;++j,++o,++s)
 		{
-			const uint e = f[t]->data[s];
+			const uint e = f->data[s];
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==BLUE&&c!=TRANS);
 			r+=(i==0)&&(e!=BLACK);
 		}
@@ -70,7 +59,7 @@ sint font::draw(sint x,sint y,char a,uint c,uint b,sint t)
 	return r-1;
 }
 
-void font::draw(sint x,sint y,const char* a,uint c,uint b,sint t)
+void font::draw(sint x,sint y,const char* a,uint c,uint b)
 {
 	const sint z = x;
 	sint i = 0;
@@ -78,31 +67,32 @@ void font::draw(sint x,sint y,const char* a,uint c,uint b,sint t)
 	{
 		if(a[i]=='\n')
 		{
-			y += f[t]->height;
-			x = z-f[t]->height;
+			y += f->height;
+			x = z-f->height;
 		}
 		else
 		{
-			x += draw(x,y,a[i],c,b,t);
+			x += draw(x,y,a[i],c,b);
 		}
 		++i;
 	}
 }
 
-sint font::width(char x,sint t)
+sint font::width(char x)
 {
-	const sint h = f[t]->height;
+	x = map(x);
+	const sint h = f->height;
 	sint s = h*x;
 	sint r = 0;
 
 	for(sint j=0;j<h;++j,++s)
 	{
-		r+=(f[t]->data[s]!=BLACK);
+		r+=(f->data[s]!=BLACK);
 	}
 	return r-1;
 }
 
-sint font::width(const char* x,sint t)
+sint font::width(const char* x)
 {
 	char** b = string::split(x,'\n');
 	const sint c = string::count(x,'\n')+1;
@@ -113,7 +103,7 @@ sint font::width(const char* x,sint t)
 		sint s = 0;
 		for(sint j=0;j<l;++j)
 		{
-			s += width(b[i][j],t);
+			s += width(b[i][j]);
 		}
 		r = math::max(r,s);
 	}
@@ -121,14 +111,26 @@ sint font::width(const char* x,sint t)
 	return r;
 }
 
-sint font::height(const char* x,sint t)
+sint font::height(const char* x)
 {
-	return (string::count(x,'\n')+1)*f[t]->height;
+	return (string::count(x,'\n')+1)*f->height;
 }
 
-sint font::height(sint t)
+sint font::height()
 {
-	return f[t]->height;
+	return f->height;
+}
+
+char font::map(char a)
+{
+	switch(a)
+	{
+		case 'A'...'Z': return a-'A';
+		case 'a'...'z': return a-'a'+26;
+		case '0'...'9': return a-'0'+52;
+		case '.': return 62;
+		default: return 63;
+	}
 }
 ///*
 
