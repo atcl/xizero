@@ -39,7 +39,7 @@ void trans::circleblend(sint x,sint y,sint r) //fix
 		}
 	}
 
-	system::slp(3000);
+	screen::sleep(3000);
 }
 
 void trans::dissolve()
@@ -47,7 +47,7 @@ void trans::dissolve()
 	for(uint i=0;i<256000;++i)
 	{
 		gfx::pix(math::rnd(XRES),math::rnd(YRES),math::rnd(-1)); 
-		system::slp(8);
+		screen::sleep(8);
 	}	
 }
 
@@ -64,7 +64,7 @@ void trans::fadeout()
 			c.b[3] = math::max(0,c.b[3]--);
 			screen::back[j] = c.d;
 		}
-		system::slp(5);
+		screen::sleep(5);
 	}
 }
 ///*

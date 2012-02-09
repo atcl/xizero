@@ -55,8 +55,12 @@ namespace screen
 	}
 
 	void init(sint x,sint y,const char* t,void* c=0);
-	void exit(sint x=0);
+	void close();
 	bool run();
+
+	sint time() { return (sint)(1000.0*glfwGetTime()); }
+	void sleep(sint t) { glfwSleep(double(t)*1000.0); }
+	sint fps(bool o=1) { static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; }
 
 	inline sint  key()    { const sint k = keys[1]; keys[1] = 0; return k; }
 	inline sint  turbo()  { return keys[0]; }
@@ -89,11 +93,10 @@ void screen::init(sint x,sint y,const char* t,void* c)
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,XRES,YRES,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
 }
 
-void screen::exit(sint x)
+void screen::close()
 {
 	glfwCloseWindow();
 	glfwTerminate();
-	__asm__ __volatile__ ("int $0x80": :"a"(1),"b"(x):);
 }
 
 bool screen::run()

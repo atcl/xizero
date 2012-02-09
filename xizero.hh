@@ -77,7 +77,7 @@ sint about()
 sint leave()
 {
 	//if(dialog::askbox("Are you sure?")==-1) { return -1; };
-	screen::exit();
+	screen::close();
 	system::bye();
 }
 
@@ -157,7 +157,7 @@ void lost()
 
 void bench()
 {
-	const sint fps = system::fps();
+	const sint fps = screen::fps();
 	if(fps!=-1)
 	{
 		system::say(string::int2str(polygon::counter*fps),0); 			

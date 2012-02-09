@@ -114,7 +114,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	}
 
 	_active = 0;
-	_lastupdate = _lastfire = system::clk();
+	_lastupdate = _lastfire = screen::time();
 }
 
 void entity::fire(sint h,sint i)
@@ -167,7 +167,7 @@ sint entity::update(sint k)
 {
 	static sint last = 0;
 	const bool l = k^last;
-	const sint curr = system::clk();
+	const sint curr = screen::time();
 
 	for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 	{
@@ -259,7 +259,7 @@ sint entity::update(sint k)
 
 sint entity::update()
 {
-	const sint curr = system::clk();
+	const sint curr = screen::time();
 
 	if( (_position.y>0) && (_position.y+fx::l2f(YRES)>ymark) ) //check
 	{
@@ -321,7 +321,7 @@ void entity::display(sint m,bool t)
 
 void entity::resume()
 {
-	_lastfire = _lastupdate = system::clk();
+	_lastfire = _lastupdate = screen::time();
 }
 
 void entity::addpoints(sint a)
