@@ -28,6 +28,7 @@ class button : public gui
 		char* text;						//Button Caption
 		sint (*action)();					//Onclick Function Pointer
 		bool depth;						//Flat or Relief
+		bool active;						//Usable
 		const sint textleft;					//Relative Y Coordinate of Caption	
 		const sint texttop;					//Relative X Coordinate of Caption
 		static list bl;						//List of all Buttons
@@ -36,6 +37,8 @@ class button : public gui
 		~button();						//Destructor
 		void draw() const;					//Draw Button
 		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
+		static void allon();					//Activate All Buttons
+		static void alloff();					//Deactivate All Buttons
 };
 ///*
 
@@ -47,6 +50,7 @@ button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint
 	text(string::copy(x)),
 	action(a),
 	depth(d),
+	active(1),
 	textleft( (math::max(w-font::width(x),0))>>1 ),
 	texttop( (math::max(h-font::height(x),0))>>1 )
 {
@@ -60,13 +64,20 @@ button::~button()
 	delete text;
 }
 
+void button::draw() const
+{
+	guard(visible==0);
+	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
+	font::draw(left+textleft,top+texttop,text,color,backcolor);
+}
+
 sint button::check(sint x,sint y,sint b)
 {
 	const sint e = math::neg(bl.length(),b==0);
 	for(sint i=bl.first();i<e;i+=bl.next())
 	{
 		const button* temp = (button*)bl.current();
-		if( (temp->visible!=0) && (game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) ) 
+		if( (temp->visible!=0) && (temp->active!=0) && (game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) ) 
 		{
 			return temp->action();
 		}
@@ -74,11 +85,22 @@ sint button::check(sint x,sint y,sint b)
 	return 0;
 }
 
-void button::draw() const
+void button::allon()
 {
-	guard(visible==0);
-	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
-	font::draw(left+textleft,top+texttop,text,color,backcolor);
+	const sint e = bl.length();
+	for(sint i=bl.first();i<e;i+=bl.next())
+	{
+		((button*)bl.current())->active = 1;
+	}
+}
+
+void button::alloff()
+{
+	const sint e = bl.length();
+	for(sint i=bl.first();i<e;i+=bl.next())
+	{
+		((button*)bl.current())->active = 0;
+	}
 }
 ///*
 
