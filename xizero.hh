@@ -42,9 +42,9 @@ sint start(sint l)
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); v.resume(); }
+		if(screen::key()==ESCAPE) { menu(); v.resume(); }
 
-		v.update(screen::turbo());
+		v.update(screen::turbo(),screen::joy());
 		v.display();
 		//screen::back.fsaamb(screen::accum);
 		v.gauges();

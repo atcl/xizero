@@ -15,23 +15,14 @@
 
 ///declarations
 #ifdef __GNUC__
-	#define LIKELY(x)   __builtin_expect((x),1)
-	#define UNLIKELY(x) __builtin_expect((x),0)
-	#define PREFETCH(x,y,z) __builtin_prefetch(x,y,z)
 
 	#define CONST __attribute__((const))
-	#define HOTFN __attribute__((hot))
 
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline))
 	#endif
 #else
-	#define LIKELY(x) x
-	#define UNLIKELY(x) x
-	#define PREFETCH(x,y,z)
-
 	#define CONST
-	#define HOTFN
 #endif
 
 #ifndef TITLE
@@ -87,15 +78,6 @@ union packed
 {
 	uint d;
 	byte b[4];
-};
-
-union color
-{
-	uint c;
-	byte a;
-	byte r;
-	byte g;
-	byte b;
 };
 ///*
 

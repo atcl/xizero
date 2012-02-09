@@ -80,7 +80,7 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 
 	sint pc = 0;
 	sint dc = 0;
-	for(uint j=0;j<subs;++j)
+	for(sint j=0;j<subs;++j)
 	{
 		if(string::find(t[i++],"sobj")==-1) { system::say("y3d format wrong (sobj)",1); system::bye(-1); }
 

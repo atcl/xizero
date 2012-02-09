@@ -47,7 +47,7 @@ class level
 	public:
 		level(const char* o);		//Constructor
 		~level();			//Destructor
-		sint update(sint k);		//Update All Entities
+		sint update(sint k,sint j);	//Update All Entities
 		void display();			//Display Terrain, Shadows, Entities
 		void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
@@ -190,14 +190,14 @@ level::~level()
 	delete ep;
 }
 
-sint level::update(sint k)
+sint level::update(sint k,sint j)
 {
 	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
 		if(((entity*)enemies.current())->update()<=0) { delete (entity*)enemies.delcurrent(); }
 	}
 
-	return (boss->update()<=0)-(player->update(k)<=0);
+	return (boss->update()<=0)-(player->update(k,j)<=0);
 }
 
 void level::display()

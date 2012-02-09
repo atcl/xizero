@@ -235,9 +235,8 @@ void gfx::fsprog(sint p,uint c)
 tile* gfx::save()
 {
 	const sint l = XRES*YRES;
-	sint* d = new sint[l];
-	tile* r = new tile({XRES,YRES,d});
-	for(sint i=0;i<l;++i) { d[i] = screen::back[i]; }
+	tile* r = new tile({XRES,YRES,new sint[l]});
+	for(sint i=0;i<l;++i) { r->data[i] = screen::back[i]; }
 	return r;
 }
 ///*

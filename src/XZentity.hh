@@ -67,7 +67,7 @@ class entity
 		entity(const lvector& p,object* m,const info& v,sint s);
 		entity(const lvector& p,object* m,const info& v);
 		~entity();
-		sint update(sint k);
+		sint update(sint k,sint j);
 		sint update();
 		void display(sint m,bool t);
 		inline void resume();
@@ -163,7 +163,7 @@ entity::~entity()
 	//delete[] _ammomount;
 }
 
-sint entity::update(sint k)
+sint entity::update(sint k,sint j)
 {
 	static sint last = 0;
 	const bool l = k^last;

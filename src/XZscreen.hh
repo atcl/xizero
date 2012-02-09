@@ -44,9 +44,9 @@ namespace screen
 
 	namespace
 	{
-		sint  joy[2] = { 0,0 };
 		sint  mouse[4] = { 0,0,0,0 };	
 		sint  keys[2] = { 0,0 };
+		sint  joys = 0;
 		void* mcursor = 0;
 
 		void cb_key(int k,int a)    { keys[1] = keys[0] = math::set(k,a==GLFW_PRESS); }
@@ -68,8 +68,7 @@ namespace screen
 	inline sint  mousey() { return mouse[3]; }
 	inline sint  mousel() { return mouse[0]; }
 	inline sint  mouser() { return mouse[1]; }
-	inline sint  joya()   { return joy[0]; }
-	inline sint  joyb()   { return joy[1]; }
+	inline sint  joy()    { return joys; }
 	inline void* cursor() { return mcursor; }
 }
 ///*
@@ -110,16 +109,11 @@ bool screen::run()
 	glEnd();
 	glFlush();
 	glfwSwapBuffers();
-	glfwGetJoystickPos(0,(float*)&joy[0],2);
-	joy[0] = math::set(1,joy[0],joy[0]==1065353216);
-	joy[0] = math::set(2,joy[0],joy[0]==-1082130431);
-	joy[0] = math::set(3,joy[0],joy[1]==1065353216);
-	joy[0] = math::set(4,joy[1]==-1082130431);
-	glfwGetJoystickButtons(0,(byte*)&joy[1],4);
-	joy[1] = math::set(1,joy[1],(joy[1]>>24)!=0);
-	joy[1] = math::set(2,joy[1],(joy[1]>>16)!=0);
-	joy[1] = math::set(3,joy[1],(joy[1]>>8)!=0);
-	joy[1] = math::set(4,(joy[1])!=0);
+	sint temp = 0;
+	glfwGetJoystickPos(0,(float*)&temp,2);
+	joys  = (temp==1065353216) | ((temp==-1082130431)<<1) | ((temp== 1065353216)<<2) | ((temp==-1082130431)<<3);
+	glfwGetJoystickButtons(0,(byte*)&temp,4);
+	joys |= (((temp>>24)!=0)<<4) | (((temp>>16)!=0)<<5) | (((temp>>8)!=0)<<6) | (((temp)!=0)<<7);
 	//back.swap(accum);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
 }
