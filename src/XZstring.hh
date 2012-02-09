@@ -29,7 +29,7 @@ namespace string
 	/*OK*/ char*  int2str(sint x);
 	/*OK*/ char*  fix2str(fixed x);
 	/*OK*/ char*  repl(const char* x,char y,char z);
-	/*OK*/ char** split(const char* x,char y);
+	/*OK*/ char** split(char* x,char y,bool n=1);
 	/*OK*/ char*  trim(const char* x,char y=' ');
 	/*OK*/ char   toup(char x);
 }
@@ -198,7 +198,7 @@ char* string::repl(const char* x,char y,char z)
 	return r;
 }
 
-char** string::split(const char* x,char y)
+char** string::split(char* x,char y,bool n)
 {
 	const sint c = count(x,y)+1;
 	char* s = repl(x,y,0);
