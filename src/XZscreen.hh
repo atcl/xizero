@@ -55,8 +55,8 @@ namespace screen
 	}
 
 	void init(sint x,sint y,const char* t,void* c=0);
+	void exit(sint x=0);
 	bool run();
-	void exit();
 
 	inline sint  key()    { const sint k = keys[1]; keys[1] = 0; return k; }
 	inline sint  turbo()  { return keys[0]; }
@@ -89,6 +89,13 @@ void screen::init(sint x,sint y,const char* t,void* c)
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,XRES,YRES,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
 }
 
+void screen::exit(sint x)
+{
+	glfwCloseWindow();
+	glfwTerminate();
+	__asm__ __volatile__ ("int $0x80": :"a"(1),"b"(x):);
+}
+
 bool screen::run()
 {
 	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,XRES,YRES,GL_RGBA,GL_UNSIGNED_BYTE,back.pointer());
@@ -112,12 +119,6 @@ bool screen::run()
 	joy[1] = math::set(4,(joy[1])!=0);
 	//back.swap(accum);
 	return glfwGetWindowParam(GLFW_OPENED);// && !glfwGetKey(GLFW_KEY_ESC);
-}
-
-void screen::exit()
-{
-	glfwCloseWindow();
-	glfwTerminate();
 }
 ///*
 
