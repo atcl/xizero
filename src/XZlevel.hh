@@ -194,7 +194,7 @@ sint level::update(sint k,sint j)
 {
 	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
 	{
-		if(((entity*)enemies.current())->update()<=0) { delete (entity*)enemies.delcurrent(); }
+		((entity*)enemies.current())->update();
 	}
 
 	return (boss->update()<=0)-(player->update(k,j)<=0);

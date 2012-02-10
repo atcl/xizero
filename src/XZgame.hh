@@ -57,10 +57,17 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 		const fvector slope0 = n-m;
 		const fvector slope1 = p-m;
 
-		coeff[0] = fx::div(slope0.x,slope0.y);
-		coeff[1] = fx::div(slope1.x,slope1.y);
-		coeff[2] = fx::div(slope0.y,slope0.x);
-		coeff[3] = fx::div(slope1.y,slope1.x);
+		//coeff[0] = fx::div(slope0.x,slope0.y);
+		//coeff[1] = fx::div(slope1.x,slope1.y);
+		//coeff[2] = fx::div(slope0.y,slope0.x);
+		//coeff[3] = fx::div(slope1.y,slope1.x);
+
+		//temp
+		if(slope0.y!=0) { coeff[0] = fx::div(slope0.x,slope0.y); } else { coeff[0] = 0; }
+		if(slope1.y!=0) { coeff[1] = fx::div(slope1.x,slope1.y); } else { coeff[1] = 0; }
+		if(slope0.x!=0) { coeff[2] = fx::div(slope0.y,slope0.x); } else { coeff[2] = 0; }
+		if(slope1.x!=0) { coeff[3] = fx::div(slope1.y,slope1.x); } else { coeff[3] = 0; }
+		//*
 
 		inter[0][0] = m.x - fx::mul(m.y,coeff[0]);
 		inter[0][1] = p.x - fx::mul(p.y,coeff[0]);
@@ -81,14 +88,12 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	//*
 
 	//check overlap
-	sint v = -4;
-	v += (loc0 > math::min(inter[0][0],inter[0][1])) && (loc0 < math::max(inter[0][0],inter[0][1]));
-	v += (loc1 > math::min(inter[1][0],inter[1][1])) && (loc1 < math::max(inter[1][0],inter[1][1]));
-	v += (loc2 > math::min(inter[2][0],inter[2][1])) && (loc2 < math::max(inter[2][0],inter[2][1]));
-	v += (loc3 > math::min(inter[3][0],inter[3][1])) && (loc3 < math::max(inter[3][0],inter[3][1]));
+	return 4
+		- (loc0 > math::min(inter[0][0],inter[0][1])) && (loc0 < math::max(inter[0][0],inter[0][1]))
+		- (loc1 > math::min(inter[1][0],inter[1][1])) && (loc1 < math::max(inter[1][0],inter[1][1]))
+		- (loc2 > math::min(inter[2][0],inter[2][1])) && (loc2 < math::max(inter[2][0],inter[2][1]))
+		- (loc3 > math::min(inter[3][0],inter[3][1])) && (loc3 < math::max(inter[3][0],inter[3][1]));
 	//*
-
-	return v;
 }
 
 sint game::angle(const fvector& x,const box& y,const fvector& m)

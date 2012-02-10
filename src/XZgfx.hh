@@ -45,6 +45,8 @@ namespace gfx
 ///implementation
 void gfx::circpix(sint x,sint y,sint l,sint t,uint c)
 {
+	//lim guard here
+
 	const sint o = (y*XRES)+x;
 	const sint p = t*XRES;
 	const sint q = l*XRES;
@@ -61,7 +63,11 @@ void gfx::circpix(sint x,sint y,sint l,sint t,uint c)
 void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 {
 	guard( (x<0) || (y<0) || (x>XRES) || (y>YRES) || (a<0) || (b<0) || (a>XRES) || (b>YRES) );
-	const sint s = math::set(2,sint(y==b)-sint(x==a),k==1);
+
+	//x = math::lim(0,x,XRES);
+	//y = math::lim(0,y,YRES);
+	//a = math::lim(0,a,XRES);
+	//b = math::lim(0,b,YRES);
 
 	sint o = 0;
 	sint p = 0;
@@ -73,7 +79,7 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 	packed u = { c };
 	packed v = { c };
 
-	switch(s)
+	switch( math::set(2,sint(y==b)-sint(x==a),k==1) )
 	{
 		case -1: //vertical line
 			p = math::min(y,b);
@@ -183,7 +189,6 @@ void gfx::rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f,bool g)
 
 void gfx::circ(sint x,sint y,sint r,uint c)
 {
-	//guard(x-r<0 || x+r>XRES || y-r<0 || y+r>YRES);
 	sint d  = 3 - (r<<1);
 	sint cx = 0;
 	sint cy = r;

@@ -121,6 +121,7 @@ void entity::fire(sint h,sint i)
 {
 	const bool j = _ammomount[i]->z;
 	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,fx::div(FXONE,_direction[j].length())<<2}}); 
+	//cur->pos -= (cur->dir*cur->dir.e);
 	_ammo.append(cur);
 }
 
@@ -172,10 +173,10 @@ sint entity::update(sint k,sint j)
 	for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 	{
 		ammo* ca = (ammo*)_ammo.current();
-		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		//if(h!=0) { /*delete*/ _ammo.delcurrent(); }
-		//_health -= h;
-		/*if(curr>_lastupdate+ammorate)*/ ca->pos -= ca->dir*ca->dir.e;
+		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
+		if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
+		_health -= h;
+		/*ca->pos -= math::set(ca->dir*ca->dir.e,curr>lastammo);*/ ca->pos -= ca->dir*ca->dir.e;
 	}
 
 	//destroy ani if health below zeros
@@ -261,14 +262,15 @@ sint entity::update() //check, because ammo is in list even though level just st
 {
 	const sint curr = screen::time();
 
-	if( (_position.y>0) && (_position.y+fx::l2f(YRES)>ymark) ) //check
+	if( (_health>0) && (_position.y>0) && (_position.y+(YRES<<FX)>ymark) ) //check
 	{
 		//_active = 1;
 		for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		{
-			//const sint h = game::collision(_position,_model[0]->boundingbox(),((ammo*)_ammo.current())->pos,i==0)<<2;
-			//if(h!=0) { _ammo.delcurrent(); }
-			//_health -= h;
+			ammo* ca = (ammo*)_ammo.current();
+			const sint h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;	
+			if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
+			_health -= h;
 		}
 
 		if(curr>_lastfire)
@@ -311,7 +313,7 @@ void entity::display(sint m,bool t)
 			const sint cy = fx::r2l(cur->y)-m;
 			switch(game::onscreen(cx,cy))
 			{
-				case 0: /*delete*/ _ammo.delcurrent(); break;
+				case 0: delete (ammo*)_ammo.delcurrent(); break;
 				case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;
 			}
 		}
