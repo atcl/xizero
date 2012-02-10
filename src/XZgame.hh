@@ -16,7 +16,7 @@
 ///*
 
 ///declarations
-typedef fvector box[2];
+typedef fvector box[4];
 ///*
 
 ///definition
@@ -44,9 +44,9 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 {
 	//add position to box
 	const fvector m( (x.x+y[0].x), (x.y-y[0].y), (x.z+y[0].z) );
-	const fvector n( (x.x+y[0].x), (x.y-y[1].y), (x.z+y[0].z) );
-	//const fvector o( (x.x+y[1].x), (x.y-y[1].y), (x.z+y[0].z) ); //not needed
-	const fvector p( (x.x+y[1].x), (x.y-y[0].y), (x.z+y[0].z) );
+	const fvector n( (x.x+y[1].x), (x.y-y[1].y), (x.z+y[1].z) );
+	//const fvector o( (x.x+y[2].x), (x.y-y[2].y), (x.z+y[2].z) ); //not needed
+	const fvector p( (x.x+y[3].x), (x.y-y[3].y), (x.z+y[3].z) );
 	//*
 
 	//if requested calcualte reusable intersections

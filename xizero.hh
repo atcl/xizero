@@ -91,7 +91,7 @@ void menu()
 
 	//draw menu
 	tile* scr = gfx::save();
-	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
+	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0 && screen::key()!=ESCAPE)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);

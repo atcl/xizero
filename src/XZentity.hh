@@ -257,19 +257,18 @@ sint entity::update(sint k,sint j)
 	return _health;
 }
 
-sint entity::update()
+sint entity::update() //check, because ammo is in list even though level just started
 {
 	const sint curr = screen::time();
 
 	if( (_position.y>0) && (_position.y+fx::l2f(YRES)>ymark) ) //check
 	{
 		//_active = 1;
-
 		for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
 		{
-			//const long h = game::collision(_position,_model[0]->boundingbox(),(ammo*)_ammo.current()->pos,i==0)<<2;
+			//const sint h = game::collision(_position,_model[0]->boundingbox(),((ammo*)_ammo.current())->pos,i==0)<<2;
 			//if(h!=0) { _ammo.delcurrent(); }
-			//health -= h;
+			//_health -= h;
 		}
 
 		if(curr>_lastfire)
@@ -321,10 +320,12 @@ void entity::display(sint m,bool t)
 	//temp: draw 2d bounding box
 	const lvector b0 = object::project(p,_model[0]->boundingbox()[0]);
 	const lvector b1 = object::project(p,_model[0]->boundingbox()[1]);
-	gfx::line(b0.x,b0.y,b1.x,b0.y,GREEN);
-	gfx::line(b1.x,b0.y,b1.x,b1.y,GREEN);
-	gfx::line(b1.x,b1.y,b0.x,b1.y,GREEN);
-	gfx::line(b0.x,b1.y,b0.x,b0.y,GREEN);
+	const lvector b2 = object::project(p,_model[0]->boundingbox()[2]);
+	const lvector b3 = object::project(p,_model[0]->boundingbox()[3]);
+	gfx::line(b0.x,b0.y,b1.x,b1.y,GREEN);
+	gfx::line(b1.x,b1.y,b2.x,b2.y,GREEN);
+	gfx::line(b2.x,b2.y,b3.x,b3.y,GREEN);
+	gfx::line(b3.x,b3.y,b0.x,b0.y,GREEN);
 	//*
 }
 

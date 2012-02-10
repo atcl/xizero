@@ -19,7 +19,7 @@
 ///*
 
 ///declarations
-typedef fvector box[2];
+typedef fvector box[4];
 ///*
 
 ///definition 
@@ -112,18 +112,18 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 			bbox[0].x = math::min(bbox[0].x,fx::l2f(math::min(x[0].x,math::min(x[1].x,x[2].x))));
 			bbox[0].y = math::min(bbox[0].y,fx::l2f(math::min(x[0].y,math::min(x[1].y,x[2].y))));
 			bbox[0].z = math::min(bbox[0].z,fx::l2f(math::min(x[0].z,math::min(x[1].z,x[2].z))));
-			bbox[1].x = math::max(bbox[1].x,fx::l2f(math::max(x[0].x,math::max(x[1].x,x[2].x))));
-			bbox[1].y = math::max(bbox[1].y,fx::l2f(math::max(x[0].y,math::max(x[1].y,x[2].y))));
-			bbox[1].z = math::max(bbox[1].z,fx::l2f(math::max(x[0].z,math::max(x[1].z,x[2].z))));
+			bbox[2].x = math::max(bbox[2].x,fx::l2f(math::max(x[0].x,math::max(x[1].x,x[2].x))));
+			bbox[2].y = math::max(bbox[2].y,fx::l2f(math::max(x[0].y,math::max(x[1].y,x[2].y))));
+			bbox[2].z = math::max(bbox[2].z,fx::l2f(math::max(x[0].z,math::max(x[1].z,x[2].z))));
 
 			if(verts==4)
 			{
 				bbox[0].x = math::min(bbox[0].x,fx::l2f(x[3].x));
 				bbox[0].y = math::min(bbox[0].y,fx::l2f(x[3].y));
 				bbox[0].z = math::min(bbox[0].z,fx::l2f(x[3].z));
-				bbox[1].x = math::max(bbox[1].x,fx::l2f(x[3].x));
-				bbox[1].y = math::max(bbox[1].y,fx::l2f(x[3].y));
-				bbox[1].z = math::max(bbox[1].z,fx::l2f(x[3].z));
+				bbox[2].x = math::max(bbox[2].x,fx::l2f(x[3].x));
+				bbox[2].y = math::max(bbox[2].y,fx::l2f(x[3].y));
+				bbox[2].z = math::max(bbox[2].z,fx::l2f(x[3].z));
 			
 				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor,scolor);
 			}
@@ -137,6 +137,11 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 			dock[dc].set(fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type);
 		}
 	}
+
+	bbox[0].z = (bbox[0].z + bbox[1].z)>>1;
+	bbox[1].set(bbox[2].x,bbox[0].y,bbox[0].z);
+	bbox[2].z = bbox[0].z;
+	bbox[3].set(bbox[0].x,bbox[2].y,bbox[0].z);
 
 	delete t;
 }
@@ -194,6 +199,8 @@ object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks)
 	}
 	bbox[0] = o.bbox[0];
 	bbox[1] = o.bbox[1];
+	bbox[2] = o.bbox[2];
+	bbox[3] = o.bbox[3];
 }
 
 object::~object()
@@ -215,6 +222,8 @@ void object::update(const fmatrix& m)
 	}
 	bbox[0] = m.transform(bbox[0]);
 	bbox[1] = m.transform(bbox[1]);
+	bbox[2] = m.transform(bbox[2]);
+	bbox[3] = m.transform(bbox[3]);
 }
 
 void object::display(const lvector& p,sint f) const
