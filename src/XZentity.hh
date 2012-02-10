@@ -173,7 +173,7 @@ sint entity::update(sint k,sint j)
 	{
 		ammo* ca = (ammo*)_ammo.current();
 		//const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		//if(h!=0) { _ammo.delcurrent(); }
+		//if(h!=0) { /*delete*/ _ammo.delcurrent(); }
 		//_health -= h;
 		/*if(curr>_lastupdate+ammorate)*/ ca->pos -= ca->dir*ca->dir.e;
 	}
@@ -317,6 +317,15 @@ void entity::display(sint m,bool t)
 			}
 		}
 	}
+
+	//temp: draw 2d bounding box
+	const lvector b0 = object::project(p,_model[0]->boundingbox()[0]);
+	const lvector b1 = object::project(p,_model[0]->boundingbox()[1]);
+	gfx::line(b0.x,b0.y,b1.x,b0.y,GREEN);
+	gfx::line(b1.x,b0.y,b1.x,b1.y,GREEN);
+	gfx::line(b1.x,b1.y,b0.x,b1.y,GREEN);
+	gfx::line(b0.x,b1.y,b0.x,b0.y,GREEN);
+	//*
 }
 
 void entity::resume()

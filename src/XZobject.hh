@@ -32,7 +32,7 @@ class object
 		sint      polys;
 		sint      docks;
 	public:
-		static lvector project(const lvector& p,const lvector& v);
+		static lvector project(const lvector& p,const fvector& v);
 		/*OK*/ object(const char* o);
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
@@ -50,12 +50,12 @@ class object
 ///implementation
 fmatrix object::linear = fmatrix(FXONE);
 
-lvector object::project(const lvector& p,const lvector& v)
+lvector object::project(const lvector& p,const fvector& v)
 {
 	lvector r;
-	r.z = v.z+p.z;
-	r.x = fx::f2l(fx::mul( PRJX<<FX,fx::div(fx::l2f(v.x),fx::l2f(r.z)))) + p.x;
-	r.y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(fx::l2f(v.y),fx::l2f(r.z)))) + p.y;
+	r.z = fx::l2f(p.z)+v.z;
+	r.x = fx::f2l(fx::mul( PRJX<<FX,fx::div(v.x,r.z))) + p.x;
+	r.y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(v.y,r.z))) + p.y;
 	return r;
 }
 
@@ -109,21 +109,21 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 
 			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor,scolor);
 
-			bbox[0].x = fx::l2f(math::min(bbox[0].x,math::min(x[0].x,math::min(x[1].x,x[2].x))));
-			bbox[0].y = fx::l2f(math::min(bbox[0].y,math::min(x[0].y,math::min(x[1].y,x[2].y))));
-			bbox[0].z = fx::l2f(math::min(bbox[0].z,math::min(x[0].z,math::min(x[1].z,x[2].z))));
-			bbox[1].x = fx::l2f(math::max(bbox[1].x,math::max(x[0].x,math::max(x[1].x,x[2].x))));
-			bbox[1].y = fx::l2f(math::max(bbox[1].y,math::max(x[0].y,math::max(x[1].y,x[2].y))));
-			bbox[1].z = fx::l2f(math::max(bbox[1].z,math::max(x[0].z,math::max(x[1].z,x[2].z))));
+			bbox[0].x = math::min(bbox[0].x,fx::l2f(math::min(x[0].x,math::min(x[1].x,x[2].x))));
+			bbox[0].y = math::min(bbox[0].y,fx::l2f(math::min(x[0].y,math::min(x[1].y,x[2].y))));
+			bbox[0].z = math::min(bbox[0].z,fx::l2f(math::min(x[0].z,math::min(x[1].z,x[2].z))));
+			bbox[1].x = math::max(bbox[1].x,fx::l2f(math::max(x[0].x,math::max(x[1].x,x[2].x))));
+			bbox[1].y = math::max(bbox[1].y,fx::l2f(math::max(x[0].y,math::max(x[1].y,x[2].y))));
+			bbox[1].z = math::max(bbox[1].z,fx::l2f(math::max(x[0].z,math::max(x[1].z,x[2].z))));
 
 			if(verts==4)
 			{
-				bbox[0].x = fx::l2f(math::min(bbox[0].x,x[3].x));
-				bbox[0].y = fx::l2f(math::min(bbox[0].y,x[3].y));
-				bbox[0].z = fx::l2f(math::min(bbox[0].z,x[3].z));
-				bbox[1].x = fx::l2f(math::max(bbox[1].x,x[3].x));
-				bbox[1].y = fx::l2f(math::max(bbox[1].y,x[3].y));
-				bbox[1].z = fx::l2f(math::max(bbox[1].z,x[3].z));
+				bbox[0].x = math::min(bbox[0].x,fx::l2f(x[3].x));
+				bbox[0].y = math::min(bbox[0].y,fx::l2f(x[3].y));
+				bbox[0].z = math::min(bbox[0].z,fx::l2f(x[3].z));
+				bbox[1].x = math::max(bbox[1].x,fx::l2f(x[3].x));
+				bbox[1].y = math::max(bbox[1].y,fx::l2f(x[3].y));
+				bbox[1].z = math::max(bbox[1].z,fx::l2f(x[3].z));
 			
 				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor,scolor);
 			}

@@ -44,9 +44,9 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 {
 	//add position to box
 	const fvector m( (x.x+y[0].x), (x.y-y[0].y), (x.z+y[0].z) );
-	const fvector n( (x.x+y[1].x), (x.y-y[0].y), (x.z+y[0].z) );
-	//const fvector o( (x.x+y[0].x), (x.y-y[1].y), (x.z+y[0].z) ); //not needed
-	const fvector p( (x.x+y[1].x), (x.y-y[1].y), (x.z+y[0].z) );
+	const fvector n( (x.x+y[0].x), (x.y-y[1].y), (x.z+y[0].z) );
+	//const fvector o( (x.x+y[1].x), (x.y-y[1].y), (x.z+y[0].z) ); //not needed
+	const fvector p( (x.x+y[1].x), (x.y-y[0].y), (x.z+y[0].z) );
 	//*
 
 	//if requested calcualte reusable intersections
@@ -57,7 +57,7 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 		const fvector slope0 = n-m;
 		const fvector slope1 = p-m;
 
-		coeff[0] = fx::div(slope0.x,slope0.y); //crashes here
+		coeff[0] = fx::div(slope0.x,slope0.y);
 		coeff[1] = fx::div(slope1.x,slope1.y);
 		coeff[2] = fx::div(slope0.y,slope0.x);
 		coeff[3] = fx::div(slope1.y,slope1.x);

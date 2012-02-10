@@ -87,8 +87,7 @@ sint button::check(sint x,sint y,sint b)
 
 void button::allon()
 {
-	const sint e = bl.length();
-	for(sint i=bl.first();i<e;i+=bl.next())
+	for(sint i=bl.first();i<bl.length();i+=bl.next())
 	{
 		((button*)bl.current())->active = 1;
 	}
@@ -96,8 +95,7 @@ void button::allon()
 
 void button::alloff()
 {
-	const sint e = bl.length();
-	for(sint i=bl.first();i<e;i+=bl.next())
+	for(sint i=bl.first();i<bl.length();i+=bl.next())
 	{
 		((button*)bl.current())->active = 0;
 	}
