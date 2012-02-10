@@ -16,6 +16,7 @@
 #include "XZmath.hh"
 #include "XZformat.hh"
 #include "XZresource.hh"
+#include "XZsystem.hh"
 ///*
 
 ///definitions
@@ -52,11 +53,11 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 		for(sint j=0;j<h;++j,++o,++s)
 		{
 			const uint e = f->data[s];
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],e==WHITE&&b!=TRANS),e==RED&&c!=TRANS);
+			screen::back[o] = math::set(c,math::set(b,screen::back[o],b!=TRANS&&e==WHITE),c!=TRANS&&e==RED);
 			r+=(i==0)&&(e!=BLACK);
 		}
 	}
-	return r-1;
+	return r;
 }
 
 void font::draw(sint x,sint y,const char* a,uint c,uint b)
@@ -65,14 +66,10 @@ void font::draw(sint x,sint y,const char* a,uint c,uint b)
 	sint i = 0;
 	while(a[i]!=0)
 	{
-		if(a[i]=='\n')
+		switch(a[i])
 		{
-			y += f->height;
-			x = z-1;
-		}
-		else
-		{
-			x += draw(x,y,a[i],c,b);
+			case '\n': y += f->height; x = z; break;
+			default: x += draw(x,y,a[i],c,b);
 		}
 		++i;
 	}
@@ -89,7 +86,7 @@ sint font::width(char x)
 	{
 		r+=(f->data[s]!=BLACK);
 	}
-	return r-1;
+	return r;
 }
 
 sint font::width(const char* x)

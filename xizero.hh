@@ -71,7 +71,7 @@ sint load()
 
 sint about()
 {
-	return dialog::msgbox("XiZero\n by atCROSSLEVEL studios\n Version: "VERSION);
+	return dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: "VERSION);
 }
 
 sint leave()
@@ -97,7 +97,7 @@ void menu()
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
 		
-		font::draw(2,1," atCROSSLEVEL: Xi Zero",WHITE,RED);
+		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED);
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();

@@ -45,7 +45,7 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	//add position to box
 	const fvector m( (x.x+y[0].x), (x.y-y[0].y), (x.z+y[0].z) );
 	const fvector n( (x.x+y[1].x), (x.y-y[0].y), (x.z+y[0].z) );
-	//const fvector o( (x.x+y[0].x), (x.y-y[1].y), (x.z+y[2].z) ); //not needed
+	//const fvector o( (x.x+y[0].x), (x.y-y[1].y), (x.z+y[0].z) ); //not needed
 	const fvector p( (x.x+y[1].x), (x.y-y[1].y), (x.z+y[0].z) );
 	//*
 

@@ -36,7 +36,7 @@
 typedef sint fixed;
 ///*
 
-namespace fx
+namespace fx 
 {
 	inline sint  f2l(fixed x) { return x>>FX; } CONST
 	inline sint  r2l(fixed x) { return (x+FXHLF)>>FX; } CONST

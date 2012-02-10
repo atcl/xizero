@@ -6,7 +6,7 @@
 ///guard
 #ifndef HH_XZBUFFER
 #define HH_XZBUFFER
-//#pragma message "Compiling " __FILE__ "..." " TODO: FSAA/FXAA + FSMB"
+//#pragma message "Compiling " __FILE__ "..." " TODO: FSMB"
 ///*
 
 ///includes

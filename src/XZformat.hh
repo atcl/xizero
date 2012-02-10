@@ -6,7 +6,7 @@
 ///guard
 #ifndef HH_XZFORMAT
 #define HH_XZFORMAT
-//#pragma message "Compiling " __FILE__ "..." " TODO: AR archive reader"
+//#pragma message "Compiling " __FILE__ "..." " TODO:"
 ///*
 
 ///includes
@@ -23,14 +23,6 @@ struct info
 	char** value;
 	sint   count;
 	char*  operator[](const char* n) const {for(sint i=0;i<count;++i){if(string::find(n,name[i])==0){return value[i];}} return 0;} 
-};
-
-struct file
-{
-	char* name;
-	char* data;
-	sint  size;
-	sint* files;
 };
 
 #ifndef TILE
