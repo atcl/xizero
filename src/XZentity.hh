@@ -62,6 +62,7 @@ class entity
 
 		void setup(const lvector& p,object* m,const info& v);
 		void fire(sint h,sint i);
+		void checkammo(sint t);
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,sint s);
@@ -120,9 +121,21 @@ void entity::setup(const lvector& p,object* m,const info& v)
 void entity::fire(sint h,sint i)
 {
 	const bool j = _ammomount[i]->z;
-	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,fx::div(FXONE,_direction[j].length())<<2}}); 
+	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
 	//cur->pos -= (cur->dir*cur->dir.e);
 	_ammo.append(cur);
+}
+
+void entity::checkammo(sint t)
+{
+	for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+	{
+		ammo* ca = (ammo*)_ammo.current();
+		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
+		if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
+		_health -= h;
+		ca->pos -= ca->dir* ((ca->dir.e)*(_model[1]!=0/*&&curr>lastammo*/));
+	}
 }
 
 entity::entity(const lvector& p,object* m,object* n,const info& v)
@@ -170,14 +183,7 @@ sint entity::update(sint k,sint j)
 	const bool l = k^last;
 	const sint curr = screen::time();
 
-	for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
-	{
-		ammo* ca = (ammo*)_ammo.current();
-		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
-		_health -= h;
-		/*ca->pos -= math::set(ca->dir*ca->dir.e,curr>lastammo);*/ ca->pos -= ca->dir*ca->dir.e;
-	}
+	checkammo(curr);
 
 	//destroy ani if health below zeros
 	if(_health<0)
@@ -265,13 +271,7 @@ sint entity::update() //check, because ammo is in list even though level just st
 	if( (_health>0) && (_position.y>0) && (_position.y+(YRES<<FX)>ymark) ) //check
 	{
 		//_active = 1;
-		for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
-		{
-			ammo* ca = (ammo*)_ammo.current();
-			const sint h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;	
-			if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
-			_health -= h;
-		}
+		checkammo(curr);
 
 		if(curr>_lastfire)
 		{
