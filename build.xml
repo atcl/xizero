@@ -96,5 +96,10 @@
 		</binary>
 		<action>cppcheck -a -v -s xizero.cc</action>
 	</rule>
+
+	<rule>
+		<name>install</name>
+		<!--action>cp xizero /usr/bin</action-->
+	</rule>
 </project>
 

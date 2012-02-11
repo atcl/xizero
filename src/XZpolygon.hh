@@ -57,7 +57,7 @@ class polygon
 		/*OK*/ inline void shape() const;
 		/*OK*/        void project(const lvector& p) const;
 		              void flat(sint pz,sint f);
-		              void raster(bool s) const /*HOTFN*/; //based on "Daily Code Gem - Advanced Rasterization"
+		              void raster(bool s) const; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,uint c,uint s);
 		/*OK*/ void update(const fmatrix& m,bool i=0);

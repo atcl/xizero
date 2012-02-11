@@ -14,7 +14,6 @@
 - xsltproc
 - gl
 - glfw
-- glfw-dev
 
 == Usage: ==
 
@@ -30,17 +29,16 @@
 === Major: ===
 
 - Software Rasterizer
-- 32bit Z-Buffer
 - Flatshading
 - Blinn Shadows
 - 2x FSAA/FXAA + FSMB
 
 === Minor: ===
 
+- 32bit Z-Buffer
 - Cordic Fixed Point Math
 - Minimal Branching
--
--
+- Only human readable, non binary, data
 
 == Bugs: ==
 

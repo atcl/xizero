@@ -16,7 +16,7 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 <xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">
 	<xsl:output method=\"text\" encoding=\"utf-8\"/>
 	<xsl:template match=\"project\">
-		<xsl:text>#!/bin/sh&#10;</xsl:text>
+		<!--xsl:text>#!/bin/sh&#10;</xsl:text-->
 		<xsl:for-each select=\"rule\">
 			<xsl:if test=\"name='$P'\">
 				<xsl:for-each select=\"sources/source\">
@@ -46,7 +46,7 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 					<xsl:text>.o </xsl:text>
 					<xsl:text>&#10;</xsl:text>
 				</xsl:for-each>
-				<xsl:text>g++ </xsl:text>
+				<xsl:text> &#38;&#38; g++ </xsl:text>
 				<xsl:for-each select=\"sources/source\">
 					<xsl:text>.</xsl:text>
 					<xsl:value-of select=\".\"/>
@@ -64,11 +64,11 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 				</xsl:for-each>
 				<xsl:text> -o </xsl:text>
 				<xsl:value-of select=\"binary/name\"/>
-				<xsl:text>&#10;echo &#34;</xsl:text>
+				<xsl:text> &#38;&#38; echo &#34;</xsl:text>
 				<xsl:value-of select=\"message\"/>
-				<xsl:text>&#34;&#10;</xsl:text>
+				<xsl:text>&#34;</xsl:text>
 				<xsl:value-of select=\"action\"/>
-				<xsl:text>&#10;&#10;</xsl:text>
+				<xsl:text> </xsl:text>
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
@@ -81,14 +81,9 @@ if [ `ls build.xml` != 'build.xml' ]; then
 fi
 
 #generate and execute commands from build.xml
-touch .smmn.xsl
-echo $XSL>.smmn.xsl
-xsltproc .smmn.xsl build.xml > .smmn.sh
-chmod +x .smmn.sh
-./.smmn.sh
+SMMN=`echo $XSL | xsltproc - build.xml`
+eval $SMMN
 
 #clean up
-rm -f .*.o
-rm -f .smmn.xsl
-rm -f .smmn.sh
+#rm -f .*.o
 
