@@ -2,3 +2,4 @@ player = dat/player0.y3d,dat/player1.y3d,dat/player.ini
 enemy  = dat/enemy.y3d,dat/enemy.ini
 boss   = dat/enemy.y3d,dat/boss.ini
 map    = dat/level0.map
+intro  = dat/level0.txt

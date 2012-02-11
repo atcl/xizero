@@ -57,9 +57,9 @@ namespace screen
 	void init(sint x,sint y,const char* t,void* c=0);
 	void close();
 	bool run();
-
-	sint time() { return (sint)(1000.0*glfwGetTime()); }
-	void sleep(sint t) { glfwSleep(double(t)*1000.0); }
+	void wait(sint k)  { while(glfwGetKey(k)!=GLFW_PRESS) { glfwWaitEvents(); } }
+	void sleep(sint t) { glfwSleep(double(t)/1000.0); }
+	sint time()        { return (sint)(1000.0*glfwGetTime()); }
 	sint fps(bool o=1) { static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; }
 
 	inline sint  key()    { const sint k = keys[1]; keys[1] = 0; return k; }

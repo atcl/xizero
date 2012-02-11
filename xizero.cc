@@ -7,23 +7,12 @@
 #include "xizero.hh"
 ///*
 
-///declarations
-#define LEVELS 2 
-///*
-
 ///implementation
 int main(int argc,const char* argv[])
 {
 	init();
 	//intro();
 	mainmenu();
-
-	for(long i=0;i<LEVELS;++i)
-	{
-		start(i);
-	}
-
-	return 0;
 }
 ///*
 

@@ -225,10 +225,10 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 
 void gfx::fsprog(sint p,uint c)
 {
-	p = math::min(math::max(p,100),0);
+	p = math::lim(0,p,100);
 	const sint r = (XRES*p)/100;
-	const sint q = XRES - r*p;
-	for(uint i=0,o=0;i<YRES;++i,o+=q)
+	const sint q = XRES - r;
+	for(sint i=0,o=0;i<YRES;++i,o+=q)
 	{
 		for(sint j=0;j<r;++j,++o)
 		{

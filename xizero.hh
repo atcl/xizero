@@ -7,12 +7,16 @@
 #include "xz.hh"
 ///*
 
+///declarations
+#define LEVELS 2 
+///*
+
 ///definition
 void init();
 sint start(sint l);
 sint start();
 inline sint close();
-inline sint load();
+inline sint control();
 inline sint about();
 inline sint leave();
 void menu();
@@ -31,13 +35,7 @@ void init()
 
 sint start(sint l)
 {
-	//load level
-	//gfx::sprite(,0,0,0);
-	//font::draw(40,40,m,WHITE,TRANS,SYSFONT);
 	level v(system::ldf("dat/level0.lvl"));
-	//gfx::fsprog(50,RED);
-	//dialog::msgbox(n);
-	//*
 
 	while(screen::run())
 	{
@@ -56,7 +54,10 @@ sint start(sint l)
 
 sint start()
 {
-	return start(0);
+	for(long i=0;i<LEVELS;++i)
+	{
+		start(i);
+	}
 }
 
 sint close()
@@ -64,9 +65,18 @@ sint close()
 	return -1;
 }
 
-sint load()
+sint control()
 {
-	//return start(string::conl(screen::instance()->inpbox("Enter the level number you want to play (0-9):")));
+	return dialog::msgbox(
+"UP        Move Forward\n"\
+"DOWN      Move Backward\n"\
+"LEFT      Steer Left\n"\
+"RIGHT     Steer Right\n"\
+"A         Turn Tower Left\n"\
+"D         Turn Tower Right\n"\
+"W         Align Tower Center\n"\
+"SPACE     Fire\n"\
+"ESC       Menu\n");
 }
 
 sint about()
@@ -97,7 +107,7 @@ void menu()
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
 		
-		font::draw(2,1," atCROSSLEVEL: XiZero",WHITE,RED);
+		font::draw(2,1," atCROSSLEVEL XiZero",WHITE,RED);
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();
@@ -122,19 +132,20 @@ void mainmenu()
 {
 	//enlist buttons
 	const button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_load("Load",&load,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	const button b_control("Controls",&control,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	const button b_about("About",&about,0,(XRES-(XRES>>2))>>1,360,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	const button b_leave("Exit",&leave,0,(XRES-(XRES>>2))>>1,440,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	//*
 
 	//draw menu
 	//object xizero();
-	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
+	while(screen::run())
 	{
+		button::check(screen::mousex(),screen::mousey(),screen::mousel());
 		screen::back.clear(BLACK);
 		//draw menu object
 		b_start.draw();
-		b_load.draw();
+		b_control.draw();
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS);

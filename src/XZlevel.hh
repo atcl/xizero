@@ -61,6 +61,14 @@ level::level(const char* o)
 	info* lvl = format::ini(o);
 	//*
 
+	//load intro message
+	char*   ms = (*lvl)["intro"];
+	char*   tx = system::ldf(ms);
+	screen::back.clear(BLACK);
+	font::draw(100,100,tx,ORANGE,BLACK);
+	screen::run();
+	//*
+
 	//load player
 	char*   ts = (*lvl)["player"];
 	char**  ps = string::split(ts,',');
@@ -69,6 +77,8 @@ level::level(const char* o)
 	info*   pi = format::ini(system::ldf(ps[2]));
  	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
  	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
+	gfx::fsprog(10);
+	screen::run();
 	//*
 
 	//load boss
@@ -77,6 +87,8 @@ level::level(const char* o)
 	object* bm = new object(system::ldf(bs[0]));
 	info*   bi = format::ini(system::ldf(bs[1]));
 	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
+	gfx::fsprog(20);
+	screen::run();
 	//*
 
 	//load enemy
@@ -85,6 +97,8 @@ level::level(const char* o)
 	object* em = new object(system::ldf(es[0]));
 	info*   ei = format::ini(system::ldf(es[1]));
 	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
+	gfx::fsprog(30);
+	screen::run();
 	//*
 
 	//load map
@@ -93,6 +107,8 @@ level::level(const char* o)
 	const sint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
+	gfx::fsprog(40);
+	screen::run();
 
 	markmax = 4*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
@@ -167,10 +183,17 @@ level::level(const char* o)
 
 		terrain[i] = new object(a,b,c,d,k,OCHER);
 	}
+	gfx::fsprog(90);
+	screen::run();
 	delete[] a;
 	delete[] b;
 	delete[] c;
 	delete[] d;
+	//delete info
+	gfx::fsprog(100);
+	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
+	screen::run();
+	screen::wait(ENTER);
 }
 
 level::~level()
