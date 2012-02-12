@@ -31,11 +31,9 @@ struct tile
 ///definitions
 namespace gfx
 {
-	/*OK*/ inline void circpix(sint x,sint y,sint l,sint t,uint c);			//draw circle pixel
 	/*OK*/ inline void pix(sint x,sint y,uint c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
 	/*OK*/ void line(sint x,sint y,sint a,sint b,uint c,bool k=0); 			//draw line
 	/*OK*/ void rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f=0,bool g=0); 	//draw rectangle
-	/*OK*/ void circ(sint x,sint y,sint r,uint c);					//draw circle
 	/*OK*/ void sprite(const tile& t,sint x,sint y,bool a=0);			//draw sprite
 	/*OK*/ void fsprog(sint p,uint c=RED);						//draw full screen progress bar
 	/*OK*/ tile* save();								//save current screen
@@ -43,31 +41,14 @@ namespace gfx
 ///*
 
 ///implementation
-void gfx::circpix(sint x,sint y,sint l,sint t,uint c)
-{
-	//lim guard here
-
-	const sint o = (y*XRES)+x;
-	const sint p = t*XRES;
-	const sint q = l*XRES;
-	screen::back[o+p+l] = c;
-	screen::back[o-p+l] = c;
-	screen::back[o+p-l] = c;
-	screen::back[o-p-l] = c;
-	screen::back[o+q+t] = c;
-	screen::back[o-q+t] = c;
-	screen::back[o+q-t] = c;
-	screen::back[o-q-t] = c;
-}
-
 void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 {
-	guard( (x<0) || (y<0) || (x>XRES) || (y>YRES) || (a<0) || (b<0) || (a>XRES) || (b>YRES) );
+	guard( ((x<0)&&(a<0)) || ((x>XRES)&&(a>XRES)) || ((y<0)&&(b<0)) || ((y>YRES)&&(b>YRES)) );
 
-	//x = math::lim(0,x,XRES);
-	//y = math::lim(0,y,YRES);
-	//a = math::lim(0,a,XRES);
-	//b = math::lim(0,b,YRES);
+	x = math::lim(0,x,XRES-1);
+	y = math::lim(0,y,YRES-1);
+	a = math::lim(0,a,XRES-1);
+	b = math::lim(0,b,YRES-1);
 
 	sint o = 0;
 	sint p = 0;
@@ -184,22 +165,6 @@ void gfx::rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f,bool g)
 		{
 			line(x,i,a,i,d,0);
 		}
-	}
-}
-
-void gfx::circ(sint x,sint y,sint r,uint c)
-{
-	sint d  = 3 - (r<<1);
-	sint cx = 0;
-	sint cy = r;
-
-	while(cx<=cy)
-	{
-		circpix(x,y,cx,cy,c);
-		const sint ct = math::set(cy-1,cy,d>0);
-		d = math::set(d+(cx<<2)+6,d+((cx-cy)<<2)+10,d<0);
-		cy = ct;
-		++cx;
 	}
 }
 
