@@ -163,64 +163,38 @@ void polygon::raster(bool s,uint c) const
 	const sint st = XRES - (maxx-minx);
 	sint off = miny * XRES + minx;
 
-	if(s==0)
-	{
 		const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
 		const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
 		fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z); 
 
-		for(sint y=miny;y<maxy;++y,off+=st,ty+=zy)
-		{
-			sint cx0 = cy0;
-			sint cx1 = cy1;
-			sint cx2 = cy2;
-
-			fixed tx = ty;
-
-			for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
-			{
-				const fixed sz = screen::depth[off];
-		
-				if( (cx0<0) && (cx1<0) && (cx2<0) && (tx<sz) )
-				{
-					screen::depth[off] = tx;
-					screen::back[off]  = c;
-				}
-
-				cx0 -= dy01;
-				cx1 -= dy12;
-				cx2 -= dy20;
-			}
-
-			cy0 += dx01;
-			cy1 += dx12;
-			cy2 += dx20;
-		}
-	}
-	else
+	for(sint y=miny;y<maxy;++y,off+=st,ty+=zy)
 	{
-		for(sint y=miny;y<maxy;++y,off+=st)
+		sint cx0 = cy0;
+		sint cx1 = cy1;
+		sint cx2 = cy2;
+
+		fixed tx = ty;
+
+		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			sint cx0 = cy0;
-			sint cx1 = cy1;
-			sint cx2 = cy2;
-
-			for(sint x=minx;x<maxx;++x,++off) 
+			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<screen::depth[off])) )<<1) ) //simplify
 			{
-				if( (cx0<0) && (cx1<0) && (cx2<0) )
-				{
-					screen::back[off]  = (c+screen::back[off])>>1; 
-				}
-
-				cx0 -= dy01;
-				cx1 -= dy12;
-				cx2 -= dy20;
+				case 0:
+					screen::depth[off] = tx;
+				case 1:
+					screen::back[off]  = c;
+					//screen::back[off]  = (c+screen::back[off])>>1;
+				default: ;
 			}
 
-			cy0 += dx01;
-			cy1 += dx12;
-			cy2 += dx20;
+			cx0 -= dy01;
+			cx1 -= dy12;
+			cx2 -= dy20;
 		}
+
+		cy0 += dx01;
+		cy1 += dx12;
+		cy2 += dx20;
 	}
 }
 
