@@ -231,7 +231,7 @@ void polygon::display(const lvector& p,sint f,uint c)
 	{
 		project(p);
 		if((f&R_S)!=0) { shape(); return; }
-		if((f&R_F)!=0) { c = flat(p.z,f,math::set(c,color,c!=0)); } 
+		if((f&R_F)!=0) { c = flat(p.z,f,math::set(ORANGE,color,f&R_C)); } 
 	}
 
 	raster( f&R_B,c );

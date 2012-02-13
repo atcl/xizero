@@ -138,7 +138,7 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),polys(x<<1),docks(0)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),polys(x<<1),docks(0),scolor(0)
 {
 	for(sint i=0;i<x;++i)
 	{
@@ -176,7 +176,7 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 	}
 }
 
-object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks)
+object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks),scolor(o.scolor)
 {
 	poly  = new polygon*[polys];
 	if(docks!=0) { dock = new fvector[docks]; }
@@ -220,10 +220,9 @@ void object::update(const fmatrix& m)
 
 void object::display(const lvector& p,sint f) const
 {
-	const uint c = math::set(scolor,f&R_B);
 	for(sint i=0;i<polys;++i)
 	{
-		poly[i]->display(p,f,c);
+		poly[i]->display(p,f,scolor);
 	}
 }
 
