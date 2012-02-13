@@ -320,10 +320,10 @@ void entity::display(sint m,bool t)
 	}
 
 	//temp: draw 2d bounding box
-	const lvector b0 = object::project(p,_model[0]->boundingbox()[0]);
-	const lvector b1 = object::project(p,_model[0]->boundingbox()[1]);
-	const lvector b2 = object::project(p,_model[0]->boundingbox()[2]);
-	const lvector b3 = object::project(p,_model[0]->boundingbox()[3]);
+	const lvector b0 = polygon::project(p,_model[0]->boundingbox()[0]);
+	const lvector b1 = polygon::project(p,_model[0]->boundingbox()[1]);
+	const lvector b2 = polygon::project(p,_model[0]->boundingbox()[2]);
+	const lvector b3 = polygon::project(p,_model[0]->boundingbox()[3]);
 	gfx::line(b0.x,b0.y,b1.x,b1.y,GREEN);
 	gfx::line(b1.x,b1.y,b2.x,b2.y,GREEN);
 	gfx::line(b2.x,b2.y,b3.x,b3.y,GREEN);

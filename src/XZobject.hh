@@ -31,8 +31,9 @@ class object
 		box       bbox;
 		sint      polys;
 		sint      docks;
+		uint      scolor;	//Shadow Color
 	public:
-		static lvector project(const lvector& p,const fvector& v);
+
 		/*OK*/ object(const char* o);
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
@@ -49,15 +50,6 @@ class object
 
 ///implementation
 fmatrix object::linear = fmatrix(FXONE);
-
-lvector object::project(const lvector& p,const fvector& v)
-{
-	lvector r;
-	r.z = fx::l2f(p.z)+v.z;
-	r.x = fx::f2l(fx::mul( PRJX<<FX,fx::div(v.x,r.z))) + p.x;
-	r.y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(v.y,r.z))) + p.y;
-	return r;
-}
 
 object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 {
@@ -76,7 +68,7 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 
 	const sint subs = string::str2int(t[i++]);
 	/*char* oid = t[i++];*/ i++;
-	uint scolor = string::str2hex(t[i++]);
+	scolor = string::str2hex(t[i++]);
 
 	sint pc = 0;
 	sint dc = 0;
@@ -107,7 +99,7 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 				x[l].set(pos.x+string::str2int(t[i]),pos.y+string::str2int(t[i+1]),pos.z+string::str2int(t[i+2]));
 			}
 
-			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor,scolor);
+			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor);
 
 			bbox[0].x = math::min(bbox[0].x,fx::l2f(math::min(x[0].x,math::min(x[1].x,x[2].x))));
 			bbox[0].y = math::min(bbox[0].y,fx::l2f(math::min(x[0].y,math::min(x[1].y,x[2].y))));
@@ -125,7 +117,7 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 				bbox[2].y = math::max(bbox[2].y,fx::l2f(x[3].y));
 				bbox[2].z = math::max(bbox[2].z,fx::l2f(x[3].z));
 			
-				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor,scolor);
+				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor);
 			}
 		}
 
@@ -172,13 +164,13 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 		{
 			case -1:
 			case 0:
-				if(az!=0 || bz!=0 || cz!=0) { poly[j++] = new polygon(a[i],b[i],c[i],e,0); }
-				if(cz!=0 || dz!=0 || az!=0) { poly[j++] = new polygon(c[i],d[i],a[i],e,0); }
+				if(az!=0 || bz!=0 || cz!=0) { poly[j++] = new polygon(a[i],b[i],c[i],e); }
+				if(cz!=0 || dz!=0 || az!=0) { poly[j++] = new polygon(c[i],d[i],a[i],e); }
 			break;
 
 			case 1:
-				if(bz!=0 || cz!=0 || dz!=0) { poly[j++] = new polygon(b[i],c[i],d[i],e,0); }
-				if(dz!=0 || az!=0 || bz!=0) { poly[j++] = new polygon(d[i],a[i],b[i],e,0); }
+				if(bz!=0 || cz!=0 || dz!=0) { poly[j++] = new polygon(b[i],c[i],d[i],e); }
+				if(dz!=0 || az!=0 || bz!=0) { poly[j++] = new polygon(d[i],a[i],b[i],e); }
 			break;
 		}
 	}
@@ -228,9 +220,10 @@ void object::update(const fmatrix& m)
 
 void object::display(const lvector& p,sint f) const
 {
+	const uint c = math::set(scolor,f&R_B);
 	for(sint i=0;i<polys;++i)
 	{
-		poly[i]->display(p,f);
+		poly[i]->display(p,f,c);
 	}
 }
 
@@ -239,7 +232,7 @@ fvector* object::docktype(sint i,sint j) const
 	for(sint k=0,l=-1;k<docks;++k)
 	{
 		l += (dock[k].e==i);
-		if(l==j) { return &dock[k]; }
+		if(l==j) { return &dock[k]; } //to break condition
 	}
 	return 0;
 }

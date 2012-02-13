@@ -40,6 +40,7 @@
 #define R_S 0x00001000 //shape
 #define R_B 0x00010000 //blinn shadows
 #define R_F 0x00100000 //flat
+#define R_C 0x01000000 //single color
 ///*
 
 ///definition
@@ -47,8 +48,6 @@ class polygon
 {
 	private:
 		const uint color;		//Polygon Color
-		const uint scolor;		//Shadow Color
-		sint shade;			//Current Color Shade
 		fvector cnormal;		//Polygon Normal
 		fvector cpoint[3];		//Polygon Vertices
 		static lvector lpoint[3];	//Render Vertices
@@ -56,13 +55,14 @@ class polygon
 		/*OK*/ inline bool isvisible() const { return cnormal.z<FXMON; }
 		/*OK*/ inline void shape() const;
 		/*OK*/        void project(const lvector& p) const;
-		              void flat(sint pz,sint f);
-		              void raster(bool s) const; //based on "Daily Code Gem - Advanced Rasterization"
+		              uint flat(sint pz,sint f,uint c) const;
+		              void raster(bool s,uint c) const; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
-		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,uint c,uint s);
+		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
 		/*OK*/ void update(const fmatrix& m,bool i=0);
-		/*OK*/ void display(const lvector& p,sint f);
+		/*OK*/ void display(const lvector& p,sint f,uint c=0);
 		/*OK*/ void pull(fixed a);
+		/*OK*/ static lvector project(const lvector& p,const fvector& v);
 
 		static sint  counter;		//Polygon Counter
 		static const fvector light;	//Light Vector
@@ -75,6 +75,15 @@ lvector       polygon::lpoint[] = { lvector(), lvector(), lvector() };
 sint          polygon::counter  = 0;
 const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
 const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(fvector(0,FXTNT,FXONE),fvector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
+
+lvector polygon::project(const lvector& p,const fvector& v)
+{
+	lvector r;
+	r.z = fx::l2f(p.z)+v.z;
+	r.x = fx::f2l(fx::mul( PRJX<<FX,fx::div(v.x,r.z))) + p.x;
+	r.y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(v.y,r.z))) + p.y;
+	return r;
+}
 
 void polygon::project(const lvector& p) const
 {
@@ -93,7 +102,7 @@ void polygon::project(const lvector& p) const
 	lpoint[2].y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(cpoint[2].y,lpoint[2].z))) + p.y;
 }
 
-void polygon::flat(sint pz,sint f)
+uint polygon::flat(sint pz,sint f,uint c) const
 {
 	fixed t = fx::mul(cnormal.e,light.e);
 	t = fx::div(cnormal.dot(light),t);
@@ -103,12 +112,12 @@ void polygon::flat(sint pz,sint f)
 	const char nolight = math::set(NOLIGHT,f&R_N);
 	const char zshade  = math::set(ZLIGHT*pz,f&R_Z);
 
-	packed argb = { color };
+	packed argb = { c };
 	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) + ambient + nolight + zshade));
 	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
 	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
 	argb.b[3] = 0;
-	shade = argb.d;
+	return argb.d;
 }
 
 void polygon::shape() const 
@@ -118,7 +127,7 @@ void polygon::shape() const
 	gfx::line(lpoint[2].x,lpoint[2].y,lpoint[0].x,lpoint[0].y,color);
 }
 
-void polygon::raster(bool s) const
+void polygon::raster(bool s,uint c) const
 {
 	//determine projected minima and maxima
 	const sint mix01 = lpoint[1].x<lpoint[0].x;
@@ -175,7 +184,7 @@ void polygon::raster(bool s) const
 				if( (cx0<0) && (cx1<0) && (cx2<0) && (tx<sz) )
 				{
 					screen::depth[off] = tx;
-					screen::back[off]  = shade;
+					screen::back[off]  = c;
 				}
 
 				cx0 -= dy01;
@@ -200,7 +209,7 @@ void polygon::raster(bool s) const
 			{
 				if( (cx0<0) && (cx1<0) && (cx2<0) )
 				{
-					screen::back[off]  = (shade+screen::back[off])>>1; 
+					screen::back[off]  = (c+screen::back[off])>>1; 
 				}
 
 				cx0 -= dy01;
@@ -215,7 +224,7 @@ void polygon::raster(bool s) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c,uint s) : color(c), scolor(s), shade(c)
+polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : color(c)
 {
 	cpoint[0] = x;
 	cpoint[1] = y;
@@ -233,32 +242,25 @@ void polygon::update(const fmatrix& m,bool i)
 	cnormal.e = cnormal.length();
 }
 
-void polygon::display(const lvector& p,sint f)
+void polygon::display(const lvector& p,sint f,uint c)
 {
 	guard(isvisible()==0);
 	++counter;
 
 	if( f&R_B )
 	{
-		const fvector s[3] = cpoint;
-		cpoint[0] = shadow.transform(cpoint[0]);
-		cpoint[1] = shadow.transform(cpoint[1]);
-		cpoint[2] = shadow.transform(cpoint[2]);
-		project(p);
-		cpoint[0] = s[0];
-		cpoint[1] = s[1];
-		cpoint[2] = s[2];
-		shade = scolor;
+		lpoint[0] = project(p,shadow.transform(cpoint[0]));
+		lpoint[1] = project(p,shadow.transform(cpoint[1]));
+		lpoint[2] = project(p,shadow.transform(cpoint[2]));
 	}
 	else
 	{
 		project(p);
 		if((f&R_S)!=0) { shape(); return; }
-		shade = color; 
-		if((f&R_F)!=0) { flat(p.z,f); } 
+		if((f&R_F)!=0) { c = flat(p.z,f,math::set(c,color,c!=0)); } 
 	}
 
-	raster( f&R_B );
+	raster( f&R_B,c );
 }
 
 void polygon::pull(fixed a)
