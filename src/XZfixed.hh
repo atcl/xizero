@@ -44,8 +44,8 @@ namespace fx
 	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; } CONST
 	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
 
-	inline fixed ain(fixed x) { return math::set(x+FXPI,math::set(x+FX2PI,math::set(x-FXPI,math::set(x-FX2PI,x,x>FXPI+FXPI2),(x>FXPI2)&&(x<FXPI+FXPI2)),x<-FXPI-FXPI2),(x<-FXPI2)&&(x>-FXPI-FXPI2)); }
-	inline fixed aout(fixed x,fixed y) { return math::neg(x,((y<-FXPI2)&&(y>-FXPI-FXPI2))||((y>FXPI2)&&(y<FXPI+FXPI2))); }
+	inline fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXPI,math::set(-FX2PI,0,y>FXPI+FXPI2),(y>FXPI2)&&(y<FXPI+FXPI2)),x<0); }
+	inline fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXPI2)&&(y<FXPI+FXPI2)); }
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
