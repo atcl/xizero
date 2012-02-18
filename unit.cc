@@ -52,19 +52,11 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 	{
 		t1[i].set(fx::cos(j),fx::sin(j),0);
 		t1[i] *= q1;
-system::say(string::fix2str(t1[i].x),1);
-system::say(string::fix2str(t1[i].y),1);
-system::say(string::fix2str(t1[i].z),1);
-system::say("***\n");
 	}
 	for(sint i=0,j=0;i<s2;++i,j+=c2)
 	{
 		t2[i].set(fx::cos(j),0,fx::sin(j));
 		t2[i] *= q2;
-system::say(string::fix2str(t2[i].x),1);
-system::say(string::fix2str(t2[i].y),1);
-system::say(string::fix2str(t2[i].z),1);
-system::say("***\n");
 	}
 
 	fmatrix m;
@@ -74,7 +66,7 @@ system::say("***\n");
 	lvector*   c = new lvector[x];
 	lvector*   d = new lvector[x];
 
-	for(sint i=0,n=0;i<1;++i) //s1
+	for(sint i=0,n=0;i<s1;++i)
 	{
 		m.rotatez(c1);
 		const sint k = math::set(0,i+1,i==(s1-1));
@@ -91,7 +83,7 @@ system::say("***\n");
 		}
 	}
 
-	object* r = new object(a,b,c,d,s2,e);
+	object* r = new object(a,b,c,d,x,e);
 	delete[] t1;
 	delete[] t2;
 	delete[] a;
@@ -139,7 +131,7 @@ void viewer(object* u,long k)
 			case 'L': rc=R_S; break;
 		}
 		u->update();
-		u->display(pos,R_S); //rc
+		u->display(pos,rc);
 }
 ///*
 
@@ -148,8 +140,9 @@ int main(int argc,char** argv)
 {
 	init();
 
-	//object* u = new object(system::ldf(argv[1]));
-	object* u = torus(50,20,5,5,ORANGE);
+	object* u = 0;
+
+	if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); }
 
 	while(screen::run())
 	{
@@ -159,7 +152,7 @@ int main(int argc,char** argv)
 		screen::depth.clear(fx::l2f(200));
 //if(screen::joya()!=0) { system::say(string::cons(screen::joya()),1); }
 //if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
-		//if(screen::turbo()=='R') { delete u; u = new object(system::ldf(argv[1])); }
+		if(screen::turbo()=='R') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); } }
 		viewer(u,screen::turbo());
 
 		bench();

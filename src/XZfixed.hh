@@ -44,14 +44,17 @@ namespace fx
 	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; } CONST
 	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
 
+	inline fixed ain(fixed x) { return math::set(x+FXPI,math::set(x+FX2PI,math::set(x-FXPI,math::set(x-FX2PI,x,x>FXPI+FXPI2),(x>FXPI2)&&(x<FXPI+FXPI2)),x<-FXPI-FXPI2),(x<-FXPI2)&&(x>-FXPI-FXPI2)); }
+	inline fixed aout(fixed x,fixed y) { return math::neg(x,((y<-FXPI2)&&(y>-FXPI-FXPI2))||((y>FXPI2)&&(y<FXPI+FXPI2))); }
+
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
-//fix sin/cos problem
+
 	inline fixed round(fixed x)       { return ((x + FXHLF)>>FX)<<FX; }
 	inline fixed sqr(fixed x)         { return math::sqr(x)<<(FX>>1); }
 	inline fixed rsq(fixed x)         { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
-	inline fixed sin(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return y; } // |a| < 1.74
-	inline fixed cos(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return x; } // |a| < 1.74 
-	inline fixed tan(fixed a)         { fixed x = FXITG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,0); return div(y,x); } // |a| < 1.74 
+	inline fixed sin(fixed a)         { a = a%FX2PI; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(y,a); } // |a| < 1.74
+	inline fixed cos(fixed a)         { a = a%FX2PI; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(x,a); } // |a| < 1.74 
+	inline fixed tan(fixed a)         { a = a%FX2PI; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(div(y,x),a); } // |a| < 1.74 
 	inline fixed arcsin(fixed a)      { fixed x = FXITG; fixed y = 0; fixed z = 0; cordic(x,y,z,math::abs(a),0); return math::neg(z,a<0); } // |a| < 0.98
 	inline fixed arccos(fixed a)      { return FXPI2 - arcsin(a); }
 	inline fixed arctan(fixed a)      { fixed x = FXONE; fixed y = a; fixed z = 0; cordic(x,y,z,0,0); return z; }
