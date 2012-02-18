@@ -49,7 +49,7 @@ class object
 ///*
 
 ///implementation
-fmatrix object::linear = fmatrix(FXONE);
+fmatrix object::linear = fmatrix();
 
 object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 {

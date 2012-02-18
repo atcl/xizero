@@ -39,11 +39,14 @@ class button : public gui
 		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
 		static void allon();					//Activate All Buttons
 		static void alloff();					//Deactivate All Buttons
+
+		static button* current;					//Currenty Highlighted Button 
 };
 ///*
 
 ///implementation
-list button::bl = list();
+list    button::bl      = list();
+button* button::current = 0;
 
 button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),

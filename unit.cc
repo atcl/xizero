@@ -39,6 +39,79 @@
 	system::say(string::conf(fx::div(FXONE,x)),1);
 }*/
 
+object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
+{
+	const fixed q1 = fx::l2f(r1);
+	const fixed q2 = fx::l2f(r2);
+	const fixed c1 = fx::div(fx::l2f(360),fx::l2f(s1));
+	const fixed c2 = fx::div(fx::l2f(360),fx::l2f(s2));
+	fvector*    t1 = new fvector[s1];
+	fvector*    t2 = new fvector[s2];
+
+	for(sint i=0;i<s1;++i)
+	{
+		const sint j = fx::l2f(i);
+		t1[i].set(fx::cos(fx::mul(c1,j)),fx::sin(fx::mul(c1,j)),0);
+		t1[i] *= q1;
+	}
+	for(sint i=0;i<s2;++i)
+	{
+		const sint j = fx::l2f(i);
+		t2[i].set(fx::cos(fx::mul(c2,j)),0,fx::sin(fx::mul(c2,j)));
+		t2[i] *= q2;
+	}
+
+	fmatrix m;
+	const sint x = s1*s2;
+	lvector*   a = new lvector[x];
+	lvector*   b = new lvector[x];
+	lvector*   c = new lvector[x];
+	lvector*   d = new lvector[x];
+
+	for(sint i=0,n=0;i<s1;++i)
+	{
+		m.rotatez(-c1);
+		const sint k = math::set(0,i+1,i==(s1-1));
+
+		for(sint j=0;j<s2;++j,++n)
+		{
+			const sint    l = math::set(0,j+1,j==(s2-1));
+			const fvector u = m.transform(t2[j]);
+			const fvector v = m.transform(t2[l]);
+			a[n].set(fx::r2l(t1[i].x+u.x),fx::r2l(t1[i].y+u.y),fx::r2l(t1[i].z+u.z));
+			b[n].set(fx::r2l(t1[i].x+v.x),fx::r2l(t1[i].y+v.y),fx::r2l(t1[i].z+v.z));
+			c[n].set(fx::r2l(t1[k].x+v.x),fx::r2l(t1[k].y+v.y),fx::r2l(t1[k].z+v.z));
+			d[n].set(fx::r2l(t1[k].x+u.x),fx::r2l(t1[k].y+u.y),fx::r2l(t1[k].z+u.z));
+alert(a[i*s2+j].x);
+alert(a[i*s2+j].y);
+alert(a[i*s2+j].z);
+system::say("***\n");
+alert(b[i*s2+j].x);
+alert(b[i*s2+j].y);
+alert(b[i*s2+j].z);
+system::say("***\n");
+alert(c[i*s2+j].x);
+alert(c[i*s2+j].y);
+alert(c[i*s2+j].z);
+system::say("***\n");
+alert(d[i*s2+j].x);
+alert(d[i*s2+j].y);
+alert(d[i*s2+j].z);
+system::say("########\n");
+
+		}
+	}
+
+	object* r = new object(a,b,c,d,x,e);
+	delete[] t1;
+	delete[] t2;
+	delete[] a;
+	delete[] b;
+	delete[] c;
+	delete[] d;
+	return r;
+}
+
 void viewer(object* u,long k)
 {
 		const lvector pos(400,300,100);
@@ -77,7 +150,7 @@ void viewer(object* u,long k)
 			case 'L': rc=R_S; break;
 		}
 		u->update();
-		u->display(pos,rc);
+		u->display(pos,R_S); //rc
 }
 ///*
 
@@ -86,17 +159,18 @@ int main(int argc,char** argv)
 {
 	init();
 
-	object* u = new object(system::ldf(argv[1]));
+	//object* u = new object(system::ldf(argv[1]));
+	object* u = torus(50,20,3,3,ORANGE);
 
 	while(screen::run())
 	{
-		if(UNLIKELY(screen::key()==ESCAPE)) { menu(); }
+		if(screen::key()==ESCAPE) { menu(); }
 
 		screen::back.clear(BLACK);
 		screen::depth.clear(fx::l2f(200));
 //if(screen::joya()!=0) { system::say(string::cons(screen::joya()),1); }
 //if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
-		if(screen::turbo()=='R') { delete u; u = new object(system::ldf(argv[1])); }
+		//if(screen::turbo()=='R') { delete u; u = new object(system::ldf(argv[1])); }
 		viewer(u,screen::turbo());
 
 		bench();
@@ -105,7 +179,7 @@ int main(int argc,char** argv)
 	
 	//generate();
 
-	screen::exit();
+	screen::close();
 	return 0;
 }
 ///*

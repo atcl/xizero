@@ -171,10 +171,10 @@ void bench()
 	const sint fps = screen::fps();
 	if(fps!=-1)
 	{
-		system::say(string::int2str(polygon::counter*fps),0); 			
-		system::say("p/s - ",0);
-		system::say(string::int2str(polygon::counter),0); 
-		system::say("@",0);
+		system::say(string::int2str(polygon::counter*fps)); 			
+		system::say("p/s - ");
+		system::say(string::int2str(polygon::counter)); 
+		system::say("@");
 		system::say(string::int2str(fps),1);
 	}
 }
