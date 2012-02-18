@@ -43,22 +43,28 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 {
 	const fixed q1 = fx::l2f(r1);
 	const fixed q2 = fx::l2f(r2);
-	const fixed c1 = fx::div(fx::l2f(360),fx::l2f(s1));
-	const fixed c2 = fx::div(fx::l2f(360),fx::l2f(s2));
+	const fixed c1 = fx::mul(fx::div(fx::l2f(360),fx::l2f(s1)),FXD2R);
+	const fixed c2 = fx::mul(fx::div(fx::l2f(360),fx::l2f(s2)),FXD2R);
 	fvector*    t1 = new fvector[s1];
 	fvector*    t2 = new fvector[s2];
 
-	for(sint i=0;i<s1;++i)
+	for(sint i=0,j=0;i<s1;++i,j+=c1)
 	{
-		const sint j = fx::l2f(i);
-		t1[i].set(fx::cos(fx::mul(c1,j)),fx::sin(fx::mul(c1,j)),0);
+		t1[i].set(fx::cos(j),fx::sin(j),0);
 		t1[i] *= q1;
+system::say(string::fix2str(t1[i].x),1);
+system::say(string::fix2str(t1[i].y),1);
+system::say(string::fix2str(t1[i].z),1);
+system::say("***\n");
 	}
-	for(sint i=0;i<s2;++i)
+	for(sint i=0,j=0;i<s2;++i,j+=c2)
 	{
-		const sint j = fx::l2f(i);
-		t2[i].set(fx::cos(fx::mul(c2,j)),0,fx::sin(fx::mul(c2,j)));
+		t2[i].set(fx::cos(j),0,fx::sin(j));
 		t2[i] *= q2;
+system::say(string::fix2str(t2[i].x),1);
+system::say(string::fix2str(t2[i].y),1);
+system::say(string::fix2str(t2[i].z),1);
+system::say("***\n");
 	}
 
 	fmatrix m;
@@ -68,9 +74,9 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 	lvector*   c = new lvector[x];
 	lvector*   d = new lvector[x];
 
-	for(sint i=0,n=0;i<s1;++i)
+	for(sint i=0,n=0;i<1;++i) //s1
 	{
-		m.rotatez(-c1);
+		m.rotatez(c1);
 		const sint k = math::set(0,i+1,i==(s1-1));
 
 		for(sint j=0;j<s2;++j,++n)
@@ -82,27 +88,10 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 			b[n].set(fx::r2l(t1[i].x+v.x),fx::r2l(t1[i].y+v.y),fx::r2l(t1[i].z+v.z));
 			c[n].set(fx::r2l(t1[k].x+v.x),fx::r2l(t1[k].y+v.y),fx::r2l(t1[k].z+v.z));
 			d[n].set(fx::r2l(t1[k].x+u.x),fx::r2l(t1[k].y+u.y),fx::r2l(t1[k].z+u.z));
-alert(a[i*s2+j].x);
-alert(a[i*s2+j].y);
-alert(a[i*s2+j].z);
-system::say("***\n");
-alert(b[i*s2+j].x);
-alert(b[i*s2+j].y);
-alert(b[i*s2+j].z);
-system::say("***\n");
-alert(c[i*s2+j].x);
-alert(c[i*s2+j].y);
-alert(c[i*s2+j].z);
-system::say("***\n");
-alert(d[i*s2+j].x);
-alert(d[i*s2+j].y);
-alert(d[i*s2+j].z);
-system::say("########\n");
-
 		}
 	}
 
-	object* r = new object(a,b,c,d,x,e);
+	object* r = new object(a,b,c,d,s2,e);
 	delete[] t1;
 	delete[] t2;
 	delete[] a;
@@ -160,7 +149,7 @@ int main(int argc,char** argv)
 	init();
 
 	//object* u = new object(system::ldf(argv[1]));
-	object* u = torus(50,20,3,3,ORANGE);
+	object* u = torus(50,20,5,5,ORANGE);
 
 	while(screen::run())
 	{

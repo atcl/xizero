@@ -45,7 +45,7 @@ namespace fx
 	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
-
+//fix sin/cos problem
 	inline fixed round(fixed x)       { return ((x + FXHLF)>>FX)<<FX; }
 	inline fixed sqr(fixed x)         { return math::sqr(x)<<(FX>>1); }
 	inline fixed rsq(fixed x)         { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
