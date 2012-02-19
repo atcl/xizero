@@ -52,9 +52,7 @@ class polygon
 		fvector cpoint[3];		//Polygon Vertices
 		static lvector lpoint[3];	//Render Vertices
 
-		/*OK*/ inline bool isvisible() const { return cnormal.z<FXMON; }
 		/*OK*/ inline void shape() const;
-		/*OK*/        void project(const lvector& p) const;
 		              uint flat(sint pz,sint f,uint c) const;
 		              void raster(bool s,uint c) const; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
@@ -83,23 +81,6 @@ lvector polygon::project(const lvector& p,const fvector& v)
 	r.x = fx::f2l(fx::mul( PRJX<<FX,fx::div(v.x,r.z))) + p.x;
 	r.y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(v.y,r.z))) + p.y;
 	return r;
-}
-
-void polygon::project(const lvector& p) const
-{
-	const fixed pz = fx::l2f(p.z);
-
-	lpoint[0].z = cpoint[0].z + pz;
-	lpoint[0].x = fx::f2l(fx::mul( PRJX<<FX,fx::div(cpoint[0].x,lpoint[0].z))) + p.x;
-	lpoint[0].y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(cpoint[0].y,lpoint[0].z))) + p.y;
-
-	lpoint[1].z = cpoint[1].z + pz;
-	lpoint[1].x = fx::f2l(fx::mul( PRJX<<FX,fx::div(cpoint[1].x,lpoint[1].z))) + p.x;
-	lpoint[1].y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(cpoint[1].y,lpoint[1].z))) + p.y;
-
-	lpoint[2].z = cpoint[2].z + pz;
-	lpoint[2].x = fx::f2l(fx::mul( PRJX<<FX,fx::div(cpoint[2].x,lpoint[2].z))) + p.x;
-	lpoint[2].y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(cpoint[2].y,lpoint[2].z))) + p.y;
 }
 
 uint polygon::flat(sint pz,sint f,uint c) const
@@ -156,18 +137,18 @@ void polygon::raster(bool s,uint c) const
 	const sint dy12 = lpoint[1].y - lpoint[2].y;
 	const sint dy20 = lpoint[2].y - lpoint[0].y;
 
-	sint cy0 = (dy01*lpoint[0].x) - (dx01*lpoint[0].y) + (dx01*miny) - (dy01*minx) - ((dy01<0) || (dy01==0 && dx01>0));
-	sint cy1 = (dy12*lpoint[1].x) - (dx12*lpoint[1].y) + (dx12*miny) - (dy12*minx) - ((dy12<0) || (dy12==0 && dx12>0));
-	sint cy2 = (dy20*lpoint[2].x) - (dx20*lpoint[2].y) + (dx20*miny) - (dy20*minx) - ((dy20<0) || (dy20==0 && dx20>0)); 
+	sint cy0 = dy01*(lpoint[0].x - minx) + dx01*(miny - lpoint[0].y) - ((dy01<0) || (dy01==0 && dx01>0));
+	sint cy1 = dy12*(lpoint[1].x - minx) + dx12*(miny - lpoint[1].y) - ((dy12<0) || (dy12==0 && dx12>0));
+	sint cy2 = dy20*(lpoint[2].x - minx) + dx20*(miny - lpoint[2].y) - ((dy20<0) || (dy20==0 && dx20>0)); 
 
-	const sint st = XRES - (maxx-minx);
-	sint off = miny * XRES + minx;
+	const sint str = XRES - (maxx-minx);
+	      sint off = miny * XRES + minx;
 
-		const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
-		const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
-		fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z); 
+	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
+	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
+	      fixed ty = lpoint[mixi].z - fx::mul(zy,lpoint[mixi].z-lpoint[miyi].z);
 
-	for(sint y=miny;y<maxy;++y,off+=st,ty+=zy)
+	for(sint y=miny;y<maxy;++y,off+=str,ty+=zy)
 	{
 		sint cx0 = cy0;
 		sint cx1 = cy1;
@@ -177,7 +158,7 @@ void polygon::raster(bool s,uint c) const
 
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<screen::depth[off])) )<<1) ) //simplify
+			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<=screen::depth[off])) )<<1) ) //simplify
 			{
 				case 0:
 					screen::depth[off] = tx;
@@ -218,7 +199,7 @@ void polygon::update(const fmatrix& m,bool i)
 
 void polygon::display(const lvector& p,sint f,uint c)
 {
-	guard(isvisible()==0);
+	guard(cnormal.z>FXMON);
 	++counter;
 
 	if( f&R_B )
@@ -229,7 +210,9 @@ void polygon::display(const lvector& p,sint f,uint c)
 	}
 	else
 	{
-		project(p);
+		lpoint[0] = project(p,cpoint[0]);
+		lpoint[1] = project(p,cpoint[1]);
+		lpoint[2] = project(p,cpoint[2]);
 		if((f&R_S)!=0) { shape(); return; }
 		if((f&R_F)!=0) { c = flat(p.z,f,math::set(ORANGE,color,f&R_C)); } 
 	}

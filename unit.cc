@@ -43,8 +43,8 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 {
 	const fixed q1 = fx::l2f(r1);
 	const fixed q2 = fx::l2f(r2);
-	const fixed c1 = fx::mul(fx::div(fx::l2f(360),fx::l2f(s1)),FXD2R);
-	const fixed c2 = fx::mul(fx::div(fx::l2f(360),fx::l2f(s2)),FXD2R);
+	const fixed c1 = fx::div(FX2PI,fx::l2f(s1));
+	const fixed c2 = fx::div(FX2PI,fx::l2f(s2));
 	fvector*    t1 = new fvector[s1];
 	fvector*    t2 = new fvector[s2];
 
@@ -121,7 +121,6 @@ void viewer(object* u,long k)
 			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
 			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
-			case 'R': rc=R_F; break;
 			case 'T': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
 			case 'Z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
 			case 'U': break;
@@ -129,6 +128,7 @@ void viewer(object* u,long k)
 			case 'O': u->pull(-FXTNT); break;
 			case 'P': rc=R_B; break;
 			case 'L': rc=R_S; break;
+			case 'M': rc=R_F; break;
 		}
 		u->update();
 		u->display(pos,rc);
