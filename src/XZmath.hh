@@ -31,6 +31,7 @@ namespace math
 	/*OK*/ inline sint lim(sint x,sint a,sint y) { return max(x,min(a,y)); } CONST
 	/*OK*/        sint sqr(uint x) { uint r=0; uint t=0; for(uint i=15;i!=0;--i) { t=(r+(1<<i))<<i; r=set(r|(2<<i),r,x>=t); x=set(x-t,x,x>=t); } return r>>1; } CONST //HOTFN 
 	/*OK*/        sint rnd(uint x) { static sint seed=SEED; ++seed; seed^=(seed<<15); seed^=(seed>>21); seed^=(seed<<4); return seed%x; } 
+	inline void swp(void*& a,void*& b) { __asm__ __volatile__ ("xchgl %%eax,%%ebx;": "=a"(a),"=b"(b) :"a"(a),"b"(b): ); }
 }
 ///*
 

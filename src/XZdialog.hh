@@ -31,7 +31,7 @@ sint dialog::msgbox(const char* m)
 	const sint h = font::height(m)+60;
 	const sint x = (XRES-w)>>1;
 	const sint y = (YRES-h)>>1;
-	button::alloff();
+	button::all(0);
 	const button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
 
 	tile* scr = gfx::save();
@@ -44,7 +44,7 @@ sint dialog::msgbox(const char* m)
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	
-	button::allon();
+	button::all(1);
 	delete scr;
 	return 1;
 }

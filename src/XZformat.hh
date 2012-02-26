@@ -58,7 +58,7 @@ char** format::csv(const char* x,char y)
 	while(s[i]!=0 && j<l)
 	{
 		if(s[i]==y) { s[i] = 0; r[j++] = &s[++i]; }
-		i++;
+		++i;
 	}
 	return r;
 }
@@ -119,7 +119,7 @@ info* format::ini(const char* x)
 			t = string::split(s[i],'=');
 			r->name[j] = string::trim(t[0]);
 			r->value[j] = string::trim(t[1]);
-			j++;
+			++j;
 		}
 	}
 

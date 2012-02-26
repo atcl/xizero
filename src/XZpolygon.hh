@@ -56,7 +56,7 @@ class polygon
 		              uint flat(sint pz,sint f,uint c) const;
 		              void raster(bool s,uint c) const; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
-		/*OK*/ polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
+		/*OK*/      polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
 		/*OK*/ void update(const fmatrix& m,bool i=0);
 		/*OK*/ void display(const lvector& p,sint f,uint c=0);
 		/*OK*/ void pull(fixed a);
@@ -85,9 +85,7 @@ lvector polygon::project(const lvector& p,const fvector& v)
 
 uint polygon::flat(sint pz,sint f,uint c) const
 {
-	fixed t = fx::mul(cnormal.e,light.e);
-	t = fx::div(cnormal.dot(light),t);
-	t = math::lim(FXTNT,math::abs(t),FXONE);
+	const fixed t = math::lim(FXTNT,math::abs(fx::div(cnormal.dot(light),fx::mul(cnormal.e,light.e))),FXONE);
 
 	const char ambient = math::set(AMBIENT,f&R_A);
 	const char nolight = math::set(NOLIGHT,f&R_N);
@@ -158,7 +156,7 @@ void polygon::raster(bool s,uint c) const
 
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<=screen::depth[off])) )<<1) ) //simplify
+			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<screen::depth[off])) )<<1) ) //simplify
 			{
 				case 0:
 					screen::depth[off] = tx;

@@ -37,8 +37,7 @@ class button : public gui
 		~button();						//Destructor
 		void draw() const;					//Draw Button
 		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
-		static void allon();					//Activate All Buttons
-		static void alloff();					//Deactivate All Buttons
+		static void all(bool b);				//Activate or Deactivate All Buttons
 
 		static button* current;					//Currenty Highlighted Button 
 };
@@ -88,19 +87,11 @@ sint button::check(sint x,sint y,sint b)
 	return 0;
 }
 
-void button::allon()
+void button::all(bool b)
 {
 	for(sint i=bl.first();i<bl.length();i+=bl.next())
 	{
-		((button*)bl.current())->active = 1;
-	}
-}
-
-void button::alloff()
-{
-	for(sint i=bl.first();i<bl.length();i+=bl.next())
-	{
-		((button*)bl.current())->active = 0;
+		((button*)bl.current())->active = b;
 	}
 }
 ///*

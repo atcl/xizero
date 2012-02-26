@@ -149,7 +149,7 @@ int main(int argc,char** argv)
 		if(screen::key()==ESCAPE) { menu(); }
 
 		screen::back.clear(BLACK);
-		screen::depth.clear(fx::l2f(200));
+		screen::depth.clear(fx::l2f(400));
 //if(screen::joya()!=0) { system::say(string::cons(screen::joya()),1); }
 //if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
 		if(screen::turbo()=='R') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); } }

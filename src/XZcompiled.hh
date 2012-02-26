@@ -12,6 +12,7 @@
 ///includes
 #include "XZbasic.hh"
 #include "XZscreen.hh"
+#include "XZgame.hh"
 ///*
 
 ///definitions
@@ -25,7 +26,7 @@ namespace compiled
 ///implementation
 void compiled::ammo(const sint x,const sint y,const uint r,const uint c)
 {
-	guard(y<=0||x<=0);
+	guard(game::onscreen(x,y)==1);
 	uint o = ((y-4)*XRES)+(x-3);
 
 	screen::back[o++] = r;
