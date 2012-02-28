@@ -120,15 +120,31 @@ void menu()
 void intro()
 {
 	//load, clone and place object
-	object q(system::ldf("dat/block.y3d"));
 	object c(system::ldf("dat/cross.y3d"));
+	object q(system::ldf("dat/level.y3d"));
 	object b[4] = { object(q),object(q),object(q),object(q) };
 
+	lvector p(400,300,100);
+	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0); c.update();
+	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0); b[0].update();
+	object::linear.clear(); object::linear.translate(0,0,0); b[1].update();
+	object::linear.clear(); object::linear.translate(0,fx::l2f(-30),0); b[2].update();
+	object::linear.clear(); object::linear.translate(0,fx::l2f(-60),0); b[3].update();
 	//*
 
 	//animate in phases
 
+	screen::back.clear(BLACK);
+	screen::depth.clear(fx::l2f(400));
+	c.display(p,R_F);
+	b[0].display(p,R_F);
+	b[1].display(p,R_F);
+	b[2].display(p,R_F);
+	b[3].display(p,R_F);
+screen::run();
 	//*
+
+	screen::sleep(4000);
 }
 
 void mainmenu()
@@ -139,6 +155,16 @@ void mainmenu()
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
+	lvector p(400,300,100);
+	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0); x[1].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0); x[2].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(120),fx::l2f(-140),0); z[0].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(60),fx::l2f(-70),0); z[1].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(200),fx::l2f(-70),0); z[2].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(60),fx::l2f(70),0); z[3].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(200),fx::l2f(70),0); z[4].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(120),fx::l2f(140),0); z[5].update();
 	//*
 
 	//enlist buttons
@@ -155,6 +181,16 @@ void mainmenu()
 		button::check(screen::mousex(),screen::mousey(),screen::mousel());
 		screen::back.clear(BLACK);
 		//draw menu object
+		x[0].display(p,R_S);
+		x[1].display(p,R_S);
+		x[2].display(p,R_S);
+		z[0].display(p,R_S);
+		z[1].display(p,R_S);
+		z[2].display(p,R_S);
+		z[3].display(p,R_S);
+		z[4].display(p,R_S);
+		z[5].display(p,R_S);
+		//*
 		b_start.draw();
 		b_control.draw();
 		b_about.draw();

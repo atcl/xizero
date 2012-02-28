@@ -11,7 +11,7 @@
 int main(int argc,const char* argv[])
 {
 	init();
-	//intro();
+	intro();
 	mainmenu();
 }
 ///*
