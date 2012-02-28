@@ -119,7 +119,10 @@ void menu()
 
 void intro()
 {
-	//load object
+	//load, clone and place object
+	object q(system::ldf("dat/block.y3d"));
+	object c(system::ldf("dat/cross.y3d"));
+	object b[4] = { object(q),object(q),object(q),object(q) };
 
 	//*
 
@@ -130,6 +133,14 @@ void intro()
 
 void mainmenu()
 {
+	//load, clone and place objects
+	object v(system::ldf("dat/segver.y3d"));
+	object h(system::ldf("dat/seghor.y3d"));
+	object x[3] = { object(h),object(h),object(h) };
+	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
+
+	//*
+
 	//enlist buttons
 	const button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	const button b_control("Controls",&control,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
