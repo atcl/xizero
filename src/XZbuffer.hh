@@ -29,7 +29,7 @@ class buffer
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/        void  clear(sint x=0);
-		/*OK*/        void  copy(const buffer& s,uint x) { for(uint i=x;i!=0;--i) { data[i]=s.data[i]; } }
+		/*OK*/        void  copy(const buffer& s,uint x);
 		/*OK*/        void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
 		              void  fsaamb(const buffer& b);
 };
@@ -67,6 +67,15 @@ void buffer::clear(sint x)
 #else
 	for(uint i=tsize;i!=0;--i) { data[i]=x; }
 #endif
+}
+
+void buffer::copy(const buffer& s,uint x)
+{
+//#ifdef SSE
+
+//#else
+	for(uint i=x;i!=0;--i) { data[i]=s.data[i]; }
+//#endif
 }
 
 void buffer::fsaamb(const buffer& b)

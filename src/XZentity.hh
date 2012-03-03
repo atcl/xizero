@@ -122,7 +122,7 @@ void entity::fire(sint h,sint i)
 {
 	const bool j = _ammomount[i]->z;
 	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
-	//cur->pos -= (cur->dir*cur->dir.e);
+	cur->pos -= (cur->dir*cur->dir.e);
 	_ammo.append(cur);
 }
 

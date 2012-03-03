@@ -141,10 +141,15 @@ void intro()
 	b[1].display(p,R_F);
 	b[2].display(p,R_F);
 	b[3].display(p,R_F);
-screen::run();
+
 	//*
 
-	screen::sleep(4000);
+	const sint last = screen::time();
+	while(screen::run() && screen::time()<last+4000 && screen::key()!=ESCAPE)
+	{
+		;
+	}
+
 }
 
 void mainmenu()

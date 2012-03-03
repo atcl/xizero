@@ -10,10 +10,12 @@
 ///*
 
 ///definition
-//static const char* xxx = STR(#include "../dat/enemy.ini");
-
 namespace resource
 {
+	//static const char* icon[] = STR(#include "dat/...");
+	//static const char* cursor[] = STR(#include "dat/...");
+	//static const char* font[] = STR(#include "dat/...");
+
 	static const char* icon[] =
 { 
 "16 16 4 1",

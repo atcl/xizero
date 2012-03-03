@@ -26,22 +26,22 @@
 #endif
 
 #ifndef TITLE
- #define TITLE "_"
+	#define TITLE "_"
 #endif
 
 #ifndef VERSION
- #define VERSION "0.0"
+	#define VERSION "0.0"
 #endif
 
 #ifndef XRES
- #define XRES 800
+	#define XRES 800
 #endif
 
 #ifndef YRES
- #define YRES 600
+	#define YRES 600
 #endif
 
-#define XZOK 'XZOK'
+#define XZOK    'XZOK'
 
 #define BLACK   0x00000000
 #define BLUE    0x00FF0000

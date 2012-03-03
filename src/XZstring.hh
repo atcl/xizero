@@ -47,10 +47,7 @@ char* string::copy(const char* x,sint y,sint z)
 {
 	const sint l = math::min(length(x),z);
 	char* r = new char[l+1];
-	for(sint i=0;i<l;++i,++y)
-	{
-		r[i] = x[y];
-	}
+	for(sint i=0;i<l;++i,++y) { r[i] = x[y]; }
 	r[l] = 0;
 	return r;
 }
@@ -63,14 +60,8 @@ char* string::concat(const char* x,const char* y)
 
 	sint i = 0;
 	sint j = 0;
-	for(;i<a;++i)
-	{
-		r[i] = x[i];
-	}
-	for(;j<b;++i,++j)
-	{
-		r[i] = y[j];
-	}
+	for(;i<a;++i) { r[i] = x[i]; }
+	for(;j<b;++i,++j) { r[i] = y[j]; }
 	r[++i] = 0;
 	return r;
 }
@@ -191,10 +182,7 @@ char* string::repl(const char* x,char y,char z)
 	const sint l = length(x);
 	char* r = new char[l+1];
 	r[l] = 0;
-	for(sint i=0;i<l;++i)
-	{
-		r[i] = math::set(z,x[i],x[i]==y);
-	}
+	for(sint i=0;i<l;++i) { r[i] = math::set(z,x[i],x[i]==y); }
 	return r;
 }
 

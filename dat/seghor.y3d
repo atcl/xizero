@@ -37,13 +37,13 @@ vert,-50,-10,0
 poly,3,lu2,000000ff
 vert,-70,0,0
 vert,-50,-10,0
-vert,-50,0,-10
+vert,-50,0,10
 poly,3,ro1,000000ff
 vert,50,0,-10
 vert,50,10,0
 vert,70,0,0
 poly,3,ro2,000000ff
-vert,50,0,-10
+vert,50,0,10
 vert,70,0,0
 vert,50,10,0
 poly,3,ru1,000000ff
@@ -51,6 +51,6 @@ vert,50,0,-10
 vert,70,0,0
 vert,50,-10,0
 poly,3,ru2,000000ff
-vert,50,0,-10
+vert,50,0,10
 vert,50,-10,0
 vert,70,0,0
