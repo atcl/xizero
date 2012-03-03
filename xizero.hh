@@ -120,9 +120,9 @@ void menu()
 void intro()
 {
 	//load, clone and place object
-	object c(system::ldf("dat/cross.y3d"));
-	object q(system::ldf("dat/level.y3d"));
+	const object q(system::ldf("dat/level.y3d"));
 	object b[4] = { object(q),object(q),object(q),object(q) };
+	object c(system::ldf("dat/cross.y3d"));
 
 	lvector p(400,300,100);
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0); c.update();
@@ -133,30 +133,26 @@ void intro()
 	//*
 
 	//animate in phases
-
-	screen::back.clear(BLACK);
-	screen::depth.clear(fx::l2f(400));
-	c.display(p,R_F);
-	b[0].display(p,R_F);
-	b[1].display(p,R_F);
-	b[2].display(p,R_F);
-	b[3].display(p,R_F);
-
-	//*
-
 	const sint last = screen::time();
 	while(screen::run() && screen::time()<last+4000 && screen::key()!=ESCAPE)
 	{
-		;
+		screen::back.clear(BLACK);
+		screen::depth.clear(fx::l2f(400));
+		c.display(p,R_F);
+		b[0].display(p,R_F);
+		b[1].display(p,R_F);
+		b[2].display(p,R_F);
+		b[3].display(p,R_F);
 	}
 
+	//*
 }
 
 void mainmenu()
 {
 	//load, clone and place objects
-	object v(system::ldf("dat/segver.y3d"));
-	object h(system::ldf("dat/seghor.y3d"));
+	const object v(system::ldf("dat/segver.y3d"));
+	const object h(system::ldf("dat/seghor.y3d"));
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
