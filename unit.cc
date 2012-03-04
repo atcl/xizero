@@ -59,31 +59,36 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 		t2[i] *= q2;
 	}
 
-	fmatrix m;
-	const sint x = s1*s2;
-	lvector*   a = new lvector[x];
-	lvector*   b = new lvector[x];
-	lvector*   c = new lvector[x];
-	lvector*   d = new lvector[x];
+	fmatrix m1;
+	fmatrix m2;
+	m2.rotatez(c1);
+	const sint n = s1*s2;
+	lvector*   a = new lvector[n];
+	lvector*   b = new lvector[n];
+	lvector*   c = new lvector[n];
+	lvector*   d = new lvector[n];
 
-	for(sint i=0,n=0;i<s1;++i)
+	for(sint i=0,h=0;i<s1;++i)
 	{
-		m.rotatez(c1);
 		const sint k = math::set(0,i+1,i==(s1-1));
 
-		for(sint j=0;j<s2;++j,++n)
+		for(sint j=0;j<s2;++j,++h)
 		{
 			const sint    l = math::set(0,j+1,j==(s2-1));
-			const fvector u = m.transform(t2[j]);
-			const fvector v = m.transform(t2[l]);
-			a[n].set(fx::r2l(t1[i].x+u.x),fx::r2l(t1[i].y+u.y),fx::r2l(t1[i].z+u.z));
-			b[n].set(fx::r2l(t1[i].x+v.x),fx::r2l(t1[i].y+v.y),fx::r2l(t1[i].z+v.z));
-			c[n].set(fx::r2l(t1[k].x+v.x),fx::r2l(t1[k].y+v.y),fx::r2l(t1[k].z+v.z));
-			d[n].set(fx::r2l(t1[k].x+u.x),fx::r2l(t1[k].y+u.y),fx::r2l(t1[k].z+u.z));
+			const fvector u = m1.transform(t2[j]);
+			const fvector v = m1.transform(t2[l]);
+			const fvector w = m2.transform(t2[j]);
+			const fvector x = m2.transform(t2[l]);
+			a[h].set(fx::r2l(t1[i].x+u.x),fx::r2l(t1[i].y+u.y),fx::r2l(t1[i].z+u.z));
+			b[h].set(fx::r2l(t1[k].x+w.x),fx::r2l(t1[k].y+w.y),fx::r2l(t1[k].z+w.z));
+			c[h].set(fx::r2l(t1[k].x+x.x),fx::r2l(t1[k].y+x.y),fx::r2l(t1[k].z+x.z));
+			d[h].set(fx::r2l(t1[i].x+v.x),fx::r2l(t1[i].y+v.y),fx::r2l(t1[i].z+v.z));
 		}
+		m1.rotatez(c1);
+		m2.rotatez(c1);
 	}
 
-	object* r = new object(a,b,c,d,x,e);
+	object* r = new object(a,b,c,d,n,e);
 	delete[] t1;
 	delete[] t2;
 	delete[] a;
