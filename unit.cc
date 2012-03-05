@@ -59,9 +59,12 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 		t2[i] *= q2;
 	}
 
+	const fixed a1 = fx::div(fx::l2f(360),fx::l2f(s1));
+	const fixed a2 = fx::div(fx::l2f(360),fx::l2f(s2));
 	fmatrix m1;
 	fmatrix m2;
-	m2.rotatez(c1);
+	m2.rotatez(a1);
+
 	const sint n = s1*s2;
 	lvector*   a = new lvector[n];
 	lvector*   b = new lvector[n];
@@ -71,21 +74,16 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 	for(sint i=0,h=0;i<s1;++i)
 	{
 		const sint k = math::set(0,i+1,i==(s1-1));
-
 		for(sint j=0;j<s2;++j,++h)
 		{
-			const sint    l = math::set(0,j+1,j==(s2-1));
-			const fvector u = m1.transform(t2[j]);
-			const fvector v = m1.transform(t2[l]);
-			const fvector w = m2.transform(t2[j]);
-			const fvector x = m2.transform(t2[l]);
-			a[h].set(fx::r2l(t1[i].x+u.x),fx::r2l(t1[i].y+u.y),fx::r2l(t1[i].z+u.z));
-			b[h].set(fx::r2l(t1[k].x+w.x),fx::r2l(t1[k].y+w.y),fx::r2l(t1[k].z+w.z));
-			c[h].set(fx::r2l(t1[k].x+x.x),fx::r2l(t1[k].y+x.y),fx::r2l(t1[k].z+x.z));
-			d[h].set(fx::r2l(t1[i].x+v.x),fx::r2l(t1[i].y+v.y),fx::r2l(t1[i].z+v.z));
+			const sint l = math::set(0,j+1,j==(s2-1));
+			a[h] = t1[i]+m1.transform(t2[j]);
+			b[h] = t1[k]+m2.transform(t2[j]);
+			c[h] = t1[k]+m2.transform(t2[l]);
+			d[h] = t1[i]+m1.transform(t2[l]);
 		}
-		m1.rotatez(c1);
-		m2.rotatez(c1);
+		m1.rotatez(a1);
+		m2.rotatez(a2);
 	}
 
 	object* r = new object(a,b,c,d,n,e);
