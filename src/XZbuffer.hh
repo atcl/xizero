@@ -1,5 +1,5 @@
 // atCROSSLEVEL 2010,2011,2012
-// licensed under zlib-license
+// released under zlib/libpng license
 // XZbuffer.hh
 // Buffer Library 
 
