@@ -140,11 +140,11 @@ void intro()
 	{
 		screen::back.clear(BLACK);
 		screen::depth.clear(fx::l2f(400));
-		c.display(p,R_F);
-		b[0].display(p,R_F);
-		b[1].display(p,R_F);
-		b[2].display(p,R_F);
-		b[3].display(p,R_F);
+		c.display(p,R_F|R_Z);
+		b[0].display(p,R_F|R_Z);
+		b[1].display(p,R_F|R_Z);
+		b[2].display(p,R_F|R_Z);
+		b[3].display(p,R_F|R_Z);
 	}
 
 	//*

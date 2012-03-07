@@ -31,7 +31,7 @@
 #define PRJY 150
 
 #define AMBIENT 25
-#define ZLIGHT 100
+#define ZLIGHT  FXTNT
 #define NOLIGHT 10
 
 #define R_A 0x00000001 //ambient
@@ -89,7 +89,7 @@ uint polygon::flat(sint pz,sint f,uint c) const
 
 	const char ambient = math::set(AMBIENT,f&R_A);
 	const char nolight = math::set(NOLIGHT,f&R_N);
-	const char zshade  = math::set(ZLIGHT*pz,f&R_Z);
+	const char zshade  = math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z);
 
 	packed argb = { c };
 	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) + ambient + nolight + zshade));

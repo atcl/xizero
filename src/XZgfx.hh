@@ -45,6 +45,9 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 {
 	guard( ((x<0)&&(a<0)) || ((x>XRES)&&(a>XRES)) || ((y<0)&&(b<0)) || ((y>YRES)&&(b>YRES)) );
 
+	sint dx = a-x;
+	sint dy = b-y;
+
 	x = math::lim(0,x,XRES-1);
 	y = math::lim(0,y,YRES-1);
 	a = math::lim(0,a,XRES-1);
@@ -53,8 +56,7 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 	sint o = 0;
 	sint p = 0;
 	sint q = 0;
-	sint dx = 0;
-	sint dy = 0;
+
 	sint xs = 1;
 	sint ys = XRES;
 	packed u = { c };
@@ -86,8 +88,6 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 		default:
 		case 0: //general line
 			o = y*XRES+x;
-			dx = a-x;
-			dy = b-y;
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
 			ys = math::neg(ys,dy<0);
@@ -111,8 +111,6 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 
 		case 2: //antialiased line
 			o = y*XRES+x;
-			dx = a-x;
-			dy = b-y;
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
 			ys = math::neg(ys,dy<0);
