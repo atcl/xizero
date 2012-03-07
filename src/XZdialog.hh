@@ -35,12 +35,14 @@ sint dialog::msgbox(const char* m)
 	const button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
 
 	tile* scr = gfx::save();
-	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0)
+	sint cbrk = 0;
+	while(screen::run() && cbrk==0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
 		font::draw(x+20,y+20,m,BLACK,WHITE);
 		bok.draw();
+		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	

@@ -101,7 +101,8 @@ void menu()
 
 	//draw menu
 	tile* scr = gfx::save();
-	while(screen::run() && button::check(screen::mousex(),screen::mousey(),screen::mousel())==0 && screen::key()!=ESCAPE)
+	sint cbrk = 0;
+	while(screen::run() && screen::key()!=ESCAPE && cbrk==0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(0,0,XRES,17,RED,RED,1,0);
@@ -111,6 +112,7 @@ void menu()
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();
+		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	delete scr;
@@ -179,7 +181,6 @@ void mainmenu()
 	//object xizero();
 	while(screen::run())
 	{
-		button::check(screen::mousex(),screen::mousey(),screen::mousel());
 		screen::back.clear(BLACK);
 		//draw menu object
 		x[0].display(p,R_S);
@@ -197,6 +198,7 @@ void mainmenu()
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS);
+		button::check(screen::mousex(),screen::mousey(),screen::mouseb());
 		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	//*

@@ -66,8 +66,7 @@ namespace screen
 	inline sint  turbo()  { return keys[0]; }
 	inline sint  mousex() { return mouse[2]; }
 	inline sint  mousey() { return mouse[3]; }
-	inline sint  mousel() { return mouse[0]; }
-	inline sint  mouser() { return mouse[1]; }
+	inline sint  mouseb() { const sint b = mouse[0]; mouse[0] = 0; return b; }
 	inline sint  joy()    { return joys; }
 	inline void* cursor() { return mcursor; }
 }

@@ -144,7 +144,7 @@ void polygon::raster(bool s,uint c) const
 
 	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
 	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
-	      fixed ty = lpoint[mixi].z - fx::mul(zy,fx::l2f(math::abs(lpoint[mixi].y-lpoint[miyi].y))); //prob here?
+	      fixed ty = lpoint[mixi].z - fx::mul(zy,fx::l2f(math::abs(lpoint[mixi].y-lpoint[miyi].y)));
 
 	for(sint y=miny;y<maxy;++y,off+=str,ty+=zy)
 	{
