@@ -220,7 +220,7 @@ sint level::update(sint k,sint j)
 		((entity*)enemies.current())->update();
 	}
 
-	return (boss->update()<=0)-(player->update(k,j)<=0);
+	return (boss->update()<0)-(player->update(k,j)<0);
 }
 
 void level::display()

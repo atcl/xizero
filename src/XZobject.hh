@@ -41,7 +41,7 @@ class object
 		/*OK*/ void   update(const fmatrix& m=object::linear);
 		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
-		/*OK*/ void   pull(sint x);
+		/*OK*/ void   pull(fixed x);
 		/*OK*/ inline box& boundingbox() { return bbox; }
 
 		static fmatrix linear;

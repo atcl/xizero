@@ -13,7 +13,7 @@
 
 ///definition
 void init();
-sint start(sint l);
+sint start(sint i);
 sint start();
 inline sint close();
 inline sint control();
@@ -33,19 +33,23 @@ void init()
 	screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
 }
 
-sint start(sint l)
+sint start(sint i)
 {
-	level v(system::ldf("dat/level0.lvl"));
+	level l(system::ldf("dat/level0.lvl"));
 
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		if(screen::key()==ESCAPE) { menu(); v.resume(); }
+		if(screen::key()==ESCAPE) { menu(); l.resume(); }
 
-		v.update(screen::turbo(),screen::joy());
-		v.display();
+		switch(l.update(screen::turbo(),screen::joy()))
+		{
+			case -1: lost(); return 0;
+			case 1:  won();  return 0;
+		}
+		l.display();
 		//screen::back.fsaamb(screen::accum);
-		v.gauges();
+		l.gauges();
 		bench();
 	}
 
@@ -208,12 +212,18 @@ void won()
 {
 	screen::back.clear(BLACK);
 	font::draw(40,40,"You won.",WHITE,TRANS);
+	screen::run();
+	screen::sleep(3000);
+	trans::dissolve();
 }
 
 void lost()
 {
 	screen::back.clear(BLACK);
 	font::draw(40,40,"You lost.",WHITE,TRANS);
+	screen::run();
+	screen::sleep(3000);
+	trans::dissolve();
 }
 
 void bench()

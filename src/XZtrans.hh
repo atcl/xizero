@@ -38,7 +38,7 @@ void trans::circleblend(sint x,sint y,sint r) //fix
 			if(math::sqr(q)<=r) { screen::back[i*XRES+j] = BLACK; }
 		}
 	}
-
+	screen::run();
 	screen::sleep(3000);
 }
 
@@ -46,7 +46,8 @@ void trans::dissolve()
 {
 	for(uint i=0;i<256000;++i)
 	{
-		gfx::pix(math::rnd(XRES),math::rnd(YRES),math::rnd(-1)); 
+		gfx::pix(math::rnd(XRES),math::rnd(YRES),math::rnd(-1));
+		screen::run();
 		screen::sleep(8);
 	}	
 }
@@ -64,6 +65,7 @@ void trans::fadeout()
 			c.b[3] = math::max(0,c.b[3]--);
 			screen::back[j] = c.d;
 		}
+		screen::run();
 		screen::sleep(5);
 	}
 }

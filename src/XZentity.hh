@@ -133,8 +133,8 @@ void entity::checkammo(sint t)
 		ammo* ca = (ammo*)_ammo.current();
 		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
 		if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
-		_health -= h;
-		ca->pos -= ca->dir* ((ca->dir.e)*(_model[1]!=0/*&&curr>lastammo*/));
+		_health = math::max(0,_health-h);
+		ca->pos -= ca->dir * ((ca->dir.e)*(_model[1]!=0/*&&curr>lastammo*/));
 	}
 }
 
@@ -185,12 +185,13 @@ sint entity::update(sint k,sint j)
 
 	checkammo(curr);
 
-	//destroy ani if health below zeros
-	if(_health<0)
+	if(_health==0)
 	{
-		
+		static sint dm = 0;
+		_model[0]->pull(-FXHLF+FXTNT);
+		_model[1]->pull(-FXHLF);
+		return _health-(dm++>250);
 	}
-	//
 
 	switch(k)
 	{
@@ -287,7 +288,7 @@ sint entity::update() //check, because ammo is in list even though level just st
 		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x>=fx::l2f(650));
 	}
 
-	if(_health<0)
+	if(_health==0)
 	{
 		
 	}
