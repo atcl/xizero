@@ -35,7 +35,7 @@ class entity
 	private:
 		static const fmatrix rp;
 		static const fmatrix rm;
-		static list _ammo;
+		static list _ammo[2];
 
 		object* _model[2];
 		fvector _position;
@@ -44,6 +44,7 @@ class entity
 		lvector _towpos;
 		sint    _angle;
 
+		bool _unique;
 		bool _active;
 		sint _lastupdate;
 
@@ -62,7 +63,7 @@ class entity
 
 		void setup(const lvector& p,object* m,const info& v);
 		void fire(sint h,sint i);
-		void checkammo(sint t);
+		void checkammo(sint t,bool j);
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,sint s);
@@ -83,7 +84,7 @@ class entity
 ///implementation
 const fmatrix entity::rp    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }();
 const fmatrix entity::rm    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }();
-list          entity::_ammo = list();
+list          entity::_ammo[2] = { list(), list() };
 sint          entity::ylevel = 0;
 fixed         entity::ymark  = 0;
 
@@ -123,24 +124,24 @@ void entity::fire(sint h,sint i)
 	const bool j = _ammomount[i]->z;
 	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
 	//cur->pos -= (cur->dir*cur->dir.e);
-	_ammo.append(cur);
+	_ammo[(_model[1]!=0)].append(cur);
 }
 
-void entity::checkammo(sint t)
+void entity::checkammo(sint t,bool j)
 {
-	for(sint i=_ammo.first();i<_ammo.length();i+=_ammo.next())
+	for(sint i=_ammo[j].first();i<_ammo[j].length();i+=_ammo[j].next())
 	{
-		ammo* ca = (ammo*)_ammo.current();
+		ammo* ca = (ammo*)_ammo[j].current();
 		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		if(h!=0) { delete (ammo*)_ammo.delcurrent(); }
+		if(h!=0) { delete (ammo*)_ammo[j].delcurrent(); }
 		_health = math::max(0,_health-h);
-		ca->pos -= ca->dir * ((ca->dir.e)*(_model[1]!=0/*&&curr>lastammo*/));
 	}
 }
 
 entity::entity(const lvector& p,object* m,object* n,const info& v)
 {
 	_model[1] = new object(*n);
+	_unique = 1;
 	setup(p,m,v);
 
 	_towpos = *_model[1]->docktype(3,0)-*_model[0]->docktype(3,0);	
@@ -153,6 +154,7 @@ entity::entity(const lvector& p,object* m,object* n,const info& v)
 entity::entity(const lvector& p,object* m,const info& v,sint s)
 {
 	_model[1] = 0;
+	_unique = 1;
 	setup(p,m,v);
 	_direction[1].set(FXMON,0,0,FXONE);
 	
@@ -167,6 +169,7 @@ entity::entity(const lvector& p,object* m,const info& v,sint s)
 entity::entity(const lvector& p,object* m,const info& v)
 {
 	_model[1] = 0;
+	_unique = 0;
 	setup(p,m,v);
 }
 
@@ -183,7 +186,7 @@ sint entity::update(sint k,sint j)
 	const bool l = k^last;
 	const sint curr = screen::time();
 
-	checkammo(curr);
+	checkammo(curr,0);
 
 	if(_health==0)
 	{
@@ -272,7 +275,7 @@ sint entity::update() //check, because ammo is in list even though level just st
 	if( (_health>0) && (_position.y>0) && (_position.y+(YRES<<FX)>ymark) ) //check
 	{
 		//_active = 1;
-		checkammo(curr);
+		checkammo(curr,1);
 
 		if(curr>_lastfire)
 		{
@@ -307,15 +310,21 @@ void entity::display(sint m,bool t)
 	if(_model[1]!=0)
 	{
 		_model[1]->display(p+_towpos,r);
-		for(sint i=_ammo.first();i<_ammo.length()&&r==R_F;i+=_ammo.next())
+		for(sint h=0;h<2;++h)
 		{
-			const fvector* cur = &((ammo*)_ammo.current())->pos;
-			const sint cx = fx::r2l(cur->x);
-			const sint cy = fx::r2l(cur->y)-m;
-			switch(game::onscreen(cx,cy))
+			for(sint i=_ammo[h].first();i<_ammo[h].length()&&r==R_F;i+=_ammo[h].next())
 			{
-				case 0: delete (ammo*)_ammo.delcurrent(); break;
-				case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;
+				fvector* cur = &((ammo*)_ammo[h].current())->pos;
+				const fvector* dir = &((ammo*)_ammo[h].current())->dir;
+				(*cur) -= (*dir) * dir->e;
+
+				const sint cx = fx::r2l(cur->x);
+				const sint cy = fx::r2l(cur->y)-m;
+				switch(game::onscreen(cx,cy))
+				{
+					case 0: delete (ammo*)_ammo[h].delcurrent(); break;
+					case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;
+				}
 			}
 		}
 	}
