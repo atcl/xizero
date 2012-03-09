@@ -44,11 +44,16 @@ void trans::circleblend(sint x,sint y,sint r) //fix
 
 void trans::dissolve()
 {
-	for(uint i=0;i<256000;++i)
+	for(uint i=0;i<64000;++i)
 	{
-		gfx::pix(math::rnd(XRES),math::rnd(YRES),math::rnd(-1));
+		const uint x = math::rnd(XRES);
+		const uint y = math::rnd(YRES);
+		const uint c = math::rnd(0x00FFFFFF);
+		gfx::pix(x,y,c);
+		gfx::pix(x+1,y,c);
+		gfx::pix(x,y+1,c);
+		gfx::pix(x+1,y+1,c);
 		screen::run();
-		screen::sleep(8);
 	}	
 }
 

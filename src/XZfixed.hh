@@ -38,11 +38,11 @@ typedef sint fixed;
 
 namespace fx 
 {
-	inline sint  f2l(fixed x) { return x>>FX; } CONST
-	inline sint  r2l(fixed x) { return (x+FXHLF)>>FX; } CONST
-	inline fixed l2f(sint x)  { return x<<FX; } CONST
-	inline fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; } CONST
-	inline fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
+	inline pure sint  f2l(fixed x) { return x>>FX; }
+	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }
+	inline pure fixed l2f(sint x)  { return x<<FX; }
+	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
+	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
 
 	inline fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXPI,math::set(-FX2PI,0,y>FXPI+FXPI2),(y>FXPI2)&&(y<FXPI+FXPI2)),x<0); }
 	inline fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXPI2)&&(y<FXPI+FXPI2)); }

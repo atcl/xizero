@@ -18,7 +18,7 @@
 ///definitions
 namespace compiled
 {
-	/*OK*/ void ammo(sint x,sint y,uint r,uint c);
+	/*OK*/ pure void ammo(sint x,sint y,uint r,uint c);
 	void tracks(uint x,uint y,uint d,uint c);
 }
 ///*

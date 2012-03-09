@@ -18,20 +18,20 @@
 ///definitions
 namespace string
 {
-	/*OK*/ sint   length(const char* x);
-	/*OK*/ char*  copy(const char* x,sint y=0,sint z=0x7FFFFFFF);
-	/*OK*/ char*  concat(const char* x,const char* y);
-	/*OK*/ sint   count(const char* x,char='\n');
-	/*OK*/ sint   scan(const char* x,char y,char z='\n');
-	/*OK*/ sint   find(const char* x,const char* y);
-	/*OK*/ sint   str2int(const char* x);
-	/*OK*/ sint   str2hex(const char* x);
-	/*OK*/ char*  int2str(sint x);
-	/*OK*/ char*  fix2str(fixed x);
-	/*OK*/ char*  repl(const char* x,char y,char z);
-	/*OK*/ char** split(const char* x,char y);
-	/*OK*/ char*  trim(const char* x,char y=' ');
-	/*OK*/ char   toup(char x);
+	/*OK*/ pure sint   length(const char* x);
+	/*OK*/ pure char*  copy(const char* x,sint y=0,sint z=0x7FFFFFFF);
+	/*OK*/ pure char*  concat(const char* x,const char* y);
+	/*OK*/ pure sint   count(const char* x,char='\n');
+	/*OK*/ pure sint   scan(const char* x,char y,char z='\n');
+	/*OK*/ pure sint   find(const char* x,const char* y);
+	/*OK*/ pure sint   str2int(const char* x);
+	/*OK*/ pure sint   str2hex(const char* x);
+	/*OK*/ pure char*  int2str(sint x);
+	/*OK*/ pure char*  fix2str(fixed x);
+	/*OK*/ pure char*  repl(const char* x,char y,char z);
+	/*OK*/ pure char** split(const char* x,char y);
+	/*OK*/ pure char*  trim(const char* x,char y=' ');
+	/*OK*/ pure char   toup(char x);
 }
 ///*
 

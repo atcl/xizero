@@ -16,13 +16,13 @@
 ///declarations
 #ifdef __GNUC__
 
-	#define CONST __attribute__((const))
+	#define pure __attribute__((pure))
 
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline))
 	#endif
 #else
-	#define CONST
+	#define pure
 #endif
 
 #ifndef TITLE
