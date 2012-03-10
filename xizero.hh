@@ -211,7 +211,6 @@ void mainmenu()
 void won()
 {
 	//trans::circleblend();
-	trans::fadeout();
 	font::draw(40,40,"You won.",WHITE,TRANS);
 	screen::run();
 	screen::sleep(3000);

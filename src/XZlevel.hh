@@ -51,6 +51,7 @@ class level
 		void display();			//Display Terrain, Shadows, Entities
 		void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
+		lvector ppos();			//get player position
 };
 ///*
 
