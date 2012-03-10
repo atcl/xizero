@@ -27,7 +27,7 @@
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<!--flag>-s</flag--><!--strip debug symbols-->
 			<!--flag>-static</flag-->
-			<flag>-g -std=gnu++0x</flag>
+			<flag>-g -std=c++0x</flag>
 		</flags>
 		<binary>
 			<name>xizero</name>
@@ -62,7 +62,7 @@
 			<!--flag>-msse -mpfpmath=sse</flag-->
 			<!--flag>-fprefetch-loop-arrays</flag-->
 			<!--flag>-Wl,-file-alignment 4096</flag-->
-			<flag>-g -std=gnu++0x</flag>
+			<flag>-g -std=c++0x</flag>
 		</flags>
 		<binary>
 			<name>unit</name>
@@ -88,7 +88,7 @@
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<flag>-Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++ -pedantic</flag>
-			<flag>-std=gnu++0x</flag>
+			<flag>-std=c++0x</flag>
 		</flags>
 		<binary>
 			<name>test</name>

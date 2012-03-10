@@ -210,7 +210,8 @@ void mainmenu()
 
 void won()
 {
-	screen::back.clear(BLACK);
+	//trans::circleblend();
+	trans::fadeout();
 	font::draw(40,40,"You won.",WHITE,TRANS);
 	screen::run();
 	screen::sleep(3000);
@@ -219,7 +220,7 @@ void won()
 
 void lost()
 {
-	screen::back.clear(BLACK);
+	trans::fadeout();
 	font::draw(40,40,"You lost.",WHITE,TRANS);
 	screen::run();
 	screen::sleep(3000);

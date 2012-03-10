@@ -44,17 +44,18 @@ void trans::circleblend(sint x,sint y,sint r) //fix
 
 void trans::dissolve()
 {
-	for(uint i=0;i<64000;++i)
+	for(uint i=0;i<2000;++i)
 	{
-		const uint x = math::rnd(XRES);
-		const uint y = math::rnd(YRES);
-		const uint c = math::rnd(0x00FFFFFF);
-		gfx::pix(x,y,c);
-		gfx::pix(x+1,y,c);
-		gfx::pix(x,y+1,c);
-		gfx::pix(x+1,y+1,c);
+		for(uint i=0;i<32;++i)
+		{
+			const uint o = math::rnd(((XRES-2)*(YRES-2)));
+			screen::back[o] = math::rnd(0x00FFFFFF);
+			screen::back[o+1] = math::rnd(0x00FFFFFF);
+			screen::back[o+XRES] = math::rnd(0x00FFFFFF);
+			screen::back[o+XRES+1] = math::rnd(0x00FFFFFF);
+		}
 		screen::run();
-	}	
+	}
 }
 
 void trans::fadeout()
@@ -64,14 +65,14 @@ void trans::fadeout()
 		for(uint j=0;j<XRES*YRES;++j)
 		{
 			packed c = { screen::back[j] };
-			//c.b[0] = math::max(0,c.b[0]--); //no need to fade alpha byte
-			c.b[1] = math::max(0,c.b[1]--);
-			c.b[2] = math::max(0,c.b[2]--);
-			c.b[3] = math::max(0,c.b[3]--);
+			c.b[0] = (byte)math::max(0,c.b[0]-1);
+			c.b[1] = (byte)math::max(0,c.b[1]-1);
+			c.b[2] = (byte)math::max(0,c.b[2]-1);
+			//c.b[3] = (byte)math::max(0,c.b[3]-1); //no need to fade alpha byte
 			screen::back[j] = c.d;
 		}
 		screen::run();
-		screen::sleep(5);
+		screen::sleep(10);
 	}
 }
 ///*
