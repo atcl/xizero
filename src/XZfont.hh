@@ -29,11 +29,11 @@ namespace font
 
 	       sint draw(sint x,sint y,char a,uint c,uint b);
 	       void draw(sint x,sint y,const char* a,uint c,uint b);
-	       sint width(char x);
-	       sint width(const char* x);
-	inline sint height(const char* x);
-	inline sint height();
-	inline char map(char a);
+	       pure sint width(char x);
+	       pure sint width(const char* x);
+	inline pure sint height(const char* x);
+	inline pure sint height();
+	inline pure char map(char a);
 }
 ///*
 

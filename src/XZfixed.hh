@@ -42,10 +42,10 @@ namespace fx
 	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }
 	inline pure fixed l2f(sint x)  { return x<<FX; }
 	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
-	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; } //CONST (causes problems)
+	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
 
-	inline fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXPI,math::set(-FX2PI,0,y>FXPI+FXPI2),(y>FXPI2)&&(y<FXPI+FXPI2)),x<0); }
-	inline fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXPI2)&&(y<FXPI+FXPI2)); }
+	inline pure fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXPI,math::set(-FX2PI,0,y>FXPI+FXPI2),(y>FXPI2)&&(y<FXPI+FXPI2)),x<0); }
+	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXPI2)&&(y<FXPI+FXPI2)); }
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
