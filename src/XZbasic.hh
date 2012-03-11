@@ -79,6 +79,14 @@ union packed
 	uint d;
 	byte b[4];
 };
+
+//global new + delete overloading
+//void* operator new(uint s)   { return memalign(16,s); }
+//void* operator new[](uint s) { return memalign(16,s); }
+//void  operator delete(void *p)   { free(p); }
+//void  operator delete[](void *p) { free(p); }
+//*
+
 ///*
 
 #endif
