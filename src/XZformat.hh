@@ -22,7 +22,14 @@ struct info
 	char** name;
 	char** value;
 	sint   count;
-	char*  operator[](const char* n) const {for(sint i=0;i<count;++i){if(string::find(n,name[i])==0){return value[i];}} return 0;} 
+	char*  operator[](const char* n) const
+	{
+		for(sint i=0;i<count;++i)
+		{
+			if(string::find(n,name[i])==0) { return value[i]; }
+		}
+		return 0;
+	} 
 };
 
 #ifndef TILE

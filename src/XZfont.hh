@@ -27,8 +27,8 @@ namespace font
 		tile* f = format::xpm(resource::font);
 	}
 
-	       sint draw(sint x,sint y,char a,uint c,uint b);
-	       void draw(sint x,sint y,const char* a,uint c,uint b);
+	            sint draw(sint x,sint y,char a,uint c,uint b);
+	            void draw(sint x,sint y,const char* a,uint c,uint b);
 	       pure sint width(char x);
 	       pure sint width(const char* x);
 	inline pure sint height(const char* x);
