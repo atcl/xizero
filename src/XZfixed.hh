@@ -23,12 +23,12 @@
 #define FXTNT 0x00001999 //0.1
 #define FXHUN 0x0000028F //0.01
 #define FXEPS 0x00000001 //eps
-#define FXPI  0x0003243F //pi
-#define FX2PI 0x0006487E //2*pi
-#define FXPI2 0x0001921F //pi/2
+#define FXTAU 0x0006487E //tau
+#define FXTA2 0x0003243F //tau/2
+#define FXTA4 0x0001921F //tau/4
 #define FXITG 0x00009B71 //0.607200
 #define FXIHG 0x000134A3 //1.205614
-#define FXD2R 0x00000477 //pi/180 deg2rad
+#define FXD2R 0x00000477 //tau/360 deg2rad
 #define FXSQ2 0x00016A09 //2^0.5
 #define FXRS1 0x00000126 //0.0045
 #define FXRS2 0x00012902 //1.1602
@@ -44,19 +44,19 @@ namespace fx
 	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
 	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
 
-	inline pure fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXPI,math::set(-FX2PI,0,y>FXPI+FXPI2),(y>FXPI2)&&(y<FXPI+FXPI2)),x<0); }
-	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXPI2)&&(y<FXPI+FXPI2)); }
+	inline pure fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXTA2,math::set(-FXTAU,0,y>FXTA2+FXTA4),(y>FXTA4)&&(y<FXTA2+FXTA4)),x<0); }
+	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXTAU)&&(y<FXTA2+FXTA4)); }
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
 	inline fixed round(fixed x)       { return ((x + FXHLF)>>FX)<<FX; }
 	inline fixed sqr(fixed x)         { return math::sqr(x)<<(FX>>1); }
 	inline fixed rsq(fixed x)         { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
-	inline fixed sin(fixed a)         { a = a%FX2PI; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(y,a); } // |a| < 1.74
-	inline fixed cos(fixed a)         { a = a%FX2PI; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(x,a); } // |a| < 1.74 
-	inline fixed tan(fixed a)         { a = a%FX2PI; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(div(y,x),a); } // |a| < 1.74 
+	inline fixed sin(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(y,a); } // |a| < 1.74
+	inline fixed cos(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(x,a); } // |a| < 1.74 
+	inline fixed tan(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(div(y,x),a); } // |a| < 1.74 
 	inline fixed arcsin(fixed a)      { fixed x = FXITG; fixed y = 0; fixed z = 0; cordic(x,y,z,math::abs(a),0); return math::neg(z,a<0); } // |a| < 0.98
-	inline fixed arccos(fixed a)      { return FXPI2 - arcsin(a); }
+	inline fixed arccos(fixed a)      { return FXTA4 - arcsin(a); }
 	inline fixed arctan(fixed a)      { fixed x = FXONE; fixed y = a; fixed z = 0; cordic(x,y,z,0,0); return z; }
 	inline fixed sinc(fixed a)        { return div(sin(a),a); }
 	inline fixed sinh(fixed a)        { fixed x = FXIHG; fixed y = 0; fixed z = a; cordic(x,y,z,FXMON,1); return y; } // |a| < 1.13

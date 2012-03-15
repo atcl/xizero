@@ -43,8 +43,8 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 {
 	const fixed q1 = fx::l2f(r1);
 	const fixed q2 = fx::l2f(r2);
-	const fixed c1 = fx::div(FX2PI,fx::l2f(s1));
-	const fixed c2 = fx::div(FX2PI,fx::l2f(s2));
+	const fixed c1 = fx::div(FXTAU,fx::l2f(s1));
+	const fixed c2 = fx::div(FXTAU,fx::l2f(s2));
 	fvector*    t1 = new fvector[s1];
 	fvector*    t2 = new fvector[s2];
 
