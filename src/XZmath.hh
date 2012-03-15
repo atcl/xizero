@@ -24,7 +24,7 @@ namespace math
 	/*OK*/ pure inline sint abs(sint x) { sint y=x>>31; x^=y; x-=y; return x; }
 	/*OK*/ pure inline sint ndn(sint x) { return ((x>>24)&0x000000ff) | ((x<<8)&0x00ff0000) | ((x>>8)&0x0000ff00) | ((x<<24)&0xff000000); }
 	/*OK*/ pure inline sint min(sint x,sint y) { return y^((x^y) & -(x<y)); }
-	/*OK*/ pure inline sint max(sint x,sint y){ return x^((x^y) & -(x<y)); }
+	/*OK*/ pure inline sint max(sint x,sint y) { return x^((x^y) & -(x<y)); }
 	/*OK*/ pure inline sint neg(sint x,bool y) { return ~(x^(y-1))+y; }
 	/*OK*/ pure inline sint set(sint x,bool y) { return ((sint(!y))-1) & x; }
 	/*OK*/ pure inline sint set(sint x,sint y,bool z) { return (((sint(!z))-1) & x) | ((sint(z)-1) & y); }

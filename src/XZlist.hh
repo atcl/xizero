@@ -41,6 +41,7 @@ class list
 		inline sint next() { guard(_len==0,0); _cur = _cur->next; return  1; }
 		inline void* current() const { guard(_len==0,0); return _cur->data; }
 		inline void clear() { _cur = _fir = _las = 0; _len = 0; }
+		inline void prefn() { prefetch(_cur->next); }
 		void* delcurrent();
 		void append(void* x,sint h=0);
 		void exchangesort(bool u);

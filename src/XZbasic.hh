@@ -18,11 +18,15 @@
 
 	#define pure __attribute__((pure))
 
+	#define prefetch(x) __builtin_prefetch(x)
+
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline))
 	#endif
 #else
 	#define pure
+
+	#define prefetch(x)
 #endif
 
 #ifndef TITLE
@@ -81,10 +85,11 @@ union packed
 };
 
 //global new + delete overloading
-//void* operator new(uint s)   { return memalign(16,s); }
-//void* operator new[](uint s) { return memalign(16,s); }
-//void  operator delete(void *p)   { free(p); }
-//void  operator delete[](void *p) { free(p); }
+/*#include <malloc.h>
+void* operator new(uint s)   { return memalign(16,s); }
+void* operator new[](uint s) { return memalign(16,s); }
+void  operator delete(void *p)   { free(p); }
+void  operator delete[](void *p) { free(p); }*/
 //*
 
 ///*
