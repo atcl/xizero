@@ -11,7 +11,6 @@
 
 ///include
 #include "XZbasic.hh"
-#include "XZutil.hh"
 #include "XZbuffer.hh"
 #include "XZmath.hh"
 #include "XZvector.hh"

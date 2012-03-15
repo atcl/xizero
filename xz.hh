@@ -5,7 +5,6 @@
 
 ///includes
 #include "src/XZbasic.hh"
-#include "src/XZutil.hh"
 #include "src/XZbuffer.hh"
 #include "src/XZbutton.hh"
 #include "src/XZcompiled.hh"

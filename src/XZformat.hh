@@ -11,7 +11,6 @@
 
 ///includes
 #include "XZbasic.hh"
-#include "XZutil.hh"
 #include "XZgfx.hh"
 #include "XZstring.hh"
 ///*

@@ -10,7 +10,7 @@
 ///*
 
 ///includes
-#include "XZutil.hh"
+#include "XZbasic.hh"
 #include "XZgui.hh"
 #include "XZgfx.hh"
 #include "XZmath.hh"
