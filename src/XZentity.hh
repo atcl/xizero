@@ -132,9 +132,9 @@ void entity::checkammo(sint t,bool j)
 	for(sint i=_ammo[j].first();i<_ammo[j].length();i+=_ammo[j].next())
 	{
 		ammo* ca = (ammo*)_ammo[j].current();
-		//_ammo[j].prefn();
 		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
 		if(h!=0) { delete (ammo*)_ammo[j].delcurrent(); }
+		//_ammo[j].prefn();
 		_health = math::max(0,_health-h);
 	}
 }
