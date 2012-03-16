@@ -75,7 +75,7 @@ void* list::delcurrent()
 			_cur->prev = _fir = _cur;
 		break;
 
-		default: //del middle
+		default: //del middle 
 			member* tempnext = _cur->next;
 			member* tempprev = _cur->prev;
 			next();
