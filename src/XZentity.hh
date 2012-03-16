@@ -89,17 +89,17 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_model[0] = new object(*m);
 
 	_position = p;
-	_direction[0].set(0,FXONE,0,FXONE);
+	_direction[0].set(math::set(FXMON,_type==-1),math::neg(math::set(FXONE,_type!=-1),_type==0),0,FXONE);
 	_direction[1].set(0,FXONE,0,FXONE);
 
 	_health     = string::str2int(v["health"]);
 	_shieldmax  = string::str2int(v["shield"]);
-	_shield     = _shieldmax;
 	_shieldrate = string::str2int(v["srate"]);
 	_ammomounts = string::str2int(v["mounts"]);
 	_ammotype   = string::str2int(v["atype"]);
 	_firerate   = string::str2int(v["frate"]);
 	_points     = string::str2int(v["points"]);
+	_shield     = _shieldmax;
 
 	_ammomount = new fvector*[_ammomounts];
 	const sint s = (_model[1]!=0);
@@ -115,9 +115,9 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_lastupdate = _lastfire = screen::time();
 }
 
-void entity::fire(sint i)
+void entity::fire(sint i) //fix so all ammo on same z level (project?)
 {
-	const bool j = _ammomount[i]->z;
+	const bool j = (_ammomount[i]->z)||(_type!=0);
 	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,0 },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
 	_ammo[(bool)_type].append(cur);
 }
@@ -127,11 +127,11 @@ void entity::checkammo()
 	list& a = _ammo[!(bool)_type];
 	for(sint i=a.first();i<a.length();i+=a.next())
 	{
-		ammo* ca = (ammo*)a.current();
-		const sint h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
+		const fvector ca = ((ammo*)a.current())->pos;
+		const sint h = game::collision(_position,_model[0]->boundingbox(),ca,i==0)<<2;
 
 		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); }
-		//_ammo[j].prefn();
+		//a.prefn();
 	}
 }
 
@@ -153,7 +153,6 @@ entity::entity(const lvector& p,object* m,const info& v,sint s)
 	_model[1] = 0;
 	_type = math::neg(1,s!=1);
 	setup(p,m,v);
-	_direction[1].set(math::set(FXMON,s!=1),math::set(FXONE,s==1),0,FXONE);
 	
 	//scale model by s
 	s = fx::l2f(s);
@@ -281,12 +280,12 @@ sint entity::update()
 			_lastfire = curr+_firerate;
 		}
 
-		_position.x -= fx::mul(_direction[1].x,_direction[1].e);
-		_position.y += fx::mul(_direction[1].y,_direction[1].e);
-		//_position.z += fx::mul(_direction[1].z,_direction[1].e);
+		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
+		_position.y += fx::mul(_direction[0].y,_direction[0].e);
+		_position.z += fx::mul(_direction[0].z,_direction[0].e);
 
-		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x<=fx::l2f(150));
-		_direction[1].x = math::set(-_direction[1].x,_direction[1].x,_position.x>=fx::l2f(650));
+		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x<=fx::l2f(150));
+		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x>=fx::l2f(650));
 	}
 
 	_lastupdate = curr;

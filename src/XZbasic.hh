@@ -44,6 +44,7 @@
 #define STR(x) VAL(x)
 
 #define alert(x) system::say(string::int2str(x),1)
+#define alerf(x) system::say(string::fix2str(x),1)
 
 #define mod2(x)   x&1
 #define mod4(x)   x&3
