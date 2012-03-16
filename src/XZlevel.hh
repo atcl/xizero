@@ -294,6 +294,11 @@ void level::resume()
 	player->resume();
 	//*
 }
+
+lvector level::ppos()
+{
+	return player->data(mark);
+}
 ///*
 
 #endif

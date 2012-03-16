@@ -27,6 +27,10 @@ struct ammo
 };
 
 #define ROTANG 1
+
+#define PLAYER 0
+#define ENEMY  1
+#define BOSS  -1
 ///*
 
 ///definitions
@@ -44,7 +48,7 @@ class entity
 		lvector _towpos;
 		sint    _angle;
 
-		bool _unique;
+		sint _type;
 		bool _active;
 		sint _lastupdate;
 
@@ -63,7 +67,7 @@ class entity
 
 		void setup(const lvector& p,object* m,const info& v);
 		void fire(sint h,sint i);
-		void checkammo(sint t,bool j);
+		void checkammo();
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,sint s);
@@ -96,13 +100,14 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_direction[0].set(0,FXONE,0,FXONE);
 	_direction[1].set(0,FXONE,0,FXONE);
 
-	_health = string::str2int(v["health"]);
-	_shield = _shieldmax = string::str2int(v["shield"]);
+	_health     = string::str2int(v["health"]);
+	_shieldmax  = string::str2int(v["shield"]);
+	_shield     = _shieldmax;
 	_shieldrate = string::str2int(v["srate"]);
 	_ammomounts = string::str2int(v["mounts"]);
-	_ammotype = string::str2int(v["atype"]);
-	_firerate = string::str2int(v["frate"]);
-	_points = string::str2int(v["points"]);
+	_ammotype   = string::str2int(v["atype"]);
+	_firerate   = string::str2int(v["frate"]);
+	_points     = string::str2int(v["points"]);
 
 	_ammomount = new fvector*[_ammomounts];
 	const sint s = (_model[1]!=0);
@@ -124,16 +129,17 @@ void entity::fire(sint h,sint i)
 	const bool j = _ammomount[i]->z;
 	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,h },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
 	//cur->pos -= (cur->dir*cur->dir.e);
-	_ammo[(_model[1]!=0)].append(cur);
+	_ammo[_type].append(cur);
 }
 
-void entity::checkammo(sint t,bool j)
+void entity::checkammo()
 {
-	for(sint i=_ammo[j].first();i<_ammo[j].length();i+=_ammo[j].next())
+	list& a = _ammo[(_model[1]==0)];
+	for(sint i=a.first();i<a.length();i+=a.next())
 	{
-		ammo* ca = (ammo*)_ammo[j].current();
+		ammo* ca = (ammo*)a.current();
 		const long h = game::collision(_position,_model[0]->boundingbox(),ca->pos,i==0)<<2;
-		if(h!=0) { delete (ammo*)_ammo[j].delcurrent(); }
+		if(h!=0) { delete (ammo*)a.delcurrent(); }
 		//_ammo[j].prefn();
 		_health = math::max(0,_health-h);
 	}
@@ -142,7 +148,7 @@ void entity::checkammo(sint t,bool j)
 entity::entity(const lvector& p,object* m,object* n,const info& v)
 {
 	_model[1] = new object(*n);
-	_unique = 1;
+	_type = 0;
 	setup(p,m,v);
 
 	_towpos = *_model[1]->docktype(3,0)-*_model[0]->docktype(3,0);	
@@ -155,7 +161,7 @@ entity::entity(const lvector& p,object* m,object* n,const info& v)
 entity::entity(const lvector& p,object* m,const info& v,sint s)
 {
 	_model[1] = 0;
-	_unique = 1;
+	_type = -1;
 	setup(p,m,v);
 	_direction[1].set(FXMON,0,0,FXONE);
 	
@@ -170,7 +176,7 @@ entity::entity(const lvector& p,object* m,const info& v,sint s)
 entity::entity(const lvector& p,object* m,const info& v)
 {
 	_model[1] = 0;
-	_unique = 0;
+	_type = 1;
 	setup(p,m,v);
 }
 
@@ -187,7 +193,7 @@ sint entity::update(sint k,sint j)
 	const bool l = k^last;
 	const sint curr = screen::time();
 
-	checkammo(curr,0);
+	checkammo();
 
 	if(_health==0)
 	{
@@ -276,7 +282,7 @@ sint entity::update() //check, because ammo is in list even though level just st
 	if( (_health>0) && (_position.y>0) && (_position.y+(YRES<<FX)>ymark) ) //check
 	{
 		//_active = 1;
-		checkammo(curr,1);
+		checkammo();
 
 		if(curr>_lastfire)
 		{

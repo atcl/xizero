@@ -49,10 +49,10 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	const fvector p( (x.x+y[3].x), (x.y-y[3].y), (x.z+y[3].z) );
 	//*
 
-	//if requested calcualte reusable intersections
-	static fixed inter[4][2];
+	//if requested calculate reusable intersections
 	static fixed coeff[4];
-	if(r)
+	static fixed inter[8];
+	ifu(r)
 	{
 		const fvector slope0 = n-m;
 		const fvector slope1 = p-m;
@@ -62,14 +62,24 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 		coeff[2] = math::set(fx::div(slope0.y,slope0.x+(slope0.x==0)),slope0.x!=0);
 		coeff[3] = math::set(fx::div(slope1.y,slope1.x+(slope1.x==0)),slope1.x!=0);
 
-		inter[0][0] = m.x - fx::mul(m.y,coeff[0]);
-		inter[0][1] = p.x - fx::mul(p.y,coeff[0]);
-		inter[1][0] = m.x - fx::mul(m.y,coeff[1]);
-		inter[1][1] = n.x - fx::mul(n.y,coeff[1]);
-		inter[2][0] = m.y - fx::mul(m.x,coeff[2]);
-		inter[2][1] = p.y - fx::mul(p.x,coeff[2]);
-		inter[3][0] = m.y - fx::mul(m.x,coeff[3]);
-		inter[3][1] = n.y - fx::mul(n.x,coeff[3]);
+		const fixed mxy0 = m.x - fx::mul(m.y,coeff[0]);
+		const fixed pxy0 = p.x - fx::mul(p.y,coeff[0]);
+		const fixed mxy1 = m.x - fx::mul(m.y,coeff[1]);
+		const fixed nxy1 = n.x - fx::mul(n.y,coeff[1]);
+		const fixed myx2 = m.y - fx::mul(m.x,coeff[2]);
+		const fixed pyx2 = p.y - fx::mul(p.x,coeff[2]);
+		const fixed myx3 = m.y - fx::mul(m.x,coeff[3]);
+		const fixed nyx3 = n.y - fx::mul(n.x,coeff[3]);
+
+
+		inter[0] = math::min(mxy0,pxy0);
+		inter[1] = math::max(mxy0,pxy0);
+		inter[2] = math::min(mxy1,nxy1);
+		inter[3] = math::max(mxy1,nxy1);
+		inter[4] = math::min(myx2,pyx2);
+		inter[5] = math::max(myx2,pyx2);
+		inter[6] = math::min(myx3,nyx3);
+		inter[7] = math::max(myx3,nyx3);
 	}
 	//*
 
@@ -81,10 +91,10 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	//*
 
 	//check overlap
-	return 	(loc0 >= math::min(inter[0][0],inter[0][1])) && (loc0 <= math::max(inter[0][0],inter[0][1]))
-	&&	(loc1 >= math::min(inter[1][0],inter[1][1])) && (loc1 <= math::max(inter[1][0],inter[1][1]))
-	&&	(loc2 >= math::min(inter[2][0],inter[2][1])) && (loc2 <= math::max(inter[2][0],inter[2][1]))
-	&&	(loc3 >= math::min(inter[3][0],inter[3][1])) && (loc3 <= math::max(inter[3][0],inter[3][1]));
+	return 	(loc0 >= inter[0]) && (loc0 <= inter[1])
+	&&	(loc1 >= inter[2]) && (loc1 <= inter[3])
+	&&	(loc2 >= inter[4]) && (loc2 <= inter[5])
+	&&	(loc3 >= inter[6]) && (loc3 <= inter[7]);
 	//*
 }
 

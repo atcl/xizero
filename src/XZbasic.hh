@@ -20,6 +20,10 @@
 
 	#define prefetch(x) __builtin_prefetch(x)
 
+	#define ifl(x) if(__builtin_expect(!!(x),1))
+
+	#define ifu(x) if(__builtin_expect(!!(x),0))
+
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline))
 	#endif
@@ -27,10 +31,14 @@
 	#define pure
 
 	#define prefetch(x)
+
+	#define ifl(x) if(x)
+
+	#define ifu(x) if(x)
 #endif
 
 
-#define guard(x,...) if(x) { return __VA_ARGS__; } //switch(!x) { case 0: return __VA_ARGS__; case 1: ; }
+#define guard(x,...) if(__builtin_expect(!!(x),0)) { return __VA_ARGS__; }
 
 #define VAL(x) #x
 #define STR(x) VAL(x)

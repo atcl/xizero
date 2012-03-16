@@ -76,9 +76,9 @@ const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(fvector(0
 lvector polygon::project(const lvector& p,const fvector& v)
 {
 	lvector r;
-	r.z = fx::l2f(p.z)+v.z;
-	r.x = fx::f2l(fx::mul( PRJX<<FX,fx::div(v.x,r.z))) + p.x;
-	r.y = fx::f2l(fx::mul(-PRJY<<FX,fx::div(v.y,r.z))) + p.y;
+	r.z = v.z + fx::l2f(p.z);
+	r.x = p.x + fx::f2l(fx::mul(PRJX<<FX,fx::div(v.x,r.z)));
+	r.y = p.y - fx::f2l(fx::mul(PRJY<<FX,fx::div(v.y,r.z)));
 	return r;
 }
 
