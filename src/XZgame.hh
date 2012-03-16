@@ -71,7 +71,6 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 		const fixed myx3 = m.y - fx::mul(m.x,coeff[3]);
 		const fixed nyx3 = n.y - fx::mul(n.x,coeff[3]);
 
-
 		inter[0] = math::min(mxy0,pxy0);
 		inter[1] = math::max(mxy0,pxy0);
 		inter[2] = math::min(mxy1,nxy1);
@@ -91,10 +90,7 @@ bool game::collision(const fvector& x,const box& y,const fvector& a,bool r)
 	//*
 
 	//check overlap
-	return 	(loc0 >= inter[0]) && (loc0 <= inter[1])
-	&&	(loc1 >= inter[2]) && (loc1 <= inter[3])
-	&&	(loc2 >= inter[4]) && (loc2 <= inter[5])
-	&&	(loc3 >= inter[6]) && (loc3 <= inter[7]);
+	return (loc0>=inter[0]) && (loc0<=inter[1]) && (loc1>=inter[2]) && (loc1<=inter[3]) && (loc2>=inter[4]) && (loc2<=inter[5]) && (loc3>=inter[6]) && (loc3<=inter[7]); 
 	//*
 }
 
