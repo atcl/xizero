@@ -68,8 +68,8 @@ class polygon
 ///*
 
 ///implementation
-lvector       polygon::lpoint[] = { lvector(), lvector(), lvector() };
-sint          polygon::counter  = 0;
+      lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
+      sint    polygon::counter  = 0;
 const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
 const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(fvector(0,FXTNT,FXONE),fvector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
 

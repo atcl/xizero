@@ -25,8 +25,8 @@ namespace game
 {
 	/*OK*/ pure inline bool onscreen(sint x,sint y);
 	/*OK*/ pure inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d);
-	              bool collision(const fvector& x,const box& y,const fvector& a,bool r=1);
-	              sint angle(const fvector& x,const box& y,const fvector& m);
+	                   bool collision(const fvector& x,const box& y,const fvector& a,bool r=1);
+	                   sint angle(const fvector& x,const box& y,const fvector& m);
 }
 ///*
 

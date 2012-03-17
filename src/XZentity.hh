@@ -115,10 +115,10 @@ void entity::setup(const lvector& p,object* m,const info& v)
 	_lastupdate = _lastfire = screen::time();
 }
 
-void entity::fire(sint i) //fix so all ammo on same z level (project?)
+void entity::fire(sint i)
 {
 	const bool j = (_ammomount[i]->z)||(_type!=0);
-	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,0 },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
+	ammo* cur = new ammo({{_position.x/*+_ammomount[i]->x*/,_position.y/*-_ammomount[i]->y*/,0,0 },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
 	_ammo[(bool)_type].append(cur);
 }
 
@@ -128,10 +128,12 @@ void entity::checkammo()
 	for(sint i=a.first();i<a.length();i+=a.next())
 	{
 		const fvector ca = ((ammo*)a.current())->pos;
+/*alerf(_position.x);
+alerf(_position.y);
+alerf(ca.x);
+alerf(ca.y);*/
 		const sint h = game::collision(_position,_model[0]->boundingbox(),ca,i==0)<<2;
-
 		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); }
-		//a.prefn();
 	}
 }
 
@@ -239,7 +241,7 @@ sint entity::update(sint k,sint j)
 		case SPACE:
 			if(curr>_lastfire)
 			{
-				for(sint i=0;i<_ammomounts;++i) { fire(i); }
+				for(sint i=0;i<1/*_ammomounts*/;++i) { fire(i); }
 				_lastfire = curr+_firerate;
 			}
 		break;
@@ -306,12 +308,12 @@ void entity::display(sint m,bool t)
 		{
 			for(sint i=_ammo[h].first();i<_ammo[h].length();i+=_ammo[h].next())
 			{
-				      fvector* cur = &((ammo*)_ammo[h].current())->pos;
-				const fvector* dir = &((ammo*)_ammo[h].current())->dir;
-				(*cur) -= (*dir) * dir->e;
+				      fvector& cur = ((ammo*)_ammo[h].current())->pos;
+				const fvector& dir = ((ammo*)_ammo[h].current())->dir;
+				cur -= dir * dir.e;
 
-				const sint cx = fx::r2l(cur->x);
-				const sint cy = fx::r2l(cur->y)-m;
+				const sint cx = fx::r2l(cur.x);
+				const sint cy = fx::r2l(cur.y)-m;
 				switch(game::onscreen(cx,cy)<<h)
 				{
 					case 0: delete (ammo*)_ammo[h].delcurrent(); break;
