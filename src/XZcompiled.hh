@@ -19,7 +19,7 @@
 namespace compiled
 {
 	/*OK*/ void ammo(sint x,sint y,uint r,uint c);
-	void tracks(uint x,uint y,uint d,uint c);
+	       void tracks(uint x,uint y,uint d,uint c);
 }
 ///*
 

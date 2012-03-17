@@ -44,14 +44,15 @@ namespace fx
 	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
 	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
 
+	inline pure fixed round(fixed x)  { return ((x + FXHLF)>>FX)<<FX; }
+	inline pure fixed rsq(fixed x)    { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
+	inline pure fixed sqr(fixed x)    { return math::sqr(x)<<(FX>>1); }
+
 	inline pure fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXTA2,math::set(-FXTAU,0,y>(FXTA2+FXTA4)),(y>FXTA4)&&(y<(FXTA2+FXTA4))),x<0); }
 	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXTAU)&&(y<(FXTA2+FXTA4))); }
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
-	inline fixed round(fixed x)       { return ((x + FXHLF)>>FX)<<FX; }
-	inline fixed sqr(fixed x)         { return math::sqr(x)<<(FX>>1); }
-	inline fixed rsq(fixed x)         { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
 	inline fixed sin(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(y,a); } // |a| < 1.74
 	inline fixed cos(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(x,a); } // |a| < 1.74 
 	inline fixed tan(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(div(y,x),a); } // |a| < 1.74 

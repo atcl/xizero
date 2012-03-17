@@ -30,12 +30,12 @@ struct tile
 ///definitions
 namespace gfx
 {
-	/*OK*/ inline void pix(sint x,sint y,uint c) { screen::back[(y*XRES+x)] = c; }	//draw pixel
-	/*OK*/ void line(sint x,sint y,sint a,sint b,uint c,bool k=0); 			//draw line
-	/*OK*/ void rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f=0,bool g=0); 	//draw rectangle
-	/*OK*/ void sprite(const tile& t,sint x,sint y,bool a=0);			//draw sprite
-	/*OK*/ void fsprog(sint p,uint c=RED);						//draw full screen progress bar
-	/*OK*/ tile* save();								//save current screen
+	/*OK*/ inline void  pix(sint x,sint y,uint c) { screen::back[(y*XRES+x)] = c; }		//draw pixel
+	/*OK*/        void  line(sint x,sint y,sint a,sint b,uint c,bool k=0); 			//draw line
+	/*OK*/        void  rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f=0,bool g=0); 	//draw rectangle
+	/*OK*/        void  sprite(const tile& t,sint x,sint y,bool a=0);			//draw sprite
+	/*OK*/        void  fsprog(sint p,uint c=RED);						//draw full screen progress bar
+	/*OK*/        tile* save();								//save current screen
 }
 ///*
 
@@ -153,15 +153,12 @@ void gfx::rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f,bool g)
 	line(x,y,x,b,c); 
 	line(x,b,a,b,c);
 
-	if(f==1)
+	++x;
+	++y;
+	--a;
+	for(sint i=y;i<b&&f==1;++i)
 	{
-		++x;
-		++y;
-		--a;
-		for(sint i=y;i<b;++i)
-		{
-			line(x,i,a,i,d,0);
-		}
+		line(x,i,a,i,d,0);
 	}
 }
 
