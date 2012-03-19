@@ -33,8 +33,7 @@ struct ammo
 class entity
 {
 	private:
-		static const fmatrix rp;
-		static const fmatrix rm;
+		static const fmatrix rot[2];
 		static list _ammo[2];
 		static fixed ymark;
 
@@ -77,8 +76,7 @@ class entity
 ///*
 
 ///implementation
-const fmatrix entity::rp    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }();
-const fmatrix entity::rm    = []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }();
+const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }() };
 list          entity::_ammo[2] = { list(), list() };
 fixed         entity::ymark  = 0;
 sint          entity::ylevel = 0;
@@ -127,7 +125,7 @@ void entity::checkammo()
 	list& a = _ammo[!(bool)_type];
 	for(sint i=a.first();i<a.length();i+=a.next())
 	{
-		const fvector ca = ((ammo*)a.current())->pos;
+		const fvector& ca = ((ammo*)a.current())->pos;
 /*alerf(_position.x);
 alerf(_position.y);
 alerf(ca.x);
@@ -177,6 +175,8 @@ sint entity::update(sint k,sint j)
 	const bool l = k^last;
 	const sint curr = screen::time();
 
+	const bool mat = (_angle>=0&&_angle<=180) || (_angle<=-180&&_angle>=-360);
+
 	//checkammo();
 
 	ifu(_health==0)
@@ -190,17 +190,17 @@ sint entity::update(sint k,sint j)
 	switch(k)
 	{
 		case LEFT:
-			_model[0]->update(rp);
-			_model[1]->update(rp);
-			_direction[0] = rp.transform(_direction[0]);
-			_direction[1] = rp.transform(_direction[1]);
+			_model[0]->update(rot[0]);
+			_model[1]->update(rot[0]);
+			_direction[0] = rot[0].transform(_direction[0]);
+			_direction[1] = rot[0].transform(_direction[1]);
 		break;
 
 		case RIGHT:
-			_model[0]->update(rm);
-			_model[1]->update(rm);
-			_direction[0] = rm.transform(_direction[0]);
-			_direction[1] = rm.transform(_direction[1]);
+			_model[0]->update(rot[1]);
+			_model[1]->update(rot[1]);
+			_direction[0] = rot[1].transform(_direction[0]);
+			_direction[1] = rot[1].transform(_direction[1]);
 		break;
 
 		case UP:
@@ -212,38 +212,26 @@ sint entity::update(sint k,sint j)
 		break;
 
 		case 'A':
-			_model[1]->update(rp);
+			_model[1]->update(rot[0]);
 			_angle+=ROTANG;
-			_direction[1] = rp.transform(_direction[1]);
+			_direction[1] = rot[0].transform(_direction[1]);
 		break;
 
 		case 'D':
-			_model[1]->update(rm);
+			_model[1]->update(rot[1]);
 			_angle-=ROTANG;
-			_direction[1] = rm.transform(_direction[1]);
+			_direction[1] = rot[1].transform(_direction[1]);
 		break;
 
 		case 'W':
-			if( (_angle>=0&&_angle<=180) || (_angle<=-180&&_angle>=-360) )
-			{ 
-				_model[1]->update(rm);
-				_direction[1] = rm.transform(_direction[1]);
-				_angle -= ROTANG;
-			}
-			else
-			{ 
-				_model[1]->update(rp);
-				_direction[1] = rp.transform(_direction[1]);
-				_angle += ROTANG;
-			}
+			_model[1]->update(rot[mat]);
+			_direction[1] = rot[mat].transform(_direction[1]);
+			_angle += math::neg(ROTANG,mat);
 		break;
 
 		case SPACE:
-			if(curr>_lastfire)
-			{
-				for(sint i=0;i<1/*_ammomounts*/;++i) { fire(i); }
-				_lastfire = curr+_firerate;
-			}
+			for(sint i=0;i<1/*_ammomounts*/&&curr>_lastfire;++i) { fire(i); }
+			_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
 		break;
 	}
  
