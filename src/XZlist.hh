@@ -6,7 +6,7 @@
 ///guard
 #ifndef HH_XZLIST
 #define HH_XZLIST
-//#pragma message "Compiling " __FILE__ "..." " TODO: ."
+//#pragma message "Compiling " __FILE__ "..." " TODO: shared_ptr for list members?"
 ///*
 
 ///includes

@@ -125,12 +125,7 @@ void entity::checkammo()
 	list& a = _ammo[!(bool)_type];
 	for(sint i=a.first();i<a.length();i+=a.next())
 	{
-		const fvector& ca = ((ammo*)a.current())->pos;
-/*alerf(_position.x);
-alerf(_position.y);
-alerf(ca.x);
-alerf(ca.y);*/
-		const sint h = game::collision(_position,_model[0]->boundingbox(),ca,i==0)<<2;
+		const sint h = game::collision(_position,_model[0]->bounding(),((ammo*)a.current())->pos)<<2;
 		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); }
 	}
 }
@@ -213,34 +208,37 @@ sint entity::update(sint k,sint j)
 
 		case 'A':
 			_model[1]->update(rot[0]);
-			_angle+=ROTANG;
+			_angle += ROTANG;
 			_direction[1] = rot[0].transform(_direction[1]);
 		break;
 
 		case 'D':
 			_model[1]->update(rot[1]);
-			_angle-=ROTANG;
+			_angle -= ROTANG;
 			_direction[1] = rot[1].transform(_direction[1]);
 		break;
 
 		case 'W':
 			_model[1]->update(rot[mat]);
-			_direction[1] = rot[mat].transform(_direction[1]);
 			_angle += math::neg(ROTANG,mat);
+			_direction[1] = rot[mat].transform(_direction[1]);
 		break;
 
 		case SPACE:
-			for(sint i=0;i<1/*_ammomounts*/&&curr>_lastfire;++i) { fire(i); }
+			for(sint i=0;i<_ammomounts&&curr>_lastfire;++i) { fire(i); }
 			_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
 		break;
 	}
  
 	_angle -= math::set(360,_angle>=360);
 
-	const bool t = 1; //(temp.x<=0||temp.x>=XRES)||(temp.y<=0||temp.y>=m)
-	_position.x -= math::set(fx::mul(_direction[0].x,_direction[0].e),t);
-	_position.y += math::set(fx::mul(_direction[0].y,_direction[0].e),t);
-	_position.z += math::set(fx::mul(_direction[0].z,_direction[0].e),t);
+	const fvector tp(_position.x - fx::mul(_direction[0].x,_direction[0].e),_position.y + fx::mul(_direction[0].y,_direction[0].e),_position.z + fx::mul(_direction[0].z,_direction[0].e));
+	//terrain collision here
+	const bool t = (tp.x>=0)&&(tp.x<=(XRES<<FX));//||(ty<=0||temp.y>=m);
+	_position.x = math::set(tp.x,_position.x,t);
+	_position.y = math::set(tp.y,_position.y,t);
+	_position.z = math::set(tp.z,_position.z,t); 
+
 	ymark  = _position.y;
 	ylevel = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y,_position.z))); //PRJY from polygon
 
@@ -264,11 +262,8 @@ sint entity::update()
 	{
 		checkammo();
 
-		if(curr>_lastfire)
-		{
-			for(sint i=0;i<_ammomounts;++i) { fire(i); }
-			_lastfire = curr+_firerate;
-		}
+		for(sint i=0;i<_ammomounts&&curr>_lastfire;++i) { fire(i); }
+		_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
 
 		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
 		_position.y += fx::mul(_direction[0].y,_direction[0].e);
@@ -294,34 +289,24 @@ void entity::display(sint m,bool t)
 		_model[1]->display(p+_towpos,r);
 		for(sint h=0;h<2&&r!=R_B;++h)
 		{
-			for(sint i=_ammo[h].first();i<_ammo[h].length();i+=_ammo[h].next())
+			list& a = _ammo[h];
+			for(sint i=a.first();i<a.length();i+=a.next())
 			{
-				      fvector& cur = ((ammo*)_ammo[h].current())->pos;
-				const fvector& dir = ((ammo*)_ammo[h].current())->dir;
+				      fvector& cur = ((ammo*)a.current())->pos;
+				const fvector& dir = ((ammo*)a.current())->dir;
 				cur -= dir * dir.e;
 
 				const sint cx = fx::r2l(cur.x);
 				const sint cy = fx::r2l(cur.y)-m;
 				switch(game::onscreen(cx,cy)<<h)
 				{
-					case 0: delete (ammo*)_ammo[h].delcurrent(); break;
+					case 0: delete (ammo*)a.delcurrent(); break;
 					case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;
 					case 2: compiled::ammo(cx,cy,GREEN,ORANGE); break;
 				}
 			}
 		}
 	}
-
-	//temp: draw 2d bounding box
-	const lvector b0 = polygon::project(p,_model[0]->boundingbox()[0]);
-	const lvector b1 = polygon::project(p,_model[0]->boundingbox()[1]);
-	const lvector b2 = polygon::project(p,_model[0]->boundingbox()[2]);
-	const lvector b3 = polygon::project(p,_model[0]->boundingbox()[3]);
-	gfx::line(b0.x,b0.y,b1.x,b1.y,GREEN);
-	gfx::line(b1.x,b1.y,b2.x,b2.y,GREEN);
-	gfx::line(b2.x,b2.y,b3.x,b3.y,GREEN);
-	gfx::line(b3.x,b3.y,b0.x,b0.y,GREEN);
-	//*
 }
 
 void entity::resume()

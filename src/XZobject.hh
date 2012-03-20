@@ -18,17 +18,13 @@
 #include "XZsystem.hh"
 ///*
 
-///declarations
-typedef fvector box[4];
-///*
-
 ///definition 
 class object
 {
 	private:
 		polygon** poly;
 		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
-		box       bbox;
+		fvector   bound;
 		sint      polys;
 		sint      docks;
 		uint      scolor;	//Shadow Color
@@ -42,7 +38,7 @@ class object
 		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
 		/*OK*/ void   pull(fixed x);
-		/*OK*/ inline box& boundingbox() { return bbox; }
+		/*OK*/ inline fvector bounding() { return bound; }
 
 		static fmatrix linear;
 };
@@ -51,7 +47,7 @@ class object
 ///implementation
 fmatrix object::linear = fmatrix();
 
-object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
+object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
 {
 	char** t = format::csv(o);
 	sint i = 0;
@@ -63,6 +59,8 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 	docks = string::str2int(t[i++]);
 	poly  = new polygon*[polys];
 	if(docks!=0) { dock = new fvector[docks]; }
+
+	fvector bbox[2];
 
 	if(string::find(t[i++],"objt")==-1) { system::say("y3d format wrong (objt)",1); system::bye(-1); }
 
@@ -104,18 +102,18 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 			bbox[0].x = math::min(bbox[0].x,fx::l2f(math::min(x[0].x,math::min(x[1].x,x[2].x))));
 			bbox[0].y = math::min(bbox[0].y,fx::l2f(math::min(x[0].y,math::min(x[1].y,x[2].y))));
 			bbox[0].z = math::min(bbox[0].z,fx::l2f(math::min(x[0].z,math::min(x[1].z,x[2].z))));
-			bbox[2].x = math::max(bbox[2].x,fx::l2f(math::max(x[0].x,math::max(x[1].x,x[2].x))));
-			bbox[2].y = math::max(bbox[2].y,fx::l2f(math::max(x[0].y,math::max(x[1].y,x[2].y))));
-			bbox[2].z = math::max(bbox[2].z,fx::l2f(math::max(x[0].z,math::max(x[1].z,x[2].z))));
+			bbox[1].x = math::max(bbox[1].x,fx::l2f(math::max(x[0].x,math::max(x[1].x,x[2].x))));
+			bbox[1].y = math::max(bbox[1].y,fx::l2f(math::max(x[0].y,math::max(x[1].y,x[2].y))));
+			bbox[1].z = math::max(bbox[1].z,fx::l2f(math::max(x[0].z,math::max(x[1].z,x[2].z))));
 
 			if(verts==4)
 			{
 				bbox[0].x = math::min(bbox[0].x,fx::l2f(x[3].x));
 				bbox[0].y = math::min(bbox[0].y,fx::l2f(x[3].y));
 				bbox[0].z = math::min(bbox[0].z,fx::l2f(x[3].z));
-				bbox[2].x = math::max(bbox[2].x,fx::l2f(x[3].x));
-				bbox[2].y = math::max(bbox[2].y,fx::l2f(x[3].y));
-				bbox[2].z = math::max(bbox[2].z,fx::l2f(x[3].z));
+				bbox[1].x = math::max(bbox[1].x,fx::l2f(x[3].x));
+				bbox[1].y = math::max(bbox[1].y,fx::l2f(x[3].y));
+				bbox[1].z = math::max(bbox[1].z,fx::l2f(x[3].z));
 			
 				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor);
 			}
@@ -130,15 +128,14 @@ object::object(const char* o) : poly(0),dock(0),polys(0),docks(0)
 		}
 	}
 
-	bbox[0].z = (bbox[0].z + bbox[1].z)>>1;
-	bbox[1].set(bbox[2].x,bbox[0].y,bbox[0].z);
-	bbox[2].z = bbox[0].z;
-	bbox[3].set(bbox[0].x,bbox[2].y,bbox[0].z);
+	const fixed mx = math::min(bbox[0].x,bbox[1].x);
+	const fixed my = math::min(bbox[0].y,bbox[1].y);
+	bound.x = fx::sqr(fx::mul(mx,mx)+fx::mul(my,my));
 
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),polys(x<<1),docks(0),scolor(0)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),bound(0,0,0,0),polys(x<<1),docks(0),scolor(0)
 {
 	for(sint i=0;i<x;++i)
 	{
@@ -176,7 +173,7 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 	}
 }
 
-object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks),scolor(o.scolor)
+object::object(const object& o) : poly(0),dock(0),bound(o.bound),polys(o.polys),docks(o.docks),scolor(o.scolor)
 {
 	poly  = new polygon*[polys];
 	if(docks!=0) { dock = new fvector[docks]; }
@@ -189,10 +186,7 @@ object::object(const object& o) : poly(0),dock(0),polys(o.polys),docks(o.docks),
 	{
 		dock[i] = o.dock[i];
 	}
-	bbox[0] = o.bbox[0];
-	bbox[1] = o.bbox[1];
-	bbox[2] = o.bbox[2];
-	bbox[3] = o.bbox[3];
+
 }
 
 object::~object()
@@ -212,10 +206,7 @@ void object::update(const fmatrix& m)
 	{
 		dock[i] = m.transform(dock[i]);
 	}
-	bbox[0] = m.transform(bbox[0]);
-	bbox[1] = m.transform(bbox[1]);
-	bbox[2] = m.transform(bbox[2]);
-	bbox[3] = m.transform(bbox[3]);
+	//transform bounding ellipsoid here later
 }
 
 void object::display(const lvector& p,sint f) const
