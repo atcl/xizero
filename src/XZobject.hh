@@ -128,9 +128,10 @@ object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
 		}
 	}
 
-	const fixed mx = math::min(bbox[0].x,bbox[1].x);
-	const fixed my = math::min(bbox[0].y,bbox[1].y);
-	bound.x = fx::sqr(fx::mul(mx,mx)+fx::mul(my,my));
+	const fixed a = (bbox[1].x-bbox[0].x)<<1;
+	const fixed b = (bbox[1].y-bbox[0].y)<<1;
+	const fixed c = fx::sqr(fx::mul(a,a)+fx::mul(b,b));
+	bound.x = fx::div(fx::mul(a,b),a+b+c);
 
 	delete t;
 }
