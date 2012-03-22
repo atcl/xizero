@@ -8,11 +8,11 @@
 ///*
 
 ///declarations
-#define LEVELS 2 
+#define LEVELS 1 
 ///*
 
 ///definition
-void init();
+inline void init();
 sint start(sint i);
 sint start();
 inline sint close();
@@ -24,6 +24,7 @@ void intro();
 void mainmenu();
 void won();
 void lost();
+void over();
 void bench();
 ///*
 
@@ -62,6 +63,7 @@ sint start()
 	{
 		start(i);
 	}
+	over();
 }
 
 sint close()
@@ -224,6 +226,13 @@ void lost()
 	screen::run();
 	screen::sleep(3000);
 	trans::dissolve();
+}
+
+void over()
+{
+	font::draw(40,40,"Thanks for playing.",WHITE,TRANS);
+	screen::run();
+	screen::sleep(3000);
 }
 
 void bench()

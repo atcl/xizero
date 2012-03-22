@@ -128,6 +128,7 @@ object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
 		}
 	}
 
+	//todo: fix to proper incircle for bounding rect radius
 	const fixed a = (bbox[1].x-bbox[0].x)<<1;
 	const fixed b = (bbox[1].y-bbox[0].y)<<1;
 	const fixed c = fx::sqr(fx::mul(a,a)+fx::mul(b,b));

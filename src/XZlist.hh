@@ -6,10 +6,11 @@
 ///guard
 #ifndef HH_XZLIST
 #define HH_XZLIST
-//#pragma message "Compiling " __FILE__ "..." " TODO: shared_ptr for list members?"
+//#pragma message "Compiling " __FILE__ "..." " TODO: "
 ///*
 
 ///includes
+//#include <memory>
 #include "XZbasic.hh"
 ///*
 
@@ -20,19 +21,19 @@ class list
 		struct member
 		{
 			void*   data;
-			member* next;
-			member* prev;
+			member* /*std::shared_ptr<member>*/ next;
+			member* /*std::shared_ptr<member>*/ prev;
 			sint    hash;
 		};
-		member* _cur;
-		member* _fir;
-		member* _las;
+		member* /*std::shared_ptr<member>*/ _cur;
+		member* /*std::shared_ptr<member>*/ _fir;
+		member* /*std::shared_ptr<member>*/ _las;
 		uint    _len;
 	public:
 		inline list() : _cur(0),_fir(0),_las(0),_len(0) { ; }
-		inline ~list() { /*delete cur,fir,las)*/; }
-		inline bool islast() const { return _cur==_las; }
-		inline bool isfirst() const { return _cur==_fir; }
+		inline ~list() { ; }
+		inline bool notlast() const { return _cur!=_las; }
+		inline bool notfirst() const { return _cur!=_fir; }
 		inline sint length() const { return _len; }
 		inline sint first() { _cur = _fir; return 0; }
 		inline sint last() { _cur = _las; return _len; }
@@ -54,13 +55,13 @@ void* list::delcurrent()
 	guard(_len==0,0);
 	//*
 
-	void* c = _cur;
+	void* c = _cur->data;
 
 	//catch special cases
 	switch( (_cur==_fir) - (_cur==_las) + ((_cur!=_las && _cur!=_fir && _las!=_fir)<<1) )
 	{
-		case -1: //del last 
-			prev();
+		case -1: //del last
+			_cur = _cur->prev;
 			_cur->next = _las = _cur;
 		break;
 
@@ -69,17 +70,14 @@ void* list::delcurrent()
 		break;
 
 		case 1: //del first
-			next();
+			_cur = _cur->next;
 			_cur->prev = _fir = _cur;
 		break;
 
 		default: //del middle 
-			member* tempnext = _cur->next;
-			member* tempprev = _cur->prev;
-			next();
-			_cur->prev = tempprev;
-			prev();
-			_cur->next = tempnext;
+			_cur->next->prev = _cur->prev;
+			_cur->prev->next = _cur->next;
+			_cur = _cur->prev;
 		break;
 	}
 	//*
@@ -96,8 +94,8 @@ void list::append(void* x,sint h)
 	//very first member
 	if(_len==0)
 	{
-		_cur = new member;
-		_cur->next = _cur->prev = _las = _fir = _cur;
+		_cur = _las = _fir = /*std::shared_ptr<member>*/(new member);
+		_cur->next = _cur->prev = _cur;
 		_cur->data = x;
 		_cur->hash = h;
 	}
@@ -106,13 +104,13 @@ void list::append(void* x,sint h)
 	//default append
 	else
 	{
-		last();
-		_las = _cur->next = new member;
-		_cur->next->data = x;
-		_cur->next->hash = h;
-		_cur->next->prev = _cur;
-		_cur->next->next = _cur->next;
-		_cur = _cur->next;
+		_cur = _las;
+		_las = _cur->next = /*std::shared_ptr<member>*/(new member);
+		_las->next = _las;
+		_las->prev = _cur;
+		_las->data = x;
+		_las->hash = h;
+		_cur = _las;
 	}
 	//*
 
@@ -129,7 +127,7 @@ void list::exchangesort(bool u) //use swap
 		{
 			if( (_cur->hash<_cur->next->hash&&u) || (_cur->hash>_cur->next->hash&&!u) )
 			{
-				member* temp = _cur->next;
+				member* /*std::shared_ptr<member>*/ temp = _cur->next;
 					
 				_cur->next = temp->next;
 				temp->next = _cur;

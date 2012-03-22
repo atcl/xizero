@@ -74,6 +74,7 @@ tile* format::xpm(const char** x)
 	sint   index = 0;
 	char** line  = string::split(x[index++],' ');
 
+
 	guard(string::str2int(line[3])!=1,0);
 
 	const sint width  = string::str2int(line[0]);

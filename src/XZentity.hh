@@ -172,7 +172,7 @@ sint entity::update(sint k,sint j)
 
 	const bool mat = (_angle>=0&&_angle<=180) || (_angle<=-180&&_angle>=-360);
 
-	checkammo();
+	//checkammo();
 
 	ifu(_health==0)
 	{
@@ -290,7 +290,7 @@ void entity::display(sint m,bool t)
 		for(sint h=0;h<2&&r!=R_B;++h)
 		{
 			list& a = _ammo[h];
-			for(sint i=a.first();i<a.length();i+=a.next())
+			for(a.first();a.notlast();a.next())
 			{
 				      fvector& cur = ((ammo*)a.current())->pos;
 				const fvector& dir = ((ammo*)a.current())->dir;
