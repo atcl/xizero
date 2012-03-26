@@ -11,7 +11,7 @@
 		</sources>
 		<libs>
 			<lib>GL</lib>
-			<lib>glfw</lib>
+			<lib>glfw</lib><!--freeglut-->
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>

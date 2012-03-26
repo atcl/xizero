@@ -33,12 +33,12 @@ class list
 		inline ~list() { delete fir; delete las; }
 		inline bool notlast() const { return cur!=las; }
 		inline bool notfirst() const { return cur!=fir; }
-		inline sint length() const { return len; }
+		inline uint length() const { return len; }
 		inline void first() { cur = fir->next; }
 		inline void last() { cur = las->prev; }
 		inline void prev() { cur = cur->prev; /*prefetch(cur->prev);*/ }
 		inline void next() { cur = cur->next; /*prefetch(cur->next);*/ }
-		inline void clear() { cur = fir = las = 0; len = 0; }
+		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
 		inline void* current() const { guard(len==0,0); return cur->data; }
 		       void* delcurrent();
 		       void append(void* x,sint h=0);
