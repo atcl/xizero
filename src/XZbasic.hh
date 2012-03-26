@@ -35,8 +35,7 @@
 	#define ifl(x) if(x)
 
 	#define ifu(x) if(x)
-#endif
-
+#endif 
 
 #define guard(x,...) if(__builtin_expect(!!(x),0)) { return __VA_ARGS__; }
 

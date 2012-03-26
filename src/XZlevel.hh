@@ -216,7 +216,7 @@ level::~level()
 
 sint level::update(sint k,sint j)
 {
-	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
+	for(enemies.first();enemies.notlast();enemies.next())
 	{
 		((entity*)enemies.current())->update();
 	}
@@ -248,13 +248,13 @@ void level::display()
 	//*
 
 	//render shadows
-	for(sint i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
+	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
 	boss->display(mark,1);
 	player->display(mark,1);
 	//*
 
 	//render entities
-	for(sint i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->display(mark,0); }
+	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->display(mark,0); }
 	boss->display(mark,0);
 	player->display(mark,0);
 	//*
@@ -263,7 +263,7 @@ void level::display()
 void level::gauges()
 {
 	//render gui elements
-	for(sint i=enemies.first();i<enemies.length();i+=enemies.next())
+	for(enemies.first();enemies.notlast();enemies.next())
 	{
 		const lvector e(((entity*)enemies.current())->data(mark));
 		ep->visible = (game::onscreen(e.x,e.y));
@@ -289,7 +289,7 @@ void level::gauges()
 void level::resume()
 {
 	//resume all entities
-	for(sint i=enemies.first();i<enemies.length();i+=enemies.next()) { ((entity*)enemies.current())->resume(); }
+	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->resume(); }
 	boss->resume();
 	player->resume();
 	//*

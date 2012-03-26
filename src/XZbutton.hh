@@ -74,8 +74,7 @@ void button::draw() const
 
 sint button::check(sint x,sint y,sint b)
 {
-	const sint e = math::neg(bl.length(),b==0);
-	for(sint i=bl.first();i<e;i+=bl.next())
+	for(bl.first();b&&bl.notlast();bl.next())
 	{
 		const button* temp = (button*)bl.current();
 		if( (temp->visible!=0) && (temp->active!=0) && (game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) ) 
@@ -88,7 +87,7 @@ sint button::check(sint x,sint y,sint b)
 
 void button::all(bool b)
 {
-	for(sint i=bl.first();i<bl.length();i+=bl.next())
+	for(bl.first();bl.notlast();bl.next())
 	{
 		((button*)bl.current())->active = b;
 	}

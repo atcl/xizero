@@ -123,7 +123,7 @@ void entity::fire(sint i)
 void entity::checkammo()
 {
 	list& a = _ammo[!(bool)_type];
-	for(sint i=a.first();i<a.length();i+=a.next())
+	for(a.first();a.notlast();a.next())
 	{
 		const sint h = game::collision(_position,_model[0]->bounding(),((ammo*)a.current())->pos)<<2;
 		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); }
