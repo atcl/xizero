@@ -40,7 +40,7 @@ void trans::circleblend(sint x,sint y,sint r)
 		}
 	}
 	screen::run();
-	screen::sleep(3000);
+	screen::sleep(1000);
 }
 
 void trans::dissolve()
