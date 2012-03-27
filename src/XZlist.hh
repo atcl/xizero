@@ -39,51 +39,24 @@ class list
 		inline void prev() { cur = cur->prev; /*prefetch(cur->prev);*/ }
 		inline void next() { cur = cur->next; /*prefetch(cur->next);*/ }
 		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
-		inline void* current() const { guard(len==0,0); return cur->data; }
+		inline void* current() const { return cur->data; }
 		       void* delcurrent();
 		       void append(void* x,sint h=0);
 		       bool find(void* x);
-		       void exchangesort(bool u);
+		       void xsort(bool u);
 };
 ///*
 
 ///implementation
 void* list::delcurrent()
 {
-	//return if list is empty
 	guard(len==0,0);
-	//*
 
 	void* c = cur->data;
-
-	//catch special cases
-	switch( (cur==fir) - (cur==las) + ((cur!=las && cur!=fir && las!=fir)<<1) )
-	{
-		case -1: //del last
-			las->prev = cur->prev;
-			las->prev->next = las;
-		break;
-
-		case 0: //del single
-			cur = fir = las = 0;
-		break;
-
-		case 1: //del first
-			fir->next = cur->next;
-			fir->next->prev = fir;
-		break;
-
-		default: //del middle 
-			cur->next->prev = cur->prev;
-			cur->prev->next = cur->next;
-			cur = cur->prev;
-		break;
-	}
-	//*
-
-	//adjust length
+	cur->next->prev = cur->prev;
+	cur->prev->next = cur->next;
+	cur = cur->prev;
 	--len;
-	//*
 
 	return c;
 }
@@ -109,7 +82,7 @@ bool list::find(void* x) //test
 	return r;
 }
 
-void list::exchangesort(bool u) //use swap
+void list::xsort(bool u) //use swap
 {
 	for(uint i=1;i<len;++i)
 	{
