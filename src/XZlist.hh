@@ -50,13 +50,12 @@ class list
 ///implementation
 void* list::delcurrent()
 {
-	guard(len==0,0);
-
 	void* c = cur->data;
 	cur->next->prev = cur->prev;
 	cur->prev->next = cur->next;
+	//if(len!=0) { delete cur; }
 	cur = cur->prev;
-	--len;
+	len-=(len!=0);
 
 	return c;
 }
@@ -64,13 +63,10 @@ void* list::delcurrent()
 void list::append(void* x,sint h)
 {
 	las->prev = las->prev->next = cur = new member{x,las,las->prev,h};
-
-	//adjust length
 	++len;
-	//*
 }
 
-bool list::find(void* x) //test
+bool list::find(void* x)
 {
 	bool r = 0;
 

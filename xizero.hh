@@ -22,7 +22,7 @@ inline sint leave();
 void menu();
 void intro();
 void mainmenu();
-void won();
+void won(const lvector& p);
 void lost();
 void over();
 void bench();
@@ -46,7 +46,7 @@ sint start(sint i)
 		switch(l.update(screen::turbo(),screen::joy()))
 		{
 			case -1: lost(); return 0;
-			case 1:  won();  return 0;
+			case 1:  won(l.ppos());  return 0;
 		}
 		l.display();
 		//screen::back.fsaamb(screen::accum);
@@ -210,9 +210,9 @@ void mainmenu()
 	//*
 }
 
-void won()
+void won(const lvector& p)
 {
-	//trans::circleblend();
+	trans::circleblend(p.x,p.y,60);
 	font::draw(40,40,"You won.",WHITE,TRANS);
 	screen::run();
 	screen::sleep(3000);

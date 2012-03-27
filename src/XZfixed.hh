@@ -49,7 +49,7 @@ namespace fx
 	inline pure fixed sqr(fixed x)    { return math::sqr(x)<<(FX>>1); }
 
 	inline pure fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXTA2,math::set(-FXTAU,0,y>(FXTA2+FXTA4)),(y>FXTA4)&&(y<(FXTA2+FXTA4))),x<0); }
-	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXTAU)&&(y<(FXTA2+FXTA4))); }
+	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXTA4)&&(y<(FXTA2+FXTA4))); }
 
 	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 

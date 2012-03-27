@@ -27,15 +27,16 @@ namespace trans
 ///*
 
 ///implementation
-void trans::circleblend(sint x,sint y,sint r) //fix
+void trans::circleblend(sint x,sint y,sint r)
 {
 	for(uint i=0;i<YRES;++i)
 	{
-		const sint q  = (i - y)*(i - y);
+		const sint p  = (i - y)*(i - y);
 
 		for(uint j=0;j<XRES;++j)
 		{
-			if(math::sqr(q)<=r) { screen::back[i*XRES+j] = BLACK; }
+			const sint q  = (j - x)*(j - x);
+			screen::back[i*XRES+j] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(p+q)<=r);
 		}
 	}
 	screen::run();
