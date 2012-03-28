@@ -142,8 +142,25 @@ void intro()
 
 	//animate in phases
 	const sint last = screen::time();
-	while(screen::run() && screen::time()<last+4000 && screen::key()!=ESCAPE)
+	      sint curr = last;
+	while(screen::run() && curr<last+4000 && screen::key()!=ESCAPE)
 	{
+		object::linear.clear();
+		curr = screen::time();
+		switch( (curr-last)/500 )
+		{
+			case 1: case 2: object::linear.translate(0,fx::l2f(-3),0); break;
+
+			case 3: case 4: object::linear.rotatex(-FXTWO-FXTNT-FXTNT-FXTNT); break;
+
+			case 5: case 6: object::linear.translate(0,0,fx::l2f(-3)); break;
+		}
+
+		c.update();
+		b[0].update();
+		b[1].update();
+		b[2].update();
+		b[3].update();
 		screen::back.clear(BLACK);
 		screen::depth.clear(fx::l2f(400));
 		c.display(p,R_F|R_Z);
@@ -151,6 +168,8 @@ void intro()
 		b[1].display(p,R_F|R_Z);
 		b[2].display(p,R_F|R_Z);
 		b[3].display(p,R_F|R_Z);
+
+		screen::sleep(10);
 	}
 
 	//*
