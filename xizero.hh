@@ -143,17 +143,19 @@ void intro()
 	//animate in phases
 	const sint last = screen::time();
 	      sint curr = last;
+	      sint prog = 0;
 	while(screen::run() && curr<last+4000 && screen::key()!=ESCAPE)
 	{
-		object::linear.clear();
 		curr = screen::time();
-		switch( (curr-last)/500 )
+		object::linear.clear();
+		const sint diff = curr-last;
+		switch( diff/500 )
 		{
-			case 1: case 2: object::linear.translate(0,fx::l2f(-3),0); break;
+			case 1: case 2: object::linear.translate(0,fx::mul(fx::l2f(25),prog),0); break;
 
-			case 3: case 4: object::linear.rotatex(-FXTWO-FXTNT-FXTNT-FXTNT); break;
+			case 3: case 4: object::linear.rotatex(fx::mul(fx::l2f(19),prog)); break;
 
-			case 5: case 6: object::linear.translate(0,0,fx::l2f(-3)); break;
+			case 5: case 6: object::linear.translate(0,0,fx::mul(fx::l2f(35),prog)); break;
 		}
 
 		c.update();
@@ -168,8 +170,7 @@ void intro()
 		b[1].display(p,R_F|R_Z);
 		b[2].display(p,R_F|R_Z);
 		b[3].display(p,R_F|R_Z);
-
-		screen::sleep(10);
+		prog = fx::mul(fx::l2f(curr-screen::time()),FXHUN);
 	}
 
 	//*
