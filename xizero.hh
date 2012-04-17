@@ -250,7 +250,7 @@ void lost()
 
 void over()
 {
-	font::draw(40,40,"Thanks for playing.",WHITE,TRANS);
+	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
 	screen::run();
 	screen::sleep(3000);
 }

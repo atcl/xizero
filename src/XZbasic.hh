@@ -108,10 +108,10 @@ union packed
 
 //global new + delete overloading
 /*#include <malloc.h>
-void* operator new(uint s)   { return memalign(16,s); }
-void* operator new[](uint s) { return memalign(16,s); }
-void  operator delete(void *p)   { free(p); }
-void  operator delete[](void *p) { free(p); }*/
+inline void* operator new(uint s)   { return memalign(16,s); }
+inline void* operator new[](uint s) { return memalign(16,s); }
+inline void  operator delete(void *p)   { free(p); }
+inline void  operator delete[](void *p) { free(p); }*/
 //*
 
 ///*
