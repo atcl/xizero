@@ -27,6 +27,7 @@ struct lvector
 	sint z;
 	sint e;
 	inline lvector(sint a=0,sint b=0,sint c=0,sint d=1) : x(a),y(b),z(c),e(d) { ; }
+	//inline lvector(lvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline lvector  operator+(const lvector& a) const { return lvector(x+a.x,y+a.y,z+a.z); }
 	inline lvector  operator-(const lvector& a) const { return lvector(x-a.x,y-a.y,z-a.z); }
 	inline lvector  operator*(sint a) const { return lvector(x*a,y*a,z*a); }
@@ -51,6 +52,7 @@ struct fvector
 	fixed z;
 	fixed e;
 	inline fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
+	//inline fvector(fvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline fvector  operator+(const fvector& a) const { return fvector(x+a.x,y+a.y,z+a.z); }
 	inline fvector  operator-(const fvector& a) const { return fvector(x-a.x,y-a.y,z-a.z); }
 	inline fvector  operator*(fixed a) const { return fvector(fx::mul(x,a),fx::mul(y,a),fx::mul(z,a)); }
