@@ -39,9 +39,9 @@ class list
 		inline void prev() { cur = cur->prev; /*prefetch(cur->prev);*/ }
 		inline void next() { cur = cur->next; /*prefetch(cur->next);*/ }
 		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
+		inline void append(void* x,sint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
 		inline void* current() const { return cur->data; }
 		       void* delcurrent();
-		       void append(void* x,sint h=0);
 		       bool find(void* x);
 		       void xsort(bool u);
 };
@@ -58,12 +58,6 @@ void* list::delcurrent()
 	len-=(len!=0);
 
 	return c;
-}
-
-void list::append(void* x,sint h)
-{
-	las->prev = las->prev->next = cur = new member{x,las,las->prev,h};
-	++len;
 }
 
 bool list::find(void* x)

@@ -24,7 +24,7 @@ class object
 	private:
 		polygon** poly;
 		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
-		fvector   bound;
+		fixed     bound;
 		sint      polys;
 		sint      docks;
 		uint      scolor;	//Shadow Color
@@ -38,7 +38,7 @@ class object
 		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
 		/*OK*/ void   pull(fixed x);
-		/*OK*/ inline fvector bounding() { return bound; }
+		/*OK*/ inline fixed bounding() const { return bound; }
 
 		static fmatrix linear;
 };
@@ -47,7 +47,7 @@ class object
 ///implementation
 fmatrix object::linear = fmatrix();
 
-object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
+object::object(const char* o) : poly(0),dock(0),bound(0),polys(0),docks(0)
 {
 	char** t = format::csv(o);
 	sint i = 0;
@@ -60,7 +60,7 @@ object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
 	poly  = new polygon*[polys];
 	if(docks!=0) { dock = new fvector[docks]; }
 
-	fvector bbox[2];
+	lvector bbox[2];
 
 	if(string::find(t[i++],"objt")==-1) { system::say("y3d format wrong (objt)",1); system::bye(-1); }
 
@@ -99,21 +99,21 @@ object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
 
 			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor);
 
-			bbox[0].x = math::min(bbox[0].x,fx::l2f(math::min(x[0].x,math::min(x[1].x,x[2].x))));
-			bbox[0].y = math::min(bbox[0].y,fx::l2f(math::min(x[0].y,math::min(x[1].y,x[2].y))));
-			bbox[0].z = math::min(bbox[0].z,fx::l2f(math::min(x[0].z,math::min(x[1].z,x[2].z))));
-			bbox[1].x = math::max(bbox[1].x,fx::l2f(math::max(x[0].x,math::max(x[1].x,x[2].x))));
-			bbox[1].y = math::max(bbox[1].y,fx::l2f(math::max(x[0].y,math::max(x[1].y,x[2].y))));
-			bbox[1].z = math::max(bbox[1].z,fx::l2f(math::max(x[0].z,math::max(x[1].z,x[2].z))));
+			bbox[0].x = math::min(bbox[0].x,math::min(x[0].x,math::min(x[1].x,x[2].x)));
+			bbox[0].y = math::min(bbox[0].y,math::min(x[0].y,math::min(x[1].y,x[2].y)));
+			bbox[0].z = math::min(bbox[0].z,math::min(x[0].z,math::min(x[1].z,x[2].z)));
+			bbox[1].x = math::max(bbox[1].x,math::max(x[0].x,math::max(x[1].x,x[2].x)));
+			bbox[1].y = math::max(bbox[1].y,math::max(x[0].y,math::max(x[1].y,x[2].y)));
+			bbox[1].z = math::max(bbox[1].z,math::max(x[0].z,math::max(x[1].z,x[2].z)));
 
 			if(verts==4)
 			{
-				bbox[0].x = math::min(bbox[0].x,fx::l2f(x[3].x));
-				bbox[0].y = math::min(bbox[0].y,fx::l2f(x[3].y));
-				bbox[0].z = math::min(bbox[0].z,fx::l2f(x[3].z));
-				bbox[1].x = math::max(bbox[1].x,fx::l2f(x[3].x));
-				bbox[1].y = math::max(bbox[1].y,fx::l2f(x[3].y));
-				bbox[1].z = math::max(bbox[1].z,fx::l2f(x[3].z));
+				bbox[0].x = math::min(bbox[0].x,x[3].x);
+				bbox[0].y = math::min(bbox[0].y,x[3].y);
+				bbox[0].z = math::min(bbox[0].z,x[3].z);
+				bbox[1].x = math::max(bbox[1].x,x[3].x);
+				bbox[1].y = math::max(bbox[1].y,x[3].y);
+				bbox[1].z = math::max(bbox[1].z,x[3].z);
 			
 				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor);
 			}
@@ -129,15 +129,15 @@ object::object(const char* o) : poly(0),dock(0),bound(0,0,0,0),polys(0),docks(0)
 	}
 
 	//todo: fix to proper incircle for bounding rect radius
-	const fixed a = (bbox[1].x-bbox[0].x)<<1;
-	const fixed b = (bbox[1].y-bbox[0].y)<<1;
-	const fixed c = fx::sqr(fx::mul(a,a)+fx::mul(b,b));
-	bound.x = fx::div(fx::mul(a,b),a+b+c);
+	//const sint a = (bbox[1].x-bbox[0].x)<<1;
+	//const sint b = (bbox[1].y-bbox[0].y)<<1;
+	//const fixed c = fx::sqr(fx::mul(a,a)+fx::mul(b,b));
+	bound = 1; //fx::div(fx::mul(a,b),a+b+c);
 
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),bound(0,0,0,0),polys(x<<1),docks(0),scolor(0)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),bound(0),polys(x<<1),docks(0),scolor(0)
 {
 	for(sint i=0;i<x;++i)
 	{

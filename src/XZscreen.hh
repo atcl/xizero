@@ -55,8 +55,8 @@ namespace screen
 	}
 
 	void init(sint x,sint y,const char* t,void* c=0);
-	void close();
 	bool run();
+	void close()       { glfwCloseWindow(); glfwTerminate(); }
 	void wait(sint k)  { while(glfwGetKey(k)!=GLFW_PRESS) { glfwWaitEvents(); } }
 	void sleep(sint t) { glfwSleep(double(t)/1000.0); }
 	sint time()        { return (sint)(1000.0*glfwGetTime()); }
@@ -89,12 +89,6 @@ void screen::init(sint x,sint y,const char* t,void* c)
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,XRES,YRES,0,GL_RGBA,GL_UNSIGNED_BYTE,0);
-}
-
-void screen::close()
-{
-	glfwCloseWindow();
-	glfwTerminate();
 }
 
 bool screen::run()

@@ -35,17 +35,18 @@ int main()
 		drmModeFreeEncoder(encoder);
 	}
 
-	//create framebuffer here
-	//with:
+	uint32_t fb = open("/dev/zero", O_RDWR);
+	void* video = mmap(0,800*600*4,PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
+	
+	stride = 	//todo: compute stride
 
-	handle = 
-	stride = 
-	fb_id = 
-
+	unsigned int fb_id = 0; 
 	uint32_t crtc;
 
-	drmModeAddFB(fd,width,height,24,32,stride,handle,&fb_id);
+	drmModeAddFB(fd,width,height,24,32,stride,fb,&fb_id);
 	drmModeSetCrtc(fd,encoder->crtc_id,fb_id,0,0,connector->connector_id,1,mode);
+
+	//try draw here
 
 	return 0;
 }

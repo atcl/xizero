@@ -84,7 +84,7 @@ sint font::width(char x)
 
 	for(sint j=0;j<h;++j,++s)
 	{
-		r+=(f->data[s]!=BLACK);
+		r += (f->data[s]!=BLACK);
 	}
 	return r;
 }

@@ -16,9 +16,7 @@
 ///definition
 namespace resource
 {
-	//static const char* icon   = STR(#include "dat/xzicon.xpm");
-	//static const char* cursor = STR(#include "dat/xzcurs.xpm");
-	//static const char* font   = STR(#include "dat/xzfont.xpm");
+	//static const char* icon   = #include "dat/xzicon.xpm";
 
 	static const char* icon[] =
 { 
