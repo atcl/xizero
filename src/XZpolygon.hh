@@ -157,10 +157,8 @@ void polygon::raster(bool s,uint c) const
 		{
 			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<screen::depth[off])) )<<1) ) //simplify
 			{
-				case 0:
-					screen::depth[off] = tx;
-				case 1:
-					screen::back[off]  = c;
+				case 0: screen::depth[off] = tx;
+				case 1: screen::back[off]  = c;
 					//screen::back[off]  = (c+screen::back[off])>>1;
 				default: ;
 			}
@@ -168,6 +166,9 @@ void polygon::raster(bool s,uint c) const
 			cx0 -= dy01;
 			cx1 -= dy12;
 			cx2 -= dy20;
+
+			//prefetch(&screen::depth[off+1]);
+			//prefetch(&screen::back[off+1]);
 		}
 
 		cy0 += dx01;

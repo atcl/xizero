@@ -19,15 +19,15 @@
 class light
 {
 	private:
-		sint _radius;
-		sint _color;
-		tile _mask;
+		sint rad;
+		sint col;
+		tile mask;
 
 		sint lambert(sint x,sint y) const;
 		void init(bool i=0);
 	public:
-		light(sint r,sint c) : _radius(r), _color(c) { init(); }
-		~light() { delete _mask.data; }
+		light(sint r,sint c) : rad(r), col(c) { init(); }
+		~light() { delete mask.data; }
 		inline void draw(sint x,sint y) const;
 		inline void color(sint c);
 		inline void radius(sint r);
@@ -37,11 +37,11 @@ class light
 ///implementation
 sint light::lambert(sint x,sint y) const
 {
-	const sint i = _radius*_radius;
+	const sint i = rad*rad;
 	const sint d = (x*x)+(y*y);
 	const fixed l = fixed(-i+d)/fixed(d*(1-i));
 	
-	packed c = { _color };
+	packed c = { col };
 	
 	c.b[1] = math::max(0,fixed(c.b[1])*l);
 	c.b[2] = math::max(0,fixed(c.b[2])*l);
@@ -54,35 +54,35 @@ void light::init(bool i)
 {
 	if(i!=0)
 	{
-		const sint dim = (_radius<<1)+1;
-		_mask.width = _mask.height = dim;
-		delete _mask.data;
-		_mask.data = new sint[dim*dim];
+		const sint dim = (rad<<1)+1;
+		mask.width = mask.height = dim;
+		delete mask.data;
+		mask.data = new sint[dim*dim];
 	}
 
-	for(sint i=0,t=0;i<_mask.width;++i)
+	for(sint i=0,t=0;i<mask.width;++i)
 	{
-		for(sint j=0;j<_mask.width;++j,++t)
+		for(sint j=0;j<mask.width;++j,++t)
 		{
-			_mask.data[t] = lambert(j-_radius,i-_radius);
+			mask.data[t] = lambert(j-rad,i-rad);
 		}
 	}
 }
 
 void light::draw(sint x,sint y) const
 {
-	gfx::sprite(_mask,x-_radius,y-_radius);
+	gfx::sprite(mask,x-rad,y-rad);
 }
 
 void light::color(sint c)
 {
-	_color = c;
+	col = c;
 	init();
 }
 
 void light::radius(sint r)
 {
-	_radius = r;
+	rad = r;
 	init(1);
 }
 ///*
