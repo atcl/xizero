@@ -155,22 +155,18 @@ void polygon::raster(bool s,uint c) const
 
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			switch(sint(s)+(!( (cx0<0) && (cx1<0) && (cx2<0) && ((s!=0)||(tx<screen::depth[off])) )<<1) ) //simplify
+			switch( ( ( (cx0<0) && (cx1<0) && (cx2<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
 			{
-				case 0: screen::depth[off] = tx;
-				case 1: screen::back[off]  = c;
-					//screen::back[off]  = (c+screen::back[off])>>1;
-				default: ;
+				case 1: screen::depth[off] = tx;
+				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;
 			}
 
 			cx0 -= dy01;
 			cx1 -= dy12;
 			cx2 -= dy20;
-
-			//prefetch(&screen::depth[off+1]);
-			//prefetch(&screen::back[off+1]);
 		}
 
+		exit_loop:
 		cy0 += dx01;
 		cy1 += dx12;
 		cy2 += dx20;
