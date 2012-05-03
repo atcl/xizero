@@ -166,7 +166,6 @@ void polygon::raster(bool s,uint c) const
 			cx2 -= dy20;
 		}
 
-		exit_loop:
 		cy0 += dx01;
 		cy1 += dx12;
 		cy2 += dx20;

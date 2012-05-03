@@ -19,9 +19,9 @@
 ///definitions
 namespace dialog
 {
-	sint msgbox(const char* m);
 	inline pure sint ok() { return 1; }
 	//inline pure sint no() { return -1; }
+	            sint msgbox(const char* m);
 }
 ///*
 

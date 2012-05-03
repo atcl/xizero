@@ -5,7 +5,6 @@
 //#include <unistd.h>
 //#include <sys/poll.h>
 //#include <sys/time.h>
-//#include <sys/mman.h>
 //#include <sys/ioctl.h>
 
 #include <cstdlib>
@@ -25,29 +24,31 @@ void flush()
 
 int main()
 {
+	//int fd = drmOpen("i915", NULL);
+	int fd = open("/dev/dri/card0",O_RDWR); // | O_CLOEXEC
+	if(fd<=0) { printf("Could not open card0!\n"); exit(1); }
 
-	int fd = open("/dev/dri/card0",O_RDWR);
-
+	//Get Resource access
 	drmModeRes* resources = drmModeGetResources(fd);
-	drmModeConnector* connector;
-	drmModeEncoder* encoder;
-
 	if(resources==0) { printf("drmModeGetResources failed!\n"); exit(1); }
+	//*
+
+	int i = 0;
 
 	//Seek connector and connect
-	int i = 0;
+	drmModeConnector* connector;
 	for(;i<resources->count_connectors;++i)
 	{
-		connector = drmModeGetConnector(fd,resources->connector[i]);
+		connector = drmModeGetConnector(fd,resources->connectors[i]);
 		if(connector==0) { continue; }
 		if(connector->connection==DRM_MODE_CONNECTED && connector->count_modes>0) { break; }
 		drmModeFreeConnector(connector); 
 	}
-
-	if(i==resources->count_connectors) { printf("No active connector found!\n"); } 
+	if(i==resources->count_connectors) { printf("No active connector found!\n"); exit(1); } 
 	//*
 
 	//Seek encoder and choose
+	drmModeEncoder* encoder;
 	for(i=0;i<resources->count_encoders;++i)
 	{
 		encoder = drmModeGetEncoder(fd,resources->encoders[i]);
@@ -55,7 +56,7 @@ int main()
 		if(encoder->encoder_id=connector->encoder_id) { break; }
 		drmModeFreeEncoder(encoder);
 	}
-
+	if(i==resources->count_encoders) { printf("No active encoder found!\n"); exit(1); } 
 	//*
 
 	uint32_t fb = open("/dev/zero", O_RDWR);
@@ -68,10 +69,27 @@ int main()
 	unsigned int fb_id = 0; 
 	uint32_t crtc;
 
+	//seek mode
+	drmModeModeInfo mode;
+	for(;i<connector->count_modes;++i)
+	{
+		mode = connector->modes[i];
+		if( (mode.hdisplay==width) && (mode.vdisplay==height) ) { break; }
+	}
+	if(i==connector->count_modes) { printf("Requested mode not found!\n"); exit(1); }
+	//*
+
 	drmModeAddFB(fd,width,height,24,32,stride,fb,&fb_id);
-	drmModeSetCrtc(fd,encoder->crtc_id,fb_id,0,0,connector->connector_id,1,mode);
+	drmModeSetCrtc(fd,encoder->crtc_id,fb_id,0,0,&connector->connector_id,1,&mode);
 
 	//try draw here
+	long* frame = static_cast<long*>(video);
+	frame[10*800+10] = 0x00FFFFFF;
+
+
+	//close(fd);
+	//drm_close(fd);
 
 	return 0;
 }
+
