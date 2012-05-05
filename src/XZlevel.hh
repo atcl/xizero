@@ -247,6 +247,10 @@ void level::display()
 	}
 	//*
 
+	//add glow to terrain
+
+	//*
+
 	//render shadows
 	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
 	boss->display(mark,1);

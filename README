@@ -2,7 +2,7 @@
 
 == Version: ==
 
-0.1
+0.1 - Callbox
 
 == Install: ==
 
@@ -12,8 +12,7 @@
 == Dependencies: ==
 
 - xsltproc
-- gl
-- glfw
+- libdrm
 
 == Usage: ==
 
@@ -30,7 +29,9 @@
 - Software Rasterizer
 - Flatshading
 - Blinn Shadows
-- 2x FSAA/FXAA + FSMB
+- Emissive Glow
+- 2xFSAA
+- FSMB
 
 === Minor: ===
 
@@ -38,6 +39,8 @@
 - Cordic Fixed Point Math
 - Minimal Branching
 - Only human readable, non binary, data
+- KMS (X,Wayland,OpenGL,DirectFB independence)
+- Dyadic Explosions
 
 == Bugs: ==
 

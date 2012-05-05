@@ -10,8 +10,6 @@
 ///*
 
 ///includes
-#include <malloc.h> //memalign,free
-
 #include "XZbasic.hh"
 ///*
 
@@ -23,7 +21,7 @@ class buffer
 		const uint bytes;	//size in bytes
 		sint* data;		//pointer to data
 	public:
-		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)memalign(16,bytes); }
+		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)aligned(16,bytes); }
 		/*OK*/ ~buffer() { free(data); }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
@@ -32,6 +30,7 @@ class buffer
 		/*OK*/        void  copy(const buffer& s,uint x);
 		/*OK*/        void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
 		              void  fsaamb(const buffer& b);
+		              void  glow();
 };
 ///*
 
@@ -113,6 +112,11 @@ void buffer::fsaamb(const buffer& b)
 	"loop fsaa;"
 	: :"S"(b.data),"D"(data),"c"(bytes):);
 #endif
+}
+
+void buffer::glow()
+{
+
 }
 ///*
 

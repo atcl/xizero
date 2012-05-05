@@ -11,6 +11,7 @@
 
 ///includes
 #include <cstdint>
+#include <cstdlib> //malloc,free
 ///*
 
 ///declarations
@@ -107,9 +108,15 @@ union packed
 };
 
 //global new + delete overloading
-/*#include <malloc.h>
-inline void* operator new(uint s)   { return memalign(16,s); }
-inline void* operator new[](uint s) { return memalign(16,s); }
+void* aligned(int a,int s)
+{
+	const int r = reinterpret_cast<int>(malloc(s+a));
+	const int t = r&(a-1);
+	return reinterpret_cast<void*>(r+t);
+}
+
+/*inline void* operator new(uint s)   { return aligned(16,s); }
+inline void* operator new[](uint s) { return aligned(16,s); }
 inline void  operator delete(void *p)   { free(p); }
 inline void  operator delete[](void *p) { free(p); }*/
 //*

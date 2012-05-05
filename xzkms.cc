@@ -4,7 +4,7 @@
 //#include <stdint.h>
 //#include <unistd.h>
 //#include <sys/poll.h>
-//#include <sys/time.h>
+#include <time.h>
 //#include <sys/ioctl.h>
 
 #include <cstdlib>
@@ -16,6 +16,13 @@
 
 #include <xf86drm.h>
 #include <xf86drmMode.h>
+
+void wait(int seconds)
+{
+	clock_t endwait;
+	endwait = clock () + seconds * CLOCKS_PER_SEC ;
+	while(clock() < endwait) { ; }
+}
 
 void flush()
 {
@@ -60,9 +67,12 @@ int main()
 	//*
 
 	uint32_t fb = open("/dev/zero", O_RDWR);
-	void* video = mmap(0,800*600*4,PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
+	if(fb<=0) { printf("Could not open zero!\n"); exit(1); }
+
+	void* video = mmap(0,1024*600*8,PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
+	if(video==MAP_FAILED) { printf("Could not memory map zero!\n"); exit(1); }
 	
-	unsigned int width = 800;
+	unsigned int width = 1024;
 	unsigned int height = 600;
 	unsigned int stride = 0;	//todo: compute stride
 
@@ -74,18 +84,23 @@ int main()
 	for(;i<connector->count_modes;++i)
 	{
 		mode = connector->modes[i];
+		printf("%d %d \n",mode.hdisplay,mode.vdisplay);
 		if( (mode.hdisplay==width) && (mode.vdisplay==height) ) { break; }
 	}
 	if(i==connector->count_modes) { printf("Requested mode not found!\n"); exit(1); }
 	//*
 
-	drmModeAddFB(fd,width,height,24,32,stride,fb,&fb_id);
-	drmModeSetCrtc(fd,encoder->crtc_id,fb_id,0,0,&connector->connector_id,1,&mode);
+	i = drmModeAddFB(fd,width,height,24,32,stride,fb,&fb_id);
+	if(i==0) { printf("Could not add framebuffer!\n"); exit(1); }
+
+	i = drmModeSetCrtc(fd,encoder->crtc_id,fb_id,0,0,&connector->connector_id,1,&mode);
+	if(i==0) { printf("Could not set mode!\n"); exit(1); }
 
 	//try draw here
 	long* frame = static_cast<long*>(video);
-	frame[10*800+10] = 0x00FFFFFF;
+	frame[10*1024+10] = 0x00FFFFFF;
 
+	wait(3);
 
 	//close(fd);
 	//drm_close(fd);
