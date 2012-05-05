@@ -111,8 +111,7 @@ union packed
 void* aligned(int a,int s)
 {
 	const int r = reinterpret_cast<int>(malloc(s+a));
-	const int t = r&(a-1);
-	return reinterpret_cast<void*>(r+t);
+	return reinterpret_cast<void*>(r+r&(a-1));
 }
 
 /*inline void* operator new(uint s)   { return aligned(16,s); }
