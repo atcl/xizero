@@ -1,109 +1,157 @@
 
-//#include <errno.h>
-//#include <math.h>
-//#include <stdint.h>
-//#include <unistd.h>
-//#include <sys/poll.h>
-#include <time.h>
-//#include <sys/ioctl.h>
 
-#include <cstdlib>
-#include <cstdio>
+#include <time.h>
 
 #include <sys/mman.h>
-#include <sys/stat.h>
+
 #include <fcntl.h>
+#include <unistd.h>
 
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 
-void wait(int seconds)
+#include "src/XZbasic.hh"
+#include "src/XZsystem.hh"
+
+namespace kms
+{
+	namespace
+	{
+		unsigned int fd;		//drm device handle
+		unsigned int width;		//screen width in pixels
+		unsigned int height;		//screen height in pixels
+		unsigned int bpp;		//bits per pixels
+		unsigned int handle;		//handle to framebuffer
+		unsigned int size;		//size of framebuffer
+		unsigned int pitch;		//stride
+		unsigned int id;		//framebuffer id
+
+		void* ptr;			//pointer to memory mirror of framebuffer
+
+		drmModeRes* resources;		//resource array
+		drmModeConnector* connector;	//connector array
+		drmModeEncoder* encoder;	//encoder array
+		drmModeModeInfo mode;		//video mode in use
+	}
+
+	void error(bool c,const char* m);
+	void* setmode(int w,int h);
+	void flush();
+	void sleep(int s);
+	void restore();
+}
+
+void kms::sleep(int s)
 {
 	clock_t endwait;
-	endwait = clock () + seconds * CLOCKS_PER_SEC ;
+	endwait = clock () + s * CLOCKS_PER_SEC ;
 	while(clock() < endwait) { ; }
 }
 
-void flush()
+void kms::flush()
 {
-
+	drmModeDirtyFB(fd,id,0,0);
 }
 
-int main()
+void kms::error(bool c,const char* m)
 {
-	//int fd = drmOpen("i915", NULL);
-	int fd = open("/dev/dri/card0",O_RDWR); // | O_CLOEXEC
-	if(fd<=0) { printf("Could not open card0!\n"); exit(1); }
+	if(c) { system::say(m,1); system::bye(1); }
+}
 
-	//Get Resource access
-	drmModeRes* resources = drmModeGetResources(fd);
-	if(resources==0) { printf("drmModeGetResources failed!\n"); exit(1); }
+void* kms::setmode(int w,int h)
+{
+	width = w;
+	height = h;
+
+	//open default dri device
+	fd = open("/dev/dri/card0",O_RDWR | O_CLOEXEC);
+	error(fd<=0,"Couldn't open /dev/dri/card0");
 	//*
 
-	int i = 0;
+	//drmSetMaster(fd);
 
-	//Seek connector and connect
-	drmModeConnector* connector;
-	for(;i<resources->count_connectors;++i)
+	//acquire drm resources
+	resources = drmModeGetResources(fd);
+	error(resources==0,"drmModeGetResources failed");
+	//*
+
+	int i;
+
+	//acquire drm connector
+	for(i=0;i<resources->count_connectors;++i)
 	{
 		connector = drmModeGetConnector(fd,resources->connectors[i]);
 		if(connector==0) { continue; }
 		if(connector->connection==DRM_MODE_CONNECTED && connector->count_modes>0) { break; }
-		drmModeFreeConnector(connector); 
+		drmModeFreeConnector(connector);
 	}
-	if(i==resources->count_connectors) { printf("No active connector found!\n"); exit(1); } 
+	error(i==resources->count_connectors,"No active connector found!"); 
 	//*
 
-	//Seek encoder and choose
-	drmModeEncoder* encoder;
+	//acquire encoder
 	for(i=0;i<resources->count_encoders;++i)
 	{
 		encoder = drmModeGetEncoder(fd,resources->encoders[i]);
 		if(encoder==0) { continue; }
-		if(encoder->encoder_id=connector->encoder_id) { break; }
+		if(encoder->encoder_id==connector->encoder_id) { break; }
 		drmModeFreeEncoder(encoder);
 	}
-	if(i==resources->count_encoders) { printf("No active encoder found!\n"); exit(1); } 
+	error(i==resources->count_encoders,"No active encoder found!");
 	//*
 
-	uint32_t fb = open("/dev/zero", O_RDWR);
-	if(fb<=0) { printf("Could not open zero!\n"); exit(1); }
-
-	void* video = mmap(0,1024*600*8,PROT_READ|PROT_WRITE,MAP_SHARED,fb,0);
-	if(video==MAP_FAILED) { printf("Could not memory map zero!\n"); exit(1); }
-	
-	unsigned int width = 1024;
-	unsigned int height = 600;
-	unsigned int stride = 0;	//todo: compute stride
-
-	unsigned int fb_id = 0; 
-	uint32_t crtc;
-
-	//seek mode
-	drmModeModeInfo mode;
-	for(;i<connector->count_modes;++i)
+	//acquire requested mode
+	for(i=0;i<connector->count_modes;++i)
 	{
 		mode = connector->modes[i];
-		printf("%d %d \n",mode.hdisplay,mode.vdisplay);
 		if( (mode.hdisplay==width) && (mode.vdisplay==height) ) { break; }
 	}
-	if(i==connector->count_modes) { printf("Requested mode not found!\n"); exit(1); }
+	error(i==connector->count_modes,"Requested mode not found!");
 	//*
 
-	i = drmModeAddFB(fd,width,height,24,32,stride,fb,&fb_id);
-	if(i==0) { printf("Could not add framebuffer!\n"); exit(1); }
+	//setup framebuffer
+	struct drm_mode_create_dumb dc = { height,width,32,0,0,0,0 };
+	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dc);
+	error(i==1,"Could not create buffer object!");
 
-	i = drmModeSetCrtc(fd,encoder->crtc_id,fb_id,0,0,&connector->connector_id,1,&mode);
-	if(i==0) { printf("Could not set mode!\n"); exit(1); }
+	size = dc.size;
+	pitch = dc.pitch;
+	handle = dc.handle;
 
-	//try draw here
-	long* frame = static_cast<long*>(video);
-	frame[10*1024+10] = 0x00FFFFFF;
+	struct drm_mode_map_dumb dm = { handle,0,0 };
+	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dm);
+	error(i==1,"Could not map buffer object!");
 
-	wait(3);
+	ptr = mmap(0,size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
+	error(ptr==MAP_FAILED,"Could not mirror buffer object!");
+	//*
 
-	//close(fd);
-	//drm_close(fd);
+
+	i = drmModeAddFB(fd,width,height,32,32,pitch,handle,&id);
+	error(i==1,"Could not add framebuffer!");
+
+	i = drmModeSetCrtc(fd,encoder->crtc_id,id,0,0,&connector->connector_id,1,&mode);
+	error(i==1,"Could not set mode!");
+
+	return ptr;
+}
+
+void kms::restore()
+{
+	//drmDropMaster(fd);
+	close(fd);
+}
+
+int main()
+{
+	long* frame = static_cast<long*>(kms::setmode(1024,600));
+
+	for(int i=0;i<600;++i) { for(int j=0;j<1024;++j) { frame[i*1024+j] = i*j; } }
+
+	kms::flush();
+
+	kms::sleep(3);
+
+	kms::restore();
 
 	return 0;
 }
