@@ -1,4 +1,7 @@
-
+// atCROSSLEVEL 2010,2011,2012
+// released under zlib/libpng license
+// XZkms.cc
+// kms testing ground
 
 #include <time.h>
 
@@ -125,7 +128,6 @@ void* kms::setmode(int w,int h)
 	error(ptr==MAP_FAILED,"Could not mirror buffer object!");
 	//*
 
-
 	i = drmModeAddFB(fd,width,height,32,32,pitch,handle,&id);
 	error(i==1,"Could not add framebuffer!");
 
@@ -137,6 +139,14 @@ void* kms::setmode(int w,int h)
 
 void kms::restore()
 {
+	drmModeSetCrtc(fd,encoder->crtc_id,id,0,0,&connector->connector_id,1,0); //fix parameters
+	drmModeRmFB(fd,id);
+	munmap(ptr,size);
+	struct drm_mode_map_dumb dd = { handle };
+	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&dd);
+	drmModeFreeEncoder(encoder);
+	drmModeFreeConnector(connector);
+	drmModeFreeResources(resources);
 	//drmDropMaster(fd);
 	close(fd);
 }
@@ -149,7 +159,7 @@ int main()
 
 	kms::flush();
 
-	kms::sleep(3);
+	kms::sleep(6);
 
 	kms::restore();
 

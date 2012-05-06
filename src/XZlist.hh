@@ -80,13 +80,12 @@ void list::xsort(bool u) //use swap
 		{
 			if( (cur->hash<cur->next->hash&&u) || (cur->hash>cur->next->hash&&!u) )
 			{
-				member* temp = cur->next;
-					
-				cur->next  = temp->next;
-				temp->next = cur;
-				
-				temp->prev = cur->prev;
-				cur->prev  = temp;
+				void* temp = cur->data;
+				cur->data = cur->next->data;
+				cur->next->data = temp;
+				//sint hemp = cur->hash;
+				//cur->hash = cur->next->hash;
+				//cur->next->hash = hemp;
 			}
 		}
 	}

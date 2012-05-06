@@ -114,10 +114,10 @@ void* aligned(int a,int s)
 	return reinterpret_cast<void*>(r+(r&(a-1)));
 }
 
-/*inline void* operator new(uint s)   { return aligned(16,s); }
-inline void* operator new[](uint s) { return aligned(16,s); }
+inline void* operator new(uint s)   { return malloc(s); } //use aligned, but for that fix free
+inline void* operator new[](uint s) { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }
-inline void  operator delete[](void *p) { free(p); }*/
+inline void  operator delete[](void *p) { free(p); }
 //*
 
 ///*

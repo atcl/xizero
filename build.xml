@@ -26,7 +26,8 @@
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<!--flag>-s</flag--><!--strip debug symbols-->
-			<!--flag>-static -nostdlib -fno-exceptions</flag-->
+			<flag>-fno-exceptions -fno-rtti</flag>
+			<!--flag>-static -nostdlib </flag-->
 			<flag>-g -std=c++0x</flag>
 		</flags>
 		<binary>
