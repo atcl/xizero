@@ -16,7 +16,7 @@
 ///definition
 namespace resource
 {
-	//static const char* icon   = #include "dat/xzicon.xpm";
+	//static const char* icon   = { #include "dat/xzicon.xpm"; }
 
 	static const char* icon[] =
 { 
@@ -115,3 +115,4 @@ namespace resource
 ///*
 
 #endif
+

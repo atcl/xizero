@@ -28,6 +28,7 @@ namespace kms
 		unsigned int size;		//size of framebuffer
 		unsigned int pitch;		//stride
 		unsigned int id;		//framebuffer id
+		unsigned int oid;		//old framebuffer id
 
 		void* ptr;			//pointer to memory mirror of framebuffer
 
@@ -35,10 +36,11 @@ namespace kms
 		drmModeConnector* connector;	//connector array
 		drmModeEncoder* encoder;	//encoder array
 		drmModeModeInfo mode;		//video mode in use
+		drmModeCrtcPtr crtc;
 	}
 
 	void error(bool c,const char* m);
-	void* setmode(int w,int h);
+	void* setmode(int w,int h,int c,bool f);
 	void flush();
 	void sleep(int s);
 	void restore();
@@ -61,7 +63,7 @@ void kms::error(bool c,const char* m)
 	if(c) { system::say(m,1); system::bye(1); }
 }
 
-void* kms::setmode(int w,int h)
+void* kms::setmode(int w,int h,int c,bool f)
 {
 	width = w;
 	height = h;
@@ -78,6 +80,11 @@ void* kms::setmode(int w,int h)
 	error(resources==0,"drmModeGetResources failed");
 	//*
 
+	//acquire original mode and framebuffer id
+	crtc = drmModeGetCrtc(fd,resources->crtcs[0]);
+	oid = crtc->buffer_id;
+	//*
+
 	int i;
 
 	//acquire drm connector
@@ -91,7 +98,7 @@ void* kms::setmode(int w,int h)
 	error(i==resources->count_connectors,"No active connector found!"); 
 	//*
 
-	//acquire encoder
+	//acquire drm encoder
 	for(i=0;i<resources->count_encoders;++i)
 	{
 		encoder = drmModeGetEncoder(fd,resources->encoders[i]);
@@ -102,7 +109,7 @@ void* kms::setmode(int w,int h)
 	error(i==resources->count_encoders,"No active encoder found!");
 	//*
 
-	//acquire requested mode
+	//check for requested mode
 	for(i=0;i<connector->count_modes;++i)
 	{
 		mode = connector->modes[i];
@@ -139,7 +146,7 @@ void* kms::setmode(int w,int h)
 
 void kms::restore()
 {
-	drmModeSetCrtc(fd,encoder->crtc_id,id,0,0,&connector->connector_id,1,0); //fix parameters
+	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
 	munmap(ptr,size);
 	struct drm_mode_map_dumb dd = { handle };
@@ -153,7 +160,7 @@ void kms::restore()
 
 int main()
 {
-	long* frame = static_cast<long*>(kms::setmode(1024,600));
+	long* frame = static_cast<long*>(kms::setmode(1024,600,1,0));
 
 	for(int i=0;i<600;++i) { for(int j=0;j<1024;++j) { frame[i*1024+j] = i*j; } }
 
