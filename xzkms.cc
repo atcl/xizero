@@ -20,6 +20,8 @@ namespace kms
 {
 	namespace
 	{
+		unsigned int ed;		//input event device handle
+
 		unsigned int fd;		//drm device handle
 		unsigned int width;		//screen width in pixels
 		unsigned int height;		//screen height in pixels
@@ -39,11 +41,25 @@ namespace kms
 		drmModeCrtcPtr crtc;
 	}
 
+	void init();
 	void error(bool c,const char* m);
 	void* setmode(int w,int h,int c,bool f);
 	void flush();
 	void sleep(int s);
 	void restore();
+}
+
+void kms::init()
+{
+	ed = open("/dev/input/event1",O_RDONLY);
+
+	while(true)
+	{
+
+
+	}
+
+	close(ed);
 }
 
 void kms::sleep(int s)
@@ -87,7 +103,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 
 	int i;
 
-	//acquire drm connector
+	//acquire drm connector //todo: choose connector
 	for(i=0;i<resources->count_connectors;++i)
 	{
 		connector = drmModeGetConnector(fd,resources->connectors[i]);
@@ -116,6 +132,10 @@ void* kms::setmode(int w,int h,int c,bool f)
 		if( (mode.hdisplay==width) && (mode.vdisplay==height) ) { break; }
 	}
 	error(i==connector->count_modes,"Requested mode not found!");
+	//*
+
+	//force mode
+	//...
 	//*
 
 	//setup framebuffer

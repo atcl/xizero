@@ -19,7 +19,7 @@ class buffer
 	private:
 		const uint tsize;	//size in typesize
 		const uint bytes;	//size in bytes
-		sint* data;		//pointer to data
+		__restrict sint* data;	//pointer to data
 	public:
 		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)aligned(16,bytes); }
 		/*OK*/ ~buffer() { free(data); }
@@ -52,6 +52,16 @@ void buffer::clear(sint x)
 	"movaps %%xmm0,%%xmm6;\n"
 	"movaps %%xmm0,%%xmm7;\n"
 	"set:\n"
+/*
+	"prefetch   0(%%edi);\n"
+	"prefetch  16(%%edi);\n"
+	"prefetch  32(%%edi);\n"
+	"prefetch  48(%%edi);\n"
+	"prefetch  64(%%edi);\n"
+	"prefetch  80(%%edi);\n"
+	"prefetch  96(%%edi);\n"
+	"prefetch 112(%%edi);\n"
+*/
 	"movaps %%xmm0,(%%edi);\n"
 	"movaps %%xmm1,16(%%edi);\n"
 	"movaps %%xmm2,32(%%edi);\n"
@@ -84,6 +94,12 @@ void buffer::fsaamb(const buffer& b)
 	"subl $"STR(XRES)",%%ecx;\n"
 	"shrl $6,%%ecx;\n"
 	"fsaa:\n"
+/*
+	"prefetch   0(%%edi);\n"
+	"prefetch  16(%%edi);\n"
+	"prefetch  32(%%edi);\n"
+	"prefetch  48(%%edi);\n"
+*/
 	"movaps   (%%edi),%%xmm0;\n"
 	"movaps 16(%%edi),%%xmm1;\n"
 	"movaps 32(%%edi),%%xmm2;\n"

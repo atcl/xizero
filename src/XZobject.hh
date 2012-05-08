@@ -60,7 +60,7 @@ object::object(const char* o) : poly(0),dock(0),bound(0),polys(0),docks(0)
 	poly  = new polygon*[polys];
 	if(docks!=0) { dock = new fvector[docks]; }
 
-	lvector bbox[2];
+	lvector bbox[4];
 
 	if(string::find(t[i++],"objt")==-1) { system::say("y3d format wrong (objt)",1); system::bye(-1); }
 

@@ -3,7 +3,7 @@
 		<name>default</name>
 		<path>
 			<source></source>
-			<include></include>
+			<include>/usr/include/libdrm</include>
 			<library></library>
 		</path>
 		<sources>
@@ -11,7 +11,7 @@
 		</sources>
 		<libs>
 			<lib>GL</lib>
-			<lib>glfw</lib><!--freeglut-->
+			<lib>glfw</lib><!--drm-->
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
