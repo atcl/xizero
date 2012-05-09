@@ -46,8 +46,7 @@ struct tile
 namespace format
 {
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
-	/*OK*/ tile*  xpm(const char** x);		//load xpm image (from resource)
-	/*OK*/ tile*  xpm(const char* x);		//load xpm image (from file)
+	/*OK*/ tile*  xpm(const char* x);		//load xpm image
 	/*OK*/ info*  ini(const char* x);		//load ini configuartion
 }
 ///*
@@ -69,10 +68,11 @@ char** format::csv(const char* x,char y)
 	return r;
 }
 
-tile* format::xpm(const char** x)
+tile* format::xpm(const char* x)
 {
 	sint   index = 0;
-	char** line  = string::split(x[index++],' ');
+	char** y     = string::split(x,'\n');
+	char** line  = string::split(y[index++],' ');
 
 	guard(string::str2int(line[3])!=1,0);
 
@@ -84,7 +84,7 @@ tile* format::xpm(const char** x)
 	uint* color = new uint[256];
 	for(sint i=0;i<colors;++i)
 	{
-		line = string::split(x[index++],' ');
+		line = string::split(y[index++],' ');
 		color[sint(line[0][0])] = math::set(TRANS,string::find(line[2],"None")!=0);
 		color[sint(line[0][0])] = math::set(math::ndn(string::str2hex(line[2])<<4),line[2][0]=='#');
 	}
@@ -93,17 +93,12 @@ tile* format::xpm(const char** x)
 	{
 		for(sint j=0;j<width;++j,++o)
 		{
-			r->data[o] = color[sint(x[index][j])];
+			r->data[o] = color[sint(y[index][j])];
 		}
 	}
 
 	delete[] color;
 	return r;
-}
-
-tile* format::xpm(const char* x)
-{
-	return xpm((const char**)string::split(x,'\n'));
 }
 
 info* format::ini(const char* x) 
