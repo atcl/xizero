@@ -10,17 +10,22 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <linux/input.h>
+
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 
 #include "src/XZbasic.hh"
 #include "src/XZsystem.hh"
+#include "src/XZmath.hh"
 
 namespace kms
 {
 	namespace
 	{
 		unsigned int ed;		//input event device handle
+		sint  mouse[4] = { 0,0,0,0 };	
+		sint  keys[2] = { 0,0 };
 
 		unsigned int fd;		//drm device handle
 		unsigned int width;		//screen width in pixels
@@ -55,8 +60,16 @@ void kms::init()
 
 	while(true)
 	{
+		struct input_event event;
+		int num_bytes = read(fd, &event, sizeof(struct input_event));
 
-
+		keys[1] = keys[0] = math::set(event.code,event.type==EV_KEY&&event.value==1);
+		mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
+		mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
+		mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
+		mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
+		system::say((char*)&keys[0],1);
+		if(keys[0]=='q') { break; }
 	}
 
 	close(ed);
@@ -71,6 +84,11 @@ void kms::sleep(int s)
 
 void kms::flush()
 {
+	struct input_event event;
+	read(fd, &event, sizeof(struct input_event));
+	keys[1] = keys[0] = math::set(event.code,event.value==1);
+
+
 	drmModeDirtyFB(fd,id,0,0);
 }
 
@@ -180,6 +198,8 @@ void kms::restore()
 
 int main()
 {
+	kms::init();
+
 	long* frame = static_cast<long*>(kms::setmode(1024,600,1,0));
 
 	for(int i=0;i<600;++i) { for(int j=0;j<1024;++j) { frame[i*1024+j] = i*j; } }
