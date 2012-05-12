@@ -16,26 +16,32 @@
 #include <xf86drmMode.h>
 
 #include "src/XZbasic.hh"
+#include "src/XZbuffer.hh"
 #include "src/XZsystem.hh"
 #include "src/XZmath.hh"
 
 namespace kms
 {
+	buffer back(XRES*YRES);		//System Memory Double Buffer
+	buffer depth(XRES*YRES);	//Z-Buffer
+	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
+
 	namespace
 	{
-		unsigned int ed;		//input event device handle
-		sint  mouse[4] = { 0,0,0,0 };	
-		sint  keys[2] = { 0,0 };
+		sint keys[2] = { 0,0 };
+		sint mouse[4] = { 0,0,0,0 };	
+		void* mcursor = 0;
 
-		unsigned int fd;		//drm device handle
-		unsigned int width;		//screen width in pixels
-		unsigned int height;		//screen height in pixels
-		unsigned int bpp;		//bits per pixels
-		unsigned int handle;		//handle to framebuffer
-		unsigned int size;		//size of framebuffer
-		unsigned int pitch;		//stride
-		unsigned int id;		//framebuffer id
-		unsigned int oid;		//old framebuffer id
+		uint ed;			//input event device handle
+		uint fd;			//drm device handle
+		uint width;			//screen width in pixels
+		uint height;			//screen height in pixels
+		uint bpp;			//bits per pixels
+		uint handle;			//handle to framebuffer
+		uint size;			//size of framebuffer
+		uint pitch;			//stride
+		uint id;			//framebuffer id
+		uint oid;			//old framebuffer id
 
 		void* ptr;			//pointer to memory mirror of framebuffer
 
@@ -52,6 +58,8 @@ namespace kms
 	void flush();
 	void sleep(int s);
 	void restore();
+
+	//sint fps(bool o=1) { static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; } 
 }
 
 void kms::init()
@@ -87,7 +95,10 @@ void kms::flush()
 	struct input_event event;
 	read(fd, &event, sizeof(struct input_event));
 	keys[1] = keys[0] = math::set(event.code,event.value==1);
-
+	mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
+	mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
+	mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
+	mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
 
 	drmModeDirtyFB(fd,id,0,0);
 }

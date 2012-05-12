@@ -39,8 +39,8 @@ bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
 
 bool game::collision(const fvector& x,fvector r,const fvector& a) //include level bounds check
 {
-	const fvector t = x+r-a;
-	return fx::sqr(fx::mul(t.x,t.x)+fx::mul(t.y,t.y))<r.e;
+	const fvector t = a-(x+r);
+	return t.length()<r.e;
 }
 
 sint game::angle(const fvector& x,const fvector& t,const fvector& m)
