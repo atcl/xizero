@@ -52,7 +52,7 @@ namespace kms
 		drmModeCrtcPtr crtc;
 	}
 
-	void init();
+	void init(void* c=0);
 	void error(bool c,const char* m);
 	void* setmode(int w,int h,int c,bool f);
 	void flush();
@@ -62,20 +62,16 @@ namespace kms
 	//sint fps(bool o=1) { static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; } 
 }
 
-void kms::init()
+void kms::init(void* c)
 {
+	mcursor = c;
+
 	ed = open("/dev/input/event1",O_RDONLY);
 
 	while(true)
 	{
-		struct input_event event;
-		int num_bytes = read(fd, &event, sizeof(struct input_event));
+		kms::flush();
 
-		keys[1] = keys[0] = math::set(event.code,event.type==EV_KEY&&event.value==1);
-		mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
-		mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
-		mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
-		mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
 		system::say((char*)&keys[0],1);
 		if(keys[0]=='q') { break; }
 	}
@@ -93,13 +89,14 @@ void kms::sleep(int s)
 void kms::flush()
 {
 	struct input_event event;
-	read(fd, &event, sizeof(struct input_event));
+	read(fd,&event,sizeof(struct input_event));
 	keys[1] = keys[0] = math::set(event.code,event.value==1);
 	mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
 	mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
 	mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
 	mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
 
+	//copy back to ptr
 	drmModeDirtyFB(fd,id,0,0);
 }
 
@@ -160,11 +157,23 @@ void* kms::setmode(int w,int h,int c,bool f)
 		mode = connector->modes[i];
 		if( (mode.hdisplay==width) && (mode.vdisplay==height) ) { break; }
 	}
-	error(i==connector->count_modes,"Requested mode not found!");
+	error(f==0 && i==connector->count_modes,"Requested mode not found!");
 	//*
 
 	//force mode
-	//...
+	if(f==1 && i==connector->count_modes)
+	{
+		//mode.hdisplay = width;
+		//mode.hsync_start = 
+		//mode.hsync_end = 
+		//mode.htotal = 
+		//mode.vdisplay = height;
+		//mode.vsync_start = 
+		//mode.vsync_end = 
+		//mode.vtotal = 
+		//mode.clock = force_clock*1000;
+		//mode.vrefresh = (force_timing.clock*1e3)/(force_timing.htotal*force_timing.vtotal);
+	}
 	//*
 
 	//setup framebuffer
