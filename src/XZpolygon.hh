@@ -40,6 +40,7 @@
 #define R_B 0x00010000 //blinn shadows
 #define R_F 0x00100000 //flat
 #define R_C 0x01000000 //single color
+#define R_D 0x10000000 //depth test
 ///*
 
 ///definition
@@ -139,13 +140,12 @@ void polygon::raster(bool s,uint c) const
 	sint cy2 = dy20*(lpoint[2].x - minx) + dx20*(miny - lpoint[2].y) - ((dy20<0) || (dy20==0 && dx20>0)); 
 
 	const sint str = XRES - (maxx-minx);
-	      sint off = miny * XRES + minx;
 
 	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
 	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
 	      fixed ty = lpoint[mixi].z - fx::mul(zy,fx::l2f(math::abs(lpoint[mixi].y-lpoint[miyi].y)));
 
-	for(sint y=miny;y<maxy;++y,off+=str,ty+=zy)
+	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y,off+=str,ty+=zy)
 	{
 		sint cx0 = cy0;
 		sint cx1 = cy1;

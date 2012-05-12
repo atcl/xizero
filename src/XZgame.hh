@@ -13,7 +13,6 @@
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZvector.hh"
-#include "XZpolygon.hh"
 ///*
 
 ///definition
@@ -21,7 +20,8 @@ namespace game
 {
 	/*OK*/ pure inline bool onscreen(sint x,sint y);
 	/*OK*/ pure inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d);
-	                   bool collision(const fvector& x,fvector r,const fvector& a);
+	            inline bool bounds(const fvector& x,const fvector& m);
+	            inline bool collision(const fvector& x,fvector r,const fvector& a);
 	                   sint angle(const fvector& x,const fvector& t,const fvector& m);
 }
 ///*
@@ -37,7 +37,12 @@ bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
 	return (x>math::min(a,c)) && (y>math::min(b,d)) && (x<math::max(a,c)) && (y<math::max(b,d));
 }
 
-bool game::collision(const fvector& x,fvector r,const fvector& a) //include level bounds check
+bool game::bounds(const fvector& x,const fvector& m)
+{
+	return 0;
+}
+
+bool game::collision(const fvector& x,fvector r,const fvector& a)
 {
 	const fvector t = a-(x+r);
 	return t.length()<r.e;

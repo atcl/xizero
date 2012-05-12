@@ -48,12 +48,17 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 	sint o = y*XRES+x;
 	sint r = 0;
 
+	//min max check for width and height! (will resolve memcheck issues)
+
+	const bool bt = b!=TRANS;
+	const bool ct = c!=TRANS;
+
 	for(sint i=0;i<h;++i,o+=d,s+=w)
 	{
 		for(sint j=0;j<h;++j,++o,++s)
 		{
-			const uint e = f->data[s];
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],b!=TRANS&&e==WHITE),c!=TRANS&&e==RED);
+			const uint e = f->data[s]; //memcheck: Use of uninitialised value of size 4
+			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED)); //memcheck: Use of uninitialised value of size 4 
 			r+=(i==0)&&(e!=BLACK);
 		}
 	}

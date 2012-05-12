@@ -22,7 +22,7 @@ namespace system
 {
 	/*OK*/ inline void  bye(sint x=0) { __asm__ __volatile__ ("int $0x80": :"a"(1),"b"(x):); }
 	/*OK*/        void  say(const char* x,bool y=0) { sint i=0; while(x[i]!=0) { putchar(x[i]); i++; } if(y) { putchar('\n'); } }
-	/*OK*/        char* ldf(const char* x) { FILE* f=fopen(x,"rb"); if(f==0) { return 0; } fseek(f,0,SEEK_END); const sint n=ftell(f); char* r=new char[n]; fseek(f,0,SEEK_SET); fread(r,n,1,f); fclose(f); return r; }        
+	/*OK*/        char* ldf(const char* x) { FILE* f=fopen(x,"rb"); if(f==0) { return 0; } fseek(f,0,SEEK_END); const sint n=ftell(f); char* r=new char[n+1]; fseek(f,0,SEEK_SET); fread(r,n,1,f); r[n]=0; fclose(f); return r; }        
 	//            void  svf(const char* x,void* d,uint l) FILE* f=fopen(x,"wb"); if(f==0) { return 0; } fwrite(d,l,1,f); fclose(f); return r; }
 }
 }

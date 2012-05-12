@@ -166,8 +166,8 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 {
 	const sint xd = -XRES+x+t.width;
 	const sint yd = -YRES+y+t.height;
-	const sint xmax = math::set(t.width,t.width-xd,xd<=0);
-	const sint ymax = math::set(t.height,t.width-yd,yd<=0);
+	const sint xmax = math::set(t.width,t.width-xd,xd<=0); //check!
+	const sint ymax = math::set(t.height,t.height-yd,yd<=0); //check!
 	const sint sx = t.width - xmax;
 	const sint d = XRES - xmax;
 
@@ -176,7 +176,7 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 		for(sint j=0;j<xmax;++j,++o,++s)
 		{
 			const packed c = { t.data[s] };
-			screen::back[o] = math::set(c.d,screen::back[o],c.b[0]==0xFF||a==1); 
+			screen::back[o] = math::set(c.d,screen::back[o],(c.b[0]==0xFF)||a); //memcheck: Conditional jump or move depends on uninitialised value(s)
 		}
 		s+=sx;
 	}

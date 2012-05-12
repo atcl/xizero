@@ -38,7 +38,7 @@ class button : public gui
 		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
 		static void all(bool b);				//Activate or Deactivate All Buttons
 
-		static button* current;					//Currenty Highlighted Button 
+		static button* current;					//Currently Highlighted Button 
 };
 ///*
 
