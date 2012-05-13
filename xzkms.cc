@@ -19,12 +19,11 @@
 #include "src/XZbuffer.hh"
 #include "src/XZsystem.hh"
 #include "src/XZmath.hh"
-#include "src/XZstring.hh"
 
 namespace kms
 {
-	//buffer front(XRES*YRES,0);	//Video Memory Front Buffer
-	//buffer back(XRES*YRES);		//System Memory Double Buffer
+	buffer front(XRES*YRES,0);	//Video Memory Front Buffer
+	buffer back(XRES*YRES);		//System Memory Double Buffer
 	//buffer depth(XRES*YRES);	//Z-Buffer
 	//buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
@@ -132,13 +131,12 @@ void* kms::setmode(int w,int h,int c,bool f)
 	//*
 
 	int i;
-	int j;
 
 	//acquire drm connector //todo: choose connector
-	for(i=0,j=c;i<resources->count_connectors;++i)
+	for(i=0;i<resources->count_connectors;++i)
 	{
 		connector = drmModeGetConnector(fd,resources->connectors[i]);
-		if(connector==0 || j--!=0) { continue; }
+		if(connector==0 || c--!=0) { continue; }
 		if(connector->connection==DRM_MODE_CONNECTED && connector->count_modes>0) { break; }
 		drmModeFreeConnector(connector);
 	}
@@ -184,7 +182,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 
 	ptr = mmap(0,size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
 	error(ptr==MAP_FAILED,"Could not mirror buffer object!");
-	//front.pointer(ptr);
+	front.pointer(ptr);
 	//*
 
 	i = drmModeAddFB(fd,width,height,32,32,pitch,handle,&id);
@@ -198,6 +196,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 
 void kms::restore()
 {
+	//back.~buffer();
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
 	munmap(ptr,size);
@@ -219,7 +218,9 @@ int main()
 
 	long* frame = static_cast<long*>(kms::setmode(w,h,1,1));
 
-	for(int i=0;i<h;++i) { for(int j=0;j<w;++j) { frame[i*w+j] = i*j; } }
+	for(int i=0;i<h;++i) { for(int j=0;j<w;++j) { kms::back.pointer()[i*w+j] = i*j; } }
+
+	kms::front.copy(kms::back,w*h);
 
 	kms::flush();
 
