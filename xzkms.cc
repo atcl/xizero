@@ -22,9 +22,9 @@
 
 namespace kms
 {
-	buffer back(XRES*YRES);		//System Memory Double Buffer
-	buffer depth(XRES*YRES);	//Z-Buffer
-	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
+	//buffer back(XRES*YRES);		//System Memory Double Buffer
+	//buffer depth(XRES*YRES);	//Z-Buffer
+	//buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
 	namespace
 	{
@@ -51,7 +51,7 @@ namespace kms
 		drmModeModeInfo mode;		//video mode in use
 		drmModeCrtcPtr crtc;
 
-		//drmModeModeInfo m800x600 = { 50000,800,856,864,1040,0,600,637,643,666,0,(50000*1000)/(1040*666),0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
+		drmModeModeInfo m800x600 = { 40000,800,840,968,1056,0,600,601,605,628,0,60/*(40000*1000)/(1056*628)*/,0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
 	}
 
 	void init(void* c=0);
@@ -90,16 +90,16 @@ void kms::sleep(int s)
 
 void kms::flush()
 {
-	struct input_event event;
-	read(fd,&event,sizeof(struct input_event));
-	keys[1] = keys[0] = math::set(event.code,event.value==1);
-	mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
-	mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
-	mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
-	mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
-
 	//copy back to ptr
 	drmModeDirtyFB(fd,id,0,0);
+
+	//struct input_event event;
+	//read(fd,&event,sizeof(struct input_event));
+	//keys[1] = keys[0] = math::set(event.code,event.value==1);
+	//mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
+	//mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
+	//mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
+	//mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
 }
 
 void kms::error(bool c,const char* m)
@@ -163,7 +163,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 	//*
 
 	//force mode
-	if(f==1 && i==connector->count_modes) { /*mode = m800x600*/; } //test for saved forcable modes
+	if(f==1 && i==connector->count_modes) { mode = m800x600; } //test for saved forcable modes
 	//*
 
 	//setup framebuffer
@@ -208,11 +208,14 @@ void kms::restore()
 
 int main()
 {
-	kms::init();
+	//kms::init();
 
-	long* frame = static_cast<long*>(kms::setmode(1024,600,1,0));
+	int w = 800;
+	int h = 600;
 
-	for(int i=0;i<600;++i) { for(int j=0;j<1024;++j) { frame[i*1024+j] = i*j; } }
+	long* frame = static_cast<long*>(kms::setmode(w,h,1,1));
+
+	for(int i=0;i<h;++i) { for(int j=0;j<w;++j) { frame[i*w+j] = i*j; } }
 
 	kms::flush();
 
