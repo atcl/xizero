@@ -50,6 +50,8 @@ namespace kms
 		drmModeEncoder* encoder;	//encoder array
 		drmModeModeInfo mode;		//video mode in use
 		drmModeCrtcPtr crtc;
+
+		//drmModeModeInfo m800x600 = { 50000,800,856,864,1040,0,600,637,643,666,0,(50000*1000)/(1040*666),0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
 	}
 
 	void init(void* c=0);
@@ -161,19 +163,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 	//*
 
 	//force mode
-	if(f==1 && i==connector->count_modes)
-	{
-		//mode.hdisplay = width;
-		//mode.hsync_start = 
-		//mode.hsync_end = 
-		//mode.htotal = 
-		//mode.vdisplay = height;
-		//mode.vsync_start = 
-		//mode.vsync_end = 
-		//mode.vtotal = 
-		//mode.clock = force_clock*1000;
-		//mode.vrefresh = (force_timing.clock*1e3)/(force_timing.htotal*force_timing.vtotal);
-	}
+	if(f==1 && i==connector->count_modes) { /*mode = m800x600*/; } //test for saved forcable modes
 	//*
 
 	//setup framebuffer
