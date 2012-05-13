@@ -27,6 +27,7 @@ class buffer
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
 		/*OK*/ inline sint* pointer() const { return data; }
+		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
 		/*OK*/        void  clear(sint x=0);
 		/*OK*/        void  copy(const buffer& s,uint x);
 		/*OK*/        void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
