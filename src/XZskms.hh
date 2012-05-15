@@ -1,52 +1,53 @@
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
-// XZkms.cc
-// kms testing ground
+// XZskms.hh
+// Super KMS library
 
+///guard
+#ifndef HH_XZSKMS
+#define HH_XZSKMS
+//#pragma message "Compiling " __FILE__ "..." " TODO: ."
+///*
+
+///includes
 #include <time.h>
-
-#include <sys/mman.h>
-
 #include <fcntl.h>
 #include <unistd.h>
-
+#include <sys/mman.h>
 #include <linux/input.h>
-
 #include <xf86drm.h>
 #include <xf86drmMode.h>
+#include "XZbasic.hh"
+#include "XZbuffer.hh"
+#include "XZsystem.hh"
+#include "XZmath.hh"
+///*
 
-#include "src/XZbasic.hh"
-#include "src/XZbuffer.hh"
-#include "src/XZsystem.hh"
-#include "src/XZmath.hh"
-#include "src/XZstring.hh"
+///declarations
+#define BPP 32
+///*
 
-namespace kms
+///definitions
+namespace skms
 {
 	buffer front(XRES*YRES,0);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
-	//buffer depth(XRES*YRES);	//Z-Buffer
-	//buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
-
-	sint keys[2] = { 0,0 };
-	sint mouse[4] = { 0,0,0,0 };	
+	buffer depth(XRES*YRES);	//Z-Buffer
+	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
 	namespace
 	{
+		sint keys[2] = { 0,0 };
+		sint mouse[4] = { 0,0,0,0 };	
 		void* mcursor = 0;
 
 		uint ed;			//input event device handle
 		uint fd;			//drm device handle
-		uint width;			//screen width in pixels
-		uint height;			//screen height in pixels
-		uint bpp;			//bits per pixels
 		uint handle;			//handle to framebuffer
 		uint size;			//size of framebuffer
 		uint pitch;			//stride
 		uint id;			//framebuffer id
 		uint oid;			//old framebuffer id
-
-		void* ptr;			//pointer to memory mirror of framebuffer
 
 		drmModeRes* resources;		//resource array
 		drmModeConnector* connector;	//connector array
@@ -57,54 +58,43 @@ namespace kms
 		drmModeModeInfo m800x600 = { 40000,800,840,968,1056,0,600,601,605,628,0,60/*(40000*1000)/(1056*628)*/,0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
 	}
 
-	void init(void* c=0);
-	void error(bool c,const char* m);
-	void* setmode(int w,int h,int c,bool f);
-	void flush();
-	void sleep(int s);
-	void restore();
+	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
+	void init(void* c=0) 	{ mcursor = c; ed = open("/dev/input/event0",O_RDONLY); }
+	void set(uint c,bool f=0);
+	void flush()		{ /*copy back.ptr*/ drmModeDirtyFB(fd,id,0,0); }
+	void event();
+	bool run()		{ flush(); event(); return 0; }
+	void close();
 
-	//sint fps(bool o=1) { static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; } 
+	void wait(sint k)	{ while(k!=keys[1]) { event(); } }
+	void sleep(sint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
+	uint time()		{ return (CLOCKS_PER_SEC*1000)*clock(); }
+	uint fps(bool o=1)	{ static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; } 
+
+	inline sint  key()	{ const sint k = keys[1]; keys[1] = 0; return k; }
+	inline sint  turbo()	{ return keys[0]; }
+	inline sint  mousex()	{ return mouse[2]; }
+	inline sint  mousey()	{ return mouse[3]; }
+	inline sint  mouseb()	{ const sint b = mouse[0]; mouse[0] = 0; return b; }
+	inline void* cursor()	{ return mcursor; }
+}
+///*
+
+///implementation
+void skms::event()
+{
+	struct input_event event;
+	read(fd,&event,sizeof(struct input_event));
+	keys[1] = keys[0] = math::set(event.code,event.type==EV_KEY&&event.value==1);
+	keys[1] = keys[0] = math::set(event.code,event.type==EV_KEY&&event.value==0);
+	mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
+	mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
+	mouse[2] = math::set(event.code,event.type==EV_REL&&event.value==REL_X); 
+	mouse[3] = math::set(event.code,event.type==EV_REL&&event.value==REL_Y);
 }
 
-void kms::init(void* c)
+void skms::set(uint c,bool f)
 {
-	mcursor = c;
-
-
-}
-
-void kms::sleep(int s)
-{
-	clock_t endwait;
-	endwait = clock () + s * CLOCKS_PER_SEC ;
-	while(clock() < endwait) { ; }
-}
-
-void kms::flush()
-{
-	//copy back to ptr
-	drmModeDirtyFB(fd,id,0,0);
-
-	//struct input_event event;
-	//read(fd,&event,sizeof(struct input_event));
-	//keys[1] = keys[0] = math::set(event.code,event.value==1);
-	//mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
-	//mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
-	//mouse[2] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_X); 
-	//mouse[3] = math::set(event.code,event.type==EV_ABS&&event.value==ABS_Y);
-}
-
-void kms::error(bool c,const char* m)
-{
-	if(c) { system::say(m,1); system::bye(1); }
-}
-
-void* kms::setmode(int w,int h,int c,bool f)
-{
-	width = w;
-	height = h;
-
 	//open default dri device
 	fd = open("/dev/dri/card0",O_RDWR | O_CLOEXEC);
 	error(fd<=0,"Couldn't open /dev/dri/card0");
@@ -150,7 +140,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 	for(i=0;i<connector->count_modes;++i)
 	{
 		mode = connector->modes[i];
-		if( (mode.hdisplay==width) && (mode.vdisplay==height) ) { break; }
+		if( (mode.hdisplay==XRES) && (mode.vdisplay==YRES) ) { break; }
 	}
 	error(f==0 && i==connector->count_modes,"Requested mode not found!");
 	//*
@@ -160,7 +150,7 @@ void* kms::setmode(int w,int h,int c,bool f)
 	//*
 
 	//setup framebuffer
-	struct drm_mode_create_dumb dc = { height,width,32,0,0,0,0 };
+	struct drm_mode_create_dumb dc = { YRES,XRES,BPP,0,0,0,0 };
 	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dc);
 	error(i==1,"Could not create buffer object!");
 
@@ -172,67 +162,34 @@ void* kms::setmode(int w,int h,int c,bool f)
 	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dm);
 	error(i==1,"Could not map buffer object!");
 
-	ptr = mmap(0,size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
+	void* ptr = mmap(0,size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
 	error(ptr==MAP_FAILED,"Could not mirror buffer object!");
 	front.pointer(ptr);
 	//*
 
-	i = drmModeAddFB(fd,width,height,32,32,pitch,handle,&id);
+	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,pitch,handle,&id);
 	error(i==1,"Could not add framebuffer!");
 
 	i = drmModeSetCrtc(fd,encoder->crtc_id,id,0,0,&connector->connector_id,1,&mode);
 	error(i==1,"Could not set mode!");
-
-	return ptr;
 }
 
-void kms::restore()
+void skms::close()
 {
 	//back.~buffer();
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
-	munmap(ptr,size);
+	munmap(front.pointer(),size);
 	struct drm_mode_map_dumb dd = { handle };
 	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&dd);
 	drmModeFreeEncoder(encoder);
 	drmModeFreeConnector(connector);
 	drmModeFreeResources(resources);
 	//drmDropMaster(fd);
-	close(fd);
+	::close(fd);
+	::close(ed);
 }
+///*
 
-int main()
-{
-	//kms::init();
-
-	uint ed = open("/dev/input/event1",O_RDONLY);
-	struct input_event event;
-
-	while(true)
-	{
-		read(ed,&event,sizeof(struct input_event));
-		if(event.type==1) { system::say(":",0); system::say(string::int2str(event.code),0); }
-
-		if(kms::keys[0]=='q') { break; }
-	}
-
-	close(ed);
-
-	int w = 800;
-	int h = 600;
-
-	long* frame = static_cast<long*>(kms::setmode(w,h,1,1));
-
-	for(int i=0;i<h;++i) { for(int j=0;j<w;++j) { kms::back.pointer()[i*w+j] = i*j; } }
-
-	kms::front.copy(kms::back,w*h);
-
-	kms::flush();
-
-	kms::sleep(6);
-
-	kms::restore();
-
-	return 0;
-}
+#endif
 

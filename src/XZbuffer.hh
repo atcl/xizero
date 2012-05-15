@@ -74,7 +74,7 @@ void buffer::clear(sint x)
 	"movaps %%xmm7,112(%1);\n"
 	"addl $128,%1;\n"
 	"loop set;"
-	: :"=r"(&val),"=r"(data),"c"(bytes):"memory");
+	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
 	for(uint i=tsize;i!=0;--i) { data[i]=x; }
 #endif

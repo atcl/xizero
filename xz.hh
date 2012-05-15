@@ -24,6 +24,7 @@
 #include "src/XZpolygon.hh"
 #include "src/XZprogress.hh"
 #include "src/XZscreen.hh"
+#include "src/XZskms.hh"
 #include "src/XZstring.hh"
 #include "src/XZsystem.hh"
 #include "src/XZtrans.hh"
