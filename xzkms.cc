@@ -10,8 +10,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <linux/input.h>
-
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 
@@ -201,24 +199,41 @@ void kms::restore()
 	close(fd);
 }
 
+#include <termios.h>
+
+int getch()
+{
+	static int ch = -1, fd = 0;
+	struct termios neu, alt;
+	fd = fileno(stdin);
+	tcgetattr(fd, &alt);
+	neu = alt;
+	neu.c_lflag &= ~(ICANON|ECHO);
+	tcsetattr(fd, TCSANOW, &neu);
+	ch = getchar();
+	tcsetattr(fd, TCSANOW, &alt);
+	return ch;
+}
+
+
+int mouse()
+{
+
+}
+
 int main()
 {
 	//kms::init();
 
-	uint ed = open("/dev/input/event1",O_RDONLY);
-	struct input_event event;
-
 	while(true)
 	{
-		read(ed,&event,sizeof(struct input_event));
-		if(event.type==1) { system::say(":",0); system::say(string::int2str(event.code),0); }
+		int k = getch();
+		if(k!=0) { system::say(":",0); system::say(string::int2str(k),0); }
 
 		if(kms::keys[0]=='q') { break; }
 	}
 
-	close(ed);
-
-	int w = 800;
+	/*int w = 800;
 	int h = 600;
 
 	long* frame = static_cast<long*>(kms::setmode(w,h,1,1));
@@ -231,7 +246,7 @@ int main()
 
 	kms::sleep(6);
 
-	kms::restore();
+	kms::restore();*/
 
 	return 0;
 }

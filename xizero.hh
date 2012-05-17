@@ -119,7 +119,7 @@ void menu()
 		b_about.draw();
 		b_leave.draw();
 		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
-		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
+		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	delete scr;
 	//*
@@ -225,7 +225,7 @@ void mainmenu()
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS);
 		button::check(screen::mousex(),screen::mousey(),screen::mouseb());
-		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
+		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	//*
 }

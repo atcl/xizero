@@ -6,7 +6,7 @@
 ///guard
 #ifndef HH_XZSKMS
 #define HH_XZSKMS
-//#pragma message "Compiling " __FILE__ "..." " TODO: ."
+//#pragma message "Compiling " __FILE__ "..." " TODO: mouse"
 ///*
 
 ///includes
@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/mman.h>
-#include <linux/input.h>
+#include <termios.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
 #include "XZbasic.hh"
@@ -25,6 +25,20 @@
 
 ///declarations
 #define BPP 32
+
+/*#define LEFT	
+#define RIGHT	
+#define UP	
+#define DOWN	
+#define ESCAPE	
+#define LCTRL	
+#define RCTRL	
+#define ENTER	
+#define PGUP	
+#define PGDOWN	
+#define SPACE*/   
+
+struct tile;
 ///*
 
 ///definitions
@@ -37,11 +51,16 @@ namespace skms
 
 	namespace
 	{
-		sint keys[2] = { 0,0 };
-		sint mouse[4] = { 0,0,0,0 };	
-		void* mcursor = 0;
+		tile* cs = 0;
+		uint kk = 0;
+		uint mx = XRES/2;
+		uint my = YRES/2;
+		bool mb = 0;
 
 		uint ed;			//input event device handle
+		termios nc;			//new terminal config
+		termios oc;			//old terminal config
+
 		uint fd;			//drm device handle
 		uint handle;			//handle to framebuffer
 		uint size;			//size of framebuffer
@@ -59,38 +78,43 @@ namespace skms
 	}
 
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
-	void init(void* c=0) 	{ mcursor = c; ed = open("/dev/input/event0",O_RDONLY); }
+	void init(tile* c);
 	void set(uint c,bool f=0);
 	void flush()		{ /*copy back.ptr*/ drmModeDirtyFB(fd,id,0,0); }
 	void event();
 	bool run()		{ flush(); event(); return 0; }
 	void close();
 
-	void wait(sint k)	{ while(k!=keys[1]) { event(); } }
+	void wait(sint k)	{ while(k!=kk) { event(); } }
 	void sleep(sint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint time()		{ return (CLOCKS_PER_SEC*1000)*clock(); }
 	uint fps(bool o=1)	{ static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; } 
 
-	inline sint  key()	{ const sint k = keys[1]; keys[1] = 0; return k; }
-	inline sint  turbo()	{ return keys[0]; }
-	inline sint  mousex()	{ return mouse[2]; }
-	inline sint  mousey()	{ return mouse[3]; }
-	inline sint  mouseb()	{ const sint b = mouse[0]; mouse[0] = 0; return b; }
-	inline void* cursor()	{ return mcursor; }
+	inline uint key()	{ return kk; }
+	inline uint msx()	{ return mx; }
+	inline uint msy()	{ return my; }
+	inline uint msb()	{ return mb; }
+	inline tile* cursor()	{ return cs; }
 }
 ///*
 
 ///implementation
+void skms::init(tile* c)
+{
+	cs = c;
+	ed = fileno(stdin);
+	tcgetattr(ed,&oc);
+	nc = oc;
+	nc.c_lflag &= ~(ICANON|ECHO);
+	tcsetattr(ed,TCSANOW,&nc);
+}
+
 void skms::event()
 {
-	struct input_event event;
-	read(fd,&event,sizeof(struct input_event));
-	keys[1] = keys[0] = math::set(event.code,event.type==EV_KEY&&event.value==1);
-	keys[1] = keys[0] = math::set(event.code,event.type==EV_KEY&&event.value==0);
-	mouse[0] = math::set(event.code==BTN_LEFT,event.type==EV_KEY&&event.value==1);
-	mouse[1] = math::set(event.code==BTN_RIGHT,event.type==EV_KEY&&event.value==1);
-	mouse[2] = math::set(event.code,event.type==EV_REL&&event.value==REL_X); 
-	mouse[3] = math::set(event.code,event.type==EV_REL&&event.value==REL_Y);
+	kk = getchar();
+	mb=(kk==SPACE);
+	mx=math::lim(0,mx+(kk==RIGHT)-(kk==LEFT),XRES);
+	my=math::lim(0,my+(kk==RIGHT)-(kk==LEFT),YRES);
 }
 
 void skms::set(uint c,bool f)
@@ -187,7 +211,7 @@ void skms::close()
 	drmModeFreeResources(resources);
 	//drmDropMaster(fd);
 	::close(fd);
-	::close(ed);
+	tcsetattr(ed,TCSANOW,&oc);
 }
 ///*
 

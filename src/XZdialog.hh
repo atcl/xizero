@@ -6,7 +6,7 @@
 ///guard
 #ifndef HH_XZDIALOG
 #define HH_XZDIALOG
-//#pragma message "Compiling " __FILE__ "..." " TODO: ."
+//#pragma message "Compiling " __FILE__ "..." " TODO: yesnobox"
 ///*
 
 ///includes
@@ -22,6 +22,7 @@ namespace dialog
 	inline pure sint ok() { return 1; }
 	//inline pure sint no() { return -1; }
 	            sint msgbox(const char* m);
+	//          sint yesnobox(const char* m);
 }
 ///*
 
@@ -44,7 +45,7 @@ sint dialog::msgbox(const char* m)
 		font::draw(x+20,y+20,m,BLACK,WHITE);
 		bok.draw();
 		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
-		gfx::sprite(*(tile*)screen::cursor(),screen::mousex(),screen::mousey());
+		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	
 	button::all(1);

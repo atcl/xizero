@@ -33,6 +33,8 @@
 
 #define AXES    2
 #define BUTTONS 4
+
+struct tile;
 ///*
 
 ///definitions
@@ -47,14 +49,14 @@ namespace screen
 		sint  mouse[4] = { 0,0,0,0 };	
 		sint  keys[2] = { 0,0 };
 		sint  joys = 0;
-		void* mcursor = 0;
+		tile* mcursor = 0;
 
 		void cb_key(int k,int a)    { keys[1] = keys[0] = math::set(k,a==GLFW_PRESS); }
 		void cb_mouseb(int b,int a) { mouse[math::lim(0,b,1)] = (a==GLFW_PRESS); }
 		void cb_mousep(int x,int y) { mouse[2] = x; mouse[3] = y; }
 	}
 
-	void init(sint x,sint y,const char* t,void* c=0);
+	void init(sint x,sint y,const char* t,tile* c=0);
 	bool run();
 	void close()       { glfwCloseWindow(); glfwTerminate(); }
 	void wait(sint k)  { while(glfwGetKey(k)!=GLFW_PRESS) { glfwWaitEvents(); } }
@@ -68,12 +70,12 @@ namespace screen
 	inline sint  mousey() { return mouse[3]; }
 	inline sint  mouseb() { const sint b = mouse[0]; mouse[0] = 0; return b; }
 	inline sint  joy()    { return joys; }
-	inline void* cursor() { return mcursor; }
+	inline tile* cursor() { return mcursor; }
 }
 ///*
 
 ///implementation
-void screen::init(sint x,sint y,const char* t,void* c)
+void screen::init(sint x,sint y,const char* t,tile* c)
 {
 	mcursor = c;
 	glfwInit();
