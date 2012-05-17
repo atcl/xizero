@@ -49,6 +49,7 @@ sint dialog::msgbox(const char* m)
 	}
 	
 	button::all(1);
+	delete[] scr->data;
 	delete scr;
 	return 1;
 }

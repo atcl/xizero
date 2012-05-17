@@ -201,8 +201,8 @@ object::object(const object& o) : poly(0),dock(0),bound(o.bound),polys(o.polys),
 object::~object()
 {
 	delete[] dock;
-	//for(int i=0;i<polys;++i) { delete poly[i]; }
-	//delete[] poly;
+	for(int i=0;i<polys;++i) { delete poly[i]; }
+	delete[] poly;
 }
 
 void object::update(const fmatrix& m)
