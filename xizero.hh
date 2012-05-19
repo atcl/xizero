@@ -32,6 +32,8 @@ void bench();
 void init()
 {
 	screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
+	//screen::init(format::xpm(resource::cursor));
+	//screen::set(1,1);
 }
 
 sint start(sint i)
@@ -43,7 +45,7 @@ sint start(sint i)
 		polygon::counter = 0;
 		if(screen::key()==ESCAPE) { menu(); l.resume(); }
 
-		switch(l.update(screen::turbo(),screen::joy()))
+		switch(l.update(screen::key(),0))
 		{
 			case -1: lost(); return 0;
 			case 1:  won(l.ppos());  return 0;

@@ -26,23 +26,23 @@
 ///declarations
 #define BPP 32
 
-/*#define LEFT	
-#define RIGHT	
-#define UP	
-#define DOWN	
-#define ESCAPE	
-#define LCTRL	
-#define RCTRL	
-#define ENTER	
-#define PGUP	
-#define PGDOWN	
-#define SPACE*/   
+#define ESCAPE	1
+#define ENTER	28
+#define LCTRL	29
+#define SPACE	57
+#define RCTRL	97
+#define UP	103
+#define PGUP	104
+#define LEFT	105
+#define RIGHT	106
+#define DOWN	108
+#define PGDOWN	109
 
 struct tile;
 ///*
 
 ///definitions
-namespace skms
+namespace screen
 {
 	buffer front(XRES*YRES,0);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
@@ -82,7 +82,7 @@ namespace skms
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void flush()		{ /*copy back.ptr*/ drmModeDirtyFB(fd,id,0,0); }
+	void flush()		{ front.copy(back,XRES*YRES); drmModeDirtyFB(fd,id,0,0); }
 	void event();
 	bool run()		{ flush(); event(); return 0; }
 	void close();
@@ -102,7 +102,7 @@ namespace skms
 ///*
 
 ///implementation
-void skms::init(tile* c)
+void screen::init(tile* c)
 {
 	cs = c;
 	ed = fileno(stdin);
@@ -113,7 +113,7 @@ void skms::init(tile* c)
 	last = time()+4000;
 }
 
-void skms::event()
+void screen::event()
 {
 	kk = getchar();
 	mb=(kk==SPACE);
@@ -121,7 +121,7 @@ void skms::event()
 	my=math::lim(0,my+(kk==RIGHT)-(kk==LEFT),YRES);
 }
 
-void skms::set(uint c,bool f)
+void screen::set(uint c,bool f)
 {
 	//open default dri device
 	fd = open("/dev/dri/card0",O_RDWR | O_CLOEXEC);
@@ -202,7 +202,7 @@ void skms::set(uint c,bool f)
 	error(i==1,"Could not set mode!");
 }
 
-void skms::close()
+void screen::close()
 {
 	//back.~buffer();
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 

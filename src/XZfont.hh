@@ -11,7 +11,7 @@
 
 ///includes
 #include "XZbasic.hh"
-#include "XZscreen.hh"
+#include "XZscreen.hh" //"XZskms.hh"
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"

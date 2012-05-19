@@ -12,7 +12,7 @@
 ///includes
 #include "XZbasic.hh"
 #include "XZmath.hh"
-#include "XZscreen.hh"
+#include "XZscreen.hh" //"XZskms.hh"
 #include "XZgfx.hh"
 #include "XZsystem.hh"
 ///*
