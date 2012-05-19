@@ -97,6 +97,8 @@ tile* format::xpm(const char* x)
 		}
 	}
 
+	delete y;
+	delete line; 
 	delete[] color;
 	return r;
 }
@@ -106,7 +108,6 @@ info* format::ini(const char* x)
 	const sint m = string::count(x,'=');
 	const sint n = string::count(x,'\n');
 	char** s = string::split(x,'\n');
-	char** t;
 
 	info* r = new info;
 	r->count = m;
@@ -117,7 +118,7 @@ info* format::ini(const char* x)
 	{
 		if(string::count(s[i],'=')!=0)
 		{
-			t = string::split(s[i],'=');
+			char** t = string::split(s[i],'=');
 			r->name[j] = string::trim(t[0]);
 			r->value[j] = string::trim(t[1]);
 			++j;

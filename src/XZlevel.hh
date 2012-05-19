@@ -64,7 +64,7 @@ level::level(const char* o)
 
 	//load intro message
 	char*   ms = (*lvl)["intro"];
-	char*   tx = system::ldf(ms);
+	char*   tx = system::ldf(ms);	//clean up!
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
 	screen::run();
@@ -72,10 +72,10 @@ level::level(const char* o)
 
 	//load player
 	char*   ts = (*lvl)["player"];
-	char**  ps = string::split(ts,',');
-	object* pm = new object(system::ldf(ps[0]));
-	object* pn = new object(system::ldf(ps[1]));
-	info*   pi = format::ini(system::ldf(ps[2]));
+	char**  ps = string::split(ts,',');		//clean up!
+	object* pm = new object(system::ldf(ps[0]));	//clean up!
+	object* pn = new object(system::ldf(ps[1]));	//clean up!
+	info*   pi = format::ini(system::ldf(ps[2]));	//clean up!
  	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
  	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
 	gfx::fsprog(10);
@@ -84,9 +84,9 @@ level::level(const char* o)
 
 	//load boss
 	ts         = (*lvl)["boss"];
-	char**  bs = string::split(ts,',');
-	object* bm = new object(system::ldf(bs[0]));
-	info*   bi = format::ini(system::ldf(bs[1]));
+	char**  bs = string::split(ts,',');		//clean up!
+	object* bm = new object(system::ldf(bs[0]));	//clean up!
+	info*   bi = format::ini(system::ldf(bs[1]));	//clean up!
 	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
 	gfx::fsprog(20);
 	screen::run();
@@ -94,9 +94,9 @@ level::level(const char* o)
 
 	//load enemy
 	ts         = (*lvl)["enemy"];
-	char**  es = string::split(ts,',');
-	object* em = new object(system::ldf(es[0]));
-	info*   ei = format::ini(system::ldf(es[1]));
+	char**  es = string::split(ts,',');		//clean up!
+	object* em = new object(system::ldf(es[0]));	//clean up!
+	info*   ei = format::ini(system::ldf(es[1]));	//clean up!
 	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
 	gfx::fsprog(30);
 	screen::run();
@@ -104,9 +104,9 @@ level::level(const char* o)
 
 	//load map
 	ts            = (*lvl)["map"];
-	const char* m = system::ldf(ts);
+	const char* m = system::ldf(ts);	//clean up!
 	const sint l  = string::count(m,'\n');
-	map           = string::split(m,'\n');
+	map           = string::split(m,'\n');	//clean up!
 	//long n        = string::length(t[0]); //=LWIDTH
 	gfx::fsprog(40);
 	screen::run();

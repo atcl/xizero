@@ -109,7 +109,7 @@ sint font::width(const char* x)
 		}
 		r = math::max(r,s);
 	}
-
+	delete b;
 	return r;
 }
 

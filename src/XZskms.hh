@@ -57,6 +57,8 @@ namespace skms
 		uint my = YRES/2;
 		bool mb = 0;
 
+		uint last = 0;
+
 		uint ed;			//input event device handle
 		termios nc;			//new terminal config
 		termios oc;			//old terminal config
@@ -85,16 +87,17 @@ namespace skms
 	bool run()		{ flush(); event(); return 0; }
 	void close();
 
+	inline uint time()	{ return (CLOCKS_PER_SEC*1000)*clock(); }
 	void wait(sint k)	{ while(k!=kk) { event(); } }
 	void sleep(sint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
-	uint time()		{ return (CLOCKS_PER_SEC*1000)*clock(); }
-	uint fps(bool o=1)	{ static sint f=0; static sint l=time()+4000; sint t=time(); f+=o; if(t>=l&&o==1) { l=t+4000; t=f>>2; f=0; return t; } return -1; } 
+	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+4000; t=f>>2; f=0; return t; } return -1; } 
 
 	inline uint key()	{ return kk; }
-	inline uint msx()	{ return mx; }
-	inline uint msy()	{ return my; }
-	inline uint msb()	{ return mb; }
+	inline uint mousex()	{ return mx; }
+	inline uint mousey()	{ return my; }
+	inline uint mouseb()	{ return mb; }
 	inline tile* cursor()	{ return cs; }
+	//inline void mousec()    { mx = XRES/2; my=YRES/2; }
 }
 ///*
 
@@ -107,6 +110,7 @@ void skms::init(tile* c)
 	nc = oc;
 	nc.c_lflag &= ~(ICANON|ECHO);
 	tcsetattr(ed,TCSANOW,&nc);
+	last = time()+4000;
 }
 
 void skms::event()

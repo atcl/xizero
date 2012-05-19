@@ -20,7 +20,8 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 		<xsl:for-each select=\"rule\">
 			<xsl:if test=\"name='$P'\">
 				<xsl:for-each select=\"sources/source\">
-					<xsl:text>g++ </xsl:text>
+					<xsl:value-of select=\"../../compiler\"/>
+					<xsl:text> </xsl:text>
 					<xsl:if test=\"../../path/source!=''\">
 						<xsl:value-of select=\"../../path/source\"/>
 						<xsl:text>/</xsl:text>
@@ -46,7 +47,9 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 					<xsl:text>.o </xsl:text>
 					<xsl:text>&#10;</xsl:text>
 				</xsl:for-each>
-				<xsl:text> &#38;&#38; g++ </xsl:text>
+				<xsl:text> &#38;&#38; </xsl:text>
+				<xsl:value-of select=\"compiler\"/>
+				<xsl:text> </xsl:text>
 				<xsl:for-each select=\"sources/source\">
 					<xsl:text>.</xsl:text>
 					<xsl:value-of select=\".\"/>

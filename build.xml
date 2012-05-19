@@ -1,6 +1,7 @@
 <project>
 	<rule>
 		<name>default</name>
+		<compiler>gcc</compiler>
 		<path>
 			<source></source>
 			<include>/usr/include/libdrm</include>
@@ -25,10 +26,11 @@
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
+			<!--flag>-march=native -mtune=native -m32</flag-->
 			<!--flag>-s</flag--><!--strip debug symbols-->
-			<flag>-fno-exceptions -fno-rtti</flag>
-			<!--flag>-static -nostdlib </flag-->
-			<flag>-g -std=c++0x</flag>
+			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
+			<!--flag>-static -nostdlib -fno-threadsafe-statics</flag-->
+			<flag>-g</flag>
 		</flags>
 		<binary>
 			<name>xizero</name>
@@ -40,6 +42,7 @@
 
 	<rule>
 		<name>unit</name>
+		<compiler>gcc</compiler>
 		<sources>
 			<source>unit.cc</source>
 		</sources>
@@ -73,6 +76,7 @@
 
 	<rule>
 		<name>test</name>
+		<compiler>gcc</compiler>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>

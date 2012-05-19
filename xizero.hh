@@ -129,9 +129,9 @@ void menu()
 void intro()
 {
 	//load, clone and place object
-	const object q(system::ldf("dat/level.y3d"));
+	const object q(system::ldf("dat/level.y3d")); //delete return of ldf
 	object b[4] = { object(q),object(q),object(q),object(q) };
-	object c(system::ldf("dat/cross.y3d"));
+	object c(system::ldf("dat/cross.y3d")); //delete return of ldf
 
 	lvector p(400,300,100);
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0); c.update();

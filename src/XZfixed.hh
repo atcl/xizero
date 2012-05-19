@@ -17,9 +17,9 @@
 ///declaration
 #define FX    16
 #define FXONE 0x00010000 //1
+#define FXTWO 0x00020000 //2
 #define FXMON 0xFFFF0000 //-1
 #define FXHLF 0x00008000 //0.5
-#define FXTWO 0x00020000 //2
 #define FXTNT 0x00001999 //0.1
 #define FXHUN 0x0000028F //0.01
 #define FXEPS 0x00000001 //eps
@@ -90,7 +90,7 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 		r = (((i-1)%3)==0)&&i!=1&&!r&&h;
 		const bool  s = (v>=0 && y<v) || (v<0 && z>=0);
 		const fixed w = x + math::neg(mul(y,t),s^h);
-		y -= math::neg(mul(x,t),s);	
+		y -= math::neg(mul(x,t),s);
 		z += math::neg(math::set(ah[i],at[i],h),s);
 		x = w;
 		i -= r;
