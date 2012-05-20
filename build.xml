@@ -11,8 +11,7 @@
 			<source>xizero.cc</source>
 		</sources>
 		<libs>
-			<lib>GL</lib>
-			<lib>glfw</lib><!--drm-->
+			<lib>drm</lib>
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>

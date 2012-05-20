@@ -31,9 +31,9 @@ void bench();
 ///Implementation
 void init()
 {
-	screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
-	//screen::init(format::xpm(resource::cursor));
-	//screen::set(1,1);
+	//screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
+	screen::init(format::xpm(resource::cursor));
+	screen::set(1,1);
 }
 
 sint start(sint i)
@@ -43,7 +43,7 @@ sint start(sint i)
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		if(screen::key()==ESCAPE) { menu(); l.resume(); }
+		if(screen::turbo()==ESCAPE) { menu(); l.resume(); }
 
 		switch(l.update(screen::key(),0))
 		{

@@ -223,7 +223,7 @@ int mouse()
 
 int main()
 {
-	//kms::init();
+	/*kms::init();
 
 	while(true)
 	{
@@ -231,9 +231,9 @@ int main()
 		if(k!=0) { system::say(":",0); system::say(string::int2str(k),0); }
 
 		if(kms::keys[0]=='q') { break; }
-	}
+	}*/
 
-	/*int w = 800;
+	int w = 800;
 	int h = 600;
 
 	long* frame = static_cast<long*>(kms::setmode(w,h,1,1));
@@ -246,7 +246,7 @@ int main()
 
 	kms::sleep(6);
 
-	kms::restore();*/
+	kms::restore();
 
 	return 0;
 }

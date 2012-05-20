@@ -15,7 +15,7 @@
 #include "XZmath.hh"
 #include "XZvector.hh"
 #include "XZmatrix.hh"
-#include "XZscreen.hh" //"XZskms.hh"
+#include "XZskms.hh"
 #include "XZgfx.hh"
 ///*
 

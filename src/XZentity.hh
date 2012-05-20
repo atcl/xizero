@@ -184,14 +184,14 @@ sint entity::update(sint k,sint j)
 
 	switch(k)
 	{
-		case LEFT:
+		case RIGHT:
 			_model[0]->update(rot[0]);
 			_model[1]->update(rot[0]);
 			_direction[0] = rot[0].transform(_direction[0]);
 			_direction[1] = rot[0].transform(_direction[1]);
 		break;
 
-		case RIGHT:
+		case LEFT:
 			_model[0]->update(rot[1]);
 			_model[1]->update(rot[1]);
 			_direction[0] = rot[1].transform(_direction[0]);
@@ -206,19 +206,19 @@ sint entity::update(sint k,sint j)
 			_direction[0].e = math::set(fx::l2f(-(_direction[0].e<=0)),_direction[0].e,l==1);
 		break;
 
-		case 'A':
+		case 'a':
 			_model[1]->update(rot[0]);
 			_angle += ROTANG;
 			_direction[1] = rot[0].transform(_direction[1]);
 		break;
 
-		case 'D':
+		case 'd':
 			_model[1]->update(rot[1]);
 			_angle -= ROTANG;
 			_direction[1] = rot[1].transform(_direction[1]);
 		break;
 
-		case 'W':
+		case 'w':
 			_model[1]->update(rot[mat]);
 			_angle += math::neg(ROTANG,mat);
 			_direction[1] = rot[mat].transform(_direction[1]);
