@@ -28,7 +28,7 @@
 			<!--flag>-march=native -mtune=native -m32</flag-->
 			<!--flag>-s</flag--><!--strip debug symbols-->
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
-			<!--flag>-static -nostdlib -fno-threadsafe-statics</flag-->
+			<!--flag>-static -nostdlib</flag-->
 			<flag>-g</flag>
 		</flags>
 		<binary>
@@ -46,8 +46,7 @@
 			<source>unit.cc</source>
 		</sources>
 		<libs>
-			<lib>GL</lib>
-			<lib>glfw</lib>
+			<lib>drm</lib>
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
@@ -80,8 +79,7 @@
 			<source>xizero.cc</source>
 		</sources>
 		<libs>
-			<lib>GL</lib>
-			<lib>glfw</lib>
+			<lib>drm</lib>
 		</libs>
 		<defines>
 			<define>SSE</define>

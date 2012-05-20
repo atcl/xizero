@@ -46,7 +46,7 @@ namespace resource
 "32 32 5 1\n\
 # c None\n\
 b c #800000\n\
-. c #c0c0c0\n\
+. c #000000\n\
 c c #ff0000\n\
 a c #ffffff\n\
 \n\

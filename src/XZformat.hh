@@ -85,8 +85,7 @@ tile* format::xpm(const char* x)
 	for(sint i=0;i<colors;++i)
 	{
 		line = string::split(y[index++],' ');
-		color[sint(line[0][0])] = math::set(TRANS,string::find(line[2],"None")!=0);
-		color[sint(line[0][0])] = math::set(math::ndn(string::str2hex(line[2])<<4),line[2][0]=='#');
+		color[sint(line[0][0])] = math::set(string::str2hex(line[2])>>4,TRANS,line[2][0]=='#'); 
 	}
 
 	for(sint i=0,o=0;i<height;++i,++index)

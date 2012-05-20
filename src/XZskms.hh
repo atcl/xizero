@@ -162,7 +162,7 @@ void screen::set(uint c,bool f)
 
 	int i;
 
-	//acquire drm connector //todo: choose connector
+	//acquire drm connector
 	for(i=0;i<resources->count_connectors;++i)
 	{
 		connector = drmModeGetConnector(fd,resources->connectors[i]);
