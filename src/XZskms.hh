@@ -18,6 +18,7 @@
 #include <termios.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
+
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
@@ -149,8 +150,6 @@ void screen::set(uint c,bool f)
 	error(fd<=0,"Couldn't open /dev/dri/card0");
 	//*
 
-	//drmSetMaster(fd);
-
 	//acquire drm resources
 	resources = drmModeGetResources(fd);
 	error(resources==0,"drmModeGetResources failed\nMay be you are trying to start xizero from within X.\nIn this case switch to ttyX terminal.\nFor example with STRG+ALT+1 for tty1");
@@ -236,7 +235,6 @@ void screen::close()
 	drmModeFreeEncoder(encoder);
 	drmModeFreeConnector(connector);
 	drmModeFreeResources(resources);
-	//drmDropMaster(fd);
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
 	delete nu;
