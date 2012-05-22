@@ -251,7 +251,7 @@ sint entity::update()
 {
 	const sint curr = screen::time();
 
-	ifu(_health==0)
+	ifu(_health==0) //todo: dyadic explosion
 	{
 		static sint dm = 0;
 		//_model[0].update()

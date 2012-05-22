@@ -231,13 +231,13 @@ void level::display()
 	screen::depth.clear(fx::l2f(200));
 	//*
 
-	//render terrain
+	//render terrain //fix
 	mark = math::lim(markmax,entity::ylevel-450,markmin);
 	const lvector p(400,300-BWIDTH-mark%BWIDTH,GROUND);
 	const fixed yd = fx::l2f(-20);
 	object::linear.clear();
 	object::linear.translate(0,fx::l2f(300),0);
-	sint r = math::max((mark/BWIDTH)-3,0);
+	sint r = math::max((mark/BWIDTH)-3,0); //likely errory
 	for(uint i=0;i<34;++i,++r)
 	{
 		object temp(*terrain[r]);

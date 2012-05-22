@@ -31,7 +31,6 @@ void bench();
 ///Implementation
 void init()
 {
-	//screen::init(XRES,YRES,TITLE" "VERSION,format::xpm(resource::cursor));
 	screen::init(format::xpm(resource::cursor));
 	screen::set(1,1);
 }
@@ -131,9 +130,9 @@ void menu()
 void intro()
 {
 	//load, clone and place object
-	const object q(system::ldf("dat/level.y3d")); //delete return of ldf
-	object b[4] = { object(q),object(q),object(q),object(q) };
-	object c(system::ldf("dat/cross.y3d")); //delete return of ldf
+	const char* o = system::ldf("dat/level.y3d"); object q(o); delete o;
+	object b[4] = { q,object(q),object(q),object(q) };
+	const char* r = system::ldf("dat/cross.y3d"); object c(r); delete r;
 
 	lvector p(400,300,100);
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0); c.update();
@@ -147,18 +146,19 @@ void intro()
 	const sint last = screen::time();
 	      sint curr = last;
 	      sint prog = 0;
-	while(screen::run() && curr<last+4000 && screen::key()!=ESCAPE)
+
+	while(screen::run() && curr<last+4500 && screen::key()!=ESCAPE)
 	{
 		curr = screen::time();
 		object::linear.clear();
 		const sint diff = curr-last;
-		switch( diff/500 )
+		switch( diff/1000 )
 		{
-			case 1: case 2: object::linear.translate(0,fx::mul(fx::l2f(25),prog),0); break;
+			case 1: object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
 
-			case 3: case 4: object::linear.rotatex(fx::mul(fx::l2f(19),prog)); break;
+			case 2: object::linear.rotatex(fx::mul(fx::l2f(14),prog)); break;
 
-			case 5: case 6: object::linear.translate(0,0,fx::mul(fx::l2f(35),prog)); break;
+			case 3: object::linear.translate(0,0,fx::mul(fx::l2f(23),prog)); break;
 		}
 
 		c.update();
@@ -175,15 +175,14 @@ void intro()
 		b[3].display(p,R_F|R_Z);
 		prog = fx::mul(fx::l2f(curr-screen::time()),FXHUN);
 	}
-
 	//*
 }
 
 void mainmenu()
 {
 	//load, clone and place objects
-	const object v(system::ldf("dat/segver.y3d"));
-	const object h(system::ldf("dat/seghor.y3d"));
+	const char* o = system::ldf("dat/segver.y3d"); const object v(o); delete o;
+	const char* q = system::ldf("dat/seghor.y3d"); const object h(q); delete q;
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
@@ -207,7 +206,6 @@ void mainmenu()
 	//*
 
 	//draw menu
-	//object xizero();
 	while(screen::run())
 	{
 		screen::back.clear(BLACK);

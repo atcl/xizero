@@ -4,8 +4,8 @@
 // Icon Library
 
 ///guard
-#ifndef HXX_XZRESOURCE
-#define HXX_XZRESOURCE
+#ifndef HH_XZRESOURCE
+#define HH_XZRESOURCE
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 

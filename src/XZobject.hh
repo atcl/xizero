@@ -34,7 +34,7 @@ class object
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
 		       ~object();
-		/*OK*/ void   update(const fmatrix& m=object::linear);
+		/*OK*/ void   update(const fmatrix& m=object::linear,bool j=0);
 		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
 		/*OK*/ void   pull(fixed x);
@@ -205,11 +205,11 @@ object::~object()
 	delete[] poly;
 }
 
-void object::update(const fmatrix& m)
+void object::update(const fmatrix& m,bool j)
 {
 	for(sint i=0;i<polys;++i)
 	{
-		poly[i]->update(m);
+		poly[i]->update(m,j);
 	}
 	for(sint i=0;i<docks;++i)
 	{
