@@ -155,9 +155,7 @@ void intro()
 		switch( diff/1000 )
 		{
 			case 1: object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
-
 			case 2: object::linear.rotatex(fx::mul(fx::l2f(14),prog)); break;
-
 			case 3: object::linear.translate(0,0,fx::mul(fx::l2f(23),prog)); break;
 		}
 
@@ -262,7 +260,7 @@ void bench()
 	if(fps!=-1)
 	{
 		system::say(string::int2str(polygon::counter*fps)); 			
-		system::say("p/s - ");
+		system::say("T/s - ");
 		system::say(string::int2str(polygon::counter)); 
 		system::say("@");
 		system::say(string::int2str(fps),1);
