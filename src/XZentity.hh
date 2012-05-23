@@ -34,6 +34,7 @@ class entity
 {
 	private:
 		static const fmatrix rot[2];
+		static const fmatrix exp[2];
 		static list _ammo[2];
 		static fixed ymark;
 
@@ -77,6 +78,7 @@ class entity
 
 ///implementation
 const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }() };
+const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; m.dyadic(fvector(FXONE,FXTWO,FXONE),fvector(FXHLF,FXHLF,FXHLF)); return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); return m; }() };
 list          entity::_ammo[2] = { list(), list() };
 fixed         entity::ymark  = 0;
 sint          entity::ylevel = 0;
@@ -254,7 +256,7 @@ sint entity::update()
 	ifu(_health==0) //todo: dyadic explosion
 	{
 		static sint dm = 0;
-		//_model[0].update()
+		_model[0]->update(exp[dm!=0],dm==0);
 		return _health-(dm++>250);		
 	}
 

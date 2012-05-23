@@ -45,9 +45,10 @@ struct tile
 ///definitions 
 namespace format
 {
-	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
-	/*OK*/ tile*  xpm(const char* x);		//load xpm image
-	/*OK*/ info*  ini(const char* x);		//load ini configuartion
+	/*OK*/ char**  csv(const char* x,char y=',');	//load comma seperated values
+	/*OK*/ tile*   xpm(const char* x);		//load xpm image
+	/*OK*/ info*   ini(const char* x);		//load ini configuartion
+	       char*** ar(const char* x);		//load ar archive
 }
 ///*
 
@@ -127,6 +128,10 @@ info* format::ini(const char* x)
 	return r;
 }
 
+char*** format::ar(const char* x)
+{
+
+}
 ///*
 
 #endif

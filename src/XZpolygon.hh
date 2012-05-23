@@ -57,7 +57,7 @@ class polygon
 		              void raster(bool s,uint c) const; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/      polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
-		/*OK*/ void update(const fmatrix& m,bool i=0);
+		/*OK*/ void update(const fmatrix& m,bool i=1);
 		/*OK*/ void display(const lvector& p,sint f,uint c=0);
 		/*OK*/ void pull(fixed a);
 		/*OK*/ static lvector project(const lvector& p,const fvector& v);
@@ -183,7 +183,7 @@ polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : co
 
 void polygon::update(const fmatrix& m,bool i)
 {
-	/*if(i==0)*/ { cpoint[1] = m.transform(cpoint[1]); }
+	cpoint[i] = m.transform(cpoint[i]);
 	cpoint[0] = m.transform(cpoint[0]);
 	cpoint[2] = m.transform(cpoint[2]);
 	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) * FXHUN;

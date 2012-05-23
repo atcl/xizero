@@ -34,7 +34,7 @@ class object
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
 		       ~object();
-		/*OK*/ void   update(const fmatrix& m=object::linear,bool j=0);
+		/*OK*/ void   update(const fmatrix& m=object::linear,bool j=1);
 		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
 		/*OK*/ void   pull(fixed x);

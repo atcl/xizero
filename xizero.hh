@@ -44,11 +44,13 @@ sint start(sint i)
 		polygon::counter = 0;
 		if(screen::turbo()==ESCAPE) { menu(); l.resume(); }
 
+		//int pid = vfork(); int stat; while(waitpid(pid,&stat,0)!=pid) { ; }
 		switch(l.update(screen::key(),0))
 		{
 			case -1: lost(); return 0;
 			case 1:  won(l.ppos());  return 0;
 		}
+				
 		l.display();
 		//screen::back.fsaamb(screen::accum);
 		l.gauges();
