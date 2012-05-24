@@ -44,7 +44,8 @@ bool game::bounds(const fvector& x,const fvector& m)
 
 bool game::collision(const fvector& x,fvector r,const fvector& a)
 {
-	const fvector t = a-(x+r);
+	const fvector t(a.x-x.x-r.x,a.y-x.y-r.y,0);
+	//const fvector t(a-(x+r));
 	return t.length()<r.e;
 }
 

@@ -132,14 +132,15 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 		}
 	}
 
+	bbox[0].z = bbox[1].z = bbox[2].z = bbox[3].z = 0;
 	bound = (bbox[0]+bbox[1]+bbox[2]+bbox[3]);
-	bound.x >>= 2;
-	bound.y >>= 2;
-	bound.z >>= 2;
-	fixed ac = (bbox[0]-bbox[1]).length()+(bbox[2]-bbox[3]).length();
-	fixed bd = (bbox[1]-bbox[2]).length()+(bbox[3]-bbox[0]).length();
-	fixed ar = ((bbox[0]-bbox[2]).cross(bbox[1]-bbox[3])).length();
-	bound.e = fx::div(ar,math::min(ac,bd)<<1);
+	bound.x >>= 2; //to fx
+	bound.y >>= 2; //to fx
+	bound.z >>= 2; //to fx
+	const fixed ac = fx::l2f((bbox[1]-bbox[0]).length()+(bbox[3]-bbox[2]).length());
+	const fixed bd = fx::l2f((bbox[2]-bbox[1]).length()+(bbox[0]-bbox[3]).length());
+	const fixed ar = fx::l2f(((bbox[2]-bbox[0]).cross(bbox[3]-bbox[1])).length());
+	bound.e = fx::div(ar,math::min(ac,bd)); // *0.5
 
 	delete t;
 }

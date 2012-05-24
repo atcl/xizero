@@ -84,9 +84,9 @@ namespace screen
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void flush()		{ front.copy(back,XRES*YRES); drmModeDirtyFB(fd,id,0,0); }
-	void event();
-	bool run()		{ flush(); event(); return 1; }
+	void* flush(void* n=0)	{ front.copy(back,XRES*YRES); drmModeDirtyFB(fd,id,0,0); return 0; }
+	bool event();
+	bool run()		{ flush(); return event(); }
 	void close();
 
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
@@ -127,10 +127,10 @@ void screen::init(tile* c)
 	last = time()+4000;
 }
 
-void screen::event()
+bool screen::event()
 {
 	const int r = kbhit();
-	guard(r==0); 
+	guard(r==0,1); 
 
 	const int s = 3-(r==1)-(r==2);
 	packed t;
@@ -141,6 +141,8 @@ void screen::event()
 	mb = kk==SPACE;
 	mx = math::lim(0,mx+((kk==LEFT)<<2)-((kk==RIGHT)<<2),XRES);
 	my = math::lim(0,my+((kk==DOWN)<<2)-((kk==UP)<<2),YRES);
+
+	return 1; //kk==
 }
 
 void screen::set(uint c,bool f)
