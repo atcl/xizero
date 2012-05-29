@@ -19,11 +19,11 @@ class buffer
 	private:
 		const uint tsize;	//size in typesize
 		const uint bytes;	//size in bytes
+		const bool later;	//self allocated or not
 		      sint* data;	//pointer to data
 	public:
-		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)aligned(16,bytes); }
-		/*OK*/ buffer(uint s,void* a) : tsize(s),bytes(tsize<<2),data(static_cast<sint*>(a)) { ; }
-		/*OK*/ ~buffer() { free(data); }
+		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned(16,bytes); } } 
+		/*OK*/ ~buffer() { if(later==0) { free(data); } }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
 		/*OK*/ inline sint* pointer() const { return data; }
@@ -54,26 +54,17 @@ void buffer::clear(sint x)
 	"movaps %%xmm0,%%xmm6;\n"
 	"movaps %%xmm0,%%xmm7;\n"
 	"set:\n"
-/*
-	"prefetch   0(%1);\n"
-	"prefetch  16(%1);\n"
-	"prefetch  32(%1);\n"
-	"prefetch  48(%1);\n"
-	"prefetch  64(%1);\n"
-	"prefetch  80(%1);\n"
-	"prefetch  96(%1);\n"
-	"prefetch 112(%1);\n"
-*/
-	"movaps %%xmm0,(%1);\n"
-	"movaps %%xmm1,16(%1);\n"
-	"movaps %%xmm2,32(%1);\n"
-	"movaps %%xmm3,48(%1);\n"
-	"movaps %%xmm4,64(%1);\n"
-	"movaps %%xmm5,80(%1);\n"
-	"movaps %%xmm6,96(%1);\n"
-	"movaps %%xmm7,112(%1);\n"
+	"movntps %%xmm0,(%1);\n"
+	"movntps %%xmm1,16(%1);\n"
+	"movntps %%xmm2,32(%1);\n"
+	"movntps %%xmm3,48(%1);\n"
+	"movntps %%xmm4,64(%1);\n"
+	"movntps %%xmm5,80(%1);\n"
+	"movntps %%xmm6,96(%1);\n"
+	"movntps %%xmm7,112(%1);\n"
 	"addl $128,%1;\n"
 	"loop set;"
+	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
 	for(uint i=tsize;i!=0;--i) { data[i]=x; }

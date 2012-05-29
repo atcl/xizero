@@ -44,7 +44,7 @@ struct tile;
 ///definitions
 namespace screen
 {
-	buffer front(XRES*YRES,0);	//Video Memory Front Buffer
+	buffer front(XRES*YRES,1);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
@@ -100,7 +100,7 @@ namespace screen
 	inline uint mousey()	{ return my; }
 	inline uint mouseb()	{ return mb; }
 	inline tile* cursor()	{ return cs; }
-	//inline void mousec()    { mx = XRES/2; my=YRES/2; }
+	//inline void smouse(uint x=XRES/2,uint y=YRES/2)    { mx=x; my=y; }
 }
 ///*
 
