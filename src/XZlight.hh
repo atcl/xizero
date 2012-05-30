@@ -43,9 +43,9 @@ sint light::lambert(sint x,sint y) const
 	
 	packed c = { col };
 	
-	c.b[1] = math::max(0,fixed(c.b[1])*l);
-	c.b[2] = math::max(0,fixed(c.b[2])*l);
-	c.b[3] = math::max(0,fixed(c.b[3])*l);
+	c.b[1] = math::max(0,fixed(c.b[1])*l); //check and simplify!
+	c.b[2] = math::max(0,fixed(c.b[2])*l); //"
+	c.b[3] = math::max(0,fixed(c.b[3])*l); //"
 
 	return c.d;
 }

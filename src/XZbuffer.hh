@@ -10,6 +10,7 @@
 ///*
 
 ///includes
+#include <malloc.h>
 #include "XZbasic.hh"
 ///*
 
@@ -22,7 +23,7 @@ class buffer
 		const bool later;	//self allocated or not
 		      sint* data;	//pointer to data
 	public:
-		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned(16,bytes); } } 
+		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)memalign(16,bytes); } } 
 		/*OK*/ ~buffer() { if(later==0) { free(data); } }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
@@ -113,10 +114,10 @@ void buffer::fsaamb(const buffer& b)
 	//"pavgb  %%xmm5,%%xmm1;\n"
 	//"pavgb  %%xmm6,%%xmm2;\n"
 	//"pavgb  %%xmm7,%%xmm3;\n"
-	"movaps %%xmm0,  (%%edi);\n"
-	"movaps %%xmm1,16(%%edi);\n"
-	"movaps %%xmm2,32(%%edi);\n"
-	"movaps %%xmm3,48(%%edi);\n"
+	"movntps %%xmm0,  (%%edi);\n"
+	"movntps %%xmm1,16(%%edi);\n"
+	"movntps %%xmm2,32(%%edi);\n"
+	"movntps %%xmm3,48(%%edi);\n"
 	"addl $64,%%edi;\n"
 	"loop fsaa;"
 	: :"S"(b.data),"D"(data),"c"(bytes):);

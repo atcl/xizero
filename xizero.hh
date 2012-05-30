@@ -46,7 +46,7 @@ sint start(sint i)
 		if(screen::turbo()==ESCAPE) { menu(); l.resume(); }
 
 		//pthread_t tid = 0;
-		//pthread_create(&tid,0,screen::flush,0);
+		//pthread_create(&tid,0,screen::flush,0); //todo back/triple swap
 		switch(l.update(screen::key(),0))
 		{
 			case -1: lost(); return 0;

@@ -44,19 +44,20 @@ struct tile;
 ///definitions
 namespace screen
 {
-	buffer front(XRES*YRES,1);	//Video Memory Front Buffer
+	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
 	namespace
 	{
-		tile* cs = 0;
-		uint tk = 0;
-		uint kk = 0;
-		uint mx = XRES/2;
-		uint my = YRES/2;
-		bool mb = 0;
+		tile* cs = 0;			//cursor image
+		uint tk = 0;			//turbo key
+		uint kk = 0;			//keyboard key
+		uint mx = XRES/2;		//mouse horizontal position
+		uint my = YRES/2;		//mouse vertical position
+		bool mb = 0;			//mouse button pressed
+		bool cb = 0;			//current backbuffer
 
 		uint last = 0;
 		char* nu = 0;
@@ -84,7 +85,7 @@ namespace screen
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void* flush(void* n=0)	{ front.copy(back,XRES*YRES); drmModeDirtyFB(fd,id,0,0); return 0; }
+	void* flush(void* n=0)	{ frame.copy(back,XRES*YRES); drmModeDirtyFB(fd,id,0,0); cb^=cb; return 0; }
 	bool event();
 	bool run()		{ flush(); return event(); }
 	void close();
@@ -101,6 +102,7 @@ namespace screen
 	inline uint mouseb()	{ return mb; }
 	inline tile* cursor()	{ return cs; }
 	//inline void smouse(uint x=XRES/2,uint y=YRES/2)    { mx=x; my=y; }
+	//inline buffer front()  { return back[cb]; }
 }
 ///*
 
@@ -214,7 +216,7 @@ void screen::set(uint c,bool f)
 
 	void* ptr = mmap(0,size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
 	error(ptr==MAP_FAILED,"Could not mirror buffer object!");
-	front.pointer(ptr);
+	frame.pointer(ptr);
 	//*
 
 	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,pitch,handle,&id);
@@ -231,7 +233,7 @@ void screen::close()
 	//back.~buffer();
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
-	munmap(front.pointer(),size);
+	munmap(frame.pointer(),size);
 	struct drm_mode_map_dumb dd = { handle };
 	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&dd);
 	drmModeFreeEncoder(encoder);
