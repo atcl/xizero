@@ -216,7 +216,6 @@ void object::update(const fmatrix& m,bool j)
 	{
 		dock[i] = m.transform(dock[i]);
 	}
-	//transform bounding ellipsoid here later
 }
 
 void object::display(const lvector& p,sint f) const

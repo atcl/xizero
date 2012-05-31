@@ -11,6 +11,7 @@
 
 ///includes
 #include <malloc.h>
+#include <string.h>
 #include "XZbasic.hh"
 ///*
 
@@ -29,9 +30,9 @@ class buffer
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
+		/*OK*/ inline void  copy(const buffer& s,uint x) { memcpy(data,s.data,bytes); }
+		/*OK*/ //inline void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
 		/*OK*/        void  clear(sint x=0);
-		/*OK*/        void  copy(const buffer& s,uint x);
-		/*OK*/        void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
 		              void  fsaamb(const buffer& b);
 		              void  glow();
 };
@@ -70,15 +71,6 @@ void buffer::clear(sint x)
 #else
 	for(uint i=tsize;i!=0;--i) { data[i]=x; }
 #endif
-}
-
-void buffer::copy(const buffer& s,uint x)
-{
-//#ifdef SSE
-
-//#else
-	for(uint i=x;i!=0;--i) { data[i]=s.data[i]; }
-//#endif
 }
 
 void buffer::fsaamb(const buffer& b)

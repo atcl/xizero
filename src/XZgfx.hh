@@ -52,9 +52,8 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 	a = math::lim(0,a,XRES-1);
 	b = math::lim(0,b,YRES-1);
 
-	sint o = 0;
-	sint p = 0;
-	sint q = 0;
+	sint pp = 0;
+	sint qq = 0;
 
 	sint xs = 1;
 	sint ys = XRES;
@@ -64,65 +63,64 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 	switch( math::set(2,sint(y==b)-sint(x==a),k==1) )
 	{
 		case -1: //vertical line
-			p = math::min(y,b);
-			q = math::max(y,b);
-			o = p*XRES+x;
-			for(sint i=p;i<=q;++i)
+		{
+			const sint p = math::min(y,b);
+			const sint q = math::max(y,b);
+			for(sint i=p,o=p*XRES+x;i<=q;++i,o+=XRES)
 			{
 				screen::back[o] = c;
-				o += XRES;
 			}
+		}
 		break;
 
 		case 1: //horizontal line
-			p = math::min(x,a);
-			q = math::max(x,a);
-			o = y*XRES+p;
-			for(sint i=p;i<=q;++i)
+		{
+			const sint p = math::min(x,a);
+			const sint q = math::max(x,a);
+			for(sint i=p,o=y*XRES+p;i<=q;++i,++o)
 			{
-				screen::back[o++] = c;
+				screen::back[o] = c;
 			}
+		}
 		break;
 
 		default:
 		case 0: //general line
-			o = y*XRES+x;
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
 			ys = math::neg(ys,dy<0);
 			dy = math::neg(dy,dy<0);
-			p = xs;
+			pp = xs;
 			xs = math::set(ys,xs,dy>dx);
-			ys = math::set(p,ys,ys==xs);
-			p = dx;
+			ys = math::set(pp,ys,ys==xs);
+			pp = dx;
 			dx = math::set(dy,dx,dy>dx);
-			dy = math::set(p,dy,dy==dx);
-			p = dy;
-			q = dx;
-			for(sint i=0;i<=q;++i)
+			dy = math::set(pp,dy,dy==dx);
+			pp = dy;
+			qq = dx;
+			for(sint i=0,o=y*XRES+x;i<=qq;++i)
 			{
 				screen::back[o] = c;
-				p += dy;
-				o += xs + math::set(ys,p>=dx);
-				p -= math::set(dx,p>=dx);
+				pp += dy;
+				o += xs + math::set(ys,pp>=dx);
+				pp -= math::set(dx,pp>=dx);
 			} 
 		break;
 
 		case 2: //antialiased line
-			o = y*XRES+x;
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
 			ys = math::neg(ys,dy<0);
 			dy = math::neg(dy,dy<0);
-			p = xs;
+			pp = xs;
 			xs = math::set(ys,xs,dy>dx);
-			ys = math::set(ys,p,ys!=xs);
-			p = dx;
+			ys = math::set(ys,pp,ys!=xs);
+			pp = dx;
 			dx = math::set(dy,dx,dy>dx);
-			dy = math::set(dy,p,dy!=dx);
-			p = dy;
-			q = dx;
-			for(sint i=0;i<=q;++i)
+			dy = math::set(dy,pp,dy!=dx);
+			pp = dy;
+			qq = dx;
+			for(sint i=0,o=y*XRES+x;i<=qq;++i)
 			{
 				u.d = screen::back[o-xs];
 				u.b[0] = 0xFF;
@@ -137,9 +135,9 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 				u.b[2] = (u.b[2] + v.b[2])>>1;
 				u.b[3] = (u.b[3] + v.b[3])>>1;	
 				screen::back[o+xs] = u.d;
-				p += dy;
-				o += xs + math::set(ys,p>=dx);
-				p -= math::set(dx,p>=dx);
+				pp += dy;
+				o += xs + math::set(ys,pp>=dx);
+				pp -= math::set(dx,pp>=dx);
 			} 
 		break;
 	}

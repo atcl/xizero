@@ -41,19 +41,16 @@ namespace font
 sint font::draw(sint x,sint y,char a,uint c,uint b) 
 {
 	a = map(a);
+	const bool bt = b!=TRANS;
+	const bool ct = c!=TRANS;
 	const sint h = f->height;
 	const sint w = f->width-h;
 	const sint d = XRES - h;
-	sint s = h*a;
-	sint o = y*XRES+x;
 	sint r = 0;
 
 	//min max check for width and height! (will resolve memcheck issues)
 
-	const bool bt = b!=TRANS;
-	const bool ct = c!=TRANS;
-
-	for(sint i=0;i<h;++i,o+=d,s+=w)
+	for(sint i=0,o=y*XRES+x,s=h*a;i<h;++i,o+=d,s+=w)
 	{
 		for(sint j=0;j<h;++j,++o,++s)
 		{
@@ -84,10 +81,9 @@ sint font::width(char x)
 {
 	x = map(x);
 	const sint h = f->height;
-	sint s = h*x;
 	sint r = 0;
 
-	for(sint j=0;j<h;++j,++s)
+	for(sint j=0,s=h*x;j<h;++j,++s)
 	{
 		r += (f->data[s]!=BLACK);
 	}
@@ -99,6 +95,7 @@ sint font::width(const char* x)
 	char** b = string::split(x,'\n');
 	const sint c = string::count(x,'\n')+1;
 	sint r = 0;
+
 	for(sint i=0;i<c;++i)
 	{
 		const sint l = string::length(b[i]);

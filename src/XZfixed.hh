@@ -38,14 +38,14 @@ typedef sint fixed;
 
 namespace fx 
 {
-	inline pure sint  f2l(fixed x) { return x>>FX; }
-	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }
-	inline pure fixed l2f(sint x)  { return x<<FX; }
-	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
-	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
+	inline pure sint  f2l(fixed x) { return x>>FX; }		//constexpr
+	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }	//constexpr
+	inline pure fixed l2f(sint x)  { return x<<FX; }		//constexpr
+	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }	//asm alternative ?
+	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }		//asm alternative ?
 
-	inline pure fixed round(fixed x)  { return ((x + FXHLF)>>FX)<<FX; }
-	inline pure fixed rsq(fixed x)    { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate
+	inline pure fixed round(fixed x)  { return ((x + FXHLF)>>FX)<<FX; } //alt: (x + FXHLF)&FXMON ?
+	inline pure fixed rsq(fixed x)    { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate!
 	inline pure fixed sqr(fixed x)    { return math::sqr(x)<<(FX>>1); }
 
 	inline pure fixed ain(fixed x) { fixed y = math::abs(x); return x+math::neg(math::set(-FXTA2,math::set(-FXTAU,0,y>(FXTA2+FXTA4)),(y>FXTA4)&&(y<(FXTA2+FXTA4))),x<0); }
@@ -82,8 +82,8 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	//0.549306,0.255413,0.125657,0.0625816,0.0312602,0.0156263,0.00781266,0.00390627,0.00195313,0.000976563,0.000488281,0.000244141,0.00012207,0.0000610352,0.0000305176,0.0000152588
 	static const fixed ah[FX] = { 0x00008C9F,0x00004162,0x0000202B,0x00001005,0x00000800,0x00000400,0x00000200,0x00000100,0x00000080,0x00000040,0x0000001F,0x00000010,0x00000007,0x00000004,0x00000002,0x00000001 }; 
 
-	fixed t = FXONE>>h;
-	bool  r = 0;
+	fixed t = FXONE>>h;	//move into loop
+	bool  r = 0;		//move into loop
 
 	for(uint i=0;i<FX;++i)
 	{
