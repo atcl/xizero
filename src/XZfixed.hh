@@ -20,6 +20,7 @@
 #define FXTWO 0x00020000 //2
 #define FXMON 0xFFFF0000 //-1
 #define FXHLF 0x00008000 //0.5
+#define FXQRT 0x00004000 //0.25
 #define FXTNT 0x00001999 //0.1
 #define FXHUN 0x0000028F //0.01
 #define FXEPS 0x00000001 //eps
@@ -28,7 +29,7 @@
 #define FXTA4 0x0001921F //tau/4
 #define FXITG 0x00009B71 //0.607200
 #define FXIHG 0x000134A3 //1.205614
-#define FXD2R 0x00000477 //tau/360 deg2rad
+#define FXD2R 0x00000477 //tau/360 (deg2rad)
 #define FXSQ2 0x00016A09 //2^0.5
 #define FXRS1 0x00000126 //0.0045
 #define FXRS2 0x00012902 //1.1602
@@ -38,9 +39,9 @@ typedef sint fixed;
 
 namespace fx 
 {
-	inline pure sint  f2l(fixed x) { return x>>FX; }		//constexpr
-	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }	//constexpr
-	inline pure fixed l2f(sint x)  { return x<<FX; }		//constexpr
+	inline pure sint  f2l(fixed x) { return x>>FX; }
+	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }
+	inline pure fixed l2f(sint x)  { return x<<FX; }
 	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
 	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
 

@@ -268,7 +268,7 @@ sint entity::update()
 		_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
 
 		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
-		_position.y += fx::mul(_direction[0].y,_direction[0].e);
+		//_position.y += fx::mul(_direction[0].y,_direction[0].e);
 		_position.z += fx::mul(_direction[0].z,_direction[0].e);
 
 		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x<=fx::l2f(150));
@@ -309,6 +309,10 @@ void entity::display(sint m,bool t)
 			}
 		}
 	}
+
+//fvector x(_position);
+//fvector y(_model[0]->bounding());
+//gfx::rect(fx::f2l(x.x+y.x-y.e),fx::f2l(x.y+y.y-y.e),fx::f2l(x.x+y.x+y.e),fx::f2l(x.y+y.y+y.e),BLUE,GREEN,0,0);
 }
 
 void entity::resume()

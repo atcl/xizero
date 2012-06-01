@@ -11,7 +11,6 @@
 
 ///includes
 #include <malloc.h>
-#include <string.h>
 #include "XZbasic.hh"
 ///*
 
