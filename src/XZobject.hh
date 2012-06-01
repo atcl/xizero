@@ -132,12 +132,14 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 		}
 	}
 
+	//compute bounding circle
 	bbox[0].z = bbox[1].z = bbox[2].z = bbox[3].z = 0;
 	bound = (bbox[0]+bbox[1]+bbox[2]+bbox[3])*FXQRT;
 	const fixed ac = fx::l2f((bbox[1]-bbox[0]).length()+(bbox[3]-bbox[2]).length());
 	const fixed bd = fx::l2f((bbox[2]-bbox[1]).length()+(bbox[0]-bbox[3]).length());
 	const fixed ar = fx::l2f(((bbox[2]-bbox[0]).cross(bbox[3]-bbox[1])).length());
-	bound.e = fx::div(ar,math::max(ac,bd))<<1; 
+	bound.e = fx::div(ar,math::min(ac,bd))<<1;
+	//*
 
 	delete t;
 }

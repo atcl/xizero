@@ -53,7 +53,6 @@ sint game::angle(const fvector& x,const fvector& t,const fvector& m)
 {
 	return 0;
 }
-
 ///*
 
 #endif

@@ -12,7 +12,6 @@
 ///includes
 #include <cstdint>
 #include <cstdlib> //malloc,free
-#include <string.h>
 ///*
 
 ///declarations

@@ -39,12 +39,12 @@
 - Cordic Fixed Point Math
 - Minimal Branching
 - Only human readable, non binary, data
-- KMS (X,Wayland,OpenGL,DirectFB independence)
+- KMS (independence from X,Wayland,OpenGL,DirectFB)
 - Dyadic Explosions
 
 == Bugs: ==
 
--mouse
+- Mouse/ Joypad Support
 
 == Warning: ==
 

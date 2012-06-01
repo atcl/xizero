@@ -10,7 +10,8 @@
 ///*
 
 ///includes
-#include <malloc.h>
+#include <malloc.h> //memalign
+#include <string.h> //memcpy
 #include "XZbasic.hh"
 ///*
 

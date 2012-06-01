@@ -48,7 +48,7 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 	const sint d = XRES - h;
 	sint r = 0;
 
-	//min max check for width and height! (will resolve memcheck issues)
+	//min max check for width and height! (should resolve memcheck issues)
 
 	for(sint i=0,o=y*XRES+x,s=h*a;i<h;++i,o+=d,s+=w)
 	{

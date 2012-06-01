@@ -63,12 +63,10 @@ void* list::delcurrent()
 bool list::find(void* x)
 {
 	bool r = 0;
-
 	for(first();notlast()&&x!=cur->data;next())
 	{
 		r = (x==cur->data) || r;
 	}
-
 	return r;
 }
 

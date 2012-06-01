@@ -155,8 +155,9 @@ entity::entity(const lvector& p,object* m,const info& v,sint s)
 	s = fx::l2f(s);
 	object::linear.clear();
 	object::linear.scale(s,s,s);
+	//scale bounding circle radius
 	_model[0]->update();
-	//
+	//*
 }
 
 entity::~entity()
@@ -294,9 +295,8 @@ void entity::display(sint m,bool t)
 			list& a = _ammo[h];
 			for(a.first();a.notlast();a.next())
 			{
-				      fvector& cur = ((ammo*)a.current())->pos;
 				const fvector& dir = ((ammo*)a.current())->dir;
-				cur -= dir * dir.e;
+				const fvector& cur = ((ammo*)a.current())->pos -= dir * dir.e;
 
 				const sint cx = fx::r2l(cur.x);
 				const sint cy = fx::r2l(cur.y)-m;
@@ -309,10 +309,10 @@ void entity::display(sint m,bool t)
 			}
 		}
 	}
-
-//fvector x(_position);
-//fvector y(_model[0]->bounding());
-//gfx::rect(fx::f2l(x.x+y.x-y.e),fx::f2l(x.y+y.y-y.e),fx::f2l(x.x+y.x+y.e),fx::f2l(x.y+y.y+y.e),BLUE,GREEN,0,0);
+/*fvector q;
+q = p;
+fvector y(_model[0]->bounding());
+gfx::rect(fx::f2l(q.x+y.x-y.e),fx::f2l(q.y+y.y-y.e),fx::f2l(q.x+y.x+y.e),fx::f2l(q.y+y.y+y.e),BLUE,0,0,0);*/
 }
 
 void entity::resume()
