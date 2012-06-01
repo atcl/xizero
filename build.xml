@@ -41,7 +41,12 @@
 
 	<rule>
 		<name>unit</name>
-		<compiler>gcc</compiler>
+		<compiler>g++</compiler>
+		<path>
+			<source></source>
+			<include>/usr/include/libdrm</include>
+			<library></library>
+		</path>
 		<sources>
 			<source>unit.cc</source>
 		</sources>

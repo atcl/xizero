@@ -109,8 +109,8 @@ union packed
 };
 
 //global new + delete overloading
-inline void* operator new(uint s)   { return malloc(s); }
-inline void* operator new[](uint s) { return malloc(s); }
+inline void* operator new(uint s)       { return malloc(s); }
+inline void* operator new[](uint s)     { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }
 inline void  operator delete[](void *p) { free(p); }
 //*

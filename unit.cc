@@ -39,7 +39,7 @@
 	system::say(string::conf(fx::div(FXONE,x)),1);
 }*/
 
-object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
+/*object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 {
 	const fixed q1 = fx::l2f(r1);
 	const fixed q2 = fx::l2f(r2);
@@ -110,61 +110,66 @@ void viewer(object* u,long k)
 			case PGUP:   object::linear.rotatez(FXONE); break;
 			case PGDOWN: object::linear.rotatez(FXMON); break;
 
-			case 'A': object::linear.translate(FXMON,0,0); break;
-			case 'D': object::linear.translate(FXONE,0,0); break;
-			case 'W': object::linear.translate(0,FXONE,0); break;
-			case 'S': object::linear.translate(0,FXMON,0); break;
-			case 'Q': object::linear.translate(0,0,FXONE); break;
-			case 'E': object::linear.translate(0,0,FXMON); break;
+			case 'a': object::linear.translate(FXMON,0,0); break;
+			case 'd': object::linear.translate(FXONE,0,0); break;
+			case 'w': object::linear.translate(0,FXONE,0); break;
+			case 's': object::linear.translate(0,FXMON,0); break;
+			case 'q': object::linear.translate(0,0,FXONE); break;
+			case 'e': object::linear.translate(0,0,FXMON); break;
 
 			case '1': object::linear.scale(FXONE+FXTNT,FXONE,FXONE); break;
 			case '2': object::linear.scale(FXONE-FXTNT,FXONE,FXONE); break;
 			case '3': object::linear.scale(FXONE,FXONE+FXTNT,FXONE); break;
 			case '4': object::linear.scale(FXONE,FXONE-FXTNT,FXONE); break;
-			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
-			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
+			//case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
+			//case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
-			case 'T': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
-			case 'Z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
-			case 'U': break;
-			case 'I': u->pull(FXTNT); break;
-			case 'O': u->pull(-FXTNT); break;
-			case 'P': rc=R_B; break;
-			case 'L': rc=R_S; break;
-			case 'M': rc=R_F; break;
+			case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
+			case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
+			case 'u': break;
+			case 'i': u->pull(FXTNT); break;
+			case 'o': u->pull(-FXTNT); break;
+			case 'p': rc=R_B; break;
+			case 'l': rc=R_S; break;
+			case 'm': rc=R_F; break;
 		}
 		u->update();
 		u->display(pos,rc);
-}
+}*/
 ///*
 
 ///implementation
 int main(int argc,char** argv)
 {
-	init();
+	//init();
 
-	object* u = 0;
+	//object* u = 0;
 
-	if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); }
+	//if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); }
 
-	while(screen::run())
+	system::say(string::fix2str(fx::round(FXONE)),1);
+	system::say(string::fix2str(fx::round(FXMON)),1);
+	system::say(string::fix2str(fx::round(FXTNT)),1);
+	system::say(string::fix2str(fx::round(FXHLF+FXTNT)),1);
+	system::say(string::fix2str(fx::round(FXHLF-FXTNT)),1);
+	system::say(string::fix2str(fx::round(-FXHLF+FXTNT)),1);
+	system::say(string::fix2str(fx::round(-FXHLF-FXTNT)),1);
+
+	/*while(screen::run())
 	{
 		if(screen::key()==ESCAPE) { menu(); }
 
 		screen::back.clear(SKY);
 		screen::depth.clear(fx::l2f(400));
-//if(screen::joya()!=0) { system::say(string::cons(screen::joya()),1); }
-//if(screen::joyb()!=0) { system::say(string::cons(screen::joyb()),1); }
 		if(screen::turbo()=='R') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); } }
 		viewer(u,screen::turbo());
 
 		bench();
-	}
-	//*
+	}*/
 	
 	//generate();
 
-	screen::close();
+	//screen::close();
 	return 0;
 }
 ///*
