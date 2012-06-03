@@ -195,7 +195,6 @@ object::object(const object& o) : poly(0),dock(0),bound(o.bound),polys(o.polys),
 	{
 		dock[i] = o.dock[i];
 	}
-
 }
 
 object::~object()

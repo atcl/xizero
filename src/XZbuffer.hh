@@ -31,7 +31,7 @@ class buffer
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
 		/*OK*/ inline void  copy(const buffer& s,uint x) { memcpy(data,s.data,bytes); }
-		/*OK*/ //inline void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
+		/*OK*/ inline void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
 		/*OK*/        void  clear(sint x=0);
 		              void  fsaamb(const buffer& b);
 		              void  glow();

@@ -157,7 +157,7 @@ char* string::fix2str(fixed x)
 	sint  i = sint(x<0);
 	x       = math::abs(x);
 	r[0]    = math::set('-','0',i);
-	sint  l = x>>FX;
+	sint  l = x>>FIXED;
 	i      += (l==0);
 	for(sint d=10000,k=0;d>0;d/=10,i+=k)
 	{
@@ -170,7 +170,7 @@ char* string::fix2str(fixed x)
 	l = x & 0x0000FFFF;
 	for(sint d=10;d<10000000;d*=10,++i)
 	{
-		const sint j = ((l*d)>>FX)%10;
+		const sint j = ((l*d)>>FIXED)%10;
 		r[i] = math::set(j,j>0) +'0';
 	}
 	r[i] = 0;

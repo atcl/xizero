@@ -38,8 +38,8 @@ class level
 		list enemies;			//List of Enemy Entities
 		char** map;			//Text Map of Terrain
 		sint mark;			//Current Level Position
-		sint markmin;			//Lowest Level Position
-		sint markmax;			//Highest Level Position
+		sint markmin;			//Lowest Level Position (Bottom)
+		sint markmax;			//Highest Level Position (Top)
 		progress* pp;			//Player Health Gauge
 		progress* sp;			//Player Shield Gauge
 		progress* bp;			//Boss Gauge
@@ -66,8 +66,7 @@ level::level(const char* o)
 	const char* tx = system::ldf((*lvl)["intro"]);
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
-	screen::run();
-	delete tx;
+	screen::flush();
 	//*
 
 	//load player
@@ -77,8 +76,10 @@ level::level(const char* o)
 	const char* f2 = system::ldf(ps[2]); info*   pi = format::ini(f2); 		//clean up!
  	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
  	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
+	screen::back.clear(BLACK);
+	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(10);
-	screen::run();
+	screen::flush();
 	//*
 
 	//load boss
@@ -86,8 +87,10 @@ level::level(const char* o)
 	const char* f3 = system::ldf(bs[0]); object* bm = new object(f3); delete f3;
 	const char* f4 = system::ldf(bs[1]); info*   bi = format::ini(f4); 		//clean up!
 	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
+	screen::back.clear(BLACK);
+	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(20);
-	screen::run();
+	screen::flush();
 	//*
 
 	//load enemy
@@ -95,8 +98,10 @@ level::level(const char* o)
 	const char* f5 = system::ldf(es[0]); object* em = new object(f5); delete f5;
 	const char* f6 = system::ldf(es[1]); info*   ei = format::ini(f6);		//clean up!
 	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
+	screen::back.clear(BLACK);
+	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(30);
-	screen::run();
+	screen::flush();
 	//*
 
 	//load map
@@ -104,8 +109,10 @@ level::level(const char* o)
 	const sint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
+	screen::back.clear(BLACK);
+	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(40);
-	screen::run();
+	screen::flush();
 
 	markmax = 4*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
@@ -180,17 +187,19 @@ level::level(const char* o)
 
 		terrain[i] = new object(a,b,c,d,k,OCHER);
 	}
-	gfx::fsprog(90);
-	screen::run();
+	screen::back.clear(BLACK);
+	font::draw(100,100,tx,ORANGE,BLACK);
+	gfx::fsprog(95);
+	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
+	screen::flush();
+	screen::flush();
+	screen::wait(ENTER);
 	delete[] a;
 	delete[] b;
 	delete[] c;
 	delete[] d;
 	//delete info
-	gfx::fsprog(100);
-	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
-	screen::run();
-	screen::wait(ENTER);
+	delete tx;
 }
 
 level::~level()
@@ -224,22 +233,21 @@ void level::display()
 {
 	//draw background
 	screen::back.clear(DRED);
-	screen::depth.clear(fx::l2f(200));
+	screen::depth.clear(FX(200));
 	//*
 
 	//render terrain //fix
-	mark = math::lim(markmax,entity::ylevel-450,markmin);
+	mark = math::lim(markmax,entity::ylevel()-450,markmin); //-ok?
 	const lvector p(400,300-BWIDTH-mark%BWIDTH,GROUND);
-	const fixed yd = fx::l2f(-20);
 	object::linear.clear();
-	object::linear.translate(0,fx::l2f(300),0);
+	object::linear.translate(0,FX(300),0);
 	sint r = math::max((mark/BWIDTH)-3,0); //likely errory
 	for(uint i=0;i<34;++i,++r)
 	{
 		object temp(*terrain[r]);
 		temp.update();
 		temp.display(p,R_F);
-		object::linear.translate(0,yd,0);
+		object::linear.translate(0,FX(-20),0);
 	}
 	//*
 

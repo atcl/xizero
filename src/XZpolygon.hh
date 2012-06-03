@@ -78,8 +78,8 @@ lvector polygon::project(const lvector& p,const fvector& v)
 {
 	lvector r;
 	r.z = v.z + fx::l2f(p.z);
-	r.x = p.x + fx::f2l(fx::mul(PRJX<<FX,fx::div(v.x,r.z)));
-	r.y = p.y - fx::f2l(fx::mul(PRJY<<FX,fx::div(v.y,r.z)));
+	r.x = p.x + fx::f2l(fx::mul(FX(PRJX),fx::div(v.x,r.z)));
+	r.y = p.y - fx::f2l(fx::mul(FX(PRJY),fx::div(v.y,r.z)));
 	return r;
 }
 

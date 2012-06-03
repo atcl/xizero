@@ -71,18 +71,15 @@ class entity
 		inline void resume();
 		inline void addpoints(sint a);
 		inline lvector data(sint m) const;
-
-		static sint ylevel;
+		inline static sint ylevel();
 };
 ///*
 
 ///implementation
-const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(fx::l2f(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(fx::l2f(-ROTANG)); return m; }() };
+const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }() };
 const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; m.dyadic(fvector(FXTWO,FXONE,FXHLF),fvector(FXHLF,FXHLF,FXHLF)); return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); return m; }() };
 list          entity::_ammo[2] = { list(), list() };
 fixed         entity::ymark  = 0;
-sint          entity::ylevel = 0;
-
 
 void entity::setup(const lvector& p,object* m,const info& v)
 {
@@ -237,13 +234,12 @@ sint entity::update(sint k,sint j)
 
 	const fvector tp(_position.x - fx::mul(_direction[0].x,_direction[0].e),_position.y + fx::mul(_direction[0].y,_direction[0].e),_position.z + fx::mul(_direction[0].z,_direction[0].e));
 	//terrain collision here
-	const bool t = (tp.x>=0)&&(tp.x<=(XRES<<FX));//||(ty<=0||temp.y>=m);
+	const bool t = (tp.x>=0)&&(tp.x<=FX(XRES));//||(ty<=0||temp.y>=m);
 	_position.x = math::set(tp.x,_position.x,t);
 	_position.y = math::set(tp.y,_position.y,t);
 	_position.z = math::set(tp.z,_position.z,t); 
 
 	ymark  = _position.y;
-	ylevel = fx::r2l(fx::mul(PRJY<<FX,fx::div(_position.y,_position.z))); //PRJY from polygon
 
 	last = k;
 	_lastupdate = curr;
@@ -261,7 +257,7 @@ sint entity::update()
 		return _health-(dm++>250);		
 	}
 
-	if( (_health>0) && (_position.y>0) && (_position.y+(YRES<<FX)>ymark) ) //check
+	if( (_health>0) && (_position.y>0) && (_position.y+FX(YRES)>ymark) ) //check
 	{
 		checkammo();
 
@@ -269,11 +265,11 @@ sint entity::update()
 		_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
 
 		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
-		//_position.y += fx::mul(_direction[0].y,_direction[0].e);
+		//_position.y += fx::mul(_direction[0].y,_direction[0].e); //temp
 		_position.z += fx::mul(_direction[0].z,_direction[0].e);
 
-		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x<=fx::l2f(150));
-		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x>=fx::l2f(650));
+		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x<=FX(150));
+		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x>=FX(650));
 	}
 
 	_lastupdate = curr;
@@ -328,6 +324,11 @@ void entity::addpoints(sint a)
 lvector entity::data(sint m) const
 {
 	return lvector(fx::r2l(_position.x),fx::r2l(_position.y)-m,_health,_shield);
+}
+
+sint entity::ylevel()
+{
+	return fx::r2l(ymark);
 }
 ///*
 

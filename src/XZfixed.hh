@@ -15,7 +15,7 @@
 ///*
 
 ///declaration
-#define FX    16
+#define FIXED 16
 #define FXONE 0x00010000 //1
 #define FXTWO 0x00020000 //2
 #define FXMON 0xFFFF0000 //-1
@@ -34,20 +34,22 @@
 #define FXRS1 0x00000126 //0.0045
 #define FXRS2 0x00012902 //1.1602
 
+#define FX(x) x<<FIXED
+
 typedef sint fixed;
 ///*
 
 namespace fx 
 {
-	inline pure sint  f2l(fixed x) { return x>>FX; }
-	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FX; }
-	inline pure fixed l2f(sint x)  { return x<<FX; }
-	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FX; }
-	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FX)/y; }
+	inline pure sint  f2l(fixed x) { return x>>FIXED; }
+	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FIXED; }
+	inline pure fixed l2f(sint x)  { return x<<FIXED; }
+	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FIXED; }
+	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FIXED)/y; }
 
 	inline pure fixed round(fixed x)  { return (x + FXHLF)&FXMON; }
 	inline pure fixed rsq(fixed x)    { return div(math::set(FXRS1,FXRS2,x<=FXONE),x); } //rough estimate!
-	inline pure fixed sqr(fixed x)    { return math::sqr(x)<<(FX>>1); }
+	inline pure fixed sqr(fixed x)    { return math::sqr(x)<<(FIXED>>1); }
 
 	inline pure fixed ain(fixed x)    { fixed y = math::abs(x); return x+math::neg(math::set(-FXTA2,math::set(-FXTAU,0,y>(FXTA2+FXTA4)),(y>FXTA4)&&(y<(FXTA2+FXTA4))),x<0); }
 	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXTA4)&&(y<(FXTA2+FXTA4))); }
@@ -78,15 +80,15 @@ namespace fx
 void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 {
 	//0.785398,0.463648,0.244979,0.124355,0.0624188,0.0312398,0.0156237,0.00781234,0.00390623,0.00195312,0.000976562,0.000488281,0.000244141,0.00012207,0.0000610352,0.0000305176 
-	static const fixed at[FX] = { 0x0000C90F,0x000076B1,0x00003EB6,0x00001FD5,0x00000FFA,0x000007FF,0x000003FF,0x000001FF,0x000000FF,0x0000007F,0x0000003F,0x0000001F,0x00000010,0x00000007,0x00000004,0x00000002 }; 
+	static const fixed at[FIXED] = { 0x0000C90F,0x000076B1,0x00003EB6,0x00001FD5,0x00000FFA,0x000007FF,0x000003FF,0x000001FF,0x000000FF,0x0000007F,0x0000003F,0x0000001F,0x00000010,0x00000007,0x00000004,0x00000002 }; 
 
 	//0.549306,0.255413,0.125657,0.0625816,0.0312602,0.0156263,0.00781266,0.00390627,0.00195313,0.000976563,0.000488281,0.000244141,0.00012207,0.0000610352,0.0000305176,0.0000152588
-	static const fixed ah[FX] = { 0x00008C9F,0x00004162,0x0000202B,0x00001005,0x00000800,0x00000400,0x00000200,0x00000100,0x00000080,0x00000040,0x0000001F,0x00000010,0x00000007,0x00000004,0x00000002,0x00000001 }; 
+	static const fixed ah[FIXED] = { 0x00008C9F,0x00004162,0x0000202B,0x00001005,0x00000800,0x00000400,0x00000200,0x00000100,0x00000080,0x00000040,0x0000001F,0x00000010,0x00000007,0x00000004,0x00000002,0x00000001 }; 
 
 	fixed t = FXONE>>h;
 	bool  r = 0;
 
-	for(uint i=0;i<FX;++i)
+	for(uint i=0;i<FIXED;++i)
 	{
 		r = (((i-1)%3)==0)&&i!=1&&!r&&h;
 		const bool  s = (v>=0 && y<v) || (v<0 && z>=0);

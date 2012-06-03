@@ -57,7 +57,6 @@ namespace screen
 		uint mx = XRES/2;		//mouse horizontal position
 		uint my = YRES/2;		//mouse vertical position
 		bool mb = 0;			//mouse button pressed
-		bool cb = 0;			//current backbuffer
 
 		uint last = 0;
 		char* nu = 0;
@@ -85,7 +84,7 @@ namespace screen
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void* flush(void* n=0)	{ frame.copy(back,XRES*YRES); drmModeDirtyFB(fd,id,0,0); cb^=cb; return 0; }
+	void* flush(void* n=0)	{ frame.copy(accum,XRES*YRES); drmModeDirtyFB(fd,id,0,0); back.swap(accum); return 0; }
 	bool event();
 	bool run()		{ flush(); return event(); }
 	void close();
@@ -101,8 +100,7 @@ namespace screen
 	inline uint mousey()	{ return my; }
 	inline uint mouseb()	{ return mb; }
 	inline tile* cursor()	{ return cs; }
-	//inline void smouse(uint x=XRES/2,uint y=YRES/2)    { mx=x; my=y; }
-	//inline buffer front()  { return back[cb]; }
+	//inline void smouse(uint x=XRES>>1,uint y=YRES>>1)    { mx=x; my=y; }
 }
 ///*
 
