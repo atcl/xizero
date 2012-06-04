@@ -84,7 +84,7 @@ namespace screen
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void* flush(void* n=0)	{ frame.copy(accum,XRES*YRES); drmModeDirtyFB(fd,id,0,0); back.swap(accum); return 0; }
+	void* flush(void* n=0)	{ back.swap(accum); frame.copy(accum,XRES*YRES); drmModeDirtyFB(fd,id,0,0); return 0; }
 	bool event();
 	bool run()		{ flush(); return event(); }
 	void close();

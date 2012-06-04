@@ -192,7 +192,6 @@ level::level(const char* o)
 	gfx::fsprog(95);
 	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
 	screen::flush();
-	screen::flush();
 	screen::wait(ENTER);
 	delete[] a;
 	delete[] b;
