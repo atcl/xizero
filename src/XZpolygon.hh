@@ -155,7 +155,7 @@ void polygon::raster(bool s,uint c) const
 
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			switch( ( ( (cx0<0) && (cx1<0) && (cx2<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
+			switch( ( ( (cx0<0) && (cx1<0) && (cx2<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) ) //error here affecting level display
 			{
 				case 1: screen::depth[off] = tx;
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;

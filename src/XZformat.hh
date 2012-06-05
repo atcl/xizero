@@ -45,10 +45,10 @@ struct tile
 ///definitions 
 namespace format
 {
-	/*OK*/ char**  csv(const char* x,char y=',');	//load comma seperated values
-	/*OK*/ tile*   xpm(const char* x);		//load xpm image
-	/*OK*/ info*   ini(const char* x);		//load ini configuartion
-	       char*** ar(const char* x);		//load ar archive
+	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
+	/*OK*/ tile*  xpm(const char* x);		//load xpm image
+	/*OK*/ info*  ini(const char* x);		//load ini configuartion
+	       const char*** ar(const char* x);		//load ar archive
 }
 ///*
 
@@ -128,9 +128,51 @@ info* format::ini(const char* x)
 	return r;
 }
 
-char*** format::ar(const char* x)
+const char*** format::ar(const char* x)
 {
+	//Read magic number
+	string::find(x,"!<arch>\n");
+	//guard
+	//*
 
+	//Count files
+	uint c = 0;
+	uint t = 8;
+	do
+	{
+		t += 48;
+		const uint s = string::str2int(&x[t]);
+		t += 10+s+math::set(1,(s&1)==1);
+		++c;	
+	}
+	while( (x[t++]=='`') && (x[t++]=='\n') );
+	//*
+
+	//Setup
+	const char*** r = new const char**[c];
+	//*
+
+	//Unpack
+	t = 8;
+	for(uint i=0;i<c;++i)
+	{
+		r[c] = new const char*[2];
+
+		//Read File Header
+		r[i][0] = &x[t];
+		t += 48;
+		const uint s = string::str2int(&x[t]);
+		t += 12;
+		//*
+
+		//Read File Contents
+		r[i][1] = &x[t];
+		t += s + math::set(1,(s&1)==1);
+		//*
+	}
+	//*
+
+	return r;
 }
 ///*
 
