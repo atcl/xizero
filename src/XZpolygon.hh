@@ -143,7 +143,7 @@ void polygon::raster(bool s,uint c) const
 
 	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
 	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
-	      fixed ty = lpoint[mixi].z - fx::mul(zy,fx::l2f(math::abs(lpoint[mixi].y-lpoint[miyi].y)));
+	      fixed ty = lpoint[mixi].z + fx::mul(zy,fx::l2f(lpoint[mixi].y-lpoint[miyi].y)); //works for level but not for intro
 
 	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y,off+=str,ty+=zy)
 	{
@@ -155,7 +155,7 @@ void polygon::raster(bool s,uint c) const
 
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			switch( ( ( (cx0<0) && (cx1<0) && (cx2<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) ) //error here affecting level display
+			switch( ( ( (cx0<0) && (cx1<0) && (cx2<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
 			{
 				case 1: screen::depth[off] = tx;
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;
