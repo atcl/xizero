@@ -19,6 +19,8 @@
 
 	#define pure __attribute__((pure))
 
+	#define align __attribute__ ((aligned (16)))
+
 	#define prefetch(x) __builtin_prefetch(x)
 
 	#define ifl(x) if(__builtin_expect(!!(x),1))
@@ -30,6 +32,8 @@
 	#endif
 #else
 	#define pure
+
+	#define align
 
 	#define prefetch(x)
 

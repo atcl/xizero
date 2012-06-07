@@ -24,12 +24,11 @@
 		<flags>
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
-			<flag>-march=atom -mtune=atom -m32</flag>
-			<!--flag>-march=native -mtune=native -m32</flag-->
-			<!--flag>-s</flag--><!--strip debug symbols-->
+			<flag>-march=atom -mtune=atom -m32</flag><!--flag>-march=native -mtune=native -m32</flag-->
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
-			<!--flag>-static -nostdlib</flag-->
-			<flag>-g</flag>
+			<!--flag>-static -nostdlib -nostdlib++</flag-->
+			<!--flag>-Wl,-file-alignment 4096</flag-->
+			<flag>-g</flag><!--flag>-s</flag--><!--strip debug symbols-->
 		</flags>
 		<binary>
 			<name>xizero</name>
@@ -37,6 +36,7 @@
 		</binary>
 		<message>Done</message>
 		<!--action>strip -s -R .comment -R .gnu.version xizero</action-->
+		<!--action>ar </action-->
 	</rule>
 
 	<rule>
@@ -67,8 +67,6 @@
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<!--flag>-mtune=i486 -march=i486 -m32</flag-->
 			<!--flag>-msse -mpfpmath=sse</flag-->
-			<!--flag>-fprefetch-loop-arrays</flag-->
-			<!--flag>-Wl,-file-alignment 4096</flag-->
 			<flag>-g -std=c++0x</flag>
 		</flags>
 		<binary>
@@ -79,7 +77,12 @@
 
 	<rule>
 		<name>test</name>
-		<compiler>gcc</compiler>
+		<compiler>g++</compiler>
+		<path>
+			<source></source>
+			<include>/usr/include/libdrm</include>
+			<library></library>
+		</path>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>

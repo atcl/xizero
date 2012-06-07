@@ -9,7 +9,8 @@
 
 ///implementation
 int main(int argc,const char* argv[])
-{
+{	
+	http://atcrosslevel.de
 	init();
 	intro();
 	mainmenu();

@@ -52,6 +52,8 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 
 	for(sint i=0,o=y*XRES+x,s=h*a;i<h;++i,o+=d,s+=w)
 	{
+		#pragma prefetch data
+		#pragma prefetch back
 		for(sint j=0;j<h;++j,++o,++s)
 		{
 			const uint e = f->data[s]; //memcheck: Use of uninitialised value of size 4

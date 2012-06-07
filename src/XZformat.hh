@@ -131,8 +131,7 @@ info* format::ini(const char* x)
 const char*** format::ar(const char* x)
 {
 	//Read magic number
-	string::find(x,"!<arch>\n");
-	//guard
+	guard(string::find(x,"!<arch>\n")<0,0);
 	//*
 
 	//Count files
@@ -156,7 +155,7 @@ const char*** format::ar(const char* x)
 	t = 8;
 	for(uint i=0;i<c;++i)
 	{
-		r[c] = new const char*[2];
+		r[i] = new const char*[2];
 
 		//Read File Header
 		r[i][0] = &x[t];

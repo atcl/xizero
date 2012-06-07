@@ -59,7 +59,6 @@ sint start(sint i)
 		l.gauges();
 		bench();
 	}
-
 	return 0;
 }
 
@@ -70,6 +69,7 @@ sint start()
 		start(i);
 	}
 	over();
+	return 0;
 }
 
 sint close()

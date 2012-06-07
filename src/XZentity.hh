@@ -257,7 +257,7 @@ sint entity::update()
 		return _health-(dm++>250);		
 	}
 
-	if( (_health>0) && (_position.y>0) && (_position.y+FX(YRES)>ymark) ) //check
+	if( (_health>0) && (_position.y>0) && ((_position.y+FX(YRES))>ymark) ) //check
 	{
 		checkammo();
 

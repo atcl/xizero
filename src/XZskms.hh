@@ -107,7 +107,7 @@ namespace screen
 uint screen::kbhit()
 {
 	int c = 0;
-	int e = ioctl(0,FIONREAD,&c);
+	ioctl(0,FIONREAD,&c);
 	struct timeval tv = { 0,0 };
 	select(1,0,0,0,&tv);
 	return c;
@@ -232,7 +232,7 @@ void screen::close()
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
 	munmap(frame.pointer(),size);
-	struct drm_mode_map_dumb dd = { handle };
+	drm_mode_map_dumb dd = { handle };
 	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&dd);
 	drmModeFreeEncoder(encoder);
 	drmModeFreeConnector(connector);

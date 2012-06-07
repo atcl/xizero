@@ -171,6 +171,8 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 
 	for(sint i=0,o=y*XRES+x,s=0;i<ym;++i,o+=d)
 	{
+		#pragma prefetch t.data
+		#pragma prefetch back 
 		for(sint j=0;j<xm;++j,++o,++s)
 		{
 			const uint c = t.data[s];
@@ -196,9 +198,8 @@ void gfx::fsprog(sint p,uint c)
 
 tile* gfx::save()
 {
-	const sint l = XRES*YRES;
-	tile* r = new tile({XRES,YRES,new sint[l]});
-	for(sint i=0;i<l;++i) { r->data[i] = screen::back[i]; }
+	tile* r = new tile({XRES,YRES,new sint[XRES*YRES]});
+	for(sint i=0;i<XRES*YRES;++i) { r->data[i] = screen::back[i]; }
 	return r;
 }
 ///*

@@ -17,7 +17,7 @@
 class fmatrix
 {
 	private:
-		fixed m[4][4];
+		fixed align m[4][4];
 		/*OK*/ void multiplicate(const fixed (&n)[4][4]);
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
@@ -40,7 +40,7 @@ class fmatrix
 ///implementation
 void fmatrix::multiplicate(const fixed (&n)[4][4])
 {
-	const fixed a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0])+fx::mul(m[0][3],n[3][0]),
+	const fixed align a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0])+fx::mul(m[0][3],n[3][0]),
 				  fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1])+fx::mul(m[0][3],n[3][1]),
 				  fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2])+fx::mul(m[0][3],n[3][2]),
 				  fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3])+fx::mul(m[0][3],n[3][3]) }, 
@@ -56,6 +56,7 @@ void fmatrix::multiplicate(const fixed (&n)[4][4])
 				  //fx::mul(m[3][0],n[0][1])+fx::mul(m[3][1],n[1][1])+fx::mul(m[3][2],n[2][1])+fx::mul(m[3][3],n[3][1]),
 				  //fx::mul(m[3][0],n[0][2])+fx::mul(m[3][1],n[1][2])+fx::mul(m[3][2],n[2][2])+fx::mul(m[3][3],n[3][2]),
 				  //fx::mul(m[3][0],n[0][3])+fx::mul(m[3][1],n[1][3])+fx::mul(m[3][2],n[2][3])+fx::mul(m[3][3],n[3][3]) } };
+	//movaps a to m
 	m[0][0]=a[0][0]; m[0][1]=a[0][1]; m[0][2]=a[0][2]; m[0][3]=a[0][3];
 	m[1][0]=a[1][0]; m[1][1]=a[1][1]; m[1][2]=a[1][2]; m[1][3]=a[1][3];
 	m[2][0]=a[2][0]; m[2][1]=a[2][1]; m[2][2]=a[2][2]; m[2][3]=a[2][3];
