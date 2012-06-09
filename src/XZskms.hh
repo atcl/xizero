@@ -86,7 +86,7 @@ namespace screen
 	void init(tile* c);
 	void set(uint c,bool f=0);
 	void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id,0,0); }
-	//void flush(bool i)	{ back.swap(accum); pthread_create((pthread_t[]){0},0,[](void* x)->void*{frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
+	//void Flush()		{ back.swap(accum); pthread_create((pthread_t[]){0},0,[](void* x)->void*{ frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
 	bool event();
 	bool run()		{ flush(); return event(); }
 	void close();

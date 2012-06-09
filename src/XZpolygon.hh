@@ -47,13 +47,13 @@
 class polygon
 {
 	private:
-		const uint color;		//Polygon Color
-		fvector cnormal;		//Polygon Normal
-		fvector cpoint[3];		//Polygon Vertices
 		static lvector lpoint[3];	//Render Vertices
+		fvector cpoint[3];		//Polygon Vertices
+		fvector cnormal;		//Polygon Normal
+		const uint color;		//Polygon Color
 
 		/*OK*/ inline void shape() const;
-		              uint flat(sint pz,sint f,uint c) const;
+		              uint flat(sint pz,sint f) const;
 		              void raster(bool s,uint c) const; //based on "Daily Code Gem - Advanced Rasterization"
 	public:
 		/*OK*/      polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
@@ -83,18 +83,15 @@ lvector polygon::project(const lvector& p,const fvector& v)
 	return r;
 }
 
-uint polygon::flat(sint pz,sint f,uint c) const
+uint polygon::flat(sint pz,sint f) const
 {
 	const fixed t = math::lim(FXTNT,math::abs(fx::div(cnormal.dot(light),fx::mul(cnormal.e,light.e))),FXONE);
+	const byte anz = math::set(AMBIENT,f&R_A) + math::set(NOLIGHT,f&R_N) + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
 
-	const char ambient = math::set(AMBIENT,f&R_A);
-	const char nolight = math::set(NOLIGHT,f&R_N);
-	const char zshade  = math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z);
-
-	packed argb = { c };
-	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]) ,t) + ambient + nolight + zshade));
-	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]) ,t) + ambient + nolight + zshade));
-	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]) ,t) + ambient + nolight + zshade));
+	packed argb = { math::set(ORANGE,color,f&R_C) };
+	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]),t ) + anz) );
+	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]),t ) + anz) );
+	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]),t ) + anz) );
 	argb.b[3] = 0;
 	return argb.d;
 }
@@ -208,7 +205,7 @@ void polygon::display(const lvector& p,sint f,uint c)
 		lpoint[1] = project(p,cpoint[1]);
 		lpoint[2] = project(p,cpoint[2]);
 		if((f&R_S)!=0) { shape(); return; }
-		if((f&R_F)!=0) { c = flat(p.z,f,math::set(ORANGE,color,f&R_C)); } 
+		if((f&R_F)!=0) { c = flat(p.z,f); } 
 	}
 
 	raster( f&R_B,c );
