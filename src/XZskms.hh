@@ -18,6 +18,7 @@
 #include <termios.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
+//#include <pthread.h>
 
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
@@ -84,7 +85,8 @@ namespace screen
 	void error(bool c,const char* m) { if(c) { system::say(m,1); system::bye(1); } }
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void* flush(void* n=0)	{ back.swap(accum); frame.copy(accum,XRES*YRES); drmModeDirtyFB(fd,id,0,0); return 0; }
+	void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id,0,0); }
+	//void flush(bool i)	{ back.swap(accum); pthread_create((pthread_t[]){0},0,[](void* x)->void*{frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
 	bool event();
 	bool run()		{ flush(); return event(); }
 	void close();

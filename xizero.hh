@@ -4,7 +4,6 @@
 // XiZero main header
 
 ///includes
-//#include <pthread.h>
 #include "xz.hh"
 ///*
 
@@ -45,8 +44,6 @@ sint start(sint i)
 		polygon::counter = 0;
 		if(screen::turbo()==ESCAPE) { menu(); l.resume(); }
 
-		//pthread_t tid = 0;
-		//pthread_create(&tid,0,screen::flush,0);
 		switch(l.update(screen::key(),0))
 		{
 			case -1: lost(); return 0;
@@ -55,7 +52,6 @@ sint start(sint i)
 				
 		l.display();
 		//screen::back.fsaamb(screen::accum);
-		//pthread_join(tid,0);
 		l.gauges();
 		bench();
 	}
