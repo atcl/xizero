@@ -65,8 +65,8 @@ class entity
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,sint s=1);
 		~entity();
-		sint update(sint k,sint j);
-		sint update();
+		sint update(sint k,sint j,sint m);
+		sint update(sint m);
 		void display(sint m,bool t);
 		inline void resume();
 		inline void addpoints(sint a);
@@ -164,7 +164,7 @@ entity::~entity()
 	//delete[] _ammomount;
 }
 
-sint entity::update(sint k,sint j)
+sint entity::update(sint k,sint j,sint m)
 {
 	static sint last = 0;
 	const bool l = k^last;
@@ -246,7 +246,7 @@ sint entity::update(sint k,sint j)
 	return _health;
 }
 
-sint entity::update()
+sint entity::update(sint m)
 {
 	const sint curr = screen::time();
 

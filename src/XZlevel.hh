@@ -26,6 +26,7 @@
 #define CSHIFT (-XRES)>>1
 #define GROUND 150
 #define AFLOAT 50
+#define OFFSET 4
 ///*
 
 ///definitions
@@ -114,7 +115,7 @@ level::level(const char* o)
 	gfx::fsprog(40);
 	screen::flush();
 
-	markmax = 4*BWIDTH;
+	markmax = OFFSET*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
 
 	terrain    = new object*[l];
@@ -222,10 +223,10 @@ sint level::update(sint k,sint j)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		((entity*)enemies.current())->update();
+		((entity*)enemies.current())->update(markmax);
 	}
 
-	return (boss->update()<0)-(player->update(k,j)<0);
+	return (boss->update(markmax)<0)-(player->update(k,j,markmax)<0);
 }
 
 void level::display()
@@ -240,7 +241,7 @@ void level::display()
 	const lvector p(400,300+BWIDTH-mark%BWIDTH,GROUND);
 	object::linear.clear();
 	object::linear.translate(0,FX(300),0);
-	sint r = math::max((mark/BWIDTH)-3,0);
+	sint r = math::max((mark/BWIDTH)-OFFSET,0);
 	for(uint i=0;i<34;++i,++r)
 	{
 		object temp(*terrain[r]);

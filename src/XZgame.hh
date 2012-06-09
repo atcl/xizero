@@ -20,7 +20,7 @@ namespace game
 {
 	/*OK*/ pure inline bool onscreen(sint x,sint y);
 	/*OK*/ pure inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d);
-	            inline bool bounds(const fvector& x,const fvector& m);
+	            inline bool bounds(const fvector& x,const fvector& r,sint m);
 	            inline bool collision(const fvector& x,const fvector& r,const fvector& a);
 	                   sint angle(const fvector& x,const fvector& t,const fvector& m);
 }
@@ -37,9 +37,9 @@ bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
 	return (x>math::min(a,c)) && (y>math::min(b,d)) && (x<math::max(a,c)) && (y<math::max(b,d));
 }
 
-bool game::bounds(const fvector& x,const fvector& m)
+bool game::bounds(const fvector& x,const fvector& r,sint m)
 {
-	return 0;
+	return (x.x-r.e)>0&&(x.x+r.e)<XRES&&(x.y-r.e)>0&&(x.y+r.e)<m;
 }
 
 bool game::collision(const fvector& x,const fvector& r,const fvector& a)
