@@ -1,11 +1,15 @@
 [Desktop Entry]
 Type=Application
 Version=0.1
-Name=xizero
+Name=XiZero
 GenericName=Game
-Comment=XiZero Vertical Scroller
+Comment=3D Shoot'em Up
 Icon=xizero.xpm
-Exec=/usr/games/xizero
+Exec=xizero
 Path=~/.xizero
-Terminal=No
-Category=Game;ArcadeGame;3DGraphics
+Terminal=Yes
+Categories=Game
+Keywords=3D;Vertical;Scroller
+
+Dependencies=libdrm
+Homepage=http://atcrosslevel.de
