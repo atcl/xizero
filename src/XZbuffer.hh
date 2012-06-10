@@ -80,12 +80,10 @@ void buffer::fsaamb(const buffer& b)
 	"subl $"STR(XRES)",%%ecx;\n"
 	"shrl $6,%%ecx;\n"
 	"fsaa:\n"
-/*
-	"prefetch   0(%%edi);\n"
-	"prefetch  16(%%edi);\n"
-	"prefetch  32(%%edi);\n"
-	"prefetch  48(%%edi);\n"
-*/
+	//"prefetch   0(%%edi);\n"
+	//"prefetch  16(%%edi);\n"
+	//"prefetch  32(%%edi);\n"
+	//"prefetch  48(%%edi);\n"
 	"movaps   (%%edi),%%xmm0;\n"
 	"movaps 16(%%edi),%%xmm1;\n"
 	"movaps 32(%%edi),%%xmm2;\n"

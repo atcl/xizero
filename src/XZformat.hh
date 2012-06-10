@@ -111,7 +111,7 @@ tile* format::xpm(const char* x)
 	return r;
 }
 
-info* format::ini(const char* x) 
+info* format::ini(const char* x) //test for no new line at end of file
 {
 	const sint m = string::count(x,'=');
 	const sint n = string::count(x,'\n');

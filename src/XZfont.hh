@@ -43,18 +43,19 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 	a = map(a);
 	const bool bt = b!=TRANS;
 	const bool ct = c!=TRANS;
-	const sint h = f->height;
-	const sint w = f->width-h;
-	const sint d = XRES - h;
+	const sint xd = -XRES+x+f->height;
+	const sint yd = -YRES+y+f->height;
+	const sint h = f->height-math::set(yd,yd>0);
+	const sint w = f->height-math::set(xd,xd>0);
+	const sint sx = f->width-w;
+	const sint d = XRES - w;
 	sint r = 0;
 
-	//min max check for width and height! (should resolve memcheck issues)
-
-	for(sint i=0,o=y*XRES+x,s=h*a;i<h;++i,o+=d,s+=w)
+	for(sint i=0,o=y*XRES+x,s=f->height*a;i<h;++i,o+=d,s+=sx)
 	{
 		#pragma prefetch data
 		#pragma prefetch back
-		for(sint j=0;j<h;++j,++o,++s)
+		for(sint j=0;j<w;++j,++o,++s)
 		{
 			const uint e = f->data[s]; //memcheck: Use of uninitialised value of size 4
 			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED)); //memcheck: Use of uninitialised value of size 4 

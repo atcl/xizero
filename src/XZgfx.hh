@@ -164,12 +164,12 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 {
 	const sint xd = -XRES+x+t.width;
 	const sint yd = -YRES+y+t.height;
-	const sint xm = math::set(t.width,t.width-xd,xd<=0);
-	const sint ym = math::set(t.height,t.height-yd,yd<=0);
+	const sint xm = t.width-math::set(xd,xd>0);
+	const sint ym = t.height-math::set(yd,yd>0);
 	const sint sx = t.width - xm;
 	const sint d = XRES - xm;
 
-	for(sint i=0,o=y*XRES+x,s=0;i<ym;++i,o+=d)
+	for(sint i=0,o=y*XRES+x,s=0;i<ym;++i,o+=d,s+=sx)
 	{
 		#pragma prefetch t.data
 		#pragma prefetch back 
@@ -178,7 +178,6 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 			const uint c = t.data[s];
 			screen::back[o] = math::set(c,screen::back[o],(c!=TRANS)||a); //memcheck: Conditional jump or move depends on uninitialised value(s)
 		}
-		s+=sx;
 	}
 }
 
