@@ -26,7 +26,7 @@
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag><!--flag>-march=native -mtune=native -m32</flag-->
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
-			<!--flag>-static -nostdlib -nostdlib++</flag-->
+			<!--flag>-static -nostdlib</flag-->
 			<!--flag>-Wl,-file-alignment 4096</flag-->
 			<flag>-g</flag><!--flag>-s</flag--><!--strip debug symbols-->
 		</flags>
@@ -36,12 +36,12 @@
 		</binary>
 		<message>Done</message>
 		<!--action>strip -s -R .comment -R .gnu.version xizero</action-->
-		<!--action>ar </action-->
+		<!--action>ar -q level0.a dat/level0.lvl dat/level0.txt dat/level0.map dat/player0.y3d dat/player1.y3d dat/player.ini dat/enemy.y3d dat/enemy.ini dat/boss.ini</action-->
 	</rule>
 
 	<rule>
 		<name>unit</name>
-		<compiler>g++</compiler>
+		<compiler>gcc</compiler>
 		<path>
 			<source></source>
 			<include>/usr/include/libdrm</include>
@@ -65,9 +65,10 @@
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
+			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-mtune=i486 -march=i486 -m32</flag-->
 			<!--flag>-msse -mpfpmath=sse</flag-->
-			<flag>-g -std=c++0x</flag>
+			<flag>-g</flag>
 		</flags>
 		<binary>
 			<name>unit</name>
@@ -97,8 +98,8 @@
 		<flags>
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
+			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<flag>-Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++ -pedantic</flag>
-			<flag>-std=c++0x</flag>
 		</flags>
 		<binary>
 			<name>test</name>

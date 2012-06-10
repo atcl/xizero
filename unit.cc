@@ -39,7 +39,7 @@
 	system::say(string::conf(fx::div(FXONE,x)),1);
 }*/
 
-/*object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
+object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 {
 	const fixed q1 = fx::l2f(r1);
 	const fixed q2 = fx::l2f(r2);
@@ -135,27 +135,19 @@ void viewer(object* u,long k)
 		}
 		u->update();
 		u->display(pos,rc);
-}*/
+}
 ///*
 
 ///implementation
 int main(int argc,char** argv)
 {
-	//init();
+	init();
 
-	//object* u = 0;
+	object* u = 0;
 
-	//if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); }
+	if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); }
 
-	system::say(string::fix2str(fx::round(FXONE)),1);
-	system::say(string::fix2str(fx::round(FXMON)),1);
-	system::say(string::fix2str(fx::round(FXTNT)),1);
-	system::say(string::fix2str(fx::round(FXHLF+FXTNT)),1);
-	system::say(string::fix2str(fx::round(FXHLF-FXTNT)),1);
-	system::say(string::fix2str(fx::round(-FXHLF+FXTNT)),1);
-	system::say(string::fix2str(fx::round(-FXHLF-FXTNT)),1);
-
-	/*while(screen::run())
+	while(screen::run())
 	{
 		if(screen::key()==ESCAPE) { menu(); }
 
@@ -165,11 +157,11 @@ int main(int argc,char** argv)
 		viewer(u,screen::turbo());
 
 		bench();
-	}*/
+	}
 	
 	//generate();
 
-	//screen::close();
+	screen::close();
 	return 0;
 }
 ///*

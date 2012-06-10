@@ -138,6 +138,8 @@ void polygon::raster(bool s,uint c) const
 
 	const sint str = XRES - (maxx-minx);
 
+	//const fixed minz = math::min(lpoint[0].z,math:::min(lpoint[1].z,lpoint[2].z));
+	//const fixed maxz = math::min(lpoint[0].z,math:::max(lpoint[1].z,lpoint[2].z));
 	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
 	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
 	      fixed ty = lpoint[mixi].z + fx::mul(zy,fx::l2f(lpoint[mixi].y-lpoint[miyi].y)); //works for level but not for intro
