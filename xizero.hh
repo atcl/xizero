@@ -258,7 +258,7 @@ void over()
 void bench()
 {
 	const sint fps = screen::fps();
-	if(fps!=-1)
+	ifu(fps!=-1)
 	{
 		system::say(string::int2str(polygon::counter*fps)); 			
 		system::say("T/s - ");

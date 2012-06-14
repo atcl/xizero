@@ -40,6 +40,8 @@
 #define DOWN	66
 #define PGDOWN	54
 
+#define CLOSE
+
 struct tile;
 ///*
 
@@ -87,7 +89,7 @@ namespace screen
 	void init(tile* c);
 	void set(uint c,bool f=0);
 	void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id,0,0); }
-	//void Flush()		{ back.swap(accum); pthread_create((pthread_t[]){0},0,[](void* x)->void*{ frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
+	//void flush()		{ back.swap(accum); pthread_create((pthread_t[]){0},0,[](void* x)->void*{ frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
 	bool event();
 	bool run()		{ flush(); return event(); }
 	void close();
@@ -97,7 +99,7 @@ namespace screen
 	void sleep(sint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline uint key()	{ int r=kk; kk=0; return r; }
+	inline uint key()	{ uint r=kk; kk=0; return r; }
 	inline uint turbo()	{ return tk; }
 	inline uint mousex()	{ return mx; }
 	inline uint mousey()	{ return my; }
@@ -133,7 +135,7 @@ void screen::init(tile* c)
 bool screen::event()
 {
 	const int r = kbhit();
-	guard(r==0,1); 
+	guard(r==0,(mb=0)==0); 
 
 	const int s = 3-(r==1)-(r==2);
 	packed t;
@@ -142,10 +144,10 @@ bool screen::event()
 	read(0,&nu,math::min(r-s,256));
 
 	mb = kk==SPACE;
-	mx = math::lim(0,mx+((kk==LEFT)<<2)-((kk==RIGHT)<<2),XRES);
-	my = math::lim(0,my+((kk==DOWN)<<2)-((kk==UP)<<2),YRES);
+	mx = math::lim(0,mx+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES);
+	my = math::lim(0,my+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);
 
-	return 1; //kk==
+	return 1; //kk==CLOSE;
 }
 
 void screen::set(uint c,bool f)
