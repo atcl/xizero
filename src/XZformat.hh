@@ -67,12 +67,9 @@ char** format::csv(const char* x,char y)
 	const sint l = string::count(s,y);
 	char** r = new char*[l];
 	r[0] = s;
-	sint i = 0;
-	sint j = 1;
-	while(s[i]!=0 && j<l)
+	for(sint i=0,j=1;(s[i]!=0)&&(j<l);++i)
 	{
 		if(s[i]==y) { s[i] = 0; r[j++] = &s[++i]; }
-		++i;
 	}
 	return r;
 }

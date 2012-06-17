@@ -139,7 +139,7 @@ level::level(const char* o)
 
 			if(a[k].z==d[k].z && b[k].z==c[k].z)
 			{
-				j++;
+				++j;
 				v+=2*BWIDTH; 
 				for(;j<LWIDTH;++j,v+=BWIDTH)
 				{
@@ -153,7 +153,7 @@ level::level(const char* o)
 					else break;
 				}
 				v-=2*BWIDTH;
-				j--;
+				--j;
 			}
 
 			k += (a[k].z!=0 || b[k].z!=0 || c[k].z!=0 || d[k].z!=0);

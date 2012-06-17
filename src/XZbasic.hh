@@ -17,29 +17,21 @@
 ///declarations
 #ifdef __GNUC__
 
-	#define pure __attribute__((pure))
-
-	#define align __attribute__ ((aligned (16)))
-
+	#define pure        __attribute__((pure))
+	#define align       __attribute__ ((aligned (16)))
 	#define prefetch(x) __builtin_prefetch(x)
-
-	#define ifl(x) if(__builtin_expect(!!(x),1))
-
-	#define ifu(x) if(__builtin_expect(!!(x),0))
+	#define ifl(x)   if(__builtin_expect(!!(x),1))
+	#define ifu(x)   if(__builtin_expect(!!(x),0))
 
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline))
 	#endif
 #else
 	#define pure
-
 	#define align
-
 	#define prefetch(x)
-
-	#define ifl(x) if(x)
-
-	#define ifu(x) if(x)
+	#define ifl(x)   if(x)
+	#define ifu(x)   if(x)
 #endif 
 
 #define guard(x,...) if(__builtin_expect(!!(x),0)) { return __VA_ARGS__; }

@@ -81,7 +81,7 @@ namespace screen
 		drmModeModeInfo mode;		//video mode in use
 		drmModeCrtcPtr crtc;
 
-		drmModeModeInfo m800x600 = { 40000,800,840,968,1056,0,600,601,605,628,0,60/*(40000*1000)/(1056*628)*/,0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
+		drmModeModeInfo m800x600 = { 40000,800,840,968,1056,0,600,601,605,628,0,60,0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
 	}
 
 	uint kbhit();
@@ -95,8 +95,8 @@ namespace screen
 	void close();
 
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
-	void wait(sint k)	{ while(k!=kk) { event(); } }
-	void sleep(sint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
+	void wait(uint k)	{ while(k!=kk) { event(); } }
+	void sleep(uint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
 	inline uint key()	{ uint r=kk; kk=0; return r; }
@@ -237,7 +237,7 @@ void screen::close()
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
 	munmap(frame.pointer(),size);
-	drm_mode_map_dumb dd = { handle };
+	drm_mode_map_dumb dd = { handle,0,0 };
 	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&dd);
 	drmModeFreeEncoder(encoder);
 	drmModeFreeConnector(connector);

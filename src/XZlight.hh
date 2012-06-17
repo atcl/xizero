@@ -37,8 +37,8 @@ class light
 ///implementation
 sint light::lambert(sint x,sint y) const
 {
-	const sint i = rad*rad;
-	const sint d = (x*x)+(y*y);
+	const sint  i = rad*rad;
+	const sint  d = (x*x)+(y*y);
 	const fixed l = fixed(-i+d)/fixed(d*(1-i));
 	
 	packed c = { col };

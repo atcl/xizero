@@ -69,11 +69,9 @@ char* string::concat(const char* x,const char* y)
 sint string::count(const char* x,char y)
 {
 	sint r = 0;
-	sint i = 0;
-	while(x[i]!=0)
+	for(sint i=0;x[i]!=0;++i)
 	{
 		r += (x[i]==y);
-		++i;
 	}
 	return r;
 }
@@ -90,14 +88,11 @@ sint string::scan(const char* x,char y,char z)
 
 sint string::find(const char* x,const char* y)
 {
-	sint i = 0;
-	sint j = 0;
 	sint r = -1;
-	while( (x[i]!=0) && (y[j]!=0) )
+	for(sint i=0,j=0;(x[i]!=0)&&(y[j]!=0);++i)
 	{
 		r  = math::set(i,r<0&&x[i]==y[0]) | math::set(r,r>=0&&x[i]==y[j]) | math::set(-1,x[i]!=y[j]);
 		j  = math::set(j+1,r>=0);
-		++i;
 	}
 	return r;
 }
@@ -182,11 +177,14 @@ char* string::repl(const char* x,char y,char z)
 	const sint l = length(x);
 	char* r = new char[l+1];
 	r[l] = 0;
-	for(sint i=0;i<l;++i) { r[i] = math::set(z,x[i],x[i]==y); }
+	for(sint i=0;i<l;++i)
+	{
+		r[i] = math::set(z,x[i],x[i]==y);
+	}
 	return r;
 }
 
-char** string::split(const char* x,char y)
+char** string::split(const char* x,char y) //while to for
 {
 	const sint c = count(x,y)+1;
 	char* s = repl(x,y,0);
@@ -202,7 +200,7 @@ char** string::split(const char* x,char y)
 	return r;
 }
 
-char* string::trim(const char* x,char y)
+char* string::trim(const char* x,char y) //while to for
 {
 	const sint l = length(x);
 	const sint c = count(x,y);
