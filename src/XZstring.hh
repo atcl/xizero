@@ -91,8 +91,8 @@ sint string::find(const char* x,const char* y)
 	sint r = -1;
 	for(sint i=0,j=0;(x[i]!=0)&&(y[j]!=0);++i)
 	{
-		r  = math::set(i,r<0&&x[i]==y[0]) | math::set(r,r>=0&&x[i]==y[j]) | math::set(-1,x[i]!=y[j]);
-		j  = math::set(j+1,r>=0);
+		r = math::set(i,r<0&&x[i]==y[0]) | math::set(r,r>=0&&x[i]==y[j]) | math::set(-1,(x[i]!=y[j])||(y[j+1]!=0&&x[i+1]==0));
+		j = math::set(j+1,r>=0); 
 	}
 	return r;
 }
