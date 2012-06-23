@@ -57,14 +57,7 @@ namespace format
 char** format::csv(const char* x,char y)
 {
 	char* s = string::repl(x,'\n',y);
-	const sint l = string::count(s,y);
-	char** r = new char*[l];
-	r[0] = s;
-	for(sint i=0,j=1;(s[i]!=0)&&(j<l);++i)
-	{
-		if(s[i]==y) { s[i] = 0; r[j++] = &s[++i]; }
-	}
-	return r;
+	return string::split(s,y);
 }
 
 tile* format::xpm(const char* x)
@@ -101,7 +94,7 @@ tile* format::xpm(const char* x)
 	return r;
 }
 
-info* format::ini(const char* x) //test for no new line at end of file
+info* format::ini(const char* x)
 {
 	const sint m = string::count(x,'=');
 	const sint n = string::count(x,'\n');
@@ -109,7 +102,7 @@ info* format::ini(const char* x) //test for no new line at end of file
 
 	info* r = new info{ new char*[m],new char*[m],0,m };
 
-	for(sint i=0,j=0;i<n;++i)
+	for(sint i=0,j=0;i<m;++i)
 	{
 		if(string::count(s[i],'=')!=0)
 		{
@@ -155,6 +148,7 @@ info* format::ar(char* x)
 		t += 12;
 		r->data[i] = &x[t];
 		t += s+(s&1);
+		x[t-1] = 0;
 	}
 	//*
 

@@ -162,6 +162,7 @@ int main(int argc,char** argv)
 	//generate();
 
 	screen::close();
+
 	return 0;
 }
 ///*

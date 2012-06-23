@@ -46,7 +46,7 @@ class level
 		progress* bp;			//Boss Gauge
 		progress* ep;			//Enemy Gauge
 	public:
-		level(const char* o);		//Constructor
+		level(char* o);			//Constructor
 		~level();			//Destructor
 		sint update(sint k,sint j);	//Update All Entities
 		void display();			//Display Terrain, Shadows, Entities
@@ -57,24 +57,24 @@ class level
 ///*
 
 ///implementation
-level::level(const char* o)
+level::level(char* o)
 {
 	//load lvl
-	info* lvl = format::ini(o);
+	info* arc = format::ar(o);
+	info* lvl = format::ini((*arc)["level0.lvl"]);
 	//*
 
 	//load intro message
-	const char* tx = system::ldf((*lvl)["intro"]);
+	const char* tx = (*arc)[(*lvl)["intro"]];
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
 	screen::flush();
 	//*
 
 	//load player
-	char**  ps = string::split((*lvl)["player"],',');				//clean up!
-	const char* f0 = system::ldf(ps[0]); object* pm = new object(f0); delete f0;
-	const char* f1 = system::ldf(ps[1]); object* pn = new object(f1); delete f1;
-	const char* f2 = system::ldf(ps[2]); info*   pi = format::ini(f2); 		//clean up!
+	object* pm = new object((*arc)[(*lvl)["player_0"]]);
+	object* pn = new object((*arc)[(*lvl)["player_1"]]);
+	info*   pi = format::ini((*arc)[(*lvl)["player_i"]]);
  	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
  	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
 	screen::back.clear(BLACK);
@@ -84,9 +84,8 @@ level::level(const char* o)
 	//*
 
 	//load boss
-	char**  bs = string::split((*lvl)["boss"],',');					//clean up!
-	const char* f3 = system::ldf(bs[0]); object* bm = new object(f3); delete f3;
-	const char* f4 = system::ldf(bs[1]); info*   bi = format::ini(f4); 		//clean up!
+	object* bm = new object((*arc)[(*lvl)["boss_0"]]);
+	info*   bi = format::ini((*arc)[(*lvl)["boss_i"]]); 
 	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
@@ -95,9 +94,8 @@ level::level(const char* o)
 	//*
 
 	//load enemy
-	char**  es = string::split((*lvl)["enemy"],',');				//clean up!
-	const char* f5 = system::ldf(es[0]); object* em = new object(f5); delete f5;
-	const char* f6 = system::ldf(es[1]); info*   ei = format::ini(f6);		//clean up!
+	object* em = new object((*arc)[(*lvl)["enemy_0"]]);
+	info*   ei = format::ini((*arc)[(*lvl)["enemy_i"]]);
 	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
@@ -106,7 +104,7 @@ level::level(const char* o)
 	//*
 
 	//load map
-	const char* m = system::ldf((*lvl)["map"]);					//clean up!
+	const char* m = (*arc)[(*lvl)["map"]];
 	const sint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
@@ -188,6 +186,7 @@ level::level(const char* o)
 
 		terrain[i] = new object(a,b,c,d,k,OCHER);
 	}
+
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(95);
@@ -198,8 +197,6 @@ level::level(const char* o)
 	delete[] b;
 	delete[] c;
 	delete[] d;
-	//delete info
-	delete tx;
 }
 
 level::~level()

@@ -37,7 +37,7 @@ void init()
 
 sint start(sint i)
 {
-	level l(system::ldf("dat/level0.lvl"));
+	level l(system::ldf("level0.a"));
 
 	while(screen::run())
 	{

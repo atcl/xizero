@@ -47,7 +47,6 @@
 #define mod32(x)  x&31
 #define mod256(x) x&255
 
-
 #ifndef TITLE
 	#define TITLE "_"
 #endif

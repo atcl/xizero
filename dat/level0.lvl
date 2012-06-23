@@ -1,5 +1,9 @@
-player = dat/player0.y3d,dat/player1.y3d,dat/player.ini
-enemy  = dat/enemy.y3d,dat/enemy.ini
-boss   = dat/enemy.y3d,dat/boss.ini
-map    = dat/level0.map
-intro  = dat/level0.txt
+player_0 = player0.y3d
+player_1 = player1.y3d
+player_i = player.ini
+enemy_0  = enemy.y3d
+enemy_i  = enemy.ini
+boss_0   = enemy.y3d
+boss_i   = boss.ini
+map      = level0.map
+intro    = level0.txt
