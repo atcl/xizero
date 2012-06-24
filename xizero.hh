@@ -131,14 +131,16 @@ void menu()
 void intro()
 {
 	//load, clone and place object
-	const char* o = system::ldf("dat/level.y3d"); object q(o); delete o;
+	char* f = system::ldf("intro.a");
+	info* a = format::ar(f);
+	object q((*a)["level.y3d"]);
+	object c((*a)["cross.y3d"]);
 	object b[4] = { q,object(q),object(q),object(q) };
-	const char* r = system::ldf("dat/cross.y3d"); object c(r); delete r;
 
 	lvector p(400,300,100);
-	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0); c.update();
-	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0); b[0].update();
-	object::linear.clear(); object::linear.translate(0,0,0); b[1].update();
+	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);  c.update();
+	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
+	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(-30),0); b[2].update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(-60),0); b[3].update();
 	//*
@@ -156,7 +158,7 @@ void intro()
 		switch( diff/1000 )
 		{
 			case 1: object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
-			case 2: object::linear.rotatex(fx::mul(fx::l2f(14),prog)); break;
+			case 2: object::linear.rotatex(fx::mul(fx::l2f(14),prog));       break;
 			case 3: object::linear.translate(0,0,fx::mul(fx::l2f(23),prog)); break;
 		}
 
@@ -175,26 +177,31 @@ void intro()
 		prog = fx::mul(fx::l2f(curr-screen::time()),FXHUN);
 	}
 	//*
+
+	delete a;
+	delete f;
 }
 
 void mainmenu()
 {
 	//load, clone and place objects
-	const char* o = system::ldf("dat/segver.y3d"); const object v(o); delete o;
-	const char* q = system::ldf("dat/seghor.y3d"); const object h(q); delete q;
+	char* f = system::ldf("intro.a");
+	info* a = format::ar(f);
+	const object v((*a)["segver.y3d"]);
+	const object h((*a)["seghor.y3d"]);
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
 	lvector p(400,300,100);
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0); x[1].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0); x[2].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(120),fx::l2f(-140),0); z[0].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(60),fx::l2f(-70),0); z[1].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(200),fx::l2f(-70),0); z[2].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(60),fx::l2f(70),0); z[3].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(200),fx::l2f(70),0); z[4].update();
-	object::linear.clear(); object::linear.translate(fx::l2f(120),fx::l2f(140),0); z[5].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(120),fx::l2f(-140),0);  z[0].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(60),fx::l2f(-70),0);    z[1].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(200),fx::l2f(-70),0);   z[2].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(60),fx::l2f(70),0);     z[3].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(200),fx::l2f(70),0);    z[4].update();
+	object::linear.clear(); object::linear.translate(fx::l2f(120),fx::l2f(140),0);   z[5].update();
 	//*
 
 	//enlist buttons
@@ -228,6 +235,9 @@ void mainmenu()
 		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
 	}
 	//*
+
+	delete a;
+	delete f;
 }
 
 void won(const lvector& p)
