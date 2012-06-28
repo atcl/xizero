@@ -21,7 +21,7 @@ struct info
 	char** name;
 	char** data;
 	uint*  size;
-	const uint count;
+	const  sint count;
 	char*  operator[](const char* n) const
 	{
 		for(sint i=0;i<count;++i)

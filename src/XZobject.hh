@@ -19,7 +19,7 @@
 ///*
 
 ///definition 
-class object
+class object //TODO =,cpy-ctor
 {
 	private:
 		polygon** poly;

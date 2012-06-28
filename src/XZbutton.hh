@@ -21,7 +21,7 @@
 ///*
 
 ///definitions
-class button : public gui
+class button : public gui //TODO =,cpy-ctor
 {
 	private:
 		char* text;						//Button Caption

@@ -30,7 +30,7 @@ struct ammo
 ///*
 
 ///definitions
-class entity
+class entity //TODO =,cpy-ctor
 {
 	private:
 		static const fmatrix rot[2];

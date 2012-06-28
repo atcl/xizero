@@ -89,7 +89,7 @@ sint control()
 
 sint about()
 {
-	return dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: "VERSION);
+	return dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION );
 }
 
 sint leave()
@@ -230,7 +230,7 @@ void mainmenu()
 		b_control.draw();
 		b_about.draw();
 		b_leave.draw();
-		font::draw(XRES-160,YRES-20,"Version: "VERSION,ORANGE,TRANS);
+		font::draw(XRES-160,YRES-20,"Version: " VERSION,ORANGE,TRANS);
 		button::check(screen::mousex(),screen::mousey(),screen::mouseb());
 		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
 	}

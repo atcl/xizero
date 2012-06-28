@@ -14,7 +14,7 @@
 ///*
 
 ///definition
-class list
+class list //TODO =,cpy-ctor
 {
 	private:
 		struct member
@@ -30,7 +30,7 @@ class list
 		uint    len;
 	public:
 		inline list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; }
-		inline ~list() { delete fir; delete las; }
+		inline ~list() { delete cur; delete fir; delete las; }
 		inline bool notlast() const { return cur!=las; }
 		inline bool notfirst() const { return cur!=fir; }
 		inline uint length() const { return len; }

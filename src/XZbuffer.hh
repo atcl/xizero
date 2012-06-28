@@ -16,7 +16,7 @@
 ///*
 
 ///definitions
-class buffer
+class buffer //TODO =,cpy-ctor
 {
 	private:
 		const uint tsize;	//size in typesize
@@ -77,7 +77,7 @@ void buffer::fsaamb(const buffer& b)
 {
 #ifdef SSE
 	__asm__ __volatile__ (
-	"subl $"STR(XRES)",%%ecx;\n"
+	"subl $" STR(XRES) ",%%ecx;\n"
 	"shrl $6,%%ecx;\n"
 	"fsaa:\n"
 	//"prefetch   0(%%edi);\n"
@@ -88,10 +88,10 @@ void buffer::fsaamb(const buffer& b)
 	"movaps 16(%%edi),%%xmm1;\n"
 	"movaps 32(%%edi),%%xmm2;\n"
 	"movaps 48(%%edi),%%xmm3;\n"
-	"movups ("STR(XRES*4)"+4)(%%edi), %%xmm4;\n"
-	"movups ("STR(XRES*4)"+20)(%%edi),%%xmm5;\n"
-	"movups ("STR(XRES*4)"+36)(%%edi),%%xmm6;\n"
-	"movups ("STR(XRES*4)"+52)(%%edi),%%xmm7;\n"
+	"movups (" STR(XRES*4) "+4)(%%edi), %%xmm4;\n"
+	"movups (" STR(XRES*4) "+20)(%%edi),%%xmm5;\n"
+	"movups (" STR(XRES*4) "+36)(%%edi),%%xmm6;\n"
+	"movups (" STR(XRES*4) "+52)(%%edi),%%xmm7;\n"
 	"pavgb  %%xmm4,%%xmm0;\n"
 	"pavgb  %%xmm5,%%xmm1;\n"
 	"pavgb  %%xmm6,%%xmm2;\n"

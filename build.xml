@@ -23,7 +23,7 @@
 		</defines>
 		<flags>
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
-			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
+			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes</flag>
 			<flag>-march=atom -mtune=atom -m32</flag><!--flag>-march=native -mtune=native -m32</flag-->
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-static -nostdlib</flag-->

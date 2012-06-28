@@ -21,13 +21,12 @@ namespace dialog
 {
 	inline pure sint ok() { return 1; }
 	//inline pure sint no() { return -1; }
-	            sint msgbox(const char* m);
-	//          sint yesnobox(const char* m);
+	            sint msgbox(const char* m,bool q=0);
 }
 ///*
 
 ///implementation
-sint dialog::msgbox(const char* m)
+sint dialog::msgbox(const char* m,bool q)
 {
 	const sint w = font::width(m)+40;
 	const sint h = font::height(m)+60;
@@ -35,6 +34,7 @@ sint dialog::msgbox(const char* m)
 	const sint y = (YRES-h)>>1;
 	button::all(0);
 	const button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
+	//const button bno("NO",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
 
 	tile* scr = gfx::save();
 	sint cbrk = 0;
@@ -51,7 +51,7 @@ sint dialog::msgbox(const char* m)
 	button::all(1);
 	delete[] scr->data;
 	delete scr;
-	return 1;
+	return 1; //cbrk
 }
 ///*
 
