@@ -24,7 +24,7 @@ struct info
 	const  sint count;
 	char*  operator[](const char* n) const
 	{
-		for(sint i=0;i<count;++i)
+		for(uint i=0;i<count;++i)
 		{
 			if(string::find(n,name[i])!=-1) { return data[i]; }
 		}
@@ -123,12 +123,12 @@ info* format::ar(char* x)
 	//*
 
 	//Count files
-	uint c = 0;
-	uint t = 8;
+	sint c = 0;
+	sint t = 8;
 	do
 	{
 		t += 48;
-		const uint s = string::str2int(&x[t]);
+		const sint s = string::str2int(&x[t]);
 		t += 12+s+(s&1);
 		++c;	
 	}

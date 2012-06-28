@@ -88,7 +88,7 @@ uint polygon::flat(sint pz,sint f) const
 	const fixed t = math::lim(FXTNT,math::abs(fx::div(cnormal.dot(light),fx::mul(cnormal.e,light.e))),FXONE);
 	const byte anz = math::set(AMBIENT,f&R_A) + math::set(NOLIGHT,f&R_N) + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
 
-	packed argb = { math::set(ORANGE,color,f&R_C) };
+	packed argb = { (uint)math::set(ORANGE,color,f&R_C) };
 	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]),t ) + anz) );
 	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]),t ) + anz) );
 	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]),t ) + anz) );
@@ -170,12 +170,8 @@ void polygon::raster(bool s,uint c) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : color(c)
+polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cpoint({x,y,z}),cnormal(fvector(((z-x).cross(y-x)))*FXHUN),color(c)
 {
-	cpoint[0] = x;
-	cpoint[1] = y;
-	cpoint[2] = z;
-	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) * FXHUN;
 	cnormal.e = cnormal.length();
 }
 

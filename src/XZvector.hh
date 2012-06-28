@@ -26,7 +26,8 @@ struct lvector
 	sint y;
 	sint z;
 	sint e;
-	inline lvector(sint a=0,sint b=0,sint c=0,sint d=1) : x(a),y(b),z(c),e(d) { ; }
+	lvector(sint a=0,sint b=0,sint c=0,sint d=1) : x(a),y(b),z(c),e(d) { ; }
+	lvector(const fvector& a);
 	//inline lvector(lvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline lvector  operator-() const { return lvector(-x,-y,-z); }
 	inline lvector  operator+(const lvector& a) const { return lvector(x+a.x,y+a.y,z+a.z); }
@@ -51,7 +52,8 @@ struct fvector
 	fixed y;
 	fixed z;
 	fixed e;
-	inline fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
+	fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
+	fvector(const lvector& a) : x(fx::l2f(a.x)),y(fx::l2f(a.y)),z(fx::l2f(a.z)),e(fx::l2f(a.e)) { ; }
 	//inline fvector(fvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline fvector  operator-() const { return fvector(-x,-y,-z); }
 	inline fvector  operator+(const fvector& a) const { return fvector(x+a.x,y+a.y,z+a.z); }
@@ -72,7 +74,8 @@ struct fvector
 ///*
 
 ///Implementation
-lvector& lvector::operator=(const fvector& a) { x=fx::r2l(a.x); y=fx::r2l(a.y); z=fx::r2l(a.z); e=fx::r2l(a.e); return *this; }
+inline lvector& lvector::operator=(const fvector& a) { x=fx::r2l(a.x); y=fx::r2l(a.y); z=fx::r2l(a.z); e=fx::r2l(a.e); return *this; }
+                lvector::lvector(const fvector& a) : x(fx::r2l(a.x)),y(fx::r2l(a.y)),z(fx::r2l(a.z)),e(fx::r2l(a.e)) { ; }
 ///*
 
 #endif

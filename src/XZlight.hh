@@ -20,16 +20,16 @@ class light
 {
 	private:
 		sint rad;
-		sint col;
+		uint col;
 		tile mask;
 
 		sint lambert(sint x,sint y) const;
 		void init(bool i=0);
 	public:
-		light(sint r,sint c) : rad(r), col(c) { init(); }
+		light(sint r,uint c) : rad(r), col(c), mask({0,0,0}) { init(); }
 		~light() { delete mask.data; }
 		inline void draw(sint x,sint y) const;
-		inline void color(sint c);
+		inline void color(uint c);
 		inline void radius(sint r);
 };
 ///*
@@ -74,7 +74,7 @@ void light::draw(sint x,sint y) const
 	gfx::sprite(mask,x-rad,y-rad);
 }
 
-void light::color(sint c)
+void light::color(uint c)
 {
 	col = c;
 	init();

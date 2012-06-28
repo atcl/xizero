@@ -65,7 +65,7 @@ void trans::fadeout()
 	{
 		for(uint j=0;j<XRES*YRES;++j)
 		{
-			packed c = { screen::back[j] };
+			packed c = { (uint)screen::back[j] };
 			c.b[0] = (byte)math::max(0,c.b[0]-1);
 			c.b[1] = (byte)math::max(0,c.b[1]-1);
 			c.b[2] = (byte)math::max(0,c.b[2]-1);

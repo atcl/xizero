@@ -47,7 +47,7 @@ class object //TODO =,cpy-ctor
 ///implementation
 fmatrix object::linear = fmatrix();
 
-object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(0)
+object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(0),scolor(0)
 {
 	char** t = format::csv(o);
 	sint i = 0;

@@ -96,7 +96,7 @@ namespace screen
 
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
 	void wait(uint k)	{ while(k!=kk) { event(); } }
-	void sleep(uint t)	{ const uint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
+	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
 	inline uint key()	{ uint r=kk; kk=0; return r; }
