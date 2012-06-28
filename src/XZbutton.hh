@@ -21,7 +21,7 @@
 ///*
 
 ///definitions
-class button : public gui //TODO =,cpy-ctor
+class button : public gui
 {
 	private:
 		char* text;						//Button Caption
@@ -31,6 +31,8 @@ class button : public gui //TODO =,cpy-ctor
 		const sint textleft;					//Relative Y Coordinate of Caption	
 		const sint texttop;					//Relative X Coordinate of Caption
 		static list bl;						//List of all Buttons
+		button(const button& b);
+		button& operator=(const button& b);
 	public:
 		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
 		~button();						//Destructor

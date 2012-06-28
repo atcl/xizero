@@ -16,13 +16,15 @@
 ///*
 
 ///definitions
-class buffer //TODO =,cpy-ctor
+class buffer
 {
 	private:
 		const uint tsize;	//size in typesize
 		const uint bytes;	//size in bytes
 		const bool later;	//self allocated or not
 		      sint* data;	//pointer to data
+		buffer(const buffer& b);
+		buffer& operator=(const buffer& b);
 	public:
 		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)memalign(16,bytes); } } 
 		/*OK*/ ~buffer() { if(later==0) { free(data); } }

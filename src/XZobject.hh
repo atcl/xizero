@@ -19,7 +19,7 @@
 ///*
 
 ///definition 
-class object //TODO =,cpy-ctor
+class object
 {
 	private:
 		polygon** poly;
@@ -28,6 +28,7 @@ class object //TODO =,cpy-ctor
 		sint      polys;
 		sint      docks;
 		uint      scolor;	//Shadow Color
+		object& operator=(const object& o);
 	public:
 
 		/*OK*/ object(const char* o);

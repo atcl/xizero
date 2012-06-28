@@ -81,7 +81,7 @@ namespace screen
 		drmModeModeInfo mode;		//video mode in use
 		drmModeCrtcPtr crtc;
 
-		drmModeModeInfo m800x600 = { 40000,800,840,968,1056,0,600,601,605,628,0,60,0,0,0 }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
+		drmModeModeInfo m800x600 = { 40000,800,840,968,1056,0,600,601,605,628,0,60,0,0,"atcrosslevel:   800x600@60 VBE" }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
 	}
 
 	uint kbhit();

@@ -61,6 +61,8 @@ class entity //TODO =,cpy-ctor
 		void setup(const lvector& p,object* m,const info& v);
 		void fire(sint i);
 		void checkammo();
+		entity(const entity& e);
+		entity& operator=(const entity& e);
 	public:
 		entity(const lvector& p,object* m,object* n,const info& v);
 		entity(const lvector& p,object* m,const info& v,sint s=1);

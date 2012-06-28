@@ -16,7 +16,7 @@
 ///*
 
 ///declarations
-class fvector;
+struct fvector;
 ///*
 
 ///definitions

@@ -79,7 +79,7 @@
 
 	<rule>
 		<name>test</name>
-		<compiler>g++</compiler>
+		<compiler>gcc</compiler><!--clang-->
 		<path>
 			<source></source>
 			<include>/usr/include/libdrm</include>

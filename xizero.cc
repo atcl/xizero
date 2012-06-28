@@ -8,7 +8,7 @@
 ///*
 
 ///implementation
-int main(int argc,const char* argv[])
+int main()
 {	
 	http://atcrosslevel.de
 	init();

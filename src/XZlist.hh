@@ -28,6 +28,8 @@ class list //TODO =,cpy-ctor
 		member* fir;
 		member* las;
 		uint    len;
+		//list(const list& l);
+		//list& operator=(const list& l);
 	public:
 		inline list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; }
 		inline ~list() { delete cur; delete fir; delete las; }

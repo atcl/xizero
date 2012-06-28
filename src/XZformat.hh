@@ -24,7 +24,7 @@ struct info
 	const  sint count;
 	char*  operator[](const char* n) const
 	{
-		for(uint i=0;i<count;++i)
+		for(sint i=0;i<count;++i)
 		{
 			if(string::find(n,name[i])!=-1) { return data[i]; }
 		}
@@ -97,7 +97,6 @@ tile* format::xpm(const char* x)
 info* format::ini(const char* x)
 {
 	const sint m = string::count(x,'=');
-	const sint n = string::count(x,'\n');
 	char** s = string::split(x,'\n');
 
 	info* r = new info{ new char*[m],new char*[m],0,m };
@@ -138,7 +137,7 @@ info* format::ar(char* x)
 
 	//Unpack
 	t = 8;
-	for(uint i=0;i<c;++i)
+	for(sint i=0;i<c;++i)
 	{
 		r->name[i] = &x[t];
 		t += 16;
