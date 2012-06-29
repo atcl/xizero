@@ -78,38 +78,6 @@
 	</rule>
 
 	<rule>
-		<name>test</name>
-		<compiler>gcc</compiler><!--clang-->
-		<path>
-			<source></source>
-			<include>/usr/include/libdrm</include>
-			<library></library>
-		</path>
-		<sources>
-			<source>xizero.cc</source>
-		</sources>
-		<libs>
-			<lib>drm</lib>
-		</libs>
-		<defines>
-			<define>SSE</define>
-			<define>XRES=800</define>
-			<define>YRES=600</define>
-		</defines>
-		<flags>
-			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
-			<flag>-march=atom -mtune=atom -m32</flag>
-			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
-			<flag>-Wall -Wextra -Winline -Wlogical-op -Wc++0x-compat -Wparentheses -Weffc++ -pedantic</flag>
-		</flags>
-		<binary>
-			<name>test</name>
-			<type>exe</type>
-		</binary>
-		<action>cppcheck -a -v -s xizero.cc</action>
-	</rule>
-
-	<rule>
 		<name>install</name>
 		<!--action>cp xizero /usr/bin</action-->
 	</rule>
