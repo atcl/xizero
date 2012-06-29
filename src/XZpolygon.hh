@@ -170,7 +170,7 @@ void polygon::raster(bool s,uint c) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cpoint({x,y,z}),cnormal(fvector(((z-x).cross(y-x)))*FXHUN),color(c)
+polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cpoint{x,y,z},cnormal(fvector(((z-x).cross(y-x)))*FXHUN),color(c)
 {
 	cnormal.e = cnormal.length();
 }

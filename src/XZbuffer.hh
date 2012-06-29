@@ -57,7 +57,7 @@ void buffer::clear(sint x)
 	"movaps %%xmm0,%%xmm5;\n"
 	"movaps %%xmm0,%%xmm6;\n"
 	"movaps %%xmm0,%%xmm7;\n"
-	"set:\n"
+	"SETTO: ;\n"
 	"movntps %%xmm0,(%1);\n"
 	"movntps %%xmm1,16(%1);\n"
 	"movntps %%xmm2,32(%1);\n"
@@ -67,7 +67,7 @@ void buffer::clear(sint x)
 	"movntps %%xmm6,96(%1);\n"
 	"movntps %%xmm7,112(%1);\n"
 	"addl $128,%1;\n"
-	"loop set;"
+	"loop SETTO;"
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
@@ -81,7 +81,7 @@ void buffer::fsaamb(const buffer& b)
 	__asm__ __volatile__ (
 	"subl $" STR(XRES) ",%%ecx;\n"
 	"shrl $6,%%ecx;\n"
-	"fsaa:\n"
+	"FSAA:\n"
 	//"prefetch   0(%%edi);\n"
 	//"prefetch  16(%%edi);\n"
 	//"prefetch  32(%%edi);\n"
@@ -111,7 +111,7 @@ void buffer::fsaamb(const buffer& b)
 	"movntps %%xmm2,32(%%edi);\n"
 	"movntps %%xmm3,48(%%edi);\n"
 	"addl $64,%%edi;\n"
-	"loop fsaa;"
+	"loop FSAA;"
 	: :"S"(b.data),"D"(data),"c"(bytes):);
 #endif
 }

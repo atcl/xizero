@@ -45,6 +45,8 @@ class level
 		progress* sp;			//Player Shield Gauge
 		progress* bp;			//Boss Gauge
 		progress* ep;			//Enemy Gauge
+		level(const level& l);
+		level& operator=(const level& l);
 	public:
 		level(char* o);			//Constructor
 		~level();			//Destructor

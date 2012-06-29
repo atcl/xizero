@@ -117,7 +117,7 @@ void entity::setup(const lvector& p,object* m,const info& v)
 void entity::fire(sint i)
 {
 	const bool j = (_ammomount[i]->z)||(_type!=0);
-	ammo* cur = new ammo({{_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,0 },{_direction[j].x,-(_direction[j].y),0,(FXONE<<2)}}); 
+	ammo* cur = new ammo{ fvector(_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,0 ),fvector(_direction[j].x,-(_direction[j].y),0,(FXONE<<2)) }; 
 	_ammo[(bool)_type].append(cur);
 }
 

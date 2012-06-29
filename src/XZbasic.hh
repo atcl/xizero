@@ -24,7 +24,7 @@
 	#define ifu(x)   if(__builtin_expect(!!(x),0))
 
 	#ifdef ALWAYS
-		#define inline __attribute__((always_inline))
+		#define inline __attribute__((always_inline)) inline
 	#endif
 #else
 	#define pure
