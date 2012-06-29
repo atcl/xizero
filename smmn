@@ -77,10 +77,16 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 	</xsl:template>
 </xsl:stylesheet>"
 
+#check for xsltproc
+if ! command -v xsltproc &>/dev/null; then
+	echo "No xsltproc found!"
+	exit 1;
+fi
+
 #check for build.xml
 if [ `ls build.xml` != 'build.xml' ]; then
 	echo "No build.xml found!"
-	exit
+	exit 1;
 fi
 
 #generate and execute commands from build.xml
