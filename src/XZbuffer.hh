@@ -44,30 +44,22 @@ class buffer
 void buffer::clear(sint x)
 {
 #ifdef SSE
-	static sint val[4];
-	val[0] = val[1] = val[2] = val[3] = x;
+	sint val[4] = {x,x,x,x};
 
 	__asm__ __volatile__ (
 	"shrl $7,%%ecx;\n"
 	"movups (%0),%%xmm0;\n"
-	"movaps %%xmm0,%%xmm1;\n"
-	"movaps %%xmm0,%%xmm2;\n"
-	"movaps %%xmm0,%%xmm3;\n"
-	"movaps %%xmm0,%%xmm4;\n"
-	"movaps %%xmm0,%%xmm5;\n"
-	"movaps %%xmm0,%%xmm6;\n"
-	"movaps %%xmm0,%%xmm7;\n"
-	"SETTO: ;\n"
+	"CLEAR: ;\n"
 	"movntps %%xmm0,(%1);\n"
-	"movntps %%xmm1,16(%1);\n"
-	"movntps %%xmm2,32(%1);\n"
-	"movntps %%xmm3,48(%1);\n"
-	"movntps %%xmm4,64(%1);\n"
-	"movntps %%xmm5,80(%1);\n"
-	"movntps %%xmm6,96(%1);\n"
-	"movntps %%xmm7,112(%1);\n"
+	"movntps %%xmm0,16(%1);\n"
+	"movntps %%xmm0,32(%1);\n"
+	"movntps %%xmm0,48(%1);\n"
+	"movntps %%xmm0,64(%1);\n"
+	"movntps %%xmm0,80(%1);\n"
+	"movntps %%xmm0,96(%1);\n"
+	"movntps %%xmm0,112(%1);\n"
 	"addl $128,%1;\n"
-	"loop SETTO;"
+	"loop CLEAR;"
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
