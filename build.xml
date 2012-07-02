@@ -12,6 +12,7 @@
 		</sources>
 		<libs>
 			<lib>drm</lib>
+			<lib>pthread</lib>
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
