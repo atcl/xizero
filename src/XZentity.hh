@@ -26,7 +26,7 @@ struct ammo
 	fvector dir;
 };
 
-#define ROTANG 1
+#define ROTANG 2
 ///*
 
 ///definitions
