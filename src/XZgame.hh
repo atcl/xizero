@@ -19,9 +19,8 @@
 namespace game
 {
 	/*OK*/ pure inline bool onscreen(sint x,sint y);
-	/*OK*/ pure inline bool inside(sint x,sint y,sint a,sint b,sint c,sint d);
-	            inline bool bounds(const fvector& x,const fvector& r,sint m);
-	            inline bool collision(const fvector& x,const fvector& r,const fvector& a);
+	            inline bool bounds(const fvector& x,fixed r,fixed m);
+	            inline bool collision(const fvector& x,const fvector& a,fixed r);
 	                   sint angle(const fvector& x,const fvector& t,const fvector& m);
 }
 ///*
@@ -32,19 +31,15 @@ bool game::onscreen(sint x,sint y)
 	return (x>0) && (y>0) && (x<XRES) && (y<YRES);
 }
 
-bool game::inside(sint x,sint y,sint a,sint b,sint c,sint d)
+bool game::bounds(const fvector& x,fixed r,fixed m)
 {
-	return (x>math::min(a,c)) && (y>math::min(b,d)) && (x<math::max(a,c)) && (y<math::max(b,d));
+	return (x.x-r)>0&&(x.x+r)<XRES&&(x.y-r)>0&&(x.y+r)<m;
 }
 
-bool game::bounds(const fvector& x,const fvector& r,sint m)
+bool game::collision(const fvector& x,const fvector& a,fixed r)
 {
-	return (x.x-r.e)>0&&(x.x+r.e)<XRES&&(x.y-r.e)>0&&(x.y+r.e)<m;
-}
-
-bool game::collision(const fvector& x,const fvector& r,const fvector& a)
-{
-	return (a-(x+r)).length()<r.e;
+	return (a.x>x.x-r)&&(a.x<x.x+r)&&(a.y>x.y-r)&&(a.y<x.y+r); 	//box works
+	//return (a-x).length()<r;					//circle doesn't
 }
 
 sint game::angle(const fvector& x,const fvector& t,const fvector& m)

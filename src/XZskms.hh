@@ -154,12 +154,12 @@ void screen::set(uint c,bool f)
 {
 	//open default dri device
 	fd = open("/dev/dri/card0",O_RDWR | O_CLOEXEC);
-	error(fd<=0,"Couldn't open /dev/dri/card0");
+	error(fd<=0,"Error: Couldn't open /dev/dri/card0");
 	//*
 
 	//acquire drm resources
 	resources = drmModeGetResources(fd);
-	error(resources==0,"drmModeGetResources failed\nMay be you are trying to start xizero from within X.\nIn this case switch to ttyX terminal.\nFor example with STRG+ALT+1 for tty1");
+	error(resources==0,"Error: drmModeGetResources failed\nMay be you are trying to start xizero from within X.\nIn this case switch to ttyX terminal.\nFor example with STRG+ALT+1 for tty1");
 	//*
 
 	//acquire original mode and framebuffer id
@@ -177,7 +177,7 @@ void screen::set(uint c,bool f)
 		if(connector->connection==DRM_MODE_CONNECTED && connector->count_modes>0) { break; }
 		drmModeFreeConnector(connector);
 	}
-	error(i==resources->count_connectors,"No active connector found!"); 
+	error(i==resources->count_connectors,"Error: No active connector found!"); 
 	//*
 
 	//acquire drm encoder
@@ -188,7 +188,7 @@ void screen::set(uint c,bool f)
 		if(encoder->encoder_id==connector->encoder_id) { break; }
 		drmModeFreeEncoder(encoder);
 	}
-	error(i==resources->count_encoders,"No active encoder found!");
+	error(i==resources->count_encoders,"Error: No active encoder found!");
 	//*
 
 	//check for requested mode
@@ -197,7 +197,7 @@ void screen::set(uint c,bool f)
 		mode = connector->modes[i];
 		if( (mode.hdisplay==XRES) && (mode.vdisplay==YRES) ) { break; }
 	}
-	error(f==0 && i==connector->count_modes,"Requested mode not found!");
+	error(f==0 && i==connector->count_modes,"Error: Requested mode not found!");
 	//*
 
 	//force mode
@@ -207,7 +207,7 @@ void screen::set(uint c,bool f)
 	//setup framebuffer
 	struct drm_mode_create_dumb dc = { YRES,XRES,BPP,0,0,0,0 };
 	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dc);
-	error(i==1,"Could not create buffer object!");
+	error(i==1,"Error: Could not create buffer object!");
 
 	size = dc.size;
 	pitch = dc.pitch;
@@ -215,18 +215,18 @@ void screen::set(uint c,bool f)
 
 	struct drm_mode_map_dumb dm = { handle,0,0 };
 	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dm);
-	error(i==1,"Could not map buffer object!");
+	error(i==1,"Error: Could not map buffer object!");
 
 	void* ptr = mmap(0,size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
-	error(ptr==MAP_FAILED,"Could not mirror buffer object!");
+	error(ptr==MAP_FAILED,"Error: Could not mirror buffer object!");
 	frame.pointer(ptr);
 	//*
 
 	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,pitch,handle,&id);
-	error(i==1,"Could not add framebuffer!");
+	error(i==1,"Error: Could not add framebuffer!");
 
 	i = drmModeSetCrtc(fd,encoder->crtc_id,id,0,0,&connector->connector_id,1,&mode);
-	error(i==1,"Could not set mode!");
+	error(i==1,"Error: Could not set mode!");
 
 	sleep(1500);
 }

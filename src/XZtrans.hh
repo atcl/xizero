@@ -47,7 +47,7 @@ void trans::dissolve()
 {
 	for(uint i=0;i<2000;++i)
 	{
-		for(uint i=0;i<32;++i)
+		for(uint j=0;j<32;++j)
 		{
 			const uint o = math::rnd(((XRES-2)*(YRES-2)));
 			screen::back[o] = math::rnd(0x00FFFFFF);

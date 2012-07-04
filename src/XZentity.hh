@@ -30,7 +30,7 @@ struct ammo
 ///*
 
 ///definitions
-class entity //TODO =,cpy-ctor
+class entity
 {
 	private:
 		static const fmatrix rot[2];
@@ -126,8 +126,8 @@ void entity::checkammo()
 	list& a = _ammo[!(bool)_type];
 	for(a.first();a.notlast();a.next())
 	{
-		const sint h = game::collision(_position,_model[0]->bounding(),((ammo*)a.current())->pos)<<2;
-		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); }
+		const sint h = game::collision(_position,((ammo*)a.current())->pos,_model[0]->bounding())<<2;
+		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); } //ifu?
 	}
 }
 
@@ -307,10 +307,8 @@ void entity::display(sint m,bool t)
 			}
 		}
 	}
-/*fvector q;
-q = p;
-fvector y(_model[0]->bounding());
-gfx::rect(fx::f2l(q.x+y.x-y.e),fx::f2l(q.y+y.y-y.e),fx::f2l(q.x+y.x+y.e),fx::f2l(q.y+y.y+y.e),BLUE,0,0,0);*/
+/*const fixed y(_model[0]->bounding());
+gfx::rect(fx::f2l(p.x-y),fx::f2l(p.y-y),fx::f2l(p.x+y),fx::f2l(p.y+y),BLUE,0,0,0);*/
 }
 
 void entity::resume()

@@ -60,11 +60,11 @@ void light::init(bool i)
 		mask.data = new sint[dim*dim];
 	}
 
-	for(sint i=0,t=0;i<mask.width;++i)
+	for(sint j=0,t=0;j<mask.width;++j)
 	{
-		for(sint j=0;j<mask.width;++j,++t)
+		for(sint k=0;k<mask.width;++k,++t)
 		{
-			mask.data[t] = lambert(j-rad,i-rad);
+			mask.data[t] = lambert(k-rad,j-rad);
 		}
 	}
 }

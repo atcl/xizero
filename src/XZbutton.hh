@@ -17,7 +17,6 @@
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZstring.hh"
-#include "XZgame.hh"
 ///*
 
 ///definitions
@@ -39,6 +38,7 @@ class button : public gui
 		void draw() const;					//Draw Button
 		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
 		static void all(bool b);				//Activate or Deactivate All Buttons
+		static inline bool inside(button* b,sint x,sint y);	//Check if inside
 
 		static button* current;					//Currently Highlighted Button 
 };
@@ -78,8 +78,8 @@ sint button::check(sint x,sint y,sint b)
 {
 	for(bl.first();b&&bl.notlast();bl.next())
 	{
-		const button* temp = (button*)bl.current();
-		if( (temp->visible!=0) && (temp->active!=0) && (game::inside(x,y,temp->left,temp->top,temp->left+temp->width,temp->top+temp->height)) ) 
+		button* temp = (button*)bl.current();
+		if( (temp->visible!=0) && (temp->active!=0) && inside(temp,x,y) ) 
 		{
 			return temp->action();
 		}
@@ -93,6 +93,11 @@ void button::all(bool b)
 	{
 		((button*)bl.current())->active = b;
 	}
+}
+
+bool button::inside(button* b,sint x,sint y)
+{
+	return (x>b->left) && (y>b->top) && (x<b->left+b->width) && (y<b->top+b->height);
 }
 ///*
 
