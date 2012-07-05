@@ -39,7 +39,8 @@ bool game::bounds(const fvector& x,fixed r,fixed m)
 bool game::collision(const fvector& x,const fvector& a,fixed r)
 {
 	return (a.x>x.x-r)&&(a.x<x.x+r)&&(a.y>x.y-r)&&(a.y<x.y+r); 	//box works
-	//return (a-x).length()<r;					//circle doesn't
+	//const fvector t(a-x);						//component-wise?
+	//return t.dot(t)<r*r;						//circle doesn't
 }
 
 sint game::angle(const fvector& x,const fvector& t,const fvector& m)
