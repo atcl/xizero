@@ -35,11 +35,11 @@ class object
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
 		       ~object();
-		/*OK*/ void   update(const fmatrix& m=object::linear,bool j=1);
-		/*OK*/ void   display(const lvector& p,sint f) const;
 		/*OK*/ fvector* docktype(sint i,sint j) const;
-		/*OK*/ void   pull(fixed x);
-		// void   rebound();
+		/*OK*/ void update(const fmatrix& m=object::linear,bool j=1);
+		/*OK*/ void display(const lvector& p,sint f) const;
+		/*OK*/ void pull(fixed x);
+		// void rebound();
 		/*OK*/ inline fixed bounding() const { return bound; }
 
 		static fmatrix linear;
@@ -206,6 +206,16 @@ object::~object()
 	delete[] poly;
 }
 
+fvector* object::docktype(sint i,sint j) const
+{
+	for(sint k=0,l=-1;k<docks;++k)
+	{
+		l += (dock[k].e==i);
+		if(l==j) { return &dock[k]; } //to break condition
+	}
+	return 0;
+}
+
 void object::update(const fmatrix& m,bool j)
 {
 	for(sint i=0;i<polys;++i)
@@ -224,16 +234,6 @@ void object::display(const lvector& p,sint f) const
 	{
 		poly[i]->display(p,f,scolor);
 	}
-}
-
-fvector* object::docktype(sint i,sint j) const
-{
-	for(sint k=0,l=-1;k<docks;++k)
-	{
-		l += (dock[k].e==i);
-		if(l==j) { return &dock[k]; } //to break condition
-	}
-	return 0;
 }
 
 void object::pull(fixed x) //translate along normals

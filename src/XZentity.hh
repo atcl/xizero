@@ -307,6 +307,7 @@ void entity::display(sint m,bool t)
 			}
 		}
 	}
+
 /*const fixed y(_model[0]->bounding());
 fvector q(p);
 gfx::rect(fx::f2l(q.x-y),fx::f2l(q.y-y),fx::f2l(q.x+y),fx::f2l(q.y+y),BLUE,0,0,0);*/

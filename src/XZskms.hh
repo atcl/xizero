@@ -25,7 +25,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 ///*
-
+#include "XZstring.hh"
 ///declarations
 #define BPP 32
 #define FPS 4000
@@ -40,7 +40,7 @@
 #define DOWN	66
 #define PGDOWN	54
 
-#define CLOSE
+#define CLOSE		//CTRL+ESC
 
 struct tile;
 ///*
@@ -99,7 +99,7 @@ namespace screen
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline uint key()	{ uint r=kk; kk=0; return r; }
+	inline uint key()	{ const uint r=kk; kk=0; return r; }
 	inline uint turbo()	{ return tk; }
 	inline uint mousex()	{ return mx; }
 	inline uint mousey()	{ return my; }
@@ -147,7 +147,7 @@ bool screen::event()
 	mx = math::lim(0,mx+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES);
 	my = math::lim(0,my+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);
 
-	return 1; //kk==CLOSE;
+	return 1; //kk!=CLOSE;
 }
 
 void screen::set(uint c,bool f)

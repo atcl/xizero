@@ -42,11 +42,9 @@ sint light::lambert(sint x,sint y) const
 	const fixed l = fixed(-i+d)/fixed(d*(1-i));
 	
 	packed c = { col };
-	
 	c.b[1] = math::max(0,fx::mul(fixed(c.b[1]),l));
 	c.b[2] = math::max(0,fx::mul(fixed(c.b[2]),l));
 	c.b[3] = math::max(0,fx::mul(fixed(c.b[3]),l));
-
 	return c.d;
 }
 

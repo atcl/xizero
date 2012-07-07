@@ -27,7 +27,7 @@ class fmatrix
 		/*OK*/ inline void rotatez(fixed z);
 		/*OK*/ inline void translate(fixed x,fixed y,fixed z);
 		/*OK*/ inline void scale(fixed x,fixed y,fixed z);
-		/*OK*/ inline fixed trace();
+		/*OK*/ inline fixed trace() const;
 		              void project(fixed x,fixed y,fixed z,fixed w);
 		              void transpose();
 		/*OK*/        void dyadic(const fvector& x,const fvector& y);
@@ -108,7 +108,7 @@ void fmatrix::scale(fixed x,fixed y,fixed z)
 	multiplicate({{x,0,0,0},{0,y,0,0},{0,0,z,0},{0,0,0,FXONE}});
 }
 
-fixed fmatrix::trace()
+fixed fmatrix::trace() const
 {
 	return m[0][0]+m[1][1]+m[2][2]+m[3][3];
 }
