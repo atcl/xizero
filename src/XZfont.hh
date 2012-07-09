@@ -57,8 +57,8 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 		#pragma prefetch back
 		for(sint j=0;j<w;++j,++o,++s)
 		{
-			const uint e = f->data[s]; //memcheck: Use of uninitialised value of size 4
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED)); //memcheck: Use of uninitialised value of size 4 
+			const uint e = f->data[s];
+			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED)); 
 			r+=(i==0)&&(e!=BLACK);
 		}
 	}

@@ -123,6 +123,9 @@ void menu()
 		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
 		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
 	}
+
+	gfx::sprite(*scr,0,0,1);
+	screen::flush();
 	delete[] scr->data;
 	delete scr;
 	//*

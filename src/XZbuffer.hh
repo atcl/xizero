@@ -11,7 +11,7 @@
 
 ///includes
 #include <malloc.h> //memalign
-#include <string.h> //memcpy
+#include <string.h> //memcpy,memset
 #include "XZbasic.hh"
 ///*
 
@@ -26,7 +26,7 @@ class buffer
 		buffer(const buffer& b);
 		buffer& operator=(const buffer& b);
 	public:
-		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)memalign(16,bytes); } } 
+		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)memalign(16,bytes); memset(data,0,bytes); } } 
 		/*OK*/ ~buffer() { if(later==0) { free(data); } }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
@@ -50,6 +50,7 @@ void buffer::clear(sint x)
 	"shrl $7,%%ecx;\n"
 	"movups (%0),%%xmm0;\n"
 	"CLEAR: ;\n"
+	//"prefetchnta (%1);\n"
 	"movntps %%xmm0,(%1);\n"
 	"movntps %%xmm0,16(%1);\n"
 	"movntps %%xmm0,32(%1);\n"
@@ -104,6 +105,7 @@ void buffer::fsaamb(const buffer& b)
 	"movntps %%xmm3,48(%%edi);\n"
 	"addl $64,%%edi;\n"
 	"loop FSAA;"
+	"sfence;"
 	: :"S"(b.data),"D"(data),"c"(bytes):);
 #endif
 }

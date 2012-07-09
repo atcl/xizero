@@ -34,7 +34,7 @@ sint dialog::msgbox(const char* m,bool q)
 	const sint y = (YRES-h)>>1;
 	button::all(0);
 	const button bok("OK",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
-	//const button bno("NO",&ok,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
+	//const button bno("NO",&no,1,x+(w>>1)-30,y+h-30,60,20,BLACK,SYSCOL,BLACK,1);
 
 	tile* scr = gfx::save();
 	sint cbrk = 0;
