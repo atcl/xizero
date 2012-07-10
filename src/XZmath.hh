@@ -4,8 +4,7 @@
 // Math Library 
 
 ///guard
-#ifndef HH_XZMATH
-#define HH_XZMATH
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -32,6 +31,4 @@ namespace math
 	/*OK*/             uint rnd(uint x) { static uint seed=SEED; ++seed; seed^=(seed<<15); seed^=(seed>>21); seed^=(seed<<4); return seed%x; } 
 }
 ///*
-
-#endif
 

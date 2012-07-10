@@ -4,8 +4,7 @@
 // Fileformat Library 
 
 ///guard
-#ifndef HH_XZFORMAT
-#define HH_XZFORMAT
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO:"
 ///*
 
@@ -154,6 +153,4 @@ info* format::ar(char* x)
 	return r;
 }
 ///*
-
-#endif
 

@@ -4,8 +4,7 @@
 // System Library 
 
 ///guard
-#ifndef HH_XZSYSTEM
-#define HH_XZSYSTEM
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -27,6 +26,4 @@ namespace system
 }
 }
 ///*
-
-#endif
 

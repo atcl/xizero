@@ -4,8 +4,7 @@
 // Level Class 
 
 ///guard
-#ifndef HH_XZLEVEL
-#define HH_XZLEVEL
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -166,11 +165,11 @@ level::level(char* o)
 			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
 				case '!':
-					boss = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),bm,(*bi),2);
+					boss = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),(*bi),bm,0,2);
 				break;
 
 				case '"':
-					player = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),GROUND),pm,pn,(*pi));
+					player = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),GROUND),(*pi),pm,pn,0);
 				break;
 
 				case '#':
@@ -179,7 +178,7 @@ level::level(char* o)
 				case '&':
 				case '\'':
 				case '(':
-					entity* enemy = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),em,(*ei));
+					entity* enemy = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),(*ei),em,0,1);
 					enemies.append(enemy);
 				break;
 			}
@@ -307,6 +306,4 @@ lvector level::ppos()
 	return player->data(mark);
 }
 ///*
-
-#endif
 

@@ -4,8 +4,7 @@
 // Graphic Primitives Library 
 
 ///guard
-#ifndef HH_XZGFX
-#define HH_XZGFX
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: Guards"
 ///*
 
@@ -202,6 +201,4 @@ tile* gfx::save()
 	return r;
 }
 ///*
-
-#endif
 

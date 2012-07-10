@@ -4,8 +4,7 @@
 // Compiled Sprites Library 
 
 ///guard
-#ifndef HH_XZCOMPILED
-#define HH_XZCOMPILED
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: tracks"
 ///*
 
@@ -73,6 +72,4 @@ void compiled::tracks(uint x,uint y,uint d,uint c)
 	}
 }
 ///*
-
-#endif
 

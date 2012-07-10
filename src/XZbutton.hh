@@ -4,8 +4,7 @@
 // GUI Button Library 
 
 ///guard
-#ifndef HH_XZBUTTON
-#define HH_XZBUTTON
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -100,6 +99,4 @@ bool button::inside(button* b,sint x,sint y)
 	return (x>b->left) && (y>b->top) && (x<b->left+b->width) && (y<b->top+b->height);
 }
 ///*
-
-#endif
 

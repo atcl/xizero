@@ -4,8 +4,7 @@
 // Object Library 
 
 ///guard
-#ifndef HH_XZOBJECT
-#define HH_XZOBJECT
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: Destructor"
 ///*
 
@@ -244,6 +243,4 @@ void object::pull(fixed x) //translate along normals
 	}
 }
 ///*
-
-#endif
 

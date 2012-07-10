@@ -4,8 +4,7 @@
 // Super KMS library
 
 ///guard
-#ifndef HH_XZSKMS
-#define HH_XZSKMS
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: mouse"
 ///*
 
@@ -247,6 +246,4 @@ void screen::close()
 	delete nu;
 }
 ///*
-
-#endif
 

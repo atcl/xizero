@@ -4,8 +4,7 @@
 // Font Library 
 
 ///guard
-#ifndef HH_XZFONT
-#define HH_XZFONT
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -133,6 +132,4 @@ char font::map(char a)
 	}
 }
 ///*
-
-#endif
 

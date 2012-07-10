@@ -4,8 +4,7 @@
 // Buffer Library 
 
 ///guard
-#ifndef HH_XZBUFFER
-#define HH_XZBUFFER
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: FSMB, emissive glow"
 ///*
 
@@ -50,7 +49,6 @@ void buffer::clear(sint x)
 	"shrl $7,%%ecx;\n"
 	"movups (%0),%%xmm0;\n"
 	"CLEAR: ;\n"
-	//"prefetchnta (%1);\n"
 	"movntps %%xmm0,(%1);\n"
 	"movntps %%xmm0,16(%1);\n"
 	"movntps %%xmm0,32(%1);\n"
@@ -116,4 +114,3 @@ void buffer::glow()
 }
 ///*
 
-#endif 

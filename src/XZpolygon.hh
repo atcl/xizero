@@ -4,8 +4,7 @@
 // Polygon Library 
 
 ///guard
-#ifndef HH_XZPOLYGON
-#define HH_XZPOLYGON
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: Shading, Rasterizer"
 ///*
 
@@ -215,6 +214,4 @@ void polygon::pull(fixed a)
 	cpoint[2] += m;
 }
 ///*
-
-#endif
 

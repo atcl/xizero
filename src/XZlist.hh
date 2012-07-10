@@ -4,8 +4,7 @@
 // Double Linked List Library 
 
 ///guard
-#ifndef HH_XZLIST
-#define HH_XZLIST
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: "
 ///*
 
@@ -91,6 +90,4 @@ void list::xsort(bool u) //use swap
 	}
 }
 ///*
-
-#endif
 

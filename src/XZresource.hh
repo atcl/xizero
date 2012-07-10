@@ -4,8 +4,7 @@
 // Resource Library
 
 ///guard
-#ifndef HH_XZRESOURCE
-#define HH_XZRESOURCE
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -21,6 +20,4 @@ namespace resource
 	#include "../dat/xzfont.xpm"
 }
 ///*
-
-#endif
 

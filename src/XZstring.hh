@@ -4,8 +4,7 @@
 // C String Library 
 
 ///guard
-#ifndef HH_XZSTRING
-#define HH_XZSTRING
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: "
 ///*
 
@@ -224,6 +223,4 @@ char string::toup(char x)
 	return math::set('A',math::set(x-32,x,x>=97),x<65); 
 }
 ///*
-
-#endif
 

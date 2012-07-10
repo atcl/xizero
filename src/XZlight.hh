@@ -4,8 +4,7 @@
 // Light Source Class Library 
 
 ///guard
-#ifndef HH_XZLIGHT
-#define HH_XZLIGHT
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -84,6 +83,4 @@ void light::radius(sint r)
 	init(1);
 }
 ///*
-
-#endif
 

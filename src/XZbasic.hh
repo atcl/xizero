@@ -4,8 +4,7 @@
 // Basic Library 
 
 ///guard
-#ifndef HH_XZBASIC
-#define HH_XZBASIC
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -110,6 +109,4 @@ inline void  operator delete[](void *p) { free(p); }
 //*
 
 ///*
-
-#endif
 

@@ -4,8 +4,7 @@
 // GUI Progressbar Library 
 
 ///guard
-#ifndef HH_XZPROGRESS
-#define HH_XZPROGRESS
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -56,6 +55,4 @@ void progress::draw() const
 	gfx::rect(left+2,top+2+math::set(height-4-p,horver==1),left+2+math::set(p,width-4,horver==0),top+height-2,color,color,1); 
 }
 ///*
-
-#endif
 

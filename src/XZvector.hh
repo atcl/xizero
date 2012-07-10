@@ -4,8 +4,7 @@
 // fixed point vector class
 
 ///guard
-#ifndef HH_XZVECTOR
-#define HH_XZVECTOR
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -77,6 +76,4 @@ struct fvector
 inline lvector& lvector::operator=(const fvector& a) { x=fx::r2l(a.x); y=fx::r2l(a.y); z=fx::r2l(a.z); e=fx::r2l(a.e); return *this; }
                 lvector::lvector(const fvector& a) : x(fx::r2l(a.x)),y(fx::r2l(a.y)),z(fx::r2l(a.z)),e(fx::r2l(a.e)) { ; }
 ///*
-
-#endif
 

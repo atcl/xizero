@@ -4,8 +4,7 @@
 // Game Library 
 
 ///guard
-#ifndef HH_XZGAME
-#define HH_XZGAME
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: 2D Collision Detection"
 ///*
 
@@ -48,6 +47,4 @@ sint game::angle(const fvector& x,const fvector& t,const fvector& m)
 	return 0;
 }
 ///*
-
-#endif
 

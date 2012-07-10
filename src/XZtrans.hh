@@ -4,8 +4,7 @@
 // Screen Transition Library 
 
 ///guard
-#ifndef HH_XZTRANS
-#define HH_XZTRANS
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -77,6 +76,4 @@ void trans::fadeout()
 	}
 }
 ///*
-
-#endif
 

@@ -4,8 +4,7 @@
 // Dialog Library 
 
 ///guard
-#ifndef HH_XZDIALOG
-#define HH_XZDIALOG
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: yesnobox"
 ///*
 
@@ -54,6 +53,4 @@ sint dialog::msgbox(const char* m,bool q)
 	return 1; //cbrk
 }
 ///*
-
-#endif
 

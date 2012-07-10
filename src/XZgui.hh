@@ -4,8 +4,7 @@
 // GUI base class 
 
 ///guard
-#ifndef HH_XZGUI
-#define HH_XZGUI
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -28,6 +27,4 @@ class gui
 		bool visible;
 };
 ///*
-
-#endif
 

@@ -4,8 +4,7 @@
 // Matrix Class Library
 
 ///guard
-#ifndef HH_XZMATRIX
-#define HH_XZMATRIX
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///*
 
@@ -165,6 +164,4 @@ lvector fmatrix::transform(const lvector& x) const
 		       fx::r2l(fx::mul(m[2][0],fx::l2f(x.x))+fx::mul(m[2][1],fx::l2f(x.y))+fx::mul(m[2][2],fx::l2f(x.z))+m[2][3]),x.e);
 }
 ///*
-
-#endif
 

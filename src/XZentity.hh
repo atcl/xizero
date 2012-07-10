@@ -4,9 +4,8 @@
 // Entity Class 
 
 ///guard
-#ifndef HH_XZENTITY
-#define HH_XZENTITY
-//#pragma message "Compiling " __FILE__ "..." " TODO: ."
+#pragma once
+//#pragma message "Compiling " __FILE__ "..." " TODO: ymark as reference"
 ///*
 
 ///includes
@@ -35,37 +34,35 @@ class entity
 	private:
 		static const fmatrix rot[2];
 		static const fmatrix exp[2];
-		static list _ammo[2];
+		static list  ammos[2];
 		static fixed ymark;
 
-		object* _model[2];
-		fvector _position;
-		fvector _direction[2];
-		fvector** _ammomount;
-		lvector _towpos;
-		sint    _angle;
+		object* model[2];
+		fvector position;
+		fvector direction[2];
+		lvector towpos;
+		sint    angle;
 
-		sint _type;
-		sint _lastupdate;
+		bool type;
+		sint lastupdate;
+		sint lastfire;
 
-		sint _health;
-		sint _shield;
-		sint _shieldmax;
-		sint _shieldrate;
-		sint _ammomounts;
-		sint _ammotype;
-		sint _firerate;
-		sint _lastfire;
-		sint _points;
+		sint health;
+		sint shield;
+		sint shieldmax;
+		sint shieldrate;
+		sint ammomounts;
+		sint ammotype;
+		sint firerate;
+		sint points;
+		fvector** ammomount;
 
-		void setup(const lvector& p,object* m,const info& v);
 		void fire(sint i);
 		void checkammo();
 		entity(const entity& e);
 		entity& operator=(const entity& e);
 	public:
-		entity(const lvector& p,object* m,object* n,const info& v);
-		entity(const lvector& p,object* m,const info& v,sint s=1);
+		entity(const lvector& p,const info& v,object* m,object* n,sint s);
 		~entity();
 		sint update(sint k,sint j,sint m);
 		sint update(sint m);
@@ -80,90 +77,79 @@ class entity
 ///implementation
 const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }() };
 const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; m.dyadic(fvector(FXHLF,FXQRT,FXHLF),fvector(FXHLF,FXHLF,FXHLF)); return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); return m; }() };
-list          entity::_ammo[2] = { list(), list() };
-fixed         entity::ymark  = 0;
-
-void entity::setup(const lvector& p,object* m,const info& v)
-{
-	_model[0] = new object(*m);
-
-	_position = p;
-	_direction[0].set(math::set(FXMON,_type==-1),math::neg(math::set(FXONE,_type!=-1),_type==0),0,FXONE);
-	_direction[1].set(0,FXONE,0,FXONE);
-
-	_health     = string::str2int(v["health"]);
-	_shieldmax  = string::str2int(v["shield"]);
-	_shieldrate = string::str2int(v["srate"]);
-	_ammomounts = string::str2int(v["mounts"]);
-	_ammotype   = string::str2int(v["atype"]);
-	_firerate   = string::str2int(v["frate"]);
-	_points     = string::str2int(v["points"]);
-	_shield     = _shieldmax;
-
-	_ammomount = new fvector*[_ammomounts];
-	const sint s = (_model[1]!=0);
-	for(sint i=0,j=0;i+j<_ammomounts;++i)
-	{
-		fvector* t = _model[0]->docktype(s,i);
-		const bool mt = (t==0);
-		if(_model[1]!=0 && mt==1) { t = _model[1]->docktype(s,j); ++j; --i; }
-		_ammomount[i+j] = t;
-		_ammomount[i+j]->z = mt;	
-	}
-
-	_lastupdate = _lastfire = screen::time();
-}
+list          entity::ammos[2] = { list(), list() };
+fixed         entity::ymark    = 0;
 
 void entity::fire(sint i)
 {
-	const bool j = (_ammomount[i]->z)||(_type!=0);
-	ammo* cur = new ammo{ fvector(_position.x+_ammomount[i]->x,_position.y-_ammomount[i]->y,0,0 ),fvector(_direction[j].x,-(_direction[j].y),0,(FXONE<<2)) }; 
-	_ammo[(bool)_type].append(cur);
+	const bool j = (ammomount[i]->z)||(type!=0);
+	ammo* cur = new ammo{ fvector(position.x+ammomount[i]->x,position.y-ammomount[i]->y,0,0 ),fvector(direction[j].x,-(direction[j].y),0,(FXONE<<2)) }; 
+	ammos[type].append(cur);
 }
 
 void entity::checkammo()
 {
-	list& a = _ammo[!(bool)_type];
+	list& a = ammos[!type];
 	for(a.first();a.notlast();a.next())
 	{
-		const sint h = game::collision(_position,((ammo*)a.current())->pos,_model[0]->bounding())<<2;
-		if(h!=0) { delete (ammo*)a.delcurrent(); _health = math::max(0,_health-h); } //ifu?
+		const sint h = game::collision(position,((ammo*)a.current())->pos,model[0]->bounding())<<2;
+		ifu(h!=0) { delete (ammo*)a.delcurrent(); health = math::max(0,health-h); }
 	}
 }
 
-entity::entity(const lvector& p,object* m,object* n,const info& v)
+entity::entity(const lvector& p,const info& v,object* m,object* n,sint s)
+ : model{new object(*m),0},
+   position(p),
+   direction{ fvector(0,FXONE,0,FXONE),fvector(0,FXONE,0,FXONE) },
+   towpos(),
+   angle(0),
+   type(s),
+   lastupdate(screen::time()),
+   lastfire(screen::time()),
+   health(string::str2int(v["health"])),
+   shield(string::str2int(v["shield"])),
+   shieldmax(string::str2int(v["shield"])),
+   shieldrate(string::str2int(v["srate"])),
+   ammomounts(string::str2int(v["mounts"])),
+   ammotype(string::str2int(v["atype"])),
+   firerate(string::str2int(v["frate"])),
+   points(string::str2int(v["points"])),
+   ammomount(new fvector*[ammomounts])
 {
-	_model[1] = new object(*n);
-	_type = 0;
-	setup(p,m,v);
+	switch(s)
+	{
+		case 2:
+			object::linear.clear();
+			object::linear.scale(FXTWO,FXTWO,FXTWO);
+			//scale bounding circle radius
+			model[0]->update();
+			direction[0].set(FXMON,0,0,FXONE);
+			break;
+		case 0:
+			model[1] = new object(*n);
+			ymark = position.y;
 
-	_towpos = *_model[1]->docktype(3,0)-*_model[0]->docktype(3,0);	
-	_direction[0].set(0,FXMON,0,0);
-	_direction[1].set(0,FXMON,0,0);
-	_angle = 0;
-	ymark = _position.y;
-}
+			towpos = *model[1]->docktype(3,0)-*model[0]->docktype(3,0);	
+			direction[0].set(0,FXMON,0,0);
+			direction[1].set(0,FXMON,0,0);
+	}
 
-entity::entity(const lvector& p,object* m,const info& v,sint s)
-{
-	_model[1] = 0;
-	_type = math::neg(1,s!=1);
-	setup(p,m,v);
-	
-	//scale model by s
-	s = fx::l2f(s);
-	object::linear.clear();
-	object::linear.scale(s,s,s);
-	//scale bounding circle radius
-	_model[0]->update();
-	//*
+	const sint z = (model[1]!=0);
+	for(sint i=0,j=0;i+j<ammomounts;++i)
+	{
+		fvector* t = model[0]->docktype(z,i);
+		const bool mt = (t==0);
+		if(model[1]!=0 && mt==1) { t = model[1]->docktype(z,j); ++j; --i; }
+		ammomount[i+j] = t;
+		ammomount[i+j]->z = mt;	
+	}
 }
 
 entity::~entity()
 {
-	delete _model[0];
-	if(_model[1]!=0) { delete _model[1]; }
-	//delete[] _ammomount;
+	delete model[0];
+	if(model[1]!=0) { delete model[1]; }
+	//delete[] ammomount;
 }
 
 sint entity::update(sint k,sint j,sint m)
@@ -172,125 +158,125 @@ sint entity::update(sint k,sint j,sint m)
 	const bool l = k^last;
 	const sint curr = screen::time();
 
-	const bool mat = (_angle>=0&&_angle<=180) || (_angle<=-180&&_angle>=-360);
+	const bool mat = (angle>=0&&angle<=180) || (angle<=-180&&angle>=-360);
 
 	//checkammo();
 
-	ifu(_health==0)
+	ifu(health==0)
 	{
 		static sint dm = 0;
-		_model[0]->pull(-FXHLF+FXTNT);
-		_model[1]->pull(-FXHLF);
-		return _health-(dm++>250);
+		model[0]->pull(-FXHLF+FXTNT);
+		model[1]->pull(-FXHLF);
+		return health-(dm++>250);
 	}
 
 	switch(k)
 	{
 		case RIGHT:
-			_model[0]->update(rot[0]);
-			_model[1]->update(rot[0]);
-			_direction[0] = rot[0].transform(_direction[0]);
-			_direction[1] = rot[0].transform(_direction[1]);
+			model[0]->update(rot[0]);
+			model[1]->update(rot[0]);
+			direction[0] = rot[0].transform(direction[0]);
+			direction[1] = rot[0].transform(direction[1]);
 		break;
 
 		case LEFT:
-			_model[0]->update(rot[1]);
-			_model[1]->update(rot[1]);
-			_direction[0] = rot[1].transform(_direction[0]);
-			_direction[1] = rot[1].transform(_direction[1]);
+			model[0]->update(rot[1]);
+			model[1]->update(rot[1]);
+			direction[0] = rot[1].transform(direction[0]);
+			direction[1] = rot[1].transform(direction[1]);
 		break;
 
 		case UP:
-			_direction[0].e = math::set(fx::l2f(_direction[0].e>=0),_direction[0].e,l==1);
+			direction[0].e = math::set(fx::l2f(direction[0].e>=0),direction[0].e,l==1);
 		break;
 
 		case DOWN:
-			_direction[0].e = math::set(fx::l2f(-(_direction[0].e<=0)),_direction[0].e,l==1);
+			direction[0].e = math::set(fx::l2f(-(direction[0].e<=0)),direction[0].e,l==1);
 		break;
 
 		case 'a':
-			_model[1]->update(rot[0]);
-			_angle += ROTANG;
-			_direction[1] = rot[0].transform(_direction[1]);
+			model[1]->update(rot[0]);
+			angle += ROTANG;
+			direction[1] = rot[0].transform(direction[1]);
 		break;
 
 		case 'd':
-			_model[1]->update(rot[1]);
-			_angle -= ROTANG;
-			_direction[1] = rot[1].transform(_direction[1]);
+			model[1]->update(rot[1]);
+			angle -= ROTANG;
+			direction[1] = rot[1].transform(direction[1]);
 		break;
 
 		case 'w':
-			_model[1]->update(rot[mat]);
-			_angle += math::neg(ROTANG,mat);
-			_direction[1] = rot[mat].transform(_direction[1]);
+			model[1]->update(rot[mat]);
+			angle += math::neg(ROTANG,mat);
+			direction[1] = rot[mat].transform(direction[1]);
 		break;
 
 		case SPACE:
-			for(sint i=0;i<_ammomounts&&curr>_lastfire;++i) { fire(i); }
-			_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
+			for(sint i=0;i<ammomounts&&curr>lastfire;++i) { fire(i); }
+			lastfire = math::set(curr+firerate,lastfire,curr>lastfire);
 		break;
 	}
  
-	_angle -= math::set(360,_angle>=360);
+	angle -= math::set(360,angle>=360);
 
-	const fvector tp(_position.x - fx::mul(_direction[0].x,_direction[0].e),_position.y + fx::mul(_direction[0].y,_direction[0].e),_position.z + fx::mul(_direction[0].z,_direction[0].e));
+	const fvector tp(position.x - fx::mul(direction[0].x,direction[0].e),position.y + fx::mul(direction[0].y,direction[0].e),position.z + fx::mul(direction[0].z,direction[0].e));
 	//terrain collision here
 	const bool t = (tp.x>=0)&&(tp.x<=FX(XRES));//||(ty<=0||temp.y>=m);
-	_position.x = math::set(tp.x,_position.x,t);
-	_position.y = math::set(tp.y,_position.y,t);
-	_position.z = math::set(tp.z,_position.z,t); 
+	position.x = math::set(tp.x,position.x,t);
+	position.y = math::set(tp.y,position.y,t);
+	position.z = math::set(tp.z,position.z,t); 
 
-	ymark  = _position.y;
+	ymark  = position.y;
 
 	last = k;
-	_lastupdate = curr;
-	return _health;
+	lastupdate = curr;
+	return health;
 }
 
 sint entity::update(sint m)
 {
 	const sint curr = screen::time();
 
-	ifu(_health==0) //todo: dyadic explosion
+	ifu(health==0) //todo: dyadic explosion
 	{
 		static sint dm = 0;
-		_model[0]->update(exp[dm!=0],dm==0);
-		return _health-(dm++>250);		
+		model[0]->update(exp[dm!=0],dm==0);
+		return health-(dm++>250);		
 	}
 
-	if( (_health>0) && (_position.y>0) && ((_position.y+FX(YRES))>ymark) ) //check
+	if( (health>0) && (position.y>0) && ((position.y+FX(YRES))>ymark) ) //check
 	{
 		checkammo();
 
-		for(sint i=0;i<_ammomounts&&curr>_lastfire;++i) { fire(i); }
-		_lastfire = math::set(curr+_firerate,_lastfire,curr>_lastfire);
+		for(sint i=0;i<ammomounts&&curr>lastfire;++i) { fire(i); }
+		lastfire = math::set(curr+firerate,lastfire,curr>lastfire);
 
-		_position.x -= fx::mul(_direction[0].x,_direction[0].e);
-		//_position.y += fx::mul(_direction[0].y,_direction[0].e); //temp
-		_position.z += fx::mul(_direction[0].z,_direction[0].e);
+		position.x -= fx::mul(direction[0].x,direction[0].e);
+		//position.y += fx::mul(direction[0].y,direction[0].e); //temp
+		position.z += fx::mul(direction[0].z,direction[0].e);
 
-		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x<=FX(150));
-		_direction[0].x = math::set(-_direction[0].x,_direction[0].x,_position.x>=FX(650));
+		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x<=FX(150));
+		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x>=FX(650));
 	}
 
-	_lastupdate = curr;
-	return _health;
+	lastupdate = curr;
+	return health;
 }
 
 void entity::display(sint m,bool t)
 {
-	guard(fx::r2l(_position.y)<m-100&&fx::r2l(_position.y)>m+YRES);
+	guard(fx::r2l(position.y)<m-100&&fx::r2l(position.y)>m+YRES);
 
-	const lvector p(fx::r2l(_position.x),fx::r2l(_position.y)-m,fx::r2l(_position.z));
+	const lvector p(fx::r2l(position.x),fx::r2l(position.y)-m,fx::r2l(position.z));
 	const sint r = math::set(R_B,R_F,t);
-	_model[0]->display(p,r);
-	if(_model[1]!=0)
+	model[0]->display(p,r);
+	if(model[1]!=0)
 	{
-		_model[1]->display(p+_towpos,r);
+		model[1]->display(p+towpos,r);
 		for(sint h=0;h<2&&r!=R_B;++h)
 		{
-			list& a = _ammo[h];
+			list& a = ammos[h];
 			for(a.first();a.notlast();a.next())
 			{
 				const fvector& dir = ((ammo*)a.current())->dir;
@@ -308,24 +294,24 @@ void entity::display(sint m,bool t)
 		}
 	}
 
-/*const fixed y(_model[0]->bounding());
+/*const fixed y(model[0]->bounding());
 fvector q(p);
 gfx::rect(fx::f2l(q.x-y),fx::f2l(q.y-y),fx::f2l(q.x+y),fx::f2l(q.y+y),BLUE,0,0,0);*/
 }
 
 void entity::resume()
 {
-	_lastfire = _lastupdate = screen::time();
+	lastfire = lastupdate = screen::time();
 }
 
 void entity::addpoints(sint a)
 {
-	_points += a;
+	points += a;
 }
 
 lvector entity::data(sint m) const
 {
-	return lvector(fx::r2l(_position.x),fx::r2l(_position.y)-m,_health,_shield);
+	return lvector(fx::r2l(position.x),fx::r2l(position.y)-m,health,shield);
 }
 
 sint entity::ylevel()
@@ -334,4 +320,3 @@ sint entity::ylevel()
 }
 ///*
 
-#endif

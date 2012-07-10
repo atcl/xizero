@@ -4,8 +4,7 @@
 // Fixed Point 16.16 Type Library 
 
 ///guard
-#ifndef HH_XZFIXED
-#define HH_XZFIXED
+#pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: literals to signed"
 ///*
 
@@ -101,6 +100,4 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	}
 }
 ///*
-
-#endif
 
