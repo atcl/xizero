@@ -42,7 +42,7 @@ sint start(sint i)
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		if(screen::turbo()==ESCAPE) { menu(); l.resume(); }
+		ifu(screen::turbo()==ESCAPE) { menu(); l.resume(); }
 
 		switch(l.update(screen::key(),0))
 		{

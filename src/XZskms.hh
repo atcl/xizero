@@ -24,7 +24,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 ///*
-#include "XZstring.hh"
+
 ///declarations
 #define BPP 32
 #define FPS 4000
@@ -90,7 +90,6 @@ namespace screen
 	void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id,0,0); }
 	//void flush()		{ back.swap(accum); pthread_t t; pthread_attr_t a; pthread_attr_init(&a); pthread_attr_setdetachstate(&a,PTHREAD_CREATE_DETACHED); pthread_create(&t,&a,[](void* x)->void*{ frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
 	bool event();
-	bool run()		{ flush(); return event(); }
 	void close();
 
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
@@ -98,6 +97,7 @@ namespace screen
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
+	inline bool run()	{ flush(); return event(); }
 	inline uint key()	{ const uint r=kk; kk=0; return r; }
 	inline uint turbo()	{ return tk; }
 	inline uint mousex()	{ return mx; }
