@@ -117,9 +117,6 @@ level::level(char* o)
 	markmax = OFFSET*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
 
-	entity::mmax = fx::l2f(markmax);
-	entity::mmin = fx::l2f(markmin+YMAX);
-
 	terrain    = new object*[l];
 	lvector* a = new lvector[LWIDTH];
 	lvector* b = new lvector[LWIDTH];
@@ -224,10 +221,10 @@ sint level::update(sint k,sint j)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		((entity*)enemies.current())->update(markmax);
+		((entity*)enemies.current())->update();
 	}
 
-	return (boss->update(markmax)<0)-(player->update(k,j,markmax)<0);
+	return (boss->update()<0)-(player->update(k,j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);
 }
 
 void level::display()

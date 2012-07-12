@@ -51,7 +51,7 @@ sint start(sint i)
 		}
 				
 		l.display();
-		//screen::back.fsaamb(screen::accum);
+		screen::back.fsaamb(screen::accum);
 		l.gauges();
 		bench();
 	}

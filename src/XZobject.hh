@@ -135,10 +135,33 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 	//compute bounding circle
 	bbox[0].z = bbox[1].z = bbox[2].z = bbox[3].z = 0;
-	const fixed ac = fx::l2f((bbox[1]-bbox[0]).length()+(bbox[3]-bbox[2]).length());
-	const fixed bd = fx::l2f((bbox[2]-bbox[1]).length()+(bbox[0]-bbox[3]).length());
-	const fixed ar = fx::l2f(((bbox[1]+bbox[2]-bbox[0]).cross(bbox[1])).length());
-	bound = fx::div(ar,math::min(ac,bd))<<1;
+	//const fixed p = fx::l2f((bbox[1]-bbox[0]).length()+(bbox[3]-bbox[2]).length());
+	//const fixed q = fx::l2f((bbox[2]-bbox[1]).length()+(bbox[0]-bbox[3]).length());
+	//const fixed a = fx::l2f(((bbox[3]-bbox[1]).cross(bbox[2]-bbox[0])).length())>>1;
+	//bound = fx::div(a,math::min(p,q));
+
+	lvector j = (bbox[0]+bbox[1]+bbox[2]+bbox[3]);
+	j.x>>=2;
+	j.y>>=2;
+	const uint u = (bbox[0]-j).length();
+	const uint v = (bbox[1]-j).length();
+	const uint x = (bbox[2]-j).length();
+	const uint y = (bbox[3]-j).length();
+	const uint uv = u*v;
+	const uint xy = x*y;
+	const uint ux = u*x;
+	const uint vy = v*y;
+	const uint uy = u*y;
+	const uint vx = v*x;
+	const uint uvx = uv*x;
+	const uint vxy = vx*y;
+	const uint xyu = xy*u;
+	const uint yuv = uy*v;
+	const uint uvxy = uv*xy;
+	const uint m = (uvx + vxy + xyu + yuv)>>1;
+
+	bound = fx::sqr(fx::l2f( ((m-uvx)*(m-vxy)*(m-xyu)*(m-yuv))/(uvxy*(uv+xy)*(ux+vy)*(uy+vx)) )<<1);
+	
 //alerf(bound);
 	//*
 
