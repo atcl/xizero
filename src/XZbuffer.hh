@@ -20,7 +20,7 @@ class buffer
 	private:
 		const uint tsize;	//size in typesize
 		const uint bytes;	//size in bytes
-		const bool later;	//self allocated or not
+		      bool later;	//self allocated or not
 		      sint* data;	//pointer to data
 		buffer(const buffer& b);
 		buffer& operator=(const buffer& b);
@@ -32,7 +32,7 @@ class buffer
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
 		/*OK*/ inline void  copy(const buffer& s) { memcpy(data,s.data,bytes); }
-		/*OK*/ inline void  swap(buffer & b) { sint* t=b.data; b.data=data; data=t; }
+		/*OK*/ inline void  swap(buffer& b) { sint* t=b.data; bool l=b.later; b.data=data; b.later=later; data=t; later=l; }
 		/*OK*/        void  clear(sint x=0);
 		              void  fsaamb(const buffer& b);
 		              void  glow();

@@ -71,6 +71,9 @@ class entity
 		inline void addpoints(sint a);
 		inline lvector data(sint m) const;
 		inline static sint ylevel();
+
+		static fixed mmin;
+		static fixed mmax;
 };
 ///*
 
@@ -79,6 +82,8 @@ const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTAN
 const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; m.dyadic(fvector(FXHLF,FXQRT,FXHLF),fvector(FXHLF,FXHLF,FXHLF)); return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); return m; }() };
 list          entity::ammos[2] = { list(), list() };
 fixed         entity::ymark    = 0;
+fixed         entity::mmin     = 0;
+fixed         entity::mmax     = 0;
 
 void entity::fire(sint i)
 {
@@ -222,7 +227,8 @@ sint entity::update(sint k,sint j,sint m)
 
 	const fvector tp(position.x - fx::mul(direction[0].x,direction[0].e),position.y + fx::mul(direction[0].y,direction[0].e),position.z + fx::mul(direction[0].z,direction[0].e));
 	//terrain collision here
-	const bool t = (tp.x>=0)&&(tp.x<=FX(XRES));//||(ty<=0||temp.y>=m);
+	const fixed r = model[0]->bounding();
+	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=mmax)&&(tp.y+r<=mmin));
 	position.x = math::set(tp.x,position.x,t);
 	position.y = math::set(tp.y,position.y,t);
 	position.z = math::set(tp.z,position.z,t); 

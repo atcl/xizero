@@ -117,6 +117,9 @@ level::level(char* o)
 	markmax = OFFSET*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
 
+	entity::mmax = fx::l2f(markmax);
+	entity::mmin = fx::l2f(markmin+YMAX);
+
 	terrain    = new object*[l];
 	lvector* a = new lvector[LWIDTH];
 	lvector* b = new lvector[LWIDTH];

@@ -232,7 +232,10 @@ void screen::set(uint c,bool f)
 
 void screen::close()
 {
-	//back.~buffer();
+	//delete accum;
+	//delete depth;
+	//delete back;
+	//delete frame; 
 	drmModeSetCrtc(fd,encoder->crtc_id,oid,0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id);
 	munmap(frame.pointer(),size);
