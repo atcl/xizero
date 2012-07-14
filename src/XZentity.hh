@@ -47,6 +47,7 @@ class entity
 		sint lastupdate;
 		sint lastfire;
 
+		sint death;
 		sint health;
 		sint shield;
 		sint shieldmax;
@@ -76,7 +77,7 @@ class entity
 
 ///implementation
 const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }() };
-const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; m.dyadic(fvector(FXHLF,FXQRT,FXHLF),fvector(FXHLF,FXHLF,FXHLF)); return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); return m; }() };
+const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; /*m.dyadic(fvector(FXONE,FXONE,FXONE),fvector(FXONE,FXONE,FXONE));*/ return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }() };
 list          entity::ammos[2] = { list(), list() };
 fixed         entity::ymark    = 0;
 
@@ -106,6 +107,7 @@ entity::entity(const lvector& p,const info& v,object* m,object* n,sint s)
    type(s),
    lastupdate(screen::time()),
    lastfire(screen::time()),
+   death(0),
    health(string::str2int(v["health"])),
    shield(string::str2int(v["shield"])),
    shieldmax(string::str2int(v["shield"])),
@@ -164,10 +166,9 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 
 	ifu(health==0)
 	{
-		static sint dm = 0;
 		model[0]->pull(-FXHLF+FXTNT);
 		model[1]->pull(-FXHLF);
-		return health-(dm++>250);
+		return health-(death++>250);
 	}
 
 	switch(k)
@@ -239,11 +240,10 @@ sint entity::update()
 {
 	const sint curr = screen::time();
 
-	ifu(health==0) //todo: dyadic explosion
+	ifu(health==0)
 	{
-		static sint dm = 0;
-		model[0]->update(exp[dm!=0],dm==0);
-		return health-(dm++>250);		
+		model[0]->update(exp[death!=0],death==0);
+		return health-=(death++>250);		
 	}
 
 	if( (health>0) && (position.y>0) && ((position.y+FX(YRES))>ymark) ) //check

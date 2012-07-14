@@ -221,7 +221,7 @@ sint level::update(sint k,sint j)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		((entity*)enemies.current())->update();
+		ifu(((entity*)enemies.current())->update()<0) { enemies.delcurrent(); }
 	}
 
 	return (boss->update()<0)-(player->update(k,j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);

@@ -26,11 +26,11 @@ class fmatrix
 		/*OK*/ inline void rotatez(fixed z);
 		/*OK*/ inline void translate(fixed x,fixed y,fixed z);
 		/*OK*/ inline void scale(fixed x,fixed y,fixed z);
-		/*OK*/ inline fixed trace() const;
 		              void project(fixed x,fixed y,fixed z,fixed w);
-		              void transpose();
+		/*OK*/        void transpose();
 		/*OK*/        void dyadic(const fvector& x,const fvector& y);
 		/*OK*/ inline void shadow(const fvector& x,const fvector& y);
+		/*OK*/ inline fixed trace() const;
 		/*OK*/ inline fvector transform(const fvector& x) const;
 		/*OK*/ inline lvector transform(const lvector& x) const;
 };
@@ -107,22 +107,11 @@ void fmatrix::scale(fixed x,fixed y,fixed z)
 	multiplicate({{x,0,0,0},{0,y,0,0},{0,0,z,0},{0,0,0,FXONE}});
 }
 
-fixed fmatrix::trace() const
-{
-	return m[0][0]+m[1][1]+m[2][2]+m[3][3];
-}
-
 void fmatrix::transpose()
 {
-	const fixed a = m[0][1];
-	m[0][1] = m[1][0];
-	m[1][0] = a;
-	const fixed b = m[0][2];
-	m[0][2] = m[2][0];
-	m[2][0] = b;
-	const fixed c = m[1][2];
-	m[1][2] = m[2][1];
-	m[2][1] = c;
+	const fixed a = m[0][1]; m[0][1] = m[1][0]; m[1][0] = a;
+	const fixed b = m[0][2]; m[0][2] = m[2][0]; m[2][0] = b;
+	const fixed c = m[1][2]; m[1][2] = m[2][1]; m[2][1] = c;
 }
 
 void fmatrix::project(fixed x,fixed y,fixed z,fixed w) //check! 
@@ -148,6 +137,11 @@ void fmatrix::shadow(const fvector& x,const fvector& y)
 	m[0][0] += xy;
 	m[1][1] += xy;
 	m[2][2] += xy;
+}
+
+fixed fmatrix::trace() const
+{
+	return m[0][0]+m[1][1]+m[2][2]+m[3][3];
 }
 
 fvector fmatrix::transform(const fvector& x) const

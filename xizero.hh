@@ -51,7 +51,7 @@ sint start(sint i)
 		}
 				
 		l.display();
-		screen::back.fsaamb(screen::accum);
+		//screen::back.fsaamb(screen::accum);
 		l.gauges();
 		bench();
 	}
@@ -177,7 +177,7 @@ void intro()
 		b[1].display(p,R_F|R_Z);
 		b[2].display(p,R_F|R_Z);
 		b[3].display(p,R_F|R_Z);
-		prog = fx::mul(fx::l2f(curr-screen::time()),FXHUN);
+		prog = fx::mul(fx::l2f(curr-screen::time()),FXCEN);
 	}
 	//*
 
@@ -247,7 +247,7 @@ void won(const lvector& p)
 {
 	trans::circleblend(p.x,p.y,60);
 	font::draw(40,40,"You won.",WHITE,TRANS);
-	screen::run();
+	screen::flush();
 	screen::sleep(3000);
 	trans::dissolve();
 }
@@ -256,7 +256,7 @@ void lost()
 {
 	trans::fadeout();
 	font::draw(40,40,"You lost.",WHITE,TRANS);
-	screen::run();
+	screen::flush();
 	screen::sleep(3000);
 	trans::dissolve();
 }
@@ -264,7 +264,7 @@ void lost()
 void over()
 {
 	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
-	screen::run();
+	screen::flush();
 	screen::sleep(3000);
 }
 

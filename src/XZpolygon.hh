@@ -168,7 +168,7 @@ void polygon::raster(bool s,uint c) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cpoint{x,y,z},cnormal(fvector(((z-x).cross(y-x)))*FXHUN),color(c)
+polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cpoint{x,y,z},cnormal(fvector(((z-x).cross(y-x)))*FXCEN),color(c)
 {
 	cnormal.e = cnormal.length();
 }
@@ -178,7 +178,7 @@ void polygon::update(const fmatrix& m,bool i)
 	cpoint[i] = m.transform(cpoint[i]);
 	cpoint[0] = m.transform(cpoint[0]);
 	cpoint[2] = m.transform(cpoint[2]);
-	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) * FXHUN;
+	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) * FXCEN;
 	cnormal.e = cnormal.length();
 }
 
