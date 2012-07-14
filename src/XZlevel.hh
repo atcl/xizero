@@ -69,7 +69,7 @@ level::level(char* o)
 	const char* tx = (*arc)[(*lvl)["intro"]];
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
-	screen::flush();
+	screen::_flush();
 	//*
 
 	//load player
@@ -78,30 +78,24 @@ level::level(char* o)
 	info*   pi = format::ini((*arc)[(*lvl)["player_i"]]);
  	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
  	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
-	screen::back.clear(BLACK);
-	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(10);
-	screen::flush();
+	screen::_flush();
 	//*
 
 	//load boss
 	object* bm = new object((*arc)[(*lvl)["boss_0"]]);
 	info*   bi = format::ini((*arc)[(*lvl)["boss_i"]]); 
 	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
-	screen::back.clear(BLACK);
-	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(20);
-	screen::flush();
+	screen::_flush();
 	//*
 
 	//load enemy
 	object* em = new object((*arc)[(*lvl)["enemy_0"]]);
 	info*   ei = format::ini((*arc)[(*lvl)["enemy_i"]]);
 	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
-	screen::back.clear(BLACK);
-	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(30);
-	screen::flush();
+	screen::_flush();
 	//*
 
 	//load map
@@ -109,10 +103,8 @@ level::level(char* o)
 	const sint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
-	screen::back.clear(BLACK);
-	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(40);
-	screen::flush();
+	screen::_flush();
 
 	markmax = OFFSET*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
@@ -188,11 +180,9 @@ level::level(char* o)
 		terrain[i] = new object(a,b,c,d,k,OCHER);
 	}
 
-	screen::back.clear(BLACK);
-	font::draw(100,100,tx,ORANGE,BLACK);
 	gfx::fsprog(95);
 	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
-	screen::flush();
+	screen::_flush();
 	screen::wait(ENTER);
 	delete[] a;
 	delete[] b;
@@ -203,9 +193,8 @@ level::level(char* o)
 level::~level()
 {
 	//for(long i=enemies.first();i<enemies.length();i+=enemies.next())
-	//{
-	//	delete enemies.current(); 
-	//	enemies.delcurrent();
+	//{ 
+	//	delete (entity*)enemies.delcurrent();
 	//}
 	delete boss;
 	delete player;

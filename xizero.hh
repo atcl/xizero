@@ -247,7 +247,7 @@ void won(const lvector& p)
 {
 	trans::circleblend(p.x,p.y,60);
 	font::draw(40,40,"You won.",WHITE,TRANS);
-	screen::flush();
+	screen::_flush();
 	screen::sleep(3000);
 	trans::dissolve();
 }
@@ -256,15 +256,17 @@ void lost()
 {
 	trans::fadeout();
 	font::draw(40,40,"You lost.",WHITE,TRANS);
-	screen::flush();
+	screen::_flush();
 	screen::sleep(3000);
 	trans::dissolve();
 }
 
 void over()
 {
+	screen::back.clear(0);
 	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
-	screen::flush();
+	font::draw(340,292,"atcrosslevel.de",RED,BLACK);
+	screen::_flush();
 	screen::sleep(3000);
 }
 

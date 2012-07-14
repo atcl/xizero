@@ -38,7 +38,7 @@ void trans::circleblend(sint x,sint y,sint r)
 			screen::back[i*XRES+j] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(p+q)<=r);
 		}
 	}
-	screen::flush();
+	screen::_flush();
 	screen::sleep(1000);
 }
 
@@ -54,7 +54,7 @@ void trans::dissolve()
 			screen::back[o+XRES] = math::rnd(0x00FFFFFF);
 			screen::back[o+XRES+1] = math::rnd(0x00FFFFFF);
 		}
-		screen::flush();
+		screen::_flush();
 	}
 }
 
@@ -71,7 +71,7 @@ void trans::fadeout()
 			//c.b[3] = (byte)math::max(0,c.b[3]-1); //no need to fade alpha byte
 			screen::back[j] = c.d;
 		}
-		screen::flush();
+		screen::_flush();
 		screen::sleep(10);
 	}
 }
