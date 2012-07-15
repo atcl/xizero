@@ -10,10 +10,6 @@
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
-		<libs>
-			<lib>drm</lib>
-			<lib>pthread</lib>
-		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>

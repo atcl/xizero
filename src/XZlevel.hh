@@ -16,6 +16,7 @@
 #include "XZobject.hh"
 #include "XZentity.hh"
 #include "XZprogress.hh"
+#include "XZvector.hh"
 ///*
 
 //declarations

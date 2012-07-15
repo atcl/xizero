@@ -10,7 +10,7 @@
 
 ///includes
 #include "XZbasic.hh"
-#include "XZskms.hh"
+#include "XZfrmbuf.hh" //"XZskms.hh"
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"

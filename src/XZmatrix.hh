@@ -16,8 +16,8 @@
 class fmatrix
 {
 	private:
-		fixed align m[4][4];
-		/*OK*/ void multiplicate(const fixed (&n)[4][4]);
+		fixed align m[3][4];
+		/*OK*/ void multiplicate(const fixed (&n)[3][4]);
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
 		/*OK*/        void clear(fixed x=FXONE,fixed y=0);
@@ -37,29 +37,24 @@ class fmatrix
 ///*
 
 ///implementation
-void fmatrix::multiplicate(const fixed (&n)[4][4])
+void fmatrix::multiplicate(const fixed (&n)[3][4])
 {
-	const fixed align a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0])+fx::mul(m[0][3],n[3][0]),
-				  fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1])+fx::mul(m[0][3],n[3][1]),
-				  fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2])+fx::mul(m[0][3],n[3][2]),
-				  fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3])+fx::mul(m[0][3],n[3][3]) }, 
-				{ fx::mul(m[1][0],n[0][0])+fx::mul(m[1][1],n[1][0])+fx::mul(m[1][2],n[2][0])+fx::mul(m[1][3],n[3][0]),
-				  fx::mul(m[1][0],n[0][1])+fx::mul(m[1][1],n[1][1])+fx::mul(m[1][2],n[2][1])+fx::mul(m[1][3],n[3][1]),
-				  fx::mul(m[1][0],n[0][2])+fx::mul(m[1][1],n[1][2])+fx::mul(m[1][2],n[2][2])+fx::mul(m[1][3],n[3][2]),
-				  fx::mul(m[1][0],n[0][3])+fx::mul(m[1][1],n[1][3])+fx::mul(m[1][2],n[2][3])+fx::mul(m[1][3],n[3][3]) },
-				{ fx::mul(m[2][0],n[0][0])+fx::mul(m[2][1],n[1][0])+fx::mul(m[2][2],n[2][0])+fx::mul(m[2][3],n[3][0]),
-				  fx::mul(m[2][0],n[0][1])+fx::mul(m[2][1],n[1][1])+fx::mul(m[2][2],n[2][1])+fx::mul(m[2][3],n[3][1]),
-				  fx::mul(m[2][0],n[0][2])+fx::mul(m[2][1],n[1][2])+fx::mul(m[2][2],n[2][2])+fx::mul(m[2][3],n[3][2]),
-				  fx::mul(m[2][0],n[0][3])+fx::mul(m[2][1],n[1][3])+fx::mul(m[2][2],n[2][3])+fx::mul(m[2][3],n[3][3]) } }; 
-				//{ fx::mul(m[3][0],n[0][0])+fx::mul(m[3][1],n[1][0])+fx::mul(m[3][2],n[2][0])+fx::mul(m[3][3],n[3][0]),
-				  //fx::mul(m[3][0],n[0][1])+fx::mul(m[3][1],n[1][1])+fx::mul(m[3][2],n[2][1])+fx::mul(m[3][3],n[3][1]),
-				  //fx::mul(m[3][0],n[0][2])+fx::mul(m[3][1],n[1][2])+fx::mul(m[3][2],n[2][2])+fx::mul(m[3][3],n[3][2]),
-				  //fx::mul(m[3][0],n[0][3])+fx::mul(m[3][1],n[1][3])+fx::mul(m[3][2],n[2][3])+fx::mul(m[3][3],n[3][3]) } };
-	//movaps a to m
+	const fixed align a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
+				        fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1]),
+				        fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2]),
+				        fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3]) }, 
+				      { fx::mul(m[1][0],n[0][0])+fx::mul(m[1][1],n[1][0])+fx::mul(m[1][2],n[2][0]),
+				        fx::mul(m[1][0],n[0][1])+fx::mul(m[1][1],n[1][1])+fx::mul(m[1][2],n[2][1]),
+				        fx::mul(m[1][0],n[0][2])+fx::mul(m[1][1],n[1][2])+fx::mul(m[1][2],n[2][2]),
+				        fx::mul(m[1][0],n[0][3])+fx::mul(m[1][1],n[1][3])+fx::mul(m[1][2],n[2][3]) },
+				      { fx::mul(m[2][0],n[0][0])+fx::mul(m[2][1],n[1][0])+fx::mul(m[2][2],n[2][0]),
+				        fx::mul(m[2][0],n[0][1])+fx::mul(m[2][1],n[1][1])+fx::mul(m[2][2],n[2][1]),
+				        fx::mul(m[2][0],n[0][2])+fx::mul(m[2][1],n[1][2])+fx::mul(m[2][2],n[2][2]),
+				        fx::mul(m[2][0],n[0][3])+fx::mul(m[2][1],n[1][3])+fx::mul(m[2][2],n[2][3]) } }; 
+	//memcpy(&n,&m,48);
 	m[0][0]=a[0][0]; m[0][1]=a[0][1]; m[0][2]=a[0][2]; m[0][3]=a[0][3];
 	m[1][0]=a[1][0]; m[1][1]=a[1][1]; m[1][2]=a[1][2]; m[1][3]=a[1][3];
 	m[2][0]=a[2][0]; m[2][1]=a[2][1]; m[2][2]=a[2][2]; m[2][3]=a[2][3];
-	//m[3][0]=a[3][0]; m[3][1]=a[3][1]; m[3][2]=a[3][2]; m[3][3]=a[3][3];	
 }
 
 fmatrix::fmatrix(fixed x,fixed y)
@@ -69,8 +64,8 @@ fmatrix::fmatrix(fixed x,fixed y)
 
 void fmatrix::clear(fixed x,fixed y)
 {
-	m[0][0] = m[1][1] = m[2][2] = m[3][3] = x; 
-	m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] = m[2][0] = m[2][1] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = y; 
+	m[0][0] = m[1][1] = m[2][2] = x; 
+	m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] = m[2][0] = m[2][1] = m[2][3] = y; 
 }
 
 void fmatrix::rotatex(fixed x)
@@ -78,7 +73,7 @@ void fmatrix::rotatex(fixed x)
 	x = fx::mul(x,FXD2R);
 	const fixed s = fx::sin(x);
 	const fixed c = fx::cos(x);
-	multiplicate({{FXONE,0,0,0},{0,c,-s,0},{0,s,c,0},{0,0,0,FXONE}});
+	multiplicate({{FXONE,0,0,0},{0,c,-s,0},{0,s,c,0}});
 }
 	
 void fmatrix::rotatey(fixed y)
@@ -86,7 +81,7 @@ void fmatrix::rotatey(fixed y)
 	y = fx::mul(y,FXD2R);
 	const fixed s = fx::sin(y);
 	const fixed c = fx::cos(y);
-	multiplicate({{c,0,s,0},{0,FXONE,0,0},{-s,0,c,0},{0,0,0,FXONE}});
+	multiplicate({{c,0,s,0},{0,FXONE,0,0},{-s,0,c,0}});
 }
 
 void fmatrix::rotatez(fixed z)
@@ -94,17 +89,17 @@ void fmatrix::rotatez(fixed z)
 	z = fx::mul(z,FXD2R);
 	const fixed s = fx::sin(z);
 	const fixed c = fx::cos(z);
-	multiplicate({{c,-s,0,0},{s,c,0,0},{0,0,FXONE,0},{0,0,0,FXONE}});
+	multiplicate({{c,-s,0,0},{s,c,0,0},{0,0,FXONE,0}});
 }
 
 void fmatrix::translate(fixed x,fixed y,fixed z)
 {
-	multiplicate({{FXONE,0,0,x},{0,FXONE,0,y},{0,0,FXONE,z},{0,0,0,FXONE}});
+	multiplicate({{FXONE,0,0,x},{0,FXONE,0,y},{0,0,FXONE,z}});
 }
 
 void fmatrix::scale(fixed x,fixed y,fixed z)
 {
-	multiplicate({{x,0,0,0},{0,y,0,0},{0,0,z,0},{0,0,0,FXONE}});
+	multiplicate({{x,0,0,0},{0,y,0,0},{0,0,z,0}});
 }
 
 void fmatrix::transpose()
@@ -118,8 +113,7 @@ void fmatrix::project(fixed x,fixed y,fixed z,fixed w) //check!
 {
 	m[0][0] = fx::div(z,x)<<1; m[0][1] = 0;               m[0][2] = 0;                m[0][3] = 0; 
 	m[1][0] = 0;               m[1][1] = fx::div(z,y)<<1; m[1][2] = 0;                m[1][3] = 0; 
-	m[2][0] = 0;               m[2][1] = 0;               m[2][2] = fx::div(w,(w-z)); m[2][3] = fx::div(fx::mul(-w,z),(w-z)); 
-	m[3][0] = 0;               m[3][1] = 0;               m[3][2] = FXONE;            m[3][3] = 0; 
+	m[2][0] = 0;               m[2][1] = 0;               m[2][2] = fx::div(w,(w-z)); m[2][3] = fx::div(fx::mul(-w,z),(w-z));  
 }
 
 void fmatrix::dyadic(const fvector& x,const fvector& y)
@@ -127,7 +121,6 @@ void fmatrix::dyadic(const fvector& x,const fvector& y)
 	m[0][0] = fx::mul(x.x,y.x); m[0][1] = fx::mul(x.x,y.y); m[0][2] = fx::mul(x.x,y.z); m[0][3] = 0; 
 	m[1][0] = fx::mul(x.y,y.x); m[1][1] = fx::mul(x.y,y.y); m[1][2] = fx::mul(x.y,y.z); m[1][3] = 0; 
 	m[2][0] = fx::mul(x.z,y.x); m[2][1] = fx::mul(x.z,y.y); m[2][2] = fx::mul(x.z,y.z); m[2][3] = 0; 
-	m[3][0] = 0;                m[3][1] = 0;                m[3][2] = 0;                m[3][3] = FXONE; 
 }
 
 void fmatrix::shadow(const fvector& x,const fvector& y)
@@ -141,7 +134,7 @@ void fmatrix::shadow(const fvector& x,const fvector& y)
 
 fixed fmatrix::trace() const
 {
-	return m[0][0]+m[1][1]+m[2][2]+m[3][3];
+	return m[0][0]+m[1][1]+m[2][2];
 }
 
 fvector fmatrix::transform(const fvector& x) const

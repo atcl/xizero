@@ -88,7 +88,6 @@ namespace screen
 	void set(uint c,bool f=0);
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id,0,0); }
 	void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id,0,0); }
-	//void flush()		{ back.swap(accum); pthread_t t; pthread_attr_t a; pthread_attr_init(&a); pthread_attr_setdetachstate(&a,PTHREAD_CREATE_DETACHED); pthread_create(&t,&a,[](void* x)->void*{ frame.copy(accum); drmModeDirtyFB(fd,id,0,0); pthread_exit(0); },0); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }

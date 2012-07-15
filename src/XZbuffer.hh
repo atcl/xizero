@@ -48,7 +48,7 @@ void buffer::clear(sint x)
 	__asm__ __volatile__ (
 	"shrl $7,%%ecx;\n"
 	"movups (%0),%%xmm0;\n"
-	"CLEAR: ;\n"
+	".LCLEAR: ;\n"
 	"movntps %%xmm0,(%1);\n"
 	"movntps %%xmm0,16(%1);\n"
 	"movntps %%xmm0,32(%1);\n"
@@ -58,7 +58,7 @@ void buffer::clear(sint x)
 	"movntps %%xmm0,96(%1);\n"
 	"movntps %%xmm0,112(%1);\n"
 	"addl $128,%1;\n"
-	"loop CLEAR;"
+	"loop .LCLEAR;"
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
