@@ -120,17 +120,12 @@ void polygon::raster(bool s,uint c) const
 
 	guard( (maxx==minx) || (maxy==miny) );
 
-	const sint dx01 = lpoint[0].x - lpoint[1].x;
-	const sint dx12 = lpoint[1].x - lpoint[2].x;
-	const sint dx20 = lpoint[2].x - lpoint[0].x;
+	const sint dx[3]{lpoint[0].x-lpoint[1].x,lpoint[1].x-lpoint[2].x,lpoint[2].x-lpoint[0].x};
+	const sint dy[3]{lpoint[0].y-lpoint[1].y,lpoint[1].y-lpoint[2].y,lpoint[2].y-lpoint[0].y};
 
-	const sint dy01 = lpoint[0].y - lpoint[1].y;
-	const sint dy12 = lpoint[1].y - lpoint[2].y;
-	const sint dy20 = lpoint[2].y - lpoint[0].y;
-
-	sint cy0 = dy01*(lpoint[0].x - minx) + dx01*(miny - lpoint[0].y) - ((dy01<0) || (dy01==0 && dx01>0));
-	sint cy1 = dy12*(lpoint[1].x - minx) + dx12*(miny - lpoint[1].y) - ((dy12<0) || (dy12==0 && dx12>0));
-	sint cy2 = dy20*(lpoint[2].x - minx) + dx20*(miny - lpoint[2].y) - ((dy20<0) || (dy20==0 && dx20>0)); 
+	sint cy[3]{dy[0]*(lpoint[0].x - minx) + dx[0]*(miny - lpoint[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
+	           dy[1]*(lpoint[1].x - minx) + dx[1]*(miny - lpoint[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
+	           dy[2]*(lpoint[2].x - minx) + dx[2]*(miny - lpoint[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0))}; 
 
 	const sint str = XRES - (maxx-minx);
 
@@ -140,31 +135,27 @@ void polygon::raster(bool s,uint c) const
 
 	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y,off+=str,ty+=zy)
 	{
-		sint cx0 = cy0;
-		sint cx1 = cy1;
-		sint cx2 = cy2;
+		sint cx[3]{cy[0],cy[1],cy[2]};
 
 		fixed tx = ty;
 
 		#pragma prefetch back
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
-			switch( ( ( (cx0<0) && (cx1<0) && (cx2<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
+			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
 			{
-				//default: prefetch
 				case 1: screen::depth[off] = tx;
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;
-				//case 0:
 			}
 
-			cx0 -= dy01;
-			cx1 -= dy12;
-			cx2 -= dy20;
+			cx[0] -= dy[0];
+			cx[1] -= dy[1];
+			cx[2] -= dy[2];
 		}
 
-		cy0 += dx01;
-		cy1 += dx12;
-		cy2 += dx20;
+		cy[0] += dx[0];
+		cy[1] += dx[1];
+		cy[2] += dx[2];
 	}
 }
 

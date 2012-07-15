@@ -85,7 +85,7 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	static const fixed ah[FIXED] = { 0x00008C9F,0x00004162,0x0000202B,0x00001005,0x00000800,0x00000400,0x00000200,0x00000100,0x00000080,0x00000040,0x0000001F,0x00000010,0x00000007,0x00000004,0x00000002,0x00000001 }; 
 
 	fixed t = FXONE>>h;
-	bool  r = 0;
+	register bool  r = 0;
 
 	for(uint i=0;i<FIXED;++i)
 	{

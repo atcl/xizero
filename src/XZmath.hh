@@ -27,7 +27,7 @@ namespace math
 	/*OK*/ pure inline sint set(sint x,bool y) { return ((sint(!y))-1) & x; }
 	/*OK*/ pure inline sint set(sint x,sint y,bool z) { return (((sint(!z))-1) & x) | ((sint(z)-1) & y); }
 	/*OK*/ pure inline sint lim(sint x,sint a,sint y) { return max(x,min(a,y)); }
-	/*OK*/ pure        sint sqr(uint x) { uint r=0; uint t=0; for(uint i=15;i!=0;--i) { t=(r+(1<<i))<<i; r=set(r|(2<<i),r,x>=t); x=set(x-t,x,x>=t); } return r>>1; }  
+	/*OK*/ pure        sint sqr(uint x) { register uint r=0; for(uint i=15,t=0;i!=0;--i) { t=(r+(1<<i))<<i; r=set(r|(2<<i),r,x>=t); x=set(x-t,x,x>=t); } return r>>1; }  
 	/*OK*/             uint rnd(uint x) { static uint seed=SEED; ++seed; seed^=(seed<<15); seed^=(seed>>21); seed^=(seed<<4); return seed%x; } 
 }
 ///*

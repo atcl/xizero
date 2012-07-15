@@ -42,29 +42,6 @@ sint string::length(const char* x)
 	return r;
 }
 
-char* string::copy(const char* x,sint y,sint z)
-{
-	const sint l = math::min(length(x),z);
-	char* r = new char[l+1];
-	for(sint i=0;i<l;++i,++y) { r[i] = x[y]; }
-	r[l] = 0;
-	return r;
-}
-
-char* string::concat(const char* x,const char* y)
-{
-	const sint a = length(x);
-	const sint b = length(y);
-	char* r = new char[a+b+1];
-
-	sint i = 0;
-	sint j = 0;
-	for(;i<a;++i) { r[i] = x[i]; }
-	for(;j<b;++i,++j) { r[i] = y[j]; }
-	r[++i] = 0;
-	return r;
-}
-
 sint string::count(const char* x,char y)
 {
 	sint r = 0;
@@ -124,6 +101,34 @@ sint string::str2hex(const char* x)
 		   |  math::set((x[i]-'a'+10),x[i]>='a'&&x[i]<='f') 
 		   |  math::set((x[i]-'A'+10),x[i]>='A'&&x[i]<='F'))<<((7-i)<<2); 
 	}
+	return r;
+}
+
+char string::toup(char x)
+{
+	return math::set('A',math::set(x-32,x,x>=97),x<65); 
+}
+
+char* string::copy(const char* x,sint y,sint z)
+{
+	const sint l = math::min(length(x),z);
+	char* r = new char[l+1];
+	for(sint i=0;i<l;++i,++y) { r[i] = x[y]; }
+	r[l] = 0;
+	return r;
+}
+
+char* string::concat(const char* x,const char* y)
+{
+	const sint a = length(x);
+	const sint b = length(y);
+	char* r = new char[a+b+1];
+
+	sint i = 0;
+	sint j = 0;
+	for(;i<a;++i) { r[i] = x[i]; }
+	for(;j<b;++i,++j) { r[i] = y[j]; }
+	r[++i] = 0;
 	return r;
 }
 
@@ -216,11 +221,6 @@ char* string::trim(const char* x,char y) //while to for
 	}
 	r[j] = 0;
 	return r;
-}
-
-char string::toup(char x)
-{
-	return math::set('A',math::set(x-32,x,x>=97),x<65); 
 }
 ///*
 
