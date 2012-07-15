@@ -13,7 +13,7 @@
 ///*
 
 ///definition
-class list //TODO =,cpy-ctor
+class list
 {
 	private:
 		struct member
@@ -27,11 +27,9 @@ class list //TODO =,cpy-ctor
 		member* fir;
 		member* las;
 		uint    len;
-		//list(const list& l);
-		//list& operator=(const list& l);
 	public:
-		inline list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; }
-		inline ~list() { delete cur; delete fir; delete las; }
+		list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; }
+		~list() { delete cur; delete fir; delete las; }
 		inline bool notlast() const { return cur!=las; }
 		inline bool notfirst() const { return cur!=fir; }
 		inline uint length() const { return len; }
@@ -82,7 +80,7 @@ void list::xsort(bool u) //use swap
 				void* temp = cur->data;
 				cur->data = cur->next->data;
 				cur->next->data = temp;
-				//sint hemp = cur->hash;
+				//sint temp = cur->hash;
 				//cur->hash = cur->next->hash;
 				//cur->next->hash = hemp;
 			}

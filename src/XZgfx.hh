@@ -175,7 +175,7 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 		for(sint j=0;j<xm;++j,++o,++s)
 		{
 			const uint c = t.data[s];
-			screen::back[o] = math::set(c,screen::back[o],(c!=TRANS)||a); //memcheck: Conditional jump or move depends on uninitialised value(s)
+			screen::back[o] = math::set(c,screen::back[o],(c!=TRANS)||a);
 		}
 	}
 }

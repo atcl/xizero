@@ -108,15 +108,17 @@ void menu()
 	//*
 
 	//draw menu
+	/*static*/ tile* ico = format::xpm(resource::icon);
 	tile* scr = gfx::save();
 	sint cbrk = 0;
 	while(screen::run() && screen::key()!=ESCAPE && cbrk==0)
 	{
 		gfx::sprite(*scr,0,0,1);
-		gfx::rect(0,0,XRES,17,RED,RED,1,0);
+		gfx::sprite(*ico,0,0,1);
+		gfx::rect(16,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
 		
-		font::draw(2,1," atCROSSLEVEL XiZero",WHITE,RED);
+		font::draw(20,1,"atCROSSLEVEL XiZero",WHITE,RED);
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();
@@ -128,6 +130,7 @@ void menu()
 	screen::flush();
 	delete[] scr->data;
 	delete scr;
+	delete ico; //temp
 	//*
 }
 
