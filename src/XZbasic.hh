@@ -18,6 +18,8 @@
 
 	#define pure        __attribute__((pure))
 	#define align       __attribute__ ((aligned (16)))
+	#define noret       __attribute__((noreturn))
+	#define hot         __attribute__((hot))
 	#define prefetch(x) __builtin_prefetch(x)
 	#define ifl(x)   if(__builtin_expect(!!(x),1))
 	#define ifu(x)   if(__builtin_expect(!!(x),0))
@@ -28,6 +30,8 @@
 #else
 	#define pure
 	#define align
+	#define noret
+	#define hot
 	#define prefetch(x)
 	#define ifl(x)   if(x)
 	#define ifu(x)   if(x)
