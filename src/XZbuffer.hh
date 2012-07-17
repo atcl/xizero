@@ -34,7 +34,6 @@ class buffer
 		/*OK*/ inline void  copy(const buffer& s) { memcpy(data,s.data,bytes); }
 		/*OK*/ inline void  swap(buffer& b) { sint* t=b.data; bool l=b.later; b.data=data; b.later=later; data=t; later=l; }
 		/*OK*/        void  clear(sint x=0);
-		              void  paste(const buffer& s,uint x);
 		              void  fsaamb(const buffer& b);
 		              void  glow();
 };
@@ -65,14 +64,6 @@ void buffer::clear(sint x)
 #else
 	for(uint i=tsize;i!=0;--i) { data[i]=x; }
 #endif
-}
-
-void buffer::paste(const buffer& s,uint x)
-{
-	for(int i=0,j=0,k=0;i<200;++i,j+=x,k+=4*XRES)
-	{
-		memcpy(&data[j],&s.data[k],4*XRES);
-	}
 }
 
 void buffer::fsaamb(const buffer& b)

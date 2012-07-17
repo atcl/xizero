@@ -69,14 +69,15 @@ namespace screen
 		uint xs;			//x stride
 
 		struct fb_fix_screeninfo finfo;
-		struct fb_var_screeninfo vinfo;
+		struct fb_var_screeninfo oinfo;
+		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,2*YRES,0,0,8,0,{0,8,0},{0,8,0},{0,8,0},{0,8,0},0,0,-1,-1,0,25000,88,40,23,1,256,28,3,0,0,0,0,0,0,0};
 	}
 
 	uint kbhit();
 	void init(tile* c);
 	void set();
-	void _flush()		{ frame.paste(back,4*1360); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	void flush()		{ back.swap(accum); frame.paste(back,4*1360); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void flush()		{ back.swap(accum); frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -144,24 +145,17 @@ void screen::set()
 	error(fd<=0,"Error: Could not open /dev/fb0");
 
 	const sint e = ioctl(fd,FBIOGET_FSCREENINFO,&finfo);
-	//error(e<=0,"Error: Could not read fixed framebuffer info");
+	error(e<0,"Error: Could not read fixed framebuffer info");
 
-	const sint f = ioctl(fd,FBIOGET_VSCREENINFO,&vinfo);
-	//error(f<=0,"Error: Could not read variable framebuffer info");
+	const sint f = ioctl(fd,FBIOGET_VSCREENINFO,&oinfo);
+	error(f<0,"Error: Could not read variable framebuffer info");
 
-	void* ptr = mmap(0,1360*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
+	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
+	error(g<0,"Error: Could not write variable framebuffer info");
+
+	void* ptr = mmap(0,XRES*2*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
 	error(ptr==MAP_FAILED,"Error: Could not map buffer object!");
 
-	//ptr += (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
-//print info
-alert(vinfo.xres);
-alert(vinfo.yres);
-alert(vinfo.bits_per_pixel);
-alert(vinfo.xoffset);
-alert(vinfo.yoffset);
-alert(finfo.line_length);
-alert(vinfo.xres_virtual);
-alert(vinfo.yres_virtual);
 	frame.pointer(ptr);
 }
 
@@ -171,7 +165,8 @@ void screen::close()
 	//delete depth;
 	//delete back;
 	//delete frame; 
-	munmap(frame.pointer(),1024*YRES*4);
+	munmap(frame.pointer(),XRES*2*YRES*4);
+	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
 	delete nu;
