@@ -22,7 +22,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 ///*
-
+#include "XZstring.hh"
 ///declarations
 #define BPP 32
 #define FPS 4000
@@ -45,7 +45,7 @@ struct tile;
 ///definitions
 namespace screen
 {
-	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
+	buffer frame(1360*YRES,1);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
@@ -75,8 +75,8 @@ namespace screen
 	uint kbhit();
 	void init(tile* c);
 	void set();
-	void _flush()		{ frame.copy(back); ioctl(fd,FBIOGET_VSCREENINFO,&vinfo); }
-	void flush()		{ back.swap(accum); frame.copy(accum); ioctl(fd,FBIOGET_VSCREENINFO,&vinfo); }
+	void _flush()		{ frame.paste(back,4*1360); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void flush()		{ back.swap(accum); frame.paste(back,4*1360); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -86,14 +86,14 @@ namespace screen
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline bool run()	{ flush(); return event(); }
-	inline uint key()	{ const uint r=kk; kk=0; return r; }
-	inline uint turbo()	{ return tk; }
-	inline uint mousex()	{ return mx; }
-	inline uint mousey()	{ return my; }
-	inline uint mouseb()	{ return mb; }
+	inline bool  run()	{ flush(); return event(); }
+	inline uint  key()	{ const uint r=kk; kk=0; return r; }
+	inline uint  turbo()	{ return tk; }
+	inline uint  mousex()	{ return mx; }
+	inline uint  mousey()	{ return my; }
+	inline uint  mouseb()	{ return mb; }
 	inline tile* cursor()	{ return cs; }
-	//inline void smouse(uint x=XRES>>1,uint y=YRES>>1)    { mx=x; my=y; }
+	//inline void  smouse(uint x=XRES>>1,uint y=YRES>>1)    { mx=x; my=y; }
 }
 ///*
 
@@ -149,11 +149,19 @@ void screen::set()
 	const sint f = ioctl(fd,FBIOGET_VSCREENINFO,&vinfo);
 	//error(f<=0,"Error: Could not read variable framebuffer info");
 
-	void* ptr = mmap(0,XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
-	error(ptr==MAP_FAILED,"Error: Could not mirror buffer object!");
+	void* ptr = mmap(0,1360*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
+	error(ptr==MAP_FAILED,"Error: Could not map buffer object!");
 
 	//ptr += (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
 //print info
+alert(vinfo.xres);
+alert(vinfo.yres);
+alert(vinfo.bits_per_pixel);
+alert(vinfo.xoffset);
+alert(vinfo.yoffset);
+alert(finfo.line_length);
+alert(vinfo.xres_virtual);
+alert(vinfo.yres_virtual);
 	frame.pointer(ptr);
 }
 
@@ -163,7 +171,7 @@ void screen::close()
 	//delete depth;
 	//delete back;
 	//delete frame; 
-	munmap(frame.pointer(),XRES*YRES*4);
+	munmap(frame.pointer(),1024*YRES*4);
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
 	delete nu;
