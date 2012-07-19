@@ -10,7 +10,6 @@
 
 ///includes
 #include "XZbasic.hh"
-#include "XZgfx.hh"
 #include "XZstring.hh"
 ///*
 

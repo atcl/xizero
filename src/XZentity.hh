@@ -176,15 +176,15 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 		case RIGHT:
 			model[0]->update(rot[0]);
 			model[1]->update(rot[0]);
-			direction[0] = rot[0].transform(direction[0]);
-			direction[1] = rot[0].transform(direction[1]);
+			direction[0] = rot[0]*direction[0];
+			direction[1] = rot[0]*direction[1];
 		break;
 
 		case LEFT:
 			model[0]->update(rot[1]);
 			model[1]->update(rot[1]);
-			direction[0] = rot[1].transform(direction[0]);
-			direction[1] = rot[1].transform(direction[1]);
+			direction[0] = rot[1]*direction[0];
+			direction[1] = rot[1]*direction[1];
 		break;
 
 		case UP:
@@ -198,19 +198,19 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 		case 'a':
 			model[1]->update(rot[0]);
 			angle += ROTANG;
-			direction[1] = rot[0].transform(direction[1]);
+			direction[1] = rot[0]*direction[1];
 		break;
 
 		case 'd':
 			model[1]->update(rot[1]);
 			angle -= ROTANG;
-			direction[1] = rot[1].transform(direction[1]);
+			direction[1] = rot[1]*direction[1];
 		break;
 
 		case 'w':
 			model[1]->update(rot[mat]);
 			angle += math::neg(ROTANG,mat);
-			direction[1] = rot[mat].transform(direction[1]);
+			direction[1] = rot[mat]*direction[1];
 		break;
 
 		case SPACE:
@@ -275,7 +275,7 @@ void entity::display(sint m,bool t)
 	if(model[1]!=0)
 	{
 		model[1]->display(p+towpos,r);
-		for(sint h=0;h<2&&r!=R_B;++h)
+		for(sint h=0;h<2&&t==0;++h)
 		{
 			list& a = ammos[h];
 			for(a.first();a.notlast();a.next())

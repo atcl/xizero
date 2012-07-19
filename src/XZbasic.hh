@@ -17,7 +17,7 @@
 #ifdef __GNUC__
 
 	#define pure        __attribute__((pure))
-	#define align       __attribute__ ((aligned (16)))
+	#define align       __attribute__((aligned (16)))
 	#define noret       __attribute__((noreturn))
 	#define hot         __attribute__((hot))
 	#define prefetch(x) __builtin_prefetch(x)

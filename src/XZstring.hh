@@ -37,7 +37,7 @@ namespace string
 ///implementation
 sint string::length(const char* x)
 {
-	sint r=0;
+	register sint r=0;
 	while(x[r]!=0) { ++r; }
 	return r;
 }
@@ -45,20 +45,14 @@ sint string::length(const char* x)
 sint string::count(const char* x,char y)
 {
 	sint r = 0;
-	for(sint i=0;x[i]!=0;++i)
-	{
-		r += (x[i]==y);
-	}
+	for(sint i=0;x[i]!=0;++i) { r += (x[i]==y); }
 	return r;
 }
 
 sint string::scan(const char* x,char y,char z)
 {
 	sint r = 0;
-	while( (x[r]!=0) && (x[r]!=y) &&  (x[r]!=z) )
-	{
-		++r;
-	}
+	while( (x[r]!=0) && (x[r]!=y) &&  (x[r]!=z) ) { ++r; } //to or
 	return math::neg(r,x[r]!=y||x[r]!=z);
 }
 

@@ -31,8 +31,8 @@ class fmatrix
 		/*OK*/        void dyadic(const fvector& x,const fvector& y);
 		/*OK*/ inline void shadow(const fvector& x,const fvector& y);
 		/*OK*/ inline fixed trace() const;
-		/*OK*/ inline fvector transform(const fvector& x) const;
-		/*OK*/ inline lvector transform(const lvector& x) const;
+		/*OK*/ inline fvector operator*(const fvector& x) const;
+		/*OK*/ inline lvector operator*(const lvector& x) const;
 };
 ///*
 
@@ -51,6 +51,7 @@ void fmatrix::multiplicate(const fixed (&n)[3][4])
 				        fx::mul(m[2][0],n[0][1])+fx::mul(m[2][1],n[1][1])+fx::mul(m[2][2],n[2][1]),
 				        fx::mul(m[2][0],n[0][2])+fx::mul(m[2][1],n[1][2])+fx::mul(m[2][2],n[2][2]),
 				        fx::mul(m[2][0],n[0][3])+fx::mul(m[2][1],n[1][3])+fx::mul(m[2][2],n[2][3]) } }; 
+	//m = std::move(n); n= {};
 	//memcpy(&n,&m,48);
 	m[0][0]=a[0][0]; m[0][1]=a[0][1]; m[0][2]=a[0][2]; m[0][3]=a[0][3];
 	m[1][0]=a[1][0]; m[1][1]=a[1][1]; m[1][2]=a[1][2]; m[1][3]=a[1][3];
@@ -137,14 +138,14 @@ fixed fmatrix::trace() const
 	return m[0][0]+m[1][1]+m[2][2];
 }
 
-fvector fmatrix::transform(const fvector& x) const
+fvector fmatrix::operator*(const fvector& x) const
 {
 	return fvector(fx::mul(m[0][0],x.x)+fx::mul(m[0][1],x.y)+fx::mul(m[0][2],x.z)+m[0][3],
 		       fx::mul(m[1][0],x.x)+fx::mul(m[1][1],x.y)+fx::mul(m[1][2],x.z)+m[1][3],
 		       fx::mul(m[2][0],x.x)+fx::mul(m[2][1],x.y)+fx::mul(m[2][2],x.z)+m[2][3],x.e);
 }
 
-lvector fmatrix::transform(const lvector& x) const
+lvector fmatrix::operator*(const lvector& x) const
 {
 	return lvector(fx::r2l(fx::mul(m[0][0],fx::l2f(x.x))+fx::mul(m[0][1],fx::l2f(x.y))+fx::mul(m[0][2],fx::l2f(x.z))+m[0][3]),
 		       fx::r2l(fx::mul(m[1][0],fx::l2f(x.x))+fx::mul(m[1][1],fx::l2f(x.y))+fx::mul(m[1][2],fx::l2f(x.z))+m[1][3]),

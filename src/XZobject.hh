@@ -206,11 +206,8 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 	}
 }
 
-object::object(const object& o) : poly(0),dock(0),bound(o.bound),polys(o.polys),docks(o.docks),scolor(o.scolor)
+object::object(const object& o) : poly(new polygon*[o.polys]),dock(new fvector[o.docks]),bound(o.bound),polys(o.polys),docks(o.docks),scolor(o.scolor)
 {
-	poly  = new polygon*[polys];
-	if(docks!=0) { dock = new fvector[docks]; }
-	
 	for(sint i=0;i<polys;++i)
 	{
 		poly[i] = new polygon(*o.poly[i]);
@@ -246,7 +243,7 @@ void object::update(const fmatrix& m,bool j)
 	}
 	for(sint i=0;i<docks;++i)
 	{
-		dock[i] = m.transform(dock[i]);
+		dock[i] = m*dock[i];
 	}
 }
 
