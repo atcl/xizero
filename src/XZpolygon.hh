@@ -14,7 +14,7 @@
 #include "XZmath.hh"
 #include "XZvector.hh"
 #include "XZmatrix.hh"
-#include "XZfrmbuf.hh" //"XZskms.hh"
+#include "XZskms.hh" //"XZfrmbuf.hh"
 #include "XZgfx.hh"
 ///*
 
@@ -129,9 +129,9 @@ void polygon::raster(bool s,uint c) const
 
 	const sint str = XRES - (maxx-minx);
 
-	const fixed zx = fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx));
-	const fixed zy = fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny));
-	      fixed ty = lpoint[miyi].z;// + fx::mul(zy,fx::l2f(lpoint[mixi].y-lpoint[miyi].y)); //works for level but not for intro
+	const fixed zx = math::abs(fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx)));
+	const fixed zy = math::abs(fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny)));
+	      fixed ty = lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx);
 
 	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y,off+=str,ty+=zy)
 	{

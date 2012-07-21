@@ -11,7 +11,7 @@
 ///includes
 #include "XZbasic.hh"
 #include "XZmath.hh"
-#include "XZfrmbuf.hh" //"XZskms.hh"
+#include "XZskms.hh" //"XZfrmbuf.hh"
 #include "XZgfx.hh"
 #include "XZsystem.hh"
 ///*

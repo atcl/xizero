@@ -45,7 +45,7 @@ struct tile;
 ///definitions
 namespace screen
 {
-	buffer frame(1360*YRES,1);	//Video Memory Front Buffer
+	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
@@ -150,7 +150,7 @@ void screen::set()
 	const sint f = ioctl(fd,FBIOGET_VSCREENINFO,&oinfo);
 	error(f<0,"Error: Could not read variable framebuffer info");
 
-	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo);
+	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	error(g<0,"Error: Could not write variable framebuffer info");
 
 	void* ptr = mmap(0,XRES*2*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);

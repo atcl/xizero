@@ -4,12 +4,15 @@
 		<compiler>gcc</compiler>
 		<path>
 			<source></source>
-			<include></include>
+			<include>/usr/include/libdrm</include>
 			<library></library>
 		</path>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
+		<libs>
+			<lib>drm</lib>
+		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>

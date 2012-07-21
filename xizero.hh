@@ -32,7 +32,7 @@ void bench();
 void init()
 {
 	screen::init(format::xpm(resource::cursor));
-	screen::set();
+	screen::set(1);
 }
 
 sint start(sint i)
