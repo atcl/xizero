@@ -151,9 +151,8 @@ void gfx::rect(sint x,sint y,sint a,sint b,uint c,uint d,bool f,bool g)
 	line(x,b,a,b,c);
 
 	++x;
-	++y;
 	--a;
-	for(sint i=y;i<b&&f==1;++i)
+	for(sint i=y++;i<b&&f==1;++i)
 	{
 		line(x,i,a,i,d,0);
 	}

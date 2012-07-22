@@ -27,9 +27,9 @@ class light
 	public:
 		light(sint r,uint c) : rad(r), col(c), mask({0,0,0}) { init(); }
 		~light() { delete mask.data; }
-		inline void draw(sint x,sint y) const;
-		inline void color(uint c);
-		inline void radius(sint r);
+		inline void draw(sint x,sint y) const { gfx::sprite(mask,x-rad,y-rad); }
+		inline void color(uint c) { col = c; init(); }
+		inline void radius(sint r) { rad = r; init(1); }
 };
 ///*
 
@@ -38,12 +38,12 @@ sint light::lambert(sint x,sint y) const
 {
 	const sint  i = rad*rad;
 	const sint  d = (x*x)+(y*y);
-	const fixed l = fixed(-i+d)/fixed(d*(1-i));
+	const fixed l = fx::div(fx::l2f(-i+d),fx::l2f(d*(1-i)));
 	
 	packed c = { col };
-	c.b[1] = math::max(0,fx::mul(fixed(c.b[1]),l));
-	c.b[2] = math::max(0,fx::mul(fixed(c.b[2]),l));
-	c.b[3] = math::max(0,fx::mul(fixed(c.b[3]),l));
+	c.b[1] = fx::r2l(math::max(0,fx::mul(fx::l2f(c.b[1]),l)));
+	c.b[2] = fx::r2l(math::max(0,fx::mul(fx::l2f(c.b[2]),l)));
+	c.b[3] = fx::r2l(math::max(0,fx::mul(fx::l2f(c.b[3]),l)));
 	return c.d;
 }
 
@@ -64,23 +64,6 @@ void light::init(bool i)
 			mask.data[t] = lambert(k-rad,j-rad);
 		}
 	}
-}
-
-void light::draw(sint x,sint y) const
-{
-	gfx::sprite(mask,x-rad,y-rad);
-}
-
-void light::color(uint c)
-{
-	col = c;
-	init();
-}
-
-void light::radius(sint r)
-{
-	rad = r;
-	init(1);
 }
 ///*
 
