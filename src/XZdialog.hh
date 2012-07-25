@@ -12,8 +12,8 @@
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZbutton.hh"
-#include "XZfrmbuf.hh" 
-//#include "XZskms.hh"
+//#include "XZfrmbuf.hh" 
+#include "XZskms.hh"
 ///*
 
 ///definitions

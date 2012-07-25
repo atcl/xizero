@@ -70,7 +70,7 @@ namespace screen
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
-		struct fb_var_screeninfo vinfo{XRES,YRES,2048,4096,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,-1,-1,1,25252,96,24,14,0,136,11,0,0,0,0,0,0,0,0}; 
+		struct fb_var_screeninfo vinfo{XRES,YRES,800,600,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,-1,-1,1};//,25252,96,24,14,0,136,11,0,0,0,0,0,0,0,0}; 
 	}
 
 	uint kbhit();
@@ -150,7 +150,7 @@ void screen::set()
 	const sint f = ioctl(fd,FBIOGET_VSCREENINFO,&oinfo);
 	error(f<0,"Error: Could not read variable framebuffer info");
 
-	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo); //vinfo
+	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo);
 	error(g<0,"Error: Could not write variable framebuffer info");
 
 	void* ptr = mmap(0,XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
