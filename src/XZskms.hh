@@ -48,7 +48,7 @@ struct tile;
 namespace screen
 {
 	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
-	buffer back(XRES*YRES);		//System Memory Double Buffer
+	buffer back(XRES*YRES,1);	//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
@@ -69,6 +69,7 @@ namespace screen
 
 		uint fd;			//drm device handle
 		uint id[3];			//framebuffer ids
+		bool cc = 0;			//current framebuffer
 
 		drmModeRes* resources;		//resource array
 		drmModeConnector* connector;	//connector array
@@ -83,9 +84,9 @@ namespace screen
 	uint kbhit();
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[0],0,0); }
-	void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id[0],0,0); }
-	//void flush()		{ drmModeSetCrtc(fd,encoder->crtc_id,id[(cc=!cc)],0,0,&connector->connector_id,1,&mode); }
+	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
+	//void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id[0],0,0); }
+	void flush()		{ frame.swap(back); drmModeSetCrtc(fd,encoder->crtc_id,id[(cc=!cc)],0,0,&connector->connector_id,1,&mode); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -218,12 +219,12 @@ void screen::set(uint c,bool f)
 	//*
 
 	//set up backbuffer
-	/*ptr = mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
+	ptr = mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
 	error(ptr==MAP_FAILED,"Error: Could not map backbuffer memory!");
 	back.pointer(ptr);
 
 	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,dumb.pitch,dumb.handle,&id[1]);
-	error(i==1,"Error: Could not add backbuffer!");*/
+	error(i==1,"Error: Could not add backbuffer!");
 	//*
 
 	i = drmModeSetCrtc(fd,encoder->crtc_id,id[0],0,0,&connector->connector_id,1,&mode);
