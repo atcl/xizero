@@ -48,8 +48,8 @@ struct tile;
 namespace screen
 {
 	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
-	buffer back(XRES*YRES,1);	//System Memory Double Buffer
-	buffer depth(XRES*YRES);	//Z-Buffer
+	buffer back(XRES*YRES,1);	//Video Memory Double Buffer
+	buffer depth(XRES*YRES);	//System Memory Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
 	namespace
@@ -76,17 +76,17 @@ namespace screen
 		drmModeEncoder* encoder;	//encoder array
 		drmModeModeInfo mode;		//video mode in use
 		drmModeCrtcPtr crtc;
+		drm_mode_create_dumb dumf{ YRES,XRES,BPP,0,0,0,0 };
 		drm_mode_create_dumb dumb{ YRES,XRES,BPP,0,0,0,0 };
 
-		drmModeModeInfo m800x600{ 40000,800,840,968,1056,0,600,601,605,628,0,60,0,0,"atcrosslevel:   800x600@60 VBE" }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
+		drmModeModeInfo m800x600{ 40000,800,840,968,1056,0,600,601,605,628,0,60,0,0,"atcl:   800x600@60" }; //clock,hdisplay,hsync_start,hsync_end,htotal,hskew,vdisplay,vsync_start,vsync_end,vtotal,vsync,vrefresh((1000*clock)/(htotal*vtotal)),flags,type,name 
 	}
 
 	uint kbhit();
 	void init(tile* c);
 	void set(uint c,bool f=0);
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
-	//void flush()		{ back.swap(accum); frame.copy(accum); drmModeDirtyFB(fd,id[0],0,0); }
-	void flush()		{ frame.swap(back); drmModeSetCrtc(fd,encoder->crtc_id,id[(cc=!cc)],0,0,&connector->connector_id,1,&mode); }
+	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[(cc=!cc)],0,0); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -111,7 +111,7 @@ uint screen::kbhit()
 {
 	int c = 0;
 	ioctl(0,FIONREAD,&c);
-	struct timeval tv = { 0,0 };
+	timeval tv{ 0,0 };
 	select(1,0,0,0,&tv);
 	return c;
 }
@@ -120,7 +120,7 @@ uint screen::kbhit()
 void screen::init(tile* c)
 {
 	cs = c;
-	nu = new char[256];
+	nu = new char[256];	//64 ok too?
 	tcgetattr(STDIN_FILENO,&oc);
 	nc = oc;
 	nc.c_lflag &= ~(ICANON|ECHO); //ISIG
@@ -203,31 +203,36 @@ void screen::set(uint c,bool f)
 	//*
 
 	//set up framebuffer
-	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dumb);
+	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dumf);
 	error(i==1,"Error: Could not create framebuffer object!");
 
-	struct drm_mode_map_dumb dm = { dumb.handle,0,0 };
+	drm_mode_map_dumb dm{ dumf.handle,0,0 };
 	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dm);
 	error(i==1,"Error: Could not map framebuffer object!");
 
-	void* ptr = mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
-	error(ptr==MAP_FAILED,"Error: Could not map framebuffer memory!");
-	frame.pointer(ptr);
+	frame.pointer(mmap(0,dumf.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset));
+	error(frame.pointer()==MAP_FAILED,"Error: Could not map framebuffer memory!");
 
-	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,dumb.pitch,dumb.handle,&id[0]);
+	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,dumf.pitch,dumf.handle,&id[0]);
 	error(i==1,"Error: Could not add framebuffer!");
 	//*
 
 	//set up backbuffer
-	ptr = mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm.offset);
-	error(ptr==MAP_FAILED,"Error: Could not map backbuffer memory!");
-	back.pointer(ptr);
+	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dumb);
+	error(i==1,"Error: Could not create backbuffer object!");
+
+	drm_mode_map_dumb dm2{ dumb.handle,0,0 };
+	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dm2);
+	error(i==1,"Error: Could not map backbuffer object!");
+
+	back.pointer(mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm2.offset));
+	error(back.pointer()==MAP_FAILED,"Error: Could not map backbuffer memory!");
 
 	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,dumb.pitch,dumb.handle,&id[1]);
 	error(i==1,"Error: Could not add backbuffer!");
 	//*
 
-	i = drmModeSetCrtc(fd,encoder->crtc_id,id[0],0,0,&connector->connector_id,1,&mode);
+	i = drmModeSetCrtc(fd,encoder->crtc_id,id[cc],0,0,&connector->connector_id,1,&mode);
 	error(i==1,"Error: Could not set mode!");
 
 	sleep(1500);
@@ -240,11 +245,14 @@ void screen::close()
 	//delete back;
 	//delete frame; 
 	drmModeSetCrtc(fd,encoder->crtc_id,id[2],0,0,&connector->connector_id,1,&(crtc->mode)); 
+	drmModeRmFB(fd,id[1]);
 	drmModeRmFB(fd,id[0]);
-	//drmModeRmFB(fd,id[1]);
 	munmap(frame.pointer(),dumb.size);
-	drm_mode_map_dumb dd = { dumb.handle,0,0 };
-	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&dd);
+	munmap(frame.pointer(),dumf.size);
+	drm_mode_map_dumb db{ dumb.handle,0,0 };
+	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&db);
+	drm_mode_map_dumb df{ dumf.handle,0,0 };
+	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&df);
 	drmModeFreeEncoder(encoder);
 	drmModeFreeConnector(connector);
 	drmModeFreeResources(resources);

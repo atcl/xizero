@@ -46,8 +46,8 @@ sint start(sint i)
 
 		switch(l.update(screen::key(),0))
 		{
-			case -1: lost(); return 0;
-			case 1:  won(l.ppos());  return 0;
+			case -1: lost();         return 0;
+			case  1: won(l.ppos());  return 0;
 		}
 				
 		l.display();
