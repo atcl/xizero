@@ -85,8 +85,9 @@ namespace screen
 	uint kbhit();
 	void init(tile* c);
 	void set(uint c,bool f=0);
+	bool flipped()		{ drm_event ev; read(fd,&ev,sizeof ev); return (ev.type==DRM_EVENT_FLIP_COMPLETE); }
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
-	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[(cc=!cc)],0,0); }
+	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[cc=!cc],DRM_MODE_PAGE_FLIP_EVENT,0); /*while(flipped()==0) { ; }*/ }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -221,11 +222,11 @@ void screen::set(uint c,bool f)
 	i = drmIoctl(fd,DRM_IOCTL_MODE_CREATE_DUMB,&dumb);
 	error(i==1,"Error: Could not create backbuffer object!");
 
-	drm_mode_map_dumb dm2{ dumb.handle,0,0 };
-	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dm2);
+	drm_mode_map_dumb dn{ dumb.handle,0,0 };
+	i = drmIoctl(fd,DRM_IOCTL_MODE_MAP_DUMB,&dn);
 	error(i==1,"Error: Could not map backbuffer object!");
 
-	back.pointer(mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dm2.offset));
+	back.pointer(mmap(0,dumb.size,PROT_READ | PROT_WRITE, MAP_SHARED,fd,dn.offset));
 	error(back.pointer()==MAP_FAILED,"Error: Could not map backbuffer memory!");
 
 	i = drmModeAddFB(fd,XRES,YRES,BPP,BPP,dumb.pitch,dumb.handle,&id[1]);
