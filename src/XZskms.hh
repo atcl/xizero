@@ -24,7 +24,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 ///*
-
+#include "XZstring.hh"
 ///declarations
 #define BPP 32
 #define FPS 4000
@@ -70,6 +70,7 @@ namespace screen
 		uint fd;			//drm device handle
 		uint id[3];			//framebuffer ids
 		bool cc = 0;			//current framebuffer
+		char* ev = new char[1024];	//event buffer
 
 		drmModeRes* resources;		//resource array
 		drmModeConnector* connector;	//connector array
@@ -85,9 +86,9 @@ namespace screen
 	uint kbhit();
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	bool flipped()		{ drm_event ev; read(fd,&ev,sizeof ev); return (ev.type==DRM_EVENT_FLIP_COMPLETE); }
+	void vwait()		{ sint l=read(fd,ev,1024); sint i=0; while(i<l) { drm_event* e=(drm_event*)(&ev[i]); if(e->type==DRM_EVENT_FLIP_COMPLETE) return; i+=e->length; } vwait(); }
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
-	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[cc=!cc],DRM_MODE_PAGE_FLIP_EVENT,0); /*while(flipped()==0) { ; }*/ }
+	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[cc=!cc],DRM_MODE_PAGE_FLIP_EVENT,0); vwait(); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }

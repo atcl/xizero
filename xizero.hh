@@ -54,6 +54,7 @@ sint start(sint i)
 		//screen::back.fsaamb(screen::accum);
 		l.gauges();
 		bench();
+		//screen::vwait();
 	}
 	return 0;
 }
@@ -181,6 +182,7 @@ void intro()
 		b[2].display(p,R_F|R_Z);
 		b[3].display(p,R_F|R_Z);
 		prog = fx::mul(fx::l2f(curr-screen::time()),FXCEN);
+		//screen::vwait();
 	}
 	//*
 
@@ -239,6 +241,7 @@ void mainmenu()
 		font::draw(XRES-160,YRES-20,"Version: " VERSION,ORANGE,TRANS);
 		button::check(screen::mousex(),screen::mousey(),screen::mouseb());
 		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
+		//screen::vwait();
 	}
 	//*
 
