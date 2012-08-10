@@ -157,16 +157,16 @@ void intro()
 	      sint curr = last;
 	      sint prog = 0;
 
-	while(screen::run() && curr<last+4500 && screen::key()!=ESCAPE)
+	while(screen::run() && curr<last+3500 && screen::key()!=ESCAPE)
 	{
 		curr = screen::time();
 		object::linear.clear();
 		const sint diff = curr-last;
-		switch( diff/1000 )
+		switch( diff/700 )
 		{
-			case 1: object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
-			case 2: object::linear.rotatex(fx::mul(fx::l2f(14),prog));       break;
-			case 3: object::linear.translate(0,0,fx::mul(fx::l2f(23),prog)); break;
+			case 1 ... 2: object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
+			case 3: object::linear.rotatex(fx::mul(fx::l2f(14),prog));       break;
+			case 4: object::linear.translate(0,0,fx::mul(fx::l2f(50),prog)); break;
 		}
 
 		c.update();
