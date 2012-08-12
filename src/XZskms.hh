@@ -24,7 +24,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 ///*
-#include "XZstring.hh"
+
 ///declarations
 #define BPP 32
 #define FPS 4000
@@ -86,7 +86,7 @@ namespace screen
 	uint kbhit();
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void vwait()		{ sint l=read(fd,ev,1024); sint r=0; sint i=0; while(i<l && r==0 && l>=sizeof(drm_event)) { drm_event* e=(drm_event*)(&ev[i]); r=(e->type==DRM_EVENT_FLIP_COMPLETE); i+=e->length+sizeof(drm_event); } }
+	void vwait();
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
 	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[cc=!cc],DRM_MODE_PAGE_FLIP_EVENT,0); vwait(); }
 	bool event();
@@ -109,6 +109,20 @@ namespace screen
 }
 ///*
 
+///implementation
+void screen::vwait()
+{
+	sint l=read(fd,ev,1024); 
+	sint r=0;
+	sint i=0;
+	while(i<l && r==0 && l>=sizeof(drm_event))
+	{
+		drm_event* e=(drm_event*)(&ev[i]);
+		r=(e->type==DRM_EVENT_FLIP_COMPLETE);
+		i+=e->length+sizeof(drm_event);
+	}
+}
+
 uint screen::kbhit()
 {
 	int c = 0;
@@ -118,7 +132,6 @@ uint screen::kbhit()
 	return c;
 }
 
-///implementation
 void screen::init(tile* c)
 {
 	cs = c;
