@@ -86,7 +86,7 @@ namespace screen
 	uint kbhit();
 	void init(tile* c);
 	void set(uint c,bool f=0);
-	void vwait()		{ sint l=read(fd,ev,1024); sint r=0; sint i=0; while(i<l && r==0) { drm_event* e=(drm_event*)(&ev[i]); r=(e->type==DRM_EVENT_FLIP_COMPLETE); i+=e->length; } }
+	void vwait()		{ sint l=read(fd,ev,1024); sint r=0; sint i=0; while(i<l && r==0 && l>=sizeof(drm_event)) { drm_event* e=(drm_event*)(&ev[i]); r=(e->type==DRM_EVENT_FLIP_COMPLETE); i+=e->length+sizeof(drm_event); } }
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
 	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[cc=!cc],DRM_MODE_PAGE_FLIP_EVENT,0); vwait(); }
 	bool event();
@@ -245,14 +245,14 @@ void screen::close()
 	//delete accum;
 	//delete depth;
 	//delete back;
-	//delete frame; 
+	//delete frame;
 	drmModeSetCrtc(fd,encoder->crtc_id,id[2],0,0,&connector->connector_id,1,&(crtc->mode)); 
 	drmModeRmFB(fd,id[1]);
 	drmModeRmFB(fd,id[0]);
 	munmap(frame.pointer(),dumb.size);
-	munmap(frame.pointer(),dumf.size);
 	drm_mode_map_dumb db{ dumb.handle,0,0 };
 	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&db);
+	munmap(frame.pointer(),dumf.size);
 	drm_mode_map_dumb df{ dumf.handle,0,0 };
 	drmIoctl(fd,DRM_IOCTL_MODE_DESTROY_DUMB,&df);
 	drmModeFreeEncoder(encoder);
@@ -261,6 +261,7 @@ void screen::close()
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
 	delete nu;
+	delete ev;
 }
 ///*
 
