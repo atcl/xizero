@@ -17,7 +17,6 @@
 #include <termios.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
-#include <pthread.h>
 
 #include "XZbasic.hh"
 #include "XZbuffer.hh"

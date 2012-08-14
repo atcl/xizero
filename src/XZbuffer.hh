@@ -9,8 +9,7 @@
 ///*
 
 ///includes
-#include <malloc.h> //memalign
-#include <string.h> //memcpy,memset
+#include <string.h> //memcpy
 #include "XZbasic.hh"
 ///*
 
@@ -25,7 +24,7 @@ class buffer
 		buffer(const buffer& b);
 		buffer& operator=(const buffer& b);
 	public:
-		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)memalign(16,bytes); memset(data,0,bytes); } } 
+		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned_new(16,bytes); clear(); } } 
 		/*OK*/ ~buffer() { if(later==0) { free(data); } }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }

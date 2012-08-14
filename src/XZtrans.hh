@@ -45,17 +45,13 @@ void trans::circleblend(sint x,sint y,sint r)
 
 void trans::dissolve()
 {
-	for(uint i=0;i<2000;++i)
+	for(uint i=0;i<8000000;++i)
 	{
-		for(uint j=0;j<32;++j)
-		{
-			const uint o = math::rnd(((XRES-2)*(YRES-2)));
-			screen::back[o] = math::rnd(0x00FFFFFF);
-			screen::back[o+1] = math::rnd(0x00FFFFFF);
-			screen::back[o+XRES] = math::rnd(0x00FFFFFF);
-			screen::back[o+XRES+1] = math::rnd(0x00FFFFFF);
-		}
-		screen::_flush();
+		const uint o = math::rnd(((XRES-2)*(YRES-2)));
+		screen::frame[o] = math::rnd(0x00FFFFFF);
+		screen::frame[o+1] = math::rnd(0x00FFFFFF);
+		screen::frame[o+XRES] = math::rnd(0x00FFFFFF);
+		screen::frame[o+XRES+1] = math::rnd(0x00FFFFFF);
 	}
 }
 
