@@ -11,10 +11,14 @@
 ///includes
 #include "XZbasic.hh"
 #include "XZmath.hh"
-//#include "XZfrmbuf.hh" 
-#include "XZskms.hh"
 #include "XZgfx.hh"
 #include "XZsystem.hh"
+
+#ifdef FRMBUF
+#include "XZfrmbuf.hh"
+#else
+#include "XZskms.hh"
+#endif
 ///*
 
 ///definitions

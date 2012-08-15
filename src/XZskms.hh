@@ -84,7 +84,7 @@ namespace screen
 
 	uint kbhit();
 	void init(tile* c);
-	void set(uint c,bool f=0);
+	void set(uint c=1,bool f=0);
 	void vwait();
 	void _flush()		{ frame.copy(back); drmModeDirtyFB(fd,id[cc],0,0); }
 	void flush()		{ frame.swap(back); drmModePageFlip(fd,encoder->crtc_id,id[cc=!cc],DRM_MODE_PAGE_FLIP_EVENT,0); vwait(); }

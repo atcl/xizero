@@ -10,13 +10,17 @@
 
 ///includes
 #include "XZbasic.hh"
-//#include "XZfrmbuf.hh" 
-#include "XZskms.hh"
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"
 #include "XZresource.hh"
 #include "XZsystem.hh"
+
+#ifdef FRMBUF
+#include "XZfrmbuf.hh"
+#else
+#include "XZskms.hh"
+#endif
 ///*
 
 ///definitions

@@ -14,9 +14,13 @@
 #include "XZmath.hh"
 #include "XZvector.hh"
 #include "XZmatrix.hh"
-//#include "XZfrmbuf.hh"
-#include "XZskms.hh"
 #include "XZgfx.hh"
+
+#ifdef FRMBUF
+#include "XZfrmbuf.hh"
+#else
+#include "XZskms.hh"
+#endif
 ///*
 
 ///declaration

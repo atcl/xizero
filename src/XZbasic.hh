@@ -14,6 +14,8 @@
 #include <malloc.h>
 ///*
 
+//#define FRMBUF
+
 ///declarations
 #ifdef __GNUC__
 

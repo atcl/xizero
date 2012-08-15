@@ -70,7 +70,7 @@ namespace screen
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
-		struct fb_var_screeninfo vinfo{XRES,YRES,800,600,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,-1,-1,1};//,25252,96,24,14,0,136,11,0,0,0,0,0,0,0,0}; 
+		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES/**2*/,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,-1,-1,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
 	}
 
 	uint kbhit();
