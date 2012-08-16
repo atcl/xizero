@@ -34,9 +34,9 @@ class list
 		inline bool notfirst() const { return cur!=fir; }
 		inline uint length() const { return len; }
 		inline void first() { cur = fir->next; }
-		inline void last() { cur = las->prev; }
-		inline void prev() { cur = cur->prev; }
-		inline void next() { cur = cur->next; }
+		inline void last()  { cur = las->prev; }
+		inline void prev()  { cur = cur->prev; }
+		inline void next()  { cur = cur->next; }
 		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
 		inline void append(void* x,sint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
 		inline void* current() const { return cur->data; }

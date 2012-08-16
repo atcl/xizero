@@ -140,27 +140,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 	const fixed a = fx::l2f(((bbox[3]-bbox[1]).cross(bbox[2]-bbox[0])).length())>>1;
 	bound = fx::div(a,math::min(p,q));
 
-	/*lvector j = (bbox[0]+bbox[1]+bbox[2]+bbox[3]);
-	j.x>>=2;
-	j.y>>=2;
-	const uint u = (bbox[0]-j).length();
-	const uint v = (bbox[1]-j).length();
-	const uint x = (bbox[2]-j).length();
-	const uint y = (bbox[3]-j).length();
-	const uint uv = u*v;
-	const uint xy = x*y;
-	const uint ux = u*x;
-	const uint vy = v*y;
-	const uint uy = u*y;
-	const uint vx = v*x;
-	const uint uvx = uv*x;
-	const uint vxy = vx*y;
-	const uint xyu = xy*u;
-	const uint yuv = uy*v;
-	const uint uvxy = uv*xy;
-	const uint m = (uvx>>1) + (vxy>>1) + (xyu>>1) + (yuv>>1);
-	bound = ( ((m-uvx)/(uvxy)) * ((m-vxy)/(uv+xy)) * ((m-xyu)/(ux*vy)) * ((m-yuv)/(uy+vx)) );*/
-	//bound = fx::sqr(fx::l2f( ((m-uvx)*(m-vxy)*(m-xyu)*(m-yuv))/(uvxy*(uv+xy)*(ux+vy)*(uy+vx)) )<<1);
+	//bound = fx::l2f(math::min((bbox[2].x-bbox[0].x)>>1,(bbox[3].y-bbox[1].y)>>1));
 
 alerf(bound);
 	//*

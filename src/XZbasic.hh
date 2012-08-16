@@ -97,7 +97,6 @@
 #define ORANGE  0x00FF8000
 #define OCHER   0x00808000
 
-typedef const    char* cstr;
 typedef unsigned char  byte;
 typedef uint32_t       uint;
 typedef int32_t        sint;

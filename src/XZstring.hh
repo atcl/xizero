@@ -198,20 +198,17 @@ char** string::split(const char* x,char y) //while to for
 	return r;
 }
 
-char* string::trim(const char* x,char y) //while to for
+char* string::trim(const char* x,char y)
 {
 	const sint l = length(x);
 	const sint c = count(x,y);
 	char* r = new char[l-c+1];
-	sint i = 0;
 	sint j = 0;
-	bool k = 0;
-	while(x[i]!=0)
+	for(sint i=0;x[i]!=0;++i)
 	{
-		k = x[i]!=y;
+		const bool k = x[i]!=y;
 		r[j] = math::set(x[i],r[j],k);
 		j+=k;
-		++i;
 	}
 	r[j] = 0;
 	return r;
