@@ -33,9 +33,9 @@
 #define FXRS1 0x00000126 //0.0045
 #define FXRS2 0x00012902 //1.1602
 
-#define FX(x) (x<<FIXED)
-
 typedef sint fixed;
+
+constexpr fixed FX(sint x) { return x<<FIXED; }
 ///*
 
 namespace fx 
