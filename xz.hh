@@ -7,14 +7,11 @@
 #include "src/XZbasic.hh"
 #include "src/XZbuffer.hh"
 #include "src/XZbutton.hh"
-#include "src/XZcompiled.hh"
-#include "src/XZentity.hh"
 #include "src/XZfixed.hh"
 #include "src/XZfont.hh"
 #include "src/XZformat.hh"
 #include "src/XZgame.hh"
 #include "src/XZgfx.hh"
-#include "src/XZlevel.hh"
 #include "src/XZlight.hh"
 #include "src/XZlist.hh"
 #include "src/XZmath.hh"
@@ -28,6 +25,10 @@
 #include "src/XZtrans.hh"
 #include "src/XZvector.hh"
 #include "src/XZresource.hh"
+
+#include "src/XZcompiled.hh"
+#include "src/XZlevel.hh"
+#include "src/XZentity.hh"
 
 #ifdef FRMBUF
 #include "src/XZfrmbuf.hh"
