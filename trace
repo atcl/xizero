@@ -1,0 +1,3 @@
+#!/bin/sh
+
+dtrace -x ustackframes=100 -n 'profile-997 /execname == "xizero" && arg1/ { @[ustack()] = count(); } tick-60s { exit(0); }' -o /tmp/out.stacks 
