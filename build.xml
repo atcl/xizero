@@ -22,13 +22,14 @@
 			<define>YRES=600</define>
 		</defines>
 		<flags>
-			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
+			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops <!-- -fwhole-program--></flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes</flag>
 			<flag>-march=atom -mtune=atom <!-- -march=native -mtune=native --> -m32</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-static -nostdlib</flag-->
-			<!--flag>-Wl,-file-alignment4096</flag-->
 			<flag>-g</flag><!--flag>-s</flag-->
+
+			<lflag>-flto <!---Wl,-file-alignment4096--></lflag>
 		</flags>
 		<binary>
 			<name>xizero</name>
@@ -63,7 +64,7 @@
 			<define>YRES=600</define>
 		</defines>
 		<flags>
-			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops -flto</flag>
+			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
