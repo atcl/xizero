@@ -285,7 +285,7 @@ void entity::display(sint m,bool t)
 
 				const sint cx = fx::r2l(cur.x);
 				const sint cy = fx::r2l(cur.y)-m;
-				switch(game::onscreen(cx-4,cy-3)<<h)
+				switch( (game::onscreen(cx-4,cy-4)&game::onscreen(cx+4,cy+4))<<h )
 				{
 					case 0: delete (ammo*)a.delcurrent(); break;
 					case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;

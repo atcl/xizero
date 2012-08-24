@@ -22,7 +22,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 ///*
-#include "XZstring.hh"
+
 ///declarations
 #define BPP 32
 #define FPS 4000
@@ -66,18 +66,18 @@ namespace screen
 		termios oc;			//old terminal config
 
 		uint fd;			//framebuffer device handle
-		uint xs;			//x stride
+		void* fp;			//framebuffer pointer
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
-		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES/**2*/,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,-1,-1,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
+		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,0xFFFFFFFF,0xFFFFFFFF,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
 	}
 
 	uint kbhit();
 	void init(tile* c);
 	void set();
 	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	void flush()		{ back.swap(accum); frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void flush()		{ /*frame.swap(back);*/ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	bool event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -153,19 +153,15 @@ void screen::set()
 	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo);
 	error(g<0,"Error: Could not write variable framebuffer info");
 
-	void* ptr = mmap(0,XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
-	error(ptr==MAP_FAILED,"Error: Could not map buffer object!");
+	fp = mmap(0,XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
+	error(fp==MAP_FAILED,"Error: Could not map buffer object!");
 
-	frame.pointer(ptr);
+	frame.pointer(fp);
 }
 
 void screen::close()
 {
-	//delete accum;
-	//delete depth;
-	//delete back;
-	//delete frame; 
-	munmap(frame.pointer(),XRES*YRES*4);
+	munmap(fp,XRES*YRES*4);
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
