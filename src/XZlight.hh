@@ -30,6 +30,7 @@ class light
 		inline void draw(sint x,sint y) const { gfx::sprite(mask,x-rad,y-rad); }
 		inline void color(uint c) { col = c; init(); }
 		inline void radius(sint r) { rad = r; init(1); }
+		static fvector refract(const fvector& x,const fvector& y,fixed ri);
 };
 ///*
 
@@ -64,6 +65,23 @@ void light::init(bool i)
 			mask.data[t] = lambert(k-rad,j-rad);
 		}
 	}
+}
+
+fvector light::refract(const fvector& x,const fvector& y,fixed ri)
+{
+	fixed t = x.dot(y);
+	fixed r = FXONE - fx::mul(ri,ri) * (FXONE - fx::mul(t,t));
+
+	fvector z(0,0,0,0);
+	if(r>0)
+	{
+		fixed s = ri * t + fx::sqr(r);
+		z.x = fx::mul(ri,x.x) - fx::mul(s,y.x);
+		z.y = fx::mul(ri,x.y) - fx::mul(s,y.y);
+		z.z = fx::mul(ri,x.z) - fx::mul(s,y.z);
+	}
+
+	return z;
 }
 ///*
 
