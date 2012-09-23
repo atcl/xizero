@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZpolygon.hh
 // Polygon Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: Shading, Rasterizer"
-///*
+///</header>
 
-///include
+///<include>
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZmath.hh"
@@ -21,9 +20,9 @@
 #else
 #include "XZskms.hh"
 #endif
-///*
+///</include>
 
-///declaration
+///<declare>
 #define XMIN 1
 #define XMAX XRES-1
 #define YMIN 1
@@ -45,9 +44,9 @@
 #define R_F 0x00100000 //flat
 #define R_C 0x01000000 //single color
 #define R_D 0x10000000 //depth test
-///*
+///</declare>
 
-///definition
+///<define>
 class polygon
 {
 	private:
@@ -70,9 +69,9 @@ class polygon
 		static const fvector light;	//Light Vector
 		static const fmatrix shadow;	//Shadow Matrix
 };
-///*
+///</define>
 
-///implementation
+///<code>
       lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
       sint    polygon::counter  = 0;
 const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
@@ -209,5 +208,5 @@ void polygon::pull(fixed a)
 	cpoint[1] += m;
 	cpoint[2] += m;
 }
-///*
+///</code>
 

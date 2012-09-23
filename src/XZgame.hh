@@ -1,29 +1,28 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZgame.hh
 // Game Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: 2D Collision Detection"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZvector.hh"
-///*
+///</include>
 
-///definition
+///<define>
 namespace game
 {
 	/*OK*/ pure inline bool onscreen(sint x,sint y);
 	            inline bool collision(const fvector& x,const fvector& a,fixed r);
 	                   sint angle(const fvector& x,const fvector& t,const fvector& m);
 }
-///*
+///</define>
 
-///implementation
+///<code>
 bool game::onscreen(sint x,sint y)
 {
 	return (x>0) && (y>0) && (x<XRES) && (y<YRES);
@@ -40,5 +39,5 @@ sint game::angle(const fvector& x,const fvector& t,const fvector& m)
 {
 	return 0;
 }
-///*
+///</code>
 

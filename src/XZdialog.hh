@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZmsgbox.hh
 // Dialog Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: yesnobox"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZbutton.hh"
@@ -18,18 +17,18 @@
 #else
 #include "XZskms.hh"
 #endif
-///*
+///</include>
 
-///definitions
+///<define>
 namespace dialog
 {
 	inline pure sint ok() { return 1; }
 	//inline pure sint no() { return -1; }
 	            sint msgbox(const char* m,bool q=0);
 }
-///*
+///</define>
 
-///implementation
+///<code>
 sint dialog::msgbox(const char* m,bool q)
 {
 	const sint w = font::width(m)+40;
@@ -57,5 +56,5 @@ sint dialog::msgbox(const char* m,bool q)
 	delete scr;
 	return 1; //cbrk
 }
-///*
+///</code>
 

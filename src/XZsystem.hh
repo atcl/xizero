@@ -1,20 +1,19 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZsystem.hh
 // System Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include <cstdio> //putchar,fopen,fseek,ftell,fread,fwrite,fclose
 
 #include "XZbasic.hh"
-///*
+///</include>
 
-///definitions
+///<define>
 namespace
 {
 namespace system
@@ -25,5 +24,5 @@ namespace system
 	//       void  svf(const char* x,void* d,uint l) FILE* f=fopen(x,"wb"); if(f==0) { return 0; } fwrite(d,l,1,f); fclose(f); return r; }
 }
 }
-///*
+///</define>
 

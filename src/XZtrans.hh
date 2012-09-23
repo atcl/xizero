@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZtrans.hh
 // Screen Transition Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZgfx.hh"
@@ -19,18 +18,18 @@
 #else
 #include "XZskms.hh"
 #endif
-///*
+///</include>
 
-///definitions
+///<define>
 namespace trans
 {
 	void circleblend(sint x,sint y,sint r);
 	void dissolve();
 	void fadeout();
 }
-///*
+///</define>
 
-///implementation
+///<code>
 void trans::circleblend(sint x,sint y,sint r)
 {
 	for(uint i=0;i<YRES;++i)
@@ -80,5 +79,5 @@ void trans::fadeout()
 		screen::sleep(10);
 	}
 }
-///*
+///</code>
 

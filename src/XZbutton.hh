@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZbutton.hh
 // GUI Button Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZgui.hh"
@@ -16,9 +15,9 @@
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZstring.hh"
-///*
+///</include>
 
-///definitions
+///<define>
 class button : public gui
 {
 	private:
@@ -41,9 +40,9 @@ class button : public gui
 
 		static button* current;					//Currently Highlighted Button 
 };
-///*
+///</define>
 
-///implementation
+///<code>
 list    button::bl      = list();
 button* button::current = 0;
 
@@ -98,5 +97,5 @@ bool button::inside(button* b,sint x,sint y)
 {
 	return (x>b->left) && (y>b->top) && (x<b->left+b->width) && (y<b->top+b->height);
 }
-///*
+///</code>
 

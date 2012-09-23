@@ -1,20 +1,19 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZstring.hh
 // C String Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: "
-///*
+///</header>
 
-///include
+///<include>
 #include "XZbasic.hh"
 #include "XZfixed.hh"
 #include "XZmath.hh"
-///*
+///</include>
 
-///definitions
+///<define>
 namespace string
 {
 	/*OK*/ pure sint   length(const char* x);
@@ -32,9 +31,9 @@ namespace string
 	/*OK*/      char** split(const char* x,char y);
 	/*OK*/      char*  trim(const char* x,char y=' ');
 }
-///*
+///</define>
 
-///implementation
+///<code>
 sint string::length(const char* x)
 {
 	register sint r=0;
@@ -213,5 +212,5 @@ char* string::trim(const char* x,char y)
 	r[j] = 0;
 	return r;
 }
-///*
+///</code>
 

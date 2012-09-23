@@ -1,17 +1,19 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // xizero.hh
 // XiZero main header
+///</header>
 
-///includes
+///<include>
 #include "xz.hh"
-///*
+///</include>
 
-///declarations
+///<declare>
 #define LEVELS 1 
-///*
+///</declare>
 
-///definition
+///<define>
 inline void init();
 sint start(sint i);
 sint start();
@@ -26,9 +28,9 @@ void won(const lvector& p);
 void lost();
 void over();
 void bench();
-///*
+///</define>
 
-///Implementation
+///<code>
 void init()
 {
 	screen::init(format::xpm(resource::cursor));
@@ -288,5 +290,5 @@ void bench()
 		system::say(string::int2str(fps),1);
 	}
 }
-///*
+///</code>
 

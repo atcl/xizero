@@ -1,23 +1,22 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZobject.hh
 // Object Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: Destructor"
-///*
+///</header>
 
-///include
+///<include>
 #include "XZbasic.hh"
 #include "XZformat.hh"
 #include "XZvector.hh"
 #include "XZmatrix.hh"
 #include "XZpolygon.hh"
 #include "XZsystem.hh"
-///*
+///</include>
 
-///definition 
+///<define> 
 class object
 {
 	private:
@@ -43,9 +42,9 @@ class object
 
 		static fmatrix linear;
 };
-///*
+///</define>
 
-///implementation
+///<code>
 fmatrix object::linear = fmatrix();
 
 object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(0),scolor(0)
@@ -242,5 +241,5 @@ void object::pull(fixed x) //translate along normals
 		poly[i]->pull(x);
 	}
 }
-///*
+///</code>
 

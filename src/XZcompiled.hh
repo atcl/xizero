@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZcompiled.hh
 // Compiled Sprites Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: tracks"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZgame.hh"
 
@@ -17,17 +16,17 @@
 #else
 #include "XZskms.hh"
 #endif
-///*
+///</include>
 
-///definitions
+///<define>
 namespace compiled
 {
 	/*OK*/ void ammo(sint x,sint y,uint r,uint c);
 	       void tracks(uint x,uint y,uint d,uint c);
 }
-///*
+///</define>
 
-///implementation
+///<code>
 void compiled::ammo(sint x,sint y,uint r,uint c)
 {
 	//guard(game::onscreen(x,y)==1);
@@ -76,5 +75,5 @@ void compiled::tracks(uint x,uint y,uint d,uint c)
 		case 4: ;
 	}
 }
-///*
+///</code>
 

@@ -1,13 +1,15 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // xizero.cc
 // XiZero Main Program
+///</header>
 
-///includes
+///<include>
 #include "xizero.hh"
-///*
+///</include>
 
-///implementation
+///<code>
 int main()
 {	
 	http://atcrosslevel.de
@@ -15,5 +17,5 @@ int main()
 	intro();
 	mainmenu();
 }
-///*
+///</code>
 

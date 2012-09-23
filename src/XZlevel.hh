@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZlevel.hh
 // Level Class 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZsystem.hh"
 #include "XZstring.hh"
@@ -17,9 +16,9 @@
 #include "XZentity.hh"
 #include "XZprogress.hh"
 #include "XZvector.hh"
-///*
+///</include>
 
-//declarations
+//<declare>
 #define LWIDTH 40
 #define BWIDTH 20
 #define BHEIGHT -10
@@ -27,9 +26,9 @@
 #define GROUND 150
 #define AFLOAT 50
 #define OFFSET 4
-///*
+///</declare>
 
-///definitions
+///<define>
 class level
 {
 	private:
@@ -56,9 +55,9 @@ class level
 		void resume();			//Resume After Pausing
 		inline lvector ppos();		//get player position
 };
-///*
+///</define>
 
-///implementation
+///<code>
 level::level(char* o)
 {
 	//load lvl
@@ -301,5 +300,5 @@ lvector level::ppos()
 {
 	return player->data(mark);
 }
-///*
+///</code>
 

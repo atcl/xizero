@@ -1,23 +1,22 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZresource.hh
 // Resource Library
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
-///*
+///</include>
 
-///definition
+///<define>
 namespace resource
 {
 	#include "../dat/xzicon.xpm"
 	#include "../dat/xzcurs.xpm"
 	#include "../dat/xzfont.xpm"
 }
-///*
+///</define>
 

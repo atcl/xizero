@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZskms.hh
 // Super KMS library
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: mouse"
-///*
+///</header>
 
-///includes
+///<include>
 #include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -22,9 +21,9 @@
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
-///*
+///<include>
 
-///declarations
+///<declare>
 #define BPP 32
 #define FPS 4000
 
@@ -41,9 +40,9 @@
 #define CLOSE		//CTRL+ESC
 
 struct tile;
-///*
+///</declare>
 
-///definitions
+///<define>
 namespace screen
 {
 	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
@@ -106,9 +105,9 @@ namespace screen
 	inline tile* cursor()	{ return cs; }
 	//inline void smouse(uint x=XRES>>1,uint y=YRES>>1)    { mx=x; my=y; }
 }
-///*
+///</define>
 
-///implementation
+///<code>
 void screen::vwait()
 {
 	sint l=read(fd,ev,1024); 
@@ -275,5 +274,5 @@ void screen::close()
 	delete nu;
 	delete ev;
 }
-///*
+///</code>
 

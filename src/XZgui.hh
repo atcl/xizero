@@ -1,18 +1,17 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZgui.hh
 // GUI base class 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
-///*
+///</include>
 
-///definitions
+///<define>
 class gui
 {
 	public:
@@ -26,5 +25,5 @@ class gui
 		sint framecolor;
 		bool visible;
 };
-///*
+///</define>
 

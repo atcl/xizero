@@ -1,22 +1,21 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZmath.hh
 // Math Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
-///*
+///</include>
 
-///declaration
+///<declare>
 #define SEED 22695477
-///*
+///</declare>
 
-///definition
+///<code>
 namespace math
 {
 	/*OK*/ pure inline sint sgn(sint x) { return (x>>31)|(sint)(((uint)-x)>>31); }
@@ -31,5 +30,5 @@ namespace math
 	/*OK*/ pure        sint sqr(uint x) { register uint r=0; for(uint i=15,t=0;i!=0;--i) { t=(r+(1<<i))<<i; r=set(r|(2<<i),r,x>=t); x=set(x-t,x,x>=t); } return r>>1; }  
 	/*OK*/             uint rnd(uint x) { static uint seed=SEED; ++seed; seed^=(seed<<15); seed^=(seed>>21); seed^=(seed<<4); return seed%x; } 
 }
-///*
+///</code>
 

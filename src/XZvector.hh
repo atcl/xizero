@@ -1,24 +1,23 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZvector.hh
-// fixed point vector class
-
-///guard
+// integer and fixed point vector classes
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZfixed.hh"
 #include "XZmath.hh"
-///*
+///</include>
 
-///declarations
+///<declare>
 struct fvector;
-///*
+///</declare>
 
-///definitions
+///<define>
 struct lvector
 {
 	sint x;
@@ -70,10 +69,10 @@ struct fvector
 	inline fixed    length() const { return fx::sqr(fx::mul(x,x)+fx::mul(y,y)+fx::mul(z,z)); }
 	inline void     set(fixed a,fixed b,fixed c,fixed d=1) { x=a; y=b; z=c; e=d; }
 }; 
-///*
+///</define>
 
-///Implementation
+///<code>
 inline lvector& lvector::operator=(const fvector& a) { x=fx::r2l(a.x); y=fx::r2l(a.y); z=fx::r2l(a.z); e=fx::r2l(a.e); return *this; }
                 lvector::lvector(const fvector& a) : x(fx::r2l(a.x)),y(fx::r2l(a.y)),z(fx::r2l(a.z)),e(fx::r2l(a.e)) { ; }
-///*
+///</code>
 

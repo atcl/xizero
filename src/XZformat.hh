@@ -1,19 +1,18 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZformat.hh
 // Fileformat Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO:"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZstring.hh"
-///*
+///</include>
 
-///declarations
+///<declare>
 struct info
 {
 	char** name;
@@ -39,9 +38,9 @@ struct tile
 	sint* data;
 };
 #endif
-///*
+///</declare>
 
-///definitions 
+///<define> 
 namespace format
 {
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
@@ -49,9 +48,9 @@ namespace format
 	/*OK*/ info*  ini(const char* x);		//load ini configuartion
 	       info*  ar(char* x);			//load ar archive
 }
-///*
+///</define>
 
-///implementation
+///<code>
 char** format::csv(const char* x,char y)
 {
 	char* s = string::repl(x,'\n',y);
@@ -151,5 +150,5 @@ info* format::ar(char* x)
 
 	return r;
 }
-///*
+///</code>
 

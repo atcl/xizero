@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZentity.hh
 // Entity Class 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ymark as reference"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZvector.hh"
 #include "XZlist.hh"
@@ -16,9 +15,9 @@
 #include "XZobject.hh"
 #include "XZgame.hh"
 #include "XZcompiled.hh"
-///*
+///</include>
 
-//declarations
+//<declare>
 struct ammo
 {
 	fvector pos;
@@ -26,9 +25,9 @@ struct ammo
 };
 
 #define ROTANG 2
-///*
+///</declare>
 
-///definitions
+///<define>
 class entity
 {
 	private:
@@ -73,9 +72,9 @@ class entity
 		inline lvector data(sint m) const;
 		inline static sint ylevel();
 };
-///*
+///</define>
 
-///implementation
+///<code>
 const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }() };
 const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; /*m.dyadic(fvector(FXONE,FXONE,FXONE),fvector(FXONE,FXONE,FXONE));*/ return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }() };
 list          entity::ammos[2] = { list(), list() };
@@ -319,5 +318,5 @@ sint entity::ylevel()
 {
 	return fx::r2l(ymark);
 }
-///*
+///</code>
 

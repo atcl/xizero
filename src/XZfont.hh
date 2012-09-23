@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZfont.hh
 // Font Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZstring.hh"
 #include "XZmath.hh"
@@ -21,9 +20,9 @@
 #else
 #include "XZskms.hh"
 #endif
-///*
+///</include>
 
-///definitions
+///<define>
 namespace font
 {
 	namespace
@@ -39,9 +38,9 @@ namespace font
 	inline pure sint height();
 	inline pure char map(char a);
 }
-///*
+///</define>
 
-///implementation
+///<code>
 sint font::draw(sint x,sint y,char a,uint c,uint b) 
 {
 	a = map(a);
@@ -136,5 +135,5 @@ char font::map(char a)
 		default: return 63;
 	}
 }
-///*
+///</code>
 

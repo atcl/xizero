@@ -1,22 +1,21 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZbasic.hh
 // Basic Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include <cstdint>
 #include <cstdlib> //malloc,free ///here should also be aligned_alloc
 #include <malloc.h>
-///*
+///</include>
 
 #define FRMBUF
 
-///declarations
+///<declare>
 #ifdef __GNUC__
 
 	#define pure        __attribute__((pure))
@@ -106,14 +105,14 @@ union packed
 	uint d;
 	byte b[4];
 };
+///</declare>
 
+///<code>
 //global new + delete overloading
 inline void* aligned_new(uint a,uint s) { return memalign(a,s); } //use aligned_alloc
 inline void* operator new(uint s)       { return malloc(s); }
 inline void* operator new[](uint s)     { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }
 inline void  operator delete[](void *p) { free(p); }
-//*
-
-///*
+///</code>
 

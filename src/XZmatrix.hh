@@ -1,18 +1,17 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZmatrix.hh
 // Matrix Class Library
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZvector.hh"
-///* 
+///</include>
 
-///definition
+///<define>
 class fmatrix
 {
 	private:
@@ -34,9 +33,9 @@ class fmatrix
 		/*OK*/ inline fvector operator*(const fvector& x) const;
 		/*OK*/ inline lvector operator*(const lvector& x) const;
 };
-///*
+///</define>
 
-///implementation
+///<code>
 void fmatrix::multiplicate(const fixed (&n)[3][4])
 {
 	const fixed align a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
@@ -151,5 +150,5 @@ lvector fmatrix::operator*(const lvector& x) const
 		       fx::r2l(fx::mul(m[1][0],fx::l2f(x.x))+fx::mul(m[1][1],fx::l2f(x.y))+fx::mul(m[1][2],fx::l2f(x.z))+m[1][3]),
 		       fx::r2l(fx::mul(m[2][0],fx::l2f(x.x))+fx::mul(m[2][1],fx::l2f(x.y))+fx::mul(m[2][2],fx::l2f(x.z))+m[2][3]),x.e);
 }
-///*
+///</code>
 

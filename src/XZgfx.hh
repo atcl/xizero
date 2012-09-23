@@ -1,14 +1,13 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZgfx.hh
 // Graphic Primitives Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: Guards"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZmath.hh"
 
@@ -17,9 +16,9 @@
 #else
 #include "XZskms.hh"
 #endif
-///*
+///</include>
 
-///declarations
+///<declare>
 #ifndef TILE
 #define TILE
 struct tile
@@ -29,9 +28,9 @@ struct tile
 	sint* data;
 };
 #endif
-///*
+///</declare>
 
-///definitions
+///<define>
 namespace gfx
 {
 	/*OK*/ inline void  pix(sint x,sint y,uint c) { screen::back[(y*XRES+x)] = c; }		//draw pixel
@@ -41,9 +40,9 @@ namespace gfx
 	/*OK*/        void  fsprog(sint p,uint c=RED);						//draw full screen progress bar
 	/*OK*/        tile* save();								//save current screen
 }
-///*
+///</define>
 
-///implementation
+///<code>
 void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 {
 	guard( ((x<0)&&(a<0)) || ((x>XRES)&&(a>XRES)) || ((y<0)&&(b<0)) || ((y>YRES)&&(b>YRES)) );
@@ -204,5 +203,5 @@ tile* gfx::save()
 	for(sint i=0;i<XRES*YRES;++i) { r->data[i] = screen::back[i]; }
 	return r;
 }
-///*
+///</code>
 

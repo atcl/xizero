@@ -1,18 +1,17 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZlist.hh
 // Double Linked List Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: "
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
-///*
+///</include>
 
-///definition
+///<define>
 class list
 {
 	private:
@@ -44,9 +43,9 @@ class list
 		       bool find(void* x);
 		       void xsort(bool u);
 };
-///*
+///</define>
 
-///implementation
+///<code>
 void* list::delcurrent()
 {
 	void* c = cur->data;
@@ -87,5 +86,5 @@ void list::xsort(bool u) //use swap
 		}
 	}
 }
-///*
+///</code>
 

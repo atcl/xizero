@@ -1,9 +1,11 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // xz.hh
 // XiZero include header
+///</header>
 
-///includes
+///<include>
 #include "src/XZbasic.hh"
 #include "src/XZbuffer.hh"
 #include "src/XZbutton.hh"
@@ -35,5 +37,5 @@
 #else
 #include "src/XZskms.hh"
 #endif
-///*
+///</include>
 

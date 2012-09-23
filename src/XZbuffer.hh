@@ -1,19 +1,18 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZbuffer.hh
 // Buffer Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: FSMB, emissive glow"
-///*
+///</header>
 
-///includes
+///<include>
 #include <string.h> //memcpy
 #include "XZbasic.hh"
-///*
+///</include>
 
-///definitions
+///<define>
 class buffer
 {
 	private:
@@ -36,9 +35,9 @@ class buffer
 		              void  fsaamb(const buffer& b);
 		              void  glow();
 };
-///*
+///</define>
 
-///implementation
+///<code>
 void buffer::clear(sint x)
 {
 #ifdef SSE
@@ -119,5 +118,5 @@ void buffer::glow()
 {
 
 }
-///*
+///</code>
 

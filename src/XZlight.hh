@@ -1,20 +1,19 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZlight.hh
 // Light Source Class Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: ."
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZgfx.hh"
 #include "XZmath.hh"
-///*
+///</include>
 
-///definitions
+///<define>
 class light
 {
 	private:
@@ -32,9 +31,9 @@ class light
 		inline void radius(sint r) { rad = r; init(1); }
 		static fvector refract(const fvector& x,const fvector& y,fixed ri);
 };
-///*
+///</define>
 
-///implementation
+///<code>
 sint light::lambert(sint x,sint y) const
 {
 	const sint  i = rad*rad;
@@ -83,5 +82,5 @@ fvector light::refract(const fvector& x,const fvector& y,fixed ri)
 
 	return z;
 }
-///*
+///</code>
 

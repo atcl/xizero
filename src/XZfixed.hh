@@ -1,19 +1,18 @@
+///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
 // XZfixed.hh
 // Fixed Point 16.16 Type Library 
-
-///guard
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: literals to signed"
-///*
+///</header>
 
-///includes
+///<include>
 #include "XZbasic.hh"
 #include "XZmath.hh"
-///*
+///</include>
 
-///declaration
+///<declare>
 #define FIXED 16
 #define FXONE 0x00010000 //1
 #define FXTWO 0x00020000 //2
@@ -36,8 +35,9 @@
 typedef sint fixed;
 
 constexpr fixed FX(sint x) { return x<<FIXED; }
-///*
+///</declare>
 
+///<define>
 namespace fx 
 {
 	inline pure sint  f2l(fixed x) { return x>>FIXED; }
@@ -74,8 +74,9 @@ namespace fx
 	inline fixed pow(fixed a,fixed b) { return exp(mul(log(a),b)); }
 	inline fixed hvs(fixed a)         { return (FXONE - cos(a))>>1; }
 }
+///</define>
 
-///implementation
+///<code>
 void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 {
 	//0.785398,0.463648,0.244979,0.124355,0.0624188,0.0312398,0.0156237,0.00781234,0.00390623,0.00195312,0.000976562,0.000488281,0.000244141,0.00012207,0.0000610352,0.0000305176 
@@ -99,5 +100,5 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 		t >>= !r;
 	}
 }
-///*
+///</code>
 
