@@ -18,19 +18,19 @@ class buffer
 	private:
 		const uint tsize;	//size in typesize
 		const uint bytes;	//size in bytes
-		      bool later;	//self allocated or not
+		      uint later;	//self allocated or not
 		      sint* data;	//pointer to data
 		buffer(const buffer& b);
 		buffer& operator=(const buffer& b);
 	public:
-		/*OK*/ buffer(uint s,bool a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned_new(16,bytes); clear(); } } 
+		/*OK*/ buffer(uint s,uint a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned_new(16,bytes); clear(); } } 
 		/*OK*/ ~buffer() { if(later==0) { free(data); } }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
 		/*OK*/ inline void  copy(const buffer& s) { memcpy(data,s.data,bytes); }
-		/*OK*/ inline void  swap(buffer& b) { sint* t=b.data; bool l=b.later; b.data=data; b.later=later; data=t; later=l; }
+		/*OK*/ inline void  swap(buffer& b) { sint* t=b.data; uint l=b.later; b.data=data; b.later=later; data=t; later=l; }
 		/*OK*/        void  clear(sint x=0);
 		              void  fsaamb(const buffer& b);
 		              void  glow();

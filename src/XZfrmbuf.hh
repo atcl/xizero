@@ -56,7 +56,7 @@ namespace screen
 		uint kk = 0;			//keyboard key
 		uint mx = XRES/2;		//mouse horizontal position
 		uint my = YRES/2;		//mouse vertical position
-		bool mb = 0;			//mouse button pressed
+		bool mb = 0;			//mouse button pressed //to uint?
 
 		uint last = 0;
 		char* nu = 0;
