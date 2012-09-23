@@ -39,7 +39,7 @@ class level
 		char** map;			//Text Map of Terrain
 		sint mark;			//Current Level Position
 		sint markmin;			//Lowest Level Position (Bottom)
-		sint markmax;			//Highest Level Position (Top)
+		const sint markmax;		//Highest Level Position (Top)
 		progress* pp;			//Player Health Gauge
 		progress* sp;			//Player Shield Gauge
 		progress* bp;			//Boss Gauge
@@ -58,7 +58,7 @@ class level
 ///</define>
 
 ///<code>
-level::level(char* o)
+level::level(char* o) : markmax(OFFSET*BWIDTH)
 {
 	//load lvl
 	info* arc = format::ar(o);
@@ -106,7 +106,6 @@ level::level(char* o)
 	gfx::fsprog(40);
 	screen::_flush();
 
-	markmax = OFFSET*BWIDTH;
 	markmin = (l*BWIDTH)-YMAX;
 
 	terrain    = new object*[l];

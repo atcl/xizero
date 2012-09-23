@@ -4,14 +4,14 @@
 		<compiler>gcc</compiler>
 		<path>
 			<source></source>
-			<include>/usr/include/libdrm</include>
+			<!--include>/usr/include/libdrm</include-->
 			<library></library>
 		</path>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
 		<libs>
-			<lib>drm</lib>
+			<!--lib>drm</lib-->
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
@@ -23,7 +23,7 @@
 		</defines>
 		<flags>
 			<flag>-O2 -pipe -falign-loops <!-- -fomit-frame-pointer -fwhole-program--></flag>
-			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes</flag>
+			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=atom -mtune=atom <!-- -march=native -mtune=native --> -m32</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-static -nostdlib</flag-->
