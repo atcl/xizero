@@ -71,13 +71,15 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 void font::draw(sint x,sint y,const char* a,uint c,uint b)
 {
 	const sint z = x;
-	for(sint i=0;a[i]!=0;++i)
+	char curr = a[0];
+	for(sint i=0;curr!=0;++i)
 	{
-		switch(a[i])
+		switch(curr)
 		{
 			case '\n': y += f->height; x = z; break;
-			default: x += draw(x,y,a[i],c,b);
+			default: x += draw(x,y,curr,c,b);
 		}
+		curr = a[i+1];
 	}
 }
 
