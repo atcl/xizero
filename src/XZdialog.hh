@@ -41,14 +41,16 @@ sint dialog::msgbox(const char* m,bool q)
 
 	tile* scr = gfx::save();
 	sint cbrk = 0;
+	screen::smouse();
 	while(screen::run() && cbrk==0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
 		font::draw(x+20,y+20,m,BLACK,WHITE);
 		bok.draw();
-		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
-		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
+		const uint ms = screen::mouse();
+		cbrk = button::check(ms);
+		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
 	}
 	
 	button::all(1);

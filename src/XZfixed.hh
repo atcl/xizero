@@ -92,7 +92,7 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 
 	for(uint i=0;i<FIXED;++i)
 	{
-		r = hsel16(i)&&(!r)&&h;
+		r = h&&hsel16(i)&&(!r);
 		const bool s = (v>=0 && y<v) || (v<0 && z>=0);
 		const fixed w = x + math::neg(mul(y,t),s^h);
 		y -= math::neg(mul(x,t),s);

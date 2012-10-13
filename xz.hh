@@ -27,7 +27,6 @@
 #include "src/XZtrans.hh"
 #include "src/XZvector.hh"
 #include "src/XZresource.hh"
-
 #include "src/XZcompiled.hh"
 #include "src/XZlevel.hh"
 #include "src/XZentity.hh"

@@ -34,7 +34,7 @@ class button : public gui
 		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
 		~button();						//Destructor
 		void draw() const;					//Draw Button
-		static sint check(sint x,sint y,sint b);		//Check If Button Clicked
+		static sint check(uint m);				//Check If Button Clicked
 		static void all(bool b);				//Activate or Deactivate All Buttons
 		static inline bool inside(button* b,sint x,sint y);	//Check if inside
 
@@ -72,12 +72,13 @@ void button::draw() const
 	font::draw(left+textleft,top+texttop,text,color,backcolor);
 }
 
-sint button::check(sint x,sint y,sint b)
+sint button::check(uint m)
 {
-	for(bl.first();b&&bl.notlast();bl.next())
+	guard(!MOUSEB(m),0);
+	for(bl.first();bl.notlast();bl.next())
 	{
 		button* temp = (button*)bl.current();
-		if( (temp->visible!=0) && (temp->active!=0) && inside(temp,x,y) ) 
+		if( (temp->visible!=0) && (temp->active!=0) && inside(temp,MOUSEX(m),MOUSEY(m)) ) 
 		{
 			return temp->action();
 		}

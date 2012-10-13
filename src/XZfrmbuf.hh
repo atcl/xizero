@@ -1,14 +1,15 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
 // released under zlib/libpng license
-// XZskms.hh
-// Super KMS library
+// XZfrmbuf.hh
+// Direct Framebuffer Access and Input Handling Library
 #pragma once
 //#pragma message "Compiling " __FILE__ "..." " TODO: mouse"
 ///</header>
 
 ///<include>
-#include <time.h>
+#include <cstdio>	//atexit
+#include <time.h>	//clock,CLOCKS_PER_SEC
 #include <fcntl.h>
 #include <unistd.h>
 #include <termios.h>
@@ -20,6 +21,7 @@
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
+#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -37,8 +39,6 @@
 #define PGDOWN	54
 
 #define CLOSE		//CTRL+ESC
-
-struct tile;
 ///</declare>
 
 ///<define>
@@ -51,12 +51,10 @@ namespace screen
 
 	namespace
 	{
-		tile* cs = 0;			//cursor image
-		uint tk = 0;			//turbo key
-		uint kk = 0;			//keyboard key
-		uint mx = XRES/2;		//mouse horizontal position
-		uint my = YRES/2;		//mouse vertical position
-		bool mb = 0;			//mouse button pressed //to uint?
+		void* cs = 0;				//cursor image
+		uint tk = 0;				//turbo key
+		uint kk = 0;				//keyboard key
+		uint ms = uint((XRES/2)<<16)+uint(YRES/2);//compressend mouse data
 
 		uint last = 0;
 		char* nu = 0;
@@ -73,11 +71,11 @@ namespace screen
 	}
 
 	uint kbhit();
-	void init(tile* c);
+	void init(void* c);
 	void set();
 	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void flush()		{ /*frame.swap(back);*/ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	bool event();
+	void event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
 
@@ -86,14 +84,12 @@ namespace screen
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline bool  run()	{ flush(); return event(); }
+	inline bool  run()	{ flush(); event(); return 1; }
 	inline uint  key()	{ const uint r=kk; kk=0; return r; }
 	inline uint  turbo()	{ return tk; }
-	inline uint  mousex()	{ return mx; }
-	inline uint  mousey()	{ return my; }
-	inline uint  mouseb()	{ return mb; }
-	inline tile* cursor()	{ return cs; }
-	//inline void  smouse(uint x=XRES>>1,uint y=YRES>>1)    { mx=x; my=y; }
+	inline uint  mouse()    { return ms; }
+	inline void* cursor()	{ return cs; }
+	inline void  smouse(uint x=XRES/2,uint y=YRES/2) { ms = (x<<16)+y; }
 }
 ///</define>
 
@@ -107,7 +103,7 @@ uint screen::kbhit()
 	return c;
 }
 
-void screen::init(tile* c)
+void screen::init(void* c)
 {
 	cs = c;
 	nu = new char[256];
@@ -118,12 +114,14 @@ void screen::init(tile* c)
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	last = time()+4000;
+	atexit(close);
 }
 
-bool screen::event()
+void screen::event()
 {
+	ms &= 0x7FFFFFFF;
 	const int r = kbhit();
-	guard(r==0,(mb=0)==0); 
+	guard(r==0);
 
 	const int s = 3-(r==1)-(r==2);
 	packed t;
@@ -131,11 +129,11 @@ bool screen::event()
 	tk = kk = math::set(t.b[2],t.b[0],t.b[1]==91);
 	read(0,&nu,math::min(r-s,256));
 
-	mb = kk==SPACE;
-	mx = math::lim(0,mx+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES);
-	my = math::lim(0,my+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);
-
-	return 1; //kk!=CLOSE;
+	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);		//set bottom word to mouse y
+	mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES)<<16;	//set top word to mouse x
+	mx += (kk==SPACE)<<31;								//set top bit to mouse button
+	ms = mx;
+	//ifu(kk==CLOSE) { system::bye(); }
 }
 
 void screen::set()
@@ -164,7 +162,7 @@ void screen::close()
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
-	delete nu;
+	//delete nu; 
 }
 ///</code>
 

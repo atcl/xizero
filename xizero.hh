@@ -17,7 +17,6 @@
 inline void init();
 sint start(sint i);
 sint start();
-inline sint close();
 inline sint control();
 inline sint about();
 inline sint leave();
@@ -71,11 +70,6 @@ sint start()
 	return 0;
 }
 
-sint close()
-{
-	return -1;
-}
-
 sint control()
 {
 	return dialog::msgbox(
@@ -97,15 +91,14 @@ sint about()
 
 sint leave()
 {
-	//if(dialog::askbox("Are you sure?")==-1) { return -1; };
-	screen::close();
-	system::bye();
+	/*if(dialog::askbox("Are you sure?")==1)*/ { system::bye(); };
+	return -1;
 }
 
 void menu()
 {
 	//enlist buttons
-	const button b_close("X",&close,1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
+	const button b_close("X",[](){ return -1; },1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
 	const button b_about("About",&about,0,2,19,50,16,BLACK,SYSCOL,SYSCOL,1);
 	const button b_leave("Exit",&leave,0,52,19,50,16,BLACK,SYSCOL,SYSCOL,1);
 	//*
@@ -125,8 +118,9 @@ void menu()
 		b_close.draw();
 		b_about.draw();
 		b_leave.draw();
-		cbrk = button::check(screen::mousex(),screen::mousey(),screen::mouseb());
-		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
+		const uint ms = screen::mouse();
+		cbrk = button::check(ms);
+		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
 	}
 
 	gfx::sprite(*scr,0,0,1);
@@ -241,8 +235,9 @@ void mainmenu()
 		b_about.draw();
 		b_leave.draw();
 		font::draw(XRES-160,YRES-20,"Version: " VERSION,ORANGE,TRANS);
-		button::check(screen::mousex(),screen::mousey(),screen::mouseb());
-		gfx::sprite(*screen::cursor(),screen::mousex(),screen::mousey());
+		const uint ms = screen::mouse();
+		button::check(ms);
+		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
 		//screen::vwait();
 	}
 	//*

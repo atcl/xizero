@@ -25,6 +25,7 @@
 	#define prefetch(x) __builtin_prefetch(x)
 	#define ifl(x)   if(__builtin_expect(!!(x),1))
 	#define ifu(x)   if(__builtin_expect(!!(x),0))
+	#define restrict    __restrict__
 
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline)) inline
@@ -37,12 +38,17 @@
 	#define prefetch(x)
 	#define ifl(x)   if(x)
 	#define ifu(x)   if(x)
+	#define restrict
 #endif 
 
-#define guard(x,...) if(__builtin_expect(!!(x),0)) { return __VA_ARGS__; }
+#define guard(x,...) ifu(!!(x)) { return __VA_ARGS__; }
 
 #define VAL(x) #x
 #define STR(x) VAL(x)
+
+#define MOUSEX(x) ((x&0x7FFFFFFF)>>16)
+#define MOUSEY(x) (x&0x0000FFFF)
+#define MOUSEB(x) ((x&0x80000000)!=0)
 
 #define alert(x) system::say(string::int2str(x),1)
 #define alerf(x) system::say(string::fix2str(x),1)
