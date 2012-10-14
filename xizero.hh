@@ -55,7 +55,6 @@ sint start(sint i)
 		//screen::back.fsaamb(screen::accum);
 		l.gauges();
 		bench();
-		//screen::vwait();
 	}
 	return 0;
 }

@@ -14,12 +14,7 @@
 #include "XZvector.hh"
 #include "XZmatrix.hh"
 #include "XZgfx.hh"
-
-#ifdef FRMBUF
 #include "XZfrmbuf.hh"
-#else
-#include "XZskms.hh"
-#endif
 ///</include>
 
 ///<declare>

@@ -16,7 +16,6 @@ namespace resource //to struct
 {
 	#include "../dat/xzicon.xpm"
 	#include "../dat/xzcurs.xpm"
-	#include "../dat/xzfont.xpm"
 }
 ///</define>
 

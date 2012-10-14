@@ -10,12 +10,7 @@
 ///<include>
 #include "XZbasic.hh"
 #include "XZmath.hh"
-
-#ifdef FRMBUF
 #include "XZfrmbuf.hh"
-#else
-#include "XZskms.hh"
-#endif
 ///</include>
 
 ///<declare>

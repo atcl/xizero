@@ -14,12 +14,7 @@
 #include "XZformat.hh"
 #include "XZresource.hh"
 #include "XZsystem.hh"
-
-#ifdef FRMBUF
 #include "XZfrmbuf.hh"
-#else
-#include "XZskms.hh"
-#endif
 ///</include>
 
 ///<define>
@@ -27,7 +22,8 @@ namespace font
 {
 	namespace
 	{
-		tile* f = format::xpm(resource::font);
+		#include "../dat/xzfont.xpm"
+		tile* f = format::xpm(font);
 	}
 
 	            sint draw(sint x,sint y,char a,uint c,uint b);
