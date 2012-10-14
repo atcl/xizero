@@ -1,0 +1,3 @@
+#!/bin/sh
+
+valgrind --tool=callgrind --cache-sim=yes ./xizero 

@@ -141,6 +141,7 @@ void polygon::raster(bool s,uint c) const
 		#pragma prefetch back
 		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
 		{
+			//prefetch(back[off]);
 			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
 			{
 				case 1: screen::depth[off] = tx;

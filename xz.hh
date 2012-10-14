@@ -17,12 +17,12 @@
 //Level 2
 #include "src/XZfixed.hh"
 #include "src/XZfrmbuf.hh"
+#include "src/XZstring.hh"
 //Level 3
+#include "src/XZformat.hh"
 #include "src/XZgfx.hh"
-#include "src/XZstring.hh" //move up? just requires FIXED=16!
 #include "src/XZvector.hh"
 //Level 4
-#include "src/XZformat.hh"
 #include "src/XZgame.hh"
 #include "src/XZlight.hh"
 #include "src/XZmatrix.hh"

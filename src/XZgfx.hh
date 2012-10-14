@@ -38,7 +38,7 @@ namespace gfx
 ///</define>
 
 ///<code>
-void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
+void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k) //optimize!
 {
 	guard( ((x<0)&&(a<0)) || ((x>XRES)&&(a>XRES)) || ((y<0)&&(b<0)) || ((y>YRES)&&(b>YRES)) );
 

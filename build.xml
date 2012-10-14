@@ -4,14 +4,14 @@
 		<compiler>gcc</compiler>
 		<path>
 			<source></source>
-			<!--include>/usr/include/libdrm</include-->
+			<!--include></include-->
 			<library></library>
 		</path>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
 		<libs>
-			<!--lib>drm</lib-->
+			<!--lib></lib-->
 		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
@@ -44,17 +44,9 @@
 	<rule>
 		<name>unit</name>
 		<compiler>gcc</compiler>
-		<path>
-			<source></source>
-			<include>/usr/include/libdrm</include>
-			<library></library>
-		</path>
 		<sources>
 			<source>unit.cc</source>
 		</sources>
-		<libs>
-			<lib>drm</lib>
-		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>

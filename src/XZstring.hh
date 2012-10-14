@@ -9,7 +9,6 @@
 
 ///<include>
 #include "XZbasic.hh"
-#include "XZfixed.hh"
 #include "XZmath.hh"
 ///</include>
 
@@ -26,7 +25,7 @@ namespace string
 	/*OK*/      char*  copy(const char* x,sint y=0,sint z=0x7FFFFFFF);
 	/*OK*/      char*  concat(const char* x,const char* y);
 	/*OK*/      char*  int2str(sint x);
-	/*OK*/      char*  fix2str(fixed x);
+	/*OK*/      char*  fix2str(fixed x,uint y=16);
 	/*OK*/      char*  repl(const char* x,char y,char z);
 	/*OK*/      char** split(const char* x,char y);
 	/*OK*/      char*  trim(const char* x,char y=' ');
@@ -143,13 +142,13 @@ char* string::int2str(sint x)
 	return r;
 }
 
-char* string::fix2str(fixed x)
+char* string::fix2str(fixed x,uint y)
 {
 	char* r = new char[16];
 	sint  i = sint(x<0);
 	x       = math::abs(x);
 	r[0]    = math::set('-','0',i);
-	sint  l = x>>FIXED;
+	sint  l = x>>y;
 	i      += (l==0);
 	for(sint d=10000,k=0;d>0;d/=10,i+=k)
 	{
@@ -162,7 +161,7 @@ char* string::fix2str(fixed x)
 	l = x & 0x0000FFFF;
 	for(sint d=10;d<10000000;d*=10,++i)
 	{
-		const sint j = ((l*d)>>FIXED)%10;
+		const sint j = ((l*d)>>y)%10;
 		r[i] = math::set(j,j>0) +'0';
 	}
 	r[i] = 0;
