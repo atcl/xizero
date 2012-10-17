@@ -20,6 +20,7 @@
 //<declare>
 struct ammo
 {
+	//ammo(const fvector& p,const fvector& d) : pos(p),dir(d) { ; }
 	fvector pos;
 	fvector dir;
 };

@@ -4,7 +4,7 @@
 // XZpolygon.hh
 // Polygon Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: Shading, Rasterizer"
+//#pragma message "Compiling " __FILE__ "..." " TODO: Rasterizer"
 ///</header>
 
 ///<include>
@@ -52,7 +52,7 @@ class polygon
 
 		/*OK*/ inline void shape() const;
 		              uint flat(sint pz,sint f) const;
-		              void raster(bool s,uint c) const /*hot*/; //based on "Daily Code Gem - Advanced Rasterization"
+		              void raster(bool s,uint c) const /*hot*/;
 	public:
 		/*OK*/      polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
 		/*OK*/ void update(const fmatrix& m,bool i=1);
@@ -112,9 +112,9 @@ void polygon::raster(bool s,uint c) const
 	const sint mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
 
 	const sint minx = math::max(XMIN,lpoint[mixi].x);
-	const sint maxx = math::min(XMAX,1+lpoint[maxi].x); //prevent gap
+	const sint maxx = math::min(XMAX,lpoint[maxi].x+1); //prevent gap
 	const sint miny = math::max(YMIN,lpoint[miyi].y);
-	const sint maxy = math::min(YMAX,1+lpoint[mayi].y); //prevent gap
+	const sint maxy = math::min(YMAX,lpoint[mayi].y+1); //prevent gap
 	//*
 
 	guard( (maxx==minx) || (maxy==miny) );
