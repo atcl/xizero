@@ -38,7 +38,7 @@
 #define DOWN	66
 #define PGDOWN	54
 
-#define CLOSE		//CTRL+ESC
+#define CLOSE	24	//CTRL+X
 ///</declare>
 
 ///<define>
@@ -133,7 +133,7 @@ void screen::event()
 	mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES)<<16;	//set top word to mouse x
 	mx += (kk==SPACE)<<31;								//set top bit to mouse button
 	ms = mx;
-	//ifu(kk==CLOSE) { system::bye(); }
+	ifu(kk==CLOSE) { system::bye(); }
 }
 
 void screen::set()
