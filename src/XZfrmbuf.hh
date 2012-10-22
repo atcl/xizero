@@ -28,6 +28,9 @@
 #define BPP 32
 #define FPS 4000
 
+#define FB_DEV "/dev/fb0"
+#define JS_DEV "/dev/js0"
+
 #define ESCAPE	27
 #define ENTER	10
 #define SPACE	32
@@ -109,7 +112,7 @@ void screen::init(void* c)
 	nu = new char[256];
 	tcgetattr(STDIN_FILENO,&oc);
 	nc = oc;
-	nc.c_lflag &= ~(ICANON|ECHO); //ISIG
+	nc.c_lflag &= ~(ICANON|ECHO|ISIG);
 	//nc.c_cc[VMIN] = 4;
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
@@ -129,6 +132,8 @@ void screen::event()
 	tk = kk = math::set(t.b[2],t.b[0],t.b[1]==91);
 	read(0,&nu,math::min(r-s,256));
 
+	//gamepad 
+
 	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);		//set bottom word to mouse y
 	mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES)<<16;	//set top word to mouse x
 	mx += (kk==SPACE)<<31;								//set top bit to mouse button
@@ -138,8 +143,8 @@ void screen::event()
 
 void screen::set()
 {
-        fd = open("/dev/fb0",O_RDWR);
-	error(fd<=0,"Error: Could not open /dev/fb0");
+        fd = open(FB_DEV,O_RDWR);
+	error(fd<=0,"Error: Could not open framebuffer device");
 
 	const sint e = ioctl(fd,FBIOGET_FSCREENINFO,&finfo);
 	error(e<0,"Error: Could not read fixed framebuffer info");
@@ -158,7 +163,11 @@ void screen::set()
 
 void screen::close()
 {
+	back.clear();
+	_flush();
+	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(fp,XRES*YRES*4);
+	oinfo.activate = FB_ACTIVATE_NOW;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
