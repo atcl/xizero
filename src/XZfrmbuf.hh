@@ -67,6 +67,8 @@ namespace screen
 
 		uint fd;			//framebuffer device handle
 		void* fp;			//framebuffer pointer
+		//void* fb[2];
+		//uint wh = 0;
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
@@ -77,7 +79,7 @@ namespace screen
 	void init(void* c);
 	void set();
 	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	void flush()		{ /*frame.swap(back);*/ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void flush()		{ /*frame.swap(back);*/ /*fp = mmap(fb[wh],XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0); wh=!wh;*/ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -118,6 +120,9 @@ void screen::init(void* c)
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	last = time()+4000;
 	atexit(close);
+
+	//fb[0] = frame.pointer();
+	//fb[1] = back.pointer();
 }
 
 void screen::event()
