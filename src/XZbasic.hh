@@ -41,6 +41,8 @@
 	#define restrict
 #endif 
 
+#define mv(x) std::move(x)
+
 #define guard(x,...) ifu(!!(x)) { return __VA_ARGS__; }
 
 #define VAL(x) #x

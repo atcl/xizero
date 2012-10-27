@@ -51,6 +51,7 @@ struct fvector
 	fixed z;
 	fixed e;
 	fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
+	fvector(const fvector& a) : x(a.x),y(a.y),z(a.z),e(a.e) { ; }
 	fvector(const lvector& a) : x(fx::l2f(a.x)),y(fx::l2f(a.y)),z(fx::l2f(a.z)),e(fx::l2f(a.e)) { ; }
 	//fvector(fvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline fvector  operator-() const { return fvector(-x,-y,-z); }

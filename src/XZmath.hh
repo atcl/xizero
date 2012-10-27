@@ -19,7 +19,7 @@
 namespace math
 {
 	/*OK*/ pure inline sint sgn(sint x) { return (x>>31)|(sint)(((uint)-x)>>31); }
-	/*OK*/ pure inline sint abs(sint x) { sint y=x>>31; x^=y; x-=y; return x; }
+	/*OK*/ pure inline sint abs(sint x) { register const sint y=x>>31; return (x^y)-y; }
 	/*OK*/ pure inline sint min(sint x,sint y) { return y^((x^y) & -(x<y)); }
 	/*OK*/ pure inline sint max(sint x,sint y) { return x^((x^y) & -(x<y)); }
 	/*OK*/ pure inline sint neg(sint x,bool y) { return ~(x^(y-1))+y; }

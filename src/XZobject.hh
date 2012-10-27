@@ -206,12 +206,13 @@ object::~object()
 
 fvector* object::docktype(sint i,sint j) const
 {
-	for(sint k=0,l=-1;k<docks;++k)
+	fvector* r[2] = {0,0};
+	for(sint k=0,l=-1;k<docks && (l!=j);++k)
 	{
 		l += (dock[k].e==i);
-		if(l==j) { return &dock[k]; } //to break condition
+		r[l==j] = &dock[k];
 	}
-	return 0;
+	return r[1];
 }
 
 void object::update(const fmatrix& m,bool j)

@@ -46,7 +46,7 @@ namespace format
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
 	/*OK*/ tile*  xpm(const char* x);		//load xpm image
 	/*OK*/ info*  ini(const char* x);		//load ini configuartion
-	       info*  ar(char* x);			//load ar archive
+	/*OK*/ info*  ar(char* x);			//load ar archive
 }
 ///</define>
 
