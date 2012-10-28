@@ -12,7 +12,6 @@
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"
-#include "XZresource.hh"
 #include "XZsystem.hh"
 #include "XZfrmbuf.hh"
 ///</include>

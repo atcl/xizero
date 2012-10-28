@@ -32,11 +32,11 @@ class object
 		/*OK*/ object(const char* o);
 		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
 		/*OK*/ object(const object& o);
-		       ~object();
+		/*OK*/ ~object();
 		/*OK*/ fvector* docktype(sint i,sint j) const;
 		/*OK*/ void update(const fmatrix& m=object::linear,bool j=1);
 		/*OK*/ void display(const lvector& p,sint f) const;
-		/*OK*/ void pull(fixed x);
+		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
 		/*OK*/ inline fixed bounding() const { return bound; }
 
@@ -235,7 +235,7 @@ void object::display(const lvector& p,sint f) const
 	}
 }
 
-void object::pull(fixed x) //translate along normals
+void object::pull(fixed x)
 {
 	for(sint i=0;i<polys;++i)
 	{

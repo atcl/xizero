@@ -180,7 +180,7 @@ char* string::repl(const char* x,char y,char z)
 	return r;
 }
 
-char** string::split(const char* x,char y) //while to for
+char** string::split(const char* x,char y) //optimize if!
 {
 	const sint c = count(x,y)+1;
 	char* s = repl(x,y,0);

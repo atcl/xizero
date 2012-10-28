@@ -21,7 +21,6 @@
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
-#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -114,7 +113,7 @@ void screen::init(void* c)
 	nu = new char[256];
 	tcgetattr(STDIN_FILENO,&oc);
 	nc = oc;
-	nc.c_lflag &= ~(ICANON|ECHO|ISIG);
+	nc.c_lflag &= ~(ICANON|ECHO);
 	//nc.c_cc[VMIN] = 4;
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);

@@ -4,7 +4,7 @@
 // XZfixed.hh
 // Fixed Point 16.16 Type Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: literals to signed"
+//#pragma message "Compiling " __FILE__ "..." " TODO: "
 ///</header>
 
 ///<include>

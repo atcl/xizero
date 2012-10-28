@@ -23,6 +23,7 @@
 #include "src/XZgfx.hh"
 #include "src/XZvector.hh"
 //Level 4
+#include "src/XZfont.hh"
 #include "src/XZgame.hh"
 #include "src/XZlight.hh"
 #include "src/XZmatrix.hh"
@@ -30,7 +31,6 @@
 #include "src/XZtrans.hh"
 //Level 5
 #include "src/XZbutton.hh"
-#include "src/XZfont.hh"
 #include "src/XZpolygon.hh"
 //Level 6
 #include "src/XZobject.hh"
