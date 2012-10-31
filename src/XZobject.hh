@@ -134,12 +134,23 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 	//compute bounding circle
 	bbox[0].z = bbox[1].z = bbox[2].z = bbox[3].z = 0;
-	const fixed p = fx::l2f((bbox[1]-bbox[0]).length()+(bbox[3]-bbox[2]).length());
-	const fixed q = fx::l2f((bbox[2]-bbox[1]).length()+(bbox[0]-bbox[3]).length());
-	const fixed a = fx::l2f(((bbox[3]-bbox[1]).cross(bbox[2]-bbox[0])).length())>>1;
-	bound = fx::div(a,math::min(p,q));
+	//const fixed p = fx::l2f((bbox[1]-bbox[0]).length()+(bbox[3]-bbox[2]).length());
+	//const fixed q = fx::l2f((bbox[2]-bbox[1]).length()+(bbox[0]-bbox[3]).length());
+	//const fixed a = fx::l2f(((bbox[3]-bbox[1]).cross(bbox[2]-bbox[0])).length())>>1;
+	//bound = fx::div(a,math::min(p,q));
 
 	//bound = fx::l2f(math::min((bbox[2].x-bbox[0].x)>>1,(bbox[3].y-bbox[1].y)>>1));
+
+	//
+	const fixed a = fx::sqr(fx::l2f((bbox[1]-bbox[0]).dot(bbox[1]-bbox[0]))); alerf(a);
+	const fixed b = fx::sqr(fx::l2f((bbox[2]-bbox[1]).dot(bbox[2]-bbox[1]))); alerf(b);
+	const fixed c = fx::sqr(fx::l2f((bbox[3]-bbox[2]).dot(bbox[3]-bbox[2]))); alerf(c);
+	const fixed d = fx::sqr(fx::l2f((bbox[0]-bbox[3]).dot(bbox[0]-bbox[3]))); alerf(d);
+	const fixed e = fx::l2f((bbox[2]-bbox[0]).dot(bbox[2]-bbox[0])); alerf(e);
+	const fixed f = fx::l2f((bbox[3]-bbox[1]).dot(bbox[3]-bbox[1])); alerf(f);
+	const fixed g = fx::mul(a,c)-fx::mul(b,d); alerf(g);
+	bound = fx::div(fx::sqr(fx::mul(e,f)-fx::mul(g,g)),a+b+c+d);
+	//*
 
 alerf(bound);
 	//*

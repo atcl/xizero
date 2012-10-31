@@ -4,7 +4,7 @@
 // XZfrmbuf.hh
 // Direct Framebuffer Access and Input Handling Library
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: mouse"
+//#pragma message "Compiling " __FILE__ "..." " TODO: joypad"
 ///</header>
 
 ///<include>
@@ -53,21 +53,18 @@ namespace screen
 
 	namespace
 	{
-		void* cs = 0;				//cursor image
-		uint tk = 0;				//turbo key
-		uint kk = 0;				//keyboard key
-		uint ms = uint((XRES/2)<<16)+uint(YRES/2);//compressend mouse data
+		void* cs = 0;					//cursor image
+		uint  tk = 0;					//turbo key
+		uint  kk = 0;					//keyboard key
+		uint  ms = uint((XRES/2)<<16)+uint(YRES/2);	//compressend mouse data
+		uint  ls = 0;					//.
+		char* nu = 0;					//.
 
-		uint last = 0;
-		char* nu = 0;
+		termios nc;					//new terminal config
+		termios oc;					//old terminal config
 
-		termios nc;			//new terminal config
-		termios oc;			//old terminal config
-
-		uint fd;			//framebuffer device handle
-		void* fp;			//framebuffer pointer
-		//void* fb[2];
-		//uint wh = 0;
+		uint  fd;					//framebuffer device handle
+		void* fp;					//framebuffer pointer
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
@@ -78,7 +75,8 @@ namespace screen
 	void init(void* c);
 	void set();
 	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	void flush()		{ /*frame.swap(back);*/ /*fp = mmap(fb[wh],XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0); wh=!wh;*/ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	//void flush()		{ frame.swap(back); munmap(fp,XRES*YRES*4); fp = mmap(0,XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0); frame.pointer(fp); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -86,7 +84,7 @@ namespace screen
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
 	void wait(uint k)	{ while(k!=kk) { event(); } }
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
-	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=last&&o==1) { last=t+FPS; t=f>>2; f=0; return t; } return -1; } 
+	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline uint  key()	{ const uint r=kk; kk=0; return r; }
@@ -117,11 +115,8 @@ void screen::init(void* c)
 	//nc.c_cc[VMIN] = 4;
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
-	last = time()+4000;
+	ls = time()+4000;
 	atexit(close);
-
-	//fb[0] = frame.pointer();
-	//fb[1] = back.pointer();
 }
 
 void screen::event()
@@ -159,7 +154,7 @@ void screen::set()
 	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo);
 	error(g<0,"Error: Could not write variable framebuffer info");
 
-	fp = mmap(0,XRES*YRES*4,PROT_READ | PROT_WRITE, MAP_SHARED,fd,0);
+	fp = mmap(0,XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
 	error(fp==MAP_FAILED,"Error: Could not map buffer object!");
 
 	frame.pointer(fp);
