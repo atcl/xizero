@@ -1,3 +1,6 @@
 #!/bin/sh
 
-dtrace -x ustackframes=100 -n 'profile-997 /execname == "xizero" && arg1/ { @[ustack()] = count(); } tick-60s { printa(@); exit(0); }' -o /tmp/dtrace.out
+dtrace -n 'profile-1001 /execname == "conky"/ { @[ustack()] = count(); }'
+#dtrace -n 'syscall:::entry /execname == "top"/ { @num[probefunc] = count(); } syscall::rexit:entry /execname == "top"/ { exit(0); }'
+#dtrace -x ustackframes=100 -n 'profile-997 /execname == "top"/ { @s[ustack()] = count(); } tick-10s { printa(@s); exit(0); }' 
+#-o /tmp/dtrace.out

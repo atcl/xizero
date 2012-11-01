@@ -23,7 +23,7 @@ class buffer
 		buffer(const buffer& b);
 		buffer& operator=(const buffer& b);
 	public:
-		/*OK*/ buffer(uint s,uint a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned_new(16,bytes); clear(); } } 
+		/*OK*/ buffer(uint s,uint a=0) : tsize(s),bytes((tsize<<2)+(tsize&31)),later(a),data(0) { if(a==0) { data = (sint*)aligned_new(4096,bytes); clear(); } } 
 		/*OK*/ ~buffer() { if(later==0) { free(data); } }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }

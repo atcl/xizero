@@ -46,7 +46,7 @@
 ///<define>
 namespace screen
 {
-	buffer frame(XRES*YRES,1);	//Video Memory Front Buffer
+	buffer frame(XRES*YRES);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
@@ -64,7 +64,7 @@ namespace screen
 		termios oc;					//old terminal config
 
 		uint  fd;					//framebuffer device handle
-		void* fp;					//framebuffer pointer
+		uint  gd;					//gamepad device handle
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
@@ -76,7 +76,7 @@ namespace screen
 	void set();
 	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	//void flush()		{ frame.swap(back); munmap(fp,XRES*YRES*4); fp = mmap(0,XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0); frame.pointer(fp); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	//void flush()		{ frame.swap(back); mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -154,10 +154,8 @@ void screen::set()
 	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo);
 	error(g<0,"Error: Could not write variable framebuffer info");
 
-	fp = mmap(0,XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
-	error(fp==MAP_FAILED,"Error: Could not map buffer object!");
-
-	frame.pointer(fp);
+	const void* h = mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0);
+	error(h==MAP_FAILED,"Error: Could not map buffer object!");
 }
 
 void screen::close()
@@ -165,7 +163,7 @@ void screen::close()
 	back.clear();
 	_flush();
 	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
-	munmap(fp,XRES*YRES*4);
+	//munmap(fp,XRES*YRES*4);
 	oinfo.activate = FB_ACTIVATE_NOW;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
