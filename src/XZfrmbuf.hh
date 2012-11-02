@@ -76,7 +76,7 @@ namespace screen
 	void set();
 	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	//void flush()		{ frame.swap(back); mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	//void flush()		{ mremap(frame.pointer(),XRES*YRES*4,XRES*YRES*4,MREMAP_FIXED,back.pointer()); frame.swap(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
 	void event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
