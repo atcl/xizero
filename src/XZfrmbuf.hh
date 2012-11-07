@@ -74,9 +74,8 @@ namespace screen
 	uint kbhit();
 	void init(void* c);
 	void set();
-	void _flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	void flush()		{ frame.copy(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
-	//void flush()		{ mremap(frame.pointer(),XRES*YRES*4,XRES*YRES*4,MREMAP_FIXED,back.pointer()); frame.swap(back); ioctl(fd,FBIOPAN_DISPLAY,&vinfo); }
+	void _flush()		{ frame.copy(back); }
+	void flush()		{ frame.copy(back); }
 	void event();
 	void close();
 	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
@@ -156,6 +155,9 @@ void screen::set()
 
 	const void* h = mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0);
 	error(h==MAP_FAILED,"Error: Could not map buffer object!");
+
+	const sint i = ioctl(fd,FBIOPAN_DISPLAY,&vinfo);
+	error(i<0,"Error: Could not report changes to kernel");
 }
 
 void screen::close()
@@ -163,7 +165,7 @@ void screen::close()
 	back.clear();
 	_flush();
 	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
-	//munmap(fp,XRES*YRES*4);
+	munmap(frame.pointer(),XRES*YRES*4);
 	oinfo.activate = FB_ACTIVATE_NOW;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
