@@ -33,7 +33,7 @@ class entity
 {
 	private:
 		static const fmatrix rot[2];
-		static const fmatrix exp[2];
+		static const fmatrix exp;
 		static list  ammos[2];
 		static fixed ymark;
 
@@ -77,7 +77,7 @@ class entity
 
 ///<code>
 const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }() };
-const fmatrix entity::exp[2]   = { []()->fmatrix { fmatrix m; /*m.dyadic(fvector(FXONE,FXONE,FXONE),fvector(FXONE,FXONE,FXONE));*/ return m; }(),[]()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }() };
+const fmatrix entity::exp      = []()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }();
 list          entity::ammos[2] = { list(), list() };
 fixed         entity::ymark    = 0;
 
@@ -242,7 +242,7 @@ sint entity::update()
 
 	ifu(health==0)
 	{
-		model[0]->update(exp[death!=0],death==0);
+		model[0]->update(exp,death==0);
 		return health-=(death++>250);		
 	}
 

@@ -132,17 +132,17 @@ void polygon::raster(bool s,uint c) const
 	const fixed zy = math::abs(fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny)));
 	      fixed ty = lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx);
 
-	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y,off+=str,ty+=zy)
+	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y)
 	{
 		sint cx[3]{cy[0],cy[1],cy[2]};
 
 		fixed tx = ty;
 
 		#pragma prefetch back
-		for(sint x=minx;x<maxx;++x,++off,tx+=zx) 
+		for(sint x=minx;x<maxx;++x) 
 		{
 			//__builtin_prefetch(back[off],1,0123);
-			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s)&&(tx>screen::depth[off]) ) )
+			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (tx>screen::depth[off]) ) )
 			{
 				case 1: screen::depth[off] = tx;
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;
@@ -151,11 +151,15 @@ void polygon::raster(bool s,uint c) const
 			cx[0] -= dy[0];
 			cx[1] -= dy[1];
 			cx[2] -= dy[2];
+			++off;
+			tx += zx;
 		}
 
 		cy[0] += dx[0];
 		cy[1] += dx[1];
 		cy[2] += dx[2];
+		off +=str;
+		ty += zy;
 	}
 }
 
