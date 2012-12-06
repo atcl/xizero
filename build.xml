@@ -27,7 +27,8 @@
 			<flag>-march=atom -mtune=atom <!-- -march=native -mtune=native --> -m32</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-static -nostdlib</flag-->
-			<flag>-g</flag><!--flag>-s</flag-->
+			<flag>-g</flag>
+			<!--flag>-s</flag-->
 
 			<lflag>-flto <!---Wl,-file-alignment4096--></lflag>
 		</flags>

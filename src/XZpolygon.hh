@@ -170,10 +170,10 @@ polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cp
 
 void polygon::update(const fmatrix& m,bool i)
 {
-	cpoint[i] = m*cpoint[i];
-	cpoint[0] = m*cpoint[0];
-	cpoint[2] = m*cpoint[2];
-	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) *= FXCEN;
+	cpoint[i] = std::move(m*cpoint[i]);
+	cpoint[0] = std::move(m*cpoint[0]);
+	cpoint[2] = std::move(m*cpoint[2]);
+	cnormal   = std::move((cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) *= FXCEN);
 	cnormal.e = cnormal.length();
 }
 
@@ -184,15 +184,15 @@ void polygon::display(const lvector& p,sint f,uint c)
 
 	if( f&R_B )
 	{
-		lpoint[0] = project(p,shadow*cpoint[0]);
-		lpoint[1] = project(p,shadow*cpoint[1]);
-		lpoint[2] = project(p,shadow*cpoint[2]);
+		lpoint[0] = std::move(project(p,shadow*cpoint[0]));
+		lpoint[1] = std::move(project(p,shadow*cpoint[1]));
+		lpoint[2] = std::move(project(p,shadow*cpoint[2]));
 	}
 	else
 	{
-		lpoint[0] = project(p,cpoint[0]);
-		lpoint[1] = project(p,cpoint[1]);
-		lpoint[2] = project(p,cpoint[2]);
+		lpoint[0] = std::move(project(p,cpoint[0]));
+		lpoint[1] = std::move(project(p,cpoint[1]));
+		lpoint[2] = std::move(project(p,cpoint[2]));
 		if((f&R_S)!=0) { shape(); return; }
 		if((f&R_F)!=0) { c = flat(p.z,f); } 
 	}
@@ -202,8 +202,8 @@ void polygon::display(const lvector& p,sint f,uint c)
 
 void polygon::pull(fixed a)
 {
-	const fixed l = fx::mul(fx::div(FXONE,cnormal.length()),a);
-	const fvector m = (cnormal*l);
+	const fixed   l = fx::mul(fx::div(FXONE,cnormal.length()),a);
+	const fvector m = std::move(cnormal*l);
 	cpoint[0] += m;
 	cpoint[1] += m;
 	cpoint[2] += m;

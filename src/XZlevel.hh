@@ -4,7 +4,7 @@
 // XZlevel.hh
 // Level Class 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: ."
+//#pragma message "Compiling " __FILE__ "..." " TODO: Bumpmapped Terrain"
 ///</header>
 
 ///<include>
@@ -108,23 +108,6 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	markmin = (l*BWIDTH)-YMAX;
 
-//
-	terrain = new byte[l*BWIDTH*LWIDTH];
-	for(sint i=0;i<l;++i)
-	{
-		for(sint j=0;j<BWIDTH;++j)
-		{
-			for(sint k=0;k<LWIDTH;++k)
-			{
-				for(sint l=0;l<BWIDTH;++l)
-				{
-
-				}
-			}
-		}
-	}
-//
-
 	terrain    = new object*[l];
 	lvector* a = new lvector[LWIDTH];
 	lvector* b = new lvector[LWIDTH];
@@ -190,6 +173,8 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 					enemies.append(enemy);
 				break;
 			}
+
+			//map[i][j] = string::toup(map[i][j])-'A';
 		}
 		//*
 

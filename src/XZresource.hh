@@ -8,7 +8,7 @@
 ///</header>
 
 ///<include>
-#include "XZbasic.hh"
+//#include "XZbasic.hh"
 ///</include>
 
 ///<define>
