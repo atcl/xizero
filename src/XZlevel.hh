@@ -118,38 +118,6 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	for(sint i=0,k=0;i<l;++i,k=0)
 	{
-		//load terrain stripe
-		sint v = CSHIFT;
-		for(sint j=1;j<LWIDTH;++j,v+=BWIDTH)		
-		{
-			a[k].set( v,       -(BWIDTH>>1),(string::toup(map[i+1][j-1])-'A')*BHEIGHT );
-			b[k].set( v,         BWIDTH>>1, (string::toup(map[i][j-1])  -'A')*BHEIGHT );
-			c[k].set( v+BWIDTH,  BWIDTH>>1, (string::toup(map[i][j])    -'A')*BHEIGHT );
-			d[k].set( v+BWIDTH,-(BWIDTH>>1),(string::toup(map[i+1][j])  -'A')*BHEIGHT );
-
-			if(a[k].z==d[k].z && b[k].z==c[k].z)
-			{
-				++j;
-				v+=2*BWIDTH; 
-				for(;j<LWIDTH;++j,v+=BWIDTH)
-				{
-					e.set( v,  BWIDTH>>1, (string::toup(map[i][j])  -'A')*BHEIGHT );
-					f.set( v,-(BWIDTH>>1),(string::toup(map[i+1][j])-'A')*BHEIGHT );
-					if(c[k].z==e.z && d[k].z==f.z)
-					{
-						c[k] = e;
-						d[k] = f;
-					}
-					else break;
-				}
-				v-=2*BWIDTH;
-				--j;
-			}
-
-			k += (a[k].z!=0 || b[k].z!=0 || c[k].z!=0 || d[k].z!=0);
-		}
-		//*
-
 		//load entities
 		for(sint j=0;j<LWIDTH;++j)
 		{
@@ -174,7 +142,39 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 				break;
 			}
 
-			//map[i][j] = string::toup(map[i][j])-'A';
+			map[i][j] = string::toup(map[i][j])-'A';
+		}
+		//*
+
+		//load terrain stripe
+		sint v = CSHIFT;
+		for(sint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
+		{
+			a[k].set( v,       -(BWIDTH>>1),(map[i][j-1])  *BHEIGHT );
+			b[k].set( v,         BWIDTH>>1, (map[i-1][j-1])*BHEIGHT );
+			c[k].set( v+BWIDTH,  BWIDTH>>1, (map[i-1][j])  *BHEIGHT );
+			d[k].set( v+BWIDTH,-(BWIDTH>>1),(map[i][j])    *BHEIGHT );
+
+			if(a[k].z==d[k].z && b[k].z==c[k].z)
+			{
+				++j;
+				v+=2*BWIDTH; 
+				for(;j<LWIDTH;++j,v+=BWIDTH)
+				{
+					e.set( v,  BWIDTH>>1, (map[i-1][j])*BHEIGHT );
+					f.set( v,-(BWIDTH>>1),(map[i][j])  *BHEIGHT );
+					if(c[k].z==e.z && d[k].z==f.z)
+					{
+						c[k] = e;
+						d[k] = f;
+					}
+					else break;
+				}
+				v-=2*BWIDTH;
+				--j;
+			}
+
+			k += (a[k].z!=0 || b[k].z!=0 || c[k].z!=0 || d[k].z!=0);
 		}
 		//*
 

@@ -13,8 +13,14 @@ default all:
 	$(CXX) $(SRC) -o $(EXE) $(INC) $(LIB) $(DEF) $(SSE) $(OPT) $(REL)
 
 test:
-	scan-build -o /tmp   gcc $(SRC) -o $(BIN) $(INC) $(LIB) $(DEF) $(OPT) $(DBG)
-	scan-build -o /tmp clang $(SRC) -o $(BIN) $(INC) $(LIB) $(DEF) $(OPT) $(DBG)
-	cppcheck -a -v -s $(SRC)
+	scan-build -o /tmp   gcc $(SRC) -o $(BIN) $(INC) $(LIB) $(DEF) $(OPT) $(WRN) $(DBG)
+	scan-build -o /tmp clang $(SRC) -o $(BIN) $(INC) $(LIB) $(DEF) $(OPT) $(WRN) $(DBG)
+	cppcheck --enable=all --enable=style --enable=performance --std=c++11 -v $(SRC)
 	ldd $(BIN)
+
+check:
+	touch $(EXE).perf
+	echo -n $$( date +"%d.%m.%Y | %H%M | " ) >> $(EXE).perf
+	/usr/bin/time -f " %C | %U | %M" -a -o $(EXE).perf ./$(EXE) > /dev/null
+
 
