@@ -140,7 +140,7 @@ void intro()
 	object b[4] = { q,object(q),object(q),object(q) };
 
 	lvector p(400,300,100);
-	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);  c.update();
+	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);     c.update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
 	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(-30),0); b[2].update();
@@ -159,7 +159,7 @@ void intro()
 		const sint diff = curr-last;
 		switch( diff/200 )
 		{
-			case 0 ... 9: object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
+			case 0 ... 9:   object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
 			case 10 ... 14: object::linear.rotatex(fx::mul(fx::l2f(14),prog));       break;
 			case 15 ... 19: object::linear.translate(0,0,fx::mul(fx::l2f(50),prog)); break;
 		}

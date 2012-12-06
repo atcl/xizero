@@ -163,6 +163,7 @@ void screen::set()
 void screen::close()
 {
 	back.clear();
+	//"press CTRL ALT F1\n  then CTRL ALT F7"
 	_flush();
 	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);

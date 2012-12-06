@@ -73,7 +73,7 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 				<xsl:value-of select=\"binary/name\"/>
 				<xsl:text> &#38;&#38; echo &#34;</xsl:text>
 				<xsl:value-of select=\"message\"/>
-				<xsl:text>&#34;</xsl:text>
+				<xsl:text> &#34;</xsl:text>
 				<xsl:value-of select=\"action\"/>
 				<xsl:text> </xsl:text>
 			</xsl:if>

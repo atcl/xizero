@@ -176,15 +176,15 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 		case RIGHT:
 			model[0]->update(rot[0]);
 			model[1]->update(rot[0]);
-			direction[0] = std::move(rot[0]*direction[0]);
-			direction[1] = std::move(rot[0]*direction[1]);
+			direction[0] = mov(rot[0]*direction[0]);
+			direction[1] = mov(rot[0]*direction[1]);
 		break;
 
 		case LEFT:
 			model[0]->update(rot[1]);
 			model[1]->update(rot[1]);
-			direction[0] = std::move(rot[1]*direction[0]);
-			direction[1] = std::move(rot[1]*direction[1]);
+			direction[0] = mov(rot[1]*direction[0]);
+			direction[1] = mov(rot[1]*direction[1]);
 		break;
 
 		case UP:
@@ -198,19 +198,19 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 		case 'a':
 			model[1]->update(rot[0]);
 			angle += ROTANG;
-			direction[1] = std::move(rot[0]*direction[1]);
+			direction[1] = mov(rot[0]*direction[1]);
 		break;
 
 		case 'd':
 			model[1]->update(rot[1]);
 			angle -= ROTANG;
-			direction[1] = std::move(rot[1]*direction[1]);
+			direction[1] = mov(rot[1]*direction[1]);
 		break;
 
 		case 'w':
 			model[1]->update(rot[mat]);
 			angle += math::neg(ROTANG,mat);
-			direction[1] = std::move(rot[mat]*direction[1]);
+			direction[1] = mov(rot[mat]*direction[1]);
 		break;
 
 		case SPACE:

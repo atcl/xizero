@@ -38,7 +38,7 @@ namespace gfx
 ///</define>
 
 ///<code>
-void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k) //optimize!
+void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k) //TODO: optimize!
 {
 	guard( ((x<0)&&(a<0)) || ((x>XRES)&&(a>XRES)) || ((y<0)&&(b<0)) || ((y>YRES)&&(b>YRES)) );
 
@@ -75,9 +75,9 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k) //optimize!
 		{
 			const sint p = math::min(x,a);
 			const sint q = math::max(x,a);
-			for(sint i=p,o=y*XRES+p;i<=q;++i,++o)
+			for(sint i=p,o=y*XRES+p;i<=q;++i)
 			{
-				screen::back[o] = c;
+				screen::back[o++] = c;
 			}
 		}
 		break;
