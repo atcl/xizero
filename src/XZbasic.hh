@@ -9,8 +9,7 @@
 
 ///<include>
 #include <cstdint>
-#include <cstdlib> //malloc,free ///here should also be aligned_alloc
-#include <malloc.h>
+#include <cstdlib> //malloc,free,posix_memalign
 #include <utility>
 ///</include>
 
@@ -118,7 +117,7 @@ union packed
 
 ///<code>
 //global new + delete overloading
-inline void* aligned_new(uint a,uint s) { return memalign(a,s); } //use aligned_alloc
+inline void* aligned_new(uint a,uint s) { void* r; posix_memalign(&r,a,s); return r; }
 inline void* operator new(uint s)       { return malloc(s); }
 inline void* operator new[](uint s)     { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }

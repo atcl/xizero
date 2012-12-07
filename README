@@ -36,7 +36,9 @@
 
 - 32bit Z-Buffer
 - Cordic Fixed Point Math
+- No Floating Point Operations
 - Minimal Branching
+- Minimal Dependencies
 - Only human readable, non binary, data
 - Framebuffer (independence from X,Wayland,OpenGL,DirectFB)
 - Dyadic Explosions
