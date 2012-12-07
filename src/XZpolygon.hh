@@ -120,46 +120,45 @@ void polygon::raster(bool s,uint c) const
 
 	guard( (maxx==minx) || (maxy==miny) );
 
-	const sint dx[3]{lpoint[0].x-lpoint[1].x,lpoint[1].x-lpoint[2].x,lpoint[2].x-lpoint[0].x};
-	const sint dy[3]{lpoint[0].y-lpoint[1].y,lpoint[1].y-lpoint[2].y,lpoint[2].y-lpoint[0].y};
-
-	sint cy[3]{dy[0]*(lpoint[0].x - minx) + dx[0]*(miny - lpoint[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
-	           dy[1]*(lpoint[1].x - minx) + dx[1]*(miny - lpoint[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
-	           dy[2]*(lpoint[2].x - minx) + dx[2]*(miny - lpoint[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0))}; 
-
-	const sint str = XRES - (maxx-minx);
-
 	const fixed zx = math::abs(fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx)));
 	const fixed zy = math::abs(fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny)));
-	      fixed ty = lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx);
+
+	const sint dx[4]{lpoint[0].x-lpoint[1].x,lpoint[1].x-lpoint[2].x,lpoint[2].x-lpoint[0].x,-zx};
+	const sint dy[4]{lpoint[0].y-lpoint[1].y,lpoint[1].y-lpoint[2].y,lpoint[2].y-lpoint[0].y,zy};
+
+	sint cy[4]{dy[0]*(lpoint[0].x - minx) + dx[0]*(miny - lpoint[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
+	           dy[1]*(lpoint[1].x - minx) + dx[1]*(miny - lpoint[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
+	           dy[2]*(lpoint[2].x - minx) + dx[2]*(miny - lpoint[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
+	           lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx)}; 
+
+	const sint str = XRES - (maxx-minx);
+	//uint* back = screen::back.pointer();
 
 	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y)
 	{
-		sint cx[3]{cy[0],cy[1],cy[2]};
+		sint cx[4]{cy[0],cy[1],cy[2],cy[3]};
 
-		fixed tx = ty;
-
-		#pragma prefetch back.pointer
+		#pragma prefetch back
 		for(sint x=minx;x<maxx;++x) 
 		{
-			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (tx>screen::depth[off]) ) )
+			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (cx[3]>screen::depth[off]) ) )
 			{
-				case 1: screen::depth[off] = tx;
+				case 1: screen::depth[off] = cx[3];
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;
 			}
 
 			cx[0] -= dy[0];
 			cx[1] -= dy[1];
 			cx[2] -= dy[2];
+			cx[3] -= dy[3];
 			++off;
-			tx += zx;
 		}
 
 		cy[0] += dx[0];
 		cy[1] += dx[1];
 		cy[2] += dx[2];
-		off +=str;
-		ty += zy;
+		cy[3] += dx[3];
+		off   += str;
 	}
 }
 
