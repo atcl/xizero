@@ -8,19 +8,20 @@
 ///</header>
 
 ///<include>
-#include <cstdio>	//atexit
 #include <time.h>	//clock,CLOCKS_PER_SEC
-#include <fcntl.h>
-#include <unistd.h>
-#include <termios.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <linux/fb.h>
+#include <fcntl.h>	//open,close,O_RDWR
+#include <unistd.h>	//STDIN_FILENO
+#include <termios.h>	//tcgetattr,tcsetattr,ICANON,ECHO,TCSANOW
+#include <sys/mman.h>	//mmap,munmap,PROT_READ,PROT_WRITE,MAP_SHARED,MAP_FIXED,MAP_FAILED
+#include <sys/ioctl.h>	//ioctl,FIONREAD
+#include <linux/fb.h>	//FBIOGET_FSCREENINFO,FBIOGET_VSCREENINFO,FBIOPUT_VSCREENINFO,FBIOPAN_DISPLAY,FB_ACTIVATE_NOW
 
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
+
+#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -63,8 +64,8 @@ namespace screen
 		termios nc;					//new terminal config
 		termios oc;					//old terminal config
 
-		uint  fd;					//framebuffer device handle
-		uint  gd;					//gamepad device handle
+		sint  fd;					//framebuffer device handle
+		sint  gd;					//gamepad device handle
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
@@ -78,7 +79,6 @@ namespace screen
 	void flush()		{ frame.copy(back); }
 	void event();
 	void close();
-	void error(bool c,const char* m) { if(c) { system::say(m,1); screen::close(); system::bye(1); } }
 
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
 	void wait(uint k)	{ while(k!=kk) { event(); } }
@@ -115,7 +115,7 @@ void screen::init(void* c)
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	ls = time()+4000;
-	atexit(close);
+	system::ifx(close);
 }
 
 void screen::event()
@@ -141,29 +141,19 @@ void screen::event()
 
 void screen::set()
 {
-        fd = open(FB_DEV,O_RDWR);
-	error(fd<=0,"Error: Could not open framebuffer device");
-
-	const sint e = ioctl(fd,FBIOGET_FSCREENINFO,&finfo);
-	error(e<0,"Error: Could not read fixed framebuffer info");
-
-	const sint f = ioctl(fd,FBIOGET_VSCREENINFO,&oinfo);
-	error(f<0,"Error: Could not read variable framebuffer info");
-
-	const sint g = ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo);
-	error(g<0,"Error: Could not write variable framebuffer info");
-
-	const void* h = mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0);
-	error(h==MAP_FAILED,"Error: Could not map buffer object!");
-
-	const sint i = ioctl(fd,FBIOPAN_DISPLAY,&vinfo);
-	error(i<0,"Error: Could not report changes to kernel");
+        system::err((fd=open(FB_DEV,O_RDWR))<=0,"ERROR: Could not open framebuffer device");
+	system::err(ioctl(fd,FBIOGET_FSCREENINFO,&finfo)<0,"ERROR: Could not read fixed framebuffer info");
+	system::err(ioctl(fd,FBIOGET_VSCREENINFO,&oinfo)<0,"ERROR: Could not read variable framebuffer info");
+	system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
+	system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
+	system::err(ioctl(fd,FBIOPAN_DISPLAY,&vinfo)<0,"ERROR: Could not report changes to kernel");
+alert(finfo.smem_len);
 }
 
 void screen::close()
 {
 	back.clear();
-	//"press CTRL ALT F1\n  then CTRL ALT F7"
+	//"press CTRL ALT F1\n then CTRL ALT F7"
 	_flush();
 	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);

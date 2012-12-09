@@ -25,7 +25,6 @@
 	#define prefetch(x) __builtin_prefetch(x)
 	#define ifl(x)   if(__builtin_expect(!!(x),1))
 	#define ifu(x)   if(__builtin_expect(!!(x),0))
-	#define restrict    __restrict__
 
 	#ifdef ALWAYS
 		#define inline __attribute__((always_inline)) inline
@@ -38,7 +37,6 @@
 	#define prefetch(x)
 	#define ifl(x)   if(x)
 	#define ifu(x)   if(x)
-	#define restrict
 #endif 
 
 #define mov(x) std::move(x)

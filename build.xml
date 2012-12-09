@@ -17,9 +17,9 @@
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
 			<define>ALWAYS</define>
-			<define>SSE</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
+			<define>SSE</define>
 		</defines>
 		<flags>
 			<flag>-O2 -pipe -falign-loops</flag>
@@ -61,9 +61,9 @@
 			<define>YRES=600</define>
 		</defines>
 		<flags>
-			<flag>-O2 -pipe -falign-loops -fomit-frame-pointer -fwhole-program</flag>
+			<flag>-O2 -pipe -falign-loops -fomit-frame-pointer</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
-			<flag>-march=atom -mtune=atom <!-- -march=native -mtune=native --> -m32</flag>
+			<flag>-march=native -mtune=native -m32</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<flag>-s</flag>
 

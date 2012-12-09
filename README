@@ -39,7 +39,7 @@
 - No Floating Point Operations
 - Minimal Branching
 - Minimal Dependencies
-- Only human readable, non binary, data
+- Only human readable, non-binary, data
 - Framebuffer (independence from X,Wayland,OpenGL,DirectFB)
 - Dyadic Explosions
 

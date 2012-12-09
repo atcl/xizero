@@ -4,7 +4,7 @@
 // XZbuffer.hh
 // Buffer Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: FSMB, emissive glow"
+//#pragma message "Compiling " __FILE__ "..." " TODO: emissive glow"
 ///</header>
 
 ///<include>
@@ -16,8 +16,8 @@
 class buffer
 {
 	private:
-		const uint tsize;	//size in typesize
-		const uint bytes;	//size in bytes
+		const uint  tsize;	//size in typesize
+		const uint  bytes;	//size in bytes
 		      sint* data;	//pointer to data
 		buffer(const buffer& b);
 		buffer& operator=(const buffer& b);
@@ -63,7 +63,7 @@ void buffer::clear(sint x)
 #endif
 }
 
-void buffer::fsaamb(const buffer& b)
+void buffer::fsaamb(const buffer& b) //TODO: motion-blur
 {
 #ifdef SSE
 	__asm__ __volatile__ (

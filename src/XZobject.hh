@@ -52,7 +52,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 	char** t = format::csv(o);
 	sint i = 0;
 
-	if(string::find(t[i++],"<y3dtxt>")==-1) { system::say("Error: y3d format wrong (head)",1); system::bye(-1); }
+	system::err(string::find(t[i++],"<y3dtxt>")==-1,"ERROR: y3d format wrong (head)");
 
 	polys = string::str2int(t[i++]); 
 	polys += 2*string::str2int(t[i++]); 
@@ -62,7 +62,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 	lvector bbox[4];
 
-	if(string::find(t[i++],"objt")==-1) { system::say("Error: y3d format wrong (objt)",1); system::bye(-1); }
+	system::err(string::find(t[i++],"objt")==-1,"ERROR: y3d format wrong (objt)");
 
 	const sint subs = string::str2int(t[i++]);
 	/*char* oid = t[i++];*/ i++;
@@ -72,19 +72,19 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 	sint dc = 0;
 	for(sint j=0;j<subs;++j)
 	{
-		if(string::find(t[i++],"sobj")==-1) { system::say("Error: y3d format wrong (sobj)",1); system::bye(-1); }
+		system::err(string::find(t[i++],"sobj")==-1,"ERROR: y3d format wrong (sobj)");
 
 		const sint p = string::str2int(t[i++]);
 		/*char* sid = t[i++];*/ i++;
 		const sint d = string::str2int(t[i++]);
 
-		if(string::find(t[i++],"posi")==-1) { system::say("Error: y3d format wrong (posi)",1); system::bye(-1); }
+		system::err(string::find(t[i++],"posi")==-1,"ERROR: y3d format wrong (posi)");
 
 		lvector pos(string::str2int(t[i]),string::str2int(t[i+1]),string::str2int(t[i+2])); i+=3;
 		lvector x[4];
 		for(sint k=0;k<p;++k)
 		{
-			if(string::find(t[i++],"poly")==-1) { system::say("Error: y3d format wrong (poly)",1); system::bye(-1); }
+			system::err(string::find(t[i++],"poly")==-1,"ERROR: y3d format wrong (poly)");
 
 			const sint verts = string::str2int(t[i++]);
 			/*char* pid = t[i++];*/ i++;
@@ -92,7 +92,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 			for(sint l=0;l<3+(verts==4);++l,i+=3)
 			{
-				if(string::find(t[i++],"vert")==-1) { system::say("Error: y3d format wrong (vert)",1); system::bye(-1); }
+				system::err(string::find(t[i++],"vert")==-1,"ERROR: y3d format wrong (vert)");
 
 				x[l].set(pos.x+string::str2int(t[i]),pos.y+string::str2int(t[i+1]),pos.z+string::str2int(t[i+2]));
 			}
@@ -125,7 +125,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 		for(sint k=0;k<d;++k,i+=3,++dc)
 		{
-			if(string::find(t[i++],"dock")==-1) { system::say("Error: y3d format wrong (dock)",1); system::bye(-1); }
+			system::err(string::find(t[i++],"dock")==-1,"ERROR: y3d format wrong (dock)");
 
 			const sint type = string::str2int(t[i++]);
 			dock[dc].set(fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type);

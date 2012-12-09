@@ -41,10 +41,8 @@ void compiled::tracks(uint x,uint y,uint d,uint c)
 	switch(d/5)
 	{
 		case 0:
-			screen::back[o++] = ORANGE; screen::back[o++] = ORANGE; screen::back[o++] = ORANGE;  
-			o += XRES-1;
-			screen::back[o++] = LRED; screen::back[o++] = LRED;  screen::back[o++] = LRED;
-			o += XRES-1;
+			screen::back[o++] = ORANGE; screen::back[o++] = ORANGE; screen::back[o++] = ORANGE; o += XRES-1;
+			screen::back[o++] = LRED;   screen::back[o++] = LRED;   screen::back[o++] = LRED;   o += XRES-1;
 			screen::back[o++] = ORANGE; screen::back[o++] = ORANGE; screen::back[o++] = ORANGE;
 		case 1: ;
 

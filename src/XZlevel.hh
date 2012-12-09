@@ -230,9 +230,9 @@ void level::display()
 	object::linear.clear();
 	object::linear.translate(0,FX(300),0);
 	sint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(uint i=0;i<34;++i,++r)
+	for(uint i=0;i<34;++i)
 	{
-		object temp(*terrain[r]);
+		object temp(*terrain[r++]);
 		temp.update();
 		temp.display(p,R_F);
 		object::linear.translate(0,FX(-20),0);
