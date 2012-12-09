@@ -1,10 +1,9 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // XZentity.hh
 // Entity Class 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: ymark as reference"
 ///</header>
 
 ///<include>
@@ -229,7 +228,7 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 	position.y = math::set(tp.y,position.y,t);
 	position.z = math::set(tp.z,position.z,t); 
 
-	ymark  = position.y;
+	ymark  = position.y; //TODO: ymark as reference
 
 	last = k;
 	lastupdate = curr;

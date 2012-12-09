@@ -1,10 +1,9 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // XZfrmbuf.hh
 // Direct Framebuffer Access and Input Handling Library
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: joypad"
 ///</header>
 
 ///<include>
@@ -29,7 +28,7 @@
 #define FPS 4000
 
 #define FB_DEV "/dev/fb0"
-#define JS_DEV "/dev/js0"
+#define JS_DEV "/dev/input/js0"
 
 #define ESCAPE	27
 #define ENTER	10
@@ -130,7 +129,7 @@ void screen::event()
 	tk = kk = math::set(t.b[2],t.b[0],t.b[1]==91);
 	read(0,&nu,math::min(r-s,256));
 
-	//gamepad 
+	//TODO: gamepad 
 
 	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);		//set bottom word to mouse y
 	mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES)<<16;	//set top word to mouse x

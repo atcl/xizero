@@ -1,10 +1,9 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // XZfixed.hh
 // Fixed Point 16.16 Type Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: "
 ///</header>
 
 ///<include>

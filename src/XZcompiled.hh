@@ -1,10 +1,9 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // XZcompiled.hh
 // Compiled Sprites Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: tracks"
 ///</header>
 
 ///<include>

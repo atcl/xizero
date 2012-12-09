@@ -1,10 +1,9 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // XZmsgbox.hh
 // Dialog Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: yesnobox"
 ///</header>
 
 ///<include>
@@ -24,7 +23,7 @@ namespace dialog
 ///</define>
 
 ///<code>
-sint dialog::msgbox(const char* m,bool q)
+sint dialog::msgbox(const char* m,bool q) //TODO: yesnobox
 {
 	const sint w = font::width(m)+40;
 	const sint h = font::height(m)+60;

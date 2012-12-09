@@ -1,6 +1,6 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // xizero.cc
 // XiZero Main Program
 ///</header>

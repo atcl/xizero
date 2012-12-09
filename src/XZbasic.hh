@@ -1,16 +1,15 @@
 ///<header>
 // atCROSSLEVEL 2010,2011,2012
-// released under zlib/libpng license
+// released under 2-clause BSD license
 // XZbasic.hh
 // Basic Library 
 #pragma once
-//#pragma message "Compiling " __FILE__ "..." " TODO: ."
 ///</header>
 
 ///<include>
-#include <cstdint>
+#include <cstdint> //int32_t,uint32_t
 #include <cstdlib> //malloc,free,posix_memalign
-#include <utility>
+#include <utility> //std::move
 ///</include>
 
 #define FRMBUF
@@ -47,7 +46,7 @@
 #define STR(x) VAL(x)
 
 #define MOUSEX(x) ((x&0x7FFFFFFF)>>16)
-#define MOUSEY(x) (x&0x0000FFFF)
+#define MOUSEY(x)  (x&0x0000FFFF)
 #define MOUSEB(x) ((x&0x80000000)!=0)
 
 #define alert(x) system::say(string::int2str(x),1)
