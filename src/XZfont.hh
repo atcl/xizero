@@ -49,8 +49,6 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 
 	for(sint i=0,o=y*XRES+x,s=f->height*a;i<h;++i,o+=d,s+=sx)
 	{
-		#pragma prefetch data
-		#pragma prefetch back
 		for(sint j=0;j<w;++j,++o,++s)
 		{
 			const uint e = f->data[s];

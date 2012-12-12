@@ -19,8 +19,6 @@
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
-
-#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -68,14 +66,12 @@ namespace screen
 
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
-		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,0,0xFFFFFFFF,0xFFFFFFFF,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
+		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
 	}
 
 	uint kbhit();
 	void init(void* c);
 	void set();
-	void _flush()		{ frame.copy(back); }
-	void flush()		{ frame.copy(back); }
 	void event();
 	void close();
 
@@ -84,6 +80,7 @@ namespace screen
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
+	inline void  flush()	{ frame.copy(back); }
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline uint  key()	{ const uint r=kk; kk=0; return r; }
 	inline uint  turbo()	{ return tk; }
@@ -146,14 +143,13 @@ void screen::set()
 	system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
 	system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
 	system::err(ioctl(fd,FBIOPAN_DISPLAY,&vinfo)<0,"ERROR: Could not report changes to kernel");
-alert(finfo.smem_len);
 }
 
 void screen::close()
 {
 	back.clear();
-	//"press CTRL ALT F1\n then CTRL ALT F7"
-	_flush();
+	//"press CTRL ALT F1\n then  CTRL ALT F7"
+	flush();
 	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);
 	oinfo.activate = FB_ACTIVATE_NOW;

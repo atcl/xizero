@@ -226,7 +226,7 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=m)&&(tp.y+r<=n));
 	position.x = math::set(tp.x,position.x,t);
 	position.y = math::set(tp.y,position.y,t);
-	position.z = math::set(tp.z,position.z,t); 
+	position.z = math::set(tp.z,position.z,t);
 
 	ymark  = position.y; //TODO: ymark as reference
 

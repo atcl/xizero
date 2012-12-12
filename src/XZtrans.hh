@@ -26,30 +26,30 @@ namespace trans
 ///<code>
 void trans::circleblend(sint x,sint y,sint r)
 {
-	for(uint i=0;i<YRES;++i)
+	for(uint i=0,o=0;i<YRES;++i)
 	{
 		const sint p  = (i - y)*(i - y);
 
-		for(uint j=0;j<XRES;++j)
+		for(uint j=0;j<XRES;++j,++o)
 		{
 			const sint q  = (j - x)*(j - x);
-			screen::back[i*XRES+j] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(p+q)<=r);
+			screen::back[o] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(p+q)<=r);
 		}
 	}
-	screen::_flush();
+	screen::flush();
 	screen::sleep(1000);
 }
 
 void trans::dissolve()
 {
-	for(uint i=0;i<500;++i)
+	for(uint i=0;i<YRES;++i)
 	{
-		for(uint j=0;j<800;++j)
+		for(uint j=0;j<XRES;++j)
 		{
 			const uint o = math::rnd(((XRES-2)*(YRES-2)));
-			screen::frame[o] = math::rnd(0x00FFFFFF);
-			screen::frame[o+1] = math::rnd(0x00FFFFFF);
-			screen::frame[o+XRES] = math::rnd(0x00FFFFFF);
+			screen::frame[o]        = math::rnd(0x00FFFFFF);
+			screen::frame[o+1]      = math::rnd(0x00FFFFFF);
+			screen::frame[o+XRES]   = math::rnd(0x00FFFFFF);
 			screen::frame[o+XRES+1] = math::rnd(0x00FFFFFF);
 		}
 		screen::sleep(2);
@@ -69,7 +69,7 @@ void trans::fadeout()
 			//c.b[3] = (byte)math::max(0,c.b[3]-1); //no need to fade alpha byte
 			screen::back[j] = c.d;
 		}
-		screen::_flush();
+		screen::flush();
 		screen::sleep(10);
 	}
 }

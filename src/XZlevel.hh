@@ -68,7 +68,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	const char* tx = (*arc)[(*lvl)["intro"]];
 	screen::back.clear(BLACK);
 	font::draw(100,100,tx,ORANGE,BLACK);
-	screen::_flush();
+	screen::flush();
 	//*
 
 	//load player
@@ -78,7 +78,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
  	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
  	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
 	gfx::fsprog(10);
-	screen::_flush();
+	screen::flush();
 	//*
 
 	//load boss
@@ -86,7 +86,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	info*   bi = format::ini((*arc)[(*lvl)["boss_i"]]); 
 	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
 	gfx::fsprog(20);
-	screen::_flush();
+	screen::flush();
 	//*
 
 	//load enemy
@@ -94,7 +94,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	info*   ei = format::ini((*arc)[(*lvl)["enemy_i"]]);
 	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
 	gfx::fsprog(30);
-	screen::_flush();
+	screen::flush();
 	//*
 
 	//load map
@@ -103,7 +103,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
 	gfx::fsprog(40);
-	screen::_flush();
+	screen::flush();
 
 	markmin = (l*BWIDTH)-YMAX;
 
@@ -182,7 +182,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	gfx::fsprog(95);
 	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
-	screen::_flush();
+	screen::flush();
 	screen::wait(ENTER);
 	delete[] a;
 	delete[] b;
@@ -218,7 +218,7 @@ sint level::update(sint k,sint j)
 
 void level::display()
 {
-	//draw background
+	//draw background //TODO: remove the clears
 	screen::back.clear(DRED);
 	screen::depth.clear(FX(200));
 	//*
