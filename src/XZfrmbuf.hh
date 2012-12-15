@@ -7,18 +7,21 @@
 ///</header>
 
 ///<include>
-#include <time.h>	//clock,CLOCKS_PER_SEC
-#include <fcntl.h>	//open,close,O_RDWR
-#include <unistd.h>	//STDIN_FILENO
-#include <termios.h>	//tcgetattr,tcsetattr,ICANON,ECHO,TCSANOW
-#include <sys/mman.h>	//mmap,munmap,PROT_READ,PROT_WRITE,MAP_SHARED,MAP_FIXED,MAP_FAILED
-#include <sys/ioctl.h>	//ioctl,FIONREAD
-#include <linux/fb.h>	//FBIOGET_FSCREENINFO,FBIOGET_VSCREENINFO,FBIOPUT_VSCREENINFO,FBIOPAN_DISPLAY,FB_ACTIVATE_NOW
+#include <time.h>		//clock,CLOCKS_PER_SEC
+#include <fcntl.h>		//open,read,close,O_RDWR,O_RDONLY,O_NONBLOCK
+#include <unistd.h>		//STDIN_FILENO
+#include <termios.h>		//tcgetattr,tcsetattr,ICANON,ECHO,TCSANOW
+#include <sys/mman.h>		//mmap,munmap,PROT_READ,PROT_WRITE,MAP_SHARED,MAP_FIXED,MAP_FAILED
+#include <sys/ioctl.h>		//ioctl,FIONREAD
+#include <linux/fb.h>		//FBIOGET_FSCREENINFO,FBIOGET_VSCREENINFO,FBIOPUT_VSCREENINFO,FBIOPAN_DISPLAY,FB_ACTIVATE_NOW
+#include <linux/joystick.h>	//JS_EVENT_AXIS,JS_EVENT_BUTTON,js_event
 
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
+
+#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -62,8 +65,8 @@ namespace screen
 		termios oc;					//old terminal config
 
 		sint  fd;					//framebuffer device handle
-		sint  gd;					//gamepad device handle
-
+		sint  jd;					//gamepad device handle
+		struct js_event          joyev;
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
 		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
@@ -111,6 +114,7 @@ void screen::init(void* c)
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	ls = time()+4000;
+	jd = open(JS_DEV,O_RDONLY|O_NOCTTY|O_NONBLOCK);
 	system::ifx(close);
 }
 
@@ -126,7 +130,25 @@ void screen::event()
 	tk = kk = math::set(t.b[2],t.b[0],t.b[1]==91);
 	read(0,&nu,math::min(r-s,256));
 
-	//TODO: gamepad 
+	//TODO: gamepad
+	struct js_event* joyew = new js_event;
+	read(jd,joyew,sizeof(joyev));
+
+	/*switch(joyew->type & ~JS_EVENT_INIT)
+	{
+		case JS_EVENT_BUTTON: system::say("butt ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),1); break;
+		case JS_EVENT_AXIS:   system::say("axis ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),1); break;
+	}*/
+
+	/*kk = math::set(UP,kk,ev.type==JS_EVENT_AXIS && ev.number==0 && ev.value<0);
+	kk = math::set(DOWN,kk,ev.type==JS_EVENT_AXIS && ev.number==0 && ev.value>0);
+	kk = math::set(LEFT,kk,ev.type==JS_EVENT_AXIS && ev.number==1 && ev.value<0);
+	kk = math::set(RIGHT,kk,ev.type==JS_EVENT_AXIS && ev.number==1 && ev.value>0);
+
+	kk = math::set('a',kk,ev.type==JS_EVENT_BUTTON && ev.number==0 && ev.value!=0);
+	kk = math::set('d',kk,ev.type==JS_EVENT_BUTTON && ev.number==1 && ev.value!=0);
+	kk = math::set('w',kk,ev.type==JS_EVENT_BUTTON && ev.number==2 && ev.value!=0);
+	kk = math::set(SPACE,kk,ev.type==JS_EVENT_BUTTON && ev.number==3 && ev.value!=0);*/
 
 	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);		//set bottom word to mouse y
 	mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES)<<16;	//set top word to mouse x
@@ -140,9 +162,9 @@ void screen::set()
         system::err((fd=open(FB_DEV,O_RDWR))<=0,"ERROR: Could not open framebuffer device");
 	system::err(ioctl(fd,FBIOGET_FSCREENINFO,&finfo)<0,"ERROR: Could not read fixed framebuffer info");
 	system::err(ioctl(fd,FBIOGET_VSCREENINFO,&oinfo)<0,"ERROR: Could not read variable framebuffer info");
-	system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
-	system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
-	system::err(ioctl(fd,FBIOPAN_DISPLAY,&vinfo)<0,"ERROR: Could not report changes to kernel");
+	//system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
+	//system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
+	//system::err(ioctl(fd,FBIOPAN_DISPLAY,&vinfo)<0,"ERROR: Could not report changes to kernel");
 }
 
 void screen::close()
@@ -155,6 +177,7 @@ void screen::close()
 	oinfo.activate = FB_ACTIVATE_NOW;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
+	::close(jd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
 	//delete nu; 
 }
