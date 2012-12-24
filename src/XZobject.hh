@@ -22,6 +22,7 @@ class object
 		polygon** poly;
 		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
 		fixed     bound;
+		fixed     cbound;
 		sint      polys;
 		sint      docks;
 		uint      scolor;	//Shadow Color
@@ -37,7 +38,7 @@ class object
 		/*OK*/ void display(const lvector& p,sint f) const;
 		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
-		/*OK*/ inline fixed bounding() const { return bound; }
+		/*OK*/ inline fixed bounding() const { return cbound; }
 
 		static fmatrix linear;
 };
@@ -227,6 +228,7 @@ void object::update(const fmatrix& m,bool j)
 	{
 		dock[i] = m*dock[i];
 	}
+	cbound = bound; //TODO: cbound trafo to match projection
 }
 
 void object::display(const lvector& p,sint f) const

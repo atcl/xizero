@@ -21,7 +21,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 
-#include "XZstring.hh" //temp
+//#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -162,9 +162,9 @@ void screen::set()
         system::err((fd=open(FB_DEV,O_RDWR))<=0,"ERROR: Could not open framebuffer device");
 	system::err(ioctl(fd,FBIOGET_FSCREENINFO,&finfo)<0,"ERROR: Could not read fixed framebuffer info");
 	system::err(ioctl(fd,FBIOGET_VSCREENINFO,&oinfo)<0,"ERROR: Could not read variable framebuffer info");
-	//system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
-	//system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
-	//system::err(ioctl(fd,FBIOPAN_DISPLAY,&vinfo)<0,"ERROR: Could not report changes to kernel");
+	system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
+	system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
+	system::err(ioctl(fd,FBIOPAN_DISPLAY,&vinfo)<0,"ERROR: Could not report changes to kernel");
 }
 
 void screen::close()

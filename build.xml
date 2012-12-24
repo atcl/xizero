@@ -2,17 +2,17 @@
 	<rule>
 		<name>default</name>
 		<compiler>gcc</compiler>
-		<path>
-			<source></source>
-			<!--include></include-->
-			<library></library>
-		</path>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
+		<!--path>
+			<source></source>
+			<include></include>
+			<library></library>
+		</path>
 		<libs>
-			<!--lib></lib-->
-		</libs>
+			<lib></lib>
+		</libs-->
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
@@ -41,17 +41,9 @@
 	<rule>
 		<name>release</name>
 		<compiler>gcc</compiler>
-		<path>
-			<source></source>
-			<!--include></include-->
-			<library></library>
-		</path>
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
-		<libs>
-			<!--lib></lib-->
-		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>

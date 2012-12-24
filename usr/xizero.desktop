@@ -11,5 +11,5 @@ Terminal=Yes
 Categories=Game
 Keywords=3D;Vertical;Scroller
 
-Dependencies=libdrm
+Dependencies=
 Homepage=http://atcrosslevel.de

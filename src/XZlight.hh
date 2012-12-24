@@ -50,7 +50,7 @@ void light::init(bool i)
 {
 	if(i!=0)
 	{
-		const sint dim = (rad<<1)+1;
+		const sint dim = (rad<<1)+1; //TODO: +1 to ++
 		mask.width = mask.height = dim;
 		delete mask.data;
 		mask.data = new sint[dim*dim];
@@ -60,7 +60,7 @@ void light::init(bool i)
 	{
 		for(sint k=0;k<mask.width;++k,++t)
 		{
-			mask.data[t] = lambert(k-rad,j-rad);
+			mask.data[t] = lambert(k-rad,j-rad); //TODO: ++t to mask.data[t++]
 		}
 	}
 }

@@ -186,7 +186,7 @@ void gfx::fsprog(sint p,uint c)
 	{
 		for(sint j=0;j<r;++j,++o)
 		{
-			screen::back[o] &= c;
+			screen::back[o] &= c; //TODO ++o to back[o++]
 		}
 	}
 }

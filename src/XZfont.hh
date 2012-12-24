@@ -52,8 +52,8 @@ sint font::draw(sint x,sint y,char a,uint c,uint b)
 		for(sint j=0;j<w;++j,++o,++s)
 		{
 			const uint e = f->data[s];
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED)); 
-			r+=(i==0)&&(e!=BLACK);
+			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED));
+			r += (i==0)&&(e!=BLACK);
 		}
 	}
 	return r;
@@ -82,7 +82,7 @@ sint font::width(char x)
 
 	for(sint j=0,s=h*x;j<h;++j,++s)
 	{
-		r += (f->data[s]!=BLACK);
+		r += (f->data[s]!=BLACK); //++s to data[s++]
 	}
 	return r;
 }
