@@ -50,7 +50,7 @@ void light::init(bool i)
 {
 	if(i!=0)
 	{
-		const sint dim = (rad<<1)+1; //TODO: +1 to ++
+		const sint dim = (rad<<1)+1;
 		mask.width = mask.height = dim;
 		delete mask.data;
 		mask.data = new sint[dim*dim];

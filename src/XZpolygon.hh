@@ -22,7 +22,7 @@
 #define YMIN 1
 #define YMAX YRES-1
 #define ZMIN 1
-#define ZMAX 400
+#define ZMAX 255
 #define PRJX 120
 #define PRJY 150
 
@@ -131,7 +131,6 @@ void polygon::raster(bool s,uint c) const
 	           lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx)}; 
 
 	const sint str = XRES - (maxx-minx);
-	//uint* back = screen::back.pointer();
 
 	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y)
 	{
@@ -140,7 +139,7 @@ void polygon::raster(bool s,uint c) const
 		#pragma prefetch back
 		for(sint x=minx;x<maxx;++x) 
 		{
-			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (cx[3]>screen::depth[off]) ) )
+			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (byte(fx::r2l(cx[3]))>byte(fx::r2l(screen::depth[off]))) ) )
 			{
 				case 1: screen::depth[off] = cx[3];
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;

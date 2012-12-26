@@ -28,9 +28,7 @@
 - Software Rasterizer
 - Flatshading
 - Blinn Shadows
-- Emissive Glow
-- 2xFSAA
-- FSMB
+- 2xFXAA
 
 === Minor: ===
 

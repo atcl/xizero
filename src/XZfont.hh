@@ -82,7 +82,7 @@ sint font::width(char x)
 
 	for(sint j=0,s=h*x;j<h;++j,++s)
 	{
-		r += (f->data[s]!=BLACK); //++s to data[s++]
+		r += (f->data[s]!=BLACK); //TODO ++s to data[s++]
 	}
 	return r;
 }

@@ -52,7 +52,7 @@ sint start(sint i)
 		}
 				
 		l.display();
-		//screen::back.fsaamb(screen::accum);
+		//screen::back.fxaa();
 		l.gauges();
 		bench();
 	}

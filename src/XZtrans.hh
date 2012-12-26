@@ -30,10 +30,10 @@ void trans::circleblend(sint x,sint y,sint r)
 	{
 		const sint p  = (i - y)*(i - y);
 
-		for(uint j=0;j<XRES;++j,++o)
+		for(uint j=0;j<XRES;++j)
 		{
 			const sint q  = (j - x)*(j - x);
-			screen::back[o] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(p+q)<=r); //TODO: ++o to back[o++]
+			screen::back[o++] = math::set(screen::back[i*XRES+j],BLACK,math::sqr(p+q)<=r);
 		}
 	}
 	screen::flush();

@@ -184,9 +184,9 @@ void gfx::fsprog(sint p,uint c)
 	const sint q = XRES - r;
 	for(sint i=0,o=0;i<YRES;++i,o+=q)
 	{
-		for(sint j=0;j<r;++j,++o)
+		for(sint j=0;j<r;++j)
 		{
-			screen::back[o] &= c; //TODO ++o to back[o++]
+			screen::back[o++] &= c;
 		}
 	}
 }
