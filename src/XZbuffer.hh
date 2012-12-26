@@ -36,7 +36,7 @@ class buffer
 ///<code>
 void buffer::clear(sint x)
 {
-#ifdef SSE
+#ifdef __SSE__
 	sint val[4] = {x,x,x,x};
 
 	__asm__ __volatile__ (
@@ -63,7 +63,7 @@ void buffer::clear(sint x)
 
 void buffer::copy(const buffer& s)
 {
-#ifdef SSE
+#ifdef __SSE__
 	__asm__ __volatile__ (
 	"shrl $7,%2;\n"
 	"1: ;\n"
@@ -97,7 +97,7 @@ void buffer::copy(const buffer& s)
 
 void buffer::fxaa()
 {
-#ifdef SSE
+#ifdef __SSE__
 	__asm__ __volatile__ (
 	"subl $" STR(XRES) ",%1;\n"
 	"shrl $6,%1;\n"

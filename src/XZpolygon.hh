@@ -51,7 +51,7 @@ class polygon
 
 		/*OK*/ inline void shape() const;
 		              uint flat(sint pz,sint f) const;
-		              void raster(bool s,uint c) const /*hot*/;
+		              void raster(bool s,uint c) const hot;
 	public:
 		/*OK*/      polygon(const lvector& x,const lvector& y,const lvector& z,uint c);
 		/*OK*/ void update(const fmatrix& m,bool i=1);
@@ -131,6 +131,7 @@ void polygon::raster(bool s,uint c) const
 	           lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx)}; 
 
 	const sint str = XRES - (maxx-minx);
+	//uint* back = screen::back.pointer();
 
 	for(sint y=miny,off=miny*XRES+minx;y<maxy;++y)
 	{
@@ -139,7 +140,8 @@ void polygon::raster(bool s,uint c) const
 		#pragma prefetch back
 		for(sint x=minx;x<maxx;++x) 
 		{
-			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (byte(fx::r2l(cx[3]))>byte(fx::r2l(screen::depth[off]))) ) )
+			//prefetch(&back[off]);
+			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (cx[3]>screen::depth[off]) ) )
 			{
 				case 1: screen::depth[off] = cx[3];
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;

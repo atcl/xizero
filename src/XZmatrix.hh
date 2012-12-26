@@ -14,7 +14,7 @@
 class fmatrix
 {
 	private:
-		fixed align m[3][4];
+		fixed m[3][4] align; //vector
 		/*OK*/ void multiplicate(const fixed (&n)[3][4]);
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);

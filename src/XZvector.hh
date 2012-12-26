@@ -17,7 +17,7 @@ struct fvector;
 ///</declare>
 
 ///<define>
-struct lvector
+struct lvector //TODO use vector ops see vector_size(16)
 {
 	sint x;
 	sint y;

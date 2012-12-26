@@ -19,7 +19,6 @@
 			<define>ALWAYS</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
-			<define>SSE</define>
 		</defines>
 		<flags>
 			<flag>-O2 -pipe -falign-loops</flag>
@@ -48,7 +47,6 @@
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
 			<define>ALWAYS</define>
-			<define>SSE</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
 		</defines>
@@ -80,7 +78,6 @@
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
-			<define>SSE</define>
 			<define>ALWAYS</define>
 			<define>XRES=800</define>
 			<define>YRES=600</define>
