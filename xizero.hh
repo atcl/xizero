@@ -14,6 +14,13 @@
 ///</declare>
 
 ///<define>
+static const char* ascii = "\n\
+ XXXXX  000\n\
+       0   0\n\
+  XXX  0   0\n\
+       0   0\n\
+ XXXXX  000\n"; //TODO X to Ξ
+
 inline void init();
 sint start(sint i);
 sint start();
@@ -34,6 +41,7 @@ void init()
 {
 	screen::init(format::xpm(resource::cursor));
 	screen::set();
+	system::say(ascii,1);
 }
 
 sint start(sint i)
@@ -52,7 +60,7 @@ sint start(sint i)
 		}
 				
 		l.display();
-		//screen::back.fxaa();
+		//screen::back.fsaa();
 		l.gauges();
 		bench();
 	}
@@ -139,7 +147,7 @@ void intro()
 	object c((*a)["cross.y3d"]);
 	object b[4] = { q,object(q),object(q),object(q) };
 
-	lvector p(400,300,100);
+	lvector p(XRES>>1,YRES>>1,100);
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);     c.update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
 	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
@@ -195,7 +203,7 @@ void mainmenu()
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
-	lvector p(400,300,100);
+	lvector p(XRES>>1,YRES>>1,100);
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();
@@ -208,10 +216,10 @@ void mainmenu()
 	//*
 
 	//enlist buttons
-	const button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_control("Controls",&control,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_about("About",&about,0,(XRES-(XRES>>2))>>1,360,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_leave("Exit",&leave,0,(XRES-(XRES>>2))>>1,440,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	const button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,120,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	const button b_control("Controls",&control,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	const button b_about("About",&about,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	const button b_leave("Exit",&leave,0,(XRES-(XRES>>2))>>1,360,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
 	//*
 
 	//draw menu
@@ -233,7 +241,7 @@ void mainmenu()
 		b_control.draw();
 		b_about.draw();
 		b_leave.draw();
-		font::draw(XRES-160,YRES-20,"Version: " VERSION,ORANGE,TRANS);
+		font::draw(XRES-(XRES>>2),YRES-font::height(),"Version: " VERSION,ORANGE,TRANS);
 		const uint ms = screen::mouse();
 		button::check(ms);
 		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
@@ -267,7 +275,7 @@ void over()
 {
 	screen::back.clear(0);
 	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
-	font::draw(340,292,"atcrosslevel.de",RED,BLACK);
+	font::draw((XRES>>1)-60,(YRES>>1),"atcrosslevel.de",RED,BLACK);
 	screen::flush();
 	screen::sleep(3000);
 }

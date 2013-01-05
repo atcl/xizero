@@ -256,8 +256,8 @@ sint entity::update()
 		//position.y += fx::mul(direction[0].y,direction[0].e); //temp
 		position.z += fx::mul(direction[0].z,direction[0].e);
 
-		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x<=FX(150));
-		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x>=FX(650));
+		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x<=FX(XRES>>2));
+		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x>=FX(XRES-(XRES>>2)));
 	}
 
 	lastupdate = curr;

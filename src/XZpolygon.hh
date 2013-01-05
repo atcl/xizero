@@ -196,7 +196,22 @@ void polygon::display(const lvector& p,sint f,uint c)
 		if((f&R_F)!=0) { c = flat(p.z,f); } 
 	}
 
-	raster( f&R_B,c );
+	raster( f&R_B,c );	
+
+	/*
+	switch()
+	{
+		case X:
+
+
+		case f&R_S:
+			shape(); return;
+		case f&R_F:
+			c = flat(p.z,f);
+		case X:
+			raster(f&R_B,c);
+	}
+	*/
 }
 
 void polygon::pull(fixed a)

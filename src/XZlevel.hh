@@ -19,7 +19,7 @@
 
 //<declare>
 #define LWIDTH 40
-#define BWIDTH 20
+#define BWIDTH 16
 #define BHEIGHT -10
 #define CSHIFT (-XRES)>>1
 #define GROUND 150
@@ -67,7 +67,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	//load intro message
 	const char* tx = (*arc)[(*lvl)["intro"]];
 	screen::back.clear(BLACK);
-	font::draw(100,100,tx,ORANGE,BLACK);
+	font::draw(XRES>>3,100,tx,ORANGE,BLACK);
 	screen::flush();
 	//*
 
@@ -181,7 +181,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	}
 
 	gfx::fsprog(95);
-	font::draw(600,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
+	font::draw(XRES-200,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
 	screen::flush();
 	screen::wait(ENTER); //TODO to SPACE
 	delete[] a;
@@ -219,22 +219,22 @@ sint level::update(sint k,sint j)
 void level::display()
 {
 	//draw background //TODO: remove the clears
-	screen::back.clear(DRED);
+	screen::back.clear(DRED); // (screen::zs<<24)|DRED
 	screen::depth.clear(FX(200));
 	//*
 
 	//render terrain //fix
-	mark = math::lim(markmax,entity::ylevel()-450,markmin);
-	const lvector p(400,300+BWIDTH-mark%BWIDTH,GROUND);
+	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
+	const lvector p(XRES>>1,(YRES>>1)+BWIDTH-mark%BWIDTH,GROUND);
 	object::linear.clear();
-	object::linear.translate(0,FX(300),0);
+	object::linear.translate(0,FX(YRES>>1),0);
 	sint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(uint i=0;i<34;++i)
+	for(uint i=0;i<32;++i)
 	{
 		object temp(*terrain[r++]);
 		temp.update();
 		temp.display(p,R_F);
-		object::linear.translate(0,FX(-20),0);
+		object::linear.translate(0,FX(-BWIDTH),0);
 	}
 	//*
 

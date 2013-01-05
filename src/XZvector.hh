@@ -14,10 +14,15 @@
 
 ///<declare>
 struct fvector;
+
+typedef union{
+    sint v vector;
+    sint u[4];
+} quad;
 ///</declare>
 
 ///<define>
-struct lvector //TODO use vector ops see vector_size(16)
+struct lvector
 {
 	sint x;
 	sint y;

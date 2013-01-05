@@ -169,10 +169,11 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 	{
 		#pragma prefetch t.data
 		#pragma prefetch back 
-		for(sint j=0;j<xm;++j,++o,++s)
+		for(sint j=0;j<xm;++j)
 		{
-			const uint c = t.data[s];
+			const uint c = t.data[s++];
 			screen::back[o] = math::set(c,screen::back[o],(c!=TRANS)||a);
+			o++;
 		}
 	}
 }

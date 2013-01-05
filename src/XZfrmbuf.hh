@@ -52,6 +52,8 @@ namespace screen
 	buffer depth(XRES*YRES);	//Z-Buffer
 	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
+	byte zs = 0;			//Z State
+
 	namespace
 	{
 		void* cs = 0;					//cursor image
@@ -83,7 +85,7 @@ namespace screen
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline void  flush()	{ frame.copy(back); }
+	inline void  flush()	{ frame.copy(back); ++zs; }
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline uint  key()	{ const uint r=kk; kk=0; return r; }
 	inline uint  turbo()	{ return tk; }

@@ -2,7 +2,7 @@
 
 == Version: ==
 
-0.1 - Callbox
+0.1 (Callbox)
 
 == Install: ==
 
@@ -28,7 +28,7 @@
 - Software Rasterizer
 - Flatshading
 - Blinn Shadows
-- 2xFXAA
+- 2xFSAA
 
 === Minor: ===
 

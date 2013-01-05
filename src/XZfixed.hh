@@ -21,7 +21,7 @@
 #define FXTNT 0x00001999 //0.1
 #define FXCEN 0x0000028F //0.01
 #define FXEPS 0x00000001 //eps
-#define FXTAU 0x0006487E //tau
+#define FXTAU 0x0006487E //tau = 2pi
 #define FXTA2 0x0003243F //tau/2
 #define FXTA4 0x0001921F //tau/4
 #define FXITG 0x00009B71 //0.607200

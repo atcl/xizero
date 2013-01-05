@@ -29,7 +29,7 @@ class buffer
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
 		/*OK*/        void  copy(const buffer& s);
 		/*OK*/        void  clear(sint x=0);
-		              void  fxaa();
+		              void  fsaa();
 };
 ///</define>
 
@@ -95,7 +95,7 @@ void buffer::copy(const buffer& s)
 #endif
 }
 
-void buffer::fxaa()
+void buffer::fsaa()
 {
 #ifdef __SSE__
 	__asm__ __volatile__ (
@@ -108,14 +108,14 @@ void buffer::fxaa()
 	"movaps 16(%0),%%xmm1;\n"
 	"movaps 32(%0),%%xmm2;\n"
 	"movaps 48(%0),%%xmm3;\n"
-	"movups (" STR(XRES*4) "+4)(%0), %%xmm4;\n"
+	"movups (" STR(XRES*4) "+ 4)(%0),%%xmm4;\n"
 	"movups (" STR(XRES*4) "+20)(%0),%%xmm5;\n"
 	"movups (" STR(XRES*4) "+36)(%0),%%xmm6;\n"
 	"movups (" STR(XRES*4) "+52)(%0),%%xmm7;\n"
-	"pavgb  %%xmm4,%%xmm0;\n"
-	"pavgb  %%xmm5,%%xmm1;\n"
-	"pavgb  %%xmm6,%%xmm2;\n"
-	"pavgb  %%xmm7,%%xmm3;\n"
+	"pavgb   %%xmm4,%%xmm0;\n"
+	"pavgb   %%xmm5,%%xmm1;\n"
+	"pavgb   %%xmm6,%%xmm2;\n"
+	"pavgb   %%xmm7,%%xmm3;\n"
 	"movntps %%xmm0,  (%0);\n"
 	"movntps %%xmm1,16(%0);\n"
 	"movntps %%xmm2,32(%0);\n"

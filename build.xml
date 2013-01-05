@@ -17,13 +17,13 @@
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
 			<define>ALWAYS</define>
-			<define>XRES=800</define>
-			<define>YRES=600</define>
+			<define>XRES=640</define>
+			<define>YRES=480</define>
 		</defines>
 		<flags>
 			<flag>-O2 -pipe -falign-loops</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
-			<flag>-march=atom -mtune=atom -m32</flag>
+			<flag>-march=atom -mtune=atom -m32 -mstackrealign</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-static -nostdlib</flag-->
 			<flag>-g</flag>
@@ -53,7 +53,7 @@
 		<flags>
 			<flag>-O2 -pipe -falign-loops -fomit-frame-pointer</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
-			<flag>-march=native -mtune=native -m32</flag>
+			<flag>-march=native -mtune=native -m32 -mstackrealign</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<flag>-s</flag>
 
@@ -85,7 +85,7 @@
 		<flags>
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
-			<flag>-march=atom -mtune=atom -m32</flag>
+			<flag>-march=atom -mtune=atom -m32 -mstackrealign</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
 			<!--flag>-mtune=i486 -march=i486 -m32</flag-->
 			<!--flag>-msse -mpfpmath=sse</flag-->
