@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZpolygon.hh
 // Polygon Library 
@@ -23,10 +23,10 @@
 #define YMAX YRES-1
 #define ZMIN 1
 #define ZMAX 255
-#define PRJX 120
+#define PRJX 135
 #define PRJY 150
 
-#define AMBIENT 25
+#define AMBIENT 24
 #define ZLIGHT  FXTNT
 #define NOLIGHT 10
 
@@ -36,7 +36,7 @@
 #define R_S 0x00001000 //shape
 #define R_B 0x00010000 //blinn shadows
 #define R_F 0x00100000 //flat
-#define R_C 0x01000000 //single color
+#define R_C 0x01000000 //single color //replace by some new option
 #define R_D 0x10000000 //depth test
 ///</declare>
 
@@ -45,6 +45,7 @@ class polygon
 {
 	private:
 		static lvector lpoint[3];	//Render Vertices
+		//static fvector (*sproj[2])(fvector v);
 		fvector cpoint[3];		//Polygon Vertices
 		fvector cnormal;		//Polygon Normal
 		const uint color;		//Polygon Color
@@ -62,11 +63,14 @@ class polygon
 		static sint  counter;		//Polygon Counter
 		static const fvector light;	//Light Vector
 		static const fmatrix shadow;	//Shadow Matrix
+		static fvector unit(fvector v) { return v; }
+		static fvector shad(fvector v) { return shadow*v; }
 };
 ///</define>
 
 ///<code>
       lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
+      //fvector polygon::(*sproj[2])(fvector v) = { &polygon::unit, &polygon::shad };
       sint    polygon::counter  = 0;
 const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
 const fmatrix polygon::shadow   = []() ->fmatrix { fmatrix m; m.shadow(fvector(0,FXTNT,FXONE),fvector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
@@ -179,9 +183,9 @@ void polygon::update(const fmatrix& m,bool i)
 void polygon::display(const lvector& p,sint f,uint c)
 {
 	guard(cnormal.z>FXMON);
-	++counter;
+	++counter;	
 
-	if( f&R_B )
+	if(f&R_B) 
 	{
 		lpoint[0] = mov(project(p,shadow*cpoint[0]));
 		lpoint[1] = mov(project(p,shadow*cpoint[1]));
@@ -192,26 +196,9 @@ void polygon::display(const lvector& p,sint f,uint c)
 		lpoint[0] = mov(project(p,cpoint[0]));
 		lpoint[1] = mov(project(p,cpoint[1]));
 		lpoint[2] = mov(project(p,cpoint[2]));
-		if((f&R_S)!=0) { shape(); return; }
-		if((f&R_F)!=0) { c = flat(p.z,f); } 
 	}
-
-	raster( f&R_B,c );	
-
-	/*
-	switch()
-	{
-		case X:
-
-
-		case f&R_S:
-			shape(); return;
-		case f&R_F:
-			c = flat(p.z,f);
-		case X:
-			raster(f&R_B,c);
-	}
-	*/
+	ifl(f&R_F) { c = flat(p.z,f); } 
+	ifu(f&R_S) { shape(); } else { raster(f&R_B,c); }
 }
 
 void polygon::pull(fixed a)

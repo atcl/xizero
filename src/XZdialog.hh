@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZmsgbox.hh
 // Dialog Library 
@@ -17,7 +17,7 @@
 namespace dialog
 {
 	inline pure sint ok() { return 1; }
-	//inline pure sint no() { return -1; }
+	inline pure sint no() { return -1; }
 	            sint msgbox(const char* m,bool q=0);
 }
 ///</define>

@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZprogress.hh
 // GUI Progressbar Library 
@@ -48,7 +48,7 @@ progress::progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint 
 	horver(d)	
 { ; }
 
-void progress::draw() const
+void progress::draw() const //TODO: optimize so no double draw
 {
 	guard(visible==0);
 

@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // xz.hh
 // XiZero include header
@@ -10,7 +10,6 @@
 #include "src/XZbasic.hh"
 //Level 1
 #include "src/XZbuffer.hh"
-#include "src/XZcompiled.hh"
 #include "src/XZlist.hh"
 #include "src/XZmath.hh"
 #include "src/XZsystem.hh"

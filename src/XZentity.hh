@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZentity.hh
 // Entity Class 
@@ -13,7 +13,6 @@
 #include "XZformat.hh"
 #include "XZobject.hh"
 #include "XZgame.hh"
-#include "XZcompiled.hh"
 ///</include>
 
 //<declare>
@@ -287,8 +286,8 @@ void entity::display(sint m,bool t)
 				switch( (game::onscreen(cx-4,cy-4)&game::onscreen(cx+4,cy+4))<<h )
 				{
 					case 0: delete (ammo*)a.delcurrent(); break;
-					case 1: compiled::ammo(cx,cy,BLUE,YELLOW); break;
-					case 2: compiled::ammo(cx,cy,GREEN,ORANGE); break;
+					case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
+					case 2: game::compiled(cx,cy,GREEN,ORANGE); break;
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZlevel.hh
 // Level Class 
@@ -75,8 +75,8 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	object* pm = new object((*arc)[(*lvl)["player_0"]]);
 	object* pn = new object((*arc)[(*lvl)["player_1"]]);
 	info*   pi = format::ini((*arc)[(*lvl)["player_i"]]);
- 	        pp = new progress(0,string::str2int((*pi)["health"]),VER,10,20,20,YRES-40,GREEN,SYSCOL,WHITE,1);
- 	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-30,20,20,YRES-40,BLUE,SYSCOL,WHITE,1);
+ 	        pp = new progress(0,string::str2int((*pi)["health"]),VER,16,16,16,YRES-32,GREEN,SYSCOL,WHITE,1);
+ 	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,SYSCOL,WHITE,1);
 	gfx::fsprog(10);
 	screen::flush();
 	//*
@@ -84,7 +84,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	//load boss
 	object* bm = new object((*arc)[(*lvl)["boss_0"]]);
 	info*   bi = format::ini((*arc)[(*lvl)["boss_i"]]); 
-	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,100,20,RED,SYSCOL,WHITE,0);
+	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,96,16,RED,SYSCOL,WHITE,0);
 	gfx::fsprog(20);
 	screen::flush();
 	//*
@@ -92,7 +92,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	//load enemy
 	object* em = new object((*arc)[(*lvl)["enemy_0"]]);
 	info*   ei = format::ini((*arc)[(*lvl)["enemy_i"]]);
-	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,50,10,GREEN,SYSCOL,WHITE,0);
+	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,48,8,GREEN,SYSCOL,WHITE,0);
 	gfx::fsprog(30);
 	screen::flush();
 	//*
@@ -219,27 +219,24 @@ sint level::update(sint k,sint j)
 void level::display()
 {
 	//draw background //TODO: remove the clears
-	screen::back.clear(DRED); // (screen::zs<<24)|DRED
+	screen::back.clear((screen::zs<<24)|DRED);
 	screen::depth.clear(FX(200));
 	//*
 
 	//render terrain //fix
 	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	const lvector p(XRES>>1,(YRES>>1)+BWIDTH-mark%BWIDTH,GROUND);
+	const lvector p((XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND);
 	object::linear.clear();
 	object::linear.translate(0,FX(YRES>>1),0);
 	sint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(uint i=0;i<32;++i)
+	for(uint i=0;i<31;++i)
 	{
-		object temp(*terrain[r++]);
+		object temp(*terrain[r]);
 		temp.update();
 		temp.display(p,R_F);
 		object::linear.translate(0,FX(-BWIDTH),0);
+		++r;
 	}
-	//*
-
-	//add glow to terrain
-
 	//*
 
 	//render shadows
@@ -264,7 +261,7 @@ void level::gauges()
 		if(e.z>0)
 		{
 			ep->visible = (game::onscreen(e.x,e.y));
-			ep->left = (e.x-25);
+			ep->left = (e.x-24);
 			ep->top = (e.y-10);
 			ep->set(e.z+e.e);
 			ep->draw();
@@ -274,7 +271,7 @@ void level::gauges()
 	if(b.z>0)
 	{
 		bp->visible = (game::onscreen(b.x,b.y));
-		bp->left = (b.x-50);
+		bp->left = (b.x-48);
 		bp->top = (b.y-20);
 		bp->set(b.z+b.e);
 		bp->draw();

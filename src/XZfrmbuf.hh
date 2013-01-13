@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZfrmbuf.hh
 // Direct Framebuffer Access and Input Handling Library
@@ -174,7 +174,7 @@ void screen::close()
 	back.clear();
 	//"press CTRL ALT F1\n then  CTRL ALT F7"
 	flush();
-	system::say("XiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
+	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);
 	oinfo.activate = FB_ACTIVATE_NOW;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
