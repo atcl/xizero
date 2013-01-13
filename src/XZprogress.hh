@@ -48,12 +48,27 @@ progress::progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint 
 	horver(d)	
 { ; }
 
-void progress::draw() const //TODO: optimize so no double draw
+void progress::draw() const
 {
 	guard(visible==0);
+	
+	const uint h0 = math::set(height-2-area,2,horver);
+	const uint v0 = math::set(area+2,width-2,!horver);
+	const uint h1 = math::set(-area-1,horver);
+	const uint v1 = math::set(area,!horver);
 
-	gfx::rect(left,top,left+width,top+height,backcolor,backcolor,1,0);
-	gfx::rect(left+2,top+2+math::set(height-4-area,horver),left+2+math::set(area,width-4,!horver),top+height-2,color,color,1); 
+	gfx::line(left,top,left+width,top,backcolor);
+	gfx::line(left,top+1,left+width,top+1,backcolor);
+	gfx::line(left,top+height-1,left+width,top+height-1,backcolor);
+	gfx::line(left,top+height,left+width,top+height,backcolor);
+
+	gfx::line(left,top+2,left,top+height-2,backcolor);
+	gfx::line(left+1,top+2,left+1,top+height-2,backcolor);
+	gfx::line(left+width-1,top+2,left+width-1,top+height-2,backcolor);
+	gfx::line(left+width,top+2,left+width,top+height-2,backcolor);
+
+	gfx::rect(left+2,top+h0,left+v0,top+height-2,color,color,1,0);
+	gfx::rect(left+2+v1,top+2,left+width-2,top+height-2+h1,backcolor,backcolor,1,0);
 }
 ///</code>
 

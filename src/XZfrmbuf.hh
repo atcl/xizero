@@ -50,7 +50,6 @@ namespace screen
 	buffer frame(XRES*YRES);	//Video Memory Front Buffer
 	buffer back(XRES*YRES);		//System Memory Double Buffer
 	buffer depth(XRES*YRES);	//Z-Buffer
-	buffer accum(XRES*YRES);	//Accumulation/Triple Buffer
 
 	byte zs = 0;			//Z State
 

@@ -145,7 +145,8 @@ void polygon::raster(bool s,uint c) const
 		for(sint x=minx;x<maxx;++x) 
 		{
 			//prefetch(&back[off]);
-			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (cx[3]>screen::depth[off]) ) )
+			//const uint t = screen::back[off];
+			switch( ( ( (cx[0]<0) && (cx[1]<0) && (cx[2]<0) ) << s ) >> ( (!s) && (cx[3]>screen::depth[off]/*&&t!=screen::zs*/) ) )
 			{
 				case 1: screen::depth[off] = cx[3];
 				case 2: screen::back[off]  = c;  //(c+screen::back[off])>>1;
