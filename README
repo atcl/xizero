@@ -44,7 +44,7 @@
 == Bugs: ==
 
 - Mouse / Joypad Support
-- Intel GMAs need video=800x600
+- Intel GMAs need video=640x480
 
 == Warning: ==
 

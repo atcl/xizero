@@ -18,7 +18,7 @@ namespace game
 	/*OK*/             void compiled(sint x,sint y,uint r,uint c);
 	/*OK*/ pure inline bool onscreen(sint x,sint y);
 	            inline bool collision(const fvector& x,const fvector& a,fixed r);
-	                   sint angle(const fvector& x,const fvector& t,const fvector& m);
+	                   sint angle(const char** l,const fvector& p,uint m);
 }
 ///</define>
 
@@ -46,8 +46,11 @@ bool game::collision(const fvector& x,const fvector& a,fixed r)
 	//return t.dot(t)<r*r;						//circle doesn't
 }
 
-sint game::angle(const fvector& x,const fvector& t,const fvector& m)
+sint game::angle(const char** l,const fvector& p,uint m)
 {
+	//const uint x = p.x/BWIDTH;
+	//const uint y = (p.y-m)/BWIDTH;
+
 	return 0;
 }
 ///</code>

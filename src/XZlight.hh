@@ -58,9 +58,9 @@ void light::init(bool i)
 
 	for(sint j=0,t=0;j<mask.width;++j)
 	{
-		for(sint k=0;k<mask.width;++k,++t)
+		for(sint k=0;k<mask.width;++k)
 		{
-			mask.data[t] = lambert(k-rad,j-rad); //TODO: ++t to mask.data[t++]
+			mask.data[t++] = lambert(k-rad,j-rad);
 		}
 	}
 }

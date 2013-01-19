@@ -27,19 +27,19 @@ class list
 		uint    len;
 	public:
 		list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
-		inline bool notlast() const { return cur!=las; }
-		inline bool notfirst() const { return cur!=fir; }
-		inline uint length() const { return len; }
-		inline void first() { cur = fir->next; }
-		inline void last()  { cur = las->prev; }
-		inline void prev()  { cur = cur->prev; }
-		inline void next()  { cur = cur->next; }
-		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
-		inline void append(void* x,sint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
+		inline bool  notlast() const { return cur!=las; }
+		inline bool  notfirst() const { return cur!=fir; }
+		inline uint  length() const { return len; }
+		inline void  first() { cur = fir->next; }
+		inline void  last()  { cur = las->prev; }
+		inline void  prev()  { cur = cur->prev; }
+		inline void  next()  { cur = cur->next; }
+		inline void  clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
+		inline void  append(void* x,sint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
 		inline void* current() const { return cur->data; }
 		       void* delcurrent();
-		       bool find(void* x);
-		       void xsort(bool u);
+		       bool  find(void* x);
+		       void  xsort(bool u);
 };
 ///</define>
 

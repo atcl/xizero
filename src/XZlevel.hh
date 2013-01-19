@@ -181,9 +181,9 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	}
 
 	gfx::fsprog(95);
-	font::draw(XRES-200,YRES-font::height(),"Press ENTER to start",GREEN,BLACK);
+	font::draw(XRES-200,YRES-font::height(),"Press SPACE to start",GREEN,BLACK);
 	screen::flush();
-	screen::wait(ENTER); //TODO to SPACE
+	screen::wait(SPACE);
 	delete[] a;
 	delete[] b;
 	delete[] c;

@@ -36,7 +36,7 @@
 #define R_S 0x00001000 //shape
 #define R_B 0x00010000 //blinn shadows
 #define R_F 0x00100000 //flat
-#define R_C 0x01000000 //single color //replace by some new option
+#define R_C 0x01000000 //unused
 #define R_D 0x10000000 //depth test
 ///</declare>
 

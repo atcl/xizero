@@ -7,7 +7,7 @@
 ///</header>
 
 ///<include>
-#include <cstdio> //exit,putchar,fopen,fseek,ftell,fread,fwrite,fclose
+#include <cstdio> //exit,atexit,putchar,fopen,fseek,ftell,fread,fwrite,fclose,FILE
 
 #include "XZbasic.hh"
 ///</include>

@@ -80,7 +80,7 @@ namespace screen
 	void close();
 
 	inline uint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
-	void wait(uint k)	{ while(k!=kk) { event(); } }
+	void wait(uint k)	{ kk=0; while(k!=kk) { event(); } kk=0; }
 	void sleep(sint t)	{ const sint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
@@ -175,7 +175,7 @@ void screen::close()
 	flush();
 	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);
-	oinfo.activate = FB_ACTIVATE_NOW;
+	oinfo.activate = FB_ACTIVATE_NOW | FB_ACTIVATE_FORCE;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
 	::close(jd);

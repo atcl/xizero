@@ -80,9 +80,9 @@ sint font::width(char x)
 	const sint h = f->height;
 	sint r = 0;
 
-	for(sint j=0,s=h*x;j<h;++j,++s)
+	for(sint j=0,s=h*x;j<h;++j)
 	{
-		r += (f->data[s]!=BLACK); //TODO ++s to data[s++]
+		r += (f->data[s++]!=BLACK);
 	}
 	return r;
 }
