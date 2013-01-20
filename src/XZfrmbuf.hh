@@ -21,7 +21,7 @@
 #include "XZsystem.hh"
 #include "XZmath.hh"
 
-//#include "XZstring.hh" //temp
+#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -115,7 +115,7 @@ void screen::init(void* c)
 	//nc.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	ls = time()+4000;
-	jd = open(JS_DEV,O_RDONLY|O_NOCTTY|O_NONBLOCK);
+	jd = open(JS_DEV,O_RDONLY|O_NONBLOCK|O_NOCTTY|O_NDELAY);
 	system::ifx(close);
 }
 
@@ -132,14 +132,17 @@ void screen::event()
 	read(0,&nu,math::min(r-s,256));
 
 	//TODO: gamepad
-	struct js_event* joyew = new js_event;
-	read(jd,joyew,sizeof(joyev));
+	//read(jd,&joyev,sizeof(struct js_event));
 
-	/*switch(joyew->type & ~JS_EVENT_INIT)
+/*	while(1)
 	{
-		case JS_EVENT_BUTTON: system::say("butt ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),1); break;
-		case JS_EVENT_AXIS:   system::say("axis ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),1); break;
-	}*/
+	read(jd,&joyev,sizeof(struct js_event));
+if((joyev.type & ~JS_EVENT_INIT)==JS_EVENT_BUTTON) { system::say("butt ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),0); }
+system::say(" ",0);
+if((joyev.type & ~JS_EVENT_INIT)==JS_EVENT_AXIS)   { system::say("axis ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),0); }
+system::say("",1);
+sleep(200);
+	} */
 
 	/*kk = math::set(UP,kk,ev.type==JS_EVENT_AXIS && ev.number==0 && ev.value<0);
 	kk = math::set(DOWN,kk,ev.type==JS_EVENT_AXIS && ev.number==0 && ev.value>0);
