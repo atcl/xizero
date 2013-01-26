@@ -11,10 +11,11 @@
 ///</include>
 
 ///<define>
-class fmatrix
+union fmatrix
 {
 	private:
-		fixed m[3][4] align; //vector
+		fixed q[3] vector align;
+		fixed m[3][4];
 		/*OK*/ void multiplicate(const fixed (&n)[3][4]);
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
