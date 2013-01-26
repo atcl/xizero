@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# atCROSSLEVEL 2010,2011,2012
-# released under zlib/libpng license
+# atCROSSLEVEL 2010,2011,2012,2013
+# released under 2-clause BSD license
 # smmn
 # summon xslt build.xml-processor
 
@@ -71,11 +71,13 @@ XSL="<?xml version=\"1.0\" encoding=\"utf-8\" ?>
 				</xsl:for-each>
 				<xsl:text> -o </xsl:text>
 				<xsl:value-of select=\"binary/name\"/>
+				<xsl:for-each select=\"action\">
+					<xsl:text> &#38;&#38; </xsl:text>
+					<xsl:value-of select=\".\"/>
+				</xsl:for-each>
 				<xsl:text> &#38;&#38; echo &#34;</xsl:text>
 				<xsl:value-of select=\"message\"/>
-				<xsl:text> &#34;</xsl:text>
-				<xsl:value-of select=\"action\"/>
-				<xsl:text> </xsl:text>
+				<xsl:text>&#34;</xsl:text>
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
