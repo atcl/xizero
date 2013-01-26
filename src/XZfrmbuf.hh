@@ -12,16 +12,14 @@
 #include <unistd.h>		//STDIN_FILENO
 #include <termios.h>		//tcgetattr,tcsetattr,ICANON,ECHO,TCSANOW
 #include <sys/mman.h>		//mmap,munmap,PROT_READ,PROT_WRITE,MAP_SHARED,MAP_FIXED,MAP_FAILED
-#include <sys/ioctl.h>		//ioctl,FIONREAD
+#include <sys/ioctl.h>		//ioctl
 #include <linux/fb.h>		//FBIOGET_FSCREENINFO,FBIOGET_VSCREENINFO,FBIOPUT_VSCREENINFO,FBIOPAN_DISPLAY,FB_ACTIVATE_NOW
-#include <linux/joystick.h>	//JS_EVENT_AXIS,JS_EVENT_BUTTON,js_event
+#include <linux/joystick.h>	//JS_DATA_TYPE
 
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
-
-#include "XZstring.hh" //temp
 ///</include>
 
 ///<declare>
@@ -34,12 +32,12 @@
 #define ESCAPE	27
 #define ENTER	10
 #define SPACE	32
-#define UP	65
 #define PGUP	53
+#define PGDOWN	54
+#define UP	65
+#define DOWN	66
 #define LEFT	67
 #define RIGHT	68
-#define DOWN	66
-#define PGDOWN	54
 
 #define CLOSE	24	//CTRL+X
 ///</declare>
@@ -60,20 +58,18 @@ namespace screen
 		uint  kk = 0;					//keyboard key
 		uint  ms = uint((XRES/2)<<16)+uint(YRES/2);	//compressend mouse data
 		uint  ls = 0;					//.
-		char* nu = 0;					//.
 
 		termios nc;					//new terminal config
 		termios oc;					//old terminal config
 
 		sint  fd;					//framebuffer device handle
 		sint  jd;					//gamepad device handle
-		struct js_event          joyev;
+		struct JS_DATA_TYPE      joyst;
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
-		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF,1};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
+		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
 	}
 
-	uint kbhit();
 	void init(void* c);
 	void set();
 	void event();
@@ -95,24 +91,13 @@ namespace screen
 ///</define>
 
 ///<code>
-uint screen::kbhit()
-{
-	int c = 0;
-	ioctl(0,FIONREAD,&c);
-	struct timeval tv = { 0,0 };
-	select(1,0,0,0,&tv);
-	return c;
-}
-
 void screen::init(void* c)
 {
 	cs = c;
-	nu = new char[256];
 	tcgetattr(STDIN_FILENO,&oc);
 	nc = oc;
 	nc.c_lflag &= ~(ICANON|ECHO);
-	//nc.c_cc[VMIN] = 4;
-	//nc.c_cc[VTIME] = 1;
+	nc.c_cc[VMIN] = 0;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	ls = time()+4000;
 	jd = open(JS_DEV,O_RDONLY|O_NONBLOCK|O_NOCTTY|O_NDELAY);
@@ -122,48 +107,36 @@ void screen::init(void* c)
 void screen::event()
 {
 	ms &= 0x7FFFFFFF;
-	const int r = kbhit();
-	guard(r==0);
-
-	const int s = 3-(r==1)-(r==2);
-	packed t;
-	read(0,&t,s);
-	tk = kk = math::set(t.b[2],t.b[0],t.b[1]==91);
-	read(0,&nu,math::min(r-s,256));
-
-	//TODO: gamepad
-	//read(jd,&joyev,sizeof(struct js_event));
-
-/*	while(1)
+	const uint k1 = getchar();
+	const uint k2 = getchar();
+	tk = kk = math::set(k2,k1,k1==ESCAPE);
+	
+	read(jd,&joyst,JS_RETURN);
 	{
-	read(jd,&joyev,sizeof(struct js_event));
-if((joyev.type & ~JS_EVENT_INIT)==JS_EVENT_BUTTON) { system::say("butt ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),0); }
-system::say(" ",0);
-if((joyev.type & ~JS_EVENT_INIT)==JS_EVENT_AXIS)   { system::say("axis ",0); system::say(string::int2str(joyev.number),0); system::say(" ",0); system::say(string::int2str(joyev.value),0); }
-system::say("",1);
-sleep(200);
-	} */
+		kk = math::set(UP,   kk, joyst.y==1   && (joyst.buttons&1)==0);
+		kk = math::set(DOWN, kk, joyst.y==255 && (joyst.buttons&1)==0);
+		kk = math::set(LEFT, kk, joyst.x==255 && (joyst.buttons&1)==0);
+		kk = math::set(RIGHT,kk, joyst.x==1   && (joyst.buttons&1)==0);
 
-	/*kk = math::set(UP,kk,ev.type==JS_EVENT_AXIS && ev.number==0 && ev.value<0);
-	kk = math::set(DOWN,kk,ev.type==JS_EVENT_AXIS && ev.number==0 && ev.value>0);
-	kk = math::set(LEFT,kk,ev.type==JS_EVENT_AXIS && ev.number==1 && ev.value<0);
-	kk = math::set(RIGHT,kk,ev.type==JS_EVENT_AXIS && ev.number==1 && ev.value>0);
+		kk = math::set('a',  kk, joyst.x==1   && (joyst.buttons&1)!=0);
+		kk = math::set('d',  kk, joyst.x==255 && (joyst.buttons&1)!=0);
+		kk = math::set('w',  kk, joyst.y==1   && (joyst.buttons&1)!=0);
+		kk = math::set(SPACE,kk,(joyst.buttons&2)!=0);
 
-	kk = math::set('a',kk,ev.type==JS_EVENT_BUTTON && ev.number==0 && ev.value!=0);
-	kk = math::set('d',kk,ev.type==JS_EVENT_BUTTON && ev.number==1 && ev.value!=0);
-	kk = math::set('w',kk,ev.type==JS_EVENT_BUTTON && ev.number==2 && ev.value!=0);
-	kk = math::set(SPACE,kk,ev.type==JS_EVENT_BUTTON && ev.number==3 && ev.value!=0);*/
+		//kk = math::set(ESCAPE,kk,(joyst.buttons&8)!=0);
+	}
 
-	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<3)-((kk==UP)<<3),YRES);		//set bottom word to mouse y
-	mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<3)-((kk==RIGHT)<<3),XRES)<<16;	//set top word to mouse x
-	mx += (kk==SPACE)<<31;								//set top bit to mouse button
+	const uint mk = math::set(1,3,(joyst.y!=128)||(joyst.x!=128));
+	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<mk)-((kk==UP)<<mk),YRES);	//set bottom word to mouse y
+	     mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<mk)-((kk==RIGHT)<<mk),XRES)<<16;	//set top word to mouse x
+	     mx += (kk==SPACE)<<31;							//set top bit to mouse button
 	ms = mx;
 	ifu(kk==CLOSE) { system::bye(); }
 }
 
 void screen::set()
 {
-        system::err((fd=open(FB_DEV,O_RDWR))<=0,"ERROR: Could not open framebuffer device");
+	system::err((fd=open(FB_DEV,O_RDWR))<=0,"ERROR: Could not open framebuffer device");
 	system::err(ioctl(fd,FBIOGET_FSCREENINFO,&finfo)<0,"ERROR: Could not read fixed framebuffer info");
 	system::err(ioctl(fd,FBIOGET_VSCREENINFO,&oinfo)<0,"ERROR: Could not read variable framebuffer info");
 	system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
@@ -174,7 +147,6 @@ void screen::set()
 void screen::close()
 {
 	back.clear();
-	//"press CTRL ALT F1\n then  CTRL ALT F7"
 	flush();
 	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);
@@ -183,7 +155,13 @@ void screen::close()
 	::close(fd);
 	::close(jd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
-	//delete nu; 
+
+/*#define VT_ACTIVATE   0x5606
+#define VT_WAITACTIVE 0x5607
+uint tty = open("/dev/tty",O_RDWR);
+ioctl(tty,VT_ACTIVATE,7);
+ioctl(tty,VT_WAITACTIVE,7);
+::close(tty);*/
 }
 ///</code>
 

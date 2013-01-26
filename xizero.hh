@@ -51,7 +51,7 @@ sint start(sint i)
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		ifu(screen::turbo()==ESCAPE) { menu(); l.resume(); }
+		ifu(screen::turbo()==ENTER) { menu(); l.resume(); }
 
 		switch(l.update(screen::key(),0))
 		{
@@ -88,7 +88,7 @@ sint control()
 "D         Turn Tower Right\n"\
 "W         Align Tower Center\n"\
 "SPACE     Fire\n"\
-"ESC       Menu\n");
+"ENTER     Menu\n");
 }
 
 sint about()
@@ -114,7 +114,7 @@ void menu()
 	/*static*/ tile* ico = format::xpm(resource::icon);
 	tile* scr = gfx::save();
 	sint cbrk = 0;
-	while(screen::run() && screen::key()!=ESCAPE && cbrk==0)
+	while(screen::run() && screen::key()!=ENTER && cbrk==0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::sprite(*ico,0,0,1);
@@ -160,7 +160,7 @@ void intro()
 	      sint curr = last;
 	      sint prog = 0;
 
-	while(screen::run() && curr<last+4400 && screen::key()!=ESCAPE)
+	while(screen::run() && curr<last+4400 && screen::key()!=SPACE)
 	{
 		curr = screen::time();
 		object::linear.clear();
