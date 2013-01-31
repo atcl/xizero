@@ -72,7 +72,7 @@ void list::xsort(bool u) //use swap
 	{
 		for(uint j=(i+1);j<len;++j)
 		{
-			if( (cur->hash<cur->next->hash&&u) || (cur->hash>cur->next->hash&&!u) ) //TODO: if to math::swp
+			if( (cur->hash<cur->next->hash&&u) || (cur->hash>cur->next->hash&&!u) )
 			{
 				void* temp = cur->data;
 				cur->data = cur->next->data;

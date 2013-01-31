@@ -46,6 +46,8 @@ void init()
 
 sint start(sint i)
 {
+	button::all(-1,0);
+
 	level l(system::ldf("level0.a"));
 
 	while(screen::run())
@@ -55,8 +57,8 @@ sint start(sint i)
 
 		switch(l.update(screen::key(),0))
 		{
-			case -1: lost();         return 0;
-			case  1: won(l.ppos());  return 0;
+			case -1: lost();        button::all(-1,1); return 0;
+			case  1: won(l.ppos()); button::all(-1,1); return 0;
 		}
 				
 		l.display();
@@ -64,6 +66,7 @@ sint start(sint i)
 		l.gauges();
 		bench();
 	}
+
 	return 0;
 }
 
@@ -98,8 +101,8 @@ sint about()
 
 sint leave()
 {
-	/*if(dialog::askbox("Are you sure?")==1)*/ { system::bye(); };
-	return -1;
+	if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); };
+	return 1;
 }
 
 void menu()
@@ -114,7 +117,7 @@ void menu()
 	/*static*/ tile* ico = format::xpm(resource::icon);
 	tile* scr = gfx::save();
 	sint cbrk = 0;
-	while(screen::run() && screen::key()!=ENTER && cbrk==0)
+	while(screen::run() && screen::key()!=ENTER && cbrk>=0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::sprite(*ico,0,0,1);
@@ -245,7 +248,6 @@ void mainmenu()
 		const uint ms = screen::mouse();
 		button::check(ms);
 		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
-		//screen::vwait();
 	}
 	//*
 

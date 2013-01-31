@@ -32,10 +32,10 @@ class button : public gui
 	public:
 		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
 		~button();						//Destructor
-		void draw() const;					//Draw Button
+		void draw() const;					//Draw Button	
 		static sint check(uint m);				//Check If Button Clicked
-		static void all(bool b);				//Activate or Deactivate All Buttons
-		static inline bool inside(button* b,sint x,sint y);	//Check if inside
+		static void all(sint a,sint v);				//Activate/Show or Deactivate/Hide All Buttons
+		static inline bool inside(const button& b,sint x,sint y);//Check if inside
 
 		static button* current;					//Currently Highlighted Button 
 };
@@ -76,26 +76,27 @@ sint button::check(uint m)
 	guard(!MOUSEB(m),0);
 	for(bl.first();bl.notlast();bl.next())
 	{
-		button* temp = (button*)bl.current();
-		if( (temp->visible!=0) && (temp->active!=0) && inside(temp,MOUSEX(m),MOUSEY(m)) ) 
+		const button& temp = *(button*)bl.current();
+		if( (temp.visible!=0) && (temp.active!=0) && inside(temp,MOUSEX(m),MOUSEY(m)) ) 
 		{
-			return temp->action();
+			return temp.action();
 		}
 	}
 	return 0;
 }
 
-void button::all(bool b)
+void button::all(sint a,sint v)
 {
 	for(bl.first();bl.notlast();bl.next())
 	{
-		((button*)bl.current())->active = b;
+		((button*)bl.current())->active = math::set(a,((button*)bl.current())->active,a>=0);
+		((button*)bl.current())->visible = math::set(v,((button*)bl.current())->visible,v>=0);
 	}
 }
 
-bool button::inside(button* b,sint x,sint y)
+bool button::inside(const button& b,sint x,sint y)
 {
-	return (x>b->left) && (y>b->top) && (x<b->left+b->width) && (y<b->top+b->height);
+	return (x>b.left) && (y>b.top) && (x<b.left+b.width) && (y<b.top+b.height);
 }
 ///</code>
 

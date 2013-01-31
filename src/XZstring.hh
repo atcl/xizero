@@ -49,7 +49,7 @@ sint string::count(const char* x,char y)
 sint string::scan(const char* x,char y,char z)
 {
 	sint r = 0;
-	while( (x[r]!=0) && (x[r]!=y) &&  (x[r]!=z) ) { ++r; } //to or
+	while( (x[r]!=0) && (x[r]!=y) && (x[r]!=z) ) { ++r; }
 	return math::neg(r,x[r]!=y||x[r]!=z);
 }
 

@@ -150,12 +150,12 @@ void screen::close()
 	flush();
 	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 	munmap(frame.pointer(),XRES*YRES*4);
-	oinfo.activate = FB_ACTIVATE_NOW | FB_ACTIVATE_FORCE;
+	oinfo.activate = FB_ACTIVATE_NOW;
 	ioctl(fd,FBIOPUT_VSCREENINFO,&oinfo);
 	::close(fd);
 	::close(jd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
-
+	//::system("sudo chvt 1 && sudo chvt 7");
 /*#define VT_ACTIVATE   0x5606
 #define VT_WAITACTIVE 0x5607
 uint tty = open("/dev/tty",O_RDWR);
