@@ -19,7 +19,7 @@ namespace string
 	/*OK*/ pure sint   scan(const char* x,char y,char z='\n');
 	/*OK*/ pure sint   find(const char* x,const char* y);
 	/*OK*/ pure sint   str2int(const char* x);
-	/*OK*/ pure sint   str2hex(const char* x);
+	/*OK*/ pure sint   hex2int(const char* x);
 	/*OK*/ pure char   toup(char x);
 	/*OK*/      char*  copy(const char* x,sint y=0,sint z=0x7FFFFFFF);
 	/*OK*/      char*  concat(const char* x,const char* y);
@@ -81,7 +81,7 @@ sint string::str2int(const char* x)
 	return r;
 }
 
-sint string::str2hex(const char* x)
+sint string::hex2int(const char* x)
 {
 	sint r = 0;
 	sint i = 0;

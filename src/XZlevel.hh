@@ -25,6 +25,7 @@
 #define GROUND 150
 #define AFLOAT 50
 #define OFFSET 4
+#define MAXSTEP 5
 ///</declare>
 
 ///<define>

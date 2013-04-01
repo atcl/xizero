@@ -31,7 +31,7 @@
 #define FXRS1 0x00000126 //0.0045
 #define FXRS2 0x00012902 //1.1602
 
-#define hsel16(x) ((x==4)||(x==7)||(x==10)||(x==13))	// (((i-1)%3)==0)&&(i!=1)
+#define HSEL16(x) ((x==4)||(x==7)||(x==10)||(x==13))	// (((i-1)%3)==0)&&(i!=1)
 
 typedef sint fixed;
 
@@ -92,7 +92,7 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 
 	for(uint i=0;i<FIXED;++i)
 	{
-		r = h&&hsel16(i)&&(!r);
+		r = h&&HSEL16(i)&&(!r);
 		const bool s = (v>=0 && y<v) || (v<0 && z>=0);
 		const fixed w = x + math::neg(mul(y,t),s^h);
 		y -= math::neg(mul(x,t),s);

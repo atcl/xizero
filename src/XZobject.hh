@@ -66,7 +66,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 	const sint subs = string::str2int(t[i++]);
 	/*char* oid = t[i++];*/ i++;
-	scolor = string::str2hex(t[i++]);
+	scolor = string::hex2int(t[i++]);
 
 	sint pc = 0;
 	sint dc = 0;
@@ -88,7 +88,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 			const sint verts = string::str2int(t[i++]);
 			/*char* pid = t[i++];*/ i++;
-			const uint tcolor = string::str2hex(t[i++]);
+			const uint tcolor = string::hex2int(t[i++]);
 
 			for(sint l=0;l<3+(verts==4);++l,i+=3)
 			{

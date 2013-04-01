@@ -38,7 +38,7 @@
 - Minimal Branching
 - Minimal Dependencies
 - Only human readable, non-binary, data
-- Framebuffer (NO: X, Wayland, OpenGL, DirectFB)
+- Pure Framebuffer (NO: X, Wayland, OpenGL, DirectFB)
 - Radial Explosions
 
 == Bugs: ==

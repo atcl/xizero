@@ -173,7 +173,7 @@ void gfx::sprite(const tile& t,sint x,sint y,bool a)
 		{
 			const uint c = t.data[s++];
 			screen::back[o] = math::set(c,screen::back[o],(c!=TRANS)||a);
-			o++;
+			++o;
 		}
 	}
 }

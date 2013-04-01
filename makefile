@@ -24,4 +24,3 @@ check:
 	echo -n $$( date +"%d.%m.%Y | %H%M | " ) >> $(EXE).perf
 	/usr/bin/time -f " %C | %U | %M" -a -o $(EXE).perf ./$(EXE) > /dev/null
 
-

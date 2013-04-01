@@ -21,7 +21,7 @@
 			<define>YRES=480</define>
 		</defines>
 		<flags>
-			<flag>-O2 -pipe -falign-loops</flag>
+			<flag>-O2 -pipe -falign-loops<!-- -fprefetch-loop-arrays --></flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=atom -mtune=atom -m32 -mstackrealign</flag>
 			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>

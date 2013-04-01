@@ -221,8 +221,9 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 	angle -= math::set(360,angle>=360);
 
 	const fvector tp(position.x - fx::mul(direction[0].x,direction[0].e),position.y + fx::mul(direction[0].y,direction[0].e),position.z + fx::mul(direction[0].z,direction[0].e));
-	//terrain collision here
 	const fixed r = model[0]->bounding();
+	//terrain collision here:
+	//game::angle(map,position,tp,r)
 	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=m)&&(tp.y+r<=n));
 	position.x = math::set(tp.x,position.x,t);
 	position.y = math::set(tp.y,position.y,t);
