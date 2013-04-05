@@ -123,7 +123,7 @@ void screen::event()
 		kk = math::set('w',  kk, joyst.y==1   && (joyst.buttons&1)!=0);
 		kk = math::set(SPACE,kk,(joyst.buttons&2)!=0);
 
-		//kk = math::set(ESCAPE,kk,(joyst.buttons&8)!=0);
+		kk = math::set(ENTER,kk,(joyst.buttons&8)!=0);
 	}
 
 	const uint mk = math::set(1,3,(joyst.y!=128)||(joyst.x!=128));

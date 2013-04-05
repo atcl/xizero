@@ -27,8 +27,8 @@ class button : public gui
 		const sint textleft;					//Relative Y Coordinate of Caption	
 		const sint texttop;					//Relative X Coordinate of Caption
 		static list bl;						//List of all Buttons
-		button(const button& b);
-		button& operator=(const button& b);
+		button(const button& b);				//Copy Constructor (not implemented to deny copy)
+		button& operator=(const button& b);			//Assignment (not implemented to deny copy)
 	public:
 		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
 		~button();						//Destructor

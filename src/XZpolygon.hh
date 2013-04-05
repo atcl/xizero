@@ -45,7 +45,7 @@ class polygon
 {
 	private:
 		static lvector lpoint[3];	//Render Vertices
-		//static fvector (*sproj[2])(fvector v);
+		//static fvector (*sproj[2])(fvector v); //?
 		fvector cpoint[3];		//Polygon Vertices
 		fvector cnormal;		//Polygon Normal
 		const uint color;		//Polygon Color

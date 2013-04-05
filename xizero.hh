@@ -21,6 +21,17 @@ static const char* ascii = "\n\
        0   0\n\
  XXXXX  000\n"; //TODO X to Ξ
 
+static const char* keys = "\
+UP        Move Forward\n\
+DOWN      Move Backward\n\
+LEFT      Steer Left\n\
+RIGHT     Steer Right\n\
+A         Turn Tower Left\n\
+D         Turn Tower Right\n\
+W         Align Tower Center\n\
+SPACE     Fire\n\
+ENTER     Menu\n";
+
 inline void init();
 sint start(sint i);
 sint start();
@@ -82,16 +93,7 @@ sint start()
 
 sint control()
 {
-	return dialog::msgbox(
-"UP        Move Forward\n"\
-"DOWN      Move Backward\n"\
-"LEFT      Steer Left\n"\
-"RIGHT     Steer Right\n"\
-"A         Turn Tower Left\n"\
-"D         Turn Tower Right\n"\
-"W         Align Tower Center\n"\
-"SPACE     Fire\n"\
-"ENTER     Menu\n");
+	return dialog::msgbox(keys);
 }
 
 sint about()
@@ -163,7 +165,7 @@ void intro()
 	      sint curr = last;
 	      sint prog = 0;
 
-	while(screen::run() && curr<last+4400 && screen::key()!=SPACE)
+	while(screen::run() && curr<last+4400 && screen::key()!=ENTER)
 	{
 		curr = screen::time();
 		object::linear.clear();

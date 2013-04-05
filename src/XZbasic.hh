@@ -82,23 +82,16 @@
 #define PINK    0x00FF00FF
 #define YELLOW  0x00FFFF00
 #define DWHITE  0x00808080
-#define GRAY    0x00404040
-#define LBLUE   0x008080FF
-#define LGREEN  0x0080FF80
-#define LCYAN   0x0080FFFF
-#define LRED    0x00FF8080
-#define LPINK   0x00FF80FF
-#define LYELLOW 0x00FFFF80
-#define WHITE   0x00FFFFFF
-
-#define SYSCOL  0x00C0C0C0
-#define TRANS   0xFF000000
 #define DRED    0x00800000
 #define DGREEN  0x00008000
 #define DBLUE   0x00000080
+#define OCHER   0x00808000
 #define SKY     0x000080FF
 #define ORANGE  0x00FF8000
-#define OCHER   0x00808000
+#define WHITE   0x00FFFFFF
+#define SYSCOL  0x00C0C0C0
+
+#define TRANS   0xFF000000
 ///</declare>
 
 ///<define>

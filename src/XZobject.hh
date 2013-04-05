@@ -38,7 +38,7 @@ class object
 		/*OK*/ void display(const lvector& p,sint f) const;
 		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
-		/*OK*/ inline fixed bounding() const { return cbound; }
+		/*OK*/ inline fixed bounding() const { return cbound; }			//remove if possible
 		/*OK*/ inline bool collision(const fvector& x,const fvector& a);
 
 		static fmatrix linear;
