@@ -39,6 +39,7 @@ class object
 		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
 		/*OK*/ inline fixed bounding() const { return cbound; }
+		/*OK*/ inline bool collision(const fvector& x,const fvector& a);
 
 		static fmatrix linear;
 };
@@ -245,6 +246,13 @@ void object::pull(fixed x)
 	{
 		poly[i]->pull(x);
 	}
+}
+
+bool object::collision(const fvector& x,const fvector& a)
+{
+	return (a.x>x.x-bound)&&(a.x<x.x+bound)&&(a.y>x.y-bound)&&(a.y<x.y+bound); 	//box works
+	//const fvector t(a-x);						//component-wise?
+	//return t.dot(t)<r*r;						//circle doesn't
 }
 ///</code>
 

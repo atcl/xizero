@@ -65,11 +65,11 @@
 #endif
 
 #ifndef XRES
-	#define XRES 800
+	#define XRES 640
 #endif
 
 #ifndef YRES
-	#define YRES 600
+	#define YRES 480
 #endif
 
 #define XZOK    'XZOK'

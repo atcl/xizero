@@ -58,6 +58,7 @@ class entity
 
 		void fire(sint i);
 		void checkammo();
+		sint terrain(const char** m,fvector& n);
 		entity(const entity& e);
 		entity& operator=(const entity& e);
 	public:
@@ -91,9 +92,29 @@ void entity::checkammo()
 	list& a = ammos[!type];
 	for(a.first();a.notlast();a.next())
 	{
-		const sint h = game::collision(position,((ammo*)a.current())->pos,model[0]->bounding())<<2;
+		const sint h = model[0]->collision(position,((ammo*)a.current())->pos)<<2;
 		ifu(h!=0) { delete (ammo*)a.delcurrent(); health = math::max(0,health-h); }
 	}
+}
+
+sint entity::terrain(const char** m,fvector& n) //TODO actual angle computation
+{
+	const fixed r = model[0]->bounding();
+
+	const uint l0 = fx::f2l(position.x+r)/BWIDTH;
+	const uint r0 = fx::f2l(position.x-r)/BWIDTH;
+	const uint u0 = fx::f2l(position.y+r)/BWIDTH;
+	const uint d0 = fx::f2l(position.y-r)/BWIDTH;
+
+	const uint l1 = fx::f2l(n.x+r)/BWIDTH;
+	const uint r1 = fx::f2l(n.x-r)/BWIDTH;
+	const uint u1 = fx::f2l(n.y+r)/BWIDTH;
+	const uint d1 = fx::f2l(n.y-r)/BWIDTH;
+//REWORK!!! map members are corners!!!
+	return	math::abs(m[l0][u0]-m[l1][u1])<=MAXSTEP &&
+		math::abs(m[r0][u0]-m[r1][u1])<=MAXSTEP &&
+		math::abs(m[l0][d0]-m[l1][d1])<=MAXSTEP &&
+		math::abs(m[r0][d0]-m[r1][d1])<=MAXSTEP;
 }
 
 entity::entity(const lvector& p,const info& v,object* m,object* n,sint s)
@@ -223,8 +244,8 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 	const fvector tp(position.x - fx::mul(direction[0].x,direction[0].e),position.y + fx::mul(direction[0].y,direction[0].e),position.z + fx::mul(direction[0].z,direction[0].e));
 	const fixed r = model[0]->bounding();
 	//terrain collision here:
-	//game::angle(map,position,tp,r)
-	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=m)&&(tp.y+r<=n));
+	//terrain(map,tp);
+	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=m)&&(tp.y+r<=n)); //TODO
 	position.x = math::set(tp.x,position.x,t);
 	position.y = math::set(tp.y,position.y,t);
 	position.z = math::set(tp.z,position.z,t);
