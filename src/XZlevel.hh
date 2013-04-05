@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZlevel.hh
 // Level Class 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZsystem.hh"
 #include "XZstring.hh"

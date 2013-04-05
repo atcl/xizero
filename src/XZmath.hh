@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZmath.hh
 // Math Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 ///</include>
 

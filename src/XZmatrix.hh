@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZmatrix.hh
 // Matrix Class Library
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZvector.hh"
 ///</include>
 

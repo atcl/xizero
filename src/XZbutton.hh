@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZbutton.hh
 // GUI Button Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZgui.hh"

@@ -3,15 +3,15 @@
 // released under 2-clause BSD license
 // XZformat.hh
 // Fileformat Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZstring.hh"
 ///</include>
 
-///<declare>
+///<define>
 struct info
 {
 	char** name;
@@ -37,9 +37,7 @@ struct tile
 	sint* data;
 };
 #endif
-///</declare>
 
-///<define> 
 namespace format
 {
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values

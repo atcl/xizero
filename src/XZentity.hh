@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZentity.hh
 // Entity Class 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZvector.hh"
 #include "XZlist.hh"
@@ -16,6 +16,10 @@
 ///</include>
 
 //<declare>
+#define ROTANG 2
+///</declare>
+
+///<define>
 struct ammo
 {
 	//ammo(const fvector& p,const fvector& d) : pos(p),dir(d) { ; }
@@ -23,10 +27,6 @@ struct ammo
 	fvector dir;
 };
 
-#define ROTANG 2
-///</declare>
-
-///<define>
 class entity
 {
 	private:

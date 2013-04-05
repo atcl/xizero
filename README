@@ -11,6 +11,7 @@
 
 == Dependencies: ==
 
+- framebuffer
 - xsltproc
 
 == Usage: ==

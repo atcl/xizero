@@ -3,16 +3,16 @@
 // released under 2-clause BSD license
 // XZgfx.hh
 // Graphic Primitives Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZfrmbuf.hh"
 ///</include>
 
-///<declare>
+///<define>
 #ifndef TILE
 #define TILE
 struct tile
@@ -22,9 +22,7 @@ struct tile
 	sint* data;
 };
 #endif
-///</declare>
 
-///<define>
 namespace gfx
 {
 	/*OK*/ inline void  pix(sint x,sint y,uint c) { screen::back[(y*XRES+x)] = c; }		//draw pixel

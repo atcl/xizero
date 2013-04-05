@@ -3,13 +3,18 @@
 // released under 2-clause BSD license
 // XZstring.hh
 // C String Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 ///</include>
+
+///<declare>
+#define alert(x) system::say(string::int2str(x),1)
+#define alerf(x) system::say(string::fix2str(x),1)
+///</declare>
 
 ///<define>
 namespace string

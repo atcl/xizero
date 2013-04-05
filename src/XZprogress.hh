@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZprogress.hh
 // GUI Progressbar Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZgui.hh"
 #include "XZgfx.hh"

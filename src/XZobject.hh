@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZobject.hh
 // Object Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZformat.hh"
 #include "XZvector.hh"

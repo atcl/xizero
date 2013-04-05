@@ -63,7 +63,7 @@
 			<name>xizero</name>
 			<type>exe</type>
 		</binary>
-		<action>strip -s -R .comment -R .gnu.version xizero</action>
+		<action>strip -s -R .note -R .comment -R .gnu.version xizero</action>
 		<action>ar -q level0.a dat/level0.lvl dat/level0.txt dat/level0.map dat/player0.y3d dat/player1.y3d dat/player.ini dat/enemy.y3d dat/enemy.ini dat/boss.ini</action> 
 		<action>ar -q intro.a dat/cross.y3d dat/level.y3d dat/segver.y3d dat/seghor.y3d</action> 
 		<message>Done</message>

@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZfixed.hh
 // Fixed Point 16.16 Type Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 ///</include>
@@ -32,13 +32,13 @@
 #define FXRS2 0x00012902 //1.1602
 
 #define HSEL16(x) ((x==4)||(x==7)||(x==10)||(x==13))	// (((i-1)%3)==0)&&(i!=1)
-
-typedef sint fixed;
-
-constexpr fixed FX(sint x) { return x<<FIXED; }
 ///</declare>
 
 ///<define>
+typedef sint fixed;
+
+constexpr fixed FX(sint x) { return x<<FIXED; }
+
 namespace fx 
 {
 	inline pure sint  f2l(fixed x) { return x>>FIXED; }

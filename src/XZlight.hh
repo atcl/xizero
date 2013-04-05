@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZlight.hh
 // Light Source Class Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZgfx.hh"
 #include "XZmath.hh"

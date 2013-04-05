@@ -3,18 +3,18 @@
 // released under 2-clause BSD license
 // XZbasic.hh
 // Basic Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include <cstdint> //int32_t,uint32_t
 #include <cstdlib> //malloc,free,posix_memalign
 #include <utility> //std::move
 ///</include>
 
+///<declare>
 #define FRMBUF
 
-///<declare>
 #ifdef __GNUC__
 
 	#define pure        __attribute__((pure))
@@ -49,9 +49,6 @@
 #define MOUSEX(x) ((x&0x7FFFFFFF)>>16)
 #define MOUSEY(x)  (x&0x0000FFFF)
 #define MOUSEB(x) ((x&0x80000000)!=0)
-
-#define alert(x) system::say(string::int2str(x),1)
-#define alerf(x) system::say(string::fix2str(x),1)
 
 #define mod2(x)    (x&1)
 #define mod4(x)    (x&3)
@@ -102,7 +99,9 @@
 #define SKY     0x000080FF
 #define ORANGE  0x00FF8000
 #define OCHER   0x00808000
+///</declare>
 
+///<define>
 typedef unsigned char  byte;
 typedef uint32_t       uint;
 typedef int32_t        sint;
@@ -112,7 +111,7 @@ union packed
 	uint d;
 	byte b[4];
 };
-///</declare>
+///</define>
 
 ///<code>
 //global new + delete overloading

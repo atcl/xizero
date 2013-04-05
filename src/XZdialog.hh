@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZmsgbox.hh
 // Dialog Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZbutton.hh"

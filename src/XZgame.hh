@@ -3,17 +3,19 @@
 // released under 2-clause BSD license
 // XZgame.hh
 // Game Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZvector.hh"
 ///</include>
 
+///<declare>
 #define BWIDTH  16
 #define MAXSTEP  5
+///</declare>
 
 ///<define>
 namespace game

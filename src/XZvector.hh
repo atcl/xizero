@@ -3,20 +3,18 @@
 // released under 2-clause BSD license
 // XZvector.hh
 // integer and fixed point vector classes
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZfixed.hh"
 #include "XZmath.hh"
 ///</include>
 
-///<declare>
-struct fvector;
-///</declare>
-
 ///<define>
+struct fvector;
+
 union lvector
 {
 	sint v vector align;

@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZfrmbuf.hh
 // Direct Framebuffer Access and Input Handling Library
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include <time.h>		//clock,CLOCKS_PER_SEC
 #include <fcntl.h>		//open,read,close,O_RDWR,O_RDONLY,O_NONBLOCK
 #include <unistd.h>		//STDIN_FILENO

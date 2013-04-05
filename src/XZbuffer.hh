@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZbuffer.hh
 // Buffer Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include <string.h> //memcpy
 #include "XZbasic.hh"
 ///</include>
@@ -57,7 +57,7 @@ void buffer::clear(sint x)
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
-	for(uint i=tsize;i!=0;--i) { data[i]=x; }
+	for(uint i=tsize;i!=0;--i) { data[i]=x; } //wmemset here?
 #endif
 }
 

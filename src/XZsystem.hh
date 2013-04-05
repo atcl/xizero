@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZsystem.hh
 // System Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include <cstdio> //exit,atexit,putchar,fopen,fseek,ftell,fread,fwrite,fclose,FILE
 
 #include "XZbasic.hh"

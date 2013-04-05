@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZgui.hh
 // GUI base class 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 ///</include>
 

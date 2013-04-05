@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZpolygon.hh
 // Polygon Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZmath.hh"

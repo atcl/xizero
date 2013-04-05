@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZtrans.hh
 // Screen Transition Library 
-#pragma once
 ///</header>
 
 ///<include>
+#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZgfx.hh"

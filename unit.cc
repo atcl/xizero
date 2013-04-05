@@ -1,13 +1,15 @@
-// atCROSSLEVEL 2010,2011,2012
+///<header>
+// atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZunit.cc
 // Experimental Testing Ground
+///</header>
 
-///includes
+///<include>
 #include "xizero.hh"
-///*
+///</include>
 
-///definition
+///<define>
 
 //generate torus
 
@@ -136,9 +138,9 @@ void viewer(object* u,long k)
 		u->update();
 		u->display(pos,rc);
 }
-///*
+///</define>
 
-///implementation
+///<code>
 int main(int argc,char** argv)
 {
 	init();
@@ -165,5 +167,5 @@ int main(int argc,char** argv)
 
 	return 0;
 }
-///*
+///</code>
 
