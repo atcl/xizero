@@ -13,11 +13,14 @@
 ///</include>
 
 ///<define>
-struct fvector;
+typedef sint  lvec vector;
+typedef fixed fvec vector;
 
-union lvector
+union fvector;
+
+union alignas(16) lvector
 {
-	sint v vector align;
+	lvec   v;
 	struct { sint x, y, z, e; };
 	lvector(sint a=0,sint b=0,sint c=0,sint d=1) : x(a),y(b),z(c),e(d) { ; }
 	lvector(const fvector& a);
@@ -39,9 +42,9 @@ union lvector
 	inline void     set(sint a,sint b,sint c,sint d=1) { x=a; y=b; z=c; e=d; }
 };
 
-struct fvector
+union alignas(16) fvector
 {
-	fixed v vector align;
+	fvec   v;
 	struct { fixed x, y, z, e; };
 	fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
 	fvector(const fvector& a) : x(a.x),y(a.y),z(a.z),e(a.e) { ; }

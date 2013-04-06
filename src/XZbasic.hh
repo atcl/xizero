@@ -8,8 +8,7 @@
 ///<include>
 #pragma once
 #include <cstdint> //int32_t,uint32_t
-#include <cstdlib> //malloc,free,posix_memalign
-#include <utility> //std::move
+#include <cstdlib> //malloc,free
 ///</include>
 
 ///<declare>
@@ -17,9 +16,9 @@
 
 #ifdef __GNUC__
 
-	#define pure        __attribute__((pure))
-	#define align       __attribute__((aligned (16)))
-	#define vector      __attribute__((vector_size (16)));
+	#define pure        __attribute__((const))
+	#define alignas(x)  __attribute__((aligned (x))) //remove when gcc supports alignas (4.8)
+	#define vector      __attribute__((vector_size (16))); //simd
 	#define noret       __attribute__((noreturn))
 	#define hot         __attribute__((hot))
 	#define prefetch(x) __builtin_prefetch(x)
@@ -39,16 +38,10 @@
 	#define ifu(x)   if(x)
 #endif 
 
-#define mov(x) std::move(x)
-
-#define guard(x,...) ifu(!!(x)) { return __VA_ARGS__; }
+#define guard(x,...) ifu(x) { return __VA_ARGS__; }
 
 #define VAL(x) #x
 #define STR(x) VAL(x)
-
-#define MOUSEX(x) ((x&0x7FFFFFFF)>>16)
-#define MOUSEY(x)  (x&0x0000FFFF)
-#define MOUSEB(x) ((x&0x80000000)!=0)
 
 #define mod2(x)    (x&1)
 #define mod4(x)    (x&3)
@@ -107,8 +100,7 @@ union packed
 ///</define>
 
 ///<code>
-//global new + delete overloading
-inline void* aligned_new(uint a,uint s) { void* r; posix_memalign(&r,a,s); return r; }
+//global new + delete (required for gcc over g++)
 inline void* operator new(uint s)       { return malloc(s); }
 inline void* operator new[](uint s)     { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }

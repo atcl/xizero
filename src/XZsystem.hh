@@ -7,8 +7,8 @@
 
 ///<include>
 #pragma once
-#include <cstdio> //exit,atexit,putchar,fopen,fseek,ftell,fread,fwrite,fclose,FILE
-
+#include <cstdio>  //putchar,fopen,fseek,ftell,fread,fwrite,fclose,FILE
+#include <cstdlib> //exit,atexit
 #include "XZbasic.hh"
 ///</include>
 

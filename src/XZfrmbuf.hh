@@ -23,6 +23,10 @@
 ///</include>
 
 ///<declare>
+#define MOUSEX(x) ((x&0x7FFFFFFF)>>16)
+#define MOUSEY(x)  (x&0x0000FFFF)
+#define MOUSEB(x) ((x&0x80000000)!=0)
+
 #define BPP 32
 #define FPS 4000
 

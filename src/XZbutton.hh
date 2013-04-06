@@ -20,12 +20,12 @@
 class button : public gui
 {
 	private:
-		char* text;						//Button Caption
-		sint (*action)();					//Onclick Function Pointer
-		bool depth;						//Flat or Relief
-		bool active;						//Usable
+		const char* text;					//Button Caption
 		const sint textleft;					//Relative Y Coordinate of Caption	
 		const sint texttop;					//Relative X Coordinate of Caption
+		const bool depth;					//Flat or Relief
+		bool active;						//Usable
+		sint (*action)();					//Onclick Function Pointer
 		static list bl;						//List of all Buttons
 		button(const button& b);				//Copy Constructor (not implemented to deny copy)
 		button& operator=(const button& b);			//Assignment (not implemented to deny copy)
@@ -48,11 +48,11 @@ button* button::current = 0;
 button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
 	text(string::copy(x)),
-	action(a),
+	textleft( (math::max(w-font::width(x),0))>>1 ),
+	texttop( (math::max(h-font::height(x),0))>>1 ),
 	depth(d),
 	active(1),
-	textleft( (math::max(w-font::width(x),0))>>1 ),
-	texttop( (math::max(h-font::height(x),0))>>1 )
+	action(a)
 {
 	bl.append(this);
 }

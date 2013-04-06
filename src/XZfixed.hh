@@ -55,7 +55,7 @@ namespace fx
 	inline pure fixed ain(fixed x)    { fixed y = math::abs(x); return x+math::neg(math::set(-FXTA2,math::set(-FXTAU,0,y>(FXTA2+FXTA4)),(y>FXTA4)&&(y<(FXTA2+FXTA4))),x<0); }
 	inline pure fixed aout(fixed x,fixed y) { y = math::abs(y); return math::neg(x,(y>FXTA4)&&(y<(FXTA2+FXTA4))); }
 
-	void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
+	       void cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h);
 
 	inline fixed sin(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(y,a); } // |a| < 1.74
 	inline fixed cos(fixed a)         { a = a%FXTAU; fixed x = FXITG; fixed y = 0; fixed z = ain(a); cordic(x,y,z,FXMON,0); return aout(x,a); } // |a| < 1.74 

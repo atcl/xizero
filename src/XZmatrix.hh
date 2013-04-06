@@ -14,8 +14,8 @@
 union fmatrix
 {
 	private:
-		fixed q[3] vector align;
-		fixed m[3][4];
+		alignas(16) fixed q[3] vector;
+		alignas(16) fixed m[3][4];
 		/*OK*/ void multiplicate(const fixed (&n)[3][4]);
 	public:
 		/*OK*/ fmatrix(fixed x=FXONE,fixed y=0);
@@ -38,7 +38,7 @@ union fmatrix
 ///<code>
 void fmatrix::multiplicate(const fixed (&n)[3][4])
 {
-	const fixed align a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
+	alignas(16) const fixed a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
 				        fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1]),
 				        fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2]),
 				        fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3])+m[0][3] }, 

@@ -7,7 +7,9 @@
 
 ///<include>
 #pragma once
-#include <string.h> //memcpy
+#include <stdalign.h> //aligned_alloc
+#include <cstdlib>    //free
+#include <string.h>   //memcpy
 #include "XZbasic.hh"
 ///</include>
 
@@ -15,13 +17,13 @@
 class buffer
 {
 	private:
-		const uint  tsize;	//size in typesize
-		const uint  bytes;	//size in bytes
-		      sint* data;	//pointer to data
-		buffer(const buffer& b);
-		buffer& operator=(const buffer& b);
+		const uint  tsize;			//size in typesize
+		const uint  bytes;			//size in bytes
+		      sint* data;			//pointer to data
+		buffer(const buffer& b);		//Copy Constructor (not implemented to deny copy)
+		buffer& operator=(const buffer& b);	//Assignment (not implemented to deny copy)
 	public:
-		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)aligned_new(4096,bytes); clear(); } 
+		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)aligned_alloc(4096,bytes); clear(); } 
 		/*OK*/ ~buffer() { free(data); }
 		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }

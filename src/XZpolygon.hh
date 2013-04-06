@@ -174,10 +174,10 @@ polygon::polygon(const lvector& x,const lvector& y,const lvector& z,uint c) : cp
 
 void polygon::update(const fmatrix& m,bool i)
 {
-	cpoint[i] = mov(m*cpoint[i]);
-	cpoint[0] = mov(m*cpoint[0]);
-	cpoint[2] = mov(m*cpoint[2]);
-	cnormal   = mov((cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) *= FXCEN);
+	cpoint[i] = m*cpoint[i];
+	cpoint[0] = m*cpoint[0];
+	cpoint[2] = m*cpoint[2];
+	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) *= FXCEN;
 	cnormal.e = cnormal.length();
 }
 
@@ -188,15 +188,15 @@ void polygon::display(const lvector& p,sint f,uint c)
 
 	if(f&R_B) 
 	{
-		lpoint[0] = mov(project(p,shadow*cpoint[0]));
-		lpoint[1] = mov(project(p,shadow*cpoint[1]));
-		lpoint[2] = mov(project(p,shadow*cpoint[2]));
+		lpoint[0] = project(p,shadow*cpoint[0]);
+		lpoint[1] = project(p,shadow*cpoint[1]);
+		lpoint[2] = project(p,shadow*cpoint[2]);
 	}
 	else
 	{
-		lpoint[0] = mov(project(p,cpoint[0]));
-		lpoint[1] = mov(project(p,cpoint[1]));
-		lpoint[2] = mov(project(p,cpoint[2]));
+		lpoint[0] = project(p,cpoint[0]);
+		lpoint[1] = project(p,cpoint[1]);
+		lpoint[2] = project(p,cpoint[2]);
 	}
 	ifl(f&R_F) { c = flat(p.z,f); } 
 	ifu(f&R_S) { shape(); } else { raster(f&R_B,c); }
@@ -205,7 +205,7 @@ void polygon::display(const lvector& p,sint f,uint c)
 void polygon::pull(fixed a)
 {
 	const fixed   l = fx::mul(fx::div(FXONE,cnormal.length()),a);
-	const fvector m = mov(cnormal*l);
+	const fvector m = cnormal*l;
 	cpoint[0] += m;
 	cpoint[1] += m;
 	cpoint[2] += m;
