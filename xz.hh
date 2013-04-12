@@ -19,11 +19,11 @@
 #include "src/XZstring.hh"
 //Level 3
 #include "src/XZformat.hh"
+#include "src/XZgame.hh"
 #include "src/XZgfx.hh"
 #include "src/XZvector.hh"
 //Level 4
 #include "src/XZfont.hh"
-#include "src/XZgame.hh"
 #include "src/XZlight.hh"
 #include "src/XZmatrix.hh"
 #include "src/XZprogress.hh"

@@ -8,6 +8,8 @@
 ///<include>
 #pragma once
 #include "XZbasic.hh"
+#include "XZmath.hh"
+#include "XZfixed.hh"
 #include "XZvector.hh"
 #include "XZlist.hh"
 #include "XZformat.hh"
@@ -16,7 +18,10 @@
 ///</include>
 
 //<declare>
-#define ROTANG 2
+#define ROTANG   2
+
+#define BWIDTH  16
+#define MAXSTEP  5
 ///</declare>
 
 ///<define>

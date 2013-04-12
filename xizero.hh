@@ -103,7 +103,7 @@ sint about()
 
 sint leave()
 {
-	if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); };
+	if(dialog::msgbox("Are you sure?",1)==1) { screen::close(); };
 	return 1;
 }
 

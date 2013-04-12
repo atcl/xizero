@@ -71,7 +71,7 @@ namespace screen
 		struct JS_DATA_TYPE      joyst;
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
-		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
+		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES/**2*/,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
 	}
 
 	void init(void* c);

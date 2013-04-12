@@ -13,8 +13,8 @@
 ///</include>
 
 ///<define>
-typedef sint  lvec vector;
-typedef fixed fvec vector;
+typedef sint  lvec vector
+typedef fixed fvec vector
 
 union fvector;
 

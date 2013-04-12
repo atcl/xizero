@@ -22,7 +22,7 @@ class object
 		polygon** poly;
 		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
 		fixed     bound;
-		fixed     cbound;
+		fixed     cbound;	//TODO
 		sint      polys;
 		sint      docks;
 		uint      scolor;	//Shadow Color

@@ -1,7 +1,7 @@
 SRC = xizero.cc
 BIN = /tmp/test
 EXE = xizero
-DEF = -DTITLE=\"XIZERO\" -DVERSION=\"0.1\" -DALWAYS -DXRES=800 -DYRES=600
+DEF = -DTITLE=\"XIZERO\" -DVERSION=\"0.1\" -DALWAYS -DXRES=640 -DYRES=480
 COP = -march=native -mtune=native -m32 -std=c++0x -O2 -pipe -fomit-frame-pointer -falign-loops -fno-exceptions -fno-rtti
 LOP = -flto
 WRN = -pedantic -g -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow -Wstrict-aliasing 

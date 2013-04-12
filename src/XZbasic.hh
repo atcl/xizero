@@ -19,7 +19,6 @@
 	#define pure        __attribute__((const))
 	#define alignas(x)  __attribute__((aligned (x))) //remove when gcc supports alignas (4.8)
 	#define vector      __attribute__((vector_size (16))); //simd
-	#define noret       __attribute__((noreturn))
 	#define hot         __attribute__((hot))
 	#define prefetch(x) __builtin_prefetch(x)
 	#define ifl(x)   if(__builtin_expect(!!(x),1))
@@ -30,8 +29,7 @@
 	#endif
 #else
 	#define pure
-	#define align
-	#define noret
+	#define alignas(x)
 	#define hot
 	#define prefetch(x)
 	#define ifl(x)   if(x)

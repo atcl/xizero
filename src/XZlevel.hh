@@ -261,9 +261,8 @@ void level::gauges()
 		const lvector e(((entity*)enemies.current())->data(mark));
 		if(e.z>0)
 		{
-			ep->visible = (game::onscreen(e.x,e.y));
-			ep->left = (e.x-24);
-			ep->top = (e.y-10);
+			ep->vis(game::onscreen(e.x,e.y));
+			ep->pos(e.x-24,e.y-10);
 			ep->set(e.z+e.e);
 			ep->draw();
 		}
@@ -271,9 +270,8 @@ void level::gauges()
 	const lvector b(boss->data(mark));
 	if(b.z>0)
 	{
-		bp->visible = (game::onscreen(b.x,b.y));
-		bp->left = (b.x-48);
-		bp->top = (b.y-20);
+		bp->vis(game::onscreen(b.x,b.y));
+		bp->pos(b.x-48,b.y-20);
 		bp->set(b.z+b.e);
 		bp->draw();
 	}

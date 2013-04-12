@@ -8,14 +8,8 @@
 ///<include>
 #pragma once
 #include "XZbasic.hh"
-#include "XZmath.hh"
-#include "XZvector.hh"
+#include "XZfrmbuf.hh"
 ///</include>
-
-///<declare>
-#define BWIDTH  16
-#define MAXSTEP  5
-///</declare>
 
 ///<define>
 namespace game

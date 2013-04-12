@@ -27,7 +27,7 @@ class progress : public gui
 		sint end;
 		sint prog;
 		sint area;
-		bool horver;
+		const bool horver;
 
 	public:
 		progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v);

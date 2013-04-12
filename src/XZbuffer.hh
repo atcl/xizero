@@ -39,7 +39,7 @@ class buffer
 void buffer::clear(sint x)
 {
 #ifdef __SSE__
-	sint val[4] = {x,x,x,x};
+	const sint val[4] = {x,x,x,x};
 
 	__asm__ __volatile__ (
 	"shrl $7,%2;\n"
