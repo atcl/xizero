@@ -11,10 +11,9 @@
 ///</include>
 
 ///<define>
-union fmatrix
+struct fmatrix
 {
 	private:
-		alignas(16) fixed q[3] vector;
 		alignas(16) fixed m[3][4];
 		/*OK*/ void multiplicate(const fixed (&n)[3][4]);
 	public:

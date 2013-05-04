@@ -58,13 +58,9 @@ namespace screen
 	namespace
 	{
 		void* cs = 0;					//cursor image
-		uint  tk = 0;					//turbo key
 		uint  kk = 0;					//keyboard key
 		uint  ms = uint((XRES/2)<<16)+uint(YRES/2);	//compressend mouse data
-		uint  ls = 0;					//.
-
-		termios nc;					//new terminal config
-		termios oc;					//old terminal config
+		uint  ls = 0;					//last fps update
 
 		sint  fd;					//framebuffer device handle
 		sint  jd;					//gamepad device handle
@@ -72,6 +68,8 @@ namespace screen
 		struct fb_fix_screeninfo finfo;
 		struct fb_var_screeninfo oinfo;
 		struct fb_var_screeninfo vinfo{XRES,YRES,XRES,YRES/**2*/,0,0,32,0,{16,8,0},{8,8,0},{0,8,0},{0,0,0},0,FB_ACTIVATE_NOW,0xFFFFFFFF,0xFFFFFFFF};//,25000,88,40,23,1,128,4,0,0,0,0,0,0,0,0}; 
+
+		struct termios oc;				//old terminal config
 	}
 
 	void init(void* c);
@@ -87,7 +85,7 @@ namespace screen
 	inline void  flush()	{ frame.copy(back); ++zs; }
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline uint  key()	{ const uint r=kk; kk=0; return r; }
-	inline uint  turbo()	{ return tk; }
+	inline uint  turbo()    { return kk; }
 	inline uint  mouse()    { return ms; }
 	inline void* cursor()	{ return cs; }
 	inline void  smouse(uint x=XRES/2,uint y=YRES/2) { ms = (x<<16)+y; }
@@ -99,7 +97,7 @@ void screen::init(void* c)
 {
 	cs = c;
 	tcgetattr(STDIN_FILENO,&oc);
-	nc = oc;
+	struct termios nc = oc;
 	nc.c_lflag &= ~(ICANON|ECHO);
 	nc.c_cc[VMIN] = 0;
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
@@ -111,22 +109,20 @@ void screen::init(void* c)
 void screen::event()
 {
 	ms &= 0x7FFFFFFF;
-	const uint k1 = getchar();
-	const uint k2 = getchar();
-	tk = kk = math::set(k2,k1,k1==ESCAPE);
-	
+
+	kk = getchar();
+	ifu(kk==ESCAPE) kk = getchar();
+
 	read(jd,&joyst,JS_RETURN);
 	{
 		kk = math::set(UP,   kk, joyst.y==1   && (joyst.buttons&1)==0);
 		kk = math::set(DOWN, kk, joyst.y==255 && (joyst.buttons&1)==0);
 		kk = math::set(LEFT, kk, joyst.x==255 && (joyst.buttons&1)==0);
 		kk = math::set(RIGHT,kk, joyst.x==1   && (joyst.buttons&1)==0);
-
 		kk = math::set('a',  kk, joyst.x==1   && (joyst.buttons&1)!=0);
 		kk = math::set('d',  kk, joyst.x==255 && (joyst.buttons&1)!=0);
 		kk = math::set('w',  kk, joyst.y==1   && (joyst.buttons&1)!=0);
 		kk = math::set(SPACE,kk,(joyst.buttons&2)!=0);
-
 		kk = math::set(ENTER,kk,(joyst.buttons&8)!=0);
 	}
 
@@ -141,7 +137,7 @@ void screen::event()
 void screen::set()
 {
 	system::err((fd=open(FB_DEV,O_RDWR))<=0,"ERROR: Could not open framebuffer device");
-	system::err(ioctl(fd,FBIOGET_FSCREENINFO,&finfo)<0,"ERROR: Could not read fixed framebuffer info");
+	//system::err(ioctl(fd,FBIOGET_FSCREENINFO,&finfo)<0,"ERROR: Could not read fixed framebuffer info");
 	system::err(ioctl(fd,FBIOGET_VSCREENINFO,&oinfo)<0,"ERROR: Could not read variable framebuffer info");
 	system::err(ioctl(fd,FBIOPUT_VSCREENINFO,&vinfo)<0,"ERROR: Could not write variable framebuffer info");
 	system::err(mmap(frame.pointer(),XRES*YRES*4,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_FIXED,fd,0)==MAP_FAILED,"ERROR: Could not map buffer object!");
@@ -159,13 +155,13 @@ void screen::close()
 	::close(fd);
 	::close(jd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
-	//::system("sudo chvt 1 && sudo chvt 7");
-/*#define VT_ACTIVATE   0x5606
-#define VT_WAITACTIVE 0x5607
-uint tty = open("/dev/tty",O_RDWR);
-ioctl(tty,VT_ACTIVATE,7);
-ioctl(tty,VT_WAITACTIVE,7);
-::close(tty);*/
+	
+	/*#include <linux/vt.h>
+	uint tty = open("/dev/tty0",O_RDWR);
+	ioctl(tty,VT_ACTIVATE,1); ioctl(tty,VT_WAITACTIVE,1);
+	ioctl(tty,VT_ACTIVATE,7); ioctl(tty,VT_WAITACTIVE,7);
+	::close(tty);*/
+	::system("sudo chvt 1 && sudo chvt 7");
 }
 ///</code>
 

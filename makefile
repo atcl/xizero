@@ -15,7 +15,7 @@ default all:
 
 test:
 	scan-build -o /tmp   gcc $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
-	scan-build -o /tmp clang $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
+	scan-build -o /tmp clang++ $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
 	cppcheck --enable=all --enable=style --enable=performance --std=c++11 -v $(SRC)
 	ldd $(BIN)
 

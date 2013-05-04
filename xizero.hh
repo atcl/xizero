@@ -103,7 +103,7 @@ sint about()
 
 sint leave()
 {
-	if(dialog::msgbox("Are you sure?",1)==1) { screen::close(); };
+	if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); };
 	return 1;
 }
 
@@ -287,7 +287,7 @@ void over()
 void bench()
 {
 	const sint fps = screen::fps();
-	ifu(fps!=-1)
+	ifu(fps>0)
 	{
 		system::say(string::int2str(polygon::counter*fps)); 			
 		system::say("T/s - ");

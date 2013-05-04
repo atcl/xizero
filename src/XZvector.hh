@@ -13,15 +13,14 @@
 ///</include>
 
 ///<define>
-typedef sint  lvec vector
-typedef fixed fvec vector
+struct fvector;
 
-union fvector;
-
-union alignas(16) lvector
+struct alignas(16) lvector
 {
-	lvec   v;
-	struct { sint x, y, z, e; };
+	sint x;
+	sint y;
+	sint z;
+	sint e;
 	lvector(sint a=0,sint b=0,sint c=0,sint d=1) : x(a),y(b),z(c),e(d) { ; }
 	lvector(const fvector& a);
 	//lvector(lvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
@@ -42,10 +41,12 @@ union alignas(16) lvector
 	inline void     set(sint a,sint b,sint c,sint d=1) { x=a; y=b; z=c; e=d; }
 };
 
-union alignas(16) fvector
+struct alignas(16) fvector
 {
-	fvec   v;
-	struct { fixed x, y, z, e; };
+	fixed x;
+	fixed y;
+	fixed z;
+	fixed e;
 	fvector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
 	fvector(const fvector& a) : x(a.x),y(a.y),z(a.z),e(a.e) { ; }
 	fvector(const lvector& a) : x(fx::l2f(a.x)),y(fx::l2f(a.y)),z(fx::l2f(a.z)),e(fx::l2f(a.e)) { ; }
