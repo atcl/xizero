@@ -73,7 +73,6 @@ sint start(sint i)
 		}
 				
 		l.display();
-		//screen::back.fsaa();
 		l.gauges();
 		bench();
 	}

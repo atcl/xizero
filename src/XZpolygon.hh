@@ -143,6 +143,7 @@ void polygon::raster(uint c) const
 			//prefetch(&back[off]);
 			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
 			const bool above  = cx[3]<=screen::depth[off];
+			//const bool above  = math::set(cx[3]<screen::depth[off],cx[3]>screen::depth[off],screen::zs&1); //z
 			if(inside && above)
 			{
 				screen::depth[off] = cx[3];
@@ -240,7 +241,7 @@ void polygon::update(const fmatrix& m,bool i)
 
 void polygon::display(const lvector& p,sint f,uint c)
 {
-	guard(cnormal.z>FXMON);
+	guard(cnormal.z>FXMON); //z
 	++counter;	
 
 	if(f&R_B) 

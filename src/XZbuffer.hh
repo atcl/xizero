@@ -30,8 +30,8 @@ class buffer
 		/*OK*/ inline sint* pointer() const { return data; }
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
 		/*OK*/        void  copy(const buffer& s);
+		              void  fsaa(const buffer& s);
 		/*OK*/        void  clear(sint x=0);
-		              void  fsaa();
 };
 ///</define>
 
@@ -97,14 +97,14 @@ void buffer::copy(const buffer& s)
 #endif
 }
 
-void buffer::fsaa()
+void buffer::fsaa(const buffer& s)
 {
 #ifdef __SSE__
 	__asm__ __volatile__ (
-	"subl $" STR(XRES) ",%1;\n"
-	"shrl $6,%1;\n"
+	"subl $" STR(XRES) ",%2;\n"
+	"shrl $6,%2;\n"
 	"2:\n"
-	"prefetch  (%0);\n"
+	"prefetch  (%1);\n"
 	"prefetch  (" STR(XRES*4) ")(%0);\n"
 	"movaps   (%0),%%xmm0;\n"
 	"movaps 16(%0),%%xmm1;\n"
@@ -118,14 +118,17 @@ void buffer::fsaa()
 	"pavgb   %%xmm5,%%xmm1;\n"
 	"pavgb   %%xmm6,%%xmm2;\n"
 	"pavgb   %%xmm7,%%xmm3;\n"
-	"movntps %%xmm0,  (%0);\n"
-	"movntps %%xmm1,16(%0);\n"
-	"movntps %%xmm2,32(%0);\n"
-	"movntps %%xmm3,48(%0);\n"
+	"movntps %%xmm0,  (%1);\n"
+	"movntps %%xmm1,16(%1);\n"
+	"movntps %%xmm2,32(%1);\n"
+	"movntps %%xmm3,48(%1);\n"
 	"addl $64,%0;\n"
+	"addl $64,%1;\n"
 	"loop 2b;"
 	"sfence;"
-	: :"r"(data),"c"(bytes):);
+	: :"r"(s.data),"r"(data),"c"(bytes):"memory");
+#else
+	memcpy(data,s.data,bytes);
 #endif
 }
 ///</code>

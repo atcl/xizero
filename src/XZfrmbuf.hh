@@ -83,6 +83,7 @@ namespace screen
 	uint fps(bool o=1)	{ static uint f=0; uint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
 	inline void  flush()	{ frame.copy(back); ++zs; }
+	inline void  aaflush()	{ frame.fsaa(back); ++zs; }
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline uint  key()	{ const uint r=kk; kk=0; return r; }
 	inline uint  turbo()    { return kk; }

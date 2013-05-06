@@ -99,6 +99,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 			}
 
 			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor);
+			//poly[pc++] = new polygon(x[0],x[2],x[1],tcolor); //z
 
 			if(x[0].x<bbox[0].x) { bbox[0]=x[0]; }
 			if(x[1].x<bbox[0].x) { bbox[0]=x[1]; }
@@ -121,6 +122,7 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 				if(x[3].y>bbox[3].y) { bbox[3]=x[3]; }
 			
 				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor);
+				//poly[pc++] = new polygon(x[2],x[0],x[3],tcolor); //z
 			}
 		}
 
@@ -179,11 +181,15 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 			case 0:
 				if(az!=0 || bz!=0 || cz!=0) { poly[j++] = new polygon(a[i],b[i],c[i],e); }
 				if(cz!=0 || dz!=0 || az!=0) { poly[j++] = new polygon(c[i],d[i],a[i],e); }
+				//if(az!=0 || bz!=0 || cz!=0) { poly[j++] = new polygon(a[i],c[i],b[i],e); } //z
+				//if(cz!=0 || dz!=0 || az!=0) { poly[j++] = new polygon(c[i],a[i],d[i],e); } //z
 			break;
 
 			case 1:
 				if(bz!=0 || cz!=0 || dz!=0) { poly[j++] = new polygon(b[i],c[i],d[i],e); }
 				if(dz!=0 || az!=0 || bz!=0) { poly[j++] = new polygon(d[i],a[i],b[i],e); }
+				//if(bz!=0 || cz!=0 || dz!=0) { poly[j++] = new polygon(b[i],d[i],c[i],e); } //z
+				//if(dz!=0 || az!=0 || bz!=0) { poly[j++] = new polygon(d[i],b[i],a[i],e); } //z
 			break;
 		}
 	}

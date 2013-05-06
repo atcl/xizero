@@ -20,9 +20,9 @@
 //<declare>
 #define LWIDTH 40
 #define BWIDTH 16
-#define BHEIGHT -10
+#define BHEIGHT -10 //z 10
 #define CSHIFT (-XRES)>>1
-#define GROUND 150
+#define GROUND 150 // 15
 #define AFLOAT 50
 #define OFFSET 4
 #define MAXSTEP 5
@@ -184,6 +184,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	gfx::fsprog(95);
 	font::draw(XRES-200,YRES-font::height(),"Press SPACE to start",GREEN,BLACK);
 	screen::flush();
+	//screen::depth.clear(0); //z
 	screen::wait(SPACE);
 	delete[] a;
 	delete[] b;
@@ -221,7 +222,7 @@ void level::display()
 {
 	//draw background //TODO: remove the clears
 	screen::back.clear((screen::zs<<24)|DRED);
-	screen::depth.clear(FX(200));
+	screen::depth.clear(FX(200)); //z
 	//*
 
 	//render terrain //fix
