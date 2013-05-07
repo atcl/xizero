@@ -222,7 +222,8 @@ void level::display()
 {
 	//draw background //TODO: remove the clears
 	screen::back.clear((screen::zs<<24)|DRED);
-	screen::depth.clear(FX(200)); //z
+	//screen::depth.clear(0); //z
+	screen::depth.clear(FX(200));
 	//*
 
 	//render terrain //fix
@@ -231,13 +232,12 @@ void level::display()
 	object::linear.clear();
 	object::linear.translate(0,FX(YRES>>1),0);
 	sint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(uint i=0;i<31;++i)
+	for(uint i=0;i<31;++i,++r)
 	{
 		object temp(*terrain[r]);
 		temp.update();
 		temp.display(p,R_F);
 		object::linear.translate(0,FX(-BWIDTH),0);
-		++r;
 	}
 	//*
 
