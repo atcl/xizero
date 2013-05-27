@@ -39,14 +39,14 @@ namespace string
 ///<code>
 sint string::length(const char* x)
 {
-	register sint r=0;
-	while(x[r]!=0) { ++r; }
+	register sint r=-1;
+	do { ++r; } while(x[r]);
 	return r;
 }
 
 sint string::count(const char* x,char y)
 {
-	sint r = 0;
+	register sint r = 0;
 	for(sint i=0;x[i]!=0;++i) { r += (x[i]==y); }
 	return r;
 }

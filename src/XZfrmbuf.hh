@@ -101,6 +101,7 @@ void screen::init(void* c)
 	struct termios nc = oc;
 	nc.c_lflag &= ~(ICANON|ECHO);
 	nc.c_cc[VMIN] = 0;
+	nc.c_cc[VTIME] = 0; 
 	tcsetattr(STDIN_FILENO,TCSANOW,&nc);
 	ls = time()+4000;
 	jd = open(JS_DEV,O_RDONLY|O_NONBLOCK|O_NOCTTY|O_NDELAY);
@@ -111,10 +112,10 @@ void screen::event()
 {
 	ms &= 0x7FFFFFFF;
 
-	kk = getchar();
-	ifu(kk==ESCAPE) kk = getchar();
+	kk = getchar(); //read(0, &kk, 1);
+	ifu(kk==ESCAPE||kk==0) { kk = getchar(); }
 
-	read(jd,&joyst,JS_RETURN);
+	const sint r = read(jd,&joyst,JS_RETURN);
 	{
 		kk = math::set(UP,   kk, joyst.y==1   && (joyst.buttons&1)==0);
 		kk = math::set(DOWN, kk, joyst.y==255 && (joyst.buttons&1)==0);
@@ -127,7 +128,7 @@ void screen::event()
 		kk = math::set(ENTER,kk,(joyst.buttons&8)!=0);
 	}
 
-	const uint mk = math::set(1,3,(joyst.y!=128)||(joyst.x!=128));
+	const uint mk = math::set(1,3,((joyst.y!=128)||(joyst.x!=128))&&(r>0));
 	uint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<mk)-((kk==UP)<<mk),YRES);	//set bottom word to mouse y
 	     mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<mk)-((kk==RIGHT)<<mk),XRES)<<16;	//set top word to mouse x
 	     mx += (kk==SPACE)<<31;							//set top bit to mouse button
@@ -156,13 +157,8 @@ void screen::close()
 	::close(fd);
 	::close(jd);
 	tcsetattr(STDIN_FILENO,TCSANOW,&oc);
-	
-	/*#include <linux/vt.h>
-	uint tty = open("/dev/tty0",O_RDWR);
-	ioctl(tty,VT_ACTIVATE,1); ioctl(tty,VT_WAITACTIVE,1);
-	ioctl(tty,VT_ACTIVATE,7); ioctl(tty,VT_WAITACTIVE,7);
-	::close(tty);*/
-	::system("sudo chvt 1 && sudo chvt 7");
+
+	::system("sudo chvt 1 && sudo chvt 7"); //temp
 }
 ///</code>
 

@@ -17,11 +17,11 @@
 ///<code>
 namespace math
 {
-	/*OK*/ pure inline sint sgn(sint x) { return (x>>31)|(sint)(((uint)-x)>>31); }
+	/*OK*/ pure inline sint sgn(sint x) { return (x>>31)|1; }
 	/*OK*/ pure inline sint abs(sint x) { register const sint y=x>>31; return (x^y)-y; }
 	/*OK*/ pure inline sint min(sint x,sint y) { return y^((x^y) & -(x<y)); }
 	/*OK*/ pure inline sint max(sint x,sint y) { return x^((x^y) & -(x<y)); }
-	/*OK*/ pure inline sint neg(sint x,bool y) { return ~(x^(y-1))+y; }
+	/*OK*/ pure inline sint neg(sint x,bool y) { return (x^(-y))+y; }
 	/*OK*/ pure inline sint set(sint x,bool y) { return ((sint(!y))-1) & x; }
 	/*OK*/ pure inline sint set(sint x,sint y,bool z) { return (((sint(!z))-1) & x) | ((sint(z)-1) & y); }
 	/*OK*/ pure inline sint lim(sint x,sint a,sint y) { return max(x,min(a,y)); }

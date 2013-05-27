@@ -195,7 +195,7 @@ sint entity::update(sint k,sint j,fixed m,fixed n)
 		return health-(death++>250);
 	}
 
-	k = math::set(0,k,k=='w'&&angle==0);
+	k = math::set(k,k!='w'||angle!=0);
 	switch(k)
 	{
 		case RIGHT:

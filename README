@@ -12,7 +12,7 @@
 == Dependencies: ==
 
 - framebuffer
-- xsltproc
+- xsltproc (optional)
 
 == Usage: ==
 

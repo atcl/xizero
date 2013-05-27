@@ -45,7 +45,6 @@ namespace fx
 	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FIXED; }
 	inline pure fixed l2f(sint x)  { return x<<FIXED; }
 	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FIXED; }
-	//inline pure fixed MUL(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FIXED; }
 	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FIXED)/y; }
 
 	inline pure fixed round(fixed x)  { return (x + FXHLF)&FXMON; }

@@ -81,6 +81,7 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 
 		default:
 		case 0: //general line
+		{
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
 			ys = math::neg(ys,dy<0);
@@ -99,10 +100,12 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 				pp += dy;
 				o += xs + math::set(ys,pp>=dx);
 				pp -= math::set(dx,pp>=dx);
-			} 
+			}
+		}
 		break;
 
 		case 2: //antialiased line
+		{
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
 			ys = math::neg(ys,dy<0);
@@ -133,7 +136,8 @@ void gfx::line(sint x,sint y,sint a,sint b,uint c,bool k)
 				pp += dy;
 				o += xs + math::set(ys,pp>=dx);
 				pp -= math::set(dx,pp>=dx);
-			} 
+			}
+		}
 		break;
 	}
 }
