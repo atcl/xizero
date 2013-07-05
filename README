@@ -3,6 +3,7 @@
 ## Version: ##
 
 0.1 (Callbox)
+0.2 (Gruelfin)
 
 ## Install: ##
 
@@ -11,8 +12,8 @@
 
 ## Dependencies: ##
 
-- libsdl
-- xsltproc
++ libsdl
++ xsltproc
 
 ## Usage: ##
 
@@ -26,21 +27,21 @@
 
 ### Major: ###
 
-- Software Rasterizer
-- Flatshading
-- Blinn Shadows
-- 2xFSAA
++ Software Rasterizer
++ Flatshading
++ Blinn Shadows
++ 2xFSAA
 
 ### Minor: ###
 
-- 32bit Z-Buffer
-- Cordic Fixed Point Math
-- No Floating Point Operations
-- Minimal Branching
-- Minimal Dependencies
-- Only human readable, non-binary, data
-- Pure Framebuffer (NO: X, Wayland, OpenGL, DirectFB)
-- Radial Explosions
++ 32bit Z-Buffer
++ Cordic Fixed Point Math
++ No Floating Point Operations
++ Minimal Branching
++ Minimal Dependencies
++ Only human readable, non-binary, data
++ Pure Framebuffer (NO: X, Wayland, OpenGL, DirectFB)
++ Radial Explosions
 
 ## Warning: ##
 

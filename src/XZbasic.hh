@@ -7,7 +7,7 @@
 
 ///<include>
 #pragma once
-#include <cstdint> //int32_t,uint32_t,uint64_t
+#include <cstdint> //int32_t,uint32_t
 #include <cstdlib> //malloc,free
 ///</include>
 
@@ -85,15 +85,10 @@
 
 ///<define>
 typedef unsigned char byte;
-
 typedef int32_t       xint;
 typedef uint32_t      yint;
 
-union rgba
-{
-	xint d;
-	byte b[4];
-};
+union rgba { xint d; byte b[4]; };
 ///</define>
 
 ///<code>

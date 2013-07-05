@@ -8,7 +8,7 @@
 ///<include>
 #pragma once
 #include <time.h>		//clock,CLOCKS_PER_SEC
-#include <SDL/SDL.h>
+#include <SDL/SDL.h>		//SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState
 
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
@@ -24,17 +24,21 @@
 #define BPP 32
 #define FPS 4000
 
-#define ESCAPE	27
-#define ENTER	10
-#define SPACE	32
-#define PGUP	53
-#define PGDOWN	54
-#define UP	65
-#define DOWN	66
-#define LEFT	67
-#define RIGHT	68
-
-#define CLOSE	24	//CTRL+X
+#define ESCAPE	SDLK_ESCAPE
+#define ENTER	SDLK_RETURN
+#define SPACE	SDLK_SPACE
+#define PGUP	SDLK_PAGEUP
+#define PGDOWN	SDLK_PAGEDOWN
+#define UP	SDLK_UP
+#define DOWN	SDLK_DOWN
+#define LEFT	SDLK_LEFT
+#define RIGHT	SDLK_RIGHT
+#define CTRL    SDLK_LCTRL
+#define KEYW    SDLK_w
+#define KEYA    SDLK_a
+#define KEYS    SDLK_s
+#define KEYD    SDLK_d
+#define KEYX    SDLK_x
 ///</declare>
 
 ///<define>
@@ -52,6 +56,7 @@ namespace screen
 		yint  ls = 0;					//last fps update
 
 		SDL_Surface* video;
+		Uint8* keys;
 	}
 
 	void init(void* c);
@@ -79,39 +84,37 @@ void screen::init(void* c)
 {
 	cs = c;
 
+	keys = SDL_GetKeyState(0);
 	video = SDL_SetVideoMode(XRES, YRES, BPP, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL); 
 	frame.pointer(video->pixels);
+	SDL_WM_SetCaption(TITLE " " VERSION,TITLE);
 
 	system::ifx(close);
 }
 
 void screen::event()
-{/*
-	ms &= 0x7FFFFFFF;
+{
+	SDL_PumpEvents();
+	ifu(keys[CTRL]&&keys[KEYX]) { system::bye(); }
 
-	kk = getchar(); //read(0, &kk, 1);
-	ifu(kk==ESCAPE||kk==0) { kk = getchar(); }
+	kk = math::set(UP,kk,keys[UP]);
+	kk = math::set(DOWN,kk,keys[DOWN]);
+	kk = math::set(LEFT,kk,keys[LEFT]);
+	kk = math::set(RIGHT,kk,keys[RIGHT]);
+	kk = math::set(SPACE,kk,keys[SPACE]);
+	kk = math::set(ENTER,kk,keys[ENTER]);
+	kk = math::set(KEYW,kk,keys[KEYW]);
+	kk = math::set(KEYA,kk,keys[KEYA]);
+	kk = math::set(KEYS,kk,keys[KEYS]);
+	kk = math::set(KEYD,kk,keys[KEYD]);
+	kk = math::set(PGUP,kk,keys[PGUP]);
+	kk = math::set(PGDOWN,kk,keys[PGDOWN]);
 
-	const xint r = read(jd,&joyst,JS_RETURN);
-	{
-		kk = math::set(UP,   kk, joyst.y==1   && (joyst.buttons&1)==0);
-		kk = math::set(DOWN, kk, joyst.y==255 && (joyst.buttons&1)==0);
-		kk = math::set(LEFT, kk, joyst.x==255 && (joyst.buttons&1)==0);
-		kk = math::set(RIGHT,kk, joyst.x==1   && (joyst.buttons&1)==0);
-		kk = math::set('a',  kk, joyst.x==1   && (joyst.buttons&1)!=0);
-		kk = math::set('d',  kk, joyst.x==255 && (joyst.buttons&1)!=0);
-		kk = math::set('w',  kk, joyst.y==1   && (joyst.buttons&1)!=0);
-		kk = math::set(SPACE,kk,(joyst.buttons&2)!=0);
-		kk = math::set(ENTER,kk,(joyst.buttons&8)!=0);
-	}
-
-	const yint mk = math::set(1,3,((joyst.y!=128)||(joyst.x!=128))&&(r>0));
-	yint mx =  math::lim(0,MOUSEY(ms)+((kk==DOWN)<<mk)-((kk==UP)<<mk),YRES);	//set bottom word to mouse y
-	     mx += math::lim(0,MOUSEX(ms)+((kk==LEFT)<<mk)-((kk==RIGHT)<<mk),XRES)<<16;	//set top word to mouse x
-	     mx += (kk==SPACE)<<31;							//set top bit to mouse button
+	yint mx =  math::lim(0,MOUSEY(ms)+(kk==DOWN)-(kk==UP),YRES);		//set bottom word to mouse y
+	     mx += math::lim(0,MOUSEX(ms)+(kk==LEFT)-(kk==RIGHT),XRES)<<16;	//set top word to mouse x
+	     mx += (kk==SPACE)<<31;						//set top bit to mouse button
 	ms = mx;
-	ifu(kk==CLOSE) { system::bye(); }
-*/}
+}
 
 void screen::close()
 {
@@ -120,7 +123,6 @@ void screen::close()
 
 	SDL_Quit();
 	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
-	
 }
 ///</code>
 
