@@ -19,17 +19,17 @@
 ///<define>
 namespace string
 {
-	/*OK*/ pure sint   length(const char* x);
-	/*OK*/ pure sint   count(const char* x,char='\n');
-	/*OK*/ pure sint   scan(const char* x,char y,char z='\n');
-	/*OK*/ pure sint   find(const char* x,const char* y);
-	/*OK*/ pure sint   str2int(const char* x);
-	/*OK*/ pure sint   hex2int(const char* x);
+	/*OK*/ pure xint   length(const char* x);
+	/*OK*/ pure xint   count(const char* x,char='\n');
+	/*OK*/ pure xint   scan(const char* x,char y,char z='\n');
+	/*OK*/ pure xint   find(const char* x,const char* y);
+	/*OK*/ pure xint   str2int(const char* x);
+	/*OK*/ pure xint   hex2int(const char* x);
 	/*OK*/ pure char   toup(char x);
-	/*OK*/      char*  copy(const char* x,sint y=0,sint z=0x7FFFFFFF);
+	/*OK*/      char*  copy(const char* x,xint y=0,xint z=0x7FFFFFFF);
 	/*OK*/      char*  concat(const char* x,const char* y);
-	/*OK*/      char*  int2str(sint x);
-	/*OK*/      char*  fix2str(fixed x,uint y=16);
+	/*OK*/      char*  int2str(xint x);
+	/*OK*/      char*  fix2str(fixed x,yint y=16);
 	/*OK*/      char*  repl(const char* x,char y,char z);
 	/*OK*/      char** split(const char* x,char y);
 	/*OK*/      char*  trim(const char* x,char y=' ');
@@ -37,31 +37,31 @@ namespace string
 ///</define>
 
 ///<code>
-sint string::length(const char* x)
+xint string::length(const char* x)
 {
-	register sint r=-1;
+	register xint r=-1;
 	do { ++r; } while(x[r]);
 	return r;
 }
 
-sint string::count(const char* x,char y)
+xint string::count(const char* x,char y)
 {
-	register sint r = 0;
-	for(sint i=0;x[i]!=0;++i) { r += (x[i]==y); }
+	register xint r = 0;
+	for(xint i=0;x[i]!=0;++i) { r += (x[i]==y); }
 	return r;
 }
 
-sint string::scan(const char* x,char y,char z)
+xint string::scan(const char* x,char y,char z)
 {
-	sint r = 0;
+	xint r = 0;
 	while( (x[r]!=0) && (x[r]!=y) && (x[r]!=z) ) { ++r; }
 	return math::neg(r,x[r]!=y||x[r]!=z);
 }
 
-sint string::find(const char* x,const char* y)
+xint string::find(const char* x,const char* y)
 {
-	sint r = -1;
-	for(sint i=0,j=0;(x[i]!=0)&&(y[j]!=0);++i)
+	xint r = -1;
+	for(xint i=0,j=0;(x[i]!=0)&&(y[j]!=0);++i)
 	{
 		r = math::set(i,r<0&&x[i]==y[0]) | math::set(r,r>=0&&x[i]==y[j]) | math::set(-1,(x[i]!=y[j])||(y[j+1]!=0&&x[i+1]==0));
 		j = math::set(j+1,r>=0); 
@@ -69,12 +69,12 @@ sint string::find(const char* x,const char* y)
 	return r;
 }
 
-sint string::str2int(const char* x)
+xint string::str2int(const char* x)
 {
-	sint r = 0;
-	sint i = 0;
+	xint r = 0;
+	xint i = 0;
 	while(x[i]==' ') { ++i; }
-	const sint j = math::set(i,-1,x[i]=='-');
+	const xint j = math::set(i,-1,x[i]=='-');
 	i += j!=-1;
 	while( (x[i]>='0') && (x[i]<='9') )
 	{
@@ -86,12 +86,12 @@ sint string::str2int(const char* x)
 	return r;
 }
 
-sint string::hex2int(const char* x)
+xint string::hex2int(const char* x)
 {
-	sint r = 0;
-	sint i = 0;
+	xint r = 0;
+	xint i = 0;
 	while(x[i]==' ') { ++i; }
-	for(sint j=0;j<8&&x[i]!=0;++j,++i)
+	for(xint j=0;j<8&&x[i]!=0;++j,++i)
 	{
 		r += (math::set((x[i]-'0')   ,x[i]>='0'&&x[i]<='9') 
 		   |  math::set((x[i]-'a'+10),x[i]>='a'&&x[i]<='f') 
@@ -105,39 +105,39 @@ char string::toup(char x)
 	return math::set('A',math::set(x-32,x,x>=97),x<65); 
 }
 
-char* string::copy(const char* x,sint y,sint z)
+char* string::copy(const char* x,xint y,xint z)
 {
-	const sint l = math::min(length(x),z);
+	const xint l = math::min(length(x),z);
 	char* r = new char[l+1];
-	for(sint i=0;i<l;++i,++y) { r[i] = x[y]; } //y++ into x[y]?
+	for(xint i=0;i<l;++i,++y) { r[i] = x[y]; } //y++ into x[y]?
 	r[l] = 0;
 	return r;
 }
 
 char* string::concat(const char* x,const char* y)
 {
-	const sint a = length(x);
-	const sint b = length(y);
+	const xint a = length(x);
+	const xint b = length(y);
 	char* r = new char[a+b+1];
 
-	sint i = 0;
-	sint j = 0;
+	xint i = 0;
+	xint j = 0;
 	for(;i<a;++i) { r[i] = x[i]; }
 	for(;j<b;++i,++j) { r[i] = y[j]; } //j++ into y[j]?
 	r[++i] = 0;
 	return r;
 }
 
-char* string::int2str(sint x)
+char* string::int2str(xint x)
 {
 	char* r = new char[16];
-	sint  i = (x<0);
+	xint  i = (x<0);
 	x       = math::abs(x);
 	r[0]    = math::set('-','0',i);
 	i      += (x==0);
-	for(sint d=1000000000,k=0;d>0;d/=10,i+=k)
+	for(xint d=1000000000,k=0;d>0;d/=10,i+=k)
 	{
-		const sint j = x/d;
+		const xint j = x/d;
 		k = (k+j>0);
 		x -= d*j;
 		r[i] = j+'0';
@@ -146,26 +146,26 @@ char* string::int2str(sint x)
 	return r;
 }
 
-char* string::fix2str(fixed x,uint y)
+char* string::fix2str(fixed x,yint y)
 {
 	char* r = new char[16];
-	sint  i = sint(x<0);
+	xint  i = xint(x<0);
 	x       = math::abs(x);
 	r[0]    = math::set('-','0',i);
-	sint  l = x>>y;
+	xint  l = x>>y;
 	i      += (l==0);
-	for(sint d=10000,k=0;d>0;d/=10,i+=k)
+	for(xint d=10000,k=0;d>0;d/=10,i+=k)
 	{
-		const sint j = l/d;
+		const xint j = l/d;
 		k = (k+j>0);
 		l -= d*j;
 		r[i] = j+'0';
 	}
 	r[i++] = '.';
 	l = x & 0x0000FFFF;
-	for(sint d=10;d<10000000;d*=10,++i)
+	for(xint d=10;d<10000000;d*=10,++i)
 	{
-		const sint j = ((l*d)>>y)%10;
+		const xint j = ((l*d)>>y)%10;
 		r[i] = math::set(j,j>0) +'0';
 	}
 	r[i] = 0;
@@ -174,9 +174,9 @@ char* string::fix2str(fixed x,uint y)
 
 char* string::repl(const char* x,char y,char z)
 {
-	const sint l = length(x);
+	const xint l = length(x);
 	char* r = new char[l+1];
-	for(sint i=0;i<l;++i)
+	for(xint i=0;i<l;++i)
 	{
 		r[i] = math::set(z,x[i],x[i]==y);
 	}
@@ -186,12 +186,12 @@ char* string::repl(const char* x,char y,char z)
 
 char** string::split(const char* x,char y) //optimize if!
 {
-	const sint c = count(x,y)+1;
+	const xint c = count(x,y)+1;
 	char* s = repl(x,y,0);
 	char** r = new char*[c];
 	r[0] = &s[0];
-	sint i = 0;
-	sint j = 1;
+	xint i = 0;
+	xint j = 1;
 	while(x[i]!=0)
 	{
 		if(s[i]==0) { r[j] = &s[i+1]; }
@@ -202,11 +202,11 @@ char** string::split(const char* x,char y) //optimize if!
 
 char* string::trim(const char* x,char y)
 {
-	const sint l = length(x);
-	const sint c = count(x,y);
+	const xint l = length(x);
+	const xint c = count(x,y);
 	char* r = new char[l-c+1];
-	sint j = 0;
-	for(sint i=0;x[i]!=0;++i)
+	xint j = 0;
+	for(xint i=0;x[i]!=0;++i)
 	{
 		const bool k = x[i]!=y;
 		r[j] = math::set(x[i],r[j],k);

@@ -16,11 +16,11 @@ struct info
 {
 	char** name;
 	char** data;
-	uint*  size;
-	const  sint count;
+	yint*  size;
+	const  yint count;
 	char*  operator[](const char* n) const
 	{
-		for(sint i=0;i<count;++i)
+		for(yint i=0;i<count;++i)
 		{
 			if(string::find(n,name[i])!=-1) { return data[i]; }
 		}
@@ -32,9 +32,9 @@ struct info
 #define TILE
 struct tile
 {
-	sint  width;
-	sint  height;
-	sint* data;
+	xint  width;
+	xint  height;
+	xint* data;
 };
 #endif
 
@@ -56,29 +56,29 @@ char** format::csv(const char* x,char y)
 
 tile* format::xpm(const char* x)
 {
-	sint   index = 0;
+	xint   index = 0;
 	char** y     = string::split(x,'\n');
 	char** line  = string::split(y[index++],' ');
 
 	guard(string::str2int(line[3])!=1,0);
 
-	const sint width  = string::str2int(line[0]);
-	const sint height = string::str2int(line[1]);
-	const sint colors = string::str2int(line[2]);
-	tile* r = new tile({width, height, new sint[width*height]});
+	const xint width  = string::str2int(line[0]);
+	const xint height = string::str2int(line[1]);
+	const xint colors = string::str2int(line[2]);
+	tile* r = new tile({width, height, new xint[width*height]});
 
-	uint* color = new uint[256];
-	for(sint i=0;i<colors;++i)
+	yint* color = new uint[256];
+	for(xint i=0;i<colors;++i)
 	{
 		line = string::split(y[index++],' ');
-		color[sint(line[0][0])] = math::set(string::hex2int(line[2])>>4,TRANS,line[2][0]=='#'); 
+		color[xint(line[0][0])] = math::set(string::hex2int(line[2])>>4,TRANS,line[2][0]=='#'); 
 	}
 
-	for(sint i=0,o=0;i<height;++i,++index)
+	for(xint i=0,o=0;i<height;++i,++index)
 	{
-		for(sint j=0;j<width;++j,++o)
+		for(xint j=0;j<width;++j,++o)
 		{
-			r->data[o] = color[sint(y[index][j])];
+			r->data[o] = color[xint(y[index][j])];
 		}
 	}
 
@@ -90,12 +90,12 @@ tile* format::xpm(const char* x)
 
 info* format::ini(const char* x)
 {
-	const sint m = string::count(x,'=');
+	const xint m = string::count(x,'=');
 	char** s = string::split(x,'\n');
 
 	info* r = new info{ new char*[m],new char*[m],0,m };
 
-	for(sint i=0,j=0;i<m;++i)
+	for(xint i=0,j=0;i<m;++i)
 	{
 		if(string::count(s[i],'=')!=0)
 		{
@@ -116,12 +116,12 @@ info* format::ar(char* x)
 	//*
 
 	//Count files
-	sint c = 0;
-	sint t = 8;
+	xint c = 0;
+	xint t = 8;
 	do
 	{
 		t += 48;
-		const sint s = string::str2int(&x[t]);
+		const xint s = string::str2int(&x[t]);
 		t += 12+s+(s&1);
 		++c;	
 	}
@@ -131,13 +131,13 @@ info* format::ar(char* x)
 
 	//Unpack
 	t = 8;
-	for(sint i=0;i<c;++i)
+	for(xint i=0;i<c;++i)
 	{
 		r->name[i] = &x[t];
 		t += 16;
-		for(sint j=0;j<16;++j) { if(x[t-j]=='/') { x[t-j]=0; break; } }
+		for(xint j=0;j<16;++j) { if(x[t-j]=='/') { x[t-j]=0; break; } }
 		t += 32;
-		const uint s = r->size[i] = string::str2int(&x[t]);
+		const yint s = r->size[i] = string::str2int(&x[t]);
 		t += 12;
 		r->data[i] = &x[t];
 		t += s+(s&1);

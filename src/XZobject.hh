@@ -23,19 +23,19 @@ class object
 		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
 		fixed     bound;
 		fixed     cbound;	//TODO
-		sint      polys;
-		sint      docks;
-		uint      scolor;	//Shadow Color
+		xint      polys;
+		xint      docks;
+		yint      scolor;	//Shadow Color
 		object& operator=(const object& o);
 	public:
 
 		/*OK*/ object(const char* o);
-		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e);
+		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,xint x,xint e);
 		/*OK*/ object(const object& o);
 		/*OK*/ ~object();
-		/*OK*/ fvector* docktype(sint i,sint j) const;
+		/*OK*/ fvector* docktype(xint i,xint j) const;
 		/*OK*/ void update(const fmatrix& m=object::linear,bool j=1);
-		/*OK*/ void display(const lvector& p,sint f) const;
+		/*OK*/ void display(const lvector& p,xint f) const;
 		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
 		/*OK*/ inline fixed bounding() const { return cbound; }			//remove if possible
@@ -51,7 +51,7 @@ fmatrix object::linear = fmatrix();
 object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(0),scolor(0)
 {
 	char** t = format::csv(o);
-	sint i = 0;
+	xint i = 0;
 
 	system::err(string::find(t[i++],"<y3dtxt>")==-1,"ERROR: y3d format wrong (head)");
 
@@ -65,33 +65,33 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 	system::err(string::find(t[i++],"objt")==-1,"ERROR: y3d format wrong (objt)");
 
-	const sint subs = string::str2int(t[i++]);
+	const xint subs = string::str2int(t[i++]);
 	/*char* oid = t[i++];*/ i++;
 	scolor = string::hex2int(t[i++]);
 
-	sint pc = 0;
-	sint dc = 0;
-	for(sint j=0;j<subs;++j)
+	xint pc = 0;
+	xint dc = 0;
+	for(xint j=0;j<subs;++j)
 	{
 		system::err(string::find(t[i++],"sobj")==-1,"ERROR: y3d format wrong (sobj)");
 
-		const sint p = string::str2int(t[i++]);
+		const xint p = string::str2int(t[i++]);
 		/*char* sid = t[i++];*/ i++;
-		const sint d = string::str2int(t[i++]);
+		const xint d = string::str2int(t[i++]);
 
 		system::err(string::find(t[i++],"posi")==-1,"ERROR: y3d format wrong (posi)");
 
 		lvector pos(string::str2int(t[i]),string::str2int(t[i+1]),string::str2int(t[i+2])); i+=3;
 		lvector x[4];
-		for(sint k=0;k<p;++k)
+		for(xint k=0;k<p;++k)
 		{
 			system::err(string::find(t[i++],"poly")==-1,"ERROR: y3d format wrong (poly)");
 
-			const sint verts = string::str2int(t[i++]);
+			const xint verts = string::str2int(t[i++]);
 			/*char* pid = t[i++];*/ i++;
-			const uint tcolor = string::hex2int(t[i++]);
+			const yint tcolor = string::hex2int(t[i++]);
 
-			for(sint l=0;l<3+(verts==4);++l,i+=3)
+			for(xint l=0;l<3+(verts==4);++l,i+=3)
 			{
 				system::err(string::find(t[i++],"vert")==-1,"ERROR: y3d format wrong (vert)");
 
@@ -126,11 +126,11 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 			}
 		}
 
-		for(sint k=0;k<d;++k,i+=3,++dc)
+		for(xint k=0;k<d;++k,i+=3,++dc)
 		{
 			system::err(string::find(t[i++],"dock")==-1,"ERROR: y3d format wrong (dock)");
 
-			const sint type = string::str2int(t[i++]);
+			const xint type = string::str2int(t[i++]);
 			dock[dc].set(fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type);
 		}
 	}
@@ -153,9 +153,9 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly(0),dock(0),bound(0),polys(x<<1),docks(0),scolor(0)
+object::object(lvector* a,lvector* b,lvector* c,lvector* d,xint x,xint e) : poly(0),dock(0),bound(0),polys(x<<1),docks(0),scolor(0)
 {
-	for(sint i=0;i<x;++i)
+	for(xint i=0;i<x;++i)
 	{
 		polys -= (a[i].z==0 && b[i].z==0 && c[i].z==0);
 		polys -= (c[i].z==0 && d[i].z==0 && a[i].z==0);
@@ -165,14 +165,14 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 
 	poly = new polygon*[polys];
 
-	for(sint i=0,j=0;i<x;++i)
+	for(xint i=0,j=0;i<x;++i)
 	{
-		const sint az = a[i].z;
-		const sint bz = b[i].z;
-		const sint cz = c[i].z;
-		const sint dz = d[i].z;
+		const xint az = a[i].z;
+		const xint bz = b[i].z;
+		const xint cz = c[i].z;
+		const xint dz = d[i].z;
 
-		const sint y = -(((bz>az) && (bz>cz) && (bz>dz)) || ((dz>az) && (dz>bz) && (dz>cz)) || ((az>bz) && (az>dz) && (cz>bz) && (cz>dz)) || ((dz<az) && (dz<bz) && (dz<cz)) || ((bz<az) && (bz<cz) && (bz<dz)))
+		const xint y = -(((bz>az) && (bz>cz) && (bz>dz)) || ((dz>az) && (dz>bz) && (dz>cz)) || ((az>bz) && (az>dz) && (cz>bz) && (cz>dz)) || ((dz<az) && (dz<bz) && (dz<cz)) || ((bz<az) && (bz<cz) && (bz<dz)))
 			     +  (((az>bz) && (az>cz) && (az>dz)) || ((cz>az) && (cz>bz) && (cz>dz)) || ((bz>az) && (bz>cz) && (dz>az) && (dz>cz)) || ((az<bz) && (az<cz) && (az<dz)) || ((cz<az) && (cz<bz) && (cz<dz))); 
 
 		switch(y)
@@ -197,11 +197,11 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,sint x,sint e) : poly
 
 object::object(const object& o) : poly(new polygon*[o.polys]),dock(new fvector[o.docks]),bound(o.bound),polys(o.polys),docks(o.docks),scolor(o.scolor)
 {
-	for(sint i=0;i<polys;++i)
+	for(xint i=0;i<polys;++i)
 	{
 		poly[i] = new polygon(*o.poly[i]);
 	}
-	for(sint i=0;i<docks;++i)
+	for(xint i=0;i<docks;++i)
 	{
 		dock[i] = o.dock[i];
 	}
@@ -210,14 +210,14 @@ object::object(const object& o) : poly(new polygon*[o.polys]),dock(new fvector[o
 object::~object()
 {
 	delete[] dock;
-	for(int i=0;i<polys;++i) { delete poly[i]; }
+	for(xint i=0;i<polys;++i) { delete poly[i]; }
 	delete[] poly;
 }
 
-fvector* object::docktype(sint i,sint j) const
+fvector* object::docktype(xint i,xint j) const
 {
 	fvector* r[2] = {0,0};
-	for(sint k=0,l=-1;k<docks && (l!=j);++k)
+	for(xint k=0,l=-1;k<docks && (l!=j);++k)
 	{
 		l += (dock[k].e==i);
 		r[l==j] = &dock[k];
@@ -227,20 +227,20 @@ fvector* object::docktype(sint i,sint j) const
 
 void object::update(const fmatrix& m,bool j)
 {
-	for(sint i=0;i<polys;++i)
+	for(xint i=0;i<polys;++i)
 	{
 		poly[i]->update(m,j);
 	}
-	for(sint i=0;i<docks;++i)
+	for(xint i=0;i<docks;++i)
 	{
 		dock[i] = m*dock[i];
 	}
 	cbound = bound; //TODO: cbound trafo to match projection
 }
 
-void object::display(const lvector& p,sint f) const
+void object::display(const lvector& p,xint f) const
 {
-	for(sint i=0;i<polys;++i)
+	for(xint i=0;i<polys;++i)
 	{
 		poly[i]->display(p,f,scolor);
 	}
@@ -248,7 +248,7 @@ void object::display(const lvector& p,sint f) const
 
 void object::pull(fixed x)
 {
-	for(sint i=0;i<polys;++i)
+	for(xint i=0;i<polys;++i)
 	{
 		poly[i]->pull(x);
 	}

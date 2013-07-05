@@ -14,24 +14,24 @@
 ///<define>
 namespace game
 {
-	/*OK*/             void compiled(sint x,sint y,uint r,uint c);
-	/*OK*/ pure inline bool onscreen(sint x,sint y);
+	/*OK*/             void compiled(xint x,xint y,yint r,yint c);
+	/*OK*/ pure inline bool onscreen(xint x,xint y);
 }
 ///</define>
 
 ///<code>
-void game::compiled(sint x,sint y,uint r,uint c)
+void game::compiled(xint x,xint y,yint r,yint c)
 {
 	//guard(game::onscreen(x,y)==1);
-	uint o = ((y-2)*XRES)+(x-2);
+	yint o = ((y-2)*XRES)+(x-2);
 
-	screen::back[o++] = r; screen::back[o++] = r; screen::back[o++] = r; screen::back[o] = r; o += XRES-3;
-	screen::back[o++] = r; screen::back[o++] = c; screen::back[o++] = c; screen::back[o] = r; o += XRES-3;
-	screen::back[o++] = r; screen::back[o++] = c; screen::back[o++] = c; screen::back[o] = r; o += XRES-3;
-	screen::back[o++] = r; screen::back[o++] = r; screen::back[o++] = r; screen::back[o] = r; o += XRES-3;
+	screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o] = r; o += XRES-3;
+	screen::frame[o++] = r; screen::frame[o++] = c; screen::frame[o++] = c; screen::frame[o] = r; o += XRES-3;
+	screen::frame[o++] = r; screen::frame[o++] = c; screen::frame[o++] = c; screen::frame[o] = r; o += XRES-3;
+	screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o] = r; o += XRES-3;
 }
 
-bool game::onscreen(sint x,sint y)
+bool game::onscreen(xint x,xint y)
 {
 	return (x>0) && (y>0) && (x<XRES) && (y<YRES);
 }

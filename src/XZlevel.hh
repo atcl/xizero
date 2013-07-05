@@ -37,9 +37,9 @@ class level
 		entity* boss;			//Boss Entity
 		list enemies;			//List of Enemy Entities
 		char** map;			//Text Map of Terrain
-		sint mark;			//Current Level Position
-		sint markmin;			//Lowest Level Position (Bottom)
-		const sint markmax;		//Highest Level Position (Top)
+		xint mark;			//Current Level Position
+		xint markmin;			//Lowest Level Position (Bottom)
+		const xint markmax;		//Highest Level Position (Top)
 		progress* pp;			//Player Health Gauge
 		progress* sp;			//Player Shield Gauge
 		progress* bp;			//Boss Gauge
@@ -49,7 +49,7 @@ class level
 	public:
 		level(char* o);			//Constructor
 		~level();			//Destructor
-		sint update(sint k,sint j);	//Update All Entities
+		xint update(xint k,xint j);	//Update All Entities
 		void display();			//Display Terrain, Shadows, Entities
 		void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
@@ -67,7 +67,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	//load intro message
 	const char* tx = (*arc)[(*lvl)["intro"]];
-	screen::back.clear(BLACK);
+	screen::frame.clear(BLACK);
 	font::draw(XRES>>3,100,tx,ORANGE,BLACK);
 	screen::flush();
 	//*
@@ -100,7 +100,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	//load map
 	const char* m = (*arc)[(*lvl)["map"]];
-	const sint l  = string::count(m,'\n');
+	const xint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	//long n        = string::length(t[0]); //=LWIDTH
 	gfx::fsprog(40);
@@ -116,10 +116,10 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	lvector  e;
 	lvector  f;
 
-	for(sint i=0,k=0;i<l;++i,k=0)
+	for(xint i=0,k=0;i<l;++i,k=0)
 	{
 		//load entities
-		for(sint j=0;j<LWIDTH;++j)
+		for(xint j=0;j<LWIDTH;++j)
 		{
 			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
@@ -147,8 +147,8 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 		//*
 
 		//load terrain stripe
-		sint v = CSHIFT;
-		for(sint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
+		xint v = CSHIFT;
+		for(xint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
 		{
 			a[k].set( v,       -(BWIDTH>>1),(map[i][j-1])  *BHEIGHT );
 			b[k].set( v,         BWIDTH>>1, (map[i-1][j-1])*BHEIGHT );
@@ -208,7 +208,7 @@ level::~level()
 	delete ep;
 }
 
-sint level::update(sint k,sint j)
+xint level::update(xint k,xint j)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
@@ -221,7 +221,7 @@ sint level::update(sint k,sint j)
 void level::display()
 {
 	//draw background //TODO: remove the clears
-	screen::back.clear((screen::zs<<24)|DRED);
+	screen::frame.clear((screen::zs<<24)|DRED);
 	//screen::depth.clear(0); //z
 	screen::depth.clear(FX(200));
 	//*
@@ -231,8 +231,8 @@ void level::display()
 	const lvector p((XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND);
 	object::linear.clear();
 	object::linear.translate(0,FX(YRES>>1),0);
-	sint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(uint i=0;i<31;++i,++r)
+	xint r = math::max((mark/BWIDTH)-OFFSET,0);
+	for(yint i=0;i<31;++i,++r)
 	{
 		object temp(*terrain[r]);
 		temp.update();

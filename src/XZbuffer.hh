@@ -17,29 +17,28 @@
 class buffer
 {
 	private:
-		const uint  tsize;			//size in typesize
-		const uint  bytes;			//size in bytes
-		      sint* data;			//pointer to data
+		const yint  bytes;			//size in bytes
+		      xint* data;			//pointer to data
 		buffer(const buffer& b);		//Copy Constructor (not implemented to deny copy)
 		buffer& operator=(const buffer& b);	//Assignment (not implemented to deny copy)
 	public:
-		/*OK*/ buffer(uint s) : tsize(s),bytes((tsize<<2)+(tsize&31)),data(0) { data = (sint*)aligned_alloc(4096,bytes); clear(); } 
+		/*OK*/ buffer(yint s,bool a=1) : bytes((s<<2)+(s&31)),data(0) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
 		/*OK*/ ~buffer() { free(data); }
-		/*OK*/ inline sint& operator[](uint i) { return data[i]; }
-		/*OK*/ inline sint  operator[](uint i) const { return data[i]; }
-		/*OK*/ inline sint* pointer() const { return data; }
-		/*OK*/ inline void  pointer(void* a) { data = static_cast<sint*>(a); }
+		/*OK*/ inline xint& operator[](uint i) { return data[i]; }
+		/*OK*/ inline xint  operator[](uint i) const { return data[i]; }
+		/*OK*/ inline xint* pointer() const { return data; }
+		/*OK*/ inline void  pointer(void* a) { data = static_cast<xint*>(a); }
 		/*OK*/        void  copy(const buffer& s);
 		              void  fsaa(const buffer& s);
-		/*OK*/        void  clear(sint x=0);
+		/*OK*/        void  clear(xint x=0);
 };
 ///</define>
 
 ///<code>
-void buffer::clear(sint x)
+void buffer::clear(xint x)
 {
 #ifdef __SSE__
-	const sint val[4] = {x,x,x,x};
+	const xint val[4] = {x,x,x,x};
 
 	__asm__ __volatile__ (
 	"shrl $7,%2;\n"
@@ -54,12 +53,12 @@ void buffer::clear(sint x)
 	"movntps %%xmm0,80(%1);\n"
 	"movntps %%xmm0,96(%1);\n"
 	"movntps %%xmm0,112(%1);\n"
-	"addl $128,%1;\n"
+	"addq $128,%1;\n"
 	"loop 0b;"
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
-	for(uint i=tsize;i!=0;--i) { data[i]=x; } //wmemset here?
+	for(yint i=1+bytes>>2;i!=0;--i) { data[i]=x; } //wmemset here?
 #endif
 }
 
@@ -87,8 +86,8 @@ void buffer::copy(const buffer& s)
 	"movntps %%xmm5,80(%1);\n"
 	"movntps %%xmm6,96(%1);\n"
 	"movntps %%xmm7,112(%1);\n"
-	"addl $128,%0;\n"
-	"addl $128,%1;\n"
+	"addq $128,%0;\n"
+	"addq $128,%1;\n"
 	"loop 1b;"
 	"sfence;"
 	: :"r"(s.data),"r"(data),"c"(bytes):"memory");
@@ -122,8 +121,8 @@ void buffer::fsaa(const buffer& s)
 	"movntps %%xmm1,16(%1);\n"
 	"movntps %%xmm2,32(%1);\n"
 	"movntps %%xmm3,48(%1);\n"
-	"addl $64,%0;\n"
-	"addl $64,%1;\n"
+	"addq $64,%0;\n"
+	"addq $64,%1;\n"
 	"loop 2b;"
 	"sfence;"
 	: :"r"(s.data),"r"(data),"c"(bytes):"memory");

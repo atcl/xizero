@@ -33,11 +33,11 @@ SPACE     Fire\n\
 ENTER     Menu\n";
 
 inline void init();
-sint start(sint i);
-sint start();
-inline sint control();
-inline sint about();
-inline sint leave();
+xint start(xint i);
+xint start();
+inline xint control();
+inline xint about();
+inline xint leave();
 void menu();
 void intro();
 void mainmenu();
@@ -51,11 +51,10 @@ void bench();
 void init()
 {
 	screen::init(format::xpm(resource::cursor));
-	screen::set();
 	system::say(ascii,1);
 }
 
-sint start(sint i)
+xint start(xint i)
 {
 	button::all(-1,0);
 
@@ -80,9 +79,9 @@ sint start(sint i)
 	return 0;
 }
 
-sint start()
+xint start()
 {
-	for(long i=0;i<LEVELS;++i)
+	for(yint i=0;i<LEVELS;++i)
 	{
 		start(i);
 	}
@@ -90,17 +89,17 @@ sint start()
 	return 0;
 }
 
-sint control()
+xint control()
 {
 	return dialog::msgbox(keys);
 }
 
-sint about()
+xint about()
 {
 	return dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION );
 }
 
-sint leave()
+xint leave()
 {
 	if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); };
 	return 1;
@@ -109,7 +108,7 @@ sint leave()
 void menu()
 {
 	//enlist buttons
-	const button b_close("X",[](){ return -1; },1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
+	const button b_close("X",[](){ return xint(-1); },1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
 	const button b_about("About",&about,0,2,19,50,16,BLACK,SYSCOL,SYSCOL,1);
 	const button b_leave("Exit",&leave,0,52,19,50,16,BLACK,SYSCOL,SYSCOL,1);
 	//*
@@ -117,7 +116,7 @@ void menu()
 	//draw menu
 	/*static*/ tile* ico = format::xpm(resource::icon);
 	tile* scr = gfx::save();
-	sint cbrk = 0;
+	xint cbrk = 0;
 	while(screen::run() && screen::key()!=ENTER && cbrk>=0)
 	{
 		gfx::sprite(*scr,0,0,1);
@@ -160,15 +159,15 @@ void intro()
 	//*
 
 	//animate in phases
-	const sint last = screen::time();
-	      sint curr = last;
-	      sint prog = 0;
+	const xint last = screen::time();
+	      xint curr = last;
+	      xint prog = 0;
 
 	while(screen::run() && curr<last+4400 && screen::key()!=ENTER)
 	{
 		curr = screen::time();
 		object::linear.clear();
-		const sint diff = curr-last;
+		const xint diff = curr-last;
 		switch( diff/200 )
 		{
 			case 0 ... 9:   object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
@@ -181,7 +180,7 @@ void intro()
 		b[1].update();
 		b[2].update();
 		b[3].update();
-		screen::back.clear(BLACK);
+		screen::frame.clear(BLACK);
 		screen::depth.clear(fx::l2f(400));
 		c.display(p,R_F|R_Z);
 		b[0].display(p,R_F|R_Z);
@@ -229,7 +228,7 @@ void mainmenu()
 	//draw menu
 	while(screen::run())
 	{
-		screen::back.clear(BLACK);
+		screen::frame.clear(BLACK);
 		//draw menu object
 		x[0].display(p,R_S);
 		x[1].display(p,R_S);
@@ -276,7 +275,7 @@ void lost()
 
 void over()
 {
-	screen::back.clear(0);
+	screen::frame.clear(0);
 	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
 	font::draw((XRES>>1)-60,(YRES>>1),"atcrosslevel.de",RED,BLACK);
 	screen::flush();
@@ -285,7 +284,7 @@ void over()
 
 void bench()
 {
-	const sint fps = screen::fps();
+	const xint fps = screen::fps();
 	ifu(fps>0)
 	{
 		system::say(string::int2str(polygon::counter*fps)); 			

@@ -17,28 +17,28 @@ struct fvector;
 
 struct alignas(16) lvector
 {
-	sint x;
-	sint y;
-	sint z;
-	sint e;
-	lvector(sint a=0,sint b=0,sint c=0,sint d=1) : x(a),y(b),z(c),e(d) { ; }
+	xint x;
+	xint y;
+	xint z;
+	xint e;
+	lvector(xint a=0,xint b=0,xint c=0,xint d=1) : x(a),y(b),z(c),e(d) { ; }
 	lvector(const fvector& a);
 	//lvector(lvector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline lvector  operator-() const { return lvector(-x,-y,-z); }
 	inline lvector  operator+(const lvector& a) const { return lvector(x+a.x,y+a.y,z+a.z); }
 	inline lvector  operator-(const lvector& a) const { return lvector(x-a.x,y-a.y,z-a.z); }
-	inline lvector  operator*(sint a) const { return lvector(x*a,y*a,z*a); }
+	inline lvector  operator*(xint a) const { return lvector(x*a,y*a,z*a); }
 	inline lvector& operator+=(const lvector& a) { x+=a.x; y+=a.y; z+=a.z; return *this; }
 	inline lvector& operator-=(const lvector& a) { x-=a.x; y-=a.y; z-=a.z; return *this; }
-	inline lvector& operator*=(sint a) { x*=a; y*=a; z*=a; return *this; }
+	inline lvector& operator*=(xint a) { x*=a; y*=a; z*=a; return *this; }
 	inline lvector& operator=(const lvector& a) { x=a.x; y=a.y; z=a.z; e=a.e; return *this; }
 	inline lvector& operator=(const fvector& a);
-	inline lvector& operator=(sint a) { x=a; y=a; z=a; return *this; }
+	inline lvector& operator=(xint a) { x=a; y=a; z=a; return *this; }
 	inline lvector  cross(const lvector& a) const { return lvector(y*a.z-z*a.y,z*a.x-x*a.z,x*a.y-y*a.x); }
 	inline lvector  hadamard(const lvector& a) const { return lvector(x*a.x,y*a.y,z*a.z); }
-	inline sint     dot(const lvector& a) const { return x*a.x+y*a.y+z*a.z; }
-	inline sint     length() const { return math::sqr(x*x+y*y+z*z); }
-	inline void     set(sint a,sint b,sint c,sint d=1) { x=a; y=b; z=c; e=d; }
+	inline xint     dot(const lvector& a) const { return x*a.x+y*a.y+z*a.z; }
+	inline xint     length() const { return math::sqr(x*x+y*y+z*z); }
+	inline void     set(xint a,xint b,xint c,xint d=1) { x=a; y=b; z=c; e=d; }
 };
 
 struct alignas(16) fvector

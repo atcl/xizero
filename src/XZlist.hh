@@ -19,7 +19,7 @@ class list
 			void*   data;
 			member* next;
 			member* prev;
-			sint    hash;
+			xint    hash;
 		};
 		member* cur;
 		member* fir;
@@ -29,13 +29,13 @@ class list
 		list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
 		inline bool  notlast() const { return cur!=las; }
 		inline bool  notfirst() const { return cur!=fir; }
-		inline uint  length() const { return len; }
+		inline yint  length() const { return len; }
 		inline void  first() { cur = fir->next; }
 		inline void  last()  { cur = las->prev; }
 		inline void  prev()  { cur = cur->prev; }
 		inline void  next()  { cur = cur->next; }
 		inline void  clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
-		inline void  append(void* x,sint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
+		inline void  append(void* x,xint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
 		inline void* current() const { return cur->data; }
 		       void* delcurrent();
 		       bool  find(void* x);
@@ -68,9 +68,9 @@ bool list::find(void* x)
 
 void list::xsort(bool u) //use swap
 {
-	for(uint i=1;i<len;++i)
+	for(yint i=1;i<len;++i)
 	{
-		for(uint j=(i+1);j<len;++j)
+		for(yint j=(i+1);j<len;++j)
 		{
 			if( (cur->hash<cur->next->hash&&u) || (cur->hash>cur->next->hash&&!u) )
 			{

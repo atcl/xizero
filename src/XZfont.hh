@@ -23,47 +23,47 @@ namespace font
 		tile* f = format::xpm(font);
 	}
 
-	            sint draw(sint x,sint y,char a,uint c,uint b);
-	            void draw(sint x,sint y,const char* a,uint c,uint b);
-	       pure sint width(char x);
-	       pure sint width(const char* x);
-	inline pure sint height(const char* x);
-	inline pure sint height();
+	            xint draw(xint x,xint y,char a,yint c,yint b);
+	            void draw(xint x,xint y,const char* a,yint c,yint b);
+	       pure xint width(char x);
+	       pure xint width(const char* x);
+	inline pure xint height(const char* x);
+	inline pure xint height();
 	inline pure char map(char a);
 }
 ///</define>
 
 ///<code>
-sint font::draw(sint x,sint y,char a,uint c,uint b) 
+xint font::draw(xint x,xint y,char a,yint c,yint b) 
 {
 	a = map(a);
 	const bool bt = b!=TRANS;
 	const bool ct = c!=TRANS;
-	const sint xd = -XRES+x+f->height;
-	const sint yd = -YRES+y+f->height;
-	const sint h = f->height-math::set(yd,yd>0);
-	const sint w = f->height-math::set(xd,xd>0);
-	const sint sx = f->width-w;
-	const sint d = XRES - w;
-	sint r = 0;
+	const xint xd = -XRES+x+f->height;
+	const xint yd = -YRES+y+f->height;
+	const xint h = f->height-math::set(yd,yd>0);
+	const xint w = f->height-math::set(xd,xd>0);
+	const xint sx = f->width-w;
+	const xint d = XRES - w;
+	xint r = 0;
 
-	for(sint i=0,o=y*XRES+x,s=f->height*a;i<h;++i,o+=d,s+=sx)
+	for(xint i=0,o=y*XRES+x,s=f->height*a;i<h;++i,o+=d,s+=sx)
 	{
-		for(sint j=0;j<w;++j,++o,++s)
+		for(xint j=0;j<w;++j,++o,++s)
 		{
-			const uint e = f->data[s];
-			screen::back[o] = math::set(c,math::set(b,screen::back[o],bt&&(e==WHITE)),ct&&(e==RED));
+			const yint e = f->data[s];
+			screen::frame[o] = math::set(c,math::set(b,screen::frame[o],bt&&(e==WHITE)),ct&&(e==RED));
 			r += (i==0)&&(e!=BLACK);
 		}
 	}
 	return r;
 }
 
-void font::draw(sint x,sint y,const char* a,uint c,uint b)
+void font::draw(xint x,xint y,const char* a,yint c,yint b)
 {
-	const sint z = x;
+	const xint z = x;
 	char curr = a[0];
-	for(sint i=0;curr!=0;++i)
+	for(xint i=0;curr!=0;++i)
 	{
 		switch(curr)
 		{
@@ -74,30 +74,30 @@ void font::draw(sint x,sint y,const char* a,uint c,uint b)
 	}
 }
 
-sint font::width(char x)
+xint font::width(char x)
 {
 	x = map(x);
-	const sint h = f->height;
-	sint r = 0;
+	const xint h = f->height;
+	xint r = 0;
 
-	for(sint j=0,s=h*x;j<h;++j)
+	for(xint j=0,s=h*x;j<h;++j)
 	{
 		r += (f->data[s++]!=BLACK);
 	}
 	return r;
 }
 
-sint font::width(const char* x)
+xint font::width(const char* x)
 {
 	char** b = string::split(x,'\n');
-	const sint c = string::count(x,'\n')+1;
-	sint r = 0;
+	const xint c = string::count(x,'\n')+1;
+	xint r = 0;
 
-	for(sint i=0;i<c;++i)
+	for(xint i=0;i<c;++i)
 	{
-		const sint l = string::length(b[i]);
-		sint s = 0;
-		for(sint j=0;j<l;++j)
+		const xint l = string::length(b[i]);
+		xint s = 0;
+		for(xint j=0;j<l;++j)
 		{
 			s += width(b[i][j]);
 		}
@@ -107,12 +107,12 @@ sint font::width(const char* x)
 	return r;
 }
 
-sint font::height(const char* x)
+xint font::height(const char* x)
 {
 	return (string::count(x,'\n')+1)*f->height;
 }
 
-sint font::height()
+xint font::height()
 {
 	return f->height;
 }

@@ -16,30 +16,30 @@
 class light
 {
 	private:
-		sint rad;
-		uint col;
+		xint rad;
+		yint col;
 		tile mask;
 
-		sint lambert(sint x,sint y) const;
+		xint lambert(xint x,xint y) const;
 		void init(bool i=0);
 	public:
-		light(sint r,uint c) : rad(r), col(c), mask({0,0,0}) { init(); }
+		light(xint r,yint c) : rad(r), col(c), mask({0,0,0}) { init(); }
 		~light() { delete mask.data; }
-		inline void draw(sint x,sint y) const { gfx::sprite(mask,x-rad,y-rad); }
-		inline void color(uint c) { col = c; init(); }
-		inline void radius(sint r) { rad = r; init(1); }
+		inline void draw(xint x,xint y) const { gfx::sprite(mask,x-rad,y-rad); }
+		inline void color(yint c) { col = c; init(); }
+		inline void radius(xint r) { rad = r; init(1); }
 		static fvector refract(const fvector& x,const fvector& y,fixed ri);
 };
 ///</define>
 
 ///<code>
-sint light::lambert(sint x,sint y) const
+xint light::lambert(xint x,xint y) const
 {
-	const sint  i = rad*rad;
-	const sint  d = (x*x)+(y*y);
+	const xint  i = rad*rad;
+	const xint  d = (x*x)+(y*y);
 	const fixed l = fx::div(fx::l2f(-i+d),fx::l2f(d*(1-i)));
 	
-	packed c = { col };
+	rgba c = { col };
 	c.b[1] = fx::r2l(math::max(0,fx::mul(fx::l2f(c.b[1]),l)));
 	c.b[2] = fx::r2l(math::max(0,fx::mul(fx::l2f(c.b[2]),l)));
 	c.b[3] = fx::r2l(math::max(0,fx::mul(fx::l2f(c.b[3]),l)));
@@ -50,15 +50,15 @@ void light::init(bool i)
 {
 	if(i!=0)
 	{
-		const sint dim = (rad<<1)+1;
+		const xint dim = (rad<<1)+1;
 		mask.width = mask.height = dim;
 		delete mask.data;
-		mask.data = new sint[dim*dim];
+		mask.data = new xint[dim*dim];
 	}
 
-	for(sint j=0,t=0;j<mask.width;++j)
+	for(xint j=0,t=0;j<mask.width;++j)
 	{
-		for(sint k=0;k<mask.width;++k)
+		for(xint k=0;k<mask.width;++k)
 		{
 			mask.data[t++] = lambert(k-rad,j-rad);
 		}

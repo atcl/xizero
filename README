@@ -1,37 +1,37 @@
-= XiZero =
+# XiZero #
 
-== Version: ==
+## Version: ##
 
 0.1 (Callbox)
 
-== Install: ==
+## Install: ##
 
 ./smmn
 ./smmn install #requires root 
 
-== Dependencies: ==
+## Dependencies: ##
 
-- framebuffer
-- xsltproc (optional)
+- libsdl
+- xsltproc
 
-== Usage: ==
+## Usage: ##
 
 ``xizero``	#start game
 ``unit``	#model viewer and benchmark
 
-== Changelog: ==
+## Changelog: ##
 
 
-== Features: ==
+## Features: ##
 
-=== Major: ===
+### Major: ###
 
 - Software Rasterizer
 - Flatshading
 - Blinn Shadows
 - 2xFSAA
 
-=== Minor: ===
+### Minor: ###
 
 - 32bit Z-Buffer
 - Cordic Fixed Point Math
@@ -42,15 +42,11 @@
 - Pure Framebuffer (NO: X, Wayland, OpenGL, DirectFB)
 - Radial Explosions
 
-== Bugs: ==
-
-- Intel GMAs need video=640x480
-
-== Warning: ==
+## Warning: ##
 
 XiZero is still in ALPHA stage, so do not expect it to work error- and bug-free.
 
-== License: ==
+## License: ##
 
 Copyright (c) 2010,2011,2012,2013 Christian Himpe,
 

@@ -9,10 +9,10 @@
 			<source></source>
 			<include></include>
 			<library></library>
-		</path>
+		</path-->
 		<libs>
-			<lib></lib>
-		</libs-->
+			<lib>SDL</lib>
+		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
@@ -23,8 +23,8 @@
 		<flags>
 			<flag>-O2 -pipe -falign-loops<!-- -fprefetch-loop-arrays --></flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
-			<flag>-march=atom -mtune=atom -m32 -mstackrealign</flag>
-			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
+			<flag>-march=atom -mtune=atom -mstackrealign</flag>
+			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
 			<!--flag>-static -nostdlib</flag-->
 			<flag>-g</flag>
 
@@ -43,6 +43,9 @@
 		<sources>
 			<source>xizero.cc</source>
 		</sources>
+		<libs>
+			<lib>SDL</lib>
+		</libs>
 		<defines>
 			<define>TITLE=\"XIZERO\"</define>
 			<define>VERSION=\"0.1\"</define>
@@ -54,7 +57,7 @@
 			<flag>-O2 -pipe -falign-loops -fomit-frame-pointer</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=native -mtune=native -m32 -mstackrealign</flag>
-			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
+			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
 			<flag>-s</flag>
 
 			<lflag>-flto <!---Wl,-file-alignment4096--></lflag>
@@ -86,7 +89,7 @@
 			<flag>-O2 -fomit-frame-pointer -pipe -falign-loops</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas</flag>
 			<flag>-march=atom -mtune=atom -m32 -mstackrealign</flag>
-			<flag>-std=c++0x -fno-exceptions -fno-rtti</flag>
+			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
 			<!--flag>-mtune=i486 -march=i486 -m32</flag-->
 			<!--flag>-msse -mpfpmath=sse</flag-->
 			<flag>-g</flag>

@@ -21,21 +21,21 @@ class button : public gui
 {
 	private:
 		const char* text;					//Button Caption
-		const sint textleft;					//Relative Y Coordinate of Caption	
-		const sint texttop;					//Relative X Coordinate of Caption
+		const xint textleft;					//Relative Y Coordinate of Caption	
+		const xint texttop;					//Relative X Coordinate of Caption
 		const bool depth;					//Flat or Relief
 		bool active;						//Usable
-		sint (*action)();					//Onclick Function Pointer
+		xint (*action)();					//Onclick Function Pointer
 		static list bl;						//List of all Buttons
 		button(const button& b);				//Copy Constructor (not implemented to deny copy)
 		button& operator=(const button& b);			//Assignment (not implemented to deny copy)
 	public:
-		button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v); //Constructor
+		button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint b,xint f,bool v); //Constructor
 		~button();						//Destructor
 		void draw() const;					//Draw Button	
-		static sint check(uint m);				//Check If Button Clicked
-		static void all(sint a,sint v);				//Activate/Show or Deactivate/Hide All Buttons
-		static inline bool inside(const button& b,sint x,sint y);//Check if inside
+		static xint check(uint m);				//Check If Button Clicked
+		static void all(xint a,xint v);				//Activate/Show or Deactivate/Hide All Buttons
+		static inline bool inside(const button& b,xint x,xint y);//Check if inside
 
 		static button* current;					//Currently Highlighted Button 
 };
@@ -45,7 +45,7 @@ class button : public gui
 list    button::bl      = list();
 button* button::current = 0;
 
-button::button(const char* x,sint (*a)(),bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
+button::button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint b,xint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
 	text(string::copy(x)),
 	textleft( (math::max(w-font::width(x),0))>>1 ),
@@ -71,7 +71,7 @@ void button::draw() const
 	font::draw(left+textleft,top+texttop,text,color,backcolor);
 }
 
-sint button::check(uint m)
+xint button::check(uint m)
 {
 	guard(!MOUSEB(m),0);
 	for(bl.first();bl.notlast();bl.next())
@@ -85,7 +85,7 @@ sint button::check(uint m)
 	return 0;
 }
 
-void button::all(sint a,sint v)
+void button::all(xint a,xint v)
 {
 	for(bl.first();bl.notlast();bl.next())
 	{
@@ -94,7 +94,7 @@ void button::all(sint a,sint v)
 	}
 }
 
-bool button::inside(const button& b,sint x,sint y)
+bool button::inside(const button& b,xint x,xint y)
 {
 	return (x>b.left) && (y>b.top) && (x<b.left+b.width) && (y<b.top+b.height);
 }

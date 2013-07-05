@@ -22,23 +22,23 @@
 class progress : public gui
 {
 	private:
-		const sint coeff;
-		sint start;
-		sint end;
-		sint prog;
-		sint area;
+		const xint coeff;
+		xint start;
+		xint end;
+		xint prog;
+		xint area;
 		const bool horver;
 
 	public:
-		progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v);
-		inline void set(long x) { prog = math::lim(0,x,end);      area = (prog*coeff)>>16; }
-		inline void add(long x) { prog = math::lim(0,prog+x,end); area = (prog*coeff)>>16; }
+		progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint b,xint f,bool v);
+		inline void set(xint x) { prog = math::lim(0,x,end);      area = (prog*coeff)>>16; }
+		inline void add(xint x) { prog = math::lim(0,prog+x,end); area = (prog*coeff)>>16; }
 		       void draw() const;
 };
 ///</define>
 
 ///<code>
-progress::progress(sint s,sint e,bool d,sint l,sint t,sint w,sint h,sint c,sint b,sint f,bool v) :
+progress::progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint b,xint f,bool v) :
 	gui(l,t,w,h,c,b,f,v),
 	coeff(math::set(math::set(((w-4)<<16)/(e-s+(e==s)),((h-4)<<16)/(e-s+(e==s)),d==0),e!=s)),
 	start(s),
@@ -52,10 +52,10 @@ void progress::draw() const
 {
 	guard(visible==0);
 	
-	const uint h0 = math::set(height-2-area,2,horver);
-	const uint v0 = math::set(area+2,width-2,!horver);
-	const uint h1 = math::set(-area-1,horver);
-	const uint v1 = math::set(area,!horver);
+	const yint h0 = math::set(height-2-area,2,horver);
+	const yint v0 = math::set(area+2,width-2,!horver);
+	const yint h1 = math::set(-area-1,horver);
+	const yint v1 = math::set(area,!horver);
 
 	gfx::line(left,top,left+width,top,backcolor);
 	gfx::line(left,top+1,left+width,top+1,backcolor);

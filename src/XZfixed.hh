@@ -35,15 +35,15 @@
 ///</declare>
 
 ///<define>
-typedef sint fixed;
+typedef xint fixed;
 
-constexpr fixed FX(sint x) { return x<<FIXED; }
+constexpr fixed FX(xint x) { return x<<FIXED; }
 
 namespace fx 
 {
-	inline pure sint  f2l(fixed x) { return x>>FIXED; }
-	inline pure sint  r2l(fixed x) { return (x+FXHLF)>>FIXED; }
-	inline pure fixed l2f(sint x)  { return x<<FIXED; }
+	inline pure xint  f2l(fixed x) { return x>>FIXED; }
+	inline pure xint  r2l(fixed x) { return (x+FXHLF)>>FIXED; }
+	inline pure fixed l2f(xint x)  { return x<<FIXED; }
 	inline pure fixed mul(fixed x,fixed y) { return ((long long)(x)*(long long)(y))>>FIXED; }
 	inline pure fixed div(fixed x,fixed y) { return (((long long)(x))<<FIXED)/y; }
 
@@ -89,7 +89,7 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	fixed t = FXONE>>h;
 	register bool r = 0;
 
-	for(uint i=0;i<FIXED;++i)
+	for(yint i=0;i<FIXED;++i)
 	{
 		r = h&&HSEL16(i)&&(!r);
 		const bool s = (v>=0 && y<v) || (v<0 && z>=0);

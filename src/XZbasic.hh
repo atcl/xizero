@@ -7,7 +7,7 @@
 
 ///<include>
 #pragma once
-#include <cstdint> //int32_t,uint32_t
+#include <cstdint> //int32_t,uint32_t,uint64_t
 #include <cstdlib> //malloc,free
 ///</include>
 
@@ -84,21 +84,22 @@
 ///</declare>
 
 ///<define>
-typedef unsigned char  byte;
-typedef uint32_t       uint;
-typedef int32_t        sint;
+typedef unsigned char byte;
 
-union packed
+typedef int32_t       xint;
+typedef uint32_t      yint;
+
+union rgba
 {
-	uint d;
+	xint d;
 	byte b[4];
 };
 ///</define>
 
 ///<code>
 //global new + delete (required for gcc over g++)
-inline void* operator new(uint s)       { return malloc(s); }
-inline void* operator new[](uint s)     { return malloc(s); }
+inline void* operator new(size_t s)     { return malloc(s); }
+inline void* operator new[](size_t s)   { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }
 inline void  operator delete[](void *p) { free(p); }
 ///</code>
