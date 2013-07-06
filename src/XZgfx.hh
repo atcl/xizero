@@ -17,8 +17,8 @@
 #define TILE
 struct tile
 {
-	xint  width;
-	xint  height;
+	yint  width;
+	yint  height;
 	xint* data;
 };
 #endif

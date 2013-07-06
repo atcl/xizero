@@ -56,9 +56,9 @@ void light::init(bool i)
 		mask.data = new xint[dim*dim];
 	}
 
-	for(xint j=0,t=0;j<mask.width;++j)
+	for(yint j=0,t=0;j<mask.width;++j)
 	{
-		for(xint k=0;k<mask.width;++k)
+		for(yint k=0;k<mask.width;++k)
 		{
 			mask.data[t++] = lambert(k-rad,j-rad);
 		}

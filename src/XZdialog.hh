@@ -40,7 +40,7 @@ xint dialog::msgbox(const char* m,bool q)
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
 		font::draw(x+20,y+20,m,BLACK,WHITE);
 		bok.draw();
-		if(q) bno.draw();
+		if(q) { bno.draw(); }
 		const yint ms = screen::mouse();
 		cbrk = button::check(ms);
 		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));

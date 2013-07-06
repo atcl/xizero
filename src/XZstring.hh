@@ -19,8 +19,8 @@
 ///<define>
 namespace string
 {
-	/*OK*/ pure xint   length(const char* x);
-	/*OK*/ pure xint   count(const char* x,char='\n');
+	/*OK*/ pure yint   length(const char* x);
+	/*OK*/ pure yint   count(const char* x,char='\n');
 	/*OK*/ pure xint   scan(const char* x,char y,char z='\n');
 	/*OK*/ pure xint   find(const char* x,const char* y);
 	/*OK*/ pure xint   str2int(const char* x);
@@ -37,17 +37,17 @@ namespace string
 ///</define>
 
 ///<code>
-xint string::length(const char* x)
+yint string::length(const char* x)
 {
-	register xint r=-1;
+	register yint r = -1;
 	do { ++r; } while(x[r]);
 	return r;
 }
 
-xint string::count(const char* x,char y)
+yint string::count(const char* x,char y)
 {
-	register xint r = 0;
-	for(xint i=0;x[i]!=0;++i) { r += (x[i]==y); }
+	register yint r = 0;
+	for(yint i=0;x[i]!=0;++i) { r += (x[i]==y); }
 	return r;
 }
 
@@ -107,21 +107,21 @@ char string::toup(char x)
 
 char* string::copy(const char* x,xint y,xint z)
 {
-	const xint l = math::min(length(x),z);
+	const yint l = math::min(length(x),z);
 	char* r = new char[l+1];
-	for(xint i=0;i<l;++i,++y) { r[i] = x[y]; } //y++ into x[y]?
+	for(yint i=0;i<l;++i,++y) { r[i] = x[y]; } //y++ into x[y]?
 	r[l] = 0;
 	return r;
 }
 
 char* string::concat(const char* x,const char* y)
 {
-	const xint a = length(x);
-	const xint b = length(y);
+	const yint a = length(x);
+	const yint b = length(y);
 	char* r = new char[a+b+1];
 
-	xint i = 0;
-	xint j = 0;
+	yint i = 0;
+	yint j = 0;
 	for(;i<a;++i) { r[i] = x[i]; }
 	for(;j<b;++i,++j) { r[i] = y[j]; } //j++ into y[j]?
 	r[++i] = 0;
@@ -174,9 +174,9 @@ char* string::fix2str(fixed x,yint y)
 
 char* string::repl(const char* x,char y,char z)
 {
-	const xint l = length(x);
+	const yint l = length(x);
 	char* r = new char[l+1];
-	for(xint i=0;i<l;++i)
+	for(yint i=0;i<l;++i)
 	{
 		r[i] = math::set(z,x[i],x[i]==y);
 	}
@@ -186,12 +186,12 @@ char* string::repl(const char* x,char y,char z)
 
 char** string::split(const char* x,char y) //optimize if!
 {
-	const xint c = count(x,y)+1;
-	char* s = repl(x,y,0);
+	const yint c = count(x,y)+1;
+	char*  s = repl(x,y,0);
 	char** r = new char*[c];
 	r[0] = &s[0];
-	xint i = 0;
-	xint j = 1;
+	yint i = 0;
+	yint j = 1;
 	while(x[i]!=0)
 	{
 		if(s[i]==0) { r[j] = &s[i+1]; }
@@ -202,11 +202,11 @@ char** string::split(const char* x,char y) //optimize if!
 
 char* string::trim(const char* x,char y)
 {
-	const xint l = length(x);
-	const xint c = count(x,y);
+	const yint l = length(x);
+	const yint c = count(x,y);
 	char* r = new char[l-c+1];
-	xint j = 0;
-	for(xint i=0;x[i]!=0;++i)
+	yint j = 0;
+	for(yint i=0;x[i]!=0;++i)
 	{
 		const bool k = x[i]!=y;
 		r[j] = math::set(x[i],r[j],k);

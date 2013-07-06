@@ -111,7 +111,7 @@ void screen::event()
 	kk = math::set(PGDOWN,kk,keys[PGDOWN]);
 
 	yint mx =  math::lim(0,MOUSEY(ms)+(kk==DOWN)-(kk==UP),YRES);		//set bottom word to mouse y
-	     mx += math::lim(0,MOUSEX(ms)+(kk==LEFT)-(kk==RIGHT),XRES)<<16;	//set top word to mouse x
+	     mx += math::lim(0,MOUSEX(ms)+(kk==RIGHT)-(kk==LEFT),XRES)<<16;	//set top word to mouse x
 	     mx += (kk==SPACE)<<31;						//set top bit to mouse button
 	ms = mx;
 }

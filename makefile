@@ -2,8 +2,8 @@ SRC = xizero.cc
 BIN = /tmp/test
 EXE = xizero
 DEF = -DTITLE=\"XIZERO\" -DVERSION=\"0.1\" -DALWAYS -DXRES=640 -DYRES=480
-COP = -march=native -mtune=native -m32 -std=c++0x -O2 -pipe -fomit-frame-pointer -falign-loops -fno-exceptions -fno-rtti
-LOP = -flto
+COP = -march=native -mtune=native -m64 -std=c++11 -O2 -pipe -fomit-frame-pointer -falign-loops -fno-exceptions -fno-rtti
+LOP = -flto -lSDL
 WRN = -pedantic -g -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow -Wstrict-aliasing 
 DBG = -Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing
 
@@ -14,8 +14,8 @@ default all:
 	$(CC) $(EXE).o -o $(EXE) $(LOP)
 
 test:
-	scan-build -o /tmp   gcc $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
-	scan-build -o /tmp clang++ $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
+	gcc $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
+	#scan-build -o /tmp clang++ $(SRC) -o $(BIN) $(DEF) $(COP) $(LOP) $(WRN) $(DBG)
 	cppcheck --enable=all --enable=style --enable=performance --std=c++11 -v $(SRC)
 	ldd $(BIN)
 

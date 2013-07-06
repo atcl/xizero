@@ -32,8 +32,8 @@ struct info
 #define TILE
 struct tile
 {
-	xint  width;
-	xint  height;
+	yint  width;
+	yint  height;
 	xint* data;
 };
 #endif
@@ -56,27 +56,27 @@ char** format::csv(const char* x,char y)
 
 tile* format::xpm(const char* x)
 {
-	xint   index = 0;
+	yint   index = 0;
 	char** y     = string::split(x,'\n');
 	char** line  = string::split(y[index++],' ');
 
 	guard(string::str2int(line[3])!=1,0);
 
-	const xint width  = string::str2int(line[0]);
-	const xint height = string::str2int(line[1]);
-	const xint colors = string::str2int(line[2]);
+	const yint width  = string::str2int(line[0]);
+	const yint height = string::str2int(line[1]);
+	const yint colors = string::str2int(line[2]);
 	tile* r = new tile({width, height, new xint[width*height]});
 
 	yint* color = new uint[256];
-	for(xint i=0;i<colors;++i)
+	for(yint i=0;i<colors;++i)
 	{
 		line = string::split(y[index++],' ');
 		color[xint(line[0][0])] = math::set(string::hex2int(line[2])>>4,TRANS,line[2][0]=='#'); 
 	}
 
-	for(xint i=0,o=0;i<height;++i,++index)
+	for(yint i=0,o=0;i<height;++i,++index)
 	{
-		for(xint j=0;j<width;++j,++o)
+		for(yint j=0;j<width;++j,++o)
 		{
 			r->data[o] = color[xint(y[index][j])];
 		}
@@ -90,12 +90,12 @@ tile* format::xpm(const char* x)
 
 info* format::ini(const char* x)
 {
-	const xint m = string::count(x,'=');
+	const yint m = string::count(x,'=');
 	char** s = string::split(x,'\n');
 
 	info* r = new info{ new char*[m],new char*[m],0,m };
 
-	for(xint i=0,j=0;i<m;++i)
+	for(yint i=0,j=0;i<m;++i)
 	{
 		if(string::count(s[i],'=')!=0)
 		{
@@ -116,8 +116,8 @@ info* format::ar(char* x)
 	//*
 
 	//Count files
-	xint c = 0;
-	xint t = 8;
+	yint c = 0;
+	yint t = 8;
 	do
 	{
 		t += 48;
@@ -126,12 +126,12 @@ info* format::ar(char* x)
 		++c;	
 	}
 	while(x[t+58]=='`');
-	info* r = new info{ new char*[c],new char*[c],new uint[c],c };
+	info* r = new info{ new char*[c],new char*[c],new yint[c],c };
 	//*
 
 	//Unpack
 	t = 8;
-	for(xint i=0;i<c;++i)
+	for(yint i=0;i<c;++i)
 	{
 		r->name[i] = &x[t];
 		t += 16;

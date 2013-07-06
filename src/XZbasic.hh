@@ -63,6 +63,7 @@
 
 #define XZOK    'XZOK'
 
+#define SYSCOL  0x00C0C0C0
 #define BLACK   0x00000000
 #define BLUE    0x000000FF
 #define GREEN   0x0000FF00
@@ -78,7 +79,6 @@
 #define SKY     0x000080FF
 #define ORANGE  0x00FF8000
 #define WHITE   0x00FFFFFF
-#define SYSCOL  0x00C0C0C0
 
 #define TRANS   0xFF000000
 ///</declare>
@@ -88,7 +88,7 @@ typedef unsigned char byte;
 typedef int32_t       xint;
 typedef uint32_t      yint;
 
-union rgba { xint d; byte b[4]; };
+union rgba { yint d; byte b[4]; };
 ///</define>
 
 ///<code>

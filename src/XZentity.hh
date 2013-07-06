@@ -79,7 +79,7 @@ class entity
 ///</define>
 
 ///<code>
-const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }() };
+const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }() };
 const fmatrix entity::exp      = []()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }();
 list          entity::ammos[2] = { list(), list() };
 fixed         entity::ymark    = 0;
