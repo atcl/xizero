@@ -117,7 +117,7 @@ void menu()
 	/*static*/ tile* ico = format::xpm(resource::icon);
 	tile* scr = gfx::save();
 	xint cbrk = 0;
-	while(screen::run() && screen::key()!=ENTER && cbrk>=0)
+	while(screen::run() && screen::key()!=ESCAPE && cbrk>=0)
 	{
 		gfx::sprite(*scr,0,0,1);
 		gfx::sprite(*ico,0,0,1);
@@ -163,7 +163,7 @@ void intro()
 	      xint curr = last;
 	      xint prog = 0;
 
-	while(screen::run() && curr<last+4400 && screen::key()!=ENTER)
+	while(screen::run() && curr<last+4400 && screen::key()!=ESCAPE)
 	{
 		curr = screen::time();
 		object::linear.clear();

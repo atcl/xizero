@@ -67,7 +67,7 @@ button::~button()
 void button::draw() const
 {
 	guard(visible==0);
-	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
+	gfx::rect(left,top,left+width,top+height,math::set(RED,framecolor,current),backcolor,1,depth);
 	font::draw(left+textleft,top+texttop,text,color,backcolor);
 }
 

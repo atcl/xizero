@@ -56,7 +56,7 @@
 		<flags>
 			<flag>-O2 -pipe -falign-loops -fomit-frame-pointer</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
-			<flag>-march=native -mtune=native -m32 -mstackrealign</flag>
+			<flag>-march=native -mtune=native -mstackrealign</flag>
 			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
 			<flag>-s</flag>
 

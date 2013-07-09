@@ -97,23 +97,22 @@ void screen::event()
 	SDL_PumpEvents();
 	ifu(keys[CTRL]&&keys[KEYX]) { system::bye(); }
 
-	kk = math::set(UP,kk,keys[UP]);
-	kk = math::set(DOWN,kk,keys[DOWN]);
-	kk = math::set(LEFT,kk,keys[LEFT]);
-	kk = math::set(RIGHT,kk,keys[RIGHT]);
-	kk = math::set(SPACE,kk,keys[SPACE]);
-	kk = math::set(ENTER,kk,keys[ENTER]);
-	kk = math::set(KEYW,kk,keys[KEYW]);
-	kk = math::set(KEYA,kk,keys[KEYA]);
-	kk = math::set(KEYS,kk,keys[KEYS]);
-	kk = math::set(KEYD,kk,keys[KEYD]);
-	kk = math::set(PGUP,kk,keys[PGUP]);
-	kk = math::set(PGDOWN,kk,keys[PGDOWN]);
+	kk = math::set(UP,keys[UP]);
+	kk = math::set(DOWN,keys[DOWN]);
+	kk = math::set(LEFT,keys[LEFT]);
+	kk = math::set(RIGHT,keys[RIGHT]);
+	kk = math::set(SPACE,keys[SPACE]);
+	kk = math::set(ENTER,keys[ENTER]);
+	kk = math::set(KEYW,keys[KEYW]);
+	kk = math::set(KEYA,keys[KEYA]);
+	kk = math::set(KEYS,keys[KEYS]);
+	kk = math::set(KEYD,keys[KEYD]);
+	kk = math::set(PGUP,keys[PGUP]);
+	kk = math::set(PGDOWN,keys[PGDOWN]);
 
 	yint mx =  math::lim(0,MOUSEY(ms)+(kk==DOWN)-(kk==UP),YRES);		//set bottom word to mouse y
 	     mx += math::lim(0,MOUSEX(ms)+(kk==RIGHT)-(kk==LEFT),XRES)<<16;	//set top word to mouse x
-	     mx += (kk==SPACE)<<31;						//set top bit to mouse button
-	ms = mx;
+	     ms = mx + (kk==SPACE)<<31;						//set top bit to mouse button
 }
 
 void screen::close()
