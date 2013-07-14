@@ -35,6 +35,7 @@ struct tile
 	yint  width;
 	yint  height;
 	xint* data;
+	~tile() { delete data; }
 };
 #endif
 

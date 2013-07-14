@@ -14,6 +14,8 @@
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
+
+#include "XZstring.hh"
 ///</include>
 
 ///<declare>
@@ -52,6 +54,7 @@ namespace screen
 	{
 		void* cs = 0;					//cursor image
 		yint  kk = 0;					//keyboard key
+		yint  tk = 0;					//turbo key
 		yint  ms = yint((XRES/2)<<16)+yint(YRES/2);	//compressend mouse data
 		yint  ls = 0;					//last fps update
 
@@ -72,10 +75,8 @@ namespace screen
 	inline void  aaflush()	{ frame.fsaa(frame); SDL_Flip(video); ++zs; }
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline yint  key()	{ const yint r=kk; kk=0; return r; }
-	inline yint  turbo()    { return kk; }
-	inline yint  mouse()    { return ms; }
+	inline yint  turbo()    { return tk; }
 	inline void* cursor()	{ return cs; }
-	inline void  smouse(yint x=XRES/2,yint y=YRES/2) { ms = (x<<16)+y; }
 }
 ///</define>
 
@@ -97,22 +98,23 @@ void screen::event()
 	SDL_PumpEvents();
 	ifu(keys[CTRL]&&keys[KEYX]) { system::bye(); }
 
-	kk = math::set(UP,keys[UP]);
-	kk = math::set(DOWN,keys[DOWN]);
-	kk = math::set(LEFT,keys[LEFT]);
-	kk = math::set(RIGHT,keys[RIGHT]);
-	kk = math::set(SPACE,keys[SPACE]);
-	kk = math::set(ENTER,keys[ENTER]);
-	kk = math::set(KEYW,keys[KEYW]);
-	kk = math::set(KEYA,keys[KEYA]);
-	kk = math::set(KEYS,keys[KEYS]);
-	kk = math::set(KEYD,keys[KEYD]);
-	kk = math::set(PGUP,keys[PGUP]);
-	kk = math::set(PGDOWN,keys[PGDOWN]);
+	yint tt = 0;
+	tt = math::set(UP,tt,keys[UP]);
+	tt = math::set(DOWN,tt,keys[DOWN]);
+	tt = math::set(LEFT,tt,keys[LEFT]);
+	tt = math::set(RIGHT,tt,keys[RIGHT]);
+	tt = math::set(SPACE,tt,keys[SPACE]);
+	tt = math::set(ENTER,tt,keys[ENTER]);
+	tt = math::set(ESCAPE,tt,keys[ESCAPE]);
+	tt = math::set(KEYW,tt,keys[KEYW]);
+	tt = math::set(KEYA,tt,keys[KEYA]);
+	tt = math::set(KEYS,tt,keys[KEYS]);
+	tt = math::set(KEYD,tt,keys[KEYD]);
+	tt = math::set(PGUP,tt,keys[PGUP]);
+	tt = math::set(PGDOWN,tt,keys[PGDOWN]);
 
-	yint mx =  math::lim(0,MOUSEY(ms)+(kk==DOWN)-(kk==UP),YRES);		//set bottom word to mouse y
-	     mx += math::lim(0,MOUSEX(ms)+(kk==RIGHT)-(kk==LEFT),XRES)<<16;	//set top word to mouse x
-	     ms = mx + (kk==SPACE)<<31;						//set top bit to mouse button
+	kk = math::set(tk,tt!=tk);
+	tk = tt;
 }
 
 void screen::close()

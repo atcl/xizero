@@ -25,31 +25,23 @@ xint dialog::msgbox(const char* m,bool q)
 {
 	const xint w = font::width(m)+80;
 	const xint h = font::height(m)+60;
-	const xint x = (XRES-w)>>1;
-	const xint y = (YRES-h)>>1;
-	button::all(0,-1);
-	const button bok("OK",[](){ return  xint(1); },1,x+(w>>1)-20-(30*q),y+h-30,40,20,BLACK,SYSCOL,BLACK,1);
-	const button bno("NO",[](){ return xint(-1); },1,x+(w>>1)+10,y+h-30,40,20,BLACK,SYSCOL,BLACK,q);
+	const xint x = (XRES-w)/2;
+	const xint y = (YRES-h)/2;
+	buttons bl;
+	button bok("OK",[](){ return  xint(1); },1,x+(w/2)-20-(30*q),y+h-30,40,20,BLACK,RED,SYSCOL,BLACK,1);  bl.append(&bok); 
+	button bno("NO",[](){ return xint(-1); },1,x+(w/2)+10,y+h-30,40,20,BLACK,RED,SYSCOL,BLACK,q); if(q) { bl.append(&bno); }
 
-	tile* scr = gfx::save();
-	xint cbrk = 0;
-	screen::smouse();
-	while(screen::run() && cbrk==0)
+	xint xit = 0;
+	while(xit==0 && screen::run())
 	{
-		gfx::sprite(*scr,0,0,1);
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
 		font::draw(x+20,y+20,m,BLACK,WHITE);
-		bok.draw();
-		if(q) { bno.draw(); }
-		const yint ms = screen::mouse();
-		cbrk = button::check(ms);
-		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
+
+		bl.draw();
+		xit = bl.check(screen::key());
 	}
-	
-	button::all(1,-1);
-	delete[] scr->data;
-	delete scr;
-	return cbrk;
+
+	return xit;
 }
 ///</code>
 

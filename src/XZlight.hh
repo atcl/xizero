@@ -25,7 +25,7 @@ class light
 	public:
 		light(xint r,yint c) : rad(r), col(c), mask({0,0,0}) { init(); }
 		~light() { delete mask.data; }
-		inline void draw(xint x,xint y) const { gfx::sprite(mask,x-rad,y-rad); }
+		inline void draw(xint x,xint y) const { gfx::draw(mask,x-rad,y-rad); }
 		inline void color(yint c) { col = c; init(); }
 		inline void radius(xint r) { rad = r; init(1); }
 		static fvector refract(const fvector& x,const fvector& y,fixed ri);

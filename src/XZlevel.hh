@@ -76,8 +76,8 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	object* pm = new object((*arc)[(*lvl)["player_0"]]);
 	object* pn = new object((*arc)[(*lvl)["player_1"]]);
 	info*   pi = format::ini((*arc)[(*lvl)["player_i"]]);
- 	        pp = new progress(0,string::str2int((*pi)["health"]),VER,16,16,16,YRES-32,GREEN,SYSCOL,WHITE,1);
- 	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,SYSCOL,WHITE,1);
+ 	        pp = new progress(0,string::str2int((*pi)["health"]),VER,16,16,16,YRES-32,GREEN,RED,SYSCOL,WHITE,1);
+ 	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,RED,SYSCOL,WHITE,1);
 	gfx::fsprog(10);
 	screen::flush();
 	//*
@@ -85,7 +85,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	//load boss
 	object* bm = new object((*arc)[(*lvl)["boss_0"]]);
 	info*   bi = format::ini((*arc)[(*lvl)["boss_i"]]); 
-	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,96,16,RED,SYSCOL,WHITE,0);
+	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,96,16,RED,ORANGE,SYSCOL,WHITE,0);
 	gfx::fsprog(20);
 	screen::flush();
 	//*
@@ -93,7 +93,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	//load enemy
 	object* em = new object((*arc)[(*lvl)["enemy_0"]]);
 	info*   ei = format::ini((*arc)[(*lvl)["enemy_i"]]);
-	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,48,8,GREEN,SYSCOL,WHITE,0);
+	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,48,8,GREEN,ORANGE,SYSCOL,WHITE,0);
 	gfx::fsprog(30);
 	screen::flush();
 	//*

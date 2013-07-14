@@ -17,7 +17,6 @@
 #ifdef __GNUC__
 
 	#define pure        __attribute__((const))
-	#define alignas(x)  __attribute__((aligned (x))) //remove when gcc supports alignas (4.8)
 	#define hot         __attribute__((hot))
 	#define prefetch(x) __builtin_prefetch(x)
 	#define ifl(x)   if(__builtin_expect(!!(x),1))

@@ -20,17 +20,18 @@ struct tile
 	yint  width;
 	yint  height;
 	xint* data;
+	~tile() { delete data; }
 };
 #endif
 
 namespace gfx
 {
-	/*OK*/ inline void  pix(xint x,xint y,yint c) { screen::frame[(y*XRES+x)] = c; }		//draw pixel
-	/*OK*/        void  line(xint x,xint y,xint a,xint b,yint c,bool k=0); 			//draw line
-	/*OK*/        void  rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f=0,bool g=0); 	//draw rectangle
-	/*OK*/        void  sprite(const tile& t,xint x,xint y,bool a=0);			//draw sprite
-	/*OK*/        void  fsprog(xint p,yint c=RED);						//draw full screen progress bar
-	/*OK*/        tile* save();								//save current screen
+	/*OK*/ inline void pix(xint x,xint y,yint c) { screen::frame[(y*XRES+x)] = c; }		//draw pixel
+	/*OK*/        void line(xint x,xint y,xint a,xint b,yint c,bool k=0); 			//draw line
+	/*OK*/        void rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f=0,bool g=0); 	//draw rectangle
+	/*OK*/        void draw(const tile& t,xint x=0,xint y=0,bool a=0);			//draw sprite
+	/*OK*/        void fsprog(xint p,yint c=RED);						//draw full screen progress bar
+	/*OK*/        tile save();								//save current screen
 }
 ///</define>
 
@@ -158,7 +159,7 @@ void gfx::rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f,bool g)
 	}
 }
 
-void gfx::sprite(const tile& t,xint x,xint y,bool a)
+void gfx::draw(const tile& t,xint x,xint y,bool a)
 {
 	const xint xd = -XRES+x+t.width;
 	const xint yd = -YRES+y+t.height;
@@ -194,10 +195,10 @@ void gfx::fsprog(xint p,yint c)
 	}
 }
 
-tile* gfx::save()
+tile gfx::save()
 {
-	tile* r = new tile({XRES,YRES,new xint[XRES*YRES]});
-	for(xint i=0;i<XRES*YRES;++i) { r->data[i] = screen::frame[i]; }
+	tile r({XRES,YRES,new xint[XRES*YRES]});
+	for(xint i=0;i<XRES*YRES;++i) { r.data[i] = screen::frame[i]; }
 	return r;
 }
 ///</code>

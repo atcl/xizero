@@ -19,7 +19,7 @@ static const char* ascii = "\n\
        0   0\n\
   XXX  0   0\n\
        0   0\n\
- XXXXX  000\n"; //TODO X to Ξ
+ XXXXX  000\n"; //X to Ξ
 
 static const char* keys = "\
 UP        Move Forward\n\
@@ -56,19 +56,17 @@ void init()
 
 xint start(xint i)
 {
-	button::all(-1,0);
-
 	level l(system::ldf("level0.a"));
 
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		ifu(screen::turbo()==ENTER) { menu(); l.resume(); }
+		ifu(screen::turbo()==ESCAPE) { menu(); l.resume(); }
 
-		switch(l.update(screen::key(),0))
+		switch(l.update(screen::turbo(),0))
 		{
-			case -1: lost();        button::all(-1,1); return 0;
-			case  1: won(l.ppos()); button::all(-1,1); return 0;
+			case -1: lost(); return 0;
+			case  1: won(l.ppos()); return 0;
 		}
 				
 		l.display();
@@ -89,56 +87,49 @@ xint start()
 	return 0;
 }
 
-xint control()
+xint contr()
 {
 	return dialog::msgbox(keys);
 }
 
 xint about()
 {
-	return dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION );
+	dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION );
+	return 0;
 }
 
 xint leave()
 {
 	if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); };
-	return 1;
+	return 0;
 }
 
 void menu()
 {
 	//enlist buttons
-	const button b_close("X",[](){ return xint(-1); },1,XRES-20,1,16,16,BLACK,SYSCOL,WHITE,1);
-	const button b_about("About",&about,0,2,19,50,16,BLACK,SYSCOL,SYSCOL,1);
-	const button b_leave("Exit",&leave,0,52,19,50,16,BLACK,SYSCOL,SYSCOL,1);
+	buttons bl;
+	button b_about("About",&about,0,2,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1); bl.append(&b_about);
+	button b_leave("Exit",&leave,0,52,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1); bl.append(&b_leave);
+	button b_close("X",[](){ return 1; },1,XRES-20,1,16,16,BLACK,RED,SYSCOL,WHITE,1); bl.append(&b_close);
 	//*
 
 	//draw menu
-	/*static*/ tile* ico = format::xpm(resource::icon);
-	tile* scr = gfx::save();
-	xint cbrk = 0;
-	while(screen::run() && screen::key()!=ESCAPE && cbrk>=0)
+	tile* ico = format::xpm(resource::icon);
+	tile  scr = gfx::save();
+	xint  xit = 0;
+	while(screen::run() && xit==0)
 	{
-		gfx::sprite(*scr,0,0,1);
-		gfx::sprite(*ico,0,0,1);
+		gfx::draw(scr);
+		gfx::draw(*ico);
 		gfx::rect(16,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
-		
 		font::draw(20,1,"atCROSSLEVEL XiZero",WHITE,RED);
-		b_close.draw();
-		b_about.draw();
-		b_leave.draw();
-		const uint ms = screen::mouse();
-		cbrk = button::check(ms);
-		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
-	}
 
-	gfx::sprite(*scr,0,0,1);
-	screen::flush();
-	delete[] scr->data;
-	delete scr;
-	delete ico; //temp
+		bl.draw();
+		xit = bl.check(screen::key());
+	}
 	//*
+
 }
 
 void intro()
@@ -150,7 +141,7 @@ void intro()
 	object c((*a)["cross.y3d"]);
 	object b[4] = { q,object(q),object(q),object(q) };
 
-	lvector p(XRES>>1,YRES>>1,100);
+	lvector p(XRES/2,YRES/2,100);
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);     c.update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
 	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
@@ -163,7 +154,7 @@ void intro()
 	      xint curr = last;
 	      xint prog = 0;
 
-	while(screen::run() && curr<last+4400 && screen::key()!=ESCAPE)
+	while(screen::run() && curr<last+4400 && screen::key()!=SPACE)
 	{
 		curr = screen::time();
 		object::linear.clear();
@@ -206,7 +197,7 @@ void mainmenu()
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
-	lvector p(XRES>>1,YRES>>1,100);
+	lvector p(XRES/2,YRES/2,100);
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();
@@ -219,10 +210,12 @@ void mainmenu()
 	//*
 
 	//enlist buttons
-	const button b_start("Start",&start,0,(XRES-(XRES>>2))>>1,120,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_control("Controls",&control,0,(XRES-(XRES>>2))>>1,200,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_about("About",&about,0,(XRES-(XRES>>2))>>1,280,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
-	const button b_leave("Exit",&leave,0,(XRES-(XRES>>2))>>1,360,XRES>>2,YRES>>3,RED,SYSCOL,DWHITE,1);
+	buttons bl;
+	#define VIS BLACK,RED,SYSCOL,DWHITE,1
+	button b_start("Start",&start,0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);    bl.append(&b_start);
+	button b_contr("Controls",&contr,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS); bl.append(&b_contr);
+	button b_about("About",&about,0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);    bl.append(&b_about);
+	button b_leave("Exit",&leave,0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);     bl.append(&b_leave);
 	//*
 
 	//draw menu
@@ -240,14 +233,10 @@ void mainmenu()
 		z[4].display(p,R_S);
 		z[5].display(p,R_S);
 		//*
-		b_start.draw();
-		b_control.draw();
-		b_about.draw();
-		b_leave.draw();
-		font::draw(XRES-(XRES>>2),YRES-font::height(),"Version: " VERSION,ORANGE,TRANS);
-		const uint ms = screen::mouse();
-		button::check(ms);
-		gfx::sprite(*(tile*)screen::cursor(),MOUSEX(ms),MOUSEY(ms));
+		font::draw(XRES-(XRES/4),YRES-font::height(),"Version: " VERSION,ORANGE,TRANS);
+
+		bl.draw();
+		bl.check(screen::key());
 	}
 	//*
 

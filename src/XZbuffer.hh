@@ -29,7 +29,7 @@ class buffer
 		/*OK*/ inline xint  operator[](uint i) const { return data[i]; }
 		/*OK*/ inline xint* pointer() const { return data; }
 		/*OK*/ inline void  pointer(void* a) { data = static_cast<xint*>(a); }
-		/*OK*/        void  copy(const buffer& s);
+		/*OK*/        void  copy(const buffer& s) { memcpy(data,s.data,bytes); };
 		              void  fsaa(const buffer& s);
 		/*OK*/        void  clear(xint x=0);
 };
@@ -59,41 +59,7 @@ void buffer::clear(xint x)
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
 #else
-	for(yint i=1+bytes>>2;i!=0;--i) { data[i]=x; } //wmemset here?
-#endif
-}
-
-void buffer::copy(const buffer& s)
-{
-#ifdef __SSE__
-	__asm__ __volatile__ (
-	"shrl $7,%2;\n"
-	"1: ;\n"
-	"prefetch (%0);\n"
-	"prefetch (%1);\n"
-	"movaps   (%0),%%xmm0;\n"
-	"movaps 16(%0),%%xmm1;\n"
-	"movaps 32(%0),%%xmm2;\n"
-	"movaps 48(%0),%%xmm3;\n"
-	"movaps 64(%0),%%xmm4;\n"
-	"movaps 80(%0),%%xmm5;\n"
-	"movaps 96(%0),%%xmm6;\n"
-	"movaps 112(%0),%%xmm7;\n"
-	"movntps %%xmm0,  (%1);\n"
-	"movntps %%xmm1,16(%1);\n"
-	"movntps %%xmm2,32(%1);\n"
-	"movntps %%xmm3,48(%1);\n"
-	"movntps %%xmm4,64(%1);\n"
-	"movntps %%xmm5,80(%1);\n"
-	"movntps %%xmm6,96(%1);\n"
-	"movntps %%xmm7,112(%1);\n"
-	"addq $128,%0;\n"
-	"addq $128,%1;\n"
-	"loop 1b;"
-	"sfence;"
-	: :"r"(s.data),"r"(data),"c"(bytes):"memory");
-#else
-	memcpy(data,s.data,bytes);
+	for(yint i=1+bytes>>2;i!=0;--i) { data[i]=x; }
 #endif
 }
 
