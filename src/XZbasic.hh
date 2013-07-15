@@ -38,12 +38,6 @@
 #define VAL(x) #x
 #define STR(x) VAL(x)
 
-#define mod2(x)    (x&1)
-#define mod4(x)    (x&3)
-#define mod32(x)   (x&31)
-#define mod256(x)  (x&255)
-#define mod1024(x) (x&1023)
-
 #ifndef TITLE
 	#define TITLE "_"
 #endif

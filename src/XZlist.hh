@@ -11,15 +11,15 @@
 ///</include>
 
 ///<define>
+template<typename T>
 class list
 {
 	private:
 		struct member
 		{
-			void*   data;
+			T*      data;
 			member* next;
 			member* prev;
-			xint    hash;
 		};
 		member* cur;
 		member* fir;
@@ -27,31 +27,34 @@ class list
 		member* tmp;
 		yint    len;
 	public:
-		list() : cur(0),fir(new member{0,0,0,0}),las(new member{0,0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
-		inline bool  notlast() const { return cur!=las; }
-		inline bool  notfirst() const { return cur!=fir; }
-		inline yint  length() const { return len; }
-		inline bool  same() const { return cur==tmp; }
-		inline void  first() { cur = fir->next; }
-		inline void  last()  { cur = las->prev; }
-		inline void  prev()  { cur = cur->prev; }
-		inline void  next()  { cur = cur->next; }
-		inline void  save()  { tmp = cur; }
-		inline void  load()  { cur = tmp; }
-		inline void  clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
-		inline void  append(void* x,xint h=0) { las->prev = las->prev->next = cur = new member{x,las,las->prev,h}; ++len; }
-		inline void* current() const { return cur->data; }
-		inline void* temp() const { return tmp->data; }
-		       void* delcurrent();
-		       bool  find(void* x);
-		       void  xsort(bool u);
+		list() : cur(0),fir(new member{0,0,0}),las(new member{0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
+		inline bool notlast() const { return cur!=las; }
+		inline bool notfirst() const { return cur!=fir; }
+		inline bool isfirst() const { return cur->prev==fir; }
+		inline bool islast() const { return cur->next==las; }
+		inline yint length() const { return len; }
+		inline bool same() const { return cur==tmp; }
+		inline void first() { cur = fir->next; }
+		inline void last()  { cur = las->prev; }
+		inline void prev()  { cur = cur->prev; }
+		inline void next()  { cur = cur->next; }
+		inline void save()  { tmp = cur; }
+		inline void load()  { cur = tmp; }
+		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
+		inline void append(T* x) { las->prev = las->prev->next = cur = new member{x,las,las->prev}; ++len; }
+		inline T*   current() const { return cur->data; }
+		inline T*   temp() const { return tmp->data; }
+		       T*   delcurrent();
+		       bool find(T* x);
+		       void xsort(bool u);
 };
 ///</define>
 
 ///<code>
-void* list::delcurrent()
+template<typename T>
+T* list<T>::delcurrent()
 {
-	void* c = cur->data;
+	T* c = cur->data;
 	cur->next->prev = cur->prev;
 	cur->prev->next = cur->next;
 	//if(len!=0) { delete cur; }
@@ -61,7 +64,8 @@ void* list::delcurrent()
 	return c;
 }
 
-bool list::find(void* x)
+template<typename T>
+bool list<T>::find(T* x)
 {
 	bool r = 0;
 	for(first();notlast()&&x!=cur->data;next())
@@ -71,7 +75,8 @@ bool list::find(void* x)
 	return r;
 }
 
-void list::xsort(bool u) //use swap
+/*template<typename T>
+void list<T>::xsort(bool u) //use swap
 {
 	for(yint i=1;i<len;++i)
 	{
@@ -79,15 +84,12 @@ void list::xsort(bool u) //use swap
 		{
 			if( (cur->hash<cur->next->hash&&u) || (cur->hash>cur->next->hash&&!u) )
 			{
-				void* temp = cur->data;
+				T* temp = cur->data;
 				cur->data = cur->next->data;
 				cur->next->data = temp;
-				//sint temp = cur->hash;
-				//cur->hash = cur->next->hash;
-				//cur->next->hash = hemp;
 			}
 		}
 	}
-}
+}*/
 ///</code>
 

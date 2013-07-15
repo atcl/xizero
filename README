@@ -40,7 +40,6 @@
 + Minimal Branching
 + Minimal Dependencies
 + Only human readable, non-binary, data
-+ Pure Framebuffer (NO: X, Wayland, OpenGL, DirectFB)
 + Radial Explosions
 
 ## Warning: ##

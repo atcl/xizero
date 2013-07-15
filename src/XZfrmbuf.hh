@@ -84,9 +84,9 @@ namespace screen
 void screen::init(void* c)
 {
 	cs = c;
-
+	//SDL_WM_SetIcon(c,0);
 	keys = SDL_GetKeyState(0);
-	video = SDL_SetVideoMode(XRES, YRES, BPP, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL); 
+	video = SDL_SetVideoMode(XRES,YRES,BPP,SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL); 
 	frame.pointer(video->pixels);
 	SDL_WM_SetCaption(TITLE " " VERSION,TITLE);
 

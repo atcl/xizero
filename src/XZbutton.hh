@@ -10,7 +10,6 @@
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZgui.hh"
-#include "XZlist.hh"
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZstring.hh"
@@ -24,7 +23,7 @@ class button : public gui
 		const xint textleft;					//Relative Y Coordinate of Caption	
 		const xint texttop;					//Relative X Coordinate of Caption
 		const bool depth;					//Flat or Relief
-		xint (*action)();						//Onclick Function Pointer
+		xint (*action)();					//Onclick Function Pointer
 		button(const button& b);				//Copy Constructor (not implemented to deny copy)
 		button& operator=(const button& b);			//Assignment (not implemented to deny copy)
 	public:
@@ -32,17 +31,6 @@ class button : public gui
 		~button() { delete text; };				//Destructor
 		void draw(bool h=0) const;				//Draw Button	
 		xint inline click() { return action(); };		//Trigger action
-};
-
-class buttons
-{
-	private:
-		list bl;
-	public:
-		buttons() : bl() { };
-		void append(button* b) { bl.append(b); bl.first(); };
-		xint check(xint k);
-		void draw();
 };
 ///</define>
 
@@ -62,29 +50,5 @@ void button::draw(bool h) const
 	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
 	font::draw(left+textleft,top+texttop,text,math::set(alertcolor,color,h),backcolor);
 }
-
-///
-
-xint buttons::check(xint k)
-{
-	switch(k)
-	{
-		case SPACE: return ((button*)bl.current())->click(); break;
-		case LEFT:  case UP:   bl.prev(); if(!bl.notfirst()) { bl.next(); } break;
-		case RIGHT: case DOWN: bl.next(); if(!bl.notlast())  { bl.prev(); } break;
-	}
-	return 0;
-}
-
-void buttons::draw()
-{
-	bl.save();
-	for(bl.first();bl.notlast();bl.next())
-	{
-		((button*)bl.current())->draw(bl.same());
-	}
-	bl.load();
-}
-
 ///</code>
 

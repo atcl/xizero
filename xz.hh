@@ -32,9 +32,10 @@
 #include "src/XZbutton.hh"
 #include "src/XZpolygon.hh"
 //Level 6
-#include "src/XZdialog.hh"
+#include "src/XZbuttons.hh"
 #include "src/XZobject.hh"
 //Game
+#include "src/XZdialog.hh"
 #include "src/XZlevel.hh"
 #include "src/XZentity.hh"
 //Other

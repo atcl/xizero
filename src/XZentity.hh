@@ -36,7 +36,7 @@ class entity
 	private:
 		static const fmatrix rot[2];
 		static const fmatrix exp;
-		static list  ammos[2];
+		static list<ammo> ammos[2];
 		static fixed ymark;
 
 		object* model[2];
@@ -81,7 +81,7 @@ class entity
 ///<code>
 const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }() };
 const fmatrix entity::exp      = []()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }();
-list          entity::ammos[2] = { list(), list() };
+list<ammo>    entity::ammos[2] = { list<ammo>(), list<ammo>() };
 fixed         entity::ymark    = 0;
 
 void entity::fire(xint i)
@@ -93,11 +93,11 @@ void entity::fire(xint i)
 
 void entity::checkammo()
 {
-	list& a = ammos[!type];
+	list<ammo>& a = ammos[!type];
 	for(a.first();a.notlast();a.next())
 	{
-		const xint h = model[0]->collision(position,((ammo*)a.current())->pos)<<2;
-		ifu(h!=0) { delete (ammo*)a.delcurrent(); health = math::max(0,health-h); }
+		const xint h = model[0]->collision(position,a.current()->pos)<<2;
+		ifu(h!=0) { delete a.delcurrent(); health = math::max(0,health-h); }
 	}
 }
 
@@ -302,17 +302,17 @@ void entity::display(xint m,bool t)
 		model[1]->display(p+towpos,r);
 		for(xint h=0;h<2&&t==0;++h)
 		{
-			list& a = ammos[h];
+			list<ammo>& a = ammos[h];
 			for(a.first();a.notlast();a.next())
 			{
-				const fvector& dir = ((ammo*)a.current())->dir;
-				const fvector& cur = ((ammo*)a.current())->pos -= dir * dir.e;
+				const fvector& dir = a.current()->dir;
+				const fvector& cur = a.current()->pos -= dir * dir.e;
 
 				const xint cx = fx::r2l(cur.x);
 				const xint cy = fx::r2l(cur.y)-m;
 				switch( (game::onscreen(cx-4,cy-4)&game::onscreen(cx+4,cy+4))<<h )
 				{
-					case 0: delete (ammo*)a.delcurrent(); break;
+					case 0: delete a.delcurrent(); break;
 					case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
 					case 2: game::compiled(cx,cy,GREEN,ORANGE); break;
 				}

@@ -35,7 +35,7 @@ class level
 		object** terrain;		//Level Terrain Stripe
 		entity* player;			//Player Entity
 		entity* boss;			//Boss Entity
-		list enemies;			//List of Enemy Entities
+		list<entity> enemies;		//List of Enemy Entities
 		char** map;			//Text Map of Terrain
 		xint mark;			//Current Level Position
 		xint markmin;			//Lowest Level Position (Bottom)
@@ -196,7 +196,7 @@ level::~level()
 {
 	//for(long i=enemies.first();i<enemies.length();i+=enemies.next())
 	//{ 
-	//	delete (entity*)enemies.delcurrent();
+	//	delete enemies.delcurrent();
 	//}
 	delete boss;
 	delete player;
@@ -212,7 +212,7 @@ xint level::update(xint k,xint j)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		ifu(((entity*)enemies.current())->update()<0) { /*delete*/ enemies.delcurrent(); }
+		ifu(enemies.current()->update()<0) { /*delete*/ enemies.delcurrent(); }
 	}
 
 	return (boss->update()<0)-(player->update(k,j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);
@@ -242,13 +242,13 @@ void level::display()
 	//*
 
 	//render shadows
-	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->display(mark,1); }
+	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,1); }
 	boss->display(mark,1);
 	player->display(mark,1);
 	//*
 
 	//render entities
-	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->display(mark,0); }
+	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,0); }
 	boss->display(mark,0);
 	player->display(mark,0);
 	//*
@@ -259,7 +259,7 @@ void level::gauges()
 	//render gui elements
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		const lvector e(((entity*)enemies.current())->data(mark));
+		const lvector e(enemies.current()->data(mark));
 		if(e.z>0)
 		{
 			ep->vis(game::onscreen(e.x,e.y));
@@ -287,7 +287,7 @@ void level::gauges()
 void level::resume()
 {
 	//resume all entities
-	for(enemies.first();enemies.notlast();enemies.next()) { ((entity*)enemies.current())->resume(); }
+	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->resume(); }
 	boss->resume();
 	player->resume();
 	//*

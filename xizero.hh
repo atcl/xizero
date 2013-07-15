@@ -108,9 +108,9 @@ void menu()
 {
 	//enlist buttons
 	buttons bl;
-	button b_about("About",&about,0,2,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1); bl.append(&b_about);
-	button b_leave("Exit",&leave,0,52,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1); bl.append(&b_leave);
-	button b_close("X",[](){ return 1; },1,XRES-20,1,16,16,BLACK,RED,SYSCOL,WHITE,1); bl.append(&b_close);
+	bl.add("About",&about,0,2,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1);
+	bl.add("Exit",&leave,0,52,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1);
+	bl.add("X",[](){ return 1; },1,XRES-20,1,16,16,BLACK,RED,SYSCOL,WHITE,1);
 	//*
 
 	//draw menu
@@ -212,10 +212,10 @@ void mainmenu()
 	//enlist buttons
 	buttons bl;
 	#define VIS BLACK,RED,SYSCOL,DWHITE,1
-	button b_start("Start",&start,0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);    bl.append(&b_start);
-	button b_contr("Controls",&contr,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS); bl.append(&b_contr);
-	button b_about("About",&about,0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);    bl.append(&b_about);
-	button b_leave("Exit",&leave,0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);     bl.append(&b_leave);
+	bl.add("Start",&start,0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
+	bl.add("Controls",&contr,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
+	bl.add("About",&about,0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);
+	bl.add("Exit",&leave,0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);
 	//*
 
 	//draw menu
