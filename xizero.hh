@@ -114,13 +114,13 @@ void menu()
 	//*
 
 	//draw menu
-	tile* ico = format::xpm(resource::icon);
-	tile  scr = gfx::save();
-	xint  xit = 0;
+	tile ico = format::xpm(resource::icon);
+	tile scr = gfx::save();
+	xint xit = 0;
 	while(screen::run() && xit==0)
 	{
 		gfx::draw(scr);
-		gfx::draw(*ico);
+		gfx::draw(ico);
 		gfx::rect(16,0,XRES,17,RED,RED,1,0);
 		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
 		font::draw(20,1,"atCROSSLEVEL XiZero",WHITE,RED);
@@ -151,35 +151,31 @@ void intro()
 
 	//animate in phases
 	const xint last = screen::time();
-	      xint curr = last;
-	      xint prog = 0;
+	xint diff = last;
 
-	while(screen::run() && curr<last+4400 && screen::key()!=SPACE)
+	while(screen::run() && (diff=screen::time()-last)<3200 && screen::key()!=SPACE)
 	{
-		curr = screen::time();
+		const fixed prog = fx::div(fx::l2f(diff),FX(200));
 		object::linear.clear();
-		const xint diff = curr-last;
-		switch( diff/200 )
-		{
-			case 0 ... 9:   object::linear.translate(0,fx::mul(fx::l2f(20),prog),0); break;
-			case 10 ... 14: object::linear.rotatex(fx::mul(fx::l2f(14),prog));       break;
-			case 15 ... 19: object::linear.translate(0,0,fx::mul(fx::l2f(50),prog)); break;
-		}
 
-		c.update();
+		if(prog<FX(4) ) { const fixed a=0; object::linear.translate(0,a,0); }
+		//if(prog<FX(8) ) { const fixed b=0; object::linear.rotatex(b); }
+		//if(prog<FX(12)) { const fixed c=0; object::linear.translate(0,0,c); }
+
+		   c.update();
 		b[0].update();
 		b[1].update();
 		b[2].update();
 		b[3].update();
+
 		screen::frame.clear(BLACK);
 		screen::depth.clear(fx::l2f(400));
-		c.display(p,R_F|R_Z);
+
+		   c.display(p,R_F|R_Z);
 		b[0].display(p,R_F|R_Z);
 		b[1].display(p,R_F|R_Z);
 		b[2].display(p,R_F|R_Z);
 		b[3].display(p,R_F|R_Z);
-		prog = fx::mul(fx::l2f(curr-screen::time()),FXCEN);
-		//screen::vwait();
 	}
 	//*
 

@@ -96,7 +96,7 @@ void entity::checkammo()
 	list<ammo>& a = ammos[!type];
 	for(a.first();a.notlast();a.next())
 	{
-		const xint h = model[0]->collision(position,a.current()->pos)<<2;
+		const xint h = model[0]->collision(position,a.current()->pos)*4;
 		ifu(h!=0) { delete a.delcurrent(); health = math::max(0,health-h); }
 	}
 }

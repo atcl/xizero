@@ -52,6 +52,7 @@ void trans::dissolve()
 			screen::frame[o+XRES]   = math::rnd(0x00FFFFFF);
 			screen::frame[o+XRES+1] = math::rnd(0x00FFFFFF);
 		}
+		screen::flush();
 		screen::sleep(2);
 	}
 }

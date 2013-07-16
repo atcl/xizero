@@ -8,22 +8,12 @@
 ///<include>
 #pragma once
 #include "XZbasic.hh"
+#include "XZtile.hh"
 #include "XZmath.hh"
 #include "XZfrmbuf.hh"
 ///</include>
 
 ///<define>
-#ifndef TILE
-#define TILE
-struct tile
-{
-	yint  width;
-	yint  height;
-	xint* data;
-	~tile() { delete data; }
-};
-#endif
-
 namespace gfx
 {
 	/*OK*/ inline void pix(xint x,xint y,yint c) { screen::frame[(y*XRES+x)] = c; }		//draw pixel
@@ -197,7 +187,7 @@ void gfx::fsprog(xint p,yint c)
 
 tile gfx::save()
 {
-	tile r({XRES,YRES,new xint[XRES*YRES]});
+	tile r({XRES,YRES});
 	for(xint i=0;i<XRES*YRES;++i) { r.data[i] = screen::frame[i]; }
 	return r;
 }

@@ -2,7 +2,7 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZfrmbuf.hh
-// Direct Framebuffer Access and Input Handling Library
+// SDL Interface
 ///</header>
 
 ///<include>
@@ -11,6 +11,7 @@
 #include <SDL/SDL.h>		//SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState
 
 #include "XZbasic.hh"
+#include "XZtile.hh"
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
@@ -52,7 +53,6 @@ namespace screen
 
 	namespace
 	{
-		void* cs = 0;					//cursor image
 		yint  kk = 0;					//keyboard key
 		yint  tk = 0;					//turbo key
 		yint  ms = yint((XRES/2)<<16)+yint(YRES/2);	//compressend mouse data
@@ -62,7 +62,7 @@ namespace screen
 		Uint8* keys;
 	}
 
-	void init(void* c);
+	void init(const tile& c);
 	void event();
 	void close();
 
@@ -76,14 +76,12 @@ namespace screen
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline yint  key()	{ const yint r=kk; kk=0; return r; }
 	inline yint  turbo()    { return tk; }
-	inline void* cursor()	{ return cs; }
 }
 ///</define>
 
 ///<code>
-void screen::init(void* c)
+void screen::init(const tile& c)
 {
-	cs = c;
 	//SDL_WM_SetIcon(c,0);
 	keys = SDL_GetKeyState(0);
 	video = SDL_SetVideoMode(XRES,YRES,BPP,SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL); 

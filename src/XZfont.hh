@@ -20,7 +20,7 @@ namespace font
 	namespace
 	{
 		#include "../dat/xzfont.xpm"
-		tile* f = format::xpm(font);
+		tile f = format::xpm(font);
 	}
 
 	            xint draw(xint x,xint y,char a,yint c,yint b);
@@ -39,19 +39,19 @@ xint font::draw(xint x,xint y,char a,yint c,yint b)
 	a = map(a);
 	const bool bt = b!=TRANS;
 	const bool ct = c!=TRANS;
-	const xint xd = -XRES+x+f->height;
-	const xint yd = -YRES+y+f->height;
-	const xint h = f->height-math::set(yd,yd>0);
-	const xint w = f->height-math::set(xd,xd>0);
-	const xint sx = f->width-w;
+	const xint xd = -XRES+x+f.height;
+	const xint yd = -YRES+y+f.height;
+	const xint h = f.height-math::set(yd,yd>0);
+	const xint w = f.height-math::set(xd,xd>0);
+	const xint sx = f.width-w;
 	const xint d = XRES - w;
 	xint r = 0;
 
-	for(xint i=0,o=y*XRES+x,s=f->height*a;i<h;++i,o+=d,s+=sx)
+	for(xint i=0,o=y*XRES+x,s=f.height*a;i<h;++i,o+=d,s+=sx)
 	{
 		for(xint j=0;j<w;++j,++o,++s)
 		{
-			const yint e = f->data[s];
+			const yint e = f.data[s];
 			screen::frame[o] = math::set(c,math::set(b,screen::frame[o],bt&&(e==WHITE)),ct&&(e==RED));
 			r += (i==0)&&(e!=BLACK);
 		}
@@ -67,7 +67,7 @@ void font::draw(xint x,xint y,const char* a,yint c,yint b)
 	{
 		switch(curr)
 		{
-			case '\n': y += f->height; x = z; break;
+			case '\n': y += f.height; x = z; break;
 			default: x += draw(x,y,curr,c,b);
 		}
 		curr = a[i+1];
@@ -77,12 +77,12 @@ void font::draw(xint x,xint y,const char* a,yint c,yint b)
 xint font::width(char x)
 {
 	x = map(x);
-	const xint h = f->height;
+	const xint h = f.height;
 	xint r = 0;
 
 	for(xint j=0,s=h*x;j<h;++j)
 	{
-		r += (f->data[s++]!=BLACK);
+		r += (f.data[s++]!=BLACK);
 	}
 	return r;
 }
@@ -109,12 +109,12 @@ xint font::width(const char* x)
 
 xint font::height(const char* x)
 {
-	return (string::count(x,'\n')+1)*f->height;
+	return (string::count(x,'\n')+1)*f.height;
 }
 
 xint font::height()
 {
-	return f->height;
+	return f.height;
 }
 
 char font::map(char a)

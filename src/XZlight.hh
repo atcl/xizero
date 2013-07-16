@@ -8,6 +8,7 @@
 ///<include>
 #pragma once
 #include "XZbasic.hh"
+#include "XZtile.hh"
 #include "XZgfx.hh"
 #include "XZmath.hh"
 ///</include>
@@ -16,18 +17,14 @@
 class light
 {
 	private:
-		xint rad;
-		yint col;
+		const xint rad;
+		const yint col;
 		tile mask;
 
 		xint lambert(xint x,xint y) const;
-		void init(bool i=0);
 	public:
-		light(xint r,yint c) : rad(r), col(c), mask({0,0,0}) { init(); }
-		~light() { delete mask.data; }
+		light(xint r,yint c);
 		inline void draw(xint x,xint y) const { gfx::draw(mask,x-rad,y-rad); }
-		inline void color(yint c) { col = c; init(); }
-		inline void radius(xint r) { rad = r; init(1); }
 		static fvector refract(const fvector& x,const fvector& y,fixed ri);
 };
 ///</define>
@@ -46,16 +43,8 @@ xint light::lambert(xint x,xint y) const
 	return c.d;
 }
 
-void light::init(bool i)
+light::light(xint r,yint c) : rad(r), col(c), mask((rad*2)+1,(rad*2)+1)
 {
-	if(i!=0)
-	{
-		const xint dim = (rad<<1)+1;
-		mask.width = mask.height = dim;
-		delete mask.data;
-		mask.data = new xint[dim*dim];
-	}
-
 	for(yint j=0,t=0;j<mask.width;++j)
 	{
 		for(yint k=0;k<mask.width;++k)

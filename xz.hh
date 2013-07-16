@@ -13,6 +13,7 @@
 #include "src/XZlist.hh"
 #include "src/XZmath.hh"
 #include "src/XZsystem.hh"
+#include "src/XZtile.hh"
 //Level 2
 #include "src/XZfixed.hh"
 #include "src/XZfrmbuf.hh"
@@ -34,8 +35,9 @@
 //Level 6
 #include "src/XZbuttons.hh"
 #include "src/XZobject.hh"
-//Game
+//Level 7
 #include "src/XZdialog.hh"
+//Game
 #include "src/XZlevel.hh"
 #include "src/XZentity.hh"
 //Other

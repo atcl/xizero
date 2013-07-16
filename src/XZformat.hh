@@ -8,6 +8,7 @@
 ///<include>
 #pragma once
 #include "XZbasic.hh"
+#include "XZtile.hh"
 #include "XZstring.hh"
 ///</include>
 
@@ -28,21 +29,10 @@ struct info
 	} 
 };
 
-#ifndef TILE
-#define TILE
-struct tile
-{
-	yint  width;
-	yint  height;
-	xint* data;
-	~tile() { delete data; }
-};
-#endif
-
 namespace format
 {
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
-	/*OK*/ tile*  xpm(const char* x);		//load xpm image
+	/*OK*/ tile   xpm(const char* x);		//load xpm image
 	/*OK*/ info*  ini(const char* x);		//load ini configuartion
 	/*OK*/ info*  ar(char* x);			//load ar archive
 }
@@ -55,18 +45,18 @@ char** format::csv(const char* x,char y)
 	return string::split(s,y);
 }
 
-tile* format::xpm(const char* x)
+tile format::xpm(const char* x)
 {
 	yint   index = 0;
 	char** y     = string::split(x,'\n');
 	char** line  = string::split(y[index++],' ');
 
-	guard(string::str2int(line[3])!=1,0);
+	//guard(string::str2int(line[3])!=1,0);
 
 	const yint width  = string::str2int(line[0]);
 	const yint height = string::str2int(line[1]);
 	const yint colors = string::str2int(line[2]);
-	tile* r = new tile({width, height, new xint[width*height]});
+	tile r(width,height);
 
 	yint* color = new uint[256];
 	for(yint i=0;i<colors;++i)
@@ -79,7 +69,7 @@ tile* format::xpm(const char* x)
 	{
 		for(yint j=0;j<width;++j,++o)
 		{
-			r->data[o] = color[xint(y[index][j])];
+			r.data[o] = color[xint(y[index][j])];
 		}
 	}
 
