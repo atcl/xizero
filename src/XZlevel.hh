@@ -221,22 +221,22 @@ xint level::update(xint k,xint j)
 void level::display()
 {
 	//draw background //TODO: remove the clears
-	screen::frame.clear((screen::zs<<24)|DRED);
+	screen::frame.clear((screen::zs<<24)|OCHER>>1);
 	//screen::depth.clear(0); //z
 	screen::depth.clear(FX(200));
 	//*
 
 	//render terrain //fix
 	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	const lvector p((XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND);
+	const lvector pos((XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND);
 	object::linear.clear();
 	object::linear.translate(0,FX(YRES>>1),0);
 	xint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(yint i=0;i<31;++i,++r)
+	for(yint i=0;i<31;++i)
 	{
-		object temp(*terrain[r]);
+		object temp(*terrain[r++]);
 		temp.update();
-		temp.display(p,R_F);
+		temp.display(pos,R_F);
 		object::linear.translate(0,FX(-BWIDTH),0);
 	}
 	//*
@@ -252,11 +252,8 @@ void level::display()
 	boss->display(mark,0);
 	player->display(mark,0);
 	//*
-}
 
-void level::gauges()
-{
-	//render gui elements
+	//render gauges
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
 		const lvector e(enemies.current()->data(mark));
@@ -268,6 +265,7 @@ void level::gauges()
 			ep->draw();
 		}
 	}
+
 	const lvector b(boss->data(mark));
 	if(b.z>0)
 	{
@@ -276,6 +274,7 @@ void level::gauges()
 		bp->set(b.z+b.e);
 		bp->draw();
 	}
+
 	const lvector p(player->data(mark));
 	pp->set(p.z);
 	pp->draw();

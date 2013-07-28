@@ -23,6 +23,7 @@
 #define YMAX YRES-1
 #define ZMIN 1
 #define ZMAX 255
+
 #define PRJX 135
 #define PRJY 150
 
@@ -147,7 +148,7 @@ void polygon::raster(yint c) const
 			if(inside && above)
 			{
 				screen::depth[off] = cx[3];
-				screen::frame[off]  = c;
+				screen::frame[off] = c;
 			}
 
 			cx[0] -= dy[0];
@@ -207,7 +208,7 @@ void polygon::shadow(yint c) const
 			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
 			if(inside)
 			{
-				screen::frame[off]  = c;
+				screen::frame[off]  = screen::frame[off]&c;
 			}
 
 			cx[0] -= dy[0];

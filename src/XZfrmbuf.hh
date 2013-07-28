@@ -15,8 +15,6 @@
 #include "XZbuffer.hh"
 #include "XZsystem.hh"
 #include "XZmath.hh"
-
-#include "XZstring.hh"
 ///</include>
 
 ///<declare>

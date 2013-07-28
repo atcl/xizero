@@ -70,7 +70,6 @@ xint start(xint i)
 		}
 				
 		l.display();
-		l.gauges();
 		bench();
 	}
 
