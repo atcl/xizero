@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZgfx.hh
-// Graphic Primitives Library 
+// Graphic Primitives Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZtile.hh"
 #include "XZmath.hh"
@@ -135,12 +135,14 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 
 void gfx::rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f,bool g)
 {
+	//draw frame
 	line(x,y,a,y,c);
 	line(a,y,a,b,c);
 	c = math::set(~c|0xFF000000,c,g==1); 
 	line(x,y,x,b,c); 
 	line(x,b,a,b,c);
 
+	//draw inside
 	++x;
 	--a;
 	for(xint i=y++;i<b&&f==1;++i)

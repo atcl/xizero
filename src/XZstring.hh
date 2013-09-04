@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZstring.hh
-// C String Library 
+// C String Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 ///</include>

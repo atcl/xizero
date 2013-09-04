@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZlight.hh
-// Light Source Class Library 
+// Light Source Class Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZtile.hh"
 #include "XZgfx.hh"
@@ -25,7 +25,7 @@ class light
 	public:
 		light(xint r,yint c);
 		inline void draw(xint x,xint y) const { gfx::draw(mask,x-rad,y-rad); }
-		static fvector refract(const fvector& x,const fvector& y,fixed ri);
+		static vector refract(const vector& x,const vector& y,fixed ri);
 };
 ///</define>
 
@@ -54,12 +54,12 @@ light::light(xint r,yint c) : rad(r), col(c), mask((rad*2)+1,(rad*2)+1)
 	}
 }
 
-fvector light::refract(const fvector& x,const fvector& y,fixed ri)
+vector light::refract(const vector& x,const vector& y,fixed ri)
 {
 	fixed t = x.dot(y);
 	fixed r = FXONE - fx::mul(ri,ri) * (FXONE - fx::mul(t,t));
 
-	fvector z(0,0,0,0);
+	vector z(0,0,0,0);
 	if(r>0)
 	{
 		fixed s = ri * t + fx::sqr(r);

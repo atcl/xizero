@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZlist.hh
-// Double Linked List Library 
+// Double Linked List Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 ///</include>
 

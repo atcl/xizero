@@ -41,7 +41,7 @@ inline xint leave();
 void menu();
 void intro();
 void mainmenu();
-void won(const lvector& p);
+void won(const tuple& p);
 void lost();
 void over();
 void bench();
@@ -140,7 +140,7 @@ void intro()
 	object c((*a)["cross.y3d"]);
 	object b[4] = { q,object(q),object(q),object(q) };
 
-	lvector p(XRES/2,YRES/2,100);
+	tuple p{XRES/2,YRES/2,100};
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);     c.update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
 	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
@@ -192,7 +192,7 @@ void mainmenu()
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
-	lvector p(XRES/2,YRES/2,100);
+	tuple p{XRES/2,YRES/2,100};
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();
@@ -239,7 +239,7 @@ void mainmenu()
 	delete f;
 }
 
-void won(const lvector& p)
+void won(const tuple& p)
 {
 	trans::circleblend(p.x,p.y,60);
 	font::draw(40,40,"You won.",WHITE,TRANS);

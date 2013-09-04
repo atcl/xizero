@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZobject.hh
-// Object Library 
+// Object Library
+#pragma once 
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZformat.hh"
 #include "XZvector.hh"
@@ -20,7 +20,7 @@ class object
 {
 	private:
 		polygon** poly;
-		fvector*  dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
+		vector*   dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
 		fixed     bound;
 		fixed     cbound;	//TODO
 		xint      polys;
@@ -30,23 +30,23 @@ class object
 	public:
 
 		/*OK*/ object(const char* o);
-		/*OK*/ object(lvector* a,lvector* b,lvector* c,lvector* d,xint x,xint e);
+		/*OK*/ object(tuple* a,tuple* b,tuple* c,tuple* d,xint x,xint e);
 		/*OK*/ object(const object& o);
 		/*OK*/ ~object();
-		/*OK*/ fvector* docktype(xint i,xint j) const;
-		/*OK*/ void update(const fmatrix& m=object::linear,bool j=1);
-		/*OK*/ void display(const lvector& p,xint f) const;
+		/*OK*/ vector* docktype(xint i,xint j) const;
+		/*OK*/ void update(const matrix& m=object::linear,bool j=1);
+		/*OK*/ void display(const tuple& p,xint f) const;
 		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
 		/*OK*/ inline fixed bounding() const { return cbound; }			//remove if possible
-		/*OK*/ inline bool collision(const fvector& x,const fvector& a);
+		/*OK*/ inline bool collision(const vector& x,const vector& a);
 
-		static fmatrix linear;
+		static matrix linear;
 };
 ///</define>
 
 ///<code>
-fmatrix object::linear = fmatrix();
+matrix object::linear = matrix();
 
 object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(0),scolor(0)
 {
@@ -59,9 +59,9 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 	polys += 2*string::str2int(t[i++]); 
 	docks = string::str2int(t[i++]);
 	poly  = new polygon*[polys];
-	if(docks!=0) { dock = new fvector[docks]; }
+	if(docks!=0) { dock = new vector[docks]; }
 
-	lvector bbox[4];
+	tuple bbox[4];
 
 	system::err(string::find(t[i++],"objt")==-1,"ERROR: y3d format wrong (objt)");
 
@@ -81,8 +81,8 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 
 		system::err(string::find(t[i++],"posi")==-1,"ERROR: y3d format wrong (posi)");
 
-		lvector pos(string::str2int(t[i]),string::str2int(t[i+1]),string::str2int(t[i+2])); i+=3;
-		lvector x[4];
+		tuple pos{string::str2int(t[i]),string::str2int(t[i+1]),string::str2int(t[i+2])}; i+=3;
+		tuple x[4];
 		for(xint k=0;k<p;++k)
 		{
 			system::err(string::find(t[i++],"poly")==-1,"ERROR: y3d format wrong (poly)");
@@ -95,11 +95,11 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 			{
 				system::err(string::find(t[i++],"vert")==-1,"ERROR: y3d format wrong (vert)");
 
-				x[l].set(pos.x+string::str2int(t[i]),pos.y+string::str2int(t[i+1]),pos.z+string::str2int(t[i+2]));
+				x[l] = {pos.x+string::str2int(t[i]),pos.y+string::str2int(t[i+1]),pos.z+string::str2int(t[i+2])};
 			}
 
-			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor);
-			//poly[pc++] = new polygon(x[0],x[2],x[1],tcolor); //z
+			//poly[pc++] = new polygon(x[0],x[1],x[2],tcolor);
+			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor); //z
 
 			if(x[0].x<bbox[0].x) { bbox[0]=x[0]; }
 			if(x[1].x<bbox[0].x) { bbox[0]=x[1]; }
@@ -121,8 +121,8 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 				if(x[3].x>bbox[2].x) { bbox[2]=x[3]; }
 				if(x[3].y>bbox[3].y) { bbox[3]=x[3]; }
 			
-				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor);
-				//poly[pc++] = new polygon(x[2],x[0],x[3],tcolor); //z
+				//poly[pc++] = new polygon(x[2],x[3],x[0],tcolor);
+				poly[pc++] = new polygon(x[2],x[3],x[0],tcolor); //z
 			}
 		}
 
@@ -131,29 +131,29 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 			system::err(string::find(t[i++],"dock")==-1,"ERROR: y3d format wrong (dock)");
 
 			const xint type = string::str2int(t[i++]);
-			dock[dc].set(fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type);
+			dock[dc] = {fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type};
 		}
 	}
 
 	//compute bounding circle
 	bbox[0].z = bbox[1].z = bbox[2].z = bbox[3].z = 0;
-	const fvector m = fvector(bbox[0] + bbox[1] + bbox[2] + bbox[3])*FXQRT;
+	const vector m = (vector(bbox[0]) + vector(bbox[1]) + vector(bbox[2]) + vector(bbox[3]))*FXQRT;
 
-	bound = ((fvector(bbox[0]))-m).length();
-	bound = math::min(bound,((fvector(bbox[1]))-m).length());
-	bound = math::min(bound,((fvector(bbox[2]))-m).length());
-	bound = math::min(bound,((fvector(bbox[3]))-m).length());
+	bound = ((vector(bbox[0]))-m).length();
+	bound = math::min(bound,((vector(bbox[1]))-m).length());
+	bound = math::min(bound,((vector(bbox[2]))-m).length());
+	bound = math::min(bound,((vector(bbox[3]))-m).length());
 
-	bound = math::min(bound,((fvector(bbox[0]+(bbox[1]-bbox[0])*FXHLF))-m).length());
-	bound = math::min(bound,((fvector(bbox[1]+(bbox[2]-bbox[1])*FXHLF))-m).length());
-	bound = math::min(bound,((fvector(bbox[2]+(bbox[3]-bbox[2])*FXHLF))-m).length());
-	bound = math::min(bound,((fvector(bbox[3]+(bbox[0]-bbox[3])*FXHLF))-m).length());
+	bound = math::min(bound,((vector(bbox[0])+(vector(bbox[1])-vector(bbox[0]))*FXHLF)-m).length());
+	bound = math::min(bound,((vector(bbox[1])+(vector(bbox[2])-vector(bbox[1]))*FXHLF)-m).length());
+	bound = math::min(bound,((vector(bbox[2])+(vector(bbox[3])-vector(bbox[2]))*FXHLF)-m).length());
+	bound = math::min(bound,((vector(bbox[3])+(vector(bbox[0])-vector(bbox[3]))*FXHLF)-m).length());
 	//*
 
 	delete t;
 }
 
-object::object(lvector* a,lvector* b,lvector* c,lvector* d,xint x,xint e) : poly(0),dock(0),bound(0),polys(x<<1),docks(0),scolor(0)
+object::object(tuple* a,tuple* b,tuple* c,tuple* d,xint x,xint e) : poly(0),dock(0),bound(0),polys(x<<1),docks(0),scolor(0)
 {
 	for(xint i=0;i<x;++i)
 	{
@@ -195,7 +195,7 @@ object::object(lvector* a,lvector* b,lvector* c,lvector* d,xint x,xint e) : poly
 	}
 }
 
-object::object(const object& o) : poly(new polygon*[o.polys]),dock(new fvector[o.docks]),bound(o.bound),polys(o.polys),docks(o.docks),scolor(o.scolor)
+object::object(const object& o) : poly(new polygon*[o.polys]),dock(new vector[o.docks]),bound(o.bound),polys(o.polys),docks(o.docks),scolor(o.scolor)
 {
 	for(xint i=0;i<polys;++i)
 	{
@@ -214,9 +214,9 @@ object::~object()
 	delete[] poly;
 }
 
-fvector* object::docktype(xint i,xint j) const
+vector* object::docktype(xint i,xint j) const
 {
-	fvector* r[2] = {0,0};
+	vector* r[2] = {0,0};
 	for(xint k=0,l=-1;k<docks && (l!=j);++k)
 	{
 		l += (dock[k].e==i);
@@ -225,20 +225,25 @@ fvector* object::docktype(xint i,xint j) const
 	return r[1];
 }
 
-void object::update(const fmatrix& m,bool j)
+void object::update(const matrix& m,bool j)
 {
+	//update polygon
 	for(xint i=0;i<polys;++i)
 	{
 		poly[i]->update(m,j);
 	}
+
+	//update docking points
 	for(xint i=0;i<docks;++i)
 	{
 		dock[i] = m*dock[i];
 	}
+
+	//update bounding circle
 	cbound = bound; //TODO: cbound trafo to match projection
 }
 
-void object::display(const lvector& p,xint f) const
+void object::display(const tuple& p,xint f) const
 {
 	for(xint i=0;i<polys;++i)
 	{
@@ -254,10 +259,10 @@ void object::pull(fixed x)
 	}
 }
 
-bool object::collision(const fvector& x,const fvector& a)
+bool object::collision(const vector& x,const vector& a)
 {
 	return (a.x>x.x-bound)&&(a.x<x.x+bound)&&(a.y>x.y-bound)&&(a.y<x.y+bound); 	//box works
-	//const fvector t(a-x);						//component-wise?
+	//const vector t(a-x);						//component-wise?
 	//return t.dot(t)<r*r;						//circle doesn't
 }
 ///</code>

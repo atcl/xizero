@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZmsgbox.hh
-// Dialog Library 
+// Dialog Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZbuttons.hh"

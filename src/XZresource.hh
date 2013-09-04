@@ -3,12 +3,8 @@
 // released under 2-clause BSD license
 // XZresource.hh
 // Resource Library
-///</header>
-
-///<include>
 #pragma once
-//#include "XZbasic.hh"
-///</include>
+///</header>
 
 ///<define>
 namespace resource //to struct

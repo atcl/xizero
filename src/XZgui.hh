@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZgui.hh
-// GUI base class 
+// GUI base class
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 ///</include>
 

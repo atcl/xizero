@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZbuffer.hh
 // Buffer Library 
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include <stdalign.h> //aligned_alloc
 #include <cstdlib>    //free
 #include <string.h>   //memcpy

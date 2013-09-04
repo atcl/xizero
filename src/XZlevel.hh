@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZlevel.hh
-// Level Class 
+// Level Class
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZsystem.hh"
 #include "XZstring.hh"
@@ -18,14 +18,13 @@
 ///</include>
 
 //<declare>
-#define LWIDTH 40
-#define BWIDTH 16
-#define BHEIGHT -10 //z 10
-#define CSHIFT (-XRES)>>1
-#define GROUND 150 // 15
-#define AFLOAT 50
-#define OFFSET 4
-#define MAXSTEP 5
+#define LWIDTH  40
+#define BWIDTH  16
+#define BHEIGHT 10 //z 10
+#define GROUND  10 // 150
+#define AFLOAT  50
+#define OFFSET   4
+#define MAXSTEP  5
 ///</declare>
 
 ///<define>
@@ -53,7 +52,7 @@ class level
 		void display();			//Display Terrain, Shadows, Entities
 		void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
-		inline lvector ppos();		//get player position
+		inline tuple ppos();		//get player position
 };
 ///</define>
 
@@ -108,13 +107,13 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	markmin = (l*BWIDTH)-YMAX;
 
-	terrain    = new object*[l];
-	lvector* a = new lvector[LWIDTH];
-	lvector* b = new lvector[LWIDTH];
-	lvector* c = new lvector[LWIDTH];
-	lvector* d = new lvector[LWIDTH];
-	lvector  e;
-	lvector  f;
+	terrain  = new object*[l];
+	tuple* a = new tuple[LWIDTH];
+	tuple* b = new tuple[LWIDTH];
+	tuple* c = new tuple[LWIDTH];
+	tuple* d = new tuple[LWIDTH];
+	tuple  e;
+	tuple  f;
 
 	for(xint i=0,k=0;i<l;++i,k=0)
 	{
@@ -124,21 +123,16 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
 				case '!':
-					boss = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),(*bi),bm,0,2);
+					boss = new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),AFLOAT}, (*bi),bm,0,2);
 				break;
 
 				case '"':
-					player = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),GROUND),(*pi),pm,pn,0);
+					player = new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),GROUND}, (*pi),pm,pn,0);
 				break;
 
-				case '#':
-				case '$':
-				case '%':
-				case '&':
-				case '\'':
-				case '(':
-					entity* enemy = new entity(lvector(j*BWIDTH-(BWIDTH>>1),i*BWIDTH-(BWIDTH>>1),AFLOAT),(*ei),em,0,1);
-					enemies.append(enemy);
+				case '#': case '$': case '%': case '&': case '\'': case '(':
+	
+					enemies.append(new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),AFLOAT}, (*ei),em,0,1));
 				break;
 			}
 
@@ -147,22 +141,22 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 		//*
 
 		//load terrain stripe
-		xint v = CSHIFT;
+		xint v = -XRES/2;
 		for(xint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
 		{
-			a[k].set( v,       -(BWIDTH>>1),(map[i][j-1])  *BHEIGHT );
-			b[k].set( v,         BWIDTH>>1, (map[i-1][j-1])*BHEIGHT );
-			c[k].set( v+BWIDTH,  BWIDTH>>1, (map[i-1][j])  *BHEIGHT );
-			d[k].set( v+BWIDTH,-(BWIDTH>>1),(map[i][j])    *BHEIGHT );
+			a[k] = { v,       -(BWIDTH/2),(map[i][j-1])  *BHEIGHT };
+			b[k] = { v,         BWIDTH/2, (map[i-1][j-1])*BHEIGHT };
+			c[k] = { v+BWIDTH,  BWIDTH/2, (map[i-1][j])  *BHEIGHT };
+			d[k] = { v+BWIDTH,-(BWIDTH/2),(map[i][j])    *BHEIGHT };
 
 			if(a[k].z==d[k].z && b[k].z==c[k].z)
 			{
 				++j;
-				v+=2*BWIDTH; 
+				v += BWIDTH*2; 
 				for(;j<LWIDTH;++j,v+=BWIDTH)
 				{
-					e.set( v,  BWIDTH>>1, (map[i-1][j])*BHEIGHT );
-					f.set( v,-(BWIDTH>>1),(map[i][j])  *BHEIGHT );
+					e = { v,  BWIDTH/2, (map[i-1][j])*BHEIGHT };
+					f = { v,-(BWIDTH/2),(map[i][j])  *BHEIGHT };
 					if(c[k].z==e.z && d[k].z==f.z)
 					{
 						c[k] = e;
@@ -170,7 +164,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 					}
 					else break;
 				}
-				v-=2*BWIDTH;
+				v -= BWIDTH*2;
 				--j;
 			}
 
@@ -221,14 +215,13 @@ xint level::update(xint k,xint j)
 void level::display()
 {
 	//draw background //TODO: remove the clears
-	screen::frame.clear((screen::zs<<24)|OCHER>>1);
-	//screen::depth.clear(0); //z
-	screen::depth.clear(FX(200));
-	//*
+	screen::frame.clear(OCHER>>1);
+	screen::depth.clear(0); //z
+	//screen::depth.clear(FX(200));
 
 	//render terrain //fix
 	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	const lvector pos((XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND);
+	const tuple pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
 	object::linear.clear();
 	object::linear.translate(0,FX(YRES>>1),0);
 	xint r = math::max((mark/BWIDTH)-OFFSET,0);
@@ -253,10 +246,10 @@ void level::display()
 	player->display(mark,0);
 	//*
 
-	//render gauges
+	//render enemy gauges
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		const lvector e(enemies.current()->data(mark));
+		const tuple e(enemies.current()->data(mark));
 		if(e.z>0)
 		{
 			ep->vis(game::onscreen(e.x,e.y));
@@ -266,7 +259,8 @@ void level::display()
 		}
 	}
 
-	const lvector b(boss->data(mark));
+	//render boss gauge
+	const tuple b(boss->data(mark));
 	if(b.z>0)
 	{
 		bp->vis(game::onscreen(b.x,b.y));
@@ -275,24 +269,23 @@ void level::display()
 		bp->draw();
 	}
 
-	const lvector p(player->data(mark));
+	//render player gauge
+	const tuple p(player->data(mark));
 	pp->set(p.z);
 	pp->draw();
 	sp->set(p.e);
 	sp->draw();
-	//*
 }
 
 void level::resume()
 {
-	//resume all entities
+	//resume all entities after a pause
 	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->resume(); }
 	boss->resume();
 	player->resume();
-	//*
 }
 
-lvector level::ppos()
+tuple level::ppos()
 {
 	return player->data(mark);
 }

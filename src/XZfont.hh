@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZfont.hh
 // Font Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZstring.hh"
 #include "XZmath.hh"

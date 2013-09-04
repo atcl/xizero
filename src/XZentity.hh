@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZentity.hh
-// Entity Class 
+// Entity Class
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZmath.hh"
 #include "XZfixed.hh"
@@ -27,22 +27,22 @@
 struct ammo
 {
 	//ammo(const fvector& p,const fvector& d) : pos(p),dir(d) { ; }
-	fvector pos;
-	fvector dir;
+	vector pos;
+	vector dir;
 };
 
 class entity
 {
 	private:
-		static const fmatrix rot[2];
-		static const fmatrix exp;
+		static const matrix rot[2];
+		static const matrix exp;
 		static list<ammo> ammos[2];
 		static fixed ymark;
 
 		object* model[2];
-		fvector position;
-		fvector direction[2];
-		lvector towpos;
+		vector  position;
+		vector  direction[2];
+		tuple   towpos;
 		xint    angle;
 
 		/*const*/ bool type;
@@ -58,36 +58,36 @@ class entity
 		/*const*/ xint ammotype;
 		/*const*/ xint firerate;
 		xint points;
-		fvector** ammomount;
+		vector** ammomount;
 
 		void fire(xint i);
 		void checkammo();
-		xint terrain(const char** m,fvector& n);
+		xint terrain(const char** m,vector& n);
 		entity(const entity& e);
 		entity& operator=(const entity& e);
 	public:
-		entity(const lvector& p,const info& v,object* m,object* n,xint s);
+		entity(const tuple& p,const info& v,object* m,object* n,xint s);
 		~entity();
 		xint update(xint k,xint j,fixed m,fixed n);
 		xint update();
 		void display(xint m,bool t);
 		inline void resume();
 		inline void addpoints(xint a);
-		inline lvector data(xint m) const;
+		inline tuple data(xint m) const;
 		inline static xint ylevel();
 };
 ///</define>
 
 ///<code>
-const fmatrix entity::rot[2]   = { []()->fmatrix { fmatrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->fmatrix { fmatrix m; m.rotatez(FX(ROTANG)); return m; }() };
-const fmatrix entity::exp      = []()->fmatrix { fmatrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }();
-list<ammo>    entity::ammos[2] = { list<ammo>(), list<ammo>() };
-fixed         entity::ymark    = 0;
+const matrix entity::rot[2]   = { []()->matrix { matrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->matrix { matrix m; m.rotatez(FX(ROTANG)); return m; }() };
+const matrix entity::exp      = []()->matrix { matrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }();
+list<ammo>   entity::ammos[2] = { list<ammo>(), list<ammo>() };
+fixed        entity::ymark    = 0;
 
 void entity::fire(xint i)
 {
 	const bool j = (ammomount[i]->z)||(type!=0);
-	ammo* cur = new ammo{ fvector(position.x+ammomount[i]->x,position.y-ammomount[i]->y,0,0 ),fvector(direction[j].x,-(direction[j].y),0,(FXONE<<2)) }; 
+	ammo* cur = new ammo{ vector(position.x+ammomount[i]->x,position.y-ammomount[i]->y,0,0 ),vector(direction[j].x,-(direction[j].y),0,(FXONE<<2)) }; 
 	ammos[type].append(cur);
 }
 
@@ -101,7 +101,7 @@ void entity::checkammo()
 	}
 }
 
-xint entity::terrain(const char** m,fvector& n) //TODO actual angle computation
+xint entity::terrain(const char** m,vector& n) //TODO actual angle computation
 {
 	const fixed r = model[0]->bounding();
 
@@ -121,10 +121,10 @@ xint entity::terrain(const char** m,fvector& n) //TODO actual angle computation
 		math::abs(m[r0][d0]-m[r1][d1])<=MAXSTEP;
 }
 
-entity::entity(const lvector& p,const info& v,object* m,object* n,xint s)
+entity::entity(const tuple& p,const info& v,object* m,object* n,xint s)
  : model{new object(*m),0},
    position(p),
-   direction{ fvector(0,FXONE,0,FXONE),fvector(0,FXONE,0,FXONE) },
+   direction{ vector(0,FXONE,0,FXONE),vector(0,FXONE,0,FXONE) },
    towpos(),
    angle(0),
    type(s),
@@ -139,7 +139,7 @@ entity::entity(const lvector& p,const info& v,object* m,object* n,xint s)
    ammotype(string::str2int(v["atype"])),
    firerate(string::str2int(v["frate"])),
    points(string::str2int(v["points"])),
-   ammomount(new fvector*[ammomounts])
+   ammomount(new vector*[ammomounts])
 {
 	switch(s)
 	{
@@ -148,21 +148,23 @@ entity::entity(const lvector& p,const info& v,object* m,object* n,xint s)
 			object::linear.scale(FXTWO,FXTWO,FXTWO);
 			//scale bounding circle radius
 			model[0]->update();
-			direction[0].set(FXMON,0,0,FXONE);
+			direction[0] = {FXMON,0,0,FXONE};
 			break;
 		case 0:
 			model[1] = new object(*n);
 			ymark = position.y;
 
-			towpos = *model[1]->docktype(3,0)-*model[0]->docktype(3,0);	
-			direction[0].set(0,FXMON,0,0);
-			direction[1].set(0,FXMON,0,0);
+			vector d = (*model[0]->docktype(3,0))-(*model[1]->docktype(3,0));
+
+			towpos = {d.x,d.y,d.z};	
+			direction[0] = {0,FXMON,0,0};
+			direction[1] = {0,FXMON,0,0};
 	}
 
 	const xint z = (model[1]!=0);
 	for(xint i=0,j=0;i+j<ammomounts;++i)
 	{
-		fvector* t = model[0]->docktype(z,i);
+		vector* t = model[0]->docktype(z,i);
 		const bool mt = (t==0);
 		if(model[1]!=0 && mt==1) { t = model[1]->docktype(z,j); ++j; --i; }
 		ammomount[i+j] = t;
@@ -245,7 +247,7 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
  
 	angle -= math::set(360,angle>=360);
 
-	const fvector tp(position.x - fx::mul(direction[0].x,direction[0].e),position.y + fx::mul(direction[0].y,direction[0].e),position.z + fx::mul(direction[0].z,direction[0].e));
+	const vector tp(position.x - fx::mul(direction[0].x,direction[0].e),position.y + fx::mul(direction[0].y,direction[0].e),position.z + fx::mul(direction[0].z,direction[0].e));
 	const fixed r = model[0]->bounding();
 	//terrain collision here:
 	//terrain(map,tp);
@@ -294,19 +296,19 @@ void entity::display(xint m,bool t)
 {
 	guard(fx::r2l(position.y)<m-100&&fx::r2l(position.y)>m+YRES);
 
-	const lvector p(fx::r2l(position.x),fx::r2l(position.y)-m,fx::r2l(position.z));
+	const tuple p{fx::r2l(position.x),fx::r2l(position.y)-m,fx::r2l(position.z)};
 	const xint r = math::set(R_B,R_F,t);
 	model[0]->display(p,r);
 	if(model[1]!=0)
 	{
-		model[1]->display(p+towpos,r);
+		model[1]->display({p.x+towpos.x,p.y+towpos.y,p.z+towpos.z},r);
 		for(xint h=0;h<2&&t==0;++h)
 		{
 			list<ammo>& a = ammos[h];
 			for(a.first();a.notlast();a.next())
 			{
-				const fvector& dir = a.current()->dir;
-				const fvector& cur = a.current()->pos -= dir * dir.e;
+				const vector& dir = a.current()->dir;
+				const vector& cur = a.current()->pos -= dir * dir.e;
 
 				const xint cx = fx::r2l(cur.x);
 				const xint cy = fx::r2l(cur.y)-m;
@@ -322,7 +324,7 @@ void entity::display(xint m,bool t)
 
 //temp
 const fixed y(model[0]->bounding());
-fvector q(p);
+vector q(p);
 gfx::rect(fx::f2l(q.x-y),fx::f2l(q.y-y),fx::f2l(q.x+y),fx::f2l(q.y+y),BLUE,0,0,0);
 //*
 }
@@ -337,9 +339,9 @@ void entity::addpoints(xint a)
 	points += a;
 }
 
-lvector entity::data(xint m) const
+tuple entity::data(xint m) const
 {
-	return lvector(fx::r2l(position.x),fx::r2l(position.y)-m,health,shield);
+	return tuple{fx::r2l(position.x),fx::r2l(position.y)-m,health,shield};
 }
 
 xint entity::ylevel()

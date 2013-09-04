@@ -3,10 +3,10 @@
 // released under 2-clause BSD license
 // XZfrmbuf.hh
 // SDL Interface
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include <time.h>		//clock,CLOCKS_PER_SEC
 #include <SDL/SDL.h>		//SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState
 
@@ -47,7 +47,7 @@ namespace screen
 {
 	buffer frame(XRES*YRES,0);	//Framebuffer
 	buffer depth(XRES*YRES);	//Z-Buffer
-	byte zs = 0;			//Z State
+	bool zs = 0;			//Z State
 
 	namespace
 	{
@@ -69,8 +69,8 @@ namespace screen
 	void sleep(xint t)	{ const xint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
 	yint fps(bool o=1)	{ static yint f=0; yint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline void  flush()	{ SDL_Flip(video); ++zs; }
-	inline void  aaflush()	{ frame.fsaa(frame); SDL_Flip(video); ++zs; }
+	inline void  flush()	{ SDL_Flip(video); zs = !zs; }
+	inline void  aaflush()	{ frame.fsaa(frame); SDL_Flip(video); zs = !zs; }
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline yint  key()	{ const yint r=kk; kk=0; return r; }
 	inline yint  turbo()    { return tk; }

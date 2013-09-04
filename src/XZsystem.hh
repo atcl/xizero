@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZsystem.hh
-// System Library 
+// System Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include <cstdio>  //putchar,fopen,fseek,ftell,fread,fwrite,fclose,FILE
 #include <cstdlib> //exit,atexit
 

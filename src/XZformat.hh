@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZformat.hh
-// Fileformat Library 
+// Fileformat Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZtile.hh"
 #include "XZstring.hh"
@@ -47,17 +47,18 @@ char** format::csv(const char* x,char y)
 
 tile format::xpm(const char* x)
 {
+	//split by line ends
 	yint   index = 0;
 	char** y     = string::split(x,'\n');
 	char** line  = string::split(y[index++],' ');
 
-	//guard(string::str2int(line[3])!=1,0);
-
+	//get image dimensions
 	const yint width  = string::str2int(line[0]);
 	const yint height = string::str2int(line[1]);
 	const yint colors = string::str2int(line[2]);
 	tile r(width,height);
 
+	//read color table
 	yint* color = new uint[256];
 	for(yint i=0;i<colors;++i)
 	{
@@ -65,6 +66,7 @@ tile format::xpm(const char* x)
 		color[xint(line[0][0])] = math::set(string::hex2int(line[2])>>4,TRANS,line[2][0]=='#'); 
 	}
 
+	//read image data
 	for(yint i=0,o=0;i<height;++i,++index)
 	{
 		for(yint j=0;j<width;++j,++o)
@@ -73,19 +75,24 @@ tile format::xpm(const char* x)
 		}
 	}
 
+	//clean up
 	delete y;
 	delete line; 
 	delete[] color;
+
 	return r;
 }
 
 info* format::ini(const char* x)
 {
+	//split by equal signs and line ends
 	const yint m = string::count(x,'=');
 	char** s = string::split(x,'\n');
 
+	//create name value container
 	info* r = new info{ new char*[m],new char*[m],0,m };
 
+	//extract names and values
 	for(yint i=0,j=0;i<m;++i)
 	{
 		if(string::count(s[i],'=')!=0)
@@ -104,7 +111,6 @@ info* format::ar(char* x)
 {
 	//Read magic number
 	guard(string::find(x,"!<arch>\n")<0,0);
-	//*
 
 	//Count files
 	yint c = 0;
@@ -118,7 +124,6 @@ info* format::ar(char* x)
 	}
 	while(x[t+58]=='`');
 	info* r = new info{ new char*[c],new char*[c],new yint[c],c };
-	//*
 
 	//Unpack
 	t = 8;
@@ -134,7 +139,6 @@ info* format::ar(char* x)
 		t += s+(s&1);
 		x[t-1] = 0;
 	}
-	//*
 
 	return r;
 }

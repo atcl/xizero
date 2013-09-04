@@ -2,11 +2,11 @@
 // atCROSSLEVEL 2010,2011,2012,2013
 // released under 2-clause BSD license
 // XZpolygon.hh
-// Polygon Library 
+// Polygon Library
+#pragma once
 ///</header>
 
 ///<include>
-#pragma once
 #include "XZbasic.hh"
 #include "XZbuffer.hh"
 #include "XZmath.hh"
@@ -22,10 +22,10 @@
 #define YMIN 1
 #define YMAX YRES-1
 #define ZMIN 1
-#define ZMAX 255
+#define ZMAX YRES-1
 
-#define PRJX 135
-#define PRJY 150
+#define PRJX 4
+#define PRJY 3
 
 #define AMBIENT 24
 #define ZLIGHT  FXTNT
@@ -45,9 +45,9 @@
 class polygon
 {
 	private:
-		static lvector lpoint[3];	//Render Vertices
-		fvector cpoint[3];		//Polygon Vertices
-		fvector cnormal;		//Polygon Normal
+		static tuple point[3];		//Discrete Vertices
+		vector vertex[3];		//Polygon Vertices
+		vector normal;			//Polygon Normal
 		const yint color;		//Polygon Color
 
 		/*OK*/ inline void shape() const;
@@ -55,34 +55,35 @@ class polygon
 		              void raster(uint c) const hot;
 		              void shadow(uint c) const hot;
 	public:
-		/*OK*/      polygon(const lvector& x,const lvector& y,const lvector& z,yint c);
-		/*OK*/ void update(const fmatrix& m,bool i=1);
-		/*OK*/ void display(const lvector& p,xint f,yint c=0);
+		/*OK*/      polygon(const tuple& x,const tuple& y,const tuple& z,yint c);
+		/*OK*/ void update(const matrix& m,bool i=1);
+		/*OK*/ void display(const tuple& p,xint f,yint c=0);
 		/*OK*/ void pull(fixed a);
-		/*OK*/ static lvector project(const lvector& p,const fvector& v);
+		/*OK*/ static tuple project(const tuple& p,const vector& v);
 
 		static xint  counter;		//Polygon Counter
-		static const fvector light;	//Light Vector
-		static const fmatrix blinn;	//Blinn Shadow Matrix
+		static const vector light;	//Light Vector
+		static const matrix blinn;	//Blinn Shadow Matrix
 };
 ///</define>
 
 ///<code>
-      lvector polygon::lpoint[] = { lvector(), lvector(), lvector() };
-      xint    polygon::counter  = 0;
-const fvector polygon::light    = fvector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
-const fmatrix polygon::blinn    = []() ->fmatrix { fmatrix m; m.shadow(fvector(0,FXTNT,FXONE),fvector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
+      tuple   polygon::point[] = { tuple(), tuple(), tuple() };
+      xint    polygon::counter = 0;
+const vector polygon::light    = vector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
+const matrix polygon::blinn    = []() ->matrix { matrix m; m.shadow(vector(0,FXTNT,FXONE),vector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
 
-lvector polygon::project(const lvector& p,const fvector& v)
+tuple polygon::project(const tuple& p,const vector& v)
 {
 	const fixed z = v.z + fx::l2f(p.z);
 	const fixed a = fx::div(FXONE,z);
-	return lvector(p.x+fx::f2l(fx::mul(FX(PRJX),fx::mul(v.x,a))),p.y-fx::f2l(fx::mul(FX(PRJY),fx::mul(v.y,a))),z);
+	return tuple{p.x+fx::f2l(fx::mul(FX(PRJX),fx::mul(v.x,a))),
+                     p.y-fx::f2l(fx::mul(FX(PRJY),fx::mul(v.y,a))),z};
 }
 
 yint polygon::flat(xint pz,xint f) const
 {
-	const fixed t = math::lim(FXTNT,math::abs(fx::div(cnormal.dot(light),fx::mul(cnormal.e,light.e))),FXONE);
+	const fixed t = math::lim(FXTNT,math::abs(fx::div(normal.dot(light),fx::mul(normal.e,light.e))),FXONE);
 	const byte anz = math::set(AMBIENT,f&R_A) + math::set(NOLIGHT,f&R_N) + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
 
 	rgba argb = { (uint)math::set(ORANGE,color,f&R_C) };
@@ -95,42 +96,42 @@ yint polygon::flat(xint pz,xint f) const
 
 void polygon::shape() const 
 {
-	gfx::line(lpoint[0].x,lpoint[0].y,lpoint[1].x,lpoint[1].y,color);
-	gfx::line(lpoint[1].x,lpoint[1].y,lpoint[2].x,lpoint[2].y,color);
-	gfx::line(lpoint[2].x,lpoint[2].y,lpoint[0].x,lpoint[0].y,color);
+	gfx::line(point[0].x,point[0].y,point[1].x,point[1].y,color);
+	gfx::line(point[1].x,point[1].y,point[2].x,point[2].y,color);
+	gfx::line(point[2].x,point[2].y,point[0].x,point[0].y,color);
 }
 
 void polygon::raster(yint c) const
 {
 	//determine projected minima and maxima
-	const xint mix01 = lpoint[1].x<lpoint[0].x;
+	const xint mix01 = point[1].x<point[0].x;
 	const xint max01 = !mix01;
-	const xint miy01 = lpoint[1].y<lpoint[0].y;
+	const xint miy01 = point[1].y<point[0].y;
 	const xint may01 = !miy01;
 
-	const xint mixi = math::set(2,mix01,lpoint[2].x<lpoint[mix01].x);
-	const xint maxi = math::set(2,max01,lpoint[2].x>lpoint[max01].x);
-	const xint miyi = math::set(2,miy01,lpoint[2].y<lpoint[miy01].y);
-	const xint mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
+	const xint mixi = math::set(2,mix01,point[2].x<point[mix01].x);
+	const xint maxi = math::set(2,max01,point[2].x>point[max01].x);
+	const xint miyi = math::set(2,miy01,point[2].y<point[miy01].y);
+	const xint mayi = math::set(2,may01,point[2].y>point[may01].y);
 
-	const xint minx = math::max(XMIN,lpoint[mixi].x);
-	const xint maxx = math::min(XMAX,lpoint[maxi].x+1); //prevent gap
-	const xint miny = math::max(YMIN,lpoint[miyi].y);
-	const xint maxy = math::min(YMAX,lpoint[mayi].y+1); //prevent gap
+	const xint minx = math::max(XMIN,point[mixi].x);
+	const xint maxx = math::min(XMAX,point[maxi].x+1); //prevent gap
+	const xint miny = math::max(YMIN,point[miyi].y);
+	const xint maxy = math::min(YMAX,point[mayi].y+1); //prevent gap
 	//*
 
 	guard( (maxx==minx) || (maxy==miny) );
 
-	const fixed zx = math::abs(fx::div(lpoint[maxi].z-lpoint[mixi].z,fx::l2f(maxx-minx)));
-	const fixed zy = math::abs(fx::div(lpoint[mayi].z-lpoint[miyi].z,fx::l2f(maxy-miny)));
+	const fixed zx = math::abs(fx::div(point[maxi].z-point[mixi].z,fx::l2f(maxx-minx)));
+	const fixed zy = math::abs(fx::div(point[mayi].z-point[miyi].z,fx::l2f(maxy-miny)));
 
-	const xint dx[4]{lpoint[0].x-lpoint[1].x,lpoint[1].x-lpoint[2].x,lpoint[2].x-lpoint[0].x,-zx};
-	const xint dy[4]{lpoint[0].y-lpoint[1].y,lpoint[1].y-lpoint[2].y,lpoint[2].y-lpoint[0].y,zy};
+	const xint dx[4]{point[0].x-point[1].x,point[1].x-point[2].x,point[2].x-point[0].x,-zx};
+	const xint dy[4]{point[0].y-point[1].y,point[1].y-point[2].y,point[2].y-point[0].y,zy};
 
-	xint cy[4]{dy[0]*(lpoint[0].x - minx) + dx[0]*(miny - lpoint[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
-	           dy[1]*(lpoint[1].x - minx) + dx[1]*(miny - lpoint[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
-	           dy[2]*(lpoint[2].x - minx) + dx[2]*(miny - lpoint[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
-	           lpoint[miyi].z-fx::mul(fx::l2f(lpoint[miyi].x-lpoint[mixi].x),zx)}; 
+	xint cy[4]{dy[0]*(point[0].x - minx) + dx[0]*(miny - point[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
+	           dy[1]*(point[1].x - minx) + dx[1]*(miny - point[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
+	           dy[2]*(point[2].x - minx) + dx[2]*(miny - point[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
+	           point[miyi].z-fx::mul(fx::l2f(point[miyi].x-point[mixi].x),zx)}; 
 
 	const xint str = XRES - (maxx-minx);
 
@@ -143,11 +144,10 @@ void polygon::raster(yint c) const
 		{
 			//prefetch(&back[off]);
 			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
-			const bool above  = cx[3]<=screen::depth[off];
-			//const bool above  = math::set(cx[3]<screen::depth[off],cx[3]>screen::depth[off],screen::zs&1); //z
+			const bool above  = cx[3]>=math::abs(screen::depth[off]);
 			if(inside && above)
 			{
-				screen::depth[off] = cx[3];
+				screen::depth[off] = math::neg(cx[3],!screen::zs);
 				screen::frame[off] = c;
 			}
 
@@ -169,30 +169,30 @@ void polygon::raster(yint c) const
 void polygon::shadow(yint c) const
 {
 	//determine projected minima and maxima
-	const xint mix01 = lpoint[1].x<lpoint[0].x;
+	const xint mix01 = point[1].x<point[0].x;
 	const xint max01 = !mix01;
-	const xint miy01 = lpoint[1].y<lpoint[0].y;
+	const xint miy01 = point[1].y<point[0].y;
 	const xint may01 = !miy01;
 
-	const xint mixi = math::set(2,mix01,lpoint[2].x<lpoint[mix01].x);
-	const xint maxi = math::set(2,max01,lpoint[2].x>lpoint[max01].x);
-	const xint miyi = math::set(2,miy01,lpoint[2].y<lpoint[miy01].y);
-	const xint mayi = math::set(2,may01,lpoint[2].y>lpoint[may01].y);
+	const xint mixi = math::set(2,mix01,point[2].x<point[mix01].x);
+	const xint maxi = math::set(2,max01,point[2].x>point[max01].x);
+	const xint miyi = math::set(2,miy01,point[2].y<point[miy01].y);
+	const xint mayi = math::set(2,may01,point[2].y>point[may01].y);
 
-	const xint minx = math::max(XMIN,lpoint[mixi].x);
-	const xint maxx = math::min(XMAX,lpoint[maxi].x+1); //prevent gap
-	const xint miny = math::max(YMIN,lpoint[miyi].y);
-	const xint maxy = math::min(YMAX,lpoint[mayi].y+1); //prevent gap
+	const xint minx = math::max(XMIN,point[mixi].x);
+	const xint maxx = math::min(XMAX,point[maxi].x+1); //prevent gap
+	const xint miny = math::max(YMIN,point[miyi].y);
+	const xint maxy = math::min(YMAX,point[mayi].y+1); //prevent gap
 	//*
 
 	guard( (maxx==minx) || (maxy==miny) );
 
-	const xint dx[4]{lpoint[0].x-lpoint[1].x,lpoint[1].x-lpoint[2].x,lpoint[2].x-lpoint[0].x,0};
-	const xint dy[4]{lpoint[0].y-lpoint[1].y,lpoint[1].y-lpoint[2].y,lpoint[2].y-lpoint[0].y,0};
+	const xint dx[4]{point[0].x-point[1].x,point[1].x-point[2].x,point[2].x-point[0].x,0};
+	const xint dy[4]{point[0].y-point[1].y,point[1].y-point[2].y,point[2].y-point[0].y,0};
 
-	xint cy[4]{dy[0]*(lpoint[0].x - minx) + dx[0]*(miny - lpoint[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
-	           dy[1]*(lpoint[1].x - minx) + dx[1]*(miny - lpoint[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
-	           dy[2]*(lpoint[2].x - minx) + dx[2]*(miny - lpoint[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
+	xint cy[4]{dy[0]*(point[0].x - minx) + dx[0]*(miny - point[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
+	           dy[1]*(point[1].x - minx) + dx[1]*(miny - point[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
+	           dy[2]*(point[2].x - minx) + dx[2]*(miny - point[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
 	           0}; 
 
 	const xint str = XRES - (maxx-minx);
@@ -208,7 +208,7 @@ void polygon::shadow(yint c) const
 			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
 			if(inside)
 			{
-				screen::frame[off]  = screen::frame[off]&c;
+				screen::frame[off] = screen::frame[off]&c;
 			}
 
 			cx[0] -= dy[0];
@@ -226,37 +226,38 @@ void polygon::shadow(yint c) const
 	}
 }
 
-polygon::polygon(const lvector& x,const lvector& y,const lvector& z,yint c) : cpoint{x,y,z},cnormal(fvector(((z-x).cross(y-x)))*FXCEN),color(c) 
+polygon::polygon(const tuple& x,const tuple& y,const tuple& z,yint c) : vertex{x,y,z},color(c) 
 {
-	cnormal.e = cnormal.length();
+	normal   = (vertex[2]-vertex[0]).cross(vertex[1]-vertex[0]) *= FXCEN;
+	normal.e = normal.length();
 }
 
-void polygon::update(const fmatrix& m,bool i)
+void polygon::update(const matrix& m,bool i)
 {
-	cpoint[i] = m*cpoint[i];
-	cpoint[0] = m*cpoint[0];
-	cpoint[2] = m*cpoint[2];
-	cnormal   = (cpoint[2]-cpoint[0]).cross(cpoint[1]-cpoint[0]) *= FXCEN;
-	cnormal.e = cnormal.length();
+	vertex[i] = m*vertex[i];
+	vertex[0] = m*vertex[0];
+	vertex[2] = m*vertex[2];
+	normal   = (vertex[2]-vertex[0]).cross(vertex[1]-vertex[0]) *= FXCEN;
+	normal.e = normal.length();
 }
 
-void polygon::display(const lvector& p,xint f,yint c)
+void polygon::display(const tuple& p,xint f,yint c)
 {
-	guard(cnormal.z>FXMON); //z
+	//guard(cnormal.z>FXMON); //z
 	++counter;	
 
 	if(f&R_B) 
 	{
-		lpoint[0] = project(p,blinn*cpoint[0]);
-		lpoint[1] = project(p,blinn*cpoint[1]);
-		lpoint[2] = project(p,blinn*cpoint[2]);
+		point[0] = project(p,blinn*vertex[0]);
+		point[1] = project(p,blinn*vertex[1]);
+		point[2] = project(p,blinn*vertex[2]);
 		shadow(c);
 	}
 	else
 	{
-		lpoint[0] = project(p,cpoint[0]);
-		lpoint[1] = project(p,cpoint[1]);
-		lpoint[2] = project(p,cpoint[2]);
+		point[0] = project(p,vertex[0]);
+		point[1] = project(p,vertex[1]);
+		point[2] = project(p,vertex[2]);
 		ifl(f&R_F) { c = flat(p.z,f); }
 		ifu(f&R_S) { shape(); } else { raster(c); }
 	}
@@ -264,11 +265,11 @@ void polygon::display(const lvector& p,xint f,yint c)
 
 void polygon::pull(fixed a)
 {
-	const fixed   l = fx::mul(fx::div(FXONE,cnormal.length()),a);
-	const fvector m = cnormal*l;
-	cpoint[0] += m;
-	cpoint[1] += m;
-	cpoint[2] += m;
+	const fixed  l = fx::mul(fx::div(FXONE,normal.length()),a);
+	const vector m = normal*l;
+	vertex[0] += m;
+	vertex[1] += m;
+	vertex[2] += m;
 }
 ///</code>
 
