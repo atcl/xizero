@@ -33,8 +33,8 @@ namespace format
 {
 	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
 	/*OK*/ tile   xpm(const char* x);		//load xpm image
-	/*OK*/ info*  ini(const char* x);		//load ini configuartion
-	/*OK*/ info*  ar(char* x);			//load ar archive
+	/*OK*/ info   ini(const char* x);		//load ini configuartion
+	/*OK*/ info   ar(char* x);			//load ar archive
 }
 ///</define>
 
@@ -83,14 +83,14 @@ tile format::xpm(const char* x)
 	return r;
 }
 
-info* format::ini(const char* x)
+info format::ini(const char* x)
 {
 	//split by equal signs and line ends
 	const yint m = string::count(x,'=');
 	char** s = string::split(x,'\n');
 
 	//create name value container
-	info* r = new info{ new char*[m],new char*[m],0,m };
+	info r{ new char*[m],new char*[m],0,m };
 
 	//extract names and values
 	for(yint i=0,j=0;i<m;++i)
@@ -98,8 +98,8 @@ info* format::ini(const char* x)
 		if(string::count(s[i],'=')!=0)
 		{
 			char** t = string::split(s[i],'=');
-			r->name[j] = string::trim(t[0]);
-			r->data[j] = string::trim(t[1]);
+			r.name[j] = string::trim(t[0]);
+			r.data[j] = string::trim(t[1]);
 			++j;
 		}
 	}
@@ -107,10 +107,10 @@ info* format::ini(const char* x)
 	return r;
 }
 
-info* format::ar(char* x)
+info format::ar(char* x)
 {
 	//Read magic number
-	guard(string::find(x,"!<arch>\n")<0,0);
+	//guard(string::find(x,"!<arch>\n")<0,0);
 
 	//Count files
 	yint c = 0;
@@ -123,19 +123,19 @@ info* format::ar(char* x)
 		++c;	
 	}
 	while(x[t+58]=='`');
-	info* r = new info{ new char*[c],new char*[c],new yint[c],c };
+	info r{ new char*[c],new char*[c],new yint[c],c };
 
 	//Unpack
 	t = 8;
 	for(yint i=0;i<c;++i)
 	{
-		r->name[i] = &x[t];
+		r.name[i] = &x[t];
 		t += 16;
 		for(xint j=0;j<16;++j) { if(x[t-j]=='/') { x[t-j]=0; break; } }
 		t += 32;
-		const yint s = r->size[i] = string::str2int(&x[t]);
+		const yint s = r.size[i] = string::str2int(&x[t]);
 		t += 12;
-		r->data[i] = &x[t];
+		r.data[i] = &x[t];
 		t += s+(s&1);
 		x[t-1] = 0;
 	}

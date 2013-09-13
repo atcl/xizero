@@ -26,7 +26,6 @@
 ///<define>
 struct ammo
 {
-	//ammo(const fvector& p,const fvector& d) : pos(p),dir(d) { ; }
 	vector pos;
 	vector dir;
 };
@@ -39,32 +38,33 @@ class entity
 		static list<ammo> ammos[2];
 		static fixed ymark;
 
-		object* model[2];
-		vector  position;
-		vector  direction[2];
-		tuple   towpos;
-		xint    angle;
-
-		/*const*/ bool type;
-		xint lastupdate;
-		xint lastfire;
-
-		xint death; //remove?
-		xint health;
-		xint shield;
-		/*const*/ xint shieldmax;
-		/*const*/ xint shieldrate;
-		/*const*/ xint ammomounts;
-		/*const*/ xint ammotype;
-		/*const*/ xint firerate;
-		xint points;
+		object*  model[2];
+		vector   position;
+		vector   direction[2];
 		vector** ammomount;
+		tuple    towpos;
+		xint     angle;
+
+		const bool type;
+		      xint lastupdate;
+		      xint lastfire;
+
+		      xint death; //remove?
+		      xint health;
+		      xint shield;
+		const xint shieldmax;
+		const xint shieldrate;
+		const xint ammomounts;
+		const xint ammotype;
+		const xint firerate;
+		      xint points;
 
 		void fire(xint i);
 		void checkammo();
 		xint terrain(const char** m,vector& n);
 		entity(const entity& e);
 		entity& operator=(const entity& e);
+		static void display_ammo(xint m);
 	public:
 		entity(const tuple& p,const info& v,object* m,object* n,xint s);
 		~entity();
@@ -121,10 +121,33 @@ xint entity::terrain(const char** m,vector& n) //TODO actual angle computation
 		math::abs(m[r0][d0]-m[r1][d1])<=MAXSTEP;
 }
 
+void entity::display_ammo(xint m)
+{
+	for(xint h=0;h<2;++h)
+	{
+		list<ammo>& a = ammos[h];
+		for(a.first();a.notlast();a.next())
+		{
+			const vector& dir = a.current()->dir;
+			const vector& cur = a.current()->pos -= dir * dir.e;
+
+			const xint cx = fx::r2l(cur.x);
+			const xint cy = fx::r2l(cur.y)-m;
+			switch( (game::onscreen(cx-4,cy-4)&game::onscreen(cx+4,cy+4))<<h )
+			{
+				case 0: delete a.delcurrent(); break;
+				case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
+				case 2: game::compiled(cx,cy,GREEN,ORANGE); break;
+			}
+		}
+	}
+}
+
 entity::entity(const tuple& p,const info& v,object* m,object* n,xint s)
  : model{new object(*m),0},
    position(p),
    direction{ vector(0,FXONE,0,FXONE),vector(0,FXONE,0,FXONE) },
+   ammomount(new vector*[ammomounts]),
    towpos(),
    angle(0),
    type(s),
@@ -138,8 +161,7 @@ entity::entity(const tuple& p,const info& v,object* m,object* n,xint s)
    ammomounts(string::str2int(v["mounts"])),
    ammotype(string::str2int(v["atype"])),
    firerate(string::str2int(v["frate"])),
-   points(string::str2int(v["points"])),
-   ammomount(new vector*[ammomounts])
+   points(string::str2int(v["points"]))
 {
 	switch(s)
 	{
@@ -148,7 +170,7 @@ entity::entity(const tuple& p,const info& v,object* m,object* n,xint s)
 			object::linear.scale(FXTWO,FXTWO,FXTWO);
 			//scale bounding circle radius
 			model[0]->update();
-			direction[0] = {FXMON,0,0,FXONE};
+			direction[0] = vector(FXMON,0,0,FXONE);
 			break;
 		case 0:
 			model[1] = new object(*n);
@@ -157,8 +179,8 @@ entity::entity(const tuple& p,const info& v,object* m,object* n,xint s)
 			vector d = (*model[0]->docktype(3,0))-(*model[1]->docktype(3,0));
 
 			towpos = {d.x,d.y,d.z};	
-			direction[0] = {0,FXMON,0,0};
-			direction[1] = {0,FXMON,0,0};
+			direction[0] = vector(0,FXMON,0,0);
+			direction[1] = vector(0,FXMON,0,0);
 	}
 
 	const xint z = (model[1]!=0);
@@ -222,15 +244,15 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
 		break;
 
 		case 'a':
-			model[1]->update(rot[0]);
+			model[1]->update(rot[1]);
 			angle += ROTANG;
-			direction[1] = rot[0]*direction[1];
+			direction[1] = rot[1]*direction[1];
 		break;
 
 		case 'd':
-			model[1]->update(rot[1]);
+			model[1]->update(rot[0]);
 			angle -= ROTANG;
-			direction[1] =rot[1]*direction[1];
+			direction[1] =rot[0]*direction[1];
 		break;
 
 		case 'w':
@@ -252,14 +274,12 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
 	//terrain collision here:
 	//terrain(map,tp);
 	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=m)&&(tp.y+r<=n)); //TODO
-	position.x = math::set(tp.x,position.x,t);
-	position.y = math::set(tp.y,position.y,t);
-	position.z = math::set(tp.z,position.z,t);
+	position = {math::set(tp.x,position.x,t),math::set(tp.y,position.y,t),math::set(tp.z,position.z,t)};
 
-	ymark  = position.y; //TODO: ymark as reference
-
-	last = k;
+	ymark = position.y;
+	last  = k;
 	lastupdate = curr;
+
 	return health;
 }
 
@@ -296,30 +316,15 @@ void entity::display(xint m,bool t)
 {
 	guard(fx::r2l(position.y)<m-100&&fx::r2l(position.y)>m+YRES);
 
-	const tuple p{fx::r2l(position.x),fx::r2l(position.y)-m,fx::r2l(position.z)};
+	//const tuple p{fx::r2l(position.x),fx::r2l(position.y)-m,fx::r2l(position.z)};
+	const tuple p{fx::r2l(position.x),YRES/2,fx::r2l(position.z)}; //temp
 	const xint r = math::set(R_B,R_F,t);
 	model[0]->display(p,r);
+
 	if(model[1]!=0)
 	{
 		model[1]->display({p.x+towpos.x,p.y+towpos.y,p.z+towpos.z},r);
-		for(xint h=0;h<2&&t==0;++h)
-		{
-			list<ammo>& a = ammos[h];
-			for(a.first();a.notlast();a.next())
-			{
-				const vector& dir = a.current()->dir;
-				const vector& cur = a.current()->pos -= dir * dir.e;
-
-				const xint cx = fx::r2l(cur.x);
-				const xint cy = fx::r2l(cur.y)-m;
-				switch( (game::onscreen(cx-4,cy-4)&game::onscreen(cx+4,cy+4))<<h )
-				{
-					case 0: delete a.delcurrent(); break;
-					case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
-					case 2: game::compiled(cx,cy,GREEN,ORANGE); break;
-				}
-			}
-		}
+		if(t==0) display_ammo(m);
 	}
 
 //temp

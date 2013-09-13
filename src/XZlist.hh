@@ -26,8 +26,10 @@ class list
 		member* las;
 		member* tmp;
 		yint    len;
+
+		//list(const list& l);
 	public:
-		list() : cur(0),fir(new member{0,0,0}),las(new member{0,0,0}),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
+		list() : cur(0),fir(new member{0,0,0}),las(new member{0,0,0}),tmp(0),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
 		inline bool notlast() const { return cur!=las; }
 		inline bool notfirst() const { return cur!=fir; }
 		inline bool isfirst() const { return cur->prev==fir; }

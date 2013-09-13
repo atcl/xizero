@@ -36,10 +36,10 @@ struct matrix
 ///<code>
 void matrix::multiplicate(const fixed (&n)[3][4])
 {
-	alignas(16) const fixed a[3][4] = { { fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
-				        fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1]),
-				        fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2]),
-				        fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3])+m[0][3] }, 
+	alignas(16) const fixed a[3][4] = { {	fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
+					fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1]),
+					fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2]),
+					fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3])+m[0][3] }, 
 				      { fx::mul(m[1][0],n[0][0])+fx::mul(m[1][1],n[1][0])+fx::mul(m[1][2],n[2][0]),
 				        fx::mul(m[1][0],n[0][1])+fx::mul(m[1][1],n[1][1])+fx::mul(m[1][2],n[2][1]),
 				        fx::mul(m[1][0],n[0][2])+fx::mul(m[1][1],n[1][2])+fx::mul(m[1][2],n[2][2]),

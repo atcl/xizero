@@ -28,7 +28,6 @@ class progress : public gui
 		xint prog;
 		xint area;
 		const bool horver;
-
 	public:
 		progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v);
 		inline void set(xint x) { prog = math::lim(0,x,end);      area = (prog*coeff)>>16; }

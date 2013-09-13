@@ -24,8 +24,8 @@
 #define ZMIN 1
 #define ZMAX YRES-1
 
-#define PRJX 4
-#define PRJY 3
+#define PRJX 600
+#define PRJY 480
 
 #define AMBIENT 24
 #define ZLIGHT  FXTNT
@@ -68,17 +68,16 @@ class polygon
 ///</define>
 
 ///<code>
-      tuple   polygon::point[] = { tuple(), tuple(), tuple() };
-      xint    polygon::counter = 0;
-const vector polygon::light    = vector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
-const matrix polygon::blinn    = []() ->matrix { matrix m; m.shadow(vector(0,FXTNT,FXONE),vector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
+      tuple  polygon::point[] = { tuple(), tuple(), tuple() };
+      xint   polygon::counter = 0;
+const vector polygon::light   = vector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
+const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector(0,FXTNT,FXONE),vector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
 
 tuple polygon::project(const tuple& p,const vector& v)
 {
 	const fixed z = v.z + fx::l2f(p.z);
-	const fixed a = fx::div(FXONE,z);
-	return tuple{p.x+fx::f2l(fx::mul(FX(PRJX),fx::mul(v.x,a))),
-                     p.y-fx::f2l(fx::mul(FX(PRJY),fx::mul(v.y,a))),z};
+	return tuple{p.x + fx::f2l(fx::mul(FX(PRJX),fx::div(v.x,z))),
+                     p.y - fx::f2l(fx::mul(FX(PRJY),fx::div(v.y,z))),z};
 }
 
 yint polygon::flat(xint pz,xint f) const
@@ -86,7 +85,7 @@ yint polygon::flat(xint pz,xint f) const
 	const fixed t = math::lim(FXTNT,math::abs(fx::div(normal.dot(light),fx::mul(normal.e,light.e))),FXONE);
 	const byte anz = math::set(AMBIENT,f&R_A) + math::set(NOLIGHT,f&R_N) + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
 
-	rgba argb = { (uint)math::set(ORANGE,color,f&R_C) };
+	rgba argb{ (uint)math::set(ORANGE,color,f&R_C) };
 	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]),t ) + anz) );
 	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]),t ) + anz) );
 	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]),t ) + anz) );
@@ -118,7 +117,7 @@ void polygon::raster(yint c) const
 	const xint maxx = math::min(XMAX,point[maxi].x+1); //prevent gap
 	const xint miny = math::max(YMIN,point[miyi].y);
 	const xint maxy = math::min(YMAX,point[mayi].y+1); //prevent gap
-	//*
+
 
 	guard( (maxx==minx) || (maxy==miny) );
 
@@ -147,7 +146,7 @@ void polygon::raster(yint c) const
 			const bool above  = cx[3]>=math::abs(screen::depth[off]);
 			if(inside && above)
 			{
-				screen::depth[off] = math::neg(cx[3],!screen::zs);
+				screen::depth[off] = cx[3]; //math::neg(cx[3],!screen::zs);
 				screen::frame[off] = c;
 			}
 
@@ -183,7 +182,7 @@ void polygon::shadow(yint c) const
 	const xint maxx = math::min(XMAX,point[maxi].x+1); //prevent gap
 	const xint miny = math::max(YMIN,point[miyi].y);
 	const xint maxy = math::min(YMAX,point[mayi].y+1); //prevent gap
-	//*
+
 
 	guard( (maxx==minx) || (maxy==miny) );
 
@@ -243,7 +242,7 @@ void polygon::update(const matrix& m,bool i)
 
 void polygon::display(const tuple& p,xint f,yint c)
 {
-	//guard(cnormal.z>FXMON); //z
+	guard(normal.z>FXMON); //z
 	++counter;	
 
 	if(f&R_B) 

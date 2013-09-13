@@ -20,11 +20,20 @@
 //<declare>
 #define LWIDTH  40
 #define BWIDTH  16
-#define BHEIGHT 10 //z 10
-#define GROUND  10 // 150
+#define BHEIGHT 10
+#define GROUND  300 
 #define AFLOAT  50
 #define OFFSET   4
 #define MAXSTEP  5
+
+#define BOSS   '!'
+#define PLAYER '"'
+#define ENEMY0 '#'
+#define ENEMY1 '$'
+#define ENEMY2 '%'
+#define ENEMY3 '&'
+#define ENEMY4 '\''
+#define ENEMY5 '('
 ///</declare>
 
 ///<define>
@@ -50,7 +59,7 @@ class level
 		~level();			//Destructor
 		xint update(xint k,xint j);	//Update All Entities
 		void display();			//Display Terrain, Shadows, Entities
-		void gauges();			//Display Gauges
+		//void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
 		inline tuple ppos();		//get player position
 };
@@ -60,60 +69,49 @@ class level
 level::level(char* o) : markmax(OFFSET*BWIDTH)
 {
 	//load lvl
-	info* arc = format::ar(o);
-	info* lvl = format::ini((*arc)["level0.lvl"]);
-	//*
+	info arc = format::ar(o);
+	info lvl = format::ini(arc["level0.lvl"]);
 
 	//load intro message
-	const char* tx = (*arc)[(*lvl)["intro"]];
+	const char* tx = arc[lvl["intro"]];
 	screen::frame.clear(BLACK);
 	font::draw(XRES>>3,100,tx,ORANGE,BLACK);
 	screen::flush();
-	//*
 
 	//load player
-	object* pm = new object((*arc)[(*lvl)["player_0"]]);
-	object* pn = new object((*arc)[(*lvl)["player_1"]]);
-	info*   pi = format::ini((*arc)[(*lvl)["player_i"]]);
- 	        pp = new progress(0,string::str2int((*pi)["health"]),VER,16,16,16,YRES-32,GREEN,RED,SYSCOL,WHITE,1);
- 	        sp = new progress(0,string::str2int((*pi)["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,RED,SYSCOL,WHITE,1);
+	object* pm = new object(arc[lvl["player_0"]]);
+	object* pn = new object(arc[lvl["player_1"]]);
+	info    pi = format::ini(arc[lvl["player_i"]]);
+ 	        pp = new progress(0,string::str2int(pi["health"]),VER,16,16,16,YRES-32,GREEN,RED,SYSCOL,WHITE,1);
+ 	        sp = new progress(0,string::str2int(pi["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,RED,SYSCOL,WHITE,1);
 	gfx::fsprog(10);
 	screen::flush();
-	//*
 
 	//load boss
-	object* bm = new object((*arc)[(*lvl)["boss_0"]]);
-	info*   bi = format::ini((*arc)[(*lvl)["boss_i"]]); 
-	        bp = new progress(0,string::str2int((*bi)["health"]),HOR,0,0,96,16,RED,ORANGE,SYSCOL,WHITE,0);
+	object* bm = new object(arc[lvl["boss_0"]]);
+	info    bi = format::ini(arc[lvl["boss_i"]]); 
+	        bp = new progress(0,string::str2int(bi["health"]),HOR,0,0,96,16,RED,ORANGE,SYSCOL,WHITE,0);
 	gfx::fsprog(20);
 	screen::flush();
-	//*
 
 	//load enemy
-	object* em = new object((*arc)[(*lvl)["enemy_0"]]);
-	info*   ei = format::ini((*arc)[(*lvl)["enemy_i"]]);
-	        ep = new progress(0,string::str2int((*ei)["health"]),HOR,0,0,48,8,GREEN,ORANGE,SYSCOL,WHITE,0);
+	object* em = new object(arc[lvl["enemy_0"]]);
+	info    ei = format::ini(arc[lvl["enemy_i"]]);
+	        ep = new progress(0,string::str2int(ei["health"]),HOR,0,0,48,8,GREEN,ORANGE,SYSCOL,WHITE,0);
 	gfx::fsprog(30);
 	screen::flush();
-	//*
 
 	//load map
-	const char* m = (*arc)[(*lvl)["map"]];
+	const char* m = arc[lvl["map"]];
 	const xint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
-	//long n        = string::length(t[0]); //=LWIDTH
 	gfx::fsprog(40);
 	screen::flush();
 
-	markmin = (l*BWIDTH)-YMAX;
+	markmin = (l*BWIDTH)-YMAX; //Level Start
 
-	terrain  = new object*[l];
-	tuple* a = new tuple[LWIDTH];
-	tuple* b = new tuple[LWIDTH];
-	tuple* c = new tuple[LWIDTH];
-	tuple* d = new tuple[LWIDTH];
-	tuple  e;
-	tuple  f;
+	terrain = new object*[l];
+	tuple a[LWIDTH],b[LWIDTH],c[LWIDTH],d[LWIDTH],e,f;
 
 	for(xint i=0,k=0;i<l;++i,k=0)
 	{
@@ -122,17 +120,21 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 		{
 			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
-				case '!':
-					boss = new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),AFLOAT}, (*bi),bm,0,2);
+				case BOSS:
+					boss = new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),AFLOAT}, bi,bm,0,2);
 				break;
 
-				case '"':
-					player = new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),GROUND}, (*pi),pm,pn,0);
+				case PLAYER:
+					player = new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),GROUND}, pi,pm,pn,0);
 				break;
 
-				case '#': case '$': case '%': case '&': case '\'': case '(':
-	
-					enemies.append(new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),AFLOAT}, (*ei),em,0,1));
+				case ENEMY0: 
+				case ENEMY1:
+				case ENEMY2:
+				case ENEMY3:
+				case ENEMY4:
+				case ENEMY5:
+					enemies.append(new entity( tuple{j*BWIDTH-(BWIDTH/2),i*BWIDTH-(BWIDTH/2),AFLOAT}, ei,em,0,1));
 				break;
 			}
 
@@ -144,16 +146,16 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 		xint v = -XRES/2;
 		for(xint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
 		{
-			a[k] = { v,       -(BWIDTH/2),(map[i][j-1])  *BHEIGHT };
-			b[k] = { v,         BWIDTH/2, (map[i-1][j-1])*BHEIGHT };
-			c[k] = { v+BWIDTH,  BWIDTH/2, (map[i-1][j])  *BHEIGHT };
-			d[k] = { v+BWIDTH,-(BWIDTH/2),(map[i][j])    *BHEIGHT };
+			a[k] = { v,       -BWIDTH/2, BHEIGHT*map[i][j-1] };
+			b[k] = { v,        BWIDTH/2, BHEIGHT*map[i-1][j-1] };
+			c[k] = { v+BWIDTH, BWIDTH/2, BHEIGHT*map[i-1][j] };
+			d[k] = { v+BWIDTH,-BWIDTH/2, BHEIGHT*map[i][j] };
 
 			if(a[k].z==d[k].z && b[k].z==c[k].z)
 			{
 				++j;
 				v += BWIDTH*2; 
-				for(;j<LWIDTH;++j,v+=BWIDTH)
+				for(;j<LWIDTH;++j,v+=BWIDTH) //TODO v+= weg wg v-=
 				{
 					e = { v,  BWIDTH/2, (map[i-1][j])*BHEIGHT };
 					f = { v,-(BWIDTH/2),(map[i][j])  *BHEIGHT };
@@ -180,10 +182,6 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	screen::flush();
 	//screen::depth.clear(0); //z
 	screen::wait(SPACE);
-	delete[] a;
-	delete[] b;
-	delete[] c;
-	delete[] d;
 }
 
 level::~level()
@@ -214,11 +212,10 @@ xint level::update(xint k,xint j)
 
 void level::display()
 {
-	//draw background //TODO: remove the clears
+	//draw background 
 	screen::frame.clear(OCHER>>1);
-	screen::depth.clear(0); //z
-	//screen::depth.clear(FX(200));
-
+	screen::depth.clear(0); //TODO: remove the clear
+/*
 	//render terrain //fix
 	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
 	const tuple pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
@@ -237,12 +234,12 @@ void level::display()
 	//render shadows
 	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,1); }
 	boss->display(mark,1);
-	player->display(mark,1);
+	player->display(mark,1);*/
 	//*
 
 	//render entities
-	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,0); }
-	boss->display(mark,0);
+	//for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,0); }
+	//boss->display(mark,0);
 	player->display(mark,0);
 	//*
 

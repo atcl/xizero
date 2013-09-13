@@ -28,7 +28,7 @@ class button : public gui
 		button& operator=(const button& b);			//Assignment (not implemented to deny copy)
 	public:
 		button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v); //Constructor
-		~button() { delete text; };				//Destructor
+		//~button() { delete text; };				//Destructor
 		void draw(bool h=0) const;				//Draw Button	
 		xint inline click() { return action(); };		//Trigger action
 };

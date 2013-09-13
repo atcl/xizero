@@ -135,12 +135,12 @@ void intro()
 {
 	//load, clone and place object
 	char* f = system::ldf("intro.a");
-	info* a = format::ar(f);
-	object q((*a)["level.y3d"]);
-	object c((*a)["cross.y3d"]);
+	info a = format::ar(f);
+	object q(a["level.y3d"]);
+	object c(a["cross.y3d"]);
 	object b[4] = { q,object(q),object(q),object(q) };
 
-	tuple p{XRES/2,YRES/2,100};
+	tuple p{XRES/2,YRES/2,500};
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);     c.update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
 	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
@@ -157,7 +157,7 @@ void intro()
 		const fixed prog = fx::div(fx::l2f(diff),FX(200));
 		object::linear.clear();
 
-		if(prog<FX(4) ) { const fixed a=0; object::linear.translate(0,a,0); }
+		if(prog<FX(4) ) { const fixed a=-FXHLF; object::linear.translate(0,a,0); }
 		//if(prog<FX(8) ) { const fixed b=0; object::linear.rotatex(b); }
 		//if(prog<FX(12)) { const fixed c=0; object::linear.translate(0,0,c); }
 
@@ -168,7 +168,7 @@ void intro()
 		b[3].update();
 
 		screen::frame.clear(BLACK);
-		screen::depth.clear(fx::l2f(400));
+		screen::depth.clear(0);
 
 		   c.display(p,R_F|R_Z);
 		b[0].display(p,R_F|R_Z);
@@ -178,7 +178,6 @@ void intro()
 	}
 	//*
 
-	delete a;
 	delete f;
 }
 
@@ -186,13 +185,13 @@ void mainmenu()
 {
 	//load, clone and place objects
 	char* f = system::ldf("intro.a");
-	info* a = format::ar(f);
-	const object v((*a)["segver.y3d"]);
-	const object h((*a)["seghor.y3d"]);
+	info  a = format::ar(f);
+	const object v(a["segver.y3d"]);
+	const object h(a["seghor.y3d"]);
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
-	tuple p{XRES/2,YRES/2,100};
+	tuple p{XRES/2,YRES/2,450};
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();
@@ -235,7 +234,6 @@ void mainmenu()
 	}
 	//*
 
-	delete a;
 	delete f;
 }
 
