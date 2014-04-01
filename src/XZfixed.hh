@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZfixed.hh
 // Fixed Point 16.16 Type Library

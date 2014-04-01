@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZfrmbuf.hh
 // SDL Interface
@@ -7,8 +7,8 @@
 ///</header>
 
 ///<include>
-#include <time.h>		//clock,CLOCKS_PER_SEC
-#include <SDL/SDL.h>		//SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState
+#include <time.h>		// clock,CLOCKS_PER_SEC
+#include <SDL/SDL.h>		// SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState
 
 #include "XZbasic.hh"
 #include "XZtile.hh"
@@ -45,16 +45,16 @@
 ///<define>
 namespace screen
 {
-	buffer frame(XRES*YRES,0);	//Framebuffer
-	buffer depth(XRES*YRES);	//Z-Buffer
-	bool zs = 0;			//Z State
+	buffer frame(XRES*YRES,0);	// framebuffer
+	buffer depth(XRES*YRES);	// z-buffer
+	bool zs = 0;			// z state
 
 	namespace
 	{
-		yint  kk = 0;					//keyboard key
-		yint  tk = 0;					//turbo key
-		yint  ms = yint((XRES/2)<<16)+yint(YRES/2);	//compressend mouse data
-		yint  ls = 0;					//last fps update
+		yint  kk = 0;					// keyboard key
+		yint  tk = 0;					// turbo key
+		yint  ms = yint((XRES/2)<<16)+yint(YRES/2);	// compressend mouse data
+		yint  ls = 0;					// last fps update
 
 		SDL_Surface* video;
 		Uint8* keys;
@@ -95,6 +95,7 @@ void screen::event()
 	ifu(keys[CTRL]&&keys[KEYX]) { system::bye(); }
 
 	yint tt = 0;
+
 	tt = math::set(UP,tt,keys[UP]);
 	tt = math::set(DOWN,tt,keys[DOWN]);
 	tt = math::set(LEFT,tt,keys[LEFT]);

@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZmatrix.hh
 // Matrix Class Library
@@ -28,7 +28,6 @@ struct matrix
 		/*OK*/        void transpose();
 		/*OK*/        void dyadic(const vector& x,const vector& y);
 		/*OK*/ inline void shadow(const vector& x,const vector& y);
-		/*OK*/ inline fixed trace() const;
 		/*OK*/ inline vector operator*(const vector& x) const;
 };
 ///</define>
@@ -128,11 +127,6 @@ void matrix::shadow(const vector& x,const vector& y)
 	m[0][0] += xy;
 	m[1][1] += xy;
 	m[2][2] += xy;
-}
-
-fixed matrix::trace() const
-{
-	return m[0][0]+m[1][1]+m[2][2];
 }
 
 vector matrix::operator*(const vector& x) const

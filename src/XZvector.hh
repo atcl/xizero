@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZvector.hh
 // integer and fixed point vector classes
@@ -21,7 +21,7 @@ struct alignas(16) vector
 	fixed e;
 	vector(fixed a=0,fixed b=0,fixed c=0,fixed d=1) : x(a),y(b),z(c),e(d) { ; }
 	vector(const vector& a) : x(a.x),y(a.y),z(a.z),e(a.e) { ; }
-	vector(const tuple& a)   : x(fx::l2f(a.x)),y(fx::l2f(a.y)),z(fx::l2f(a.z)),e(fx::l2f(a.e)) { ; }
+	vector(const tuple& a)  : x(fx::l2f(a.x)),y(fx::l2f(a.y)),z(fx::l2f(a.z)),e(fx::l2f(a.e)) { ; }
 	//vector(vector&& a) { x=a.x; y=a.y; z=a.z; e=a.e; a.x={}; a.y={}; a.z={}; a.e={}; }
 	inline vector  operator-() const { return vector(-x,-y,-z); }
 	inline vector  operator+(const vector& a) const { return vector(x+a.x,y+a.y,z+a.z); }

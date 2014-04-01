@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZlevel.hh
 // Level Class
@@ -239,8 +239,8 @@ void level::display()
 
 	//render entities
 	//for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,0); }
-	//boss->display(mark,0);
-	player->display(mark,0);
+	//	boss->display(mark,0);
+		player->display(mark,0);
 	//*
 
 	//render enemy gauges

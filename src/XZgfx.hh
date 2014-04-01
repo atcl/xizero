@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZgfx.hh
 // Graphic Primitives Library
@@ -16,12 +16,11 @@
 ///<define>
 namespace gfx
 {
-	/*OK*/ inline void pix(xint x,xint y,yint c) { screen::frame[(y*XRES+x)] = c; }		//draw pixel
-	/*OK*/        void line(xint x,xint y,xint a,xint b,yint c,bool k=0); 			//draw line
-	/*OK*/        void rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f=0,bool g=0); 	//draw rectangle
-	/*OK*/        void draw(const tile& t,xint x=0,xint y=0,bool a=0);			//draw sprite
-	/*OK*/        void fsprog(xint p,yint c=RED);						//draw full screen progress bar
-	/*OK*/        tile save();								//save current screen
+	/*OK*/ void line(xint x,xint y,xint a,xint b,yint c,bool k=0); 			// draw line
+	/*OK*/ void rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f=0,bool g=0); 	// draw rectangle
+	/*OK*/ void draw(const tile& t,xint x=0,xint y=0,bool a=0);			// draw sprite
+	/*OK*/ void fsprog(xint p,yint c=RED);						// draw full screen progress bar
+	/*OK*/ tile save();								// save current screen
 }
 ///</define>
 
@@ -48,7 +47,7 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 
 	switch( math::set(2,xint(y==b)-xint(x==a),k==1) )
 	{
-		case -1: //vertical line
+		case -1: // vertical line
 		{
 			const xint p = math::min(y,b);
 			const xint q = math::max(y,b);
@@ -59,7 +58,7 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 		}
 		break;
 
-		case 1: //horizontal line
+		case 1: // horizontal line
 		{
 			const xint p = math::min(x,a);
 			const xint q = math::max(x,a);
@@ -71,7 +70,7 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 		break;
 
 		default:
-		case 0: //general line
+		case 0: // general line
 		{
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
@@ -95,7 +94,7 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 		}
 		break;
 
-		case 2: //antialiased line
+		case 2: // antialiased line
 		{
 			xs = math::neg(xs,dx<0);
 			dx = math::neg(dx,dx<0);
@@ -135,14 +134,14 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 
 void gfx::rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f,bool g)
 {
-	//draw frame
+	// draw frame
 	line(x,y,a,y,c);
 	line(a,y,a,b,c);
 	c = math::set(~c|0xFF000000,c,g==1); 
 	line(x,y,x,b,c); 
 	line(x,b,a,b,c);
 
-	//draw inside
+	// draw inside
 	++x;
 	--a;
 	for(xint i=y++;i<b&&f==1;++i)

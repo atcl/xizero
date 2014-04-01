@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZtile.hh
 // Tile Library
@@ -14,10 +14,10 @@
 class tile
 {
 	public:
+		xint* data;
 		const yint width;
 		const yint height;
-		xint* data;
-		tile(yint w,yint h) : width(w),height(h),data(new xint[w*h]) { };
+		tile(yint w,yint h) : data(new xint[w*h]),width(w),height(h) { ; };
 		~tile() { delete data; }
 };
 ///</define>

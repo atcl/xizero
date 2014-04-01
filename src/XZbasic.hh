@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZbasic.hh
 // Basic Library 
@@ -7,8 +7,8 @@
 ///</header>
 
 ///<include>
-#include <cstdint> //int32_t,uint32_t
-#include <cstdlib> //malloc,free
+#include <cstdint> // int32_t,uint32_t
+#include <cstdlib> // malloc,free
 
 #include "XZcolors.hh"
 ///</include>
@@ -69,7 +69,7 @@ struct tuple { xint x; xint y; xint z; xint e; };
 ///</define>
 
 ///<code>
-//global new + delete (required for gcc over g++)
+// global new + delete (required for gcc over g++)
 inline void* operator new(size_t s)     { return malloc(s); }
 inline void* operator new[](size_t s)   { return malloc(s); }
 inline void  operator delete(void *p)   { free(p); }

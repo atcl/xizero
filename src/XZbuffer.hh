@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZbuffer.hh
 // Buffer Library 
@@ -7,9 +7,9 @@
 ///</header>
 
 ///<include>
-#include <stdalign.h> //aligned_alloc
-#include <cstdlib>    //free
-#include <string.h>   //memcpy
+#include <stdalign.h> // aligned_alloc
+#include <cstdlib>    // free
+#include <string.h>   // memcpy
 
 #include "XZbasic.hh"
 ///</include>
@@ -18,13 +18,13 @@
 class buffer
 {
 	private:
-		const yint  bytes;			//size in bytes
-		      xint* data;			//pointer to data
-		      bool  self;			//buffer exists already
-		buffer(const buffer& b);		//Copy Constructor (not implemented to deny copy)
-		buffer& operator=(const buffer& b);	//Assignment (not implemented to deny copy)
+		const yint  bytes;			// size in bytes
+		      xint* data;			// pointer to data
+		      bool  self;			// buffer exists already
+		buffer(const buffer& b);		// copy constructor (not implemented to deny copy)
+		buffer& operator=(const buffer& b);	// assignment (not implemented to deny copy)
 	public:
-		/*OK*/ buffer(yint s,bool a=1) : bytes((s<<2)+(s&31)),data(0) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
+		/*OK*/ buffer(yint s,bool a=1) : bytes((s<<2)+(s&31)),data(0),self(a) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
 		/*OK*/ ~buffer() { if(self) { free(data); } }
 		/*OK*/ inline xint& operator[](uint i) { return data[i]; }
 		/*OK*/ inline xint  operator[](uint i) const { return data[i]; }

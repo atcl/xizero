@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZbutton.hh
 // GUI Button Library
@@ -19,18 +19,18 @@
 class button : public gui
 {
 	private:
-		const char* text;					//Button Caption
-		const xint textleft;					//Relative Y Coordinate of Caption	
-		const xint texttop;					//Relative X Coordinate of Caption
-		const bool depth;					//Flat or Relief
-		xint (*action)();					//Onclick Function Pointer
-		button(const button& b);				//Copy Constructor (not implemented to deny copy)
-		button& operator=(const button& b);			//Assignment (not implemented to deny copy)
+		const char* text;					// button caption
+		const xint textleft;					// relative Y coordinate of caption	
+		const xint texttop;					// relative X coordinate of caption
+		const bool depth;					// flat or relief
+		xint (*action)();					// onclick function pointer
+		button(const button& b);				// copy constructor (not implemented to deny copy)
+		button& operator=(const button& b);			// assignment (not implemented to deny copy)
 	public:
-		button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v); //Constructor
-		//~button() { delete text; };				//Destructor
-		void draw(bool h=0) const;				//Draw Button	
-		xint inline click() { return action(); };		//Trigger action
+		button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v); // constructor
+		//~button() { delete text; };				// destructor
+		void draw(bool h=0) const;				// draw button	
+		xint inline click() { return action(); };		// trigger action
 };
 ///</define>
 

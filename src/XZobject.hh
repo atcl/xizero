@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZobject.hh
 // Object Library
@@ -25,7 +25,7 @@ class object
 		fixed     cbound;	//TODO
 		xint      polys;
 		xint      docks;
-		yint      scolor;	//Shadow Color
+		yint      scolor;	// shadow color
 
 		object&   operator=(const object& o);
 	public:
@@ -39,7 +39,7 @@ class object
 		/*OK*/ void display(const tuple& p,xint f) const;
 		/*OK*/ void pull(fixed x); //translate along normals
 		// void rebound();
-		/*OK*/ inline fixed bounding() const { return cbound; }			//remove if possible
+		/*OK*/ inline fixed bounding() const { return cbound; }			// remove if possible
 		/*OK*/ inline bool collision(const vector& x,const vector& a);
 
 		static matrix linear;

@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZformat.hh
 // Fileformat Library
@@ -31,10 +31,10 @@ struct info
 
 namespace format
 {
-	/*OK*/ char** csv(const char* x,char y=',');	//load comma seperated values
-	/*OK*/ tile   xpm(const char* x);		//load xpm image
-	/*OK*/ info   ini(const char* x);		//load ini configuartion
-	/*OK*/ info   ar(char* x);			//load ar archive
+	/*OK*/ char** csv(const char* x,char y=',');	// load comma seperated values
+	/*OK*/ tile   xpm(const char* x);		// load xpm image
+	/*OK*/ info   ini(const char* x);		// load ini configuartion
+	/*OK*/ info   ar(char* x);			// load ar archive
 }
 ///</define>
 

@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // XZpolygon.hh
 // Polygon Library
@@ -45,10 +45,10 @@
 class polygon
 {
 	private:
-		static tuple point[3];		//Discrete Vertices
-		vector vertex[3];		//Polygon Vertices
-		vector normal;			//Polygon Normal
-		const yint color;		//Polygon Color
+		static tuple point[4];		// discrete vertices
+		vector vertex[3];		// polygon vertices
+		vector normal;			// polygon normal
+		const yint color;		// polygon color
 
 		/*OK*/ inline void shape() const;
 		              yint flat(xint pz,xint f) const;
@@ -61,14 +61,14 @@ class polygon
 		/*OK*/ void pull(fixed a);
 		/*OK*/ static tuple project(const tuple& p,const vector& v);
 
-		static xint  counter;		//Polygon Counter
-		static const vector light;	//Light Vector
-		static const matrix blinn;	//Blinn Shadow Matrix
+		static xint  counter;		// polygon counter
+		static const vector light;	// light vector
+		static const matrix blinn;	// blinn shadow matrix
 };
 ///</define>
 
 ///<code>
-      tuple  polygon::point[] = { tuple(), tuple(), tuple() };
+      tuple  polygon::point[] = { tuple(), tuple(), tuple(), tuple() };
       xint   polygon::counter = 0;
 const vector polygon::light   = vector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
 const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector(0,FXTNT,FXONE),vector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
@@ -102,7 +102,7 @@ void polygon::shape() const
 
 void polygon::raster(yint c) const
 {
-	//determine projected minima and maxima
+	// determine projected minima and maxima
 	const xint mix01 = point[1].x<point[0].x;
 	const xint max01 = !mix01;
 	const xint miy01 = point[1].y<point[0].y;
@@ -141,7 +141,7 @@ void polygon::raster(yint c) const
 		#pragma prefetch back
 		for(xint x=minx;x<maxx;++x) 
 		{
-			//prefetch(&back[off]);
+			// prefetch(&back[off]);
 			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
 			const bool above  = cx[3]>=math::abs(screen::depth[off]);
 			if(inside && above)
@@ -167,7 +167,7 @@ void polygon::raster(yint c) const
 
 void polygon::shadow(yint c) const
 {
-	//determine projected minima and maxima
+	// determine projected minima and maxima
 	const xint mix01 = point[1].x<point[0].x;
 	const xint max01 = !mix01;
 	const xint miy01 = point[1].y<point[0].y;
@@ -179,9 +179,9 @@ void polygon::shadow(yint c) const
 	const xint mayi = math::set(2,may01,point[2].y>point[may01].y);
 
 	const xint minx = math::max(XMIN,point[mixi].x);
-	const xint maxx = math::min(XMAX,point[maxi].x+1); //prevent gap
+	const xint maxx = math::min(XMAX,point[maxi].x+1); // prevent gap
 	const xint miny = math::max(YMIN,point[miyi].y);
-	const xint maxy = math::min(YMAX,point[mayi].y+1); //prevent gap
+	const xint maxy = math::min(YMAX,point[mayi].y+1); // prevent gap
 
 
 	guard( (maxx==minx) || (maxy==miny) );
