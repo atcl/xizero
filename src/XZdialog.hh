@@ -28,8 +28,8 @@ xint dialog::msgbox(const char* m,bool q)
 	const xint x = (XRES-w)/2;
 	const xint y = (YRES-h)/2;
 	buttons bl;
-	bl.add("OK",[](){ return  xint(1); },1,x+(w/2)-20-(30*q),y+h-30,40,20,BLACK,RED,SYSCOL,BLACK,1); 
-	if(q) { bl.add("NO",[](){ return xint(-1); },1,x+(w/2)+10,y+h-30,40,20,BLACK,RED,SYSCOL,BLACK,q); }
+	bl.add("OK",[](){ return  xint(1); },1,x+(w/2)-20-(30*q),y+h-30,40,20,BLACK,RED,GREY,BLACK,1); 
+	if(q) { bl.add("NO",[](){ return xint(-1); },1,x+(w/2)+10,y+h-30,40,20,BLACK,RED,GREY,BLACK,q); }
 
 	xint xit = 0;
 	while(xit==0 && screen::run())

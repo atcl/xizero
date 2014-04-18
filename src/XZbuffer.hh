@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZbuffer.hh
-// Buffer Library 
+// Buffer Library ( XZbuffer.hh )
 #pragma once
 ///</header>
 
@@ -18,21 +18,21 @@
 class buffer
 {
 	private:
-		const yint  bytes;			// size in bytes
 		      xint* data;			// pointer to data
-		      bool  self;			// buffer exists already
+		const yint  bytes;			// size in bytes
+		      bool  self;			// allocated memory exists already
 		buffer(const buffer& b);		// copy constructor (not implemented to deny copy)
 		buffer& operator=(const buffer& b);	// assignment (not implemented to deny copy)
 	public:
-		/*OK*/ buffer(yint s,bool a=1) : bytes((s<<2)+(s&31)),data(0),self(a) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
-		/*OK*/ ~buffer() { if(self) { free(data); } }
-		/*OK*/ inline xint& operator[](uint i) { return data[i]; }
-		/*OK*/ inline xint  operator[](uint i) const { return data[i]; }
-		/*OK*/ inline xint* pointer() const { return data; }
-		/*OK*/ inline void  pointer(void* a) { data = static_cast<xint*>(a); }
-		/*OK*/        void  copy(const buffer& s) { memcpy(data,s.data,bytes); };
-		              void  fsaa(const buffer& s);
-		/*OK*/        void  clear(xint x=0);
+		buffer(yint s,bool a=1) : bytes((s<<2)+(s&31)),data(0),self(a) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
+		~buffer() { if(self) { free(data); } }
+		inline xint& operator[](uint i) { return data[i]; }
+		inline xint  operator[](uint i) const { return data[i]; }
+		inline xint* pointer() const { return data; }
+		inline void  pointer(void* a) { data = static_cast<xint*>(a); }
+		       void  copy(const buffer& s) { memcpy(data,s.data,bytes); };
+		       void  fsaa(const buffer& s);
+		       void  clear(xint x=0);
 };
 ///</define>
 

@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZfixed.hh
-// Fixed Point 16.16 Type Library
+// Fixed Point 16.16 Type Library ( XZfixed.hh )
 #pragma once
 ///</header>
 
@@ -13,23 +13,23 @@
 
 ///<declare>
 #define FIXED 16
-#define FXONE 0x00010000 //1
-#define FXTWO 0x00020000 //2
-#define FXMON 0xFFFF0000 //-1
-#define FXHLF 0x00008000 //0.5
-#define FXQRT 0x00004000 //0.25
-#define FXTNT 0x00001999 //0.1
-#define FXCEN 0x0000028F //0.01
-#define FXEPS 0x00000001 //eps
-#define FXTAU 0x0006487E //tau = 2pi
-#define FXTA2 0x0003243F //tau/2
-#define FXTA4 0x0001921F //tau/4
-#define FXITG 0x00009B71 //0.607200
-#define FXIHG 0x000134A3 //1.205614
-#define FXD2R 0x00000477 //tau/360 (deg2rad)
-#define FXSQ2 0x00016A09 //2^0.5
-#define FXRS1 0x00000126 //0.0045
-#define FXRS2 0x00012902 //1.1602
+#define FXONE 0x00010000 // 1
+#define FXTWO 0x00020000 // 2
+#define FXMON 0xFFFF0000 // -1
+#define FXHLF 0x00008000 // 0.5
+#define FXQRT 0x00004000 // 0.25
+#define FXTNT 0x00001999 // 0.1
+#define FXCEN 0x0000028F // 0.01
+#define FXEPS 0x00000001 // eps
+#define FXTAU 0x0006487E // tau = 2pi
+#define FXTA2 0x0003243F // tau/2
+#define FXTA4 0x0001921F // tau/4
+#define FXITG 0x00009B71 // 0.607200
+#define FXIHG 0x000134A3 // 1.205614
+#define FXD2R 0x00000477 // tau/360 (deg2rad)
+#define FXSQ2 0x00016A09 // 2^0.5
+#define FXRS1 0x00000126 // 0.0045
+#define FXRS2 0x00012902 // 1.1602
 
 #define HSEL16(x) ((x==4)||(x==7)||(x==10)||(x==13))	// (((i-1)%3)==0)&&(i!=1)
 ///</declare>
@@ -89,16 +89,33 @@ void fx::cordic(fixed& x,fixed& y,fixed& z,fixed v,bool h)
 	fixed t = FXONE>>h;
 	register bool r = 0;
 
-	for(yint i=0;i<FIXED;++i)
+	switch(h)
 	{
-		r = h&&HSEL16(i)&&(!r);
-		const bool s = (v>=0 && y<v) || (v<0 && z>=0);
-		const fixed w = x + math::neg(mul(y,t),s^h);
-		y -= math::neg(mul(x,t),s);
-		z += math::neg(math::set(ah[i],at[i],h),s);
-		x = w;
-		i -= r;
-		t >>= !r;
+		case false: // trigonometric
+			for(yint i=0;i<FIXED;++i)
+			{
+				const bool s = (v>=0 && y<v) || (v<0 && z>=0);
+				const fixed w = x + math::neg(mul(y,t),s);
+				y -= math::neg(mul(x,t),s);
+				z += math::neg(at[i],s);
+				x = w;
+				t >>= 1;
+			}
+			break;
+
+		case true: // hyperbolic
+			for(yint i=0;i<FIXED;++i)
+			{
+				r = HSEL16(i)&&(!r);
+				const bool s = (v>=0 && y<0) || (v<0 && z>=0);
+				const fixed w = x - math::neg(mul(y,t),s);
+				y -= math::neg(mul(x,t),s);
+				z += math::neg(ah[i],s);
+				x = w;
+				i -= r;
+				t >>= 1;
+			}
+			break;
 	}
 }
 ///</code>

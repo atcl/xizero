@@ -1,26 +1,25 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// xz.hh
-// XiZero include header
+// XiZero include header ( xz.hh )
 ///</header>
 
 ///<include>
 //Level 0
-#include "src/XZbasic.hh"
+#include "src/XZbasic.hh"	// v0.2
 //Level 1
-#include "src/XZbuffer.hh"
-#include "src/XZlist.hh"
-#include "src/XZmath.hh"
-#include "src/XZsystem.hh"
-#include "src/XZtile.hh"
+#include "src/XZbuffer.hh"	// v0.2
+#include "src/XZlist.hh"	// v0.2
+#include "src/XZmath.hh"	// v0.2
+#include "src/XZsystem.hh"	// v0.2
+#include "src/XZtile.hh"	// v0.2
 //Level 2
-#include "src/XZfixed.hh"
+#include "src/XZfixed.hh"	// v0.2
 #include "src/XZfrmbuf.hh"
-#include "src/XZstring.hh"
+#include "src/XZstring.hh"	// v0.2
 //Level 3
 #include "src/XZformat.hh"
-#include "src/XZgame.hh"
 #include "src/XZgfx.hh"
 #include "src/XZvector.hh"
 //Level 4
@@ -38,6 +37,7 @@
 //Level 7
 #include "src/XZdialog.hh"
 //Game
+#include "src/XZgame.hh"	// v0.2
 #include "src/XZlevel.hh"
 #include "src/XZentity.hh"
 //Other

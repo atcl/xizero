@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZstring.hh
-// C String Library
+// C String Library ( XZstring.hh )
 #pragma once
 ///</header>
 
@@ -19,20 +19,19 @@
 ///<define>
 namespace string
 {
-	/*OK*/ pure yint   length(const char* x);
-	/*OK*/ pure yint   count(const char* x,char='\n');
-	/*OK*/ pure xint   scan(const char* x,char y,char z='\n');
-	/*OK*/ pure xint   find(const char* x,const char* y);
-	/*OK*/ pure xint   str2int(const char* x);
-	/*OK*/ pure xint   hex2int(const char* x);
-	/*OK*/ pure char   toup(char x);
-	/*OK*/      char*  copy(const char* x,xint y=0,xint z=0x7FFFFFFF);
-	/*OK*/      char*  concat(const char* x,const char* y);
-	/*OK*/      char*  int2str(xint x);
-	/*OK*/      char*  fix2str(fixed x,yint y=16);
-	/*OK*/      char*  repl(const char* x,char y,char z);
-	/*OK*/      char** split(const char* x,char y);
-	/*OK*/      char*  trim(const char* x,char y=' ');
+	pure yint   length(const char* x);
+	pure yint   count(const char* x,char='\n');
+	pure xint   find(const char* x,const char* y);
+	pure xint   str2int(const char* x);
+	pure xint   hex2int(const char* x);
+	pure char   toup(char x);
+	     char*  copy(const char* x,xint y=0,xint z=0x7FFFFFFF);
+	     char*  concat(const char* x,const char* y); //unused!
+	     char*  int2str(xint x);
+	     char*  fix2str(fixed x,yint y=16);
+	     char*  repl(const char* x,char y,char z);
+	     char** split(const char* x,char y);
+	     char*  trim(const char* x,char y=' ');
 }
 ///</define>
 
@@ -49,13 +48,6 @@ yint string::count(const char* x,char y)
 	register yint r = 0;
 	for(yint i=0;x[i]!=0;++i) { r += (x[i]==y); }
 	return r;
-}
-
-xint string::scan(const char* x,char y,char z)
-{
-	xint r = 0;
-	while( (x[r]!=0) && (x[r]!=y) && (x[r]!=z) ) { ++r; }
-	return math::neg(r,x[r]!=y||x[r]!=z);
 }
 
 xint string::find(const char* x,const char* y)
@@ -109,7 +101,7 @@ char* string::copy(const char* x,xint y,xint z)
 {
 	const yint l = math::min(length(x),z);
 	char* r = new char[l+1];
-	for(yint i=0;i<l;++i,++y) { r[i] = x[y]; } //y++ into x[y]?
+	for(yint i=0;i<l;++i) { r[i] = x[y++]; } 
 	r[l] = 0;
 	return r;
 }
@@ -123,7 +115,7 @@ char* string::concat(const char* x,const char* y)
 	yint i = 0;
 	yint j = 0;
 	for(;i<a;++i) { r[i] = x[i]; }
-	for(;j<b;++i,++j) { r[i] = y[j]; } //j++ into y[j]?
+	for(;j<b;++i) { r[i] = y[j++]; }
 	r[++i] = 0;
 	return r;
 }
@@ -184,7 +176,7 @@ char* string::repl(const char* x,char y,char z)
 	return r;
 }
 
-char** string::split(const char* x,char y) //optimize if!
+char** string::split(const char* x,char y)
 {
 	const yint c = count(x,y)+1;
 	char*  s = repl(x,y,0);

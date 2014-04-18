@@ -15,6 +15,7 @@
 #include "XZentity.hh"
 #include "XZprogress.hh"
 #include "XZvector.hh"
+#include "XZfrmbuf.hh"
 ///</include>
 
 //<declare>
@@ -82,22 +83,22 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	object* pm = new object(arc[lvl["player_0"]]);
 	object* pn = new object(arc[lvl["player_1"]]);
 	info    pi = format::ini(arc[lvl["player_i"]]);
- 	        pp = new progress(0,string::str2int(pi["health"]),VER,16,16,16,YRES-32,GREEN,RED,SYSCOL,WHITE,1);
- 	        sp = new progress(0,string::str2int(pi["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,RED,SYSCOL,WHITE,1);
+ 	        pp = new progress(0,string::str2int(pi["health"]),VER,16,16,16,YRES-32,GREEN,RED,GREY,WHITE,1);
+ 	        sp = new progress(0,string::str2int(pi["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,RED,GREY,WHITE,1);
 	gfx::fsprog(10);
 	screen::flush();
 
 	//load boss
 	object* bm = new object(arc[lvl["boss_0"]]);
 	info    bi = format::ini(arc[lvl["boss_i"]]); 
-	        bp = new progress(0,string::str2int(bi["health"]),HOR,0,0,96,16,RED,ORANGE,SYSCOL,WHITE,0);
+	        bp = new progress(0,string::str2int(bi["health"]),HOR,0,0,96,16,RED,ORANGE,GREY,WHITE,0);
 	gfx::fsprog(20);
 	screen::flush();
 
 	//load enemy
 	object* em = new object(arc[lvl["enemy_0"]]);
 	info    ei = format::ini(arc[lvl["enemy_i"]]);
-	        ep = new progress(0,string::str2int(ei["health"]),HOR,0,0,48,8,GREEN,ORANGE,SYSCOL,WHITE,0);
+	        ep = new progress(0,string::str2int(ei["health"]),HOR,0,0,48,8,GREEN,ORANGE,GREY,WHITE,0);
 	gfx::fsprog(30);
 	screen::flush();
 
@@ -174,7 +175,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 		}
 		//*
 
-		terrain[i] = new object(a,b,c,d,k,OCHER);
+		terrain[i] = new object(a,b,c,d,k,VIOLET);
 	}
 
 	gfx::fsprog(95);
@@ -213,7 +214,7 @@ xint level::update(xint k,xint j)
 void level::display()
 {
 	//draw background 
-	screen::frame.clear(OCHER>>1);
+	screen::frame.clear(VIOLET>>1);
 	screen::depth.clear(0); //TODO: remove the clear
 /*
 	//render terrain //fix
@@ -249,7 +250,7 @@ void level::display()
 		const tuple e(enemies.current()->data(mark));
 		if(e.z>0)
 		{
-			ep->vis(game::onscreen(e.x,e.y));
+			ep->vis(screen::onscreen(e.x,e.y));
 			ep->pos(e.x-24,e.y-10);
 			ep->set(e.z+e.e);
 			ep->draw();
@@ -260,7 +261,7 @@ void level::display()
 	const tuple b(boss->data(mark));
 	if(b.z>0)
 	{
-		bp->vis(game::onscreen(b.x,b.y));
+		bp->vis(screen::onscreen(b.x,b.y));
 		bp->pos(b.x-48,b.y-20);
 		bp->set(b.z+b.e);
 		bp->draw();

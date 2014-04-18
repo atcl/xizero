@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZgame.hh
-// Game Library
+// Game Library ( XZgame.hh )
 #pragma once 
 ///</header>
 
@@ -14,26 +14,20 @@
 ///<define>
 namespace game
 {
-	/*OK*/             void compiled(xint x,xint y,yint r,yint c);
-	/*OK*/ pure inline bool onscreen(xint x,xint y);
+	void compiled(xint x,xint y,yint r,yint c);
 }
 ///</define>
 
 ///<code>
 void game::compiled(xint x,xint y,yint r,yint c)
 {
-	//guard(game::onscreen(x,y)==1);
+	//guard(screen::onscreen(x,y)==1);
 	yint o = ((y-2)*XRES)+(x-2);
 
 	screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o] = r; o += XRES-3;
 	screen::frame[o++] = r; screen::frame[o++] = c; screen::frame[o++] = c; screen::frame[o] = r; o += XRES-3;
 	screen::frame[o++] = r; screen::frame[o++] = c; screen::frame[o++] = c; screen::frame[o] = r; o += XRES-3;
 	screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o] = r; o += XRES-3;
-}
-
-bool game::onscreen(xint x,xint y)
-{
-	return (x>0) && (y>0) && (x<XRES) && (y<YRES);
 }
 ///</code>
 

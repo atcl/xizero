@@ -1,5 +1,5 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013,2014
+// atCROSSLEVEL 2010-2014
 // released under 2-clause BSD license
 // xizero.hh
 // XiZero main header
@@ -107,9 +107,9 @@ void menu()
 {
 	//enlist buttons
 	buttons bl;
-	bl.add("About",&about,0,2,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1);
-	bl.add("Exit",&leave,0,52,19,50,16,BLACK,RED,SYSCOL,SYSCOL,1);
-	bl.add("X",[](){ return 1; },1,XRES-20,1,16,16,BLACK,RED,SYSCOL,WHITE,1);
+	bl.add("About",&about,0,2,19,50,16,BLACK,RED,GREY,GREY,1);
+	bl.add("Exit",&leave,0,52,19,50,16,BLACK,RED,GREY,GREY,1);
+	bl.add("X",[](){ return 1; },1,XRES-20,1,16,16,BLACK,RED,GREY,WHITE,1);
 	//*
 
 	//draw menu
@@ -121,7 +121,7 @@ void menu()
 		gfx::draw(scr);
 		gfx::draw(ico);
 		gfx::rect(16,0,XRES,17,RED,RED,1,0);
-		gfx::rect(0,18,XRES,35,SYSCOL,SYSCOL,1,0);
+		gfx::rect(0,18,XRES,35,GREY,GREY,1,0);
 		font::draw(20,1,"atCROSSLEVEL XiZero",WHITE,RED);
 
 		bl.draw();
@@ -205,7 +205,7 @@ void mainmenu()
 
 	//enlist buttons
 	buttons bl;
-	#define VIS BLACK,RED,SYSCOL,DWHITE,1
+	#define VIS BLACK,RED,GREY,DWHITE,1
 	bl.add("Start",&start,0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
 	bl.add("Controls",&contr,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
 	bl.add("About",&about,0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);

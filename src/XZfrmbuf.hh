@@ -1,14 +1,14 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZfrmbuf.hh
-// SDL Interface
+// SDL Interface ( XZfrmbuf.hh )
 #pragma once
 ///</header>
 
 ///<include>
 #include <time.h>		// clock,CLOCKS_PER_SEC
-#include <SDL/SDL.h>		// SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState
+#include <SDL/SDL.h>		// SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState,SDL_PumpEvents,SDL_WM_SetCaption
 
 #include "XZbasic.hh"
 #include "XZtile.hh"
@@ -18,10 +18,6 @@
 ///</include>
 
 ///<declare>
-#define MOUSEX(x) ((x&0x7FFFFFFF)>>16)
-#define MOUSEY(x)  (x&0x0000FFFF)
-#define MOUSEB(x) ((x&0x80000000)!=0)
-
 #define BPP 32
 #define FPS 4000
 
@@ -53,7 +49,6 @@ namespace screen
 	{
 		yint  kk = 0;					// keyboard key
 		yint  tk = 0;					// turbo key
-		yint  ms = yint((XRES/2)<<16)+yint(YRES/2);	// compressend mouse data
 		yint  ls = 0;					// last fps update
 
 		SDL_Surface* video;
@@ -74,6 +69,8 @@ namespace screen
 	inline bool  run()	{ flush(); event(); return 1; }
 	inline yint  key()	{ const yint r=kk; kk=0; return r; }
 	inline yint  turbo()    { return tk; }
+
+	pure inline bool onscreen(xint x,xint y) { return (x>0) && (y>0) && (x<XRES) && (y<YRES); };
 }
 ///</define>
 
@@ -86,13 +83,15 @@ void screen::init(const tile& c)
 	frame.pointer(video->pixels);
 	SDL_WM_SetCaption(TITLE " " VERSION,TITLE);
 
-	system::ifx(close);
+	system::onx(close);
 }
 
 void screen::event()
 {
 	SDL_PumpEvents();
 	ifu(keys[CTRL]&&keys[KEYX]) { system::bye(); }
+
+	
 
 	yint tt = 0;
 

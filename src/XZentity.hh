@@ -15,6 +15,7 @@
 #include "XZformat.hh"
 #include "XZobject.hh"
 #include "XZgame.hh"
+#include "XZfrmbuf.hh"
 ///</include>
 
 //<declare>
@@ -133,7 +134,7 @@ void entity::display_ammo(xint m)
 
 			const xint cx = fx::r2l(cur.x);
 			const xint cy = fx::r2l(cur.y)-m;
-			switch( (game::onscreen(cx-4,cy-4)&game::onscreen(cx+4,cy+4))<<h )
+			switch( (screen::onscreen(cx-4,cy-4)&screen::onscreen(cx+4,cy+4))<<h )
 			{
 				case 0: delete a.delcurrent(); break;
 				case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
