@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 )
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// SDL Interface ( XZfrmbuf.hh )
+// SDL Interface ( XZscreen.hh )
 #pragma once
 ///</header>
 
@@ -18,8 +18,10 @@
 ///</include>
 
 ///<declare>
-#define BPP 32
-#define FPS 4000
+#define XRES 640
+#define YRES 480
+#define BPP  32
+#define FPS  4000
 
 #define ESCAPE	SDLK_ESCAPE
 #define ENTER	SDLK_RETURN

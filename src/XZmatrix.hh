@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZmatrix.hh
-// Matrix Class Library
+// Matrix Class Library ( XZmatrix.hh )
 #pragma once
 ///</header>
 
@@ -11,24 +11,25 @@
 ///</include>
 
 ///<define>
-struct matrix
+class matrix
 {
 	private:
 		alignas(16) fixed m[3][4];
-		/*OK*/ void multiplicate(const fixed (&n)[3][4]);
+
+		void multiplicate(const fixed (&n)[3][4]);
 	public:
-		/*OK*/ matrix(fixed x=FXONE,fixed y=0);
-		/*OK*/        void clear(fixed x=FXONE,fixed y=0);
-		/*OK*/ inline void rotatex(fixed x);
-		/*OK*/ inline void rotatey(fixed y);
-		/*OK*/ inline void rotatez(fixed z);
-		/*OK*/ inline void translate(fixed x,fixed y,fixed z);
-		/*OK*/ inline void scale(fixed x,fixed y,fixed z);
-		              void project(fixed x,fixed y,fixed z,fixed w);
-		/*OK*/        void transpose();
-		/*OK*/        void dyadic(const vector& x,const vector& y);
-		/*OK*/ inline void shadow(const vector& x,const vector& y);
-		/*OK*/ inline vector operator*(const vector& x) const;
+		matrix(fixed x=FXONE,fixed y=0);
+		       void clear(fixed x=FXONE,fixed y=0);
+		inline void rotatex(fixed x);
+		inline void rotatey(fixed y);
+		inline void rotatez(fixed z);
+		inline void translate(fixed x,fixed y,fixed z);
+		inline void scale(fixed x,fixed y,fixed z);
+		       void project(fixed x,fixed y,fixed z,fixed w);
+		       void transpose();
+		       void dyadic(const vector& x,const vector& y);
+		inline void shadow(const vector& x,const vector& y);
+		inline vector operator*(const vector& x) const;
 };
 ///</define>
 

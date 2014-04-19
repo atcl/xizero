@@ -138,15 +138,15 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 	bbox[0].z = bbox[1].z = bbox[2].z = bbox[3].z = 0;
 	const vector m = (vector(bbox[0]) + vector(bbox[1]) + vector(bbox[2]) + vector(bbox[3]))*FXQRT;
 
-	bound = ((vector(bbox[0]))-m).length();
-	bound = math::min(bound,((vector(bbox[1]))-m).length());
-	bound = math::min(bound,((vector(bbox[2]))-m).length());
-	bound = math::min(bound,((vector(bbox[3]))-m).length());
+	bound = ((vector(bbox[0]))-m).len();
+	bound = math::min(bound,((vector(bbox[1]))-m).len());
+	bound = math::min(bound,((vector(bbox[2]))-m).len());
+	bound = math::min(bound,((vector(bbox[3]))-m).len());
 
-	bound = math::min(bound,((vector(bbox[0])+(vector(bbox[1])-vector(bbox[0]))*FXHLF)-m).length());
-	bound = math::min(bound,((vector(bbox[1])+(vector(bbox[2])-vector(bbox[1]))*FXHLF)-m).length());
-	bound = math::min(bound,((vector(bbox[2])+(vector(bbox[3])-vector(bbox[2]))*FXHLF)-m).length());
-	bound = math::min(bound,((vector(bbox[3])+(vector(bbox[0])-vector(bbox[3]))*FXHLF)-m).length());
+	bound = math::min(bound,((vector(bbox[0])+(vector(bbox[1])-vector(bbox[0]))*FXHLF)-m).len());
+	bound = math::min(bound,((vector(bbox[1])+(vector(bbox[2])-vector(bbox[1]))*FXHLF)-m).len());
+	bound = math::min(bound,((vector(bbox[2])+(vector(bbox[3])-vector(bbox[2]))*FXHLF)-m).len());
+	bound = math::min(bound,((vector(bbox[3])+(vector(bbox[0])-vector(bbox[3]))*FXHLF)-m).len());
 	//*
 
 	delete t;

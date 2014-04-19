@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZgfx.hh
-// Graphic Primitives Library
+// Graphic Primitives Library ( XZgfx.hh )
 #pragma once
 ///</header>
 
@@ -10,7 +10,7 @@
 #include "XZbasic.hh"
 #include "XZtile.hh"
 #include "XZmath.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 ///<define>
@@ -27,7 +27,7 @@ namespace gfx
 ///<code>
 void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 {
-	guard( ((x<0)&&(a<0)) || ((x>XRES)&&(a>XRES)) || ((y<0)&&(b<0)) || ((y>YRES)&&(b>YRES)) );
+	guard( !screen::onscreen(x,y) || !screen::onscreen(a,b) );
 
 	xint dx = a-x;
 	xint dy = b-y;
@@ -166,8 +166,7 @@ void gfx::draw(const tile& t,xint x,xint y,bool a)
 		for(xint j=0;j<xm;++j)
 		{
 			const uint c = t.data[s++];
-			screen::frame[o] = math::set(c,screen::frame[o],(c!=TRANS)||a);
-			++o;
+			screen::frame[o++] = math::set(c,screen::frame[o],(c!=TRANS)||a);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZfont.hh
-// Font Library
+// Font Library ( XZfont.hh )
 #pragma once
 ///</header>
 
@@ -11,7 +11,7 @@
 #include "XZstring.hh"
 #include "XZmath.hh"
 #include "XZformat.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 ///<define>
@@ -37,24 +37,32 @@ namespace font
 xint font::draw(xint x,xint y,char a,yint c,yint b) 
 {
 	a = map(a);
-	const bool bt = b!=TRANS;
-	const bool ct = c!=TRANS;
-	const xint xd = -XRES+x+f.height;
-	const xint yd = -YRES+y+f.height;
-	const xint h = f.height-math::set(yd,yd>0);
-	const xint w = f.height-math::set(xd,xd>0);
-	const xint sx = f.width-w;
-	const xint d = XRES - w;
+
+	const bool bt = (b!=TRANS);
+	const bool ct = (c!=TRANS);
+
+	const xint xd = -XRES + x + f.height;
+	const xint yd = -YRES + y + f.height;
+
+	const xint h  = f.height - math::set(yd,yd>0);
+	const xint w  = f.height - math::set(xd,xd>0);
+
+	const xint sx = f.width - w;
+	const xint dx = XRES - w;
+
 	xint r = 0;
 
-	for(xint i=0,o=y*XRES+x,s=f.height*a;i<h;++i,o+=d,s+=sx)
+	for(xint i=0,o=y*XRES+x,s=f.height*a;i<h;++i)
 	{
-		for(xint j=0;j<w;++j,++o,++s)
+		for(xint j=0;j<w;++j)
 		{
-			const yint e = f.data[s];
-			screen::frame[o] = math::set(c,math::set(b,screen::frame[o],bt&&(e==WHITE)),ct&&(e==RED));
+			const yint e = f.data[s++];
+			screen::frame[++o] = math::set(c,math::set(b,screen::frame[o],bt&&(e==WHITE)),ct&&(e==RED));
 			r += (i==0)&&(e!=BLACK);
 		}
+
+		o += dx;
+		s += sx;
 	}
 	return r;
 }

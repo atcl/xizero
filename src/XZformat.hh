@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZformat.hh
-// Fileformat Library
+// Fileformat Library ( XZformat.hh )
 #pragma once
 ///</header>
 
@@ -31,10 +31,10 @@ struct info
 
 namespace format
 {
-	/*OK*/ char** csv(const char* x,char y=',');	// load comma seperated values
-	/*OK*/ tile   xpm(const char* x);		// load xpm image
-	/*OK*/ info   ini(const char* x);		// load ini configuartion
-	/*OK*/ info   ar(char* x);			// load ar archive
+	char** csv(const char* x,char y=',');	// load comma seperated values
+	tile   xpm(const char* x);		// load xpm image
+	info   ini(const char* x);		// load ini configuartion
+	info   ar(char* x);			// load ar archive
 }
 ///</define>
 

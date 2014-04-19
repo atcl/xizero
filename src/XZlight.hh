@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZlight.hh
-// Light Source Class Library
+// Light Source Class Library ( XZlight.hh )
 #pragma once
 ///</header>
 
@@ -17,9 +17,9 @@
 class light
 {
 	private:
+		tile mask;
 		const xint rad;
 		const yint col;
-		tile mask;
 
 		xint lambert(xint x,xint y) const;
 	public:

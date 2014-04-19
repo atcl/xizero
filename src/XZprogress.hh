@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZprogress.hh
-// GUI Progressbar Library
+// GUI Progressbar Library ( XZprogress.hh )
 #pragma once
 ///</header>
 
@@ -22,11 +22,12 @@
 class progress : public gui
 {
 	private:
-		const xint coeff;
-		xint start;
-		xint end;
+
 		xint prog;
 		xint area;
+		const xint start;
+		const xint end;
+		const xint coeff;
 		const bool horver;
 	public:
 		progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v);

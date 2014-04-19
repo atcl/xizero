@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZbutton.hh
-// GUI Button Library
+// GUI Button Library ( XZbutton.hh )
 #pragma once 
 ///</header>
 

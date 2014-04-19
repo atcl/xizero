@@ -8,7 +8,7 @@
 
 ///<include>
 #include "XZbasic.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 ///<define>

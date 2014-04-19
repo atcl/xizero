@@ -13,7 +13,7 @@
 #include "XZvector.hh"
 #include "XZmatrix.hh"
 #include "XZgfx.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 ///<declare>
@@ -228,7 +228,7 @@ void polygon::shadow(yint c) const
 polygon::polygon(const tuple& x,const tuple& y,const tuple& z,yint c) : vertex{x,y,z},color(c) 
 {
 	normal   = (vertex[2]-vertex[0]).cross(vertex[1]-vertex[0]) *= FXCEN;
-	normal.e = normal.length();
+	normal.e = normal.len();
 }
 
 void polygon::update(const matrix& m,bool i)
@@ -237,7 +237,7 @@ void polygon::update(const matrix& m,bool i)
 	vertex[0] = m*vertex[0];
 	vertex[2] = m*vertex[2];
 	normal   = (vertex[2]-vertex[0]).cross(vertex[1]-vertex[0]) *= FXCEN;
-	normal.e = normal.length();
+	normal.e = normal.len();
 }
 
 void polygon::display(const tuple& p,xint f,yint c)
@@ -264,7 +264,7 @@ void polygon::display(const tuple& p,xint f,yint c)
 
 void polygon::pull(fixed a)
 {
-	const fixed  l = fx::mul(fx::div(FXONE,normal.length()),a);
+	const fixed  l = fx::mul(fx::div(FXONE,normal.len()),a);
 	const vector m = normal*l;
 	vertex[0] += m;
 	vertex[1] += m;

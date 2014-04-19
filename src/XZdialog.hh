@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZmsgbox.hh
-// Dialog Library
+// Dialog Library ( XZmsgbox.hh )
 #pragma once
 ///</header>
 
@@ -10,7 +10,7 @@
 #include "XZgfx.hh"
 #include "XZfont.hh"
 #include "XZbuttons.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 ///<define>

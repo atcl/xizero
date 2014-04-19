@@ -15,7 +15,7 @@
 #include "XZentity.hh"
 #include "XZprogress.hh"
 #include "XZvector.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 //<declare>

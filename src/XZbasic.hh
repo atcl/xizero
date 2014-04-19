@@ -46,14 +46,6 @@
 	#define VERSION "0.0"
 #endif
 
-#ifndef XRES
-	#define XRES 640
-#endif
-
-#ifndef YRES
-	#define YRES 480
-#endif
-
 #define XZOK    'XZOK'
 ///</declare>
 

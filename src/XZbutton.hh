@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZbutton.hh
-// GUI Button Library
+// GUI Button Library ( XZbutton.hh )
 #pragma once
 ///</header>
 
@@ -19,11 +19,12 @@
 class button : public gui
 {
 	private:
+		xint (*action)();					// onclick function pointer
 		const char* text;					// button caption
 		const xint textleft;					// relative Y coordinate of caption	
 		const xint texttop;					// relative X coordinate of caption
 		const bool depth;					// flat or relief
-		xint (*action)();					// onclick function pointer
+
 		button(const button& b);				// copy constructor (not implemented to deny copy)
 		button& operator=(const button& b);			// assignment (not implemented to deny copy)
 	public:

@@ -15,7 +15,7 @@
 #include "XZformat.hh"
 #include "XZobject.hh"
 #include "XZgame.hh"
-#include "XZfrmbuf.hh"
+#include "XZscreen.hh"
 ///</include>
 
 //<declare>
