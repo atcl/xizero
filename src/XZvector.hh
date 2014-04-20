@@ -13,6 +13,7 @@
 ///</include>
 
 ///<define>
+
 /*
 typedef fixed vec __attribute__ ((vector_size(16)));
 
@@ -20,18 +21,35 @@ typedef alignas(16) union vector
 {
     vec   v;
     fixed x[4];
+
 } vector;
 
 namespace fx
 {
-	inline pure vector mul(vector v,fixed x) { return ((long long)(x)*(long long)(y))>>FIXED; }
+	pure vector mul(const vector& a,fixed x)
+	{
+		return vector{fx::mul(a.x[0],x),fx::mul(a.x[1],x),fx::mul(a.x[2],x)};
+	}
 
-	inline pure vector cross(const vector& a) const { return vector(fx::mul(y,a.z)-fx::mul(z,a.y),fx::mul(z,a.x)-fx::mul(x,a.z),fx::mul(x,a.y)-fx::mul(y,a.x)); }
+	pure vector cross(const vector& a,const vector& b)
+	{
+		return vector{fx::mul(a.x[1],b.x[2])-fx::mul(a.x[2],b.x[1]),
+		              fx::mul(a.x[2],b.x[1])-fx::mul(a.x[0],b.x[2]),
+		              fx::mul(a.x[0],b.x[1])-fx::mul(a.x[1],b.x[0])};
+	}
 
-	inline pure fixed dot(const vector& v,const vector& w) { return fx::mul(x,a.x)+fx::mul(y,a.y)+fx::mul(z,a.z); }
-	inline pure fixed len(const vector& v) { return fx::sqr(fx::mul(x,x)+fx::mul(y,y)+fx::mul(z,z)); }
+	pure fixed dot(const vector& a,const vector& b)
+	{
+		return fx::mul(a.x[0],b.x[0])+fx::mul(a.x[1],b.x[1])+fx::mul(a.x[2],a.x[2]);
+	}
+
+	inline pure fixed len(const vector& a)
+	{
+		return fx::sqr(dot(a,a));
+	}
 }
 */
+
 
 struct alignas(16) vector
 {
@@ -64,5 +82,7 @@ struct alignas(16) vector
 	inline fixed   dot(const vector& a) const { return fx::mul(x,a.x)+fx::mul(y,a.y)+fx::mul(z,a.z); }
 	inline fixed   len() const { return fx::sqr(fx::mul(x,x)+fx::mul(y,y)+fx::mul(z,z)); }
 };
+
+
 ///</define>
 

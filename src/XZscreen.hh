@@ -7,7 +7,6 @@
 ///</header>
 
 ///<include>
-#include <time.h>		// clock,CLOCKS_PER_SEC
 #include <SDL/SDL.h>		// SDL_Surface,SDL_SetVideoMode,SDL_Flip,SDL_Quit,SDL_GetKeyState,SDL_PumpEvents,SDL_WM_SetCaption
 
 #include "XZbasic.hh"
@@ -26,17 +25,16 @@
 #define ESCAPE	SDLK_ESCAPE
 #define ENTER	SDLK_RETURN
 #define SPACE	SDLK_SPACE
-#define PGUP	SDLK_PAGEUP
-#define PGDOWN	SDLK_PAGEDOWN
 #define UP	SDLK_UP
 #define DOWN	SDLK_DOWN
 #define LEFT	SDLK_LEFT
 #define RIGHT	SDLK_RIGHT
-#define CTRL    SDLK_LCTRL
 #define KEYW    SDLK_w
 #define KEYA    SDLK_a
 #define KEYS    SDLK_s
 #define KEYD    SDLK_d
+
+#define CTRL    SDLK_LCTRL
 #define KEYX    SDLK_x
 ///</declare>
 
@@ -49,25 +47,24 @@ namespace screen
 
 	namespace
 	{
-		yint  kk = 0;					// keyboard key
-		yint  tk = 0;					// turbo key
+		yint  kk = 0;		// keyboard key
+		yint  tk = 0;		// turbo key
 
 		SDL_Surface* video;
-		Uint8*       keys;
+		Uint8*       keys; 	//tmp
 		SDL_Event    event;
 	}
+
+	inline yint key()         { const yint r = kk; kk = 0; return r; }
+	inline yint turbo()       { return tk; }
+	inline yint time()        { return SDL_GetTicks(); }
+	inline void sleep(xint t) { SDL_Delay(t); }
 
 	void init(const tile& c);
 	bool run();
 	void close();
-
-	inline yint time()	{ return SDL_GetTicks(); }
-	void wait(uint k)	{ while(event.type!=SDL_KEYDOWN) { SDL_PollEvent(&event); } }
-	void sleep(xint t)	{ SDL_Delay(t); }
-	yint fps(bool o=1)	{ static xint l=0; static yint f=0; yint t=SDL_GetTicks(); f+=o; if(t>=l&&o==1) { l=t+FPS; t=f>>2; f=0; return t; } return -1; } 
-
-	inline yint  key()	{ const yint r=kk; kk=0; return r; }
-	inline yint  turbo()    { return tk; }
+	yint fps(bool o=1);
+	void wait(xint k)	{ while(key()!=k) run(); }
 
 	pure inline bool onscreen(xint x,xint y) { return (x>0) && (y>0) && (x<XRES) && (y<YRES); };
 }
@@ -92,27 +89,25 @@ bool screen::run()
 	zs = !zs;
 
 	SDL_PollEvent(&event);
+	const xint ek = event.key.keysym.sym;
 
-	yint tt = 0;
+	switch(event.type)
+	{
+		case SDL_KEYDOWN:
+			kk = math::set(ek,kk,tk!=ek);
+			tk = ek;
+			break;
 
-	tt = math::set(UP,tt,keys[UP]);
-	tt = math::set(DOWN,tt,keys[DOWN]);
-	tt = math::set(LEFT,tt,keys[LEFT]);
-	tt = math::set(RIGHT,tt,keys[RIGHT]);
-	tt = math::set(SPACE,tt,keys[SPACE]);
-	tt = math::set(ENTER,tt,keys[ENTER]);
-	tt = math::set(ESCAPE,tt,keys[ESCAPE]);
-	tt = math::set(KEYW,tt,keys[KEYW]);
-	tt = math::set(KEYA,tt,keys[KEYA]);
-	tt = math::set(KEYS,tt,keys[KEYS]);
-	tt = math::set(KEYD,tt,keys[KEYD]);
-	tt = math::set(PGUP,tt,keys[PGUP]);
-	tt = math::set(PGDOWN,tt,keys[PGDOWN]);
+		case SDL_KEYUP:
+			tk = math::set(tk,tk!=ek);
+			break;
 
-	kk = math::set(tk,tt!=tk);
-	tk = tt;
+		case SDL_QUIT:
+			system::bye();
+	}
 
-	ifu( (keys[CTRL]&&keys[KEYX]) || (event.type==SDL_QUIT) ) { system::bye(); }
+	ifu( (keys[CTRL]&&keys[KEYX]) ) { system::bye(); } //tmp
+
 	return 1;
 }
 
@@ -120,9 +115,26 @@ void screen::close()
 {
 	frame.clear();
 	SDL_Flip(video);
-
 	SDL_Quit();
 	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 }
+
+yint screen::fps(bool o)
+{
+	static xint last = 0;
+	static yint frames = 0;
+
+	yint curr = SDL_GetTicks();
+	++frames;
+	if(curr >= last && o==1)
+	{
+		last = curr + FPS;
+		curr = frames>>2;
+		frames = 0;
+		return curr;
+	}
+
+	return -1;
+} 
 ///</code>
 

@@ -149,17 +149,17 @@ void intro()
 	//*
 
 	//animate in phases
-	const xint last = screen::time();
-	xint diff = last;
+	const xint start = screen::time();
+	xint diff = start;
 
-	while(screen::run() && (diff=screen::time()-last)<3200 && screen::key()==SPACE)
+	while(screen::run() && (diff=screen::time()-start)<3200 && screen::key()!=SPACE)
 	{
 		const fixed prog = fx::div(fx::l2f(diff),FX(200));
 		object::linear.clear();
 
 		if(prog<FX(4) ) { const fixed a=-FXHLF; object::linear.translate(0,a,0); }
-		//if(prog<FX(8) ) { const fixed b=0; object::linear.rotatex(b); }
-		//if(prog<FX(12)) { const fixed c=0; object::linear.translate(0,0,c); }
+		if(prog<FX(8) ) { const fixed b=0; object::linear.rotatex(b); }
+		if(prog<FX(12)) { const fixed c=0; object::linear.translate(0,0,c); }
 
 		   c.update();
 		b[0].update();

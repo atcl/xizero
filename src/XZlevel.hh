@@ -182,6 +182,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	font::draw(XRES-200,YRES-font::height(),"Press SPACE to start",GREEN,BLACK);
 	screen::run();
 	//screen::depth.clear(0); //z
+	screen::key();
 	screen::wait(SPACE);
 }
 
@@ -208,7 +209,7 @@ xint level::update(xint j)
 		ifu(enemies.current()->update()<0) { /*delete*/ enemies.delcurrent(); }
 	}
 
-	return (boss->update()<0)-(player->update(screen::key(),j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);
+	return (boss->update()<0)-(player->update(screen::turbo(),j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);
 }
 
 void level::display()

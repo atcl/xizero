@@ -16,7 +16,7 @@
 #include "src/XZtile.hh"	// v0.2
 //Level 2
 #include "src/XZfixed.hh"	// v0.2
-#include "src/XZscreen.hh"			//!
+#include "src/XZscreen.hh"	// v0.2
 #include "src/XZstring.hh"	// v0.2
 //Level 3
 #include "src/XZformat.hh"	// v0.2
