@@ -38,11 +38,11 @@ class button : public gui
 ///<code>
 button::button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v) :
 	gui(l,t,w,h,c,m,b,f,v),
+	action(a),
 	text(string::copy(x)),
 	textleft( (math::max(w-font::width(x),0))/2 ),
 	texttop( (math::max(h-font::height(x),0))/2 ),
-	depth(d),
-	action(a)
+	depth(d)
 { }
 
 void button::draw(bool h) const

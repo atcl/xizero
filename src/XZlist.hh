@@ -20,7 +20,6 @@ class list
 			T*      data;
 			member* next;
 			member* prev;
-			void*   dummy;
 		};
 		member* cur;
 		member* fir;

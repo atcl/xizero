@@ -55,7 +55,6 @@ typedef int32_t       xint;
 typedef uint32_t      yint;
 
 union  rgba  { yint d; byte b[4]; };
-struct tuple { xint x; xint y; xint z; xint e; };
 ///</define>
 
 ///<code>

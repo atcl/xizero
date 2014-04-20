@@ -41,7 +41,7 @@ inline xint leave();
 void menu();
 void intro();
 void mainmenu();
-void won(const tuple& p);
+void won(const vector& p);
 void lost();
 void over();
 void bench();
@@ -56,6 +56,7 @@ void init()
 
 xint start(xint i)
 {
+system::say("hi");
 	level l(system::ldf("level0.a"));
 
 	while(screen::run())
@@ -86,7 +87,7 @@ xint start()
 	return 0;
 }
 
-xint contr()
+xint control()
 {
 	return dialog::msgbox(keys);
 }
@@ -140,7 +141,7 @@ void intro()
 	object c(a["cross.y3d"]);
 	object b[4] = { q,object(q),object(q),object(q) };
 
-	tuple p{XRES/2,YRES/2,500};
+	vector p{XRES/2,YRES/2,400,0};
 	object::linear.clear(); object::linear.translate(0,fx::l2f(60),0);     c.update();
 	object::linear.clear(); object::linear.translate(0,fx::l2f(30),0);  b[0].update();
 	object::linear.clear(); object::linear.translate(0,0,0);            b[1].update();
@@ -157,9 +158,9 @@ void intro()
 		const fixed prog = fx::div(fx::l2f(diff),FX(200));
 		object::linear.clear();
 
-		if(prog<FX(4) ) { const fixed a=-FXHLF; object::linear.translate(0,a,0); }
-		if(prog<FX(8) ) { const fixed b=0; object::linear.rotatex(b); }
-		if(prog<FX(12)) { const fixed c=0; object::linear.translate(0,0,c); }
+		if(prog<FX(4) ) { const fixed s0=-FXHLF; object::linear.translate(0,s0,0); }
+		if(prog<FX(8) ) { const fixed s1=0; object::linear.rotatex(s1); }
+		if(prog<FX(12)) { const fixed s2=0; object::linear.translate(0,0,s2); }
 
 		   c.update();
 		b[0].update();
@@ -191,7 +192,7 @@ void mainmenu()
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
-	tuple p{XRES/2,YRES/2,450};
+	vector p{XRES/2,YRES/2,450,0};
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();
@@ -207,7 +208,7 @@ void mainmenu()
 	buttons bl;
 	#define VIS BLACK,RED,GREY,DWHITE,1
 	bl.add("Start",&start,0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
-	bl.add("Controls",&contr,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
+	bl.add("Controls",&control,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
 	bl.add("About",&about,0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);
 	bl.add("Exit",&leave,0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);
 	//*
@@ -237,7 +238,7 @@ void mainmenu()
 	delete f;
 }
 
-void won(const tuple& p)
+void won(const vector& p)
 {
 	trans::circleblend(p.x,p.y,60);
 	font::draw(40,40,"You won.",WHITE,TRANS);

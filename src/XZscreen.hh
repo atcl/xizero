@@ -34,6 +34,8 @@
 #define KEYS    SDLK_s
 #define KEYD    SDLK_d
 
+#define PGUP    SDLK_PAGEUP
+#define PGDOWN  SDLK_PAGEDOWN
 #define CTRL    SDLK_LCTRL
 #define KEYX    SDLK_x
 ///</declare>
@@ -64,9 +66,9 @@ namespace screen
 	bool run();
 	void close();
 	yint fps(bool o=1);
-	void wait(xint k)	{ while(key()!=k) run(); }
+	void wait(yint k)	{ while(key()!=k) run(); }
 
-	pure inline bool onscreen(xint x,xint y) { return (x>0) && (y>0) && (x<XRES) && (y<YRES); };
+	pure inline bool onscreen(xint x,xint y) { return (x>0) && (y>0) && (x<XRES) && (y<YRES); }
 }
 ///</define>
 
@@ -89,7 +91,7 @@ bool screen::run()
 	zs = !zs;
 
 	SDL_PollEvent(&event);
-	const xint ek = event.key.keysym.sym;
+	const yint ek = event.key.keysym.sym;
 
 	switch(event.type)
 	{
@@ -121,7 +123,7 @@ void screen::close()
 
 yint screen::fps(bool o)
 {
-	static xint last = 0;
+	static yint last = 0;
 	static yint frames = 0;
 
 	yint curr = SDL_GetTicks();

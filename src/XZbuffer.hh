@@ -19,12 +19,13 @@ class buffer
 {
 	private:
 		      xint* data;			// pointer to data
+		const yint  size;			// size in xints
 		const yint  bytes;			// size in bytes
 		      bool  self;			// allocated memory exists already
 		buffer(const buffer& b);		// copy constructor (not implemented to deny copy)
 		buffer& operator=(const buffer& b);	// assignment (not implemented to deny copy)
 	public:
-		buffer(yint s,bool a=1) : bytes((s<<2)+(s&31)),data(0),self(a) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
+		buffer(yint s,bool a=1) : data(0),size(s),bytes((s<<2)+(s&31)),self(a) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
 		~buffer() { if(self) { free(data); } }
 		inline xint& operator[](uint i) { return data[i]; }
 		inline xint  operator[](uint i) const { return data[i]; }
@@ -39,7 +40,7 @@ class buffer
 ///<code>
 void buffer::clear(xint x)
 {
-#ifdef __SSE__
+/*#ifdef __SSE__
 	const xint val[4] = {x,x,x,x};
 
 	__asm__ __volatile__ (
@@ -59,14 +60,14 @@ void buffer::clear(xint x)
 	"loop 0b;"
 	"sfence;"
 	: :"r"(&val),"r"(data),"c"(bytes):"memory");
-#else
-	for(yint i=1+bytes>>2;i!=0;--i) { data[i]=x; }
-#endif
+#else*/
+	for(yint i=0;i<size;++i) { data[i]=x; }
+//#endif
 }
 
 void buffer::fsaa(const buffer& s)
 {
-#ifdef __SSE__
+/*#ifdef __SSE__
 	__asm__ __volatile__ (
 	"subl $" STR(XRES) ",%2;\n"
 	"shrl $6,%2;\n"
@@ -94,9 +95,9 @@ void buffer::fsaa(const buffer& s)
 	"loop 2b;"
 	"sfence;"
 	: :"r"(s.data),"r"(data),"c"(bytes):"memory");
-#else
+#else*/
 	memcpy(data,s.data,bytes);
-#endif
+//#endif
 }
 ///</code>
 

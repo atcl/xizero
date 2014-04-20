@@ -18,6 +18,9 @@ struct tile
 	const yint  height;
 	tile(yint w,yint h) : data(new xint[w*h]),width(w),height(h) { };
 	~tile() { delete data; }
+
+	tile(const tile& t);
+	tile& operator=(const tile& t);
 };
 ///</define>
 

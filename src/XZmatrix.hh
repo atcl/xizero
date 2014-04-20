@@ -14,9 +14,9 @@
 class matrix
 {
 	private:
-		alignas(16) fixed m[3][4];
+		vector mat[4];
 
-		void multiplicate(const fixed (&n)[3][4]);
+		void multiplicate(const vector (&n)[4]);
 	public:
 		matrix(fixed x=FXONE,fixed y=0);
 		       void clear(fixed x=FXONE,fixed y=0);
@@ -25,34 +25,20 @@ class matrix
 		inline void rotatez(fixed z);
 		inline void translate(fixed x,fixed y,fixed z);
 		inline void scale(fixed x,fixed y,fixed z);
-		       void project(fixed x,fixed y,fixed z,fixed w);
 		       void transpose();
 		       void dyadic(const vector& x,const vector& y);
-		inline void shadow(const vector& x,const vector& y);
-		inline vector operator*(const vector& x) const;
+		       void shadow(const vector& x,const vector& y);
+		     vector operator*(const vector& x) const;
 };
 ///</define>
 
 ///<code>
-void matrix::multiplicate(const fixed (&n)[3][4])
+void matrix::multiplicate(const vector (&n)[4])
 {
-	alignas(16) const fixed a[3][4] = { {	fx::mul(m[0][0],n[0][0])+fx::mul(m[0][1],n[1][0])+fx::mul(m[0][2],n[2][0]),
-					fx::mul(m[0][0],n[0][1])+fx::mul(m[0][1],n[1][1])+fx::mul(m[0][2],n[2][1]),
-					fx::mul(m[0][0],n[0][2])+fx::mul(m[0][1],n[1][2])+fx::mul(m[0][2],n[2][2]),
-					fx::mul(m[0][0],n[0][3])+fx::mul(m[0][1],n[1][3])+fx::mul(m[0][2],n[2][3])+m[0][3] }, 
-				      { fx::mul(m[1][0],n[0][0])+fx::mul(m[1][1],n[1][0])+fx::mul(m[1][2],n[2][0]),
-				        fx::mul(m[1][0],n[0][1])+fx::mul(m[1][1],n[1][1])+fx::mul(m[1][2],n[2][1]),
-				        fx::mul(m[1][0],n[0][2])+fx::mul(m[1][1],n[1][2])+fx::mul(m[1][2],n[2][2]),
-				        fx::mul(m[1][0],n[0][3])+fx::mul(m[1][1],n[1][3])+fx::mul(m[1][2],n[2][3])+m[1][3] },
-				      { fx::mul(m[2][0],n[0][0])+fx::mul(m[2][1],n[1][0])+fx::mul(m[2][2],n[2][0]),
-				        fx::mul(m[2][0],n[0][1])+fx::mul(m[2][1],n[1][1])+fx::mul(m[2][2],n[2][1]),
-				        fx::mul(m[2][0],n[0][2])+fx::mul(m[2][1],n[1][2])+fx::mul(m[2][2],n[2][2]),
-				        fx::mul(m[2][0],n[0][3])+fx::mul(m[2][1],n[1][3])+fx::mul(m[2][2],n[2][3])+m[2][3] } }; 
-	//m = std::move(n); n= {};
-	//memcpy(&n,&m,48);
-	m[0][0]=a[0][0]; m[0][1]=a[0][1]; m[0][2]=a[0][2]; m[0][3]=a[0][3];
-	m[1][0]=a[1][0]; m[1][1]=a[1][1]; m[1][2]=a[1][2]; m[1][3]=a[1][3];
-	m[2][0]=a[2][0]; m[2][1]=a[2][1]; m[2][2]=a[2][2]; m[2][3]=a[2][3];
+	mat[0] = vector{ fx::dot(mat[0],n[0]),fx::dot(mat[0],n[1]),fx::dot(mat[0],n[2]),fx::dot(mat[0],n[3]) };
+	mat[1] = vector{ fx::dot(mat[1],n[0]),fx::dot(mat[1],n[1]),fx::dot(mat[1],n[2]),fx::dot(mat[1],n[3]) };
+	mat[2] = vector{ fx::dot(mat[2],n[0]),fx::dot(mat[2],n[1]),fx::dot(mat[2],n[2]),fx::dot(mat[2],n[3]) };
+	mat[3] = vector{ fx::dot(mat[3],n[0]),fx::dot(mat[3],n[1]),fx::dot(mat[3],n[2]),fx::dot(mat[3],n[3]) };
 }
 
 matrix::matrix(fixed x,fixed y)
@@ -62,8 +48,10 @@ matrix::matrix(fixed x,fixed y)
 
 void matrix::clear(fixed x,fixed y)
 {
-	m[0][0] = m[1][1] = m[2][2] = x; 
-	m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] = m[2][0] = m[2][1] = m[2][3] = y; 
+	mat[0] = vector{x,y,y,y};
+	mat[1] = vector{y,x,y,y};
+	mat[2] = vector{y,y,x,y};
+	mat[3] = vector{y,y,y,x};
 }
 
 void matrix::rotatex(fixed x)
@@ -71,7 +59,8 @@ void matrix::rotatex(fixed x)
 	x = fx::mul(x,FXD2R);
 	const fixed s = fx::sin(x);
 	const fixed c = fx::cos(x);
-	multiplicate({{FXONE,0,0,0},{0,c,-s,0},{0,s,c,0}});
+	//multiplicate({vector{FXONE,0,0,0},vector{0,c,-s,0},vector{0,s,c,0},vector{0,0,0,FXONE}});
+	multiplicate({vector{FXONE,0,0,0},vector{0,c,s,0},vector{0,-s,c,0},vector{0,0,0,FXONE}});
 }
 	
 void matrix::rotatey(fixed y)
@@ -79,7 +68,8 @@ void matrix::rotatey(fixed y)
 	y = fx::mul(y,FXD2R);
 	const fixed s = fx::sin(y);
 	const fixed c = fx::cos(y);
-	multiplicate({{c,0,s,0},{0,FXONE,0,0},{-s,0,c,0}});
+	//multiplicate({vector{c,0,s,0},vector{0,FXONE,0,0},vector{-s,0,c,0},vector{0,0,0,FXONE}});
+	multiplicate({vector{c,0,-s,0},vector{0,FXONE,0,0},vector{s,0,c,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::rotatez(fixed z)
@@ -87,54 +77,53 @@ void matrix::rotatez(fixed z)
 	z = fx::mul(z,FXD2R);
 	const fixed s = fx::sin(z);
 	const fixed c = fx::cos(z);
-	multiplicate({{c,-s,0,0},{s,c,0,0},{0,0,FXONE,0}});
+	//multiplicate({vector{c,-s,0,0},vector{s,c,0,0},vector{0,0,FXONE,0},vector{0,0,0,FXONE}});
+	multiplicate({vector{c,s,0,0},vector{-s,c,0,0},vector{0,0,FXONE,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::translate(fixed x,fixed y,fixed z)
 {
-	multiplicate({{FXONE,0,0,x},{0,FXONE,0,y},{0,0,FXONE,z}});
+	//multiplicate({vector{FXONE,0,0,x},vector{0,FXONE,0,y},vector{0,0,FXONE,z},vector{0,0,0,FXONE}});
+	multiplicate({vector{FXONE,0,0,0},vector{0,FXONE,0,0},vector{0,0,FXONE,0},vector{x,y,z,FXONE}});
 }
 
 void matrix::scale(fixed x,fixed y,fixed z)
 {
-	multiplicate({{x,0,0,0},{0,y,0,0},{0,0,z,0}});
+	multiplicate({vector{x,0,0,0},vector{0,y,0,0},vector{0,0,z,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::transpose()
 {
-	const fixed a = m[0][1]; m[0][1] = m[1][0]; m[1][0] = a;
-	const fixed b = m[0][2]; m[0][2] = m[2][0]; m[2][0] = b;
-	const fixed c = m[1][2]; m[1][2] = m[2][1]; m[2][1] = c;
-}
+	math::swp(mat[0].y,mat[1].x);
+	math::swp(mat[0].z,mat[2].x);
+	math::swp(mat[0].e,mat[3].x);
 
-void matrix::project(fixed x,fixed y,fixed z,fixed w) //check! 
-{
-	m[0][0] = fx::div(z,x)<<1; m[0][1] = 0;               m[0][2] = 0;                m[0][3] = 0; 
-	m[1][0] = 0;               m[1][1] = fx::div(z,y)<<1; m[1][2] = 0;                m[1][3] = 0; 
-	m[2][0] = 0;               m[2][1] = 0;               m[2][2] = fx::div(w,(w-z)); m[2][3] = fx::div(fx::mul(-w,z),(w-z));  
+	math::swp(mat[1].z,mat[2].y);
+	math::swp(mat[1].e,mat[3].y);
+
+	math::swp(mat[2].e,mat[3].z);
 }
 
 void matrix::dyadic(const vector& x,const vector& y)
 {
-	m[0][0] = fx::mul(x.x,y.x); m[0][1] = fx::mul(x.x,y.y); m[0][2] = fx::mul(x.x,y.z); m[0][3] = 0; 
-	m[1][0] = fx::mul(x.y,y.x); m[1][1] = fx::mul(x.y,y.y); m[1][2] = fx::mul(x.y,y.z); m[1][3] = 0; 
-	m[2][0] = fx::mul(x.z,y.x); m[2][1] = fx::mul(x.z,y.y); m[2][2] = fx::mul(x.z,y.z); m[2][3] = 0; 
+	mat[0] = fx::mul(y,x.x);
+	mat[1] = fx::mul(y,x.y);
+	mat[2] = fx::mul(y,x.z);
+	mat[3] = fx::mul(y,x.e);
 }
 
 void matrix::shadow(const vector& x,const vector& y)
 {
 	dyadic(-x,y);
-	const fixed xy = x.dot(y);
-	m[0][0] += xy;
-	m[1][1] += xy;
-	m[2][2] += xy;
+	const fixed xy = fx::dot(x,y);
+	mat[0].x += xy;
+	mat[1].y += xy;
+	mat[2].z += xy;
 }
 
 vector matrix::operator*(const vector& x) const
 {
-	return vector(fx::mul(m[0][0],x.x)+fx::mul(m[0][1],x.y)+fx::mul(m[0][2],x.z)+m[0][3],
-		      fx::mul(m[1][0],x.x)+fx::mul(m[1][1],x.y)+fx::mul(m[1][2],x.z)+m[1][3],
-		      fx::mul(m[2][0],x.x)+fx::mul(m[2][1],x.y)+fx::mul(m[2][2],x.z)+m[2][3],x.e);
+	return vector{fx::dot(mat[0],x),fx::dot(mat[1],x),fx::dot(mat[2],x),FXONE};
 }
 ///</code>
 

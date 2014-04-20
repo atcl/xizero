@@ -54,10 +54,10 @@ xint font::draw(xint x,xint y,char a,yint c,yint b)
 
 	for(xint i=0,o=y*XRES+x,s=f.height*a;i<h;++i)
 	{
-		for(xint j=0;j<w;++j)
+		for(xint j=0;j<w;++j,++o)
 		{
 			const yint e = f.data[s++];
-			screen::frame[++o] = math::set(c,math::set(b,screen::frame[o],bt&&(e==WHITE)),ct&&(e==RED));
+			screen::frame[o] = math::set(c,math::set(b,screen::frame[o],bt&&(e==WHITE)),ct&&(e==RED));
 			r += (i==0)&&(e!=BLACK);
 		}
 

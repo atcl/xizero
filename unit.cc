@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010,2011,2012,2013,2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZunit.cc
-// Experimental Testing Ground
+// Experimental Testing Ground( unit.cc )
 ///</header>
 
 ///<include>
@@ -41,48 +41,48 @@
 	system::say(string::conf(fx::div(FXONE,x)),1);
 }*/
 
-object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
+object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 {
 	const fixed q1 = fx::l2f(r1);
 	const fixed q2 = fx::l2f(r2);
 	const fixed c1 = fx::div(FXTAU,fx::l2f(s1));
 	const fixed c2 = fx::div(FXTAU,fx::l2f(s2));
-	fvector*    t1 = new fvector[s1];
-	fvector*    t2 = new fvector[s2];
+	vector*    t1 = new vector[s1];
+	vector*    t2 = new vector[s2];
 
-	for(sint i=0,j=0;i<s1;++i,j+=c1)
+	for(xint i=0,j=0;i<s1;++i,j+=c1)
 	{
-		t1[i].set(fx::cos(j),fx::sin(j),0);
-		t1[i] *= q1;
+		t1[i] = vector{fx::cos(j),fx::sin(j),0,0};
+		t1[i] = fx::mul(t1[i],q1);
 	}
-	for(sint i=0,j=0;i<s2;++i,j+=c2)
+	for(xint i=0,j=0;i<s2;++i,j+=c2)
 	{
-		t2[i].set(fx::cos(j),0,fx::sin(j));
-		t2[i] *= q2;
+		t2[i] = vector{fx::cos(j),0,-fx::sin(j)};
+		t2[i] = fx::mul(t2[i],q2);
 	}
 
 	const fixed a1 = fx::div(fx::l2f(360),fx::l2f(s1));
 	const fixed a2 = fx::div(fx::l2f(360),fx::l2f(s2));
-	fmatrix m1;
-	fmatrix m2;
+	matrix m1;
+	matrix m2;
 	m2.rotatez(a1);
 
-	const sint n = s1*s2;
-	lvector*   a = new lvector[n];
-	lvector*   b = new lvector[n];
-	lvector*   c = new lvector[n];
-	lvector*   d = new lvector[n];
+	const xint n = s1*s2;
+	vector* a = new vector[n];
+	vector* b = new vector[n];
+	vector* c = new vector[n];
+	vector* d = new vector[n];
 
-	for(sint i=0,h=0;i<s1;++i)
+	for(xint i=0,h=0;i<s1;++i)
 	{
-		const sint k = math::set(0,i+1,i==(s1-1));
-		for(sint j=0;j<s2;++j,++h)
+		const xint k = math::set(0,i+1,i==(s1-1));
+		for(xint j=0;j<s2;++j,++h)
 		{
-			const sint l = math::set(0,j+1,j==(s2-1));
-			a[h] = t1[i]+m1.transform(t2[j]);
-			b[h] = t1[k]+m2.transform(t2[j]);
-			c[h] = t1[k]+m2.transform(t2[l]);
-			d[h] = t1[i]+m1.transform(t2[l]);
+			const xint l = math::set(0,j+1,j==(s2-1));
+			a[h] = t1[i]+m1*t2[j];
+			b[h] = t1[k]+m2*t2[j];
+			c[h] = t1[k]+m2*t2[l];
+			d[h] = t1[i]+m1*t2[l];
 		}
 		m1.rotatez(a1);
 		m2.rotatez(a2);
@@ -98,10 +98,10 @@ object* torus(sint r1,sint r2,sint s1,sint s2,uint e)
 	return r;
 }
 
-void viewer(object* u,long k)
+void viewer(object* u,yint k)
 {
-		const lvector pos(400,300,100);
-		static long rc = R_F;
+		const vector pos{ XRES/2, YRES/2, 100, 0};
+		static xint rc = R_F;
 		object::linear.clear();
 		switch(k)
 		{
@@ -123,8 +123,8 @@ void viewer(object* u,long k)
 			case '2': object::linear.scale(FXONE-FXTNT,FXONE,FXONE); break;
 			case '3': object::linear.scale(FXONE,FXONE+FXTNT,FXONE); break;
 			case '4': object::linear.scale(FXONE,FXONE-FXTNT,FXONE); break;
-			//case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
-			//case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
+			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
+			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
 			case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
 			case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
@@ -135,6 +135,7 @@ void viewer(object* u,long k)
 			case 'l': rc=R_S; break;
 			case 'm': rc=R_F; break;
 		}
+
 		u->update();
 		u->display(pos,rc);
 }
@@ -143,25 +144,25 @@ void viewer(object* u,long k)
 ///<code>
 int main(int argc,char** argv)
 {
+	//generate();
+
 	init();
 
 	object* u = 0;
 
-	if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); }
+	if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(60,30,16,16,ORANGE); }
 
 	while(screen::run())
 	{
 		if(screen::key()==ESCAPE) { menu(); }
 
-		screen::back.clear(SKY);
-		screen::depth.clear(fx::l2f(400));
-		if(screen::turbo()=='R') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(70,30,5,5,ORANGE); } }
+		screen::frame.clear(DWHITE);
+		screen::depth.clear(0);
+		if(screen::turbo()=='r') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(60,30,16,16,ORANGE); } }
 		viewer(u,screen::turbo());
 
 		bench();
 	}
-	
-	//generate();
 
 	screen::close();
 

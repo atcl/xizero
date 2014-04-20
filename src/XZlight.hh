@@ -43,7 +43,7 @@ xint light::lambert(xint x,xint y) const
 	return c.d;
 }
 
-light::light(xint r,yint c) : rad(r), col(c), mask((rad*2)+1,(rad*2)+1)
+light::light(xint r,yint c) : mask((r*2)+1,(r*2)+1), rad(r), col(c)
 {
 	for(yint j=0,t=0;j<mask.width;++j)
 	{
@@ -56,10 +56,10 @@ light::light(xint r,yint c) : rad(r), col(c), mask((rad*2)+1,(rad*2)+1)
 
 vector light::refract(const vector& x,const vector& y,fixed ri)
 {
-	fixed t = x.dot(y);
+	fixed t = fx::dot(x,y);
 	fixed r = FXONE - fx::mul(ri,ri) * (FXONE - fx::mul(t,t));
 
-	vector z(0,0,0,0);
+	vector z{0,0,0,0};
 	if(r>0)
 	{
 		fixed s = ri * t + fx::sqr(r);

@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 ) 
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// XZpolygon.hh
-// Polygon Library
+// Polygon Library ( XZpolygon.hh )
 #pragma once
 ///</header>
 
@@ -24,8 +24,8 @@
 #define ZMIN 1
 #define ZMAX YRES-1
 
-#define PRJX 600
-#define PRJY 480
+#define PRJX 100
+#define PRJY 100
 
 #define AMBIENT 24
 #define ZLIGHT  FXTNT
@@ -42,24 +42,27 @@
 ///</declare>
 
 ///<define>
+
 class polygon
 {
 	private:
-		static tuple point[4];		// discrete vertices
+		static vector point[3];		// discrete vertices
 		vector vertex[3];		// polygon vertices
 		vector normal;			// polygon normal
 		const yint color;		// polygon color
 
-		/*OK*/ inline void shape() const;
-		              yint flat(xint pz,xint f) const;
-		              void raster(uint c) const hot;
-		              void shadow(uint c) const hot;
+		inline void shape(yint c) const;
+
+		yint flat(xint pz,xint f) const;
+		void raster(uint c,bool s=0) const; //hot;
 	public:
-		/*OK*/      polygon(const tuple& x,const tuple& y,const tuple& z,yint c);
-		/*OK*/ void update(const matrix& m,bool i=1);
-		/*OK*/ void display(const tuple& p,xint f,yint c=0);
-		/*OK*/ void pull(fixed a);
-		/*OK*/ static tuple project(const tuple& p,const vector& v);
+		polygon(const vector& x,const vector& y,const vector& z,yint c);
+
+		void update(const matrix& m,bool i=1);
+		void display(const vector& p,xint f,yint c=0);
+		void pull(fixed a);
+
+		static vector project(const vector& p,const vector& v);
 
 		static xint  counter;		// polygon counter
 		static const vector light;	// light vector
@@ -68,21 +71,29 @@ class polygon
 ///</define>
 
 ///<code>
-      tuple  polygon::point[] = { tuple(), tuple(), tuple(), tuple() };
+      vector polygon::point[] = { vector{0,0,0,0},vector{0,0,0,0},vector{0,0,0,0} };
       xint   polygon::counter = 0;
-const vector polygon::light   = vector(FXONE,FXONE,FXONE,FXONE+FXONE+FXONE);
-const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector(0,FXTNT,FXONE),vector(0,4*FXTNT,FXONE+FXTNT)); return m; }(); 
+const vector polygon::light   = vector{ FXONE, FXONE, FXONE, FXONE+FXONE+FXONE };
+const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector{0,FXTNT,FXONE,FXONE},vector{0,4*FXTNT,FXONE+FXTNT,FXONE}); return m; }(); 
 
-tuple polygon::project(const tuple& p,const vector& v)
+void polygon::shape(yint c) const 
+{
+	gfx::line(point[0].x,point[0].y,point[1].x,point[1].y,c);
+	gfx::line(point[1].x,point[1].y,point[2].x,point[2].y,c);
+	gfx::line(point[2].x,point[2].y,point[0].x,point[0].y,c);
+}
+
+vector polygon::project(const vector& p,const vector& v)
 {
 	const fixed z = v.z + fx::l2f(p.z);
-	return tuple{p.x + fx::f2l(fx::mul(FX(PRJX),fx::div(v.x,z))),
-                     p.y - fx::f2l(fx::mul(FX(PRJY),fx::div(v.y,z))),z};
+
+	return vector{p.x + fx::f2l(fx::div(fx::mul(v.x,FX(PRJX)),z)),
+                      p.y - fx::f2l(fx::div(fx::mul(v.y,FX(PRJY)),z)), z, 0};
 }
 
 yint polygon::flat(xint pz,xint f) const
 {
-	const fixed t = math::lim(FXTNT,math::abs(fx::div(normal.dot(light),fx::mul(normal.e,light.e))),FXONE);
+	const fixed t = math::lim(FXTNT,math::abs(fx::div(fx::dot(normal,light),fx::mul(normal.e,light.e))),FXONE);
 	const byte anz = math::set(AMBIENT,f&R_A) + math::set(NOLIGHT,f&R_N) + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
 
 	rgba argb{ (uint)math::set(ORANGE,color,f&R_C) };
@@ -93,14 +104,7 @@ yint polygon::flat(xint pz,xint f) const
 	return argb.d;
 }
 
-void polygon::shape() const 
-{
-	gfx::line(point[0].x,point[0].y,point[1].x,point[1].y,color);
-	gfx::line(point[1].x,point[1].y,point[2].x,point[2].y,color);
-	gfx::line(point[2].x,point[2].y,point[0].x,point[0].y,color);
-}
-
-void polygon::raster(yint c) const
+void polygon::raster(yint c,bool s) const
 {
 	// determine projected minima and maxima
 	const xint mix01 = point[1].x<point[0].x;
@@ -114,121 +118,87 @@ void polygon::raster(yint c) const
 	const xint mayi = math::set(2,may01,point[2].y>point[may01].y);
 
 	const xint minx = math::max(XMIN,point[mixi].x);
-	const xint maxx = math::min(XMAX,point[maxi].x+1); //prevent gap
+	const xint maxx = math::min(XMAX,point[maxi].x); //+1 prevent gap
 	const xint miny = math::max(YMIN,point[miyi].y);
-	const xint maxy = math::min(YMAX,point[mayi].y+1); //prevent gap
-
+	const xint maxy = math::min(YMAX,point[mayi].y); //+1 prevent gap
 
 	guard( (maxx==minx) || (maxy==miny) );
 
-	const fixed zx = math::abs(fx::div(point[maxi].z-point[mixi].z,fx::l2f(maxx-minx)));
-	const fixed zy = math::abs(fx::div(point[mayi].z-point[miyi].z,fx::l2f(maxy-miny)));
+	const fixed zx = fx::div(point[maxi].z-point[mixi].z,fx::l2f(point[maxi].x-point[mixi].x));
+	const fixed zy = fx::div(point[mayi].z-point[miyi].z,fx::l2f(point[mayi].y-point[miyi].y));
 
-	const xint dx[4]{point[0].x-point[1].x,point[1].x-point[2].x,point[2].x-point[0].x,-zx};
-	const xint dy[4]{point[0].y-point[1].y,point[1].y-point[2].y,point[2].y-point[0].y,zy};
+	const vector dx{ point[0].x-point[1].x, point[1].x-point[2].x, point[2].x-point[0].x,  zy };
+	const vector dy{ point[0].y-point[1].y, point[1].y-point[2].y, point[2].y-point[0].y, -zx };
 
-	xint cy[4]{dy[0]*(point[0].x - minx) + dx[0]*(miny - point[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
-	           dy[1]*(point[1].x - minx) + dx[1]*(miny - point[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
-	           dy[2]*(point[2].x - minx) + dx[2]*(miny - point[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
-	           point[miyi].z-fx::mul(fx::l2f(point[miyi].x-point[mixi].x),zx)}; 
-
-	const xint str = XRES - (maxx-minx);
-
-	for(xint y=miny,off=miny*XRES+minx;y<maxy;++y)
-	{
-		xint cx[4]{cy[0],cy[1],cy[2],cy[3]};
-
-		#pragma prefetch back
-		for(xint x=minx;x<maxx;++x) 
-		{
-			// prefetch(&back[off]);
-			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
-			const bool above  = cx[3]>=math::abs(screen::depth[off]);
-			if(inside && above)
-			{
-				screen::depth[off] = cx[3]; //math::neg(cx[3],!screen::zs);
-				screen::frame[off] = c;
-			}
-
-			cx[0] -= dy[0];
-			cx[1] -= dy[1];
-			cx[2] -= dy[2];
-			cx[3] -= dy[3];
-			++off;
-		}
-
-		cy[0] += dx[0];
-		cy[1] += dx[1];
-		cy[2] += dx[2];
-		cy[3] += dx[3];
-		off   += str;
-	}
-}
-
-void polygon::shadow(yint c) const
-{
-	// determine projected minima and maxima
-	const xint mix01 = point[1].x<point[0].x;
-	const xint max01 = !mix01;
-	const xint miy01 = point[1].y<point[0].y;
-	const xint may01 = !miy01;
-
-	const xint mixi = math::set(2,mix01,point[2].x<point[mix01].x);
-	const xint maxi = math::set(2,max01,point[2].x>point[max01].x);
-	const xint miyi = math::set(2,miy01,point[2].y<point[miy01].y);
-	const xint mayi = math::set(2,may01,point[2].y>point[may01].y);
-
-	const xint minx = math::max(XMIN,point[mixi].x);
-	const xint maxx = math::min(XMAX,point[maxi].x+1); // prevent gap
-	const xint miny = math::max(YMIN,point[miyi].y);
-	const xint maxy = math::min(YMAX,point[mayi].y+1); // prevent gap
-
-
-	guard( (maxx==minx) || (maxy==miny) );
-
-	const xint dx[4]{point[0].x-point[1].x,point[1].x-point[2].x,point[2].x-point[0].x,0};
-	const xint dy[4]{point[0].y-point[1].y,point[1].y-point[2].y,point[2].y-point[0].y,0};
-
-	xint cy[4]{dy[0]*(point[0].x - minx) + dx[0]*(miny - point[0].y) - ((dy[0]<0) || (dy[0]==0 && dx[0]>0)),
-	           dy[1]*(point[1].x - minx) + dx[1]*(miny - point[1].y) - ((dy[1]<0) || (dy[1]==0 && dx[1]>0)),
-	           dy[2]*(point[2].x - minx) + dx[2]*(miny - point[2].y) - ((dy[2]<0) || (dy[2]==0 && dx[2]>0)),
-	           0}; 
+	vector cy{ dy.x*(point[0].x - minx) + dx.x*(miny - point[0].y) + ((dy.x<0) || (dy.x==0 && dx.x>0)),
+	           dy.y*(point[1].x - minx) + dx.y*(miny - point[1].y) + ((dy.y<0) || (dy.y==0 && dx.y>0)),
+	           dy.z*(point[2].x - minx) + dx.z*(miny - point[2].y) + ((dy.z<0) || (dy.z==0 && dx.z>0)),
+	           point[miyi].z - fx::mul(fx::l2f(point[miyi].x-point[mixi].x),zx) }; 
 
 	const xint str = XRES - (maxx-minx);
 
-	for(xint y=miny,off=miny*XRES+minx;y<maxy;++y)
+	switch(s)
 	{
-		xint cx[4]{cy[0],cy[1],cy[2],cy[3]};
-
-		#pragma prefetch back
-		for(xint x=minx;x<maxx;++x) 
-		{
-			//prefetch(&back[off]);
-			const bool inside = (cx[0]<0) && (cx[1]<0) && (cx[2]<0);
-			if(inside)
+		case false: // default
+			for(xint y=miny,off=miny*XRES+minx;y<maxy;++y)
 			{
-				screen::frame[off] = screen::frame[off]&c;
+				vector cx(cy);
+
+				//#pragma prefetch frame
+				for(xint x=minx;x<maxx;++x) 
+				{
+					const bool inside = (cx.x>0) && (cx.y>0) && (cx.z>0);
+					const bool above  = cx.e >= (screen::depth[off]); //math::abs
+					if(inside && above)
+					{
+						screen::depth[off] = cx.e; //math::neg(cx.e,!screen::zs);
+						screen::frame[off] = c;
+					}
+
+					cx -= dy;
+					++off;
+				}
+
+				cy += dx;
+				off += str;
 			}
+			break;
 
-			cx[0] -= dy[0];
-			cx[1] -= dy[1];
-			cx[2] -= dy[2];
-			cx[3] -= dy[3];
-			++off;
-		}
+		case true: //shadow
+			for(xint y=miny,off=miny*XRES+minx;y<maxy;++y)
+			{
+				vector cx(cy);
 
-		cy[0] += dx[0];
-		cy[1] += dx[1];
-		cy[2] += dx[2];
-		cy[3] += dx[3];
-		off   += str;
+				//#pragma prefetch frame[off]
+				for(xint x=minx;x<maxx;++x) 
+				{
+					const bool inside = (cx.x>0) && (cx.y>0) && (cx.z>0);
+					if(inside)
+					{
+						screen::frame[off] = screen::frame[off]&c; // &=
+					}
+
+					cx -= dy;
+					++off;
+				}
+
+				cy += dx;
+				off += str;
+			}
+			break;
 	}
+
 }
 
-polygon::polygon(const tuple& x,const tuple& y,const tuple& z,yint c) : vertex{x,y,z},color(c) 
+polygon::polygon(const vector& x,const vector& y,const vector& z,yint c) : vertex{x,y,z},normal{0,0,0,0},color(c) 
 {
-	normal   = (vertex[2]-vertex[0]).cross(vertex[1]-vertex[0]) *= FXCEN;
-	normal.e = normal.len();
+	vertex[0].e = FXONE;
+	vertex[1].e = FXONE;
+	vertex[2].e = FXONE;
+
+	normal   = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
+	normal   = fx::mul(normal,FXCEN);
+	normal.e = fx::len(normal);
 }
 
 void polygon::update(const matrix& m,bool i)
@@ -236,13 +206,15 @@ void polygon::update(const matrix& m,bool i)
 	vertex[i] = m*vertex[i];
 	vertex[0] = m*vertex[0];
 	vertex[2] = m*vertex[2];
-	normal   = (vertex[2]-vertex[0]).cross(vertex[1]-vertex[0]) *= FXCEN;
-	normal.e = normal.len();
+
+	normal    = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
+	normal    = fx::mul(normal,FXCEN);
+	normal.e  = fx::len(normal);
 }
 
-void polygon::display(const tuple& p,xint f,yint c)
+void polygon::display(const vector& p,xint f,yint c)
 {
-	guard(normal.z>FXMON); //z
+	guard(normal.z>0);
 	++counter;	
 
 	if(f&R_B) 
@@ -250,7 +222,7 @@ void polygon::display(const tuple& p,xint f,yint c)
 		point[0] = project(p,blinn*vertex[0]);
 		point[1] = project(p,blinn*vertex[1]);
 		point[2] = project(p,blinn*vertex[2]);
-		shadow(c);
+		raster(c,1);
 	}
 	else
 	{
@@ -258,14 +230,14 @@ void polygon::display(const tuple& p,xint f,yint c)
 		point[1] = project(p,vertex[1]);
 		point[2] = project(p,vertex[2]);
 		ifl(f&R_F) { c = flat(p.z,f); }
-		ifu(f&R_S) { shape(); } else { raster(c); }
+		ifu(f&R_S) { shape(c); } else { raster(c); }
 	}
 }
 
 void polygon::pull(fixed a)
 {
-	const fixed  l = fx::mul(fx::div(FXONE,normal.len()),a);
-	const vector m = normal*l;
+	const fixed  l = fx::div(a,normal.e);
+	const vector m = fx::mul(normal,l);
 	vertex[0] += m;
 	vertex[1] += m;
 	vertex[2] += m;

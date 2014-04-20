@@ -21,18 +21,18 @@
 //Level 3
 #include "src/XZformat.hh"	// v0.2
 #include "src/XZgfx.hh"		// v0.2
-#include "src/XZvector.hh"			//!
+#include "src/XZvector.hh"	// v0.2
 //Level 4
 #include "src/XZfont.hh"	// v0.2
 #include "src/XZlight.hh"	// v0.2
-#include "src/XZmatrix.hh"			//!
+#include "src/XZmatrix.hh"	// v0.2
 #include "src/XZprogress.hh"	// v0.2
 #include "src/XZtrans.hh"	// v0.2
 //Level 5
 #include "src/XZbutton.hh"	// v0.2
 #include "src/XZpolygon.hh"			//!
 //Level 6
-#include "src/XZbuttons.hh"			//!
+#include "src/XZbuttons.hh"	// v0.2
 #include "src/XZobject.hh"			//!
 //Level 7
 #include "src/XZdialog.hh"	// v0.2

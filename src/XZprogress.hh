@@ -40,11 +40,11 @@ class progress : public gui
 ///<code>
 progress::progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v) :
 	gui(l,t,w,h,c,m,b,f,v),
-	coeff(math::set(math::set(((w-4)<<16)/(e-s+(e==s)),((h-4)<<16)/(e-s+(e==s)),d==0),e!=s)),
-	start(s),
-	end(e),
 	prog(0),
 	area(0),
+	start(s),
+	end(e),
+	coeff(math::set(math::set(((w-4)<<16)/(e-s+(e==s)),((h-4)<<16)/(e-s+(e==s)),d==0),e!=s)),
 	horver(d)	
 { ; }
 

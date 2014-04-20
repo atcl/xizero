@@ -27,6 +27,7 @@ namespace math
 	pure inline xint lim(xint x,xint a,xint y) { return max(x,min(a,y)); }
 	pure        yint sqr(yint x) { register yint r=0; for(yint i=15,t=0;i!=0;--i) { t=(r+(1<<i))<<i; r=set(r|(2<<i),r,x>=t); x=set(x-t,x,x>=t); } return r>>1; }  
 	            yint rnd(yint x) { static yint seed=SEED; ++seed; seed^=(seed<<15); seed^=(seed>>21); seed^=(seed<<4); return seed%x; } 
+	            void swp(xint& x,xint& y) { register const xint t = x; x = y; y = t; }
 }
 ///</code>
 

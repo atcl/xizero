@@ -163,10 +163,10 @@ void gfx::draw(const tile& t,xint x,xint y,bool a)
 	{
 		#pragma prefetch t.data
 		#pragma prefetch frame 
-		for(xint j=0;j<xm;++j)
+		for(xint j=0;j<xm;++j,++o)
 		{
 			const uint c = t.data[s++];
-			screen::frame[o++] = math::set(c,screen::frame[o],(c!=TRANS)||a);
+			screen::frame[o] = math::set(c,screen::frame[o],(c!=TRANS)||a);
 		}
 	}
 }

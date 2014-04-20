@@ -96,7 +96,7 @@ fi
 
 #generate and execute commands from build.xml
 SMMN=`echo $XSL | xsltproc - build.xml`
-#echo $SMMN
+echo $SMMN
 eval $SMMN
 
 #clean up
