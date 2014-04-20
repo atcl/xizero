@@ -51,24 +51,21 @@ namespace screen
 	{
 		yint  kk = 0;					// keyboard key
 		yint  tk = 0;					// turbo key
-		yint  ls = 0;					// last fps update
 
 		SDL_Surface* video;
-		Uint8* keys;
+		Uint8*       keys;
+		SDL_Event    event;
 	}
 
 	void init(const tile& c);
-	void event();
+	bool run();
 	void close();
 
-	inline yint time()	{ return (1000*clock())/CLOCKS_PER_SEC; }
-	void wait(uint k)	{ kk=0; while(k!=kk) { event(); } kk=0; }
-	void sleep(xint t)	{ const xint e = clock() + (t * CLOCKS_PER_SEC)/1000; while(clock()< e) { ; } }
-	yint fps(bool o=1)	{ static yint f=0; yint t=time(); f+=o; if(t>=ls&&o==1) { ls=t+FPS; t=f>>2; f=0; return t; } return -1; } 
+	inline yint time()	{ return SDL_GetTicks(); }
+	void wait(uint k)	{ while(event.type!=SDL_KEYDOWN) { SDL_PollEvent(&event); } }
+	void sleep(xint t)	{ SDL_Delay(t); }
+	yint fps(bool o=1)	{ static xint l=0; static yint f=0; yint t=SDL_GetTicks(); f+=o; if(t>=l&&o==1) { l=t+FPS; t=f>>2; f=0; return t; } return -1; } 
 
-	inline void  flush()	{ SDL_Flip(video); zs = !zs; }
-	inline void  aaflush()	{ frame.fsaa(frame); SDL_Flip(video); zs = !zs; }
-	inline bool  run()	{ flush(); event(); return 1; }
 	inline yint  key()	{ const yint r=kk; kk=0; return r; }
 	inline yint  turbo()    { return tk; }
 
@@ -88,12 +85,13 @@ void screen::init(const tile& c)
 	system::onx(close);
 }
 
-void screen::event()
+bool screen::run()
 {
-	SDL_PumpEvents();
-	ifu(keys[CTRL]&&keys[KEYX]) { system::bye(); }
+	//if(aa) frame.fsaa(frame);
+	SDL_Flip(video);
+	zs = !zs;
 
-	
+	SDL_PollEvent(&event);
 
 	yint tt = 0;
 
@@ -113,12 +111,15 @@ void screen::event()
 
 	kk = math::set(tk,tt!=tk);
 	tk = tt;
+
+	ifu( (keys[CTRL]&&keys[KEYX]) || (event.type==SDL_QUIT) ) { system::bye(); }
+	return 1;
 }
 
 void screen::close()
 {
 	frame.clear();
-	flush();
+	SDL_Flip(video);
 
 	SDL_Quit();
 	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);

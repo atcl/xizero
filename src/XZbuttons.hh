@@ -37,9 +37,9 @@ xint buttons::check(xint k)
 {
 	switch(k)
 	{
-		case SPACE: return bl.current()->click(); break;
-		case LEFT:  case UP:   if(!bl.isfirst()) { bl.prev(); } break;
-		case RIGHT: case DOWN: if(!bl.islast())  { bl.next(); } break;
+		case LEFT: case UP: if(!bl.isfirst()) bl.prev(); break;
+		case RIGHT: case DOWN: if(!bl.islast()) bl.next(); break;
+		case SPACE: return bl.current()->click();
 	}
 	return 0;
 }

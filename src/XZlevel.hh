@@ -58,7 +58,7 @@ class level
 	public:
 		level(char* o);			//Constructor
 		~level();			//Destructor
-		xint update(xint k,xint j);	//Update All Entities
+		xint update(xint j);		//Update All Entities
 		void display();			//Display Terrain, Shadows, Entities
 		//void gauges();			//Display Gauges
 		void resume();			//Resume After Pausing
@@ -77,7 +77,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	const char* tx = arc[lvl["intro"]];
 	screen::frame.clear(BLACK);
 	font::draw(XRES>>3,100,tx,ORANGE,BLACK);
-	screen::flush();
+	screen::run();
 
 	//load player
 	object* pm = new object(arc[lvl["player_0"]]);
@@ -86,28 +86,28 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
  	        pp = new progress(0,string::str2int(pi["health"]),VER,16,16,16,YRES-32,GREEN,RED,GREY,WHITE,1);
  	        sp = new progress(0,string::str2int(pi["shield"]),VER,XRES-32,16,16,YRES-32,BLUE,RED,GREY,WHITE,1);
 	gfx::fsprog(10);
-	screen::flush();
+	screen::run();
 
 	//load boss
 	object* bm = new object(arc[lvl["boss_0"]]);
 	info    bi = format::ini(arc[lvl["boss_i"]]); 
 	        bp = new progress(0,string::str2int(bi["health"]),HOR,0,0,96,16,RED,ORANGE,GREY,WHITE,0);
 	gfx::fsprog(20);
-	screen::flush();
+	screen::run();
 
 	//load enemy
 	object* em = new object(arc[lvl["enemy_0"]]);
 	info    ei = format::ini(arc[lvl["enemy_i"]]);
 	        ep = new progress(0,string::str2int(ei["health"]),HOR,0,0,48,8,GREEN,ORANGE,GREY,WHITE,0);
 	gfx::fsprog(30);
-	screen::flush();
+	screen::run();
 
 	//load map
 	const char* m = arc[lvl["map"]];
 	const xint l  = string::count(m,'\n');
 	map           = string::split(m,'\n');
 	gfx::fsprog(40);
-	screen::flush();
+	screen::run();
 
 	markmin = (l*BWIDTH)-YMAX; //Level Start
 
@@ -180,7 +180,7 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 
 	gfx::fsprog(95);
 	font::draw(XRES-200,YRES-font::height(),"Press SPACE to start",GREEN,BLACK);
-	screen::flush();
+	screen::run();
 	//screen::depth.clear(0); //z
 	screen::wait(SPACE);
 }
@@ -201,14 +201,14 @@ level::~level()
 	delete ep;
 }
 
-xint level::update(xint k,xint j)
+xint level::update(xint j)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
 		ifu(enemies.current()->update()<0) { /*delete*/ enemies.delcurrent(); }
 	}
 
-	return (boss->update()<0)-(player->update(k,j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);
+	return (boss->update()<0)-(player->update(screen::key(),j,fx::l2f(markmax),fx::l2f(markmin+YMAX))<0);
 }
 
 void level::display()

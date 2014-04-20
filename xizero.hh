@@ -61,9 +61,9 @@ xint start(xint i)
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		ifu(screen::turbo()==ESCAPE) { menu(); l.resume(); }
+		ifu(screen::key()==ESCAPE) { menu(); l.resume(); }
 
-		switch(l.update(screen::turbo(),0))
+		switch(l.update(0))
 		{
 			case -1: lost(); return 0;
 			case  1: won(l.ppos()); return 0;
@@ -152,7 +152,7 @@ void intro()
 	const xint last = screen::time();
 	xint diff = last;
 
-	while(screen::run() && (diff=screen::time()-last)<3200 && screen::key()!=SPACE)
+	while(screen::run() && (diff=screen::time()-last)<3200 && screen::key()==SPACE)
 	{
 		const fixed prog = fx::div(fx::l2f(diff),FX(200));
 		object::linear.clear();
@@ -241,7 +241,7 @@ void won(const tuple& p)
 {
 	trans::circleblend(p.x,p.y,60);
 	font::draw(40,40,"You won.",WHITE,TRANS);
-	screen::flush();
+	screen::run();
 	screen::sleep(3000);
 	trans::dissolve();
 }
@@ -250,7 +250,7 @@ void lost()
 {
 	trans::fadeout();
 	font::draw(40,40,"You lost.",WHITE,TRANS);
-	screen::flush();
+	screen::run();
 	screen::sleep(3000);
 	trans::dissolve();
 }
@@ -260,7 +260,7 @@ void over()
 	screen::frame.clear(0);
 	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
 	font::draw((XRES>>1)-60,(YRES>>1),"atcrosslevel.de",RED,BLACK);
-	screen::flush();
+	screen::run();
 	screen::sleep(3000);
 }
 
