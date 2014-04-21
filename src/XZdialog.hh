@@ -35,7 +35,7 @@ xint dialog::msgbox(const char* m,bool q)
 	while(xit==0 && screen::run())
 	{
 		gfx::rect(x,y,x+w,y+h,WHITE,WHITE,1,0);
-		font::draw(x+20,y+20,m,BLACK,WHITE);
+		font::draw(x+20,y+20,m,BLACK);
 
 		bl.draw();
 		xit = bl.check(screen::key());

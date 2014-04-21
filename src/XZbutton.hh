@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 ) 
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// GUI Button Library ( XZbutton.hh )
+// Button List ( XZbutton.hh )
 #pragma once
 ///</header>
 
@@ -49,7 +49,7 @@ void button::draw(bool h) const
 {
 	guard(visible==0);
 	gfx::rect(left,top,left+width,top+height,framecolor,backcolor,1,depth);
-	font::draw(left+textleft,top+texttop,text,math::set(alertcolor,color,h),backcolor);
+	font::draw(left+textleft,top+texttop,text,math::set(alertcolor,color,h));
 }
 ///</code>
 

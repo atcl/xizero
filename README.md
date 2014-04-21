@@ -1,4 +1,5 @@
-# XiZero #
+XiZero
+======
 
 ## Version: ##
 
@@ -12,6 +13,7 @@
 
 ## Dependencies: ##
 
++ gcc
 + libsdl
 + xsltproc
 
@@ -19,9 +21,6 @@
 
 ``xizero``	#start game
 ``unit``	#model viewer and benchmark
-
-## Changelog: ##
-
 
 ## Features: ##
 
@@ -48,7 +47,7 @@ XiZero is still in ALPHA stage, so do not expect it to work error- and bug-free.
 
 ## License: ##
 
-Copyright (c) 2010,2011,2012,2013 Christian Himpe,
+Copyright (c) 2010-2014 Christian Himpe,
 
 All rights reserved.
 

@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 ) 
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// Polygon Library ( XZpolygon.hh )
+// Polygon Class ( XZpolygon.hh )
 #pragma once
 ///</header>
 
@@ -17,13 +17,6 @@
 ///</include>
 
 ///<declare>
-#define XMIN 1
-#define XMAX XRES-1
-#define YMIN 1
-#define YMAX YRES-1
-#define ZMIN 1
-#define ZMAX YRES-1
-
 #define PRJX 100
 #define PRJY 100
 
@@ -31,14 +24,14 @@
 #define ZLIGHT  FXTNT
 #define NOLIGHT 10
 
-#define R_A 0x00000001 //ambient
-#define R_Z 0x00000010 //zlight
-#define R_N 0x00000100 //nolight
-#define R_S 0x00001000 //shape
-#define R_B 0x00010000 //blinn shadows
-#define R_F 0x00100000 //flat
-#define R_C 0x01000000 //unused
-#define R_D 0x10000000 //depth test
+#define R_A 0x00000001 // ambient
+#define R_Z 0x00000010 // z light
+#define R_N 0x00000100 // no light
+#define R_S 0x00001000 // shape
+#define R_B 0x00010000 // blinn shadows
+#define R_F 0x00100000 // flat
+#define R_C 0x01000000 // unused
+#define R_D 0x10000000 // depth test
 ///</declare>
 
 ///<define>
@@ -148,7 +141,7 @@ void polygon::raster(yint c,bool s) const
 				for(xint x=minx;x<maxx;++x) 
 				{
 					const bool inside = (cx.x>0) && (cx.y>0) && (cx.z>0);
-					const bool above  = cx.e >= (screen::depth[off]); //math::abs
+					const bool above  = cx.e > (screen::depth[off]); //math::abs
 					if(inside && above)
 					{
 						screen::depth[off] = cx.e; //math::neg(cx.e,!screen::zs);
@@ -164,7 +157,7 @@ void polygon::raster(yint c,bool s) const
 			}
 			break;
 
-		case true: //shadow
+		case true: // shadow
 			for(xint y=miny,off=miny*XRES+minx;y<maxy;++y)
 			{
 				vector cx(cy);
@@ -214,7 +207,7 @@ void polygon::update(const matrix& m,bool i)
 
 void polygon::display(const vector& p,xint f,yint c)
 {
-	guard(normal.z>0);
+	guard(normal.z>FXHLF);
 	++counter;	
 
 	if(f&R_B) 

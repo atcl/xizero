@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 ) 
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// Matrix Class Library ( XZmatrix.hh )
+// Matrix Class ( XZmatrix.hh )
 #pragma once
 ///</header>
 
@@ -59,7 +59,6 @@ void matrix::rotatex(fixed x)
 	x = fx::mul(x,FXD2R);
 	const fixed s = fx::sin(x);
 	const fixed c = fx::cos(x);
-	//multiplicate({vector{FXONE,0,0,0},vector{0,c,-s,0},vector{0,s,c,0},vector{0,0,0,FXONE}});
 	multiplicate({vector{FXONE,0,0,0},vector{0,c,s,0},vector{0,-s,c,0},vector{0,0,0,FXONE}});
 }
 	
@@ -68,7 +67,6 @@ void matrix::rotatey(fixed y)
 	y = fx::mul(y,FXD2R);
 	const fixed s = fx::sin(y);
 	const fixed c = fx::cos(y);
-	//multiplicate({vector{c,0,s,0},vector{0,FXONE,0,0},vector{-s,0,c,0},vector{0,0,0,FXONE}});
 	multiplicate({vector{c,0,-s,0},vector{0,FXONE,0,0},vector{s,0,c,0},vector{0,0,0,FXONE}});
 }
 
@@ -77,13 +75,11 @@ void matrix::rotatez(fixed z)
 	z = fx::mul(z,FXD2R);
 	const fixed s = fx::sin(z);
 	const fixed c = fx::cos(z);
-	//multiplicate({vector{c,-s,0,0},vector{s,c,0,0},vector{0,0,FXONE,0},vector{0,0,0,FXONE}});
 	multiplicate({vector{c,s,0,0},vector{-s,c,0,0},vector{0,0,FXONE,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::translate(fixed x,fixed y,fixed z)
 {
-	//multiplicate({vector{FXONE,0,0,x},vector{0,FXONE,0,y},vector{0,0,FXONE,z},vector{0,0,0,FXONE}});
 	multiplicate({vector{FXONE,0,0,0},vector{0,FXONE,0,0},vector{0,0,FXONE,0},vector{x,y,z,FXONE}});
 }
 

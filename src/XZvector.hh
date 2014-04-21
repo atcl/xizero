@@ -2,14 +2,13 @@
 // Ξ0 - xizero ( Version 0.2 )
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// integer and fixed point vector classes ( XZvector.hh )
+// Vector Class + Library ( XZvector.hh )
 #pragma once
 ///</header>
 
 ///<include>
 #include "XZbasic.hh"
 #include "XZfixed.hh"
-#include "XZmath.hh"
 ///</include>
 
 ///<define>

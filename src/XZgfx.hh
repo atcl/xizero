@@ -16,11 +16,11 @@
 ///<define>
 namespace gfx
 {
-	/*OK*/ void line(xint x,xint y,xint a,xint b,yint c,bool k=0); 			// draw line
-	/*OK*/ void rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f=0,bool g=0); 	// draw rectangle
-	/*OK*/ void draw(const tile& t,xint x=0,xint y=0,bool a=0);			// draw sprite
-	/*OK*/ void fsprog(xint p,yint c=RED);						// draw full screen progress bar
-	/*OK*/ tile save();								// save current screen
+	void line(xint x,xint y,xint a,xint b,yint c,bool k=0); 		// draw line
+	void rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f=0,bool g=0); // draw rectangle
+	void draw(const tile& t,xint x=0,xint y=0,bool a=0);			// draw sprite
+	void fsprog(xint p,yint c=RED);						// draw full screen progress bar
+	tile save();								// save current screen
 }
 ///</define>
 
@@ -152,21 +152,24 @@ void gfx::rect(xint x,xint y,xint a,xint b,yint c,yint d,bool f,bool g)
 
 void gfx::draw(const tile& t,xint x,xint y,bool a)
 {
-	const xint xd = -XRES+x+t.width;
-	const xint yd = -YRES+y+t.height;
-	const xint xm = t.width-math::set(xd,xd>0);
-	const xint ym = t.height-math::set(yd,yd>0);
-	const xint sx = t.width - xm;
-	const xint d  = XRES - xm;
+	const xint xd = -XRES + x + t.width;
+	const xint yd = -YRES + y + t.height;
 
-	for(xint i=0,o=y*XRES+x,s=0;i<ym;++i,o+=d,s+=sx)
+	const xint w = t.width  - math::set(xd,xd>0);
+	const xint h = t.height - math::set(yd,yd>0);
+
+	const xint sx = t.width - w;
+	const xint dx = XRES - w;
+
+	for(xint i=0,o=y*XRES+x,s=0;i<h;++i,o+=dx,s+=sx)
 	{
 		#pragma prefetch t.data
 		#pragma prefetch frame 
-		for(xint j=0;j<xm;++j,++o)
+		for(xint j=0;j<w;++j,++o)
 		{
 			const uint c = t.data[s++];
-			screen::frame[o] = math::set(c,screen::frame[o],(c!=TRANS)||a);
+			const yint d = screen::frame[o];
+			screen::frame[o] = math::set(c,d,(c!=TRANS)||a);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// xizero.hh
-// XiZero main header
+// XiZero header ( xizero.hh )
 ///</header>
 
 ///<include>
@@ -34,21 +34,15 @@ ENTER     Menu\n";
 
 inline void init();
 xint start(xint i);
-xint start();
-inline xint control();
-inline xint about();
-inline xint leave();
-void menu();
 void intro();
 void mainmenu();
 void won(const vector& p);
 void lost();
 void over();
-void bench();
 ///</define>
 
 ///<code>
-void init()
+void init() //constructor
 {
 	screen::init(format::xpm(resource::cursor));
 	system::say(ascii,1);
@@ -62,7 +56,7 @@ system::say("hi");
 	while(screen::run())
 	{
 		polygon::counter = 0;
-		ifu(screen::key()==ESCAPE) { menu(); l.resume(); }
+		ifu(screen::key()==ESCAPE) { menu::show(); l.resume(); }
 
 		switch(l.update(0))
 		{
@@ -71,65 +65,10 @@ system::say("hi");
 		}
 				
 		l.display();
-		bench();
+		game::benchmark();
 	}
 
 	return 0;
-}
-
-xint start()
-{
-	for(yint i=0;i<LEVELS;++i)
-	{
-		start(i);
-	}
-	over();
-	return 0;
-}
-
-xint control()
-{
-	return dialog::msgbox(keys);
-}
-
-xint about()
-{
-	dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION );
-	return 0;
-}
-
-xint leave()
-{
-	if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); };
-	return 0;
-}
-
-void menu()
-{
-	//enlist buttons
-	buttons bl;
-	bl.add("About",&about,0,2,19,50,16,BLACK,RED,GREY,GREY,1);
-	bl.add("Exit",&leave,0,52,19,50,16,BLACK,RED,GREY,GREY,1);
-	bl.add("X",[](){ return 1; },1,XRES-20,1,16,16,BLACK,RED,GREY,WHITE,1);
-	//*
-
-	//draw menu
-	tile ico = format::xpm(resource::icon);
-	tile scr = gfx::save();
-	xint xit = 0;
-	while(screen::run() && xit==0)
-	{
-		gfx::draw(scr);
-		gfx::draw(ico);
-		gfx::rect(16,0,XRES,17,RED,RED,1,0);
-		gfx::rect(0,18,XRES,35,GREY,GREY,1,0);
-		font::draw(20,1,"atCROSSLEVEL XiZero",WHITE,RED);
-
-		bl.draw();
-		xit = bl.check(screen::key());
-	}
-	//*
-
 }
 
 void intro()
@@ -207,10 +146,10 @@ void mainmenu()
 	//enlist buttons
 	buttons bl;
 	#define VIS BLACK,RED,GREY,DWHITE,1
-	bl.add("Start",&start,0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
-	bl.add("Controls",&control,0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
-	bl.add("About",&about,0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);
-	bl.add("Exit",&leave,0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);
+	bl.add("Start",[]() { for(yint i=0;i<LEVELS;++i) { start(i); } over(); return 0; },0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
+	bl.add("Controls",[](){ return dialog::msgbox(keys); },0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
+	bl.add("About",[](){ dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION ); return 0; },0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);
+	bl.add("Exit",[](){ if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); }; return 0; },0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);
 	//*
 
 	//draw menu
@@ -228,7 +167,7 @@ void mainmenu()
 		z[4].display(p,R_S);
 		z[5].display(p,R_S);
 		//*
-		font::draw(XRES-(XRES/4),YRES-font::height(),"Version: " VERSION,ORANGE,TRANS);
+		font::draw(XRES-(XRES/4),YRES-font::height(),"Version: " VERSION,ORANGE);
 
 		bl.draw();
 		bl.check(screen::key());
@@ -241,7 +180,7 @@ void mainmenu()
 void won(const vector& p)
 {
 	trans::circleblend(p.x,p.y,60);
-	font::draw(40,40,"You won.",WHITE,TRANS);
+	font::draw(40,40,"You won.",WHITE);
 	screen::run();
 	screen::sleep(3000);
 	trans::dissolve();
@@ -250,7 +189,7 @@ void won(const vector& p)
 void lost()
 {
 	trans::fadeout();
-	font::draw(40,40,"You lost.",WHITE,TRANS);
+	font::draw(40,40,"You lost.",WHITE);
 	screen::run();
 	screen::sleep(3000);
 	trans::dissolve();
@@ -259,23 +198,10 @@ void lost()
 void over()
 {
 	screen::frame.clear(0);
-	font::draw(40,40,"Thanks for playing.",WHITE,BLACK);
-	font::draw((XRES>>1)-60,(YRES>>1),"atcrosslevel.de",RED,BLACK);
+	font::draw(40,40,"Thanks for playing.",WHITE);
+	font::draw((XRES>>1)-60,(YRES>>1),"atcrosslevel.de",RED);
 	screen::run();
 	screen::sleep(3000);
-}
-
-void bench()
-{
-	const xint fps = screen::fps();
-	ifu(fps>0)
-	{
-		system::say(string::int2str(polygon::counter*fps)); 			
-		system::say("T/s - ");
-		system::say(string::int2str(polygon::counter)); 
-		system::say("@");
-		system::say(string::int2str(fps),1);
-	}
 }
 ///</code>
 

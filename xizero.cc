@@ -1,8 +1,8 @@
 ///<header>
-// atCROSSLEVEL 2010-2014
+// Ξ0 - xizero ( Version 0.2 )
+// atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// xizero.cc
-// XiZero Main Program
+// XiZero Main Program ( xizero.cc )
 ///</header>
 
 ///<include>

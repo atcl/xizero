@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 ) 
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// Experimental Testing Ground( unit.cc )
+// Experimental Testing Ground ( unit.cc )
 ///</header>
 
 ///<include>
@@ -57,7 +57,7 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 	}
 	for(xint i=0,j=0;i<s2;++i,j+=c2)
 	{
-		t2[i] = vector{fx::cos(j),0,-fx::sin(j)};
+		t2[i] = vector{fx::cos(j),0,fx::sin(j)};
 		t2[i] = fx::mul(t2[i],q2);
 	}
 
@@ -88,7 +88,7 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 		m2.rotatez(a2);
 	}
 
-	object* r = new object(a,b,c,d,n,e);
+	object* r = new object(a,d,c,b,n,e);
 	delete[] t1;
 	delete[] t2;
 	delete[] a;
@@ -100,44 +100,44 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 
 void viewer(object* u,yint k)
 {
-		const vector pos{ XRES/2, YRES/2, 100, 0};
-		static xint rc = R_F;
-		object::linear.clear();
-		switch(k)
-		{
-			case UP:     object::linear.rotatex(FXONE); break;
-			case DOWN:   object::linear.rotatex(FXMON); break;
-			case RIGHT:  object::linear.rotatey(FXONE); break;
-			case LEFT:   object::linear.rotatey(FXMON); break;
-			case PGUP:   object::linear.rotatez(FXONE); break;
-			case PGDOWN: object::linear.rotatez(FXMON); break;
+	const vector pos{ XRES/2, YRES/2, 100, 0};
+	static xint rc = R_F;
+	object::linear.clear();
+	switch(k)
+	{
+		case UP:     object::linear.rotatex(FXONE); break;
+		case DOWN:   object::linear.rotatex(FXMON); break;
+		case RIGHT:  object::linear.rotatey(FXONE); break;
+		case LEFT:   object::linear.rotatey(FXMON); break;
+		case PGUP:   object::linear.rotatez(FXONE); break;
+		case PGDOWN: object::linear.rotatez(FXMON); break;
 
-			case 'a': object::linear.translate(FXMON,0,0); break;
-			case 'd': object::linear.translate(FXONE,0,0); break;
-			case 'w': object::linear.translate(0,FXONE,0); break;
-			case 's': object::linear.translate(0,FXMON,0); break;
-			case 'q': object::linear.translate(0,0,FXONE); break;
-			case 'e': object::linear.translate(0,0,FXMON); break;
+		case 'd': object::linear.translate(FXONE,0,0); break;
+		case 'a': object::linear.translate(FXMON,0,0); break;
+		case 'w': object::linear.translate(0,FXONE,0); break;
+		case 's': object::linear.translate(0,FXMON,0); break;
+		case 'q': object::linear.translate(0,0,FXONE); break;
+		case 'e': object::linear.translate(0,0,FXMON); break;
 
-			case '1': object::linear.scale(FXONE+FXTNT,FXONE,FXONE); break;
-			case '2': object::linear.scale(FXONE-FXTNT,FXONE,FXONE); break;
-			case '3': object::linear.scale(FXONE,FXONE+FXTNT,FXONE); break;
-			case '4': object::linear.scale(FXONE,FXONE-FXTNT,FXONE); break;
-			case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
-			case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
+		case '1': object::linear.scale(FXONE+FXTNT,FXONE,FXONE); break;
+		case '2': object::linear.scale(FXONE-FXTNT,FXONE,FXONE); break;
+		case '3': object::linear.scale(FXONE,FXONE+FXTNT,FXONE); break;
+		case '4': object::linear.scale(FXONE,FXONE-FXTNT,FXONE); break;
+		case '5': object::linear.scale(FXONE,FXONE,FXONE+FXTNT); break;
+		case '6': object::linear.scale(FXONE,FXONE,FXONE-FXTNT); break;
 
-			case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
-			case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
-			case 'u': break;
-			case 'i': u->pull(FXTNT); break;
-			case 'o': u->pull(-FXTNT); break;
-			case 'p': rc=R_B; break;
-			case 'l': rc=R_S; break;
-			case 'm': rc=R_F; break;
-		}
+		case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
+		case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
+		case 'u': break;
+		case 'i': u->pull(FXTNT); break;
+		case 'o': u->pull(-FXTNT); break;
+		case 'p': rc=R_B; break;
+		case 'l': rc=R_S; break;
+		case 'm': rc=R_F; break;
+	}
 
-		u->update();
-		u->display(pos,rc);
+	u->update();
+	u->display(pos,rc);
 }
 ///</define>
 
@@ -154,14 +154,14 @@ int main(int argc,char** argv)
 
 	while(screen::run())
 	{
-		if(screen::key()==ESCAPE) { menu(); }
+		if(screen::key()==ESCAPE) { menu::show(); }
 
-		screen::frame.clear(DWHITE);
+		screen::frame.clear(WHITE);
 		screen::depth.clear(0);
-		if(screen::turbo()=='r') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(60,30,16,16,ORANGE); } }
+		ifu(screen::turbo()=='r') { delete u; if(argc>1) { u = new object(system::ldf(argv[1])); } else { u = torus(60,30,16,16,ORANGE); } }
 		viewer(u,screen::turbo());
 
-		bench();
+		game::benchmark();
 	}
 
 	screen::close();

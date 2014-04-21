@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 ) 
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// Light Source Class Library ( XZlight.hh )
+// Light Source Class ( XZlight.hh )
 #pragma once
 ///</header>
 

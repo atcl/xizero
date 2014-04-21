@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 )
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// SDL Interface ( XZscreen.hh )
+// SDL Interface Library ( XZscreen.hh )
 #pragma once
 ///</header>
 
@@ -21,6 +21,13 @@
 #define YRES 480
 #define BPP  32
 #define FPS  4000
+
+#define ZRES 480
+
+#define XMIN 0
+#define XMAX XRES-1
+#define YMIN 0
+#define YMAX YRES-1
 
 #define ESCAPE	SDLK_ESCAPE
 #define ENTER	SDLK_RETURN
@@ -68,7 +75,7 @@ namespace screen
 	yint fps(bool o=1);
 	void wait(yint k)	{ while(key()!=k) run(); }
 
-	pure inline bool onscreen(xint x,xint y) { return (x>0) && (y>0) && (x<XRES) && (y<YRES); }
+	pure inline bool onscreen(xint x,xint y) { return (x>=0) && (y>=0) && (x<XRES) && (y<YRES); }
 }
 ///</define>
 

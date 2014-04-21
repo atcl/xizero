@@ -86,7 +86,7 @@
 		<flags>
 			<flag>-O0 -fomit-frame-pointer -pipe</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
-			<!--flag>-pedantic -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow</flag-->
+			
 			<flag>-march=native -mtune=native</flag>
 			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
 			<!--flag>-mtune=i486 -march=i486 -m32 -msse -mpfpmath=sse</flag-->
@@ -101,6 +101,13 @@
 	<rule>
 		<name>install</name>
 		<action>cp xizero /usr/bin</action>
+	</rule>
+
+	<rule>
+		<name>check</name>
+		<action>g++ -std=c++11 xizero.cc -oxizero -lSDL -pedantic -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow -Wstrict-aliasing</action>
+		<action>cppcheck --enable=all --enable=style --enable=performance --std=c++11 -v xizero.cc</action>
+		<action>ldd xizero</action>
 	</rule>
 </project>
 

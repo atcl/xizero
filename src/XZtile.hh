@@ -2,7 +2,7 @@
 // Ξ0 - xizero ( Version 0.2 )
 // atCROSSLEVEL 2010-2014 ( http://atcrosslevel.de )
 // released under 2-clause BSD license
-// Tile Library ( XZtile.hh )
+// Tile Class ( XZtile.hh )
 #pragma once
 ///</header>
 

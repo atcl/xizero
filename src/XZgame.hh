@@ -8,6 +8,7 @@
 
 ///<include>
 #include "XZbasic.hh"
+#include "XZsystem.hh"
 #include "XZscreen.hh"
 ///</include>
 
@@ -15,6 +16,7 @@
 namespace game
 {
 	void compiled(xint x,xint y,yint r,yint c);
+	void benchmark();
 }
 ///</define>
 
@@ -28,6 +30,19 @@ void game::compiled(xint x,xint y,yint r,yint c)
 	screen::frame[o++] = r; screen::frame[o++] = c; screen::frame[o++] = c; screen::frame[o] = r; o += XRES-3;
 	screen::frame[o++] = r; screen::frame[o++] = c; screen::frame[o++] = c; screen::frame[o] = r; o += XRES-3;
 	screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o] = r; o += XRES-3;
+}
+
+void game::benchmark()
+{
+	const xint fps = screen::fps();
+	ifu(fps>0)
+	{
+		system::say(string::int2str(polygon::counter*fps)); 			
+		system::say("T/s - ");
+		system::say(string::int2str(polygon::counter)); 
+		system::say("@");
+		system::say(string::int2str(fps),1);
+	}
 }
 ///</code>
 
