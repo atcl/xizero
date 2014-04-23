@@ -32,43 +32,25 @@ W         Align Tower Center\n\
 SPACE     Fire\n\
 ENTER     Menu\n";
 
-inline void init();
-xint start(xint i);
+info config;
+
+void init();
 void intro();
 void mainmenu();
+
+xint gameloop(xint i);
+
 void won(const vector& p);
 void lost();
 void over();
 ///</define>
 
 ///<code>
-void init() //constructor
+void init()
 {
+	config = format::ini(system::ldf("xz.sys"));
 	screen::init(format::xpm(resource::cursor));
 	system::say(ascii,1);
-}
-
-xint start(xint i)
-{
-system::say("hi");
-	level l(system::ldf("level0.a"));
-
-	while(screen::run())
-	{
-		polygon::counter = 0;
-		ifu(screen::key()==ESCAPE) { menu::show(); l.resume(); }
-
-		switch(l.update(0))
-		{
-			case -1: lost(); return 0;
-			case  1: won(l.ppos()); return 0;
-		}
-				
-		l.display();
-		game::benchmark();
-	}
-
-	return 0;
 }
 
 void intro()
@@ -146,7 +128,7 @@ void mainmenu()
 	//enlist buttons
 	buttons bl;
 	#define VIS BLACK,RED,GREY,DWHITE,1
-	bl.add("Start",[]() { for(yint i=0;i<LEVELS;++i) { start(i); } over(); return 0; },0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
+	bl.add("Start",[]() { for(yint i=0;i<LEVELS;++i) { gameloop(i); } over(); return 0; },0,(XRES-(XRES/4))/2,120,XRES/4,YRES/8,VIS);
 	bl.add("Controls",[](){ return dialog::msgbox(keys); },0,(XRES-(XRES/4))/2,200,XRES/4,YRES/8,VIS);
 	bl.add("About",[](){ dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION ); return 0; },0,(XRES-(XRES/4))/2,280,XRES/4,YRES/8,VIS);
 	bl.add("Exit",[](){ if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); }; return 0; },0,(XRES-(XRES/4))/2,360,XRES/4,YRES/8,VIS);
@@ -175,6 +157,29 @@ void mainmenu()
 	//*
 
 	delete f;
+}
+
+xint gameloop(xint i)
+{
+
+	level l(system::ldf("level0.a"));
+system::say("hi",1);
+	while(screen::run())
+	{
+		polygon::counter = 0;
+		ifu(screen::key()==ESCAPE) { menu::show(); l.resume(); }
+
+		switch(l.update(0))
+		{
+			case -1: lost(); return 0;
+			case  1: won(l.ppos()); return 0;
+		}
+				
+		l.display();
+		game::benchmark();
+	}
+
+	return 0;
 }
 
 void won(const vector& p)

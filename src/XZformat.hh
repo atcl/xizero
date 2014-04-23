@@ -15,11 +15,11 @@
 ///<define>
 struct info
 {
-	char** name;
-	char** data;
-	yint*  size;
-	const  yint count;
-	char*  operator[](const char* n) const
+	char**  name;
+	char**  data;
+	yint*   size;
+	mutable yint count;
+	char*   operator[](const char* n) const
 	{
 		for(yint i=0;i<count;++i)
 		{

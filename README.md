@@ -1,37 +1,37 @@
 XiZero
 ======
 
-## Version: ##
+## Version:
 
 0.1 (Callbox)
 0.2 (Gruelfin)
 
-## Install: ##
+## Install:
 
 ./smmn
 ./smmn install #requires root 
 
-## Dependencies: ##
+## Dependencies:
 
 + gcc
 + libsdl
 + xsltproc
 
-## Usage: ##
+## Usage:
 
 ``xizero``	#start game
 ``unit``	#model viewer and benchmark
 
-## Features: ##
+## Features:
 
-### Major: ###
+### Major:
 
 + Software Rasterizer
 + Flatshading
 + Blinn Shadows
 + 2xFSAA
 
-### Minor: ###
+### Minor:
 
 + 32bit Z-Buffer
 + Cordic Fixed Point Math
@@ -41,11 +41,11 @@ XiZero
 + Only human readable, non-binary, data
 + Radial Explosions
 
-## Warning: ##
+## Warning:
 
 XiZero is still in ALPHA stage, so do not expect it to work error- and bug-free.
 
-## License: ##
+## License:
 
 Copyright (c) 2010-2014 Christian Himpe,
 

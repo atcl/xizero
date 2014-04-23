@@ -17,7 +17,7 @@ class list
 	private:
 		struct member
 		{
-			T*      data;
+			T*      data; //auto_ptr
 			member* next;
 			member* prev;
 		};

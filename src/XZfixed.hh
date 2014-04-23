@@ -12,24 +12,25 @@
 ///</include>
 
 ///<declare>
-#define FIXED 16
-#define FXONE 0x00010000 // 1
-#define FXTWO 0x00020000 // 2
-#define FXMON 0xFFFF0000 // -1
-#define FXHLF 0x00008000 // 0.5
-#define FXQRT 0x00004000 // 0.25
-#define FXTNT 0x00001999 // 0.1
-#define FXCEN 0x0000028F // 0.01
-#define FXEPS 0x00000001 // eps
-#define FXTAU 0x0006487E // tau = 2pi
-#define FXTA2 0x0003243F // tau/2
-#define FXTA4 0x0001921F // tau/4
-#define FXITG 0x00009B71 // 0.607200
-#define FXIHG 0x000134A3 // 1.205614
-#define FXD2R 0x00000477 // tau/360 (deg2rad)
-#define FXSQ2 0x00016A09 // 2^0.5
-#define FXRS1 0x00000126 // 0.0045
-#define FXRS2 0x00012902 // 1.1602
+constexpr yint FIXED = 16;
+
+constexpr xint FXONE = 0x00010000; // 1
+constexpr xint FXTWO = 0x00020000; // 2
+constexpr xint FXMON = 0xFFFF0000; // -1
+constexpr xint FXHLF = 0x00008000; // 0.5
+constexpr xint FXQRT = 0x00004000; // 0.25
+constexpr xint FXTNT = 0x00001999; // 0.1
+constexpr xint FXCEN = 0x0000028F; // 0.01
+constexpr xint FXEPS = 0x00000001; // eps
+constexpr xint FXTAU = 0x0006487E; // tau = 2pi
+constexpr xint FXTA2 = 0x0003243F; // tau/2
+constexpr xint FXTA4 = 0x0001921F; // tau/4
+constexpr xint FXITG = 0x00009B71; // 0.607200
+constexpr xint FXIHG = 0x000134A3; // 1.205614
+constexpr xint FXD2R = 0x00000477; // tau/360 (deg2rad)
+constexpr xint FXSQ2 = 0x00016A09; // 2^0.5
+constexpr xint FXRS1 = 0x00000126; // 0.0045
+constexpr xint FXRS2 = 0x00012902; // 1.1602
 
 #define HSEL16(x) ((x==4)||(x==7)||(x==10)||(x==13))	// (((i-1)%3)==0)&&(i!=1)
 ///</declare>

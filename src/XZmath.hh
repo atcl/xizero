@@ -11,7 +11,7 @@
 ///</include>
 
 ///<declare>
-#define SEED 22695477
+constexpr yint SEED = 22695477;
 ///</declare>
 
 ///<code>
