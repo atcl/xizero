@@ -12,7 +12,6 @@
 #include "XZbasic.hh"
 #include "XZtile.hh"
 #include "XZbuffer.hh"
-#include "XZsystem.hh"
 #include "XZmath.hh"
 ///</include>
 
@@ -87,8 +86,6 @@ void screen::init(const tile& c)
 	video = SDL_SetVideoMode(XRES,YRES,BPP,SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL); 
 	frame.pointer(video->pixels);
 	SDL_WM_SetCaption(TITLE " " VERSION,TITLE);
-
-	system::onx(close);
 }
 
 bool screen::run()
@@ -125,7 +122,6 @@ void screen::close()
 	frame.clear();
 	SDL_Flip(video);
 	SDL_Quit();
-	system::say("\nXiZero " VERSION " by atCROSSLEVEL. Thanks for playing!",1);
 }
 
 yint screen::fps(bool o)

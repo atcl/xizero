@@ -35,7 +35,6 @@ class entity
 {
 	private:
 		static const matrix rot[2];
-		static const matrix exp;
 		static list<ammo> ammos[2];
 		static fixed ymark;
 
@@ -81,7 +80,6 @@ class entity
 
 ///<code>
 const matrix entity::rot[2]   = { []()->matrix { matrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->matrix { matrix m; m.rotatez(FX(ROTANG)); return m; }() };
-const matrix entity::exp      = []()->matrix { matrix m; m.scale(FXONE-FXCEN,FXONE-FXCEN,FXONE-FXCEN); return m; }();
 list<ammo>   entity::ammos[2] = { list<ammo>(), list<ammo>() };
 fixed        entity::ymark    = 0;
 
@@ -217,8 +215,8 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
 
 	ifu(health==0)
 	{
-		model[0]->pull(-FXHLF+FXTNT);
-		model[1]->pull(-FXHLF);
+		model[0]->explode(-FXHLF+FXTNT);
+		model[1]->explode(-FXHLF);
 		return health-(death++>250);
 	}
 
@@ -301,7 +299,7 @@ xint entity::update()
 
 	ifu(health==0)
 	{
-		model[0]->update(exp,death==0);
+		model[0]->implode(FXCEN);
 		return health-=(death++>250);		
 	}
 

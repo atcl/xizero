@@ -39,25 +39,26 @@
 class polygon
 {
 	private:
-		static vector point[3];		// discrete vertices
+		static vector point[3];		// discretized vertices
+
 		vector vertex[3];		// polygon vertices
 		vector normal;			// polygon normal
 		const yint color;		// polygon color
 
-		inline void shape(yint c) const;
-
 		yint flat(xint pz,xint f) const;
 		void raster(uint c,bool s=0) const; //hot;
+		void shape(yint c) const;
 	public:
 		polygon(const vector& x,const vector& y,const vector& z,yint c);
 
-		void update(const matrix& m,bool i=1);
-		void display(const vector& p,xint f,yint c=0);
-		void pull(fixed a);
+		void update(const matrix& m);
+		void display(const vector& p,xint f,yint c=0) const;
+
+		inline const vector& n() const { return normal; }
 
 		static vector project(const vector& p,const vector& v);
 
-		static xint  counter;		// polygon counter
+		static yint  counter;		// polygon counter
 		static const vector light;	// light vector
 		static const matrix blinn;	// blinn shadow matrix
 };
@@ -65,7 +66,7 @@ class polygon
 
 ///<code>
       vector polygon::point[] = { vector{0,0,0,0},vector{0,0,0,0},vector{0,0,0,0} };
-      xint   polygon::counter = 0;
+      yint   polygon::counter = 0;
 const vector polygon::light   = vector{ FXONE, FXONE, FXONE, FXONE+FXONE+FXONE };
 const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector{0,FXTNT,FXONE,FXONE},vector{0,4*FXTNT,FXONE+FXTNT,FXONE}); return m; }(); 
 
@@ -194,10 +195,10 @@ polygon::polygon(const vector& x,const vector& y,const vector& z,yint c) : verte
 	normal.e = fx::len(normal);
 }
 
-void polygon::update(const matrix& m,bool i)
+void polygon::update(const matrix& m)
 {
-	vertex[i] = m*vertex[i];
 	vertex[0] = m*vertex[0];
+	vertex[1] = m*vertex[1];
 	vertex[2] = m*vertex[2];
 
 	normal    = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
@@ -205,7 +206,7 @@ void polygon::update(const matrix& m,bool i)
 	normal.e  = fx::len(normal);
 }
 
-void polygon::display(const vector& p,xint f,yint c)
+void polygon::display(const vector& p,xint f,yint c) const
 {
 	guard(normal.z>FXHLF);
 	++counter;	
@@ -225,15 +226,6 @@ void polygon::display(const vector& p,xint f,yint c)
 		ifl(f&R_F) { c = flat(p.z,f); }
 		ifu(f&R_S) { shape(c); } else { raster(c); }
 	}
-}
-
-void polygon::pull(fixed a)
-{
-	const fixed  l = fx::div(a,normal.e);
-	const vector m = fx::mul(normal,l);
-	vertex[0] += m;
-	vertex[1] += m;
-	vertex[2] += m;
 }
 ///</code>
 

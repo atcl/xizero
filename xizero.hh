@@ -19,7 +19,7 @@ static const char* ascii = "\n\
        0   0\n\
   XXX  0   0\n\
        0   0\n\
- XXXXX  000\n"; //X to Ξ
+ XXXXX  000\n";
 
 static const char* keys = "\
 UP        Move Forward\n\
@@ -50,6 +50,7 @@ void init()
 {
 	config = format::ini(system::ldf("xz.sys"));
 	screen::init(format::xpm(resource::cursor));
+	system::onx([](){ screen::close(); system::say("\nXiZero " VERSION " by atCROSSLEVEL",1);} );
 	system::say(ascii,1);
 }
 

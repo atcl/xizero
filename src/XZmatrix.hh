@@ -7,6 +7,7 @@
 ///</header>
 
 ///<include>
+#include "XZmath.hh"
 #include "XZvector.hh"
 ///</include>
 
@@ -28,6 +29,8 @@ class matrix
 		       void transpose();
 		       void dyadic(const vector& x,const vector& y);
 		       void shadow(const vector& x,const vector& y);
+		       void explode(const vector& n,fixed x);
+		       void implode(fixed x);
 		     vector operator*(const vector& x) const;
 };
 ///</define>
@@ -115,6 +118,26 @@ void matrix::shadow(const vector& x,const vector& y)
 	mat[0].x += xy;
 	mat[1].y += xy;
 	mat[2].z += xy;
+}
+
+void matrix::explode(const vector& n,fixed x)
+{
+	const fixed  l = fx::div(x,n.e);
+	const vector m = fx::mul(n,l);
+	mat[0] = vector{FXONE,0,0,m.x};
+	mat[1] = vector{0,FXONE,0,m.y};
+	mat[2] = vector{0,0,FXONE,m.z};
+	mat[3] = vector{0,0,0,FXONE};
+}
+
+void matrix::implode(fixed x) //fix
+{
+	x = math::rnd(x);
+
+	mat[0] = vector{FXONE-x,0,0,0};
+	mat[1] = vector{0,FXONE-x,0,0};
+	mat[2] = vector{0,0,FXONE-x,0};
+	mat[3] = vector{0,0,0,FXONE};
 }
 
 vector matrix::operator*(const vector& x) const

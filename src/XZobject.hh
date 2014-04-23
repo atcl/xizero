@@ -34,10 +34,14 @@ class object
 		object(vector* a,vector* b,vector* c,vector* d,xint x,xint e);
 		object(const object& o);
 		~object();
-		vector* docktype(xint i,xint j) const;
-		void update(const matrix& m=object::linear,bool j=1);
+
 		void display(const vector& p,xint f) const;
-		void pull(fixed x); //translate along normals
+		void update(const matrix& m=object::linear);
+		void explode(fixed x);
+		void implode(fixed x);
+
+		vector* docktype(xint i,xint j) const;
+
 		// void rebound();
 		inline fixed bounding() const { return cbound; }			// remove if possible
 		inline bool collision(const vector& x,const vector& a);
@@ -218,23 +222,20 @@ object::~object()
 	delete[] poly;
 }
 
-vector* object::docktype(xint i,xint j) const
+void object::display(const vector& p,xint f) const
 {
-	vector* r[2] = {0,0};
-	for(xint k=0,l=-1;k<docks && (l!=j);++k)
+	for(xint i=0;i<polys;++i)
 	{
-		l += (dock[k].e==i);
-		r[l==j] = &dock[k];
+		poly[i]->display(p,f,scolor);
 	}
-	return r[1];
 }
 
-void object::update(const matrix& m,bool j)
+void object::update(const matrix& m)
 {
 	//update polygon
 	for(xint i=0;i<polys;++i)
 	{
-		poly[i]->update(m,j);
+		poly[i]->update(m);
 	}
 
 	//update docking points
@@ -247,20 +248,33 @@ void object::update(const matrix& m,bool j)
 	cbound = bound; //TODO: cbound trafo to match projection
 }
 
-void object::display(const vector& p,xint f) const
+void object::explode(fixed x)
 {
 	for(xint i=0;i<polys;++i)
 	{
-		poly[i]->display(p,f,scolor);
+		linear.explode(poly[i]->n(),x);
+		poly[i]->update(linear);
 	}
 }
 
-void object::pull(fixed x)
+void object::implode(fixed x)
 {
 	for(xint i=0;i<polys;++i)
 	{
-		poly[i]->pull(x);
+		linear.implode(x);
+		poly[i]->update(linear);
+	}	
+}
+
+vector* object::docktype(xint i,xint j) const
+{
+	vector* r[2] = {0,0};
+	for(xint k=0,l=-1;k<docks && (l!=j);++k)
+	{
+		l += (dock[k].e==i);
+		r[l==j] = &dock[k];
 	}
+	return r[1];
 }
 
 bool object::collision(const vector& x,const vector& a)

@@ -129,8 +129,10 @@ void viewer(object* u,yint k)
 		case 't': object::linear.scale(FXONE+FXTNT,FXONE+FXTNT,FXONE+FXTNT); break;
 		case 'z': object::linear.scale(FXONE-FXTNT,FXONE-FXTNT,FXONE-FXTNT); break;
 		case 'u': break;
-		case 'i': u->pull(FXTNT); break;
-		case 'o': u->pull(-FXTNT); break;
+		case 'i': u->explode(FXTNT); break;
+		case 'o': u->explode(-FXTNT); break;
+		case 'j': u->implode(FXCEN); break;
+		case 'k': u->implode(-FXCEN); break;
 		case 'p': rc=R_B; break;
 		case 'l': rc=R_S; break;
 		case 'm': rc=R_F; break;
@@ -164,7 +166,7 @@ int main(int argc,char** argv)
 		game::benchmark();
 	}
 
-	screen::close();
+	
 
 	return 0;
 }
