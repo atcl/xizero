@@ -10,7 +10,8 @@ XiZero
 ## Install:
 
 ``./smmn``
-``./smmn install` #requires root 
+
+``./smmn install`` #requires root 
 
 ## Dependencies:
 
