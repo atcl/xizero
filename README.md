@@ -4,12 +4,13 @@ XiZero
 ## Version:
 
 0.1 (Callbox)
+
 0.2 (Gruelfin)
 
 ## Install:
 
-./smmn
-./smmn install #requires root 
+``./smmn``
+``./smmn install` #requires root 
 
 ## Dependencies:
 
@@ -20,6 +21,7 @@ XiZero
 ## Usage:
 
 ``xizero``	#start game
+
 ``unit``	#model viewer and benchmark
 
 ## Features:
