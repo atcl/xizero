@@ -51,7 +51,7 @@
 			<define>ALWAYS</define>
 		</defines>
 		<flags>
-			<flag>-O2 -pipe -falign-loops -fomit-frame-pointer -falign-loops</flag>
+			<flag>-O3 -pipe -falign-loops -fomit-frame-pointer -falign-loops</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=native -mtune=native -mstackrealign</flag>
 			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
@@ -105,7 +105,7 @@
 
 	<rule>
 		<name>check</name>
-		<action>g++ -std=c++11 xizero.cc -oxizero -lSDL -pedantic -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow -Wstrict-aliasing</action>
+		<action>gcc -std=c++11 -fno-exceptions -fno-rtti xizero.cc -oxizero -lSDL -pedantic -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow -Wstrict-aliasing</action>
 		<action>cppcheck --enable=all --enable=style --enable=performance --std=c++11 -v xizero.cc</action>
 		<action>ldd xizero</action>
 	</rule>

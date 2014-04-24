@@ -57,7 +57,7 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 	}
 	for(xint i=0,j=0;i<s2;++i,j+=c2)
 	{
-		t2[i] = vector{fx::cos(j),0,fx::sin(j)};
+		t2[i] = vector{fx::cos(j),0,-fx::sin(j)};
 		t2[i] = fx::mul(t2[i],q2);
 	}
 
@@ -88,7 +88,7 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 		m2.rotatez(a2);
 	}
 
-	object* r = new object(a,d,c,b,n,e);
+	object* r = new object(a,b,c,d,n,e);
 	delete[] t1;
 	delete[] t2;
 	delete[] a;

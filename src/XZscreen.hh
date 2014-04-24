@@ -21,7 +21,7 @@
 #define BPP  32
 #define FPS  4000
 
-#define ZRES 480
+#define ZRES YRES
 
 #define XMIN 0
 #define XMAX XRES-1

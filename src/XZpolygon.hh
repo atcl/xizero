@@ -79,10 +79,10 @@ void polygon::shape(yint c) const
 
 vector polygon::project(const vector& p,const vector& v)
 {
-	const fixed z = v.z + fx::l2f(p.z);
+	const fixed z = fx::l2f(p.z) + v.z;
 
 	return vector{p.x + fx::f2l(fx::div(fx::mul(v.x,FX(PRJX)),z)),
-                      p.y - fx::f2l(fx::div(fx::mul(v.y,FX(PRJY)),z)), z, 0};
+                      p.y - fx::f2l(fx::div(fx::mul(v.y,FX(PRJY)),z)), FX(ZRES) - z, 0}; //r2l?
 }
 
 yint polygon::flat(xint pz,xint f) const
@@ -127,7 +127,7 @@ void polygon::raster(yint c,bool s) const
 	vector cy{ dy.x*(point[0].x - minx) + dx.x*(miny - point[0].y) + ((dy.x<0) || (dy.x==0 && dx.x>0)),
 	           dy.y*(point[1].x - minx) + dx.y*(miny - point[1].y) + ((dy.y<0) || (dy.y==0 && dx.y>0)),
 	           dy.z*(point[2].x - minx) + dx.z*(miny - point[2].y) + ((dy.z<0) || (dy.z==0 && dx.z>0)),
-	           point[miyi].z - fx::mul(fx::l2f(point[miyi].x-point[mixi].x),zx) }; 
+	           point[miyi].z + fx::mul(fx::l2f(point[mixi].x-point[miyi].x),zx) }; 
 
 	const xint str = XRES - (maxx-minx);
 
@@ -142,10 +142,10 @@ void polygon::raster(yint c,bool s) const
 				for(xint x=minx;x<maxx;++x) 
 				{
 					const bool inside = (cx.x>0) && (cx.y>0) && (cx.z>0);
-					const bool above  = cx.e > (screen::depth[off]); //math::abs
+					const bool above  = cx.e > screen::depth[off]; //math::neg(screen::depth[off],screen::zs);
 					if(inside && above)
 					{
-						screen::depth[off] = cx.e; //math::neg(cx.e,!screen::zs);
+						screen::depth[off] = cx.e; //math::neg(cx.e,screen::zs);
 						screen::frame[off] = c;
 					}
 

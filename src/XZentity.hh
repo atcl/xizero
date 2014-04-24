@@ -79,8 +79,8 @@ class entity
 ///</define>
 
 ///<code>
-const matrix entity::rot[2]   = { []()->matrix { matrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->matrix { matrix m; m.rotatez(FX(ROTANG)); return m; }() };
-list<ammo>   entity::ammos[2] = { list<ammo>(), list<ammo>() };
+const matrix entity::rot[2] = { []()->matrix { matrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->matrix { matrix m; m.rotatez(FX(ROTANG)); return m; }() };
+list<ammo>   entity::ammos[2]{ list<ammo>(), list<ammo>() };
 fixed        entity::ymark    = 0;
 
 void entity::fire(xint i)
