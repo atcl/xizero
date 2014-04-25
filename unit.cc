@@ -57,7 +57,7 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 	}
 	for(xint i=0,j=0;i<s2;++i,j+=c2)
 	{
-		t2[i] = vector{fx::cos(j),0,-fx::sin(j)};
+		t2[i] = vector{fx::cos(j),0,fx::sin(j)};
 		t2[i] = fx::mul(t2[i],q2);
 	}
 
@@ -100,7 +100,7 @@ object* torus(xint r1,xint r2,xint s1,xint s2,yint e)
 
 void viewer(object* u,yint k)
 {
-	const vector pos{ XRES/2, YRES/2, 100, 0};
+	const vector pos{ XRES/2, YRES/2, 350, 0};
 	static xint rc = R_F;
 	object::linear.clear();
 	switch(k)

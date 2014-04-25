@@ -81,8 +81,8 @@ vector polygon::project(const vector& p,const vector& v)
 {
 	const fixed z = fx::l2f(p.z) + v.z;
 
-	return vector{p.x + fx::f2l(fx::div(fx::mul(v.x,FX(PRJX)),z)),
-                      p.y - fx::f2l(fx::div(fx::mul(v.y,FX(PRJY)),z)), FX(ZRES) - z, 0}; //r2l?
+	return vector{p.x + fx::f2l(fx::div(fx::mul(v.x,FX(PRJX)),FX(ZRES) - z)),
+                      p.y - fx::f2l(fx::div(fx::mul(v.y,FX(PRJY)),FX(ZRES) - z)), z, 0}; //r2l?
 }
 
 yint polygon::flat(xint pz,xint f) const
