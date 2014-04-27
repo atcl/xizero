@@ -18,7 +18,8 @@ class buttons
 	private:
 		list<button> bl;
 	public:
-		buttons() : bl() { };
+		buttons() : bl() { }
+
 		void add(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v);
 		xint check(xint k);
 		void draw();

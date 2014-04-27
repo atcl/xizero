@@ -30,7 +30,7 @@
 #include "src/XZtrans.hh"	// v0.2
 // Level 5
 #include "src/XZbutton.hh"	// v0.2
-#include "src/XZpolygon.hh"			//!
+#include "src/XZpolygon.hh"	// v0.2
 // Level 6
 #include "src/XZbuttons.hh"	// v0.2
 #include "src/XZobject.hh"			//!

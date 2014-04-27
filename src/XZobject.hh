@@ -22,7 +22,6 @@ class object
 		polygon** poly;
 		vector*   dock;		// 0:ammo1; 1:ammo2; 2:exhaust; 3:connector;
 		fixed     bound;
-		fixed     cbound;	//TODO
 		xint      polys;
 		xint      docks;
 		yint      scolor;	// shadow color
@@ -43,7 +42,7 @@ class object
 		vector* docktype(xint i,xint j) const;
 
 		// void rebound();
-		inline fixed bounding() const { return cbound; }			// remove if possible
+		inline fixed bounding() const { return bound; }			// remove if possible
 		inline bool collision(const vector& x,const vector& a);
 
 		static matrix linear;
@@ -100,7 +99,9 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 			{
 				system::err(string::find(t[i++],"vert")==-1,"ERROR: y3d format wrong (vert)");
 
-				x[l] = vector{pos.x+string::str2int(t[i]),pos.y+string::str2int(t[i+1]),pos.z+string::str2int(t[i+2]),0};
+				x[l] = vector{fx::l2f(pos.x+string::str2int(t[i])),
+				              fx::l2f(pos.y+string::str2int(t[i+1])),
+				              fx::l2f(pos.z+string::str2int(t[i+2])),0};
 			}
 
 			poly[pc++] = new polygon(x[0],x[1],x[2],tcolor);
@@ -243,9 +244,6 @@ void object::update(const matrix& m)
 	{
 		dock[i] = m*dock[i];
 	}
-
-	//update bounding circle
-	cbound = bound; //TODO: cbound trafo to match projection
 }
 
 void object::explode(fixed x)
@@ -279,9 +277,8 @@ vector* object::docktype(xint i,xint j) const
 
 bool object::collision(const vector& x,const vector& a)
 {
-	return (a.x>x.x-bound)&&(a.x<x.x+bound)&&(a.y>x.y-bound)&&(a.y<x.y+bound); 	//box works
-	//const vector t(a-x);						//component-wise?
-	//return t.dot(t)<r*r;						//circle doesn't
+	const vector t(a-x);		//component-wise?
+	return fx::dot(t,t)<bound;	//circle doesn't
 }
 ///</code>
 

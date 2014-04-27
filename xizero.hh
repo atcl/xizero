@@ -75,14 +75,14 @@ void intro()
 	const xint start = screen::time();
 	xint diff = start;
 
-	while(screen::run() && (diff=screen::time()-start)<3200 && screen::key()!=SPACE)
+	while(screen::run() && (diff=screen::time()-start)<4000 && screen::key()!=SPACE)
 	{
 		const fixed prog = fx::div(fx::l2f(diff),FX(200));
 		object::linear.clear();
 
-		if(prog<FX(4) ) { const fixed s0=-FXHLF; object::linear.translate(0,s0,0); }
-		if(prog<FX(8) ) { const fixed s1=0; object::linear.rotatex(s1); }
-		if(prog<FX(12)) { const fixed s2=0; object::linear.translate(0,0,s2); }
+		if(prog<FX(6) ) { const fixed s0=-FXONE-FXONE; object::linear.translate(0,s0,0); }
+		else if(prog<FX(10) ) { const fixed s1=FXONE-FXTNT/2; object::linear.rotatex(s1); }
+		else if(prog<FX(14)) { const fixed s2=FXONE+FXQRT; object::linear.translate(0,0,s2); }
 
 		   c.update();
 		b[0].update();
@@ -114,7 +114,7 @@ void mainmenu()
 	object x[3] = { object(h),object(h),object(h) };
 	object z[6] = { object(h),object(v),object(v),object(v),object(v),object(h) };
 
-	vector p{XRES/2,YRES/2,450,0};
+	vector p{XRES/2,YRES/2,400,0};
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(-140),0); x[0].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),0,0);             x[1].update();
 	object::linear.clear(); object::linear.translate(fx::l2f(-120),fx::l2f(140),0);  x[2].update();

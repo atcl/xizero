@@ -19,19 +19,20 @@
 class button : public gui
 {
 	private:
-		xint (*action)();					// onclick function pointer
-		const char* text;					// button caption
-		const xint textleft;					// relative Y coordinate of caption	
-		const xint texttop;					// relative X coordinate of caption
-		const bool depth;					// flat or relief
+		xint (*action)();				// onclick function pointer
+		const char* text;				// button caption
+		const xint textleft;				// relative Y coordinate of caption	
+		const xint texttop;				// relative X coordinate of caption
+		const bool depth;				// flat or relief
 
-		button(const button& b);				// copy constructor (not implemented to deny copy)
-		button& operator=(const button& b);			// assignment (not implemented to deny copy)
+		button(const button& b);			// copy constructor (not implemented to deny copy)
+		button& operator=(const button& b);		// assignment (not implemented to deny copy)
 	public:
 		button(const char* x,xint (*a)(),bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v); // constructor
-		//~button() { delete text; };				// destructor
-		void draw(bool h=0) const;				// draw button	
-		xint inline click() { return action(); };		// trigger action
+		//~button() { delete text; }			// destructor
+
+		void draw(bool h=0) const;			// draw button	
+		xint inline click() { return action(); }	// trigger action
 };
 ///</define>
 

@@ -27,44 +27,19 @@ class buffer
 	public:
 		buffer(yint s,bool a=1) : data(0),size(s),bytes((s<<2)+(s&31)),self(a) { if(a) { data = (xint*)aligned_alloc(4096,bytes); clear(); } } 
 		~buffer() { if(self) { free(data); } }
+
 		inline xint& operator[](uint i) { return data[i]; }
 		inline xint  operator[](uint i) const { return data[i]; }
 		inline xint* pointer() const { return data; }
 		inline void  pointer(void* a) { data = static_cast<xint*>(a); }
-		       void  copy(const buffer& s) { memcpy(data,s.data,bytes); };
+		inline void  copy(const buffer& s) { memcpy(data,s.data,bytes); }
+		inline void  clear(xint x=0) { for(yint i=0;i<size;++i) { data[i]=x; } }
+
 		       void  fsaa(const buffer& s);
-		       void  clear(xint x=0);
 };
 ///</define>
 
 ///<code>
-void buffer::clear(xint x)
-{
-/*#ifdef __SSE__
-	const xint val[4] = {x,x,x,x};
-
-	__asm__ __volatile__ (
-	"shrl $7,%2;\n"
-	"movups (%0),%%xmm0;\n"
-	"0: ;\n"
-	"prefetch (%1);\n"
-	"movntps %%xmm0,(%1);\n"
-	"movntps %%xmm0,16(%1);\n"
-	"movntps %%xmm0,32(%1);\n"
-	"movntps %%xmm0,48(%1);\n"
-	"movntps %%xmm0,64(%1);\n"
-	"movntps %%xmm0,80(%1);\n"
-	"movntps %%xmm0,96(%1);\n"
-	"movntps %%xmm0,112(%1);\n"
-	"addq $128,%1;\n"
-	"loop 0b;"
-	"sfence;"
-	: :"r"(&val),"r"(data),"c"(bytes):"memory");
-#else*/
-	for(yint i=0;i<size;++i) { data[i]=x; }
-//#endif
-}
-
 void buffer::fsaa(const buffer& s)
 {
 /*#ifdef __SSE__

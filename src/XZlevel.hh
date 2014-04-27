@@ -153,10 +153,10 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 		xint v = -XRES/2;
 		for(xint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
 		{
-			(a[k]) = vector{ v,       -BWIDTH/2, BHEIGHT*map[i][j-1],   0 };
-			(b[k]) = vector{ v,        BWIDTH/2, BHEIGHT*map[i-1][j-1], 0 };
-			(c[k]) = vector{ v+BWIDTH, BWIDTH/2, BHEIGHT*map[i-1][j],   0 };
-			(d[k]) = vector{ v+BWIDTH,-BWIDTH/2, BHEIGHT*map[i][j],     0 };
+			a[k] = vector{ fx::l2f(v),       fx::l2f(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j-1]),   0 };
+			b[k] = vector{ fx::l2f(v),        fx::l2f(BWIDTH/2), fx::l2f(BHEIGHT*map[i-1][j-1]), 0 };
+			c[k] = vector{ fx::l2f(v+BWIDTH), fx::l2f(BWIDTH/2), fx::l2f(BHEIGHT*map[i-1][j]),   0 };
+			d[k] = vector{ fx::l2f(v+BWIDTH), fx::l2f(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j]),     0 };
 
 			if(a[k].z==d[k].z && b[k].z==c[k].z)
 			{
@@ -164,8 +164,8 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 				v += BWIDTH*2; 
 				for(;j<LWIDTH;++j,v+=BWIDTH) //TODO v+= weg wg v-=
 				{
-					e = vector{ v,  BWIDTH/2, (map[i-1][j])*BHEIGHT, 0 };
-					f = vector{ v,-(BWIDTH/2),(map[i][j])  *BHEIGHT, 0 };
+					e = vector{ fx::l2f(v),  fx::l2f(BWIDTH/2), fx::l2f((map[i-1][j])*BHEIGHT), 0 };
+					f = vector{ fx::l2f(v), fx::l2f(-(BWIDTH/2)),fx::l2f((map[i][j])  *BHEIGHT), 0 };
 					if(c[k].z==e.z && d[k].z==f.z)
 					{
 						c[k] = e;

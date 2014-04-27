@@ -224,7 +224,7 @@ void polygon::display(const vector& p,xint f,yint c) const
 		point[1] = project(p,vertex[1]);
 		point[2] = project(p,vertex[2]);
 		ifl(f&R_F) { c = flat(p.z,f); }
-		ifu(f&R_S) { shape(c); } else { raster(c); }
+		ifu(f&R_S) { shape(color); } else { raster(c); }
 	}
 }
 ///</code>
