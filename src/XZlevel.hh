@@ -22,8 +22,8 @@
 #define LWIDTH   40
 #define BWIDTH   16
 #define BHEIGHT  10
-#define GROUND  300 
-#define AFLOAT   50
+#define GROUND   50 
+#define AFLOAT  300
 #define OFFSET    4
 #define MAXSTEP   5
 
@@ -234,7 +234,7 @@ void level::display()
 /*
 	//render terrain //fix
 	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	const tuple pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
+	const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
 	object::linear.clear();
 	object::linear.translate(0,FX(YRES>>1),0);
 	xint r = math::max((mark/BWIDTH)-OFFSET,0);

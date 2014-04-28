@@ -135,7 +135,11 @@ object::object(const char* o) : poly(0),dock(0),bound(FXMON<<10),polys(0),docks(
 			system::err(string::find(t[i++],"dock")==-1,"ERROR: y3d format wrong (dock)");
 
 			const xint type = string::str2int(t[i++]);
-			dock[dc] = vector{fx::l2f(string::str2int(t[i])),fx::l2f(string::str2int(t[i+1])),fx::l2f(string::str2int(t[i+2])),type};
+
+			dock[dc] = vector{fx::l2f(string::str2int(t[i])),
+			                  fx::l2f(string::str2int(t[i+1])),
+			                  fx::l2f(string::str2int(t[i+2])),
+			                  type};
 		}
 	}
 

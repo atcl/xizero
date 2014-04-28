@@ -164,7 +164,7 @@ xint gameloop(xint i)
 {
 
 	level l(system::ldf("level0.a"));
-system::say("hi",1);
+
 	while(screen::run())
 	{
 		polygon::counter = 0;

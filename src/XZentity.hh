@@ -87,8 +87,12 @@ void entity::fire(xint i)
 {
 	const bool j = (ammomount[i]->z)||(type!=0);
 
-	ammo* cur = new ammo{ vector{position.x+ammomount[i]->x,position.y-ammomount[i]->y,0,0 },
-	                      vector{direction[j].x,-(direction[j].y),0,(FXONE<<2)} };
+	ammo* cur = new ammo{ vector{position.x+ammomount[i]->x,
+	                             position.y-ammomount[i]->y,
+	                             0,0 },
+	                      vector{direction[j].x,
+	                           -(direction[j].y),
+	                             0,(FXONE<<2)} };
 
 	ammos[type].append(cur);
 }
@@ -169,9 +173,9 @@ entity::entity(const vector& p,const info& v,object* m,object* n,xint s)
 	{
 		case 2:
 			object::linear.clear();
-			object::linear.scale(FXTWO,FXTWO,FXTWO);
+			//object::linear.scale(FXTWO,FXTWO,FXTWO);
 			//scale bounding circle radius
-			model[0]->update();
+			//model[0]->update();
 			direction[0] = vector{-65536,0,0,FXONE}; //FXMON
 			break;
 		case 0:
@@ -186,11 +190,13 @@ entity::entity(const vector& p,const info& v,object* m,object* n,xint s)
 	}
 
 	const xint z = (model[1]!=0);
+
 	for(xint i=0,j=0;i+j<ammomounts;++i)
 	{
 		vector* t = model[0]->docktype(z,i);
 		const bool mt = (t==0);
 		if(model[1]!=0 && mt==1) { t = model[1]->docktype(z,j); ++j; --i; }
+
 		ammomount[i+j] = t;
 		ammomount[i+j]->z = mt;	
 	}

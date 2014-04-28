@@ -118,8 +118,11 @@ void polygon::raster(yint c,bool s) const
 
 	guard( (maxx==minx) || (maxy==miny) );
 
-	const fixed zx = fx::div(point[maxi].z-point[mixi].z,fx::l2f(point[maxi].x-point[mixi].x));
-	const fixed zy = fx::div(point[mayi].z-point[miyi].z,fx::l2f(point[mayi].y-point[miyi].y));
+	const fixed xx = fx::l2f(point[maxi].x-point[mixi].x);
+	const fixed yy = fx::l2f(point[mayi].y-point[miyi].y);
+
+	fixed zx = 0; if(xx!=0) { fx::div(point[maxi].z-point[mixi].z,xx); }
+	fixed zy = 0; if(yy!=0) { fx::div(point[mayi].z-point[miyi].z,yy); }
 
 	const vector dx{ point[0].x-point[1].x, point[1].x-point[2].x, point[2].x-point[0].x,  zy };
 	const vector dy{ point[0].y-point[1].y, point[1].y-point[2].y, point[2].y-point[0].y, -zx };
