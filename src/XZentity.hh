@@ -34,76 +34,106 @@ struct ammo
 class entity
 {
 	private:
-		static const matrix rot[2];
-		static list<ammo> ammos[2];
-		static fixed ymark;
+		static const matrix turn[2];
+		static list<ammo> ammo_list[2];
+
+		static fixed ymark; // move to level
 
 		object*  model[2];
-		vector   position;
+		vector   position[2];
 		vector   direction[2];
 		vector** ammomount;
-		vector   towpos;
 		xint     angle;
 
 		const bool type;
-		      xint lastupdate;
-		      xint lastfire;
-
-		      xint death; //remove?
-		      xint health;
-		      xint shield;
 		const xint shieldmax;
 		const xint shieldrate;
 		const xint ammomounts;
 		const xint ammotype;
 		const xint firerate;
-		      xint points;
+
+		      yint lastupdate;
+		      yint lastfire;
+
+		      xint health;
+		      xint shield;
+
+		      yint points;
 
 		void fire(xint i);
-		void checkammo();
+
 		xint terrain(const char** m,vector& n);
+
 		entity(const entity& e);
 		entity& operator=(const entity& e);
-		static void display_ammo(xint m);
+
 	public:
 		entity(const vector& p,const info& v,object* m,object* n,xint s);
 		~entity();
+
 		xint update(xint k,xint j,fixed m,fixed n);
 		xint update();
+
 		void display(xint m,bool t);
-		inline void resume();
+
+		void check_ammo();
+		static void display_ammo(bool t,xint m);
+
+		void resume();
+
 		inline void addpoints(xint a);
-		inline vector data(xint m) const;
-		inline static xint ylevel();
+		inline yint getpoints() const;
+
+		inline vector data(xint m) const; // w/o m 
+
+		inline static xint ylevel(); // remove
 };
 ///</define>
 
 ///<code>
-const matrix entity::rot[2] = { []()->matrix { matrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->matrix { matrix m; m.rotatez(FX(ROTANG)); return m; }() };
-list<ammo>   entity::ammos[2]{ list<ammo>(), list<ammo>() };
+const matrix entity::turn[2] = { []()->matrix { matrix m; m.rotatez(FX(-ROTANG)); return m; }(),[]()->matrix { matrix m; m.rotatez(FX(ROTANG)); return m; }() };
+list<ammo>   entity::ammo_list[2]{ list<ammo>(), list<ammo>() };
 fixed        entity::ymark    = 0;
 
 void entity::fire(xint i)
 {
-	const bool j = (ammomount[i]->z)||(type!=0);
+	const bool j = (ammomount[i]->z) || (type!=0);
 
-	ammo* cur = new ammo{ vector{position.x+ammomount[i]->x,
-	                             position.y-ammomount[i]->y,
-	                             0,0 },
-	                      vector{direction[j].x,
-	                           -(direction[j].y),
-	                             0,(FXONE<<2)} };
+	ammo* cur = new ammo{ vector{position[0].x+ammomount[i]->x,position[0].y-ammomount[i]->y,0,0 },
+	                      vector{direction[j].x,-direction[j].y,0,(FXONE<<2)} };
 
-	ammos[type].append(cur);
+	ammo_list[type].append(cur);
 }
 
-void entity::checkammo()
+void entity::check_ammo()
 {
-	list<ammo>& a = ammos[!type];
+	list<ammo>& a = ammo_list[bool(type)];
+
 	for(a.first();a.notlast();a.next())
 	{
-		const xint h = model[0]->collision(position,a.current()->pos)*4;
+		const xint h = model[0]->collision(position[0],a.current()->pos)*4;
 		ifu(h!=0) { delete a.delcurrent(); health = math::max(0,health-h); }
+	}
+}
+
+void entity::display_ammo(bool t,xint m)
+{
+	list<ammo>& a = ammo_list[t];
+
+	for(a.first();a.notlast();a.next())
+	{
+		const vector& dir = a.current()->dir;
+		const vector& cur = a.current()->pos -= fx::mul(dir,dir.e);
+
+		const xint cx = fx::r2l(cur.x);
+		const xint cy = fx::r2l(cur.y) - m;
+
+		switch( (screen::onscreen(cx-4,cy-4)&screen::onscreen(cx+4,cy+4))<<t )
+		{
+			case 0: delete a.delcurrent(); break;
+			case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
+			case 2: game::compiled(cx,cy,GREEN,ORANGE); break;
+		}
 	}
 }
 
@@ -111,10 +141,10 @@ xint entity::terrain(const char** m,vector& n) //TODO actual angle computation
 {
 	const fixed r = model[0]->bounding();
 
-	const yint l0 = fx::f2l(position.x+r)/BWIDTH;
-	const yint r0 = fx::f2l(position.x-r)/BWIDTH;
-	const yint u0 = fx::f2l(position.y+r)/BWIDTH;
-	const yint d0 = fx::f2l(position.y-r)/BWIDTH;
+	const yint l0 = fx::f2l(position[0].x+r)/BWIDTH;
+	const yint r0 = fx::f2l(position[0].x-r)/BWIDTH;
+	const yint u0 = fx::f2l(position[0].y+r)/BWIDTH;
+	const yint d0 = fx::f2l(position[0].y-r)/BWIDTH;
 
 	const yint l1 = fx::f2l(n.x+r)/BWIDTH;
 	const yint r1 = fx::f2l(n.x-r)/BWIDTH;
@@ -127,39 +157,15 @@ xint entity::terrain(const char** m,vector& n) //TODO actual angle computation
 		math::abs(m[r0][d0]-m[r1][d1])<=MAXSTEP;
 }
 
-void entity::display_ammo(xint m)
-{
-	for(xint h=0;h<2;++h)
-	{
-		list<ammo>& a = ammos[h];
-		for(a.first();a.notlast();a.next())
-		{
-			const vector& dir = a.current()->dir;
-			const vector& cur = a.current()->pos -= fx::mul(dir,dir.e);
-
-			const xint cx = fx::r2l(cur.x);
-			const xint cy = fx::r2l(cur.y)-m;
-			switch( (screen::onscreen(cx-4,cy-4)&screen::onscreen(cx+4,cy+4))<<h )
-			{
-				case 0: delete a.delcurrent(); break;
-				case 1: game::compiled(cx,cy,BLUE,YELLOW); break;
-				case 2: game::compiled(cx,cy,GREEN,ORANGE); break;
-			}
-		}
-	}
-}
-
 entity::entity(const vector& p,const info& v,object* m,object* n,xint s)
  : model{new object(*m),0},
-   position(p),
+   position{ p, vector{0,0,0,0} },
    direction{ vector{0,FXONE,0,FXONE}, vector{0,FXONE,0,FXONE} },
-   ammomount(new vector*[ammomounts]),
-   towpos(),
+   ammomount(new vector*[string::str2int(v["mounts"])]),
    angle(0),
    type(s),
    lastupdate(screen::time()),
    lastfire(screen::time()),
-   death(0),
    health(string::str2int(v["health"])),
    shield(string::str2int(v["shield"])),
    shieldmax(string::str2int(v["shield"])),
@@ -180,11 +186,10 @@ entity::entity(const vector& p,const info& v,object* m,object* n,xint s)
 			break;
 		case 0:
 			model[1] = new object(*n);
-			ymark = position.y;
+			ymark = position[0].y;
 
-			vector d = (*model[0]->docktype(3,0))-(*model[1]->docktype(3,0));
+			position[1] = (*model[0]->docktype(3,0)) - (*model[1]->docktype(3,0));
 
-			towpos = vector{d.x,d.y,d.z,0};	
 			direction[0] = vector{0,-65536,0,0}; //FXMON
 			direction[1] = vector{0,-65536,0,0}; //FXMON
 	}
@@ -219,28 +224,28 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
 
 	//checkammo();
 
-	ifu(health==0)
+	ifu(health<=0)
 	{
 		model[0]->explode(-FXHLF+FXTNT);
 		model[1]->explode(-FXHLF);
-		return health-(death++>250);
+		return health--<-250;
 	}
 
-	k = math::set(k,k!='w'||angle!=0);
+	k = math::set(0,k,k=='w' && angle==0);
 	switch(k)
 	{
 		case RIGHT:
-			model[0]->update(rot[0]);
-			model[1]->update(rot[0]);
-			direction[0] = rot[0]*direction[0];
-			direction[1] = rot[0]*direction[1];
+			model[0]->update(turn[0]);
+			model[1]->update(turn[0]);
+			direction[0] = turn[0]*direction[0];
+			direction[1] = turn[0]*direction[1];
 		break;
 
 		case LEFT:
-			model[0]->update(rot[1]);
-			model[1]->update(rot[1]);
-			direction[0] = rot[1]*direction[0];
-			direction[1] = rot[1]*direction[1];
+			model[0]->update(turn[1]);
+			model[1]->update(turn[1]);
+			direction[0] = turn[1]*direction[0];
+			direction[1] = turn[1]*direction[1];
 		break;
 
 		case UP:
@@ -252,21 +257,21 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
 		break;
 
 		case 'a':
-			model[1]->update(rot[1]);
+			model[1]->update(turn[1]);
 			angle += ROTANG;
-			direction[1] = rot[1]*direction[1];
+			direction[1] = turn[1]*direction[1];
 		break;
 
 		case 'd':
-			model[1]->update(rot[0]);
+			model[1]->update(turn[0]);
 			angle -= ROTANG;
-			direction[1] =rot[0]*direction[1];
+			direction[1] =turn[0]*direction[1];
 		break;
 
 		case 'w':
-			model[1]->update(rot[mat]);
+			model[1]->update(turn[mat]);
 			angle += math::neg(ROTANG,mat);
-			direction[1] = rot[mat]*direction[1];
+			direction[1] = turn[mat]*direction[1];
 		break;
 
 		case SPACE:
@@ -277,22 +282,22 @@ xint entity::update(xint k,xint j,fixed m,fixed n)
  
 	angle -= math::set(360,angle>=360);
 
-	const vector tp{position.x - fx::mul(direction[0].x,direction[0].e),
-	                position.y + fx::mul(direction[0].y,direction[0].e),
-	                position.z + fx::mul(direction[0].z,direction[0].e),
-	                0};
+	const vector tp{position[0].x - fx::mul(direction[0].x,direction[0].e),
+	                position[0].y + fx::mul(direction[0].y,direction[0].e),
+	                position[0].z + fx::mul(direction[0].z,direction[0].e),
+	                0 };
 
 	const fixed r = model[0]->bounding();
 	//terrain collision here:
 	//terrain(map,tp);
 	const bool t = (tp.x-r>=0)&&(tp.x+r<=FX(XRES))&&((tp.y-r>=m)&&(tp.y+r<=n)); //TODO
 
-	position = vector{math::set(tp.x,position.x,t),
-	                  math::set(tp.y,position.y,t),
-	                  math::set(tp.z,position.z,t),
-	                  0};
+	position[0] = vector{math::set(tp.x,position[0].x,t),
+	                     math::set(tp.y,position[0].y,t),
+	                     math::set(tp.z,position[0].z,t),
+	                     0 };
 
-	ymark = position.y;
+	ymark = position[0].y;
 	last  = k;
 	lastupdate = curr;
 
@@ -303,25 +308,25 @@ xint entity::update()
 {
 	const xint curr = screen::time();
 
-	ifu(health==0)
+	ifu(health<=0)
 	{
 		model[0]->implode(FXCEN);
-		return health-=(death++>250);		
+		return health--<-250;		
 	}
 
-	if( (health>0) && (position.y>0) && ((position.y+FX(YRES))>ymark) ) //check
+	if( (health>0) && (position[0].y>0) && ((position[0].y+FX(YRES))>ymark) ) //check
 	{
-		checkammo();
+		check_ammo();
 
 		for(xint i=0;i<ammomounts&&curr>lastfire;++i) { fire(i); }
 		lastfire = math::set(curr+firerate,lastfire,curr>lastfire);
 
-		position.x -= fx::mul(direction[0].x,direction[0].e);
-		//position.y += fx::mul(direction[0].y,direction[0].e); //temp
-		position.z += fx::mul(direction[0].z,direction[0].e);
+		position[0].x -= fx::mul(direction[0].x,direction[0].e);
+		//position[0].y += fx::mul(direction[0].y,direction[0].e); //temp
+		position[0].z += fx::mul(direction[0].z,direction[0].e);
 
-		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x<=FX(XRES>>2));
-		direction[0].x = math::set(-direction[0].x,direction[0].x,position.x>=FX(XRES-(XRES>>2)));
+		direction[0].x = math::set(-direction[0].x,direction[0].x,position[0].x<=FX(XRES>>2));
+		direction[0].x = math::set(-direction[0].x,direction[0].x,position[0].x>=FX(XRES-(XRES>>2)));
 	}
 
 	lastupdate = curr;
@@ -330,20 +335,16 @@ xint entity::update()
 
 void entity::display(xint m,bool t)
 {
-	guard(fx::r2l(position.y)<m-100&&fx::r2l(position.y)>m+YRES);
+	guard(fx::r2l(position[0].y)<m-100&&fx::r2l(position[0].y)>m+YRES);
 
-	//const vector p{fx::r2l(position.x),fx::r2l(position.y)-m,fx::r2l(position.z)};
+	//const vector p{fx::r2l(position[0].x),fx::r2l(position.y)-m,fx::r2l(position.z)};
 
-	const vector p{fx::r2l(position.x),YRES/2,fx::r2l(position.z)}; //temp
+	const vector p{fx::r2l(position[0].x),YRES/2,fx::r2l(position[0].z)}; //temp
 
 	const xint r = math::set(R_B,R_F,t);
 	model[0]->display(p,r);
 
-	if(model[1]!=0)
-	{
-		model[1]->display(vector{p.x+towpos.x,p.y+towpos.y,p.z+towpos.z,0},r);
-		if(t==0) display_ammo(m);
-	}
+	if(model[1]!=0) { model[1]->display(position[1]+p,r); }
 
 //temp
 const fixed y(model[0]->bounding());
@@ -362,9 +363,14 @@ void entity::addpoints(xint a)
 	points += a;
 }
 
+yint entity::getpoints() const
+{
+	return points;
+}
+
 vector entity::data(xint m) const
 {
-	return vector{fx::r2l(position.x),fx::r2l(position.y)-m,health,shield};
+	return vector{fx::r2l(position[0].x),fx::r2l(position[0].y)-m,health,shield};
 }
 
 xint entity::ylevel()
