@@ -165,15 +165,15 @@ object::object(vector* a,vector* b,vector* c,vector* d,xint x,xint e)
  : poly(0),
    dock(0),
    bound(0),
-   polys(x<<1),
+   polys(x*2),
    docks(0),
    scolor(0)
 {
 	for(xint i=0;i<x;++i)
 	{
 		polys -= (a[i].z==0 && b[i].z==0 && c[i].z==0);
-		polys -= (c[i].z==0 && d[i].z==0 && a[i].z==0);
 		polys -= (b[i].z==0 && c[i].z==0 && d[i].z==0);
+		polys -= (c[i].z==0 && d[i].z==0 && a[i].z==0);
 		polys -= (d[i].z==0 && a[i].z==0 && b[i].z==0);
 	}
 

@@ -67,7 +67,7 @@ class polygon
 ///<code>
       vector polygon::point[] = { vector{0,0,0,0},vector{0,0,0,0},vector{0,0,0,0} };
       yint   polygon::counter = 0;
-const vector polygon::light   = vector{ FXONE, FXONE, FXONE, FXONE+FXONE+FXONE };
+const vector polygon::light   = []()->vector { vector l{ FXONE, -FXONE, -FXHLF, 0 }; return fx::mul(l,fx::div(FXONE,fx::len(l))); }();
 const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector{0,FXTNT,FXONE,FXONE},vector{0,4*FXTNT,FXONE+FXTNT,FXONE}); return m; }(); 
 
 void polygon::shape(yint c) const 
@@ -87,14 +87,18 @@ vector polygon::project(const vector& p,const vector& v)
 
 yint polygon::flat(xint pz,xint f) const
 {
-	const fixed t = math::lim(FXTNT,math::abs(fx::div(fx::dot(normal,light),fx::mul(normal.e,light.e))),FXONE);
-	const byte anz = math::set(AMBIENT,f&R_A) + math::set(NOLIGHT,f&R_N) + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
+	const fixed t = math::lim(FXTNT,fx::dot(normal,light),FXONE);
 
-	rgba argb{ (uint)math::set(ORANGE,color,f&R_C) };
+	const byte anz = math::set(AMBIENT,f&R_A)
+	               + math::set(NOLIGHT,f&R_N)
+	               + math::set(fx::r2l(fx::mul(ZLIGHT,fx::l2f(pz))),f&R_Z); 
+
+	rgba argb{ (yint)math::set(ORANGE,color,f&R_C) };
 	argb.b[0] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[0]),t ) + anz) );
 	argb.b[1] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[1]),t ) + anz) );
 	argb.b[2] = (byte)(fx::r2l( fx::mul( fx::l2f(argb.b[2]),t ) + anz) );
 	argb.b[3] = 0;
+
 	return argb.d;
 }
 
@@ -193,9 +197,10 @@ polygon::polygon(const vector& x,const vector& y,const vector& z,yint c) : verte
 	vertex[1].e = FXONE;
 	vertex[2].e = FXONE;
 
-	normal   = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
-	normal   = fx::mul(normal,FXCEN);
-	normal.e = fx::len(normal);
+	normal = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
+	normal = fx::mul(normal,FXCEN);
+	const fixed l = fx::len(normal);
+	if(l!=0) normal = fx::mul(normal,fx::div(FXONE,l));
 }
 
 void polygon::update(const matrix& m)
@@ -204,9 +209,10 @@ void polygon::update(const matrix& m)
 	vertex[1] = m*vertex[1];
 	vertex[2] = m*vertex[2];
 
-	normal    = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
-	normal    = fx::mul(normal,FXCEN);
-	normal.e  = fx::len(normal);
+	normal = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
+	normal = fx::mul(normal,FXCEN);
+	const fixed l = fx::len(normal);
+	if(l!=0) normal = fx::mul(normal,fx::div(FXONE,l));
 }
 
 void polygon::display(const vector& p,xint f,yint c) const

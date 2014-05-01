@@ -19,10 +19,10 @@
 ///</include>
 
 //<declare>
-#define LWIDTH   40
+#define LWIDTH   41
 #define BWIDTH   16
 #define BHEIGHT  10
-#define GROUND   50 
+#define GROUND  320 
 #define AFLOAT  300
 #define OFFSET    4
 #define MAXSTEP   5
@@ -85,6 +85,21 @@ void level::load()
 
 void level::landscape()
 {
+	const vector pos{XRES/2,YRES/2,GROUND,0};
+	object::linear.clear();
+	object::linear.translate(0,FX(YRES/2),0);
+
+	xint r = math::max((marker/BWIDTH)-OFFSET,0);
+
+	for(xint i=0;i<31;++i)
+	{
+		object temp(*terrain[r++]);
+		temp.update();
+		temp.display(pos,R_F);
+		object::linear.translate(0,FX(-BWIDTH),0);		
+	}
+
+
 	//mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
 	//const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
 	//object::linear.clear();
@@ -184,12 +199,12 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 
 	//load map
 	const char* m = arc[lvl["map"]];
-	const xint l  = string::count(m,'\n');
+	const xint  l = string::count(m,'\n');
 	char** map    = string::split(m,'\n');
 	gfx::fsprog(40);
 	screen::run();
 
-	marker_bot = (l*BWIDTH)-YMAX; //Level Start
+	marker = marker_bot = (l*BWIDTH)-YRES; //Level Start
 
 	terrain = new object*[l];
 
@@ -197,10 +212,8 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 	vector* b = new vector[LWIDTH];
 	vector* c = new vector[LWIDTH];
 	vector* d = new vector[LWIDTH];
-	vector e;
-	vector f;
 
-	for(xint i=0,k=0;i<l;++i,k=0)
+	for(xint i=0;i<l;++i)
 	{
 		//load entities
 		for(xint j=0;j<LWIDTH;++j)
@@ -229,37 +242,32 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 		}
 		//*
 
-		//load terrain stripe
+		//load terrain, stripe by stripe
+		if(i==0) continue;
 		xint v = -XRES/2;
-		for(xint j=1;j<LWIDTH&&i>1;++j,v+=BWIDTH)		
-		{
-			a[k] = vector{ fx::l2f(v),       fx::l2f(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j-1]),   0 };
-			b[k] = vector{ fx::l2f(v),        fx::l2f(BWIDTH/2), fx::l2f(BHEIGHT*map[i-1][j-1]), 0 };
-			c[k] = vector{ fx::l2f(v+BWIDTH), fx::l2f(BWIDTH/2), fx::l2f(BHEIGHT*map[i-1][j]),   0 };
-			d[k] = vector{ fx::l2f(v+BWIDTH), fx::l2f(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j]),     0 };
+		xint k = 0;
 
-			if(a[k].z==d[k].z && b[k].z==c[k].z)
+		for(xint j=1;j<LWIDTH;++j)		
+		{
+			a[k] = vector{ fx::l2f(v),        FX(BWIDTH/2),  fx::l2f(BHEIGHT*map[i-1][j-1]), 0 };
+			b[k] = vector{ fx::l2f(v),        FX(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j-1]),   0 };
+			c[k] = vector{ fx::l2f(v+BWIDTH), FX(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j]),     0 };
+			d[k] = vector{ fx::l2f(v+BWIDTH), FX(BWIDTH/2),  fx::l2f(BHEIGHT*map[i-1][j]),   0 };
+
+			//join same level blocks
+			if(k>0 && a[k].z==d[k].z && b[k].z==c[k].z && a[k].z==a[k-1].z && b[k].z==b[k-1].z)
 			{
-				++j;
-				v += BWIDTH*2; 
-				for(;j<LWIDTH;++j,v+=BWIDTH) //TODO v+= weg wg v-=
-				{
-					e = vector{ fx::l2f(v),  fx::l2f(BWIDTH/2), fx::l2f((map[i-1][j])*BHEIGHT), 0 };
-					f = vector{ fx::l2f(v), fx::l2f(-(BWIDTH/2)),fx::l2f((map[i][j])  *BHEIGHT), 0 };
-					if(c[k].z==e.z && d[k].z==f.z)
-					{
-						c[k] = e;
-						d[k] = f;
-					}
-					else break;
-				}
-				v -= BWIDTH*2;
-				--j;
+				c[k-1].x = c[k].x;
+				d[k-1].x = d[k].x;
+			}
+			else
+			{
+				k += (a[k].z!=0 || b[k].z!=0 || c[k].z!=0 || d[k].z!=0);
 			}
 
-			k += (a[k].z!=0 || b[k].z!=0 || c[k].z!=0 || d[k].z!=0);
+			v += BWIDTH;
+			
 		}
-		//*
 
 		terrain[i] = new object(a,b,c,d,k,VIOLET);
 	}
