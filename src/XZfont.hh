@@ -69,7 +69,14 @@ void font::draw(xint x,xint y,const char* a,yint c)
 	char curr = a[0];
 	for(xint i=0;curr!=0;++i)
 	{
-		if(curr=='\n') { y += f.height; x = z; } else { x += draw(x,y,curr,c); }
+		if(curr=='\n')
+		{
+			y += f.height; x = z;
+		}
+		else
+		{
+			x += draw(x,y,curr,c);
+		}
 		curr = a[i+1];
 	}
 }

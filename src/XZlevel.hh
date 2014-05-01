@@ -41,34 +41,33 @@
 class level
 {
 	private:
-		object** terrain;		//Level Terrain Stripe
+		object** terrain;		// Level Terrain Stripes
+		entity* player;			// Player Entity
+		entity* boss;			// Boss Entity
+		list<entity> enemies;		// Enemy Entities List
 
-		entity* player;			//Player Entity
-		entity* boss;			//Boss Entity
-		list<entity> enemies;		//List of Enemy Entities
+		      xint marker;		// Current Level Position
+		      xint marker_bot;		// Bottom Level Position
+		const xint marker_top;		// Top Level Position
 
-		char** map;			//Text Map of Terrain
-
-		xint mark;			//Current Level Position
-		xint markmin;			//Lowest Level Position (Bottom)
-		const xint markmax;		//Highest Level Position (Top)
-
-		progress* pp;			//Player Health Gauge
-		progress* sp;			//Player Shield Gauge
-		progress* bp;			//Boss Gauge
-		progress* ep;			//Enemy Gauge
+		progress* pp;			// Player Health Gauge
+		progress* sp;			// Player Shield Gauge
+		progress* bp;			// Boss Gauge
+		progress* ep;			// Enemy Gauge
 
 		void load();
 
 		void landscape();		// Display Terrain
-		void entities();		// Display Entities
+		void entities(bool s);		// Display Entities
 		void gauges();			// Display Gauges
+
+		vector camera(const vector& v);
 
 		level(const level& l);
 		level& operator=(const level& l);
 	public:
-		level(char* o);			//Constructor
-		~level();			//Destructor
+		level(char* o);			// Constructor
+		~level();			// Destructor
 
 		xint update(xint j);		// Update Entities
 		void display();			// Display Scene
@@ -86,31 +85,28 @@ void level::load()
 
 void level::landscape()
 {
-	mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
-	object::linear.clear();
-	object::linear.translate(0,FX(YRES>>1),0);
-	xint r = math::max((mark/BWIDTH)-OFFSET,0);
-	for(yint i=0;i<31;++i)
-	{
-		object temp(*terrain[r++]);
-		temp.update();
-		temp.display(pos,R_F);
-		object::linear.translate(0,FX(-BWIDTH),0);
-	}
+	//mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
+	//const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
+	//object::linear.clear();
+	//object::linear.translate(0,FX(YRES>>1),0);
+	//xint r = math::max((mark/BWIDTH)-OFFSET,0);
+	//for(yint i=0;i<31;++i)
+	//{
+	//	object temp(*terrain[r++]);
+	//	temp.update();
+	//	temp.display(pos,R_F);
+	//	object::linear.translate(0,FX(-BWIDTH),0);
+	//}
 }
 
-void level::entities()
+void level::entities(bool s)
 {
-	//render shadows
-	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,1); }
-	boss->display(mark,1);
-	player->display(mark,1);
-
-	//render entities
-	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->display(mark,0); }
-	boss->display(mark,0);
-	player->display(mark,0);
+	for(enemies.first();enemies.notlast();enemies.next())
+	{
+		enemies.current()->display(marker,s);
+	}
+	boss->display(marker,s);
+	player->display(marker,s);
 }
 
 void level::gauges()
@@ -118,7 +114,8 @@ void level::gauges()
 	//render enemy gauges
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		const vector e(enemies.current()->data(mark));
+		const entity& enemy = *enemies.current();
+		const vector e(camera(enemy.position()));
 		if(e.z>0)
 		{
 			ep->vis(screen::onscreen(e.x,e.y));
@@ -129,24 +126,28 @@ void level::gauges()
 	}
 
 	//render boss gauge
-	const vector b(boss->data(mark));
+	const vector b(camera(boss->position()));
 	if(b.z>0)
 	{
 		bp->vis(screen::onscreen(b.x,b.y));
 		bp->pos(b.x-48,b.y-20);
-		bp->set(b.z+b.e);
+		bp->set(boss->health()+boss->shield());
 		bp->draw();
 	}
 
 	//render player gauge
-	const vector p(player->data(mark));
-	pp->set(p.z);
+	pp->set(player->health());
 	pp->draw();
-	sp->set(p.e);
+	sp->set(player->shield());
 	sp->draw();
 }
 
-level::level(char* o) : markmax(OFFSET*BWIDTH)
+vector level::camera(const vector& v)
+{
+	return vector{v.x,v.y-marker,v.z,0};
+}
+
+level::level(char* o) : marker_top(OFFSET*BWIDTH)
 {
 	//load lvl
 	info arc = format::ar(o);
@@ -184,11 +185,11 @@ level::level(char* o) : markmax(OFFSET*BWIDTH)
 	//load map
 	const char* m = arc[lvl["map"]];
 	const xint l  = string::count(m,'\n');
-	map           = string::split(m,'\n');
+	char** map    = string::split(m,'\n');
 	gfx::fsprog(40);
 	screen::run();
 
-	markmin = (l*BWIDTH)-YMAX; //Level Start
+	marker_bot = (l*BWIDTH)-YMAX; //Level Start
 
 	terrain = new object*[l];
 
@@ -295,15 +296,17 @@ level::~level()
 
 xint level::update(xint j)
 {
-	for(enemies.first();enemies.notlast();enemies.next())
-	{
-		ifu(enemies.current()->update()<0) { /*delete*/ enemies.delcurrent(); }
-	}
+	//for(enemies.first();enemies.notlast();enemies.next())
+	//{
+	//	ifu(enemies.current()->update()<0) { /*delete*/ enemies.delcurrent(); }
+	//}
 
-	const xint b = boss->update();
-	const xint p = player->update(screen::turbo(),j,fx::l2f(markmax),fx::l2f(markmin+YMAX));
+	//const xint b = boss->update();
+	//const xint p = player->update(screen::turbo(),j,fx::l2f(markmax),fx::l2f(markmin+YMAX));
 
-	return (b<0)-(p<0);
+	//return (b<0)-(p<0);
+
+	return 0;
 }
 
 void level:: display()
@@ -313,20 +316,24 @@ void level:: display()
 	screen::depth.clear(0); //TODO: remove the clear
 
 	landscape();
-	entities();
-	gauges();
+	//entities(1); // Render Shadows
+	//entities(0); // Render Entities
+	//gauges();
 }
 
 void level::resume()
 {
-	for(enemies.first();enemies.notlast();enemies.next()) { enemies.current()->resume(); }
+	for(enemies.first();enemies.notlast();enemies.next())
+	{
+		enemies.current()->resume();
+	}
 	boss->resume();
 	player->resume();
 }
 
 vector level::ppos()
 {
-	return player->data(mark);
+	return player->position();
 }
 ///</code>
 

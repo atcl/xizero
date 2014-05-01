@@ -46,7 +46,7 @@ progress::progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint 
 	end(e),
 	coeff(math::set(math::set(((w-4)<<16)/(e-s+(e==s)),((h-4)<<16)/(e-s+(e==s)),d==0),e!=s)),
 	horver(d)	
-{ ; }
+{  }
 
 void progress::draw() const
 {
