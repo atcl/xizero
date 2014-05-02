@@ -121,7 +121,7 @@ void gfx::line(xint x,xint y,xint a,xint b,yint c,bool k)
 				u.b[0] = 0xFF;
 				u.b[1] = (u.b[1] + v.b[1])>>1;
 				u.b[2] = (u.b[2] + v.b[2])>>1;
-				u.b[3] = (u.b[3] + v.b[3])>>1;	
+				u.b[3] = (u.b[3] + v.b[3])>>1;
 				screen::frame[o+xs] = u.d;
 				pp += dy;
 				o += xs + math::set(ys,pp>=dx);

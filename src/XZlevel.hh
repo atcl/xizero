@@ -22,9 +22,9 @@
 #define LWIDTH   41
 #define BWIDTH   16
 #define BHEIGHT  10
-#define GROUND  320 
+#define GROUND  360 
 #define AFLOAT  300
-#define OFFSET    4
+#define OFFSET    3
 #define MAXSTEP   5
 
 #define BOSS   '!'
@@ -85,33 +85,22 @@ void level::load()
 
 void level::landscape()
 {
+	//mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
+	//const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
+
 	const vector pos{XRES/2,YRES/2,GROUND,0};
 	object::linear.clear();
-	object::linear.translate(0,FX(YRES/2),0);
+	object::linear.translate(0,FX(YRES/2+OFFSET*BWIDTH),0);
 
 	xint r = math::max((marker/BWIDTH)-OFFSET,0);
 
-	for(xint i=0;i<31;++i)
+	for(xint i=0;i<(30+OFFSET);++i)
 	{
 		object temp(*terrain[r++]);
 		temp.update();
 		temp.display(pos,R_F);
-		object::linear.translate(0,FX(-BWIDTH),0);		
+		object::linear.translate(0,FX(-BWIDTH),0);
 	}
-
-
-	//mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	//const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
-	//object::linear.clear();
-	//object::linear.translate(0,FX(YRES>>1),0);
-	//xint r = math::max((mark/BWIDTH)-OFFSET,0);
-	//for(yint i=0;i<31;++i)
-	//{
-	//	object temp(*terrain[r++]);
-	//	temp.update();
-	//	temp.display(pos,R_F);
-	//	object::linear.translate(0,FX(-BWIDTH),0);
-	//}
 }
 
 void level::entities(bool s)

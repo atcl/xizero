@@ -37,7 +37,7 @@ void game::benchmark()
 	const xint fps = screen::fps();
 	ifu(fps>0)
 	{
-		system::say(string::int2str(polygon::counter*fps)); 			
+		system::say(string::int2str(polygon::counter*fps));
 		system::say("T/s - ");
 		system::say(string::int2str(polygon::counter)); 
 		system::say("@");

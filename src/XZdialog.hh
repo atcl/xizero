@@ -27,9 +27,13 @@ xint dialog::msgbox(const char* m,bool q)
 	const xint h = font::height(m)+60;
 	const xint x = (XRES-w)/2;
 	const xint y = (YRES-h)/2;
+	
+	const auto ok = [](){ return xint(1); };
+	const auto no = [](){ return xint(-1); };
+	
 	buttons bl;
-	bl.add("OK",[](){ return  xint(1); },1,x+(w/2)-20-(30*q),y+h-30,40,20,BLACK,RED,GREY,BLACK,1); 
-	if(q) { bl.add("NO",[](){ return xint(-1); },1,x+(w/2)+10,y+h-30,40,20,BLACK,RED,GREY,BLACK,q); }
+	bl.add("OK",ok,1,x+(w/2)-20-(30*q),y+h-30,40,20,BLACK,RED,GREY,BLACK,1); 
+	if(q) { bl.add("NO",no,1,x+(w/2)+10,y+h-30,40,20,BLACK,RED,GREY,BLACK,q); }
 
 	xint xit = 0;
 	while(xit==0 && screen::run())
