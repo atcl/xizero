@@ -23,7 +23,7 @@
 #define BWIDTH   16
 #define BHEIGHT  10
 #define GROUND  360 
-#define AFLOAT  300
+#define AFLOAT  380
 #define OFFSET    3
 #define MAXSTEP   5
 
@@ -314,7 +314,7 @@ void level:: display()
 
 	landscape();
 	//entities(1); // Render Shadows
-	//entities(0); // Render Entities
+	entities(0); // Render Entities
 	//gauges();
 }
 

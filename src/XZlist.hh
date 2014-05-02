@@ -21,6 +21,7 @@ class list
 			member* next;
 			member* prev;
 		};
+		
 		member* cur;
 		member* fir;
 		member* las;
@@ -29,27 +30,62 @@ class list
 
 		//list(const list& l);
 	public:
-		list() : cur(0),fir(new member{0,0,0}),las(new member{0,0,0}),tmp(0),len(0) { fir->next=las->next=las; fir->prev=las->prev=fir; } 
+		list();
+
 		inline bool notlast()  const { return cur!=las; }
 		inline bool notfirst() const { return cur!=fir; }
 		inline bool isfirst()  const { return cur->prev==fir; }
 		inline bool islast()   const { return cur->next==las; }
+
 		inline yint length()   const { return len; }
+
 		inline bool same()     const { return cur==tmp; }
+
 		inline void first() { cur = fir->next; }
 		inline void last()  { cur = las->prev; }
 		inline void prev()  { cur = cur->prev; }
 		inline void next()  { cur = cur->next; }
+
 		inline void save()  { tmp = cur; }
 		inline void load()  { cur = tmp; }
-		inline void clear() { fir->next=las->next=las; fir->prev=las->prev=fir; cur = 0; len = 0; }
-		inline void append(T* x) { las->prev = las->prev->next = cur = new member{x,las,las->prev}; ++len; }
+
+		inline void clear();
+		inline void append(T* x);
+
 		inline T*   current() const { return cur->data; }
 		       T*   delcurrent(bool s=0);
 };
 ///</define>
 
 ///<code>
+template<typename T>
+list<T>::list() :
+	cur(0),
+	fir(new member{0,0,0}),
+	las(new member{0,0,0}),
+	tmp(0),
+	len(0)
+{
+	fir->next=las->next=las;
+	fir->prev=las->prev=fir;
+}
+
+template<typename T>
+void list<T>::clear()
+{
+	fir->next=las->next=las;
+	fir->prev=las->prev=fir;
+	cur = 0;
+	len = 0;
+}
+
+template<typename T>
+void list<T>::append(T* x)
+{
+	las->prev = las->prev->next = cur = new member{x,las,las->prev};
+	++len;
+}
+
 template<typename T>
 T* list<T>::delcurrent(bool s)
 {

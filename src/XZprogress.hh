@@ -31,8 +31,8 @@ class progress : public gui
 		const bool horver;
 	public:
 		progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint m,xint b,xint f,bool v);
-		inline void set(xint x) { prog = math::lim(0,x,end);      area = (prog*coeff)>>16; }
-		inline void add(xint x) { prog = math::lim(0,prog+x,end); area = (prog*coeff)>>16; }
+		inline void set(xint x);
+		inline void add(xint x);
 		       void draw() const;
 };
 ///</define>
@@ -47,6 +47,18 @@ progress::progress(xint s,xint e,bool d,xint l,xint t,xint w,xint h,xint c,xint 
 	coeff(math::set(math::set(((w-4)<<16)/(e-s+(e==s)),((h-4)<<16)/(e-s+(e==s)),d==0),e!=s)),
 	horver(d)	
 {  }
+
+void progress::set(xint x)
+{
+	prog = math::lim(0,x,end);
+	area = (prog*coeff)>>16;
+}
+
+void progress::add(xint x)
+{
+	prog = math::lim(0,prog+x,end);
+	area = (prog*coeff)>>16;
+}
 
 void progress::draw() const
 {

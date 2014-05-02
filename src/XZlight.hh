@@ -24,7 +24,8 @@ class light
 		xint lambert(xint x,xint y) const;
 	public:
 		light(xint r,yint c);
-		inline void draw(xint x,xint y) const { gfx::draw(mask,x-rad,y-rad); }
+		inline void draw(xint x,xint y) const;
+		
 		static vector refract(const vector& x,const vector& y,fixed ri);
 };
 ///</define>
@@ -52,6 +53,11 @@ light::light(xint r,yint c) : mask((r*2)+1,(r*2)+1), rad(r), col(c)
 			mask.data[t++] = lambert(k-rad,j-rad);
 		}
 	}
+}
+
+void light::draw(xint x,xint y) const
+{
+	gfx::draw(mask,x-rad,y-rad);
 }
 
 vector light::refract(const vector& x,const vector& y,fixed ri)

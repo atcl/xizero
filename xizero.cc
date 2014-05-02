@@ -12,7 +12,6 @@
 ///<code>
 int main()
 {	
-	http://atcrosslevel.de
 	init();
 	intro();
 	mainmenu();
