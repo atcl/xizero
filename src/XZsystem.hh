@@ -42,7 +42,7 @@ void system::err(bool c,const char* m)
 
 char* system::ldf(const char* x)
 {
-	FILE* f = fopen(x,"rb");
+	FILE* f(fopen(x,"rb"));
 	guard(f==0,0);
 	
 	fseek(f,0,SEEK_END);

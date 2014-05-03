@@ -197,10 +197,7 @@ polygon::polygon(const vector& x,const vector& y,const vector& z,yint c) : verte
 	vertex[1].e = FXONE;
 	vertex[2].e = FXONE;
 
-	normal = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
-	normal = fx::mul(normal,FXCEN);
-	const fixed l = fx::len(normal);
-	if(l!=0) normal = fx::mul(normal,fx::div(FXONE,l));
+	normal = fx::unormal(vertex[2]-vertex[0],vertex[1]-vertex[0]);
 }
 
 void polygon::update(const matrix& m)
@@ -209,10 +206,7 @@ void polygon::update(const matrix& m)
 	vertex[1] = m*vertex[1];
 	vertex[2] = m*vertex[2];
 
-	normal = fx::cross(vertex[2]-vertex[0],vertex[1]-vertex[0]);
-	normal = fx::mul(normal,FXCEN);
-	const fixed l = fx::len(normal);
-	if(l!=0) normal = fx::mul(normal,fx::div(FXONE,l));
+	normal = fx::unormal(vertex[2]-vertex[0],vertex[1]-vertex[0]);
 }
 
 void polygon::display(const vector& p,xint f,yint c) const

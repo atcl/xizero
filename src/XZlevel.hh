@@ -16,10 +16,11 @@
 #include "XZprogress.hh"
 #include "XZvector.hh"
 #include "XZscreen.hh"
+#include "XZpatch.hh"
 ///</include>
 
 //<declare>
-#define LWIDTH   41
+#define LWIDTH   40
 #define BWIDTH   16
 #define BHEIGHT  10
 #define GROUND  360 
@@ -41,7 +42,7 @@
 class level
 {
 	private:
-		object** terrain;		// Level Terrain Stripes
+		patch** terrain;		// Level Terrain Normal Map
 		entity* player;			// Player Entity
 		entity* boss;			// Boss Entity
 		list<entity> enemies;		// Enemy Entities List
@@ -57,11 +58,11 @@ class level
 
 		void load();
 
-		void landscape();		// Display Terrain
+		void landscape() const;		// Display Terrain
 		void entities(bool s);		// Display Entities
 		void gauges();			// Display Gauges
 
-		vector camera(const vector& v);
+		vector camera(const vector& v) const;
 
 		level(const level& l);
 		level& operator=(const level& l);
@@ -69,7 +70,7 @@ class level
 		level(char* o);			// Constructor
 		~level();			// Destructor
 
-		xint update(xint j);		// Update Entities
+		xint update();			// Update Entities
 		void display();			// Display Scene
 		void resume();			// Resume After Pausing
 
@@ -83,23 +84,14 @@ void level::load()
 
 }
 
-void level::landscape()
+void level::landscape() const
 {
-	//mark = math::lim(markmax,entity::ylevel()-YRES+(YRES>>2),markmin);
-	//const vector pos{(XRES>>1)+(BWIDTH/2),(YRES>>1)+(BWIDTH/2)-mark%BWIDTH,GROUND};
-
-	const vector pos{XRES/2,YRES/2,GROUND,0};
-	object::linear.clear();
-	object::linear.translate(0,FX(YRES/2+OFFSET*BWIDTH),0);
-
-	xint r = math::max((marker/BWIDTH)-OFFSET,0);
-
-	for(xint i=0;i<(30+OFFSET);++i)
+	for(xint i=0,p=0,y=0;i<30;++i,y+=BWIDTH)
 	{
-		object temp(*terrain[r++]);
-		temp.update();
-		temp.display(pos,R_F);
-		object::linear.translate(0,FX(-BWIDTH),0);
+		for(xint j=0,x=0;j<LWIDTH;++j,++p,x+=BWIDTH)
+		{
+			terrain[p]->display(vector{x,y,0,BWIDTH},-polygon::light,ORANGE);
+		}
 	}
 }
 
@@ -107,10 +99,10 @@ void level::entities(bool s)
 {
 	for(enemies.first();enemies.notlast();enemies.next())
 	{
-		enemies.current()->display(marker,s);
+		enemies.current()->display(camera(enemies.current()->position()),s);
 	}
-	boss->display(marker,s);
-	player->display(marker,s);
+	boss->display(camera(boss->position()),s);
+	player->display(camera(player->position()),s);
 }
 
 void level::gauges()
@@ -146,7 +138,7 @@ void level::gauges()
 	sp->draw();
 }
 
-vector level::camera(const vector& v)
+vector level::camera(const vector& v) const
 {
 	return vector{v.x,v.y-marker,v.z,0};
 }
@@ -195,17 +187,12 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 
 	marker = marker_bot = (l*BWIDTH)-YRES; //Level Start
 
-	terrain = new object*[l];
+	terrain = new patch*[l*LWIDTH];
 
-	vector* a = new vector[LWIDTH];
-	vector* b = new vector[LWIDTH];
-	vector* c = new vector[LWIDTH];
-	vector* d = new vector[LWIDTH];
-
-	for(xint i=0;i<l;++i)
+	for(xint i=0,p=0;i<l;++i)
 	{
 		//load entities
-		for(xint j=0;j<LWIDTH;++j)
+		for(xint j=0;j<(LWIDTH+1);++j)
 		{
 			switch(map[i][j] - math::set(62,map[i][j]>='a'))
 			{
@@ -233,32 +220,19 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 
 		//load terrain, stripe by stripe
 		if(i==0) continue;
-		xint v = -XRES/2;
-		xint k = 0;
-
-		for(xint j=1;j<LWIDTH;++j)		
+		
+		for(xint j=1;j<(LWIDTH+1);++j,++p)		
 		{
-			a[k] = vector{ fx::l2f(v),        FX(BWIDTH/2),  fx::l2f(BHEIGHT*map[i-1][j-1]), 0 };
-			b[k] = vector{ fx::l2f(v),        FX(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j-1]),   0 };
-			c[k] = vector{ fx::l2f(v+BWIDTH), FX(-BWIDTH/2), fx::l2f(BHEIGHT*map[i][j]),     0 };
-			d[k] = vector{ fx::l2f(v+BWIDTH), FX(BWIDTH/2),  fx::l2f(BHEIGHT*map[i-1][j]),   0 };
+			const vector x0 = { FX(BWIDTH), 0, fx::l2f(map[i-1][j-1]-map[i-1][j]) };
+			const vector y0 = { 0, FX(BWIDTH), fx::l2f(map[i-1][j-1]-map[i][j-1]) };
 
-			//join same level blocks
-			if(k>0 && a[k].z==d[k].z && b[k].z==c[k].z && a[k].z==a[k-1].z && b[k].z==b[k-1].z)
-			{
-				c[k-1].x = c[k].x;
-				d[k-1].x = d[k].x;
-			}
-			else
-			{
-				k += (a[k].z!=0 || b[k].z!=0 || c[k].z!=0 || d[k].z!=0);
-			}
+			const vector x1 = { FX(BWIDTH), 0, fx::l2f(map[i][j-1]-map[i][j]) };
+			const vector y1 = { 0, FX(BWIDTH), fx::l2f(map[i-1][j]-map[i][j]) };
 
-			v += BWIDTH;
+			const bool s = 0; //TODO
 			
+			terrain[p] = new patch(fx::unormal(x0,y0),fx::unormal(x1,y1),s);
 		}
-
-		terrain[i] = new object(a,b,c,d,k,VIOLET);
 	}
 
 	gfx::fsprog(95);
@@ -291,7 +265,7 @@ level::~level()
 	delete ep;
 }
 
-xint level::update(xint j)
+xint level::update()
 {
 	//for(enemies.first();enemies.notlast();enemies.next())
 	//{
@@ -299,7 +273,7 @@ xint level::update(xint j)
 	//}
 
 	//const xint b = boss->update();
-	//const xint p = player->update(screen::turbo(),j,fx::l2f(markmax),fx::l2f(markmin+YMAX));
+	//const xint p = player->update();
 
 	//return (b<0)-(p<0);
 
@@ -314,7 +288,11 @@ void level:: display()
 
 	landscape();
 	//entities(1); // Render Shadows
-	entities(0); // Render Entities
+	//entities(0); // Render Entities
+	
+	//entities::display_ammo(0);
+	//entiites::display_ammo(1);
+	
 	//gauges();
 }
 

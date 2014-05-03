@@ -112,7 +112,7 @@ bool screen::run()
 			system::bye();
 	}
 
-	ifu( (keys[CTRL]&&keys[KEYX]) ) { system::bye(); } //tmp
+	ifu( (keys[CTRL]&&keys[KEYX]) ) { system::bye(); }
 
 	return 1;
 }

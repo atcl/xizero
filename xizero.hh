@@ -170,7 +170,7 @@ xint gameloop(xint i)
 		polygon::counter = 0;
 		ifu(screen::key()==ESCAPE) { menu::show(); l.resume(); }
 
-		switch(l.update(0))
+		switch(l.update())
 		{
 			case -1: lost(); return 0;
 			case  1: won(l.ppos()); return 0;
