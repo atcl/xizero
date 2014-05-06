@@ -33,8 +33,6 @@ union vector
 
 	inline vector& operator+=(const vector& w) { v += w.v; return *this; }
 	inline vector& operator-=(const vector& w) { v -= w.v; return *this; }
-	
-	//vector operator>>(xint d) { return vector{x>>d,y>>d,z>>d,e>>d}; }
 };
 
 namespace fx
@@ -74,7 +72,10 @@ namespace fx
 	pure vector unormal(const vector& a,const vector& b)
 	{
 		vector r = fx::cross(a,b);
-		r = fx::mul(r,FXCEN);
+		r.x >>= FIXED/2;
+		r.y >>= FIXED/2;
+		r.z >>= FIXED/2;
+		r.e >>= FIXED/2;
 		const fixed l = fx::len(r);
 		if(l!=0) r = fx::mul(r,fx::div(FXONE,l));
 		return r;

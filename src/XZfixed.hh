@@ -31,8 +31,6 @@ constexpr xint FXD2R = 0x00000477; // tau/360 (deg2rad)
 constexpr xint FXSQ2 = 0x00016A09; // 2^0.5
 constexpr xint FXRS1 = 0x00000126; // 0.0045
 constexpr xint FXRS2 = 0x00012902; // 1.1602
-constexpr xint FXSXT = 0x000F0000; // 16
-constexpr xint FX256 = 0x00FF0000; // 256
 
 #define HSEL16(x) ((x==4)||(x==7)||(x==10)||(x==13))	// (((i-1)%3)==0)&&(i!=1)
 ///</declare>
