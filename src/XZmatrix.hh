@@ -17,7 +17,7 @@ class matrix
 	private:
 		vector mat[4];
 
-		void multiplicate(const vector (&n)[4]);
+		void multiply(const vector (&n)[4]);
 	public:
 		matrix(fixed x=FXONE,fixed y=0);
 		       void clear(fixed x=FXONE,fixed y=0);
@@ -36,7 +36,7 @@ class matrix
 ///</define>
 
 ///<code>
-void matrix::multiplicate(const vector (&n)[4])
+void matrix::multiply(const vector (&n)[4])
 {
 	mat[0] = vector{ fx::dot(mat[0],n[0]),fx::dot(mat[0],n[1]),fx::dot(mat[0],n[2]),fx::dot(mat[0],n[3]) };
 	mat[1] = vector{ fx::dot(mat[1],n[0]),fx::dot(mat[1],n[1]),fx::dot(mat[1],n[2]),fx::dot(mat[1],n[3]) };
@@ -62,7 +62,7 @@ void matrix::rotatex(fixed x)
 	x = fx::mul(x,FXD2R);
 	const fixed s = fx::sin(x);
 	const fixed c = fx::cos(x);
-	multiplicate({vector{FXONE,0,0,0},vector{0,c,s,0},vector{0,-s,c,0},vector{0,0,0,FXONE}});
+	multiply({vector{FXONE,0,0,0},vector{0,c,s,0},vector{0,-s,c,0},vector{0,0,0,FXONE}});
 }
 	
 void matrix::rotatey(fixed y)
@@ -70,7 +70,7 @@ void matrix::rotatey(fixed y)
 	y = fx::mul(y,FXD2R);
 	const fixed s = fx::sin(y);
 	const fixed c = fx::cos(y);
-	multiplicate({vector{c,0,-s,0},vector{0,FXONE,0,0},vector{s,0,c,0},vector{0,0,0,FXONE}});
+	multiply({vector{c,0,-s,0},vector{0,FXONE,0,0},vector{s,0,c,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::rotatez(fixed z)
@@ -78,17 +78,17 @@ void matrix::rotatez(fixed z)
 	z = fx::mul(z,FXD2R);
 	const fixed s = fx::sin(z);
 	const fixed c = fx::cos(z);
-	multiplicate({vector{c,s,0,0},vector{-s,c,0,0},vector{0,0,FXONE,0},vector{0,0,0,FXONE}});
+	multiply({vector{c,s,0,0},vector{-s,c,0,0},vector{0,0,FXONE,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::translate(fixed x,fixed y,fixed z)
 {
-	multiplicate({vector{FXONE,0,0,0},vector{0,FXONE,0,0},vector{0,0,FXONE,0},vector{x,y,z,FXONE}});
+	multiply({vector{FXONE,0,0,0},vector{0,FXONE,0,0},vector{0,0,FXONE,0},vector{x,y,z,FXONE}});
 }
 
 void matrix::scale(fixed x,fixed y,fixed z)
 {
-	multiplicate({vector{x,0,0,0},vector{0,y,0,0},vector{0,0,z,0},vector{0,0,0,FXONE}});
+	multiply({vector{x,0,0,0},vector{0,y,0,0},vector{0,0,z,0},vector{0,0,0,FXONE}});
 }
 
 void matrix::transpose()

@@ -223,15 +223,18 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 		
 		for(xint j=1;j<(LWIDTH+1);++j,++p)		
 		{
-			const vector x0 = { FX(BWIDTH), 0, fx::l2f(map[i-1][j-1]-map[i-1][j]) };
-			const vector y0 = { 0, FX(BWIDTH), fx::l2f(map[i-1][j-1]-map[i][j-1]) };
-
-			const vector x1 = { FX(BWIDTH), 0, fx::l2f(map[i][j-1]-map[i][j]) };
-			const vector y1 = { 0, FX(BWIDTH), fx::l2f(map[i-1][j]-map[i][j]) };
-
-			const bool s = 0; //TODO
+			const xint az = map[i-1][j-1];
+			const xint bz = map[i-1][j];
+			const xint cz = map[i][j];
+			const xint dz = map[i][j-1];
 			
-			terrain[p] = new patch(fx::unormal(x0,y0),fx::unormal(x1,y1),s);
+			const vector x0 = { FX(BWIDTH), 0, fx::l2f(dz-cz) };
+			const vector y0 = { 0, FX(BWIDTH), fx::l2f(az-dz) };
+
+			const vector x1 = { FX(BWIDTH), 0, fx::l2f(az-bz) };
+			const vector y1 = { 0, FX(BWIDTH), fx::l2f(bz-cz) };
+
+			terrain[p] = new patch(x0,y0,x1,y1);
 		}
 	}
 

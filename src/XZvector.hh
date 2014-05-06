@@ -32,7 +32,9 @@ union vector
 	inline vector operator-(const vector& w) const { return vector{v-w.v}; }
 
 	inline vector& operator+=(const vector& w) { v += w.v; return *this; }
-	inline vector& operator-=(const vector& w) { v -= w.v; return *this; } 
+	inline vector& operator-=(const vector& w) { v -= w.v; return *this; }
+	
+	//vector operator>>(xint d) { return vector{x>>d,y>>d,z>>d,e>>d}; }
 };
 
 namespace fx

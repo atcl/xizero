@@ -67,7 +67,7 @@ class polygon
 ///<code>
       vector polygon::point[] = { vector{0,0,0,0},vector{0,0,0,0},vector{0,0,0,0} };
       yint   polygon::counter = 0;
-const vector polygon::light   = []()->vector { vector l{ FXONE, -FXONE, -FXHLF, 0 }; return fx::mul(l,fx::div(FXONE,fx::len(l))); }();
+const vector polygon::light   = []()->vector { vector l{ FXONE, -FXHLF, -FXHLF, 0 }; return fx::mul(l,fx::div(FXONE,fx::len(l))); }();
 const matrix polygon::blinn   = []()->matrix { matrix m; m.shadow(vector{0,FXTNT,FXONE,FXONE},vector{0,4*FXTNT,FXONE+FXTNT,FXONE}); return m; }(); 
 
 void polygon::shape(yint c) const 

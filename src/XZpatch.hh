@@ -18,12 +18,12 @@
 class patch
 {
 	private:
-		const vector normal[2];
-		const bool   split;		// 0: ul->lr, 1: ll->ur
+		mutable vector normal[2];
+		mutable bool split;
 
 		yint shade(bool n,const vector& l,yint c) const;
 	public:
-		patch(const vector& m,const vector&n,bool s);
+		patch(const vector& a,const vector& b,const vector& c,const vector& d);
 		void display(const vector& p,const vector& l,yint c) const;
 };
 ///</define>
@@ -42,10 +42,27 @@ yint patch::shade(bool n,const vector& l,yint c) const
 	return argb.d;
 }
 
-patch::patch(const vector& m,const vector& n,bool s) :
-	normal{m,n},
-	split(s)
-{ }
+patch::patch(const vector& a,const vector& b,const vector& c,const vector& d) :
+	normal{ vector{0,0,0,0},vector{0,0,0,0} },
+	split(0)
+{
+	split = ((c.z>0) && (b.z+a.z>0) && (b.z>0)) ||
+		((b.z+a.z<0) && (d.z<0) && (a.z<0)) ||
+		((c.z<0) && (d.z>0) && (b.z<0) && (a.z<0)) ||
+		((c.z<0) && (b.z+a.z<0) && (b.z<0)) ||
+		((b.z+a.z>0) && (d.z>0) && (a.z>0));
+	
+	if(split)
+	{
+		normal[0] = fx::unormal(a,d);
+		normal[1] = fx::unormal(c,b);
+	}
+	else
+	{
+		normal[0] = fx::unormal(a,b);
+		normal[1] = fx::unormal(c,d);
+	}
+}
 
 void patch::display(const vector& p,const vector& l,yint c) const
 {
