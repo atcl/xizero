@@ -72,10 +72,7 @@ namespace fx
 	pure vector unormal(const vector& a,const vector& b)
 	{
 		vector r = fx::cross(a,b);
-		r.x >>= FIXED/2;
-		r.y >>= FIXED/2;
-		r.z >>= FIXED/2;
-		r.e >>= FIXED/2;
+		r.v >>= FIXED/2;
 		const fixed l = fx::len(r);
 		if(l!=0) r = fx::mul(r,fx::div(FXONE,l));
 		return r;
