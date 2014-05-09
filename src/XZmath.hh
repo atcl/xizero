@@ -8,7 +8,6 @@
 
 ///<include>
 #include "XZbasic.hh"
-#include<math.h>
 ///</include>
 
 ///<declare>

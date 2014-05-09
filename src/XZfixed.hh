@@ -100,7 +100,6 @@ void fx::cordic_t(fixed& x,fixed& y,fixed& z,fixed v)
 					 0x00000002 }; // 0.0000305176
 
 	fixed t = FXONE;
-	register bool r = 0;
 
 	for(yint i=0;i<FIXED;++i)
 	{

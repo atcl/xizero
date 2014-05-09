@@ -23,7 +23,7 @@ namespace game
 ///<code>
 void game::compiled(xint x,xint y,yint r,yint c)
 {
-	//guard(screen::onscreen(x,y)==1);
+	guard(screen::onscreen(x,y)==1);
 	yint o = ((y-2)*XRES)+(x-2);
 
 	screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o++] = r; screen::frame[o] = r; o += XRES-3;

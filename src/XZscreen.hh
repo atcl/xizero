@@ -63,16 +63,16 @@ namespace screen
 		SDL_Event    event;
 	}
 
-	inline yint key()         { const yint r = kk; kk = 0; return r; }
-	inline yint turbo()       { return tk; }
-	inline yint time()        { return SDL_GetTicks(); }
-	inline void sleep(xint t) { SDL_Delay(t); }
-
 	void init(const tile& c);
 	bool run();
 	void close();
 	yint fps(bool o=1);
-	void wait(yint k)	{ while(key()!=k) run(); }
+	
+	inline yint key()         { const yint r = kk; kk = 0; return r; }
+	inline yint turbo()       { return tk; }
+	inline yint time()        { return SDL_GetTicks(); }
+	inline void sleep(xint t) { SDL_Delay(t); }
+	inline void wait(yint k)  { while(key()!=k) run(); }
 
 	pure inline bool onscreen(xint x,xint y) { return (x>=0) && (y>=0) && (x<XRES) && (y<YRES); }
 }
@@ -81,7 +81,7 @@ namespace screen
 ///<code>
 void screen::init(const tile& c)
 {
-	//SDL_WM_SetIcon(c,0);
+	//SDL_WM_SetIcon(SDL_CreateRGBSurfaceFrom(c.data,c.width,c.height,32,c.width*4,0xFF0000,0x00FF00,0x0000FF,0xFF000000),0); 
 	keys = SDL_GetKeyState(0);
 	video = SDL_SetVideoMode(XRES,YRES,BPP,SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL); 
 	frame.pointer(video->pixels);

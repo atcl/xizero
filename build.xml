@@ -19,7 +19,7 @@
 			<define>ALWAYS</define>
 		</defines>
 		<flags>
-			<flag>-O0 -pipe -falign-loops -flto<!-- -fprefetch-loop-arrays --></flag>
+			<flag>-O0 -pipe -falign-loops<!-- -fprefetch-loop-arrays --></flag>
 			<!--flag>-pedantic -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow</flag-->
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=native -mtune=native</flag>
@@ -27,7 +27,7 @@
 			<!--flag>-static -nostdlib</flag-->
 			<flag>-g</flag>
 
-			<lflag>-flto <!---Wl,-file-alignment4096--></lflag>
+			<lflag> <!---Wl,-file-alignment4096--></lflag>
 		</flags>
 		<binary>
 			<name>xizero</name>
@@ -51,7 +51,7 @@
 			<define>ALWAYS</define>
 		</defines>
 		<flags>
-			<flag>-O3 -pipe -falign-loops -fomit-frame-pointer -falign-loops</flag>
+			<flag>-Os -pipe -falign-loops -fomit-frame-pointer -flto</flag>
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=native -mtune=native -mstackrealign</flag>
 			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
@@ -89,7 +89,7 @@
 			
 			<flag>-march=native -mtune=native</flag>
 			<flag>-std=c++11 -fno-exceptions -fno-rtti</flag>
-			<!--flag>-mtune=i486 -march=i486 -m32 -msse -mpfpmath=sse</flag-->
+			<!--flag>-mtune=i486 -march=i486 -msse</flag-->
 			<flag>-g</flag>
 		</flags>
 		<binary>
