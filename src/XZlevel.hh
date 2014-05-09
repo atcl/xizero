@@ -90,7 +90,7 @@ void level::landscape() const
 	{
 		for(xint j=0,x=0;j<LWIDTH;++j,++p,x+=BWIDTH)
 		{
-			terrain[p]->display(vector{x,y,0,BWIDTH},-polygon::light,ORANGE);
+			if(terrain[p]!=0) terrain[p]->display(vector{x,y,0,BWIDTH},-polygon::light,ORANGE);
 		}
 	}
 }
@@ -234,7 +234,14 @@ level::level(char* o) : marker_top(OFFSET*BWIDTH)
 			const vector x1 = { FX(BWIDTH), 0, fx::l2f(az-bz) };
 			const vector y1 = { 0, FX(BWIDTH), fx::l2f(bz-cz) };
 
-			terrain[p] = new patch(x0,y0,x1,y1);
+			if(az==0 && bz==0 && cz==0 && dz==0)
+			{
+				terrain[p] = 0;
+			}
+			else
+			{
+				terrain[p] = new patch(x0,y0,x1,y1);
+			}
 		}
 	}
 

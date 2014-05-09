@@ -18,6 +18,7 @@ union vector
 	typedef fixed vec __attribute__ ((vector_size(16)));
 
 	alignas(16) vec v;
+
 	struct
 	{
 		fixed x;

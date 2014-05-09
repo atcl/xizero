@@ -19,7 +19,7 @@
 			<define>ALWAYS</define>
 		</defines>
 		<flags>
-			<flag>-O0 -pipe -falign-loops<!-- -fprefetch-loop-arrays --></flag>
+			<flag>-O0 -pipe -falign-loops -flto<!-- -fprefetch-loop-arrays --></flag>
 			<!--flag>-pedantic -Wall -Wextra -Winline -Wlogical-op -Wc++11-compat -Wparentheses -Weffc++ -Wmissing-declarations -Wredundant-decls -Wshadow</flag-->
 			<flag>-Wno-multichar -Wno-write-strings -Wno-pragmas -Wno-attributes -Wstrict-aliasing</flag>
 			<flag>-march=native -mtune=native</flag>
