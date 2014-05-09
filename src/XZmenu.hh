@@ -26,9 +26,10 @@ void menu::show()
 {
 	//enlist buttons
 	buttons bl;
-	bl.add("About",[](){ dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION ); return 0; },0,16,16,50,15,BLACK,RED,GREY,GREY,1);
-	bl.add("Exit",[](){ if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); }; return 0; },0,68,16,50,15,BLACK,RED,GREY,GREY,1);
-	bl.add("X",[](){ return 1; },1,XRES-20,0,16,16,BLACK,RED,GREY,WHITE,1);
+	bl.add("Hide",[](){ return 1; },0,16,16,40,15,BLACK,RED,GREY,GREY,1);
+	bl.add("About",[](){ dialog::msgbox("XiZero\nby atCROSSLEVEL studios\nVersion: " VERSION ); return 0; },0,60,16,50,15,BLACK,RED,GREY,GREY,1);
+	bl.add("Exit",[](){ if(dialog::msgbox("Are you sure?",1)==1) { system::bye(); }; return 0; },0,114,16,50,15,BLACK,RED,GREY,GREY,1);
+	
 	//*
 
 	//draw menu
